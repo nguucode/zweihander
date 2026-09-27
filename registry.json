@@ -538,6 +538,349 @@
           "target": "components/zweihander/inputs/Combobox.module.css"
         }
       ]
+    },
+    {
+      "name": "spinner",
+      "type": "registry:component",
+      "title": "Spinner",
+      "description": "Loading indicator: a status, or a progress ring with a value; delay keeps fast loads from flashing it.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/loaders/Spinner.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/loaders/Spinner.tsx"
+        },
+        {
+          "path": "src/components/loaders/Spinner.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/loaders/Spinner.module.css"
+        }
+      ]
+    },
+    {
+      "name": "progress-bar",
+      "type": "registry:component",
+      "title": "Progress Bar",
+      "description": "Linear progress on Base UI Progress: determinate or indeterminate, with an optional label and value.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "files": [
+        {
+          "path": "src/components/loaders/ProgressBar.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/loaders/ProgressBar.tsx"
+        },
+        {
+          "path": "src/components/loaders/ProgressBar.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/loaders/ProgressBar.module.css"
+        }
+      ]
+    },
+    {
+      "name": "skeleton",
+      "type": "registry:component",
+      "title": "Skeleton",
+      "description": "Decorative placeholder in the shape of loading content: circle, square or rounded, with rows.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/loaders/Skeleton.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/loaders/Skeleton.tsx"
+        },
+        {
+          "path": "src/components/loaders/Skeleton.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/loaders/Skeleton.module.css"
+        }
+      ]
+    },
+    {
+      "name": "link",
+      "type": "registry:component",
+      "title": "Link",
+      "description": "Inline or standalone link with colour, size, underline, external and disabled states; render prop for router links.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/icon.json"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "files": [
+        {
+          "path": "src/components/navigation/Link.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/navigation/Link.tsx"
+        },
+        {
+          "path": "src/components/navigation/Link.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/navigation/Link.module.css"
+        }
+      ]
+    },
+    {
+      "name": "alert",
+      "type": "registry:component",
+      "title": "Alert",
+      "description": "Page or section message in info, success, warning or danger, subtle/outlined/solid, with optional title, action, close button and live announcement.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/icon.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/notifications/Alert.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/notifications/Alert.tsx"
+        },
+        {
+          "path": "src/components/notifications/Alert.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/notifications/Alert.module.css"
+        }
+      ]
+    },
+    {
+      "name": "empty-state",
+      "type": "registry:component",
+      "title": "Empty State",
+      "description": "What an empty list, table or page shows: icon, title as a real heading, description and next action, in two sizes.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/states/EmptyState.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/states/EmptyState.tsx"
+        },
+        {
+          "path": "src/components/states/EmptyState.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/states/EmptyState.module.css"
+        }
+      ]
+    },
+    {
+      "name": "tooltip",
+      "type": "registry:component",
+      "title": "Tooltip",
+      "description": "Short inverted label on hover or focus, with arrow, side and delay, on Base UI Tooltip; TooltipGroup shares the delay.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "files": [
+        {
+          "path": "src/components/overlays/Tooltip.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/overlays/Tooltip.tsx"
+        },
+        {
+          "path": "src/components/overlays/Tooltip.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/overlays/Tooltip.module.css"
+        }
+      ]
+    },
+    {
+      "name": "popover",
+      "type": "registry:component",
+      "title": "Popover",
+      "description": "Anchored dialog panel with title, description, close button and arrow, modal or not, on Base UI Popover.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/icon.json"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "files": [
+        {
+          "path": "src/components/overlays/Popover.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/overlays/Popover.tsx"
+        },
+        {
+          "path": "src/components/overlays/Popover.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/overlays/Popover.module.css"
+        }
+      ]
+    },
+    {
+      "name": "modal",
+      "type": "registry:component",
+      "title": "Modal",
+      "description": "Centred dialog with title, description, scrolling body and footer, or an alert dialog for decisions, on Base UI Dialog and Alert Dialog.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/icon.json"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "files": [
+        {
+          "path": "src/components/overlays/Modal.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/overlays/Modal.tsx"
+        },
+        {
+          "path": "src/components/overlays/Modal.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/overlays/Modal.module.css"
+        }
+      ]
+    },
+    {
+      "name": "menu",
+      "type": "registry:component",
+      "title": "Menu",
+      "description": "Dropdown of actions, links, checkbox and radio items, groups and submenus from an items array, on Base UI Menu.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/icon.json"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "files": [
+        {
+          "path": "src/components/navigation/Menu.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/navigation/Menu.tsx"
+        },
+        {
+          "path": "src/components/navigation/Menu.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/navigation/Menu.module.css"
+        }
+      ]
+    },
+    {
+      "name": "breadcrumbs",
+      "type": "registry:component",
+      "title": "Breadcrumbs",
+      "description": "Navigation trail with the current page marked, collapsible middle and router-friendly links.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/icon.json"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "files": [
+        {
+          "path": "src/components/navigation/Breadcrumbs.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/navigation/Breadcrumbs.tsx"
+        },
+        {
+          "path": "src/components/navigation/Breadcrumbs.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/navigation/Breadcrumbs.module.css"
+        }
+      ]
+    },
+    {
+      "name": "pagination",
+      "type": "registry:component",
+      "title": "Pagination",
+      "description": "Previous, next and a stable range of page numbers with ellipses, as buttons or links.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/icon.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/navigation/Pagination.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/navigation/Pagination.tsx"
+        },
+        {
+          "path": "src/components/navigation/Pagination.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/navigation/Pagination.module.css"
+        }
+      ]
+    },
+    {
+      "name": "tabs",
+      "type": "registry:component",
+      "title": "Tabs",
+      "description": "Underline or pill tabs with a sliding indicator, icons, vertical orientation and panels, on Base UI Tabs.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "files": [
+        {
+          "path": "src/components/navigation/Tabs.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/navigation/Tabs.tsx"
+        },
+        {
+          "path": "src/components/navigation/Tabs.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/navigation/Tabs.module.css"
+        }
+      ]
+    },
+    {
+      "name": "toast",
+      "type": "registry:component",
+      "title": "Toast",
+      "description": "Corner notifications with variants, action, timeout, promise and swipe to dismiss: ToastProvider plus useToast(), on Base UI Toast.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/icon.json"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "files": [
+        {
+          "path": "src/components/notifications/Toast.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/notifications/Toast.tsx"
+        },
+        {
+          "path": "src/components/notifications/Toast.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/notifications/Toast.module.css"
+        }
+      ]
     }
   ]
 }

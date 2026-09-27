@@ -1,0 +1,74 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import * as PaginationStories from './Pagination.stories'
+
+<Meta of={PaginationStories} />
+
+# Pagination
+
+Moves through a long list one page at a time: previous, next, and the
+page numbers around the current one. Spec:
+[uiguideline.com/components/pagination](https://www.uiguideline.com/components/pagination).
+A plain element.
+
+<Canvas of={PaginationStories.Middle} />
+
+## Anatomy
+
+| Part | What it is |
+| --- | --- |
+| **Previous / Next** | Chevron buttons, disabled at either end. |
+| **Page** | A square ghost button with the number, tabular figures. |
+| **Current page** | The only solid: `--primary` behind `--primary-foreground`. |
+| **Ellipsis** | "…" where two or more pages are skipped. Decorative. |
+
+## Props
+
+| Prop | Values | Default | |
+| --- | --- | --- | --- |
+| `totalPages` | number | – | Required. |
+| `page`, `defaultPage`, `onPageChange` | number (1-based) | `1` | Controlled or uncontrolled. |
+| `siblingCount` | number | `1` | Pages shown either side of the current one. |
+| `boundaryCount` | number | `1` | Pages always shown at each end. |
+| `size` | `sm`, `md` | `md` | 32 or 40px controls. |
+| `getHref` | `(page) => string` | – | Render links instead of buttons. |
+| `aria-label` | string | `Pagination` | The landmark's name. |
+
+Every other `<nav>` attribute passes through. `paginationItems(page,
+total, siblings, boundary)` is exported too, for building your own.
+
+<Controls of={PaginationStories.Default} />
+
+### Design notes
+
+- **The width stays put.** First and last page are always shown, the
+  current page keeps a sibling each side, and a "…" appears only where
+  it hides two or more pages: a single hidden page is shown instead,
+  since "…" would take the same room. The number of controls stays the
+  same as you move through the middle, so the Next button does not jump.
+
+  <Canvas of={PaginationStories.Ranges} />
+
+- **Links when pages have URLs.** With `getHref` each page is an `<a>`,
+  so it can be opened in a new tab and shared; without it, buttons.
+
+## Usage
+
+<Canvas of={PaginationStories.Default} />
+
+<Canvas of={PaginationStories.Small} />
+
+<Canvas of={PaginationStories.FewPages} />
+
+<Canvas of={PaginationStories.Links} />
+
+## Accessibility
+
+- A `<nav>` landmark named "Pagination", around a list.
+- Each page control is named "Page 3"; the current one has
+  `aria-current="page"`. Previous and next are named "Previous page" and
+  "Next page", and are disabled (or, as links, lose their `href`) at the
+  ends.
+- The ellipsis is `aria-hidden`: the page names already say which
+  numbers are there.
+- Controls are 32px (`sm`) or 40px (`md`), and grow to 44px on coarse
+  pointers.

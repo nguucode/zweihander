@@ -1,0 +1,92 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import * as ModalStories from './Modal.stories'
+
+<Meta of={ModalStories} />
+
+# Modal
+
+A dialog over the page that has to be dealt with before going back: a
+short form, a confirmation, a decision. Everything behind it is dimmed
+and out of reach until it closes. Spec:
+[uiguideline.com/components/modal](https://www.uiguideline.com/components/modal).
+Behaviour from Base UI's [Dialog](https://base-ui.com/react/components/dialog)
+and [Alert Dialog](https://base-ui.com/react/components/alert-dialog).
+
+<Canvas of={ModalStories.Default} />
+
+## Anatomy
+
+| Part | What it is |
+| --- | --- |
+| **Backdrop** | A black scrim at 50% over the whole page. |
+| **Popup** | `--popover` surface, `--shadow-xl`, `--radius-panel`, 24px padding, centred. |
+| **Title** | Required. `heading-md`, semibold. Names the dialog. |
+| **Close button** | Top right. On by default, off for `isAlert`. |
+| **Description** | Optional, `--muted-foreground`. |
+| **Body** | `children`. Scrolls when the modal is taller than the screen. |
+| **Footer** | Actions, right-aligned, the main one last. |
+
+## Props
+
+| Prop | Values | Default | |
+| --- | --- | --- | --- |
+| `title` | node | – | Required. |
+| `trigger` | element | – | Omit when `open` is controlled from elsewhere. |
+| `description` | node | – | |
+| `children` | node | – | |
+| `footer` | node | – | |
+| `size` | `sm`, `md`, `lg` | `md` | Max width 24, 32, 48rem. |
+| `hasCloseButton` | boolean | `!isAlert` | |
+| `closeLabel` | string | `Close` | |
+| `isAlert` | boolean | `false` | `role="alertdialog"`, no backdrop dismissal. |
+| `closeOnBackdropClick` | boolean | `true` | Ignored when `isAlert`. |
+| `initialFocus` | ref | – | By default, the first focusable element. |
+| `open`, `defaultOpen`, `onOpenChange` | | | Controlled or uncontrolled. |
+
+`ModalClose` closes the modal it is in. Give it your own button with
+`render`: `<ModalClose render={<Button />}>Cancel</ModalClose>`.
+
+<Controls of={ModalStories.Default} />
+
+### Design notes
+
+- **One layer with the popups.** Modal, Popover, Select and Combobox all
+  sit at z-index 50. Each portals to the end of `<body>` when it opens,
+  so the most recent is on top: a Select opened inside a modal lists its
+  options above the modal, which a higher modal layer would hide. The
+  `WithSelect` story checks it.
+
+  <Canvas of={ModalStories.WithSelect} />
+
+- **The body scrolls, not the page.** Title and footer stay on screen
+  however long the content is.
+
+  <Canvas of={ModalStories.Long} />
+
+## Usage
+
+For a decision with consequences, use `isAlert` and say exactly what
+will happen in the description. Name the buttons after what they do
+("Delete", "Keep project"), not "OK" and "Cancel".
+
+<Canvas of={ModalStories.Alert} />
+
+Reach for a modal last: it stops everything else. A Popover suits a
+small form tied to one button; an inline message suits information.
+
+## Accessibility
+
+- `role="dialog"` (or `alertdialog`), named by the title and described
+  by the description.
+- Opening moves focus to the first focusable element, or `initialFocus`,
+  and traps it inside. The page behind is `aria-hidden`, its pointer
+  events are blocked by the backdrop, and its scroll is locked. Closing
+  returns focus to the trigger.
+- Escape closes it, as does a press outside unless `isAlert` or
+  `closeOnBackdropClick={false}`. An alert dialog closes only through its
+  own buttons (and Escape).
+
+  <Canvas of={ModalStories.Dismissing} />
+
+- The close button is named `Close`, has the 2px focus ring and a 44px
+  touch target on coarse pointers.

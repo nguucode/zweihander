@@ -1,0 +1,143 @@
+/* 50: the popup layer, with Select, Popover and Modal. */
+.positioner {
+  z-index: 50;
+  outline: none;
+}
+
+/* The same surface as the Select list. */
+.popup {
+  box-sizing: border-box;
+  min-inline-size: max(12rem, var(--anchor-width));
+  max-block-size: var(--available-height);
+  overflow-y: auto;
+  padding: var(--space-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-field);
+  background: var(--popover);
+  box-shadow: var(--shadow-md);
+  color: var(--popover-foreground);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  outline: none;
+  transform-origin: var(--transform-origin);
+  transition:
+    opacity 100ms,
+    scale 100ms;
+}
+.popup[data-starting-style],
+.popup[data-ending-style] {
+  opacity: 0;
+  scale: 0.98;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-block-size: var(--space-8);
+  padding: var(--space-1-5) var(--space-2);
+  border-radius: var(--radius-sm);
+  color: inherit;
+  text-decoration: none;
+  cursor: default;
+  user-select: none;
+  outline: none;
+}
+
+/* Highlighted: where the arrow keys or the pointer are. The submenu
+   trigger keeps it while its submenu is open. */
+.item[data-highlighted],
+.item[data-popup-open] {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+
+.item[data-disabled] {
+  color: var(--muted-foreground);
+  opacity: 0.6;
+}
+
+/* Text colour, not the solid: 4.5:1 on the popover and on the hover
+   surface. */
+.destructive {
+  color: var(--danger-text);
+}
+.destructive[data-highlighted] {
+  background: var(--danger-subtle);
+  color: var(--danger-text);
+}
+
+.label {
+  flex: 1;
+}
+
+.icon,
+.indicator,
+.chevron {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--space-4);
+  font-size: var(--space-4);
+}
+
+.icon {
+  color: var(--muted-foreground);
+}
+.item[data-highlighted] .icon {
+  color: inherit;
+}
+.destructive .icon {
+  color: inherit;
+}
+
+.chevron {
+  margin-inline-end: calc(var(--space-1) * -1);
+  color: var(--muted-foreground);
+}
+
+/* A 6px dot for the chosen radio item. */
+.dot {
+  inline-size: 6px;
+  block-size: 6px;
+  border-radius: 9999px;
+  background: currentColor;
+}
+
+.shortcut {
+  margin-inline-start: var(--space-4);
+  font-family: inherit;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--muted-foreground);
+  letter-spacing: 0.05em;
+}
+
+.separator {
+  block-size: 1px;
+  margin: var(--space-1) calc(var(--space-1) * -1);
+  background: var(--border);
+}
+
+.groupLabel {
+  padding: var(--space-1-5) var(--space-2) var(--space-1);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  font-weight: 500;
+  color: var(--muted-foreground);
+}
+
+/* Items are 32px; on touch they grow to 44px. */
+@media (pointer: coarse) {
+  .item {
+    min-block-size: 44px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .popup {
+    transition: none;
+  }
+}

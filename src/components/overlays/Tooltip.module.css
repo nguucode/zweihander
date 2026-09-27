@@ -1,0 +1,56 @@
+/* 60: above popups (50), so a tooltip on a control inside a popover or a
+   modal still shows. */
+.positioner {
+  z-index: 60;
+}
+
+/* Inverted: --foreground on --background reads as "not part of the page"
+   in both modes, at the same 16:1 or more as body text. */
+.popup {
+  box-sizing: border-box;
+  max-inline-size: min(20rem, var(--available-width));
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  background: var(--foreground);
+  color: var(--background);
+  font-family: var(--font-sans);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  overflow-wrap: break-word;
+  transform-origin: var(--transform-origin);
+  transition:
+    opacity 100ms,
+    scale 100ms;
+}
+
+.popup[data-starting-style],
+.popup[data-ending-style] {
+  opacity: 0;
+  scale: 0.96;
+}
+
+/* A 10px square turned 45deg, half of it outside the popup. */
+.arrow {
+  inline-size: 10px;
+  block-size: 10px;
+  background: inherit;
+  rotate: 45deg;
+}
+.arrow[data-side='top'] {
+  bottom: -4px;
+}
+.arrow[data-side='bottom'] {
+  top: -4px;
+}
+.arrow[data-side='left'] {
+  right: -4px;
+}
+.arrow[data-side='right'] {
+  left: -4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .popup {
+    transition: none;
+  }
+}

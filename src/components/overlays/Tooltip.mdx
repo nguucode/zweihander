@@ -1,0 +1,81 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import * as TooltipStories from './Tooltip.stories'
+
+<Meta of={TooltipStories} />
+
+# Tooltip
+
+A short label that appears when you hover over or focus a control: the
+name of an icon-only button, a keyboard shortcut, a one-line hint. Spec:
+[uiguideline.com/components/tooltip](https://www.uiguideline.com/components/tooltip).
+Behaviour from Base UI's [Tooltip](https://base-ui.com/react/components/tooltip).
+
+<Canvas of={TooltipStories.LongContent} />
+
+## Anatomy
+
+| Part | What it is |
+| --- | --- |
+| **Trigger** | `children`: one focusable element. Tooltip merges its props onto it rather than wrapping it. |
+| **Popup** | Inverted: `--foreground` behind `--background` text, `body-sm`, at most 20rem wide. |
+| **Arrow** | Optional, points at the trigger. |
+
+## Props
+
+| Prop | Values | Default | |
+| --- | --- | --- | --- |
+| `content` | node | – | Required. |
+| `children` | element | – | Required. The trigger. |
+| `side` | `top`, `right`, `bottom`, `left` | `top` | Flips if there is no room. |
+| `align` | `start`, `center`, `end` | `center` | |
+| `delay` | number (ms) | `600` | Hover delay. Focus opens it at once. |
+| `closeDelay` | number (ms) | `0` | |
+| `hasArrow` | boolean | `true` | |
+| `open`, `defaultOpen`, `onOpenChange` | | | Controlled or uncontrolled. |
+| `disabled` | boolean | `false` | Never opens. |
+
+`TooltipGroup` (Base UI's `Tooltip.Provider`) wraps several tooltips so
+that once one has opened, moving to the next opens it without the delay:
+
+<Canvas of={TooltipStories.Group} />
+
+<Controls of={TooltipStories.Default} />
+
+### Design notes
+
+- **Inverted in both modes.** A tooltip is not part of the page; the
+  dark-on-light (light-on-dark in dark mode) box says so, at the same
+  contrast as body text.
+- **600ms before it opens on hover.** Shorter and tooltips flash as the
+  pointer crosses a toolbar; `TooltipGroup` removes the wait once the
+  reader is clearly browsing tooltips.
+
+## Usage
+
+<Canvas of={TooltipStories.Default} />
+
+<Canvas of={TooltipStories.WithoutArrow} />
+
+Only one tooltip is open at a time: opening one closes any other. Hover
+or focus the triggers above to see them.
+
+Keep it to a label or a hint. Anything a reader needs in order to finish
+a task belongs on the page: a tooltip cannot be reached by touch, and it
+disappears the moment you look away. For interactive content, use a
+Popover.
+
+## Accessibility
+
+- It opens on hover after `delay` and on keyboard focus at once, and
+  closes on Escape, blur or pointer leave.
+- Base UI keeps tooltips out of the accessibility tree. This component
+  gives the popup `role="tooltip"` and, while it is open, points the
+  trigger's `aria-describedby` at it, so it is read as a description.
+- It is a **description, not a name.** An icon-only button still needs
+  its own `aria-label`; the tooltip then shows that label to sighted
+  users too.
+- The trigger must be focusable. A disabled button is not, so its
+  tooltip never opens by keyboard: put the reason it is disabled in text
+  next to it instead.
+- Hover and touch cannot reach the tooltip content, so it must never hold
+  a link or a button.

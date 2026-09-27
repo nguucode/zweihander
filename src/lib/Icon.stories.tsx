@@ -14,7 +14,7 @@ type Story = StoryObj<typeof meta>
 
 const names = [
   'calendar', 'check', 'chevron-down', 'chevron-left', 'chevron-right', 'chevron-up',
-  'chevrons-up-down', 'close', 'danger', 'info', 'menu', 'minus', 'more', 'plus',
+  'chevrons-up-down', 'close', 'danger', 'external', 'info', 'menu', 'minus', 'more', 'plus',
   'search', 'star', 'star-filled', 'success', 'user', 'warning',
 ] satisfies IconName[]
 

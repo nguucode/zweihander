@@ -84,6 +84,62 @@
       "types": "./dist/components/inputs/Combobox.d.ts",
       "import": "./dist/components/inputs/Combobox.js"
     },
+    "./spinner": {
+      "types": "./dist/components/loaders/Spinner.d.ts",
+      "import": "./dist/components/loaders/Spinner.js"
+    },
+    "./progress-bar": {
+      "types": "./dist/components/loaders/ProgressBar.d.ts",
+      "import": "./dist/components/loaders/ProgressBar.js"
+    },
+    "./skeleton": {
+      "types": "./dist/components/loaders/Skeleton.d.ts",
+      "import": "./dist/components/loaders/Skeleton.js"
+    },
+    "./link": {
+      "types": "./dist/components/navigation/Link.d.ts",
+      "import": "./dist/components/navigation/Link.js"
+    },
+    "./alert": {
+      "types": "./dist/components/notifications/Alert.d.ts",
+      "import": "./dist/components/notifications/Alert.js"
+    },
+    "./empty-state": {
+      "types": "./dist/components/states/EmptyState.d.ts",
+      "import": "./dist/components/states/EmptyState.js"
+    },
+    "./tooltip": {
+      "types": "./dist/components/overlays/Tooltip.d.ts",
+      "import": "./dist/components/overlays/Tooltip.js"
+    },
+    "./popover": {
+      "types": "./dist/components/overlays/Popover.d.ts",
+      "import": "./dist/components/overlays/Popover.js"
+    },
+    "./modal": {
+      "types": "./dist/components/overlays/Modal.d.ts",
+      "import": "./dist/components/overlays/Modal.js"
+    },
+    "./menu": {
+      "types": "./dist/components/navigation/Menu.d.ts",
+      "import": "./dist/components/navigation/Menu.js"
+    },
+    "./breadcrumbs": {
+      "types": "./dist/components/navigation/Breadcrumbs.d.ts",
+      "import": "./dist/components/navigation/Breadcrumbs.js"
+    },
+    "./pagination": {
+      "types": "./dist/components/navigation/Pagination.d.ts",
+      "import": "./dist/components/navigation/Pagination.js"
+    },
+    "./tabs": {
+      "types": "./dist/components/navigation/Tabs.d.ts",
+      "import": "./dist/components/navigation/Tabs.js"
+    },
+    "./toast": {
+      "types": "./dist/components/notifications/Toast.d.ts",
+      "import": "./dist/components/notifications/Toast.js"
+    },
     "./theme": {
       "types": "./dist/theme/Theme.d.ts",
       "import": "./dist/theme/Theme.js"

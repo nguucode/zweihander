@@ -175,6 +175,20 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/search.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/number-input.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/select.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/combobox.json
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/spinner.json
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/progress-bar.json
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/skeleton.json
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/link.json
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/alert.json
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/empty-state.json
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/tooltip.json
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/popover.json
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/modal.json
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/menu.json
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/breadcrumbs.json
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/pagination.json
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/tabs.json
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/toast.json
 ```
 
 Or register Zweihänder as a named registry in the project's `components.json`
@@ -219,6 +233,20 @@ import { Search } from 'zweihander/search'
 import { NumberInput } from 'zweihander/number-input'
 import { Select } from 'zweihander/select'
 import { Combobox } from 'zweihander/combobox'
+import { Spinner } from 'zweihander/spinner'
+import { ProgressBar } from 'zweihander/progress-bar'
+import { Skeleton } from 'zweihander/skeleton'
+import { Link } from 'zweihander/link'
+import { Alert } from 'zweihander/alert'
+import { EmptyState } from 'zweihander/empty-state'
+import { Tooltip } from 'zweihander/tooltip'
+import { Popover } from 'zweihander/popover'
+import { Modal } from 'zweihander/modal'
+import { Menu } from 'zweihander/menu'
+import { Breadcrumbs } from 'zweihander/breadcrumbs'
+import { Pagination } from 'zweihander/pagination'
+import { Tabs } from 'zweihander/tabs'
+import { ToastProvider, useToast } from 'zweihander/toast'
 ```
 
 ```css
