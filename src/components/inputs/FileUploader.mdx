@@ -1,0 +1,84 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import * as FileUploaderStories from './FileUploader.stories'
+
+<Meta of={FileUploaderStories} />
+
+# File Uploader
+
+Choose files to send: drag them onto the drop zone or pick them with the
+button. It checks type, size and count, lists what was chosen, and shows
+progress or an error per file. It does not upload: your code does, and
+tells it how that is going. Spec:
+[uiguideline.com/components/file-uploader](https://www.uiguideline.com/components/file-uploader).
+A native `<input type="file">` behind a kit Button.
+
+<Canvas of={FileUploaderStories.WithStatus} />
+
+## Anatomy
+
+| Part | What it is |
+| --- | --- |
+| **Label** | Names the whole uploader (a group). |
+| **Drop zone** | A dashed area with an icon, "Drag files here or", and the Choose button. Solid-edged while a file is over it. |
+| **Choose button** | Opens the system picker. The way in for keyboard, screen reader and touch. |
+| **Helper text** | What is allowed, e.g. "PDF, PNG or JPG, up to 5 MB each." |
+| **Errors** | One line per file that was not added, in `--danger-text`. |
+| **File list** | Name, size, optional progress bar or error, and a remove button. |
+
+## Props
+
+| Prop | Values | Default | |
+| --- | --- | --- | --- |
+| `files` | `File[]` | – | Controlled. |
+| `defaultFiles` | `File[]` | `[]` | |
+| `onFilesChange` | `(files) => void` | – | After an add or a remove. |
+| `onReject` | `(rejections) => void` | – | `{ file, reason: 'type' \| 'size' \| 'count', message }[]`. |
+| `accept` | string | – | As the native attribute: `.pdf,image/*`. Checked on drop too. |
+| `multiple` | boolean | `false` | One file is replaced by the next; many are appended. |
+| `maxSize` | bytes | – | |
+| `maxFiles` | number | – | With `multiple`. |
+| `getFileStatus` | `(file) => { progress?, error? }` | – | Progress 0–100, or an error message. |
+| `label`, `helperText`, `required`, `disabled`, `isFullWidth` | | | |
+| `name` | string | – | The native input carries the whole list, so a plain form post sends it. |
+
+<Controls of={FileUploaderStories.Default} />
+
+### Design notes
+
+- **Checks on every path in.** The system picker filters by `accept`, but
+  a drop, or "All files" in the picker, does not. The uploader checks the
+  type, size and count of everything and says why a file was left out.
+- **The same file twice is one file.** Name, size and modified time
+  match, so it is skipped rather than listed again.
+- **Uploading is yours.** Start it in `onFilesChange` and report through
+  `getFileStatus`. A bar shows while `progress` is under 100; an `error`
+  replaces it and outlines the row.
+
+## Usage
+
+<Canvas of={FileUploaderStories.Default} />
+
+<Canvas of={FileUploaderStories.Single} />
+
+<Canvas of={FileUploaderStories.Rejected} />
+
+<Canvas of={FileUploaderStories.Disabled} />
+
+## Accessibility
+
+- Dragging is a shortcut, never the only way: the Choose button is a
+  real button, reached by Tab, and opens the system picker. The file
+  input itself is hidden from assistive tech so there is one control, not
+  two.
+- The uploader is a `group` named by its label; `required` adds
+  "(required)" to that name, since a group cannot be `aria-required`.
+- The helper text and any errors describe the Choose button, so they
+  are read when focus lands on it.
+- A polite status line announces "2 files added. 1 not added." and
+  "report.pdf removed."
+- Remove buttons are named "Remove report.pdf". After a remove, focus
+  moves to the next file's button, or back to Choose when the list is
+  empty, so it is never lost.
+- The drop zone's edge is `--control-border` (3:1); while dragging it
+  turns solid as well as changing colour. Disabled fades the icon and the
+  buttons, not the text.

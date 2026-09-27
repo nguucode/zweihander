@@ -56,6 +56,7 @@ export default defineConfig({
         'components/inputs/DatePicker': 'src/components/inputs/DatePicker.tsx',
         'components/data-display/Carousel': 'src/components/data-display/Carousel.tsx',
         'components/controls/ColorPicker': 'src/components/controls/ColorPicker.tsx',
+        'components/inputs/FileUploader': 'src/components/inputs/FileUploader.tsx',
         'theme/Theme': 'src/theme/Theme.tsx',
         'lib/utils': 'src/lib/utils.ts',
       },

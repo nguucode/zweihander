@@ -192,6 +192,10 @@
       "types": "./dist/components/controls/ColorPicker.d.ts",
       "import": "./dist/components/controls/ColorPicker.js"
     },
+    "./file-uploader": {
+      "types": "./dist/components/inputs/FileUploader.d.ts",
+      "import": "./dist/components/inputs/FileUploader.js"
+    },
     "./theme": {
       "types": "./dist/theme/Theme.d.ts",
       "import": "./dist/theme/Theme.js"

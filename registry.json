@@ -1203,6 +1203,31 @@
           "target": "components/zweihander/controls/ColorPicker.module.css"
         }
       ]
+    },
+    {
+      "name": "file-uploader",
+      "type": "registry:component",
+      "title": "File Uploader",
+      "description": "Drop zone and Choose button over a native file input, with type/size/count checks, a file list, and per-file progress or errors.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/icon.json",
+        "https://ontheshore.biz/zweihander/r/button.json",
+        "https://ontheshore.biz/zweihander/r/progress-bar.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/inputs/FileUploader.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/inputs/FileUploader.tsx"
+        },
+        {
+          "path": "src/components/inputs/FileUploader.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/inputs/FileUploader.module.css"
+        }
+      ]
     }
   ]
 }

@@ -1,0 +1,167 @@
+.uploader {
+  display: inline-grid;
+  gap: var(--space-1-5);
+  inline-size: 24rem;
+  max-inline-size: 100%;
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--foreground);
+}
+
+.fullWidth {
+  display: grid;
+  inline-size: 100%;
+}
+
+.label {
+  font-weight: 500;
+}
+
+.required {
+  margin-inline-start: 0.125rem;
+  color: var(--danger-text);
+}
+
+/* ------------------------------------------------------------- dropzone
+   The dashed edge is --control-border, 3:1 on the page like a field's. */
+.dropzone {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: var(--space-2);
+  padding: var(--space-6) var(--space-4);
+  border: 1px dashed var(--control-border);
+  border-radius: var(--radius-panel);
+  background: var(--surface-subtle);
+  text-align: center;
+  transition:
+    border-color 150ms,
+    background-color 150ms;
+}
+
+/* While a file is dragged over it: a solid edge in the ring colour, so
+   the change is not colour alone. */
+.dragging {
+  border-style: solid;
+  border-color: var(--ring);
+  background: var(--accent);
+}
+
+.invalid {
+  border-color: var(--danger-text);
+}
+
+.icon {
+  display: inline-flex;
+  padding: var(--space-2);
+  border-radius: 9999px;
+  background: var(--background);
+  color: var(--muted-foreground);
+  font-size: var(--space-6);
+}
+
+.prompt {
+  margin: 0;
+  color: var(--muted-foreground);
+}
+
+/* Disabled fades the icon, and the buttons fade themselves. The text stays
+   at 4.5:1: none of it is a native <label>, so faded text would fail
+   contrast rather than be exempt as part of a disabled control. */
+.disabled .dropzone {
+  cursor: var(--cursor-disabled);
+}
+.disabled .icon {
+  opacity: 0.5;
+}
+.disabled .label {
+  color: var(--muted-foreground);
+}
+
+.helper {
+  margin: 0;
+  color: var(--muted-foreground);
+}
+
+.errors {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--danger-text);
+}
+
+/* ------------------------------------------------------------------ list */
+.list {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+  margin-block-start: var(--space-1-5);
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-field);
+  background: var(--background);
+}
+
+.itemError {
+  border-color: var(--danger-text);
+}
+
+.fileIcon {
+  display: inline-flex;
+  color: var(--muted-foreground);
+  font-size: calc(var(--space-4) + var(--space-1));
+}
+
+.meta {
+  display: grid;
+  gap: 0.125rem;
+  min-inline-size: 0;
+}
+
+.name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+.size {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--muted-foreground);
+}
+
+.progress {
+  margin-block-start: var(--space-1);
+}
+
+.fileError {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--danger-text);
+}
+
+.srOnly {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dropzone {
+    transition: none;
+  }
+}
