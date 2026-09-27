@@ -100,7 +100,10 @@
 
 .swatch {
   position: relative;
+  appearance: none;
   aspect-ratio: 1;
+  inline-size: auto;
+  block-size: auto;
   margin: 0;
   padding: 0;
   border: 0;
@@ -116,9 +119,14 @@
 }
 /* The chosen one gets a ring in --foreground, not a tick that would need a
    contrasting colour per swatch. */
-.swatch[aria-pressed='true'] {
+.swatch:checked {
   outline: 2px solid var(--foreground);
   outline-offset: 2px;
+}
+/* Focus on the chosen swatch: the ring colour, a step further out. */
+.swatch:checked:focus-visible {
+  outline-color: var(--ring);
+  outline-offset: 3px;
 }
 .swatch:disabled {
   cursor: var(--cursor-disabled);

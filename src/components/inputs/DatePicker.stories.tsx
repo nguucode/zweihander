@@ -69,6 +69,31 @@ export const Typing: Story = {
     await userEvent.clear(input)
     await userEvent.tab()
     await expect(args.onValueChange).toHaveBeenLastCalledWith(null)
+    // Passing through an empty field again reports nothing new.
+    ;(args.onValueChange as ReturnType<typeof fn>).mockClear()
+    await userEvent.click(input)
+    await userEvent.tab()
+    await expect(args.onValueChange).not.toHaveBeenCalled()
+  },
+}
+
+/** Thai uses the Buddhist era and Persian its own calendar and digits by default; the field stays Gregorian with Western digits so it reads back. */
+export const OtherCalendars: Story = {
+  args: { locale: 'th-TH', defaultValue: new Date(2026, 8, 27) },
+  play: async ({ args, canvas }) => {
+    const input = canvas.getByRole('textbox')
+    await expect(input).toHaveValue('27/09/2026')
+    await userEvent.click(input)
+    await userEvent.tab()
+    await expect(args.onValueChange).not.toHaveBeenCalled()
+    await expect(input).not.toHaveAttribute('aria-invalid', 'true')
+  },
+}
+
+export const Required: Story = {
+  args: { required: true, defaultValue: null },
+  play: async ({ canvas }) => {
+    await expect(canvas.getByRole('textbox', { name: /Start date/ })).toBeRequired()
   },
 }
 

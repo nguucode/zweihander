@@ -50,7 +50,16 @@ const iso = (d: Date) =>
 /** The locale's numeric date format, its field order and a placeholder pattern. */
 function useDateFormat(locale?: string) {
   return useMemo(() => {
-    const format = new Intl.DateTimeFormat(locale, { day: '2-digit', month: '2-digit', year: 'numeric' })
+    // Gregorian and Western digits whatever the locale's defaults: the grid is
+    // Gregorian, and the parser reads ASCII digits. Without this, th-TH shows
+    // the Buddhist year (2569) and fa-IR Persian digits, and neither reads back.
+    const format = new Intl.DateTimeFormat(locale, {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      calendar: 'gregory',
+      numberingSystem: 'latn',
+    })
     const parts = format.formatToParts(new Date(2026, 10, 22))
     const order = parts.filter((p) => p.type === 'day' || p.type === 'month' || p.type === 'year').map((p) => p.type)
     const pattern = parts
@@ -121,7 +130,7 @@ export function DatePicker({
   const commitText = () => {
     const parsed = parse(text)
     if (parsed === undefined || (parsed && !allowed(parsed))) setInvalid(true)
-    else if (!isSameDay(parsed, date) || (parsed === null && date !== null)) commit(parsed)
+    else if (parsed === null ? date !== null : !isSameDay(parsed, date)) commit(parsed)
     else setInvalid(false)
   }
 
@@ -143,6 +152,7 @@ export function DatePicker({
           inputMode="numeric"
           autoComplete="off"
           aria-label={ariaLabel}
+          required={required}
           className={inputStyles.control}
           onChange={(e) => {
             setText(e.target.value)

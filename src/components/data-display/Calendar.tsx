@@ -85,11 +85,11 @@ export function Calendar({
   const first = weekStartsOn ?? firstDayOfWeek(locale)
   const fmt = useMemo(() => {
     return {
-      title: new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric' }),
-      weekday: new Intl.DateTimeFormat(locale, { weekday: 'short' }),
-      weekdayLong: new Intl.DateTimeFormat(locale, { weekday: 'long' }),
-      day: new Intl.DateTimeFormat(locale, { day: 'numeric' }),
-      full: new Intl.DateTimeFormat(locale, { dateStyle: 'full' }),
+      title: new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric', calendar: 'gregory' }),
+      weekday: new Intl.DateTimeFormat(locale, { weekday: 'short', calendar: 'gregory' }),
+      weekdayLong: new Intl.DateTimeFormat(locale, { weekday: 'long', calendar: 'gregory' }),
+      day: new Intl.DateTimeFormat(locale, { day: 'numeric', calendar: 'gregory' }),
+      full: new Intl.DateTimeFormat(locale, { dateStyle: 'full', calendar: 'gregory' }),
     }
   }, [locale])
 
@@ -124,11 +124,13 @@ export function Calendar({
     setFocused(d)
   }
 
-  const onKeyDown = (e: KeyboardEvent) => {
+  const onKeyDown = (e: KeyboardEvent<HTMLElement>) => {
     const dow = (focused.getDay() - first + 7) % 7
+    // Right to left mirrors the grid, so the arrows follow what is on screen.
+    const ahead = getComputedStyle(e.currentTarget).direction === 'rtl' ? -1 : 1
     const moves: Record<string, () => Date> = {
-      ArrowLeft: () => addDays(focused, -1),
-      ArrowRight: () => addDays(focused, 1),
+      ArrowLeft: () => addDays(focused, -ahead),
+      ArrowRight: () => addDays(focused, ahead),
       ArrowUp: () => addDays(focused, -7),
       ArrowDown: () => addDays(focused, 7),
       Home: () => addDays(focused, -dow),
@@ -163,7 +165,7 @@ export function Calendar({
           disabled={prevDisabled}
           onClick={() => setMonth(addMonths(month, -1))}
         >
-          <Icon name="chevron-left" />
+          <Icon name="chevron-left" className={styles.dirIcon} />
         </button>
         {/* Not a heading: a calendar can sit anywhere in a page's outline. It
             names the grid, and announces the month as it changes. */}
@@ -177,7 +179,7 @@ export function Calendar({
           disabled={nextDisabled}
           onClick={() => setMonth(addMonths(month, 1))}
         >
-          <Icon name="chevron-right" />
+          <Icon name="chevron-right" className={styles.dirIcon} />
         </button>
       </div>
       <table ref={gridRef} role="grid" aria-labelledby={`${id}-title`} className={styles.grid} onKeyDown={onKeyDown}>

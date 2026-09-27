@@ -92,4 +92,27 @@ export const NoWeekends: Story = {
   },
 }
 
+/** Arrows follow the screen: in right to left, ArrowLeft is the next day. */
+export const RightToLeft: Story = {
+  decorators: [(Story) => <div dir="rtl">{Story()}</div>],
+  play: async ({ canvas }) => {
+    canvas.getByRole('button', { name: 'Friday 18 September 2026' }).focus()
+    await userEvent.keyboard('{ArrowLeft}')
+    await expect(canvas.getByRole('button', { name: 'Saturday 19 September 2026' })).toHaveFocus()
+    // The chevrons are mirrored to point the way the months move.
+    const svg = canvas.getByRole('button', { name: 'Previous month' }).querySelector('svg')!
+    await expect(getComputedStyle(svg).scale).toBe('-1 1')
+  },
+}
+
+/** Persian's default calendar is not Gregorian; the grid is, so its labels are too. */
+export const Persian: Story = {
+  args: { locale: 'fa-IR' },
+  play: async ({ canvasElement }) => {
+    const selected = canvasElement.querySelector('td[aria-selected="true"]')!
+    // 18, in Persian digits: the Gregorian day, not 27 Shahrivar.
+    await expect(selected).toHaveTextContent('۱۸')
+  },
+}
+
 export const Vietnamese: Story = { args: { locale: 'vi-VN', weekStartsOn: undefined } }

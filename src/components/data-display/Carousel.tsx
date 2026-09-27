@@ -95,6 +95,16 @@ export function Carousel({
     if (next !== index) report(next)
   }
 
+  // Start at defaultIndex (or a controlled index) without animating there.
+  const placed = useRef(false)
+  useEffect(() => {
+    if (placed.current) return
+    placed.current = true
+    const track = trackRef.current
+    const slide = track?.children[index] as HTMLElement | undefined
+    if (track && slide && index > 0) track.scrollTo({ left: offsetOf(track, slide), behavior: 'auto' })
+  }, [index])
+
   // A controlled index that changes from outside scrolls the track.
   useEffect(() => {
     if (indexProp === undefined) return
@@ -143,7 +153,7 @@ export function Carousel({
           disabled={!loop && index === 0}
           onClick={() => goTo(index - 1)}
         >
-          <Icon name="chevron-left" />
+          <Icon name="chevron-left" className={styles.dirIcon} />
         </button>
         <button
           type="button"
@@ -153,15 +163,13 @@ export function Carousel({
           disabled={!loop && index >= last}
           onClick={() => goTo(index + 1)}
         >
-          <Icon name="chevron-right" />
+          <Icon name="chevron-right" className={styles.dirIcon} />
         </button>
       </div>
       <div
         id={`${id}-track`}
         ref={trackRef}
         className={styles.track}
-        // Polite while the reader drives it; silent while it rotates on its own.
-        aria-live={rotating ? 'off' : 'polite'}
         // Focusable so arrow keys scroll it, like any scrolling region.
         tabIndex={0}
         onScroll={onScroll}
@@ -178,6 +186,14 @@ export function Carousel({
           </div>
         ))}
       </div>
+      {/* Every slide is always in the DOM, so a live region round the track
+          would never change. This line does: polite while the reader drives
+          it, silent while it rotates on its own. */}
+      <p className={styles.srOnly} aria-live={rotating ? 'off' : 'polite'} aria-atomic="true">
+        {slidesPerView > 1
+          ? `Slides ${index + 1} to ${Math.min(index + slidesPerView, count)} of ${count}`
+          : `Slide ${index + 1} of ${count}`}
+      </p>
       {showDots && last > 0 && (
         <div className={styles.dots}>
           {Array.from({ length: last + 1 }, (_, i) => (

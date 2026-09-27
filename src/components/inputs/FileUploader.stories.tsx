@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect, fireEvent, fn, userEvent, waitFor } from 'storybook/test'
+import { Button } from '../buttons/Button'
 import { FileUploader } from './FileUploader'
 
 const file = (name: string, size: number, type: string) =>
@@ -110,6 +112,12 @@ export const Single: Story = {
     // Choosing again replaces it.
     pick(canvasElement, [file('me.png', 30_000, 'image/png')])
     await expect(args.onFilesChange).toHaveBeenLastCalledWith([expect.objectContaining({ name: 'me.png' })])
+    // A rejected file does not replace the chosen one.
+    ;(args.onFilesChange as ReturnType<typeof fn>).mockClear()
+    pick(canvasElement, [report])
+    await expect(canvas.getByText('Q3 report.pdf is not an accepted type.')).toBeVisible()
+    await expect(args.onFilesChange).not.toHaveBeenCalled()
+    await expect(canvas.getByRole('list', { name: 'Chosen file' })).toHaveTextContent('me.png')
   },
 }
 
@@ -128,8 +136,54 @@ export const WithStatus: Story = {
 
 export const Required: Story = {
   args: { required: true },
-  play: async ({ canvas }) => {
+  render: (args) => (
+    <form aria-label="Expense claim" onSubmit={(e) => e.preventDefault()}>
+      <FileUploader {...args} />
+    </form>
+  ),
+  play: async ({ canvas, canvasElement }) => {
     await expect(canvas.getByRole('group', { name: 'Attachments (required)' })).toBeVisible()
+    // Submitting empty: our message, and focus on Choose, not on the hidden input.
+    ;(canvas.getByRole('form') as HTMLFormElement).requestSubmit()
+    const choose = canvas.getByRole('button', { name: 'Choose files' })
+    await waitFor(() => expect(choose).toHaveFocus())
+    await expect(choose).toHaveAccessibleDescription(/Choose at least one file\./)
+    pick(canvasElement, [report])
+    await expect(canvas.queryByText('Choose at least one file.')).toBeNull()
+  },
+}
+
+function ControlledUploader(props: { onFilesChange: (files: File[]) => void }) {
+  const [files, setFiles] = useState<File[]>([])
+  return (
+    <form aria-label="Upload" style={{ display: 'grid', gap: 'var(--space-3)', justifyItems: 'start' }}>
+      <FileUploader
+        label="Attachments"
+        name="attachments"
+        multiple
+        files={files}
+        onFilesChange={(next) => {
+          setFiles(next)
+          props.onFilesChange(next)
+        }}
+      />
+      <Button variant="secondary" appearance="outlined" size="sm" onClick={() => setFiles([])}>
+        Clear after upload
+      </Button>
+    </form>
+  )
+}
+
+/** A controlled list cleared from outside clears what the form sends, too. */
+export const Controlled: Story = {
+  render: (args) => <ControlledUploader onFilesChange={args.onFilesChange!} />,
+  play: async ({ canvas, canvasElement }) => {
+    pick(canvasElement, [report, photo])
+    const form = canvas.getByRole('form') as HTMLFormElement
+    await expect(new FormData(form).getAll('attachments')).toHaveLength(2)
+    await userEvent.click(canvas.getByRole('button', { name: 'Clear after upload' }))
+    await expect(canvas.queryByRole('list')).toBeNull()
+    await waitFor(() => expect((new FormData(form).getAll('attachments') as File[]).filter((f) => f.size > 0)).toHaveLength(0))
   },
 }
 

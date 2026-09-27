@@ -1,4 +1,4 @@
-import { useState, type CSSProperties, type KeyboardEvent, type PointerEvent, type ReactNode } from 'react'
+import { useId, useState, type CSSProperties, type KeyboardEvent, type PointerEvent, type ReactNode } from 'react'
 import { Field } from '@base-ui/react/field'
 import { Popover } from '@base-ui/react/popover'
 import { Slider } from '@base-ui/react/slider'
@@ -82,6 +82,7 @@ export function ColorPanel({
   disabled = false,
   className,
 }: ColorPanelProps) {
+  const id = useId()
   const [valueState, setValueState] = useState(() => normalizeHex(defaultValue) ?? '#000000')
   const hex = (value !== undefined ? normalizeHex(value) : null) ?? valueState
   // Kept as HSV, not read back from hex: at zero saturation or brightness the
@@ -196,19 +197,22 @@ export function ColorPanel({
       </Slider.Root>
 
       {presets && presets.length > 0 && (
-        <div role="group" aria-label="Swatches" className={styles.swatches}>
+        // Native radios: one choice at a time, one tab stop, arrows to move.
+        // None is checked while the colour is not one of the swatches.
+        <div role="radiogroup" aria-label="Swatches" className={styles.swatches}>
           {presets.map((s) => {
             const sv = normalizeHex(s.value) ?? s.value
             return (
-              <button
+              <input
                 key={s.value}
-                type="button"
+                type="radio"
+                name={`${id}-swatch`}
                 className={styles.swatch}
                 style={{ '--swatch': sv } as CSSProperties}
                 aria-label={s.label}
-                aria-pressed={sv === hex}
+                checked={sv === hex}
                 disabled={disabled}
-                onClick={() => pick(sv)}
+                onChange={() => pick(sv)}
               />
             )
           })}
@@ -310,6 +314,7 @@ export function ColorPicker({
           spellCheck={false}
           autoComplete="off"
           aria-label={ariaLabel}
+          required={required}
           className={cn(inputStyles.control, styles.hexInput)}
           onChange={(e) => {
             setText(e.target.value)

@@ -92,8 +92,15 @@ export function Table<Row>({
     const col = columns.find((c) => c.key === sort.key)
     if (!col) return rows
     const value = col.sortValue ?? ((row: Row) => (row as Record<string, unknown>)[col.key])
-    const sorted = [...rows].sort((a, b) => compare(value(a), value(b)))
-    return sort.direction === 'descending' ? sorted.reverse() : sorted
+    // Descending flips the comparison, not the result: empty values stay
+    // last and ties keep their order either way.
+    const sign = sort.direction === 'descending' ? -1 : 1
+    return [...rows].sort((a, b) => {
+      const va = value(a)
+      const vb = value(b)
+      if (va == null || vb == null) return compare(va, vb)
+      return sign * compare(va, vb)
+    })
   }, [rows, columns, sort, sortProp])
 
   const setSort = (key: string) => {
@@ -131,7 +138,11 @@ export function Table<Row>({
                   aria-label="Select all rows"
                   checked={allSelected}
                   isIndeterminate={someSelected}
-                  onCheckedChange={(on) => setSelected(on ? ids : [])}
+                  // Adds or removes this page's rows only: with rows paged
+                  // in, ids selected on other pages are kept.
+                  onCheckedChange={(on) =>
+                    setSelected(on ? [...new Set([...selected, ...ids])] : [...selected].filter((id) => !ids.includes(id)))
+                  }
                 />
               </th>
             )}

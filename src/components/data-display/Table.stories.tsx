@@ -87,10 +87,58 @@ export const Selectable: Story = {
     await userEvent.click(canvas.getByRole('checkbox', { name: 'Select Atlas' }))
     await expect(args.onSelectionChange).toHaveBeenLastCalledWith(['p2', 'p1'])
     await userEvent.click(all)
-    await expect(args.onSelectionChange).toHaveBeenLastCalledWith(['p1', 'p2', 'p3', 'p4'])
+    await expect(args.onSelectionChange).toHaveBeenLastCalledWith(['p2', 'p1', 'p3', 'p4'])
     await expect(all).toHaveAttribute('aria-checked', 'true')
     await userEvent.click(all)
     await expect(args.onSelectionChange).toHaveBeenLastCalledWith([])
+  },
+}
+
+function PagedTable(props: { onSelectionChange: (ids: string[]) => void }) {
+  const [page, setPage] = useState(0)
+  return (
+    <div style={{ display: 'grid', gap: 'var(--space-3)', justifyItems: 'start' }}>
+      <Table
+        columns={columns}
+        rows={projects.slice(page * 2, page * 2 + 2)}
+        getRowId={(p) => p.id}
+        caption={`Projects, page ${page + 1} of 2`}
+        isSelectable
+        onSelectionChange={props.onSelectionChange}
+      />
+      <Button variant="secondary" appearance="outlined" size="sm" onClick={() => setPage(1 - page)}>
+        {page === 0 ? 'Next page' : 'Previous page'}
+      </Button>
+    </div>
+  )
+}
+
+/** Selection with getRowId survives paging: "Select all" adds or removes this page's rows only. */
+export const Paged: Story = {
+  render: (args) => <PagedTable onSelectionChange={args.onSelectionChange!} />,
+  play: async ({ args, canvas }) => {
+    await userEvent.click(canvas.getByRole('checkbox', { name: 'Select Atlas' }))
+    await userEvent.click(canvas.getByRole('button', { name: 'Next page' }))
+    const all = canvas.getByRole('checkbox', { name: 'Select all rows' })
+    await userEvent.click(all)
+    await expect(args.onSelectionChange).toHaveBeenLastCalledWith(['p1', 'p3', 'p4'])
+    await userEvent.click(all)
+    await expect(args.onSelectionChange).toHaveBeenLastCalledWith(['p1'])
+  },
+}
+
+/** Rows with no value sort last in both directions. */
+export const EmptyValuesSortLast: Story = {
+  args: {
+    rows: [...projects, { id: 'p5', name: 'Scratch', owner: '', status: 'Paused', files: null as unknown as number, updated: new Date('2026-01-01') }],
+    columns: columns.map((c) => (c.key === 'files' ? { ...c, cell: (p: Project) => (p.files == null ? '–' : p.files.toLocaleString('en')) } : c)),
+  },
+  play: async ({ canvas }) => {
+    const files = within(canvas.getByRole('columnheader', { name: /Files/ })).getByRole('button')
+    await userEvent.click(files)
+    await expect(names(canvas).at(-1)).toBe('Scratch')
+    await userEvent.click(files)
+    await expect(names(canvas)).toEqual(['Onboarding', 'Atlas', 'Billing revamp', 'Design tokens', 'Scratch'])
   },
 }
 

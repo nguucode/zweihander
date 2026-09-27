@@ -39,7 +39,7 @@ A native `<input type="file">` behind a kit Button.
 | `maxFiles` | number | – | With `multiple`. |
 | `getFileStatus` | `(file) => { progress?, error? }` | – | Progress 0–100, or an error message. |
 | `label`, `helperText`, `required`, `disabled`, `isFullWidth` | | | |
-| `name` | string | – | The native input carries the whole list, so a plain form post sends it. |
+| `name` | string | – | The native input carries the whole list, so a plain form post sends it. It follows a controlled `files` too. |
 
 <Controls of={FileUploaderStories.Default} />
 
@@ -48,6 +48,8 @@ A native `<input type="file">` behind a kit Button.
 - **Checks on every path in.** The system picker filters by `accept`, but
   a drop, or "All files" in the picker, does not. The uploader checks the
   type, size and count of everything and says why a file was left out.
+- **A rejected file never replaces a good one.** In single-file mode a
+  new file replaces the chosen one only if it passes the checks.
 - **The same file twice is one file.** Name, size and modified time
   match, so it is skipped rather than listed again.
 - **Uploading is yours.** Start it in `onFilesChange` and report through
@@ -72,6 +74,9 @@ A native `<input type="file">` behind a kit Button.
   two.
 - The uploader is a `group` named by its label; `required` adds
   "(required)" to that name, since a group cannot be `aria-required`.
+  Submitting it empty shows "Choose at least one file." (or "Choose a
+  file.") in the errors and moves focus to the Choose button, instead of
+  the browser's bubble on the hidden input.
 - The helper text and any errors describe the Choose button, so they
   are read when focus lands on it.
 - A polite status line announces "2 files added. 1 not added." and

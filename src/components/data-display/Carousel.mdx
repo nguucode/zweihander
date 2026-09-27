@@ -49,7 +49,10 @@ A native scrolling track with snap points, following the
 - **Stops, not slides.** With three in view, five slides have three stops
   (1-3, 2-4, 3-5), and the dots count stops.
 - **Right to left works.** Offsets are measured from the first slide, so
-  the negative `scrollLeft` of an RTL track reads correctly.
+  the negative `scrollLeft` of an RTL track reads correctly, and the
+  previous/next chevrons are mirrored.
+- **`defaultIndex` starts there.** The track jumps to it on mount, without
+  a scroll animation.
 
 ## Usage
 
@@ -66,9 +69,12 @@ A native scrolling track with snap points, following the
   like "2 of 5".
 - **Autoplay** (WCAG 2.2.2) pauses while the pointer is over the carousel
   or focus is inside it, has a stop/start button as its first control, and
-  never runs under `prefers-reduced-motion`. While it rotates the track is
-  `aria-live="off"`; when the reader drives it, `polite`, so a screen
-  reader hears the new slide.
+  never runs under `prefers-reduced-motion`.
+- A visually hidden line says where you are ("Slide 3 of 5", or "Slides
+  2 to 4 of 5"). It is `aria-live="polite"` when the reader moves the
+  carousel, so a screen reader hears the change, and `off` while it
+  rotates on its own. The slides themselves never change in the DOM, so a
+  live region round them would stay silent.
 - Previous and next are disabled at the ends unless `loop`. Dots are
   buttons named "Slide 3" with `aria-current` on the current stop.
 - The track is focusable (`tabindex="0"`) so a keyboard can scroll it,

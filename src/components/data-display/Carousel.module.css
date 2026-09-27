@@ -117,3 +117,22 @@
     transition: none;
   }
 }
+
+/* Previous and next point the way the content moves: mirrored right to
+   left. Not :dir(rtl): the build lowers it to a list of :lang()s, which
+   misses a dir="rtl" page in any other language. */
+:global([dir='rtl']) .dirIcon {
+  scale: -1 1;
+}
+:global([dir='rtl'] [dir='ltr']) .dirIcon {
+  scale: none;
+}
+
+.srOnly {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

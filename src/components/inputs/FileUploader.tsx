@@ -1,4 +1,4 @@
-import { useId, useRef, useState, type DragEvent, type ReactNode } from 'react'
+import { useEffect, useId, useRef, useState, type DragEvent, type ReactNode } from 'react'
 import { Icon } from '@/lib/icon'
 import { cn } from '@/lib/utils'
 import { Button } from '../buttons/Button'
@@ -63,6 +63,13 @@ function accepts(file: File, accept?: string) {
     .some((t) => (t.startsWith('.') ? name.endsWith(t) : t.endsWith('/*') ? type.startsWith(t.slice(0, -1)) : type === t))
 }
 
+function syncInput(input: HTMLInputElement | null, files: File[]) {
+  if (!input || typeof DataTransfer === 'undefined') return
+  const transfer = new DataTransfer()
+  files.forEach((f) => transfer.items.add(f))
+  input.files = transfer.files
+}
+
 const sameFile = (a: File, b: File) => a.name === b.name && a.size === b.size && a.lastModified === b.lastModified
 
 export function FileUploader({
@@ -94,31 +101,33 @@ export function FileUploader({
   const [announcement, setAnnouncement] = useState('')
   const limit = multiple ? (maxFiles ?? Infinity) : 1
 
-  // The native input carries the list, so a plain form post sends it.
-  const sync = (next: File[]) => {
-    const input = inputRef.current
-    if (!input || typeof DataTransfer === 'undefined') return
-    const transfer = new DataTransfer()
-    next.forEach((f) => transfer.items.add(f))
-    input.files = transfer.files
-  }
+  const [missing, setMissing] = useState(false)
+
+  // The native input carries the list, so a plain form post sends it. Also
+  // after a controlled `files` changes from outside, e.g. cleared after upload.
+  useEffect(() => syncInput(inputRef.current, files), [files])
 
   const update = (next: File[]) => {
     setFilesState(next)
-    sync(next)
+    syncInput(inputRef.current, next)
     onFilesChange?.(next)
   }
 
   const add = (incoming: File[]) => {
     const rejected: FileRejection[] = []
-    // A single-file uploader replaces its file; a multiple one appends.
-    let next = multiple ? [...files] : []
+    const accepted: File[] = []
     for (const file of incoming) {
       if (!accepts(file, accept)) rejected.push({ file, reason: 'type', message: `${file.name} is not an accepted type.` })
       else if (maxSize !== undefined && file.size > maxSize)
         rejected.push({ file, reason: 'size', message: `${file.name} is larger than ${sizeFormat(maxSize)}.` })
-      else if (next.some((f) => sameFile(f, file))) continue
-      else if (next.length >= limit)
+      else accepted.push(file)
+    }
+    // A single-file uploader replaces its file, but only with one that passed:
+    // a rejected drop leaves the chosen file where it is. A multiple one appends.
+    let next = multiple ? [...files] : []
+    for (const file of accepted) {
+      if (next.some((f) => sameFile(f, file))) continue
+      if (next.length >= limit)
         rejected.push({
           file,
           reason: 'count',
@@ -126,11 +135,13 @@ export function FileUploader({
         })
       else next.push(file)
     }
+    if (!multiple && next.length === 0) next = files
     const added = next.filter((f) => !files.some((g) => sameFile(f, g))).length
     setRejections(rejected)
     if (rejected.length) onReject?.(rejected)
+    if (next.length) setMissing(false)
     if (added || next.length !== files.length) update(next)
-    else sync(files)
+    else syncInput(inputRef.current, files)
     setAnnouncement(
       [added ? `${added} ${added === 1 ? 'file' : 'files'} added.` : '', rejected.length ? `${rejected.length} not added.` : '']
         .filter(Boolean)
@@ -183,7 +194,7 @@ export function FileUploader({
         </div>
       )}
       <div
-        className={cn(styles.dropzone, dragging && styles.dragging, rejections.length > 0 && styles.invalid)}
+        className={cn(styles.dropzone, dragging && styles.dragging, (rejections.length > 0 || missing) && styles.invalid)}
         data-disabled={disabled || undefined}
         onDragEnter={(e) => {
           e.preventDefault()
@@ -211,7 +222,7 @@ export function FileUploader({
           appearance="outlined"
           size="sm"
           disabled={disabled}
-          aria-describedby={[helperText ? helperId : '', rejections.length ? errorId : ''].filter(Boolean).join(' ') || undefined}
+          aria-describedby={[helperText ? helperId : '', rejections.length || missing ? errorId : ''].filter(Boolean).join(' ') || undefined}
           onClick={() => inputRef.current?.click()}
         >
           {multiple ? 'Choose files' : 'Choose a file'}
@@ -228,6 +239,13 @@ export function FileUploader({
           required={required && files.length === 0}
           aria-hidden="true"
           onChange={(e) => add([...(e.target.files ?? [])])}
+          // The browser would focus this hidden input and pin its bubble to
+          // it. Show the message ourselves and send focus to Choose instead.
+          onInvalid={(e) => {
+            e.preventDefault()
+            setMissing(true)
+            chooseRef.current?.focus()
+          }}
         />
       </div>
       {helperText && (
@@ -235,8 +253,9 @@ export function FileUploader({
           {helperText}
         </p>
       )}
-      {rejections.length > 0 && (
+      {(rejections.length > 0 || missing) && (
         <ul id={errorId} className={styles.errors}>
+          {missing && <li>{multiple ? 'Choose at least one file.' : 'Choose a file.'}</li>}
           {rejections.map((r, i) => (
             <li key={i}>{r.message}</li>
           ))}

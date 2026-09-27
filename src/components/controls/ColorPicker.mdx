@@ -33,7 +33,7 @@ the picker in a Base UI Popover, and `ColorPanel`, the picker on its own.
 | `defaultValue` | `#rrggbb` | `#3b82f6` | |
 | `onValueChange` | `(hex) => void` | – | On every change: typing (once committed), dragging, keys, swatches. |
 | `swatches` | `(string \| { value, label })[]` | – | A plain string is named by its hex; give brand colours a `label`. |
-| `label`, `helperText`, `validationState`, `size`, `appearance`, `isFullWidth`, `required`, `disabled` | | | As Text Input. |
+| `label`, `helperText`, `validationState`, `size`, `appearance`, `isFullWidth`, `required`, `disabled` | | | As Text Input. `required` is set on the hex input. |
 | `name` | string | – | Submits the hex. |
 
 `ColorPanel` takes `value`, `defaultValue`, `onValueChange`, `swatches`,
@@ -77,8 +77,10 @@ into `#aabbcc`, and anything else into `null`.
   change brightness by 10%, Home and End set saturation to 0 or 100%.
   A second "Brightness" slider is there for a screen reader's browse mode.
 - The hue strip is a Base UI slider named "Hue", read as "217 degrees".
-- Swatches are buttons in a group named "Swatches", with `aria-pressed`
-  on the chosen one. They are 24px with 8px between them, which meets
-  WCAG 2.5.8 without an invisible larger target.
+- Swatches are native radios in a radio group named "Swatches": one tab
+  stop, arrows move and choose, and the chosen one is checked. None is
+  checked while the colour is not one of them. They are 24px with 8px
+  between them, which meets WCAG 2.5.8 without an invisible larger
+  target.
 - A colour is never the only way to know the value: the hex is always in
   the field.

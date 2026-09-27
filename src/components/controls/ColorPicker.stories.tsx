@@ -68,11 +68,23 @@ export const Swatches: Story = {
   play: async ({ args, canvas }) => {
     await userEvent.click(canvas.getByRole('button', { name: /Choose colour/ }))
     const dialog = within(await popup())
-    await expect(dialog.getByRole('button', { name: 'Blue' })).toHaveAttribute('aria-pressed', 'true')
-    await userEvent.click(dialog.getByRole('button', { name: 'Violet' }))
+    const swatches = within(dialog.getByRole('radiogroup', { name: 'Swatches' }))
+    await expect(swatches.getByRole('radio', { name: 'Blue' })).toBeChecked()
+    await userEvent.click(swatches.getByRole('radio', { name: 'Violet' }))
     await expect(args.onValueChange).toHaveBeenLastCalledWith('#8b5cf6')
-    await expect(dialog.getByRole('button', { name: 'Violet' })).toHaveAttribute('aria-pressed', 'true')
-    await expect(dialog.getByRole('button', { name: 'Blue' })).toHaveAttribute('aria-pressed', 'false')
+    await expect(swatches.getByRole('radio', { name: 'Violet' })).toBeChecked()
+    await expect(swatches.getByRole('radio', { name: 'Blue' })).not.toBeChecked()
+    // One tab stop; arrows move between swatches and choose.
+    await userEvent.keyboard('{ArrowRight}')
+    await expect(args.onValueChange).toHaveBeenLastCalledWith('#ec4899')
+    await expect(swatches.getByRole('radio', { name: 'Pink' })).toHaveFocus()
+  },
+}
+
+export const Required: Story = {
+  args: { required: true },
+  play: async ({ canvas }) => {
+    await expect(canvas.getByRole('textbox', { name: /Brand colour/ })).toBeRequired()
   },
 }
 
