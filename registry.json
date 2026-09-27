@@ -1177,6 +1177,32 @@
           "target": "components/zweihander/data-display/Carousel.module.css"
         }
       ]
+    },
+    {
+      "name": "color-picker",
+      "type": "registry:component",
+      "title": "Color Picker",
+      "description": "A hex field with a popover picker: saturation/brightness area, hue strip and swatches. Also exports ColorPanel.",
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/input-field.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/controls/ColorPicker.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/controls/ColorPicker.tsx"
+        },
+        {
+          "path": "src/components/controls/ColorPicker.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/controls/ColorPicker.module.css"
+        }
+      ]
     }
   ]
 }

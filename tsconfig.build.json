@@ -52,6 +52,7 @@
     "src/components/data-display/Calendar.tsx",
     "src/components/inputs/DatePicker.tsx",
     "src/components/data-display/Carousel.tsx",
+    "src/components/controls/ColorPicker.tsx",
     "src/theme/Theme.tsx",
     "src/lib/utils.ts"
   ]

@@ -201,6 +201,7 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/table.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/calendar.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/date-picker.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/carousel.json
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/color-picker.json
 ```
 
 Or register Zweihänder as a named registry in the project's `components.json`
@@ -270,6 +271,7 @@ import { Table } from 'zweihander/table'
 import { Calendar } from 'zweihander/calendar'
 import { DatePicker } from 'zweihander/date-picker'
 import { Carousel } from 'zweihander/carousel'
+import { ColorPicker } from 'zweihander/color-picker'
 import { ToastProvider, useToast } from 'zweihander/toast'
 ```
 

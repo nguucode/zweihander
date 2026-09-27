@@ -188,6 +188,10 @@
       "types": "./dist/components/data-display/Carousel.d.ts",
       "import": "./dist/components/data-display/Carousel.js"
     },
+    "./color-picker": {
+      "types": "./dist/components/controls/ColorPicker.d.ts",
+      "import": "./dist/components/controls/ColorPicker.js"
+    },
     "./theme": {
       "types": "./dist/theme/Theme.d.ts",
       "import": "./dist/theme/Theme.js"

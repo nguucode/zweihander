@@ -55,6 +55,7 @@ export default defineConfig({
         'components/data-display/Calendar': 'src/components/data-display/Calendar.tsx',
         'components/inputs/DatePicker': 'src/components/inputs/DatePicker.tsx',
         'components/data-display/Carousel': 'src/components/data-display/Carousel.tsx',
+        'components/controls/ColorPicker': 'src/components/controls/ColorPicker.tsx',
         'theme/Theme': 'src/theme/Theme.tsx',
         'lib/utils': 'src/lib/utils.ts',
       },
