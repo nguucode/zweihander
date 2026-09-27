@@ -36,6 +36,7 @@
     "src/components/overlays/Popover.tsx",
     "src/components/overlays/Modal.tsx",
     "src/components/navigation/Menu.tsx",
+    "src/components/navigation/Breadcrumbs.tsx",
     "src/theme/Theme.tsx",
     "src/lib/utils.ts"
   ]

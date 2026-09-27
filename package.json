@@ -124,6 +124,10 @@
       "types": "./dist/components/navigation/Menu.d.ts",
       "import": "./dist/components/navigation/Menu.js"
     },
+    "./breadcrumbs": {
+      "types": "./dist/components/navigation/Breadcrumbs.d.ts",
+      "import": "./dist/components/navigation/Breadcrumbs.js"
+    },
     "./theme": {
       "types": "./dist/theme/Theme.d.ts",
       "import": "./dist/theme/Theme.js"

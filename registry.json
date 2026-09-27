@@ -781,6 +781,32 @@
           "target": "components/zweihander/navigation/Menu.module.css"
         }
       ]
+    },
+    {
+      "name": "breadcrumbs",
+      "type": "registry:component",
+      "title": "Breadcrumbs",
+      "description": "Navigation trail with the current page marked, collapsible middle and router-friendly links.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/icon.json"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "files": [
+        {
+          "path": "src/components/navigation/Breadcrumbs.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/navigation/Breadcrumbs.tsx"
+        },
+        {
+          "path": "src/components/navigation/Breadcrumbs.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/navigation/Breadcrumbs.module.css"
+        }
+      ]
     }
   ]
 }
