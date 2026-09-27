@@ -198,6 +198,8 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/stepper.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/sidebar.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/rating.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/table.json
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/calendar.json
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/date-picker.json
 ```
 
 Or register Zweihänder as a named registry in the project's `components.json`
@@ -264,6 +266,8 @@ import { Stepper } from 'zweihander/stepper'
 import { Sidebar } from 'zweihander/sidebar'
 import { Rating } from 'zweihander/rating'
 import { Table } from 'zweihander/table'
+import { Calendar } from 'zweihander/calendar'
+import { DatePicker } from 'zweihander/date-picker'
 import { ToastProvider, useToast } from 'zweihander/toast'
 ```
 

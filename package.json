@@ -176,6 +176,14 @@
       "types": "./dist/components/data-display/Table.d.ts",
       "import": "./dist/components/data-display/Table.js"
     },
+    "./calendar": {
+      "types": "./dist/components/data-display/Calendar.d.ts",
+      "import": "./dist/components/data-display/Calendar.js"
+    },
+    "./date-picker": {
+      "types": "./dist/components/inputs/DatePicker.d.ts",
+      "import": "./dist/components/inputs/DatePicker.js"
+    },
     "./theme": {
       "types": "./dist/theme/Theme.d.ts",
       "import": "./dist/theme/Theme.js"

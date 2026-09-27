@@ -52,6 +52,8 @@ export default defineConfig({
         'components/navigation/Sidebar': 'src/components/navigation/Sidebar.tsx',
         'components/controls/Rating': 'src/components/controls/Rating.tsx',
         'components/data-display/Table': 'src/components/data-display/Table.tsx',
+        'components/data-display/Calendar': 'src/components/data-display/Calendar.tsx',
+        'components/inputs/DatePicker': 'src/components/inputs/DatePicker.tsx',
         'theme/Theme': 'src/theme/Theme.tsx',
         'lib/utils': 'src/lib/utils.ts',
       },

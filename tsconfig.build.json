@@ -49,6 +49,8 @@
     "src/components/navigation/Sidebar.tsx",
     "src/components/controls/Rating.tsx",
     "src/components/data-display/Table.tsx",
+    "src/components/data-display/Calendar.tsx",
+    "src/components/inputs/DatePicker.tsx",
     "src/theme/Theme.tsx",
     "src/lib/utils.ts"
   ]
