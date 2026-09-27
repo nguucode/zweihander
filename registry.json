@@ -904,6 +904,54 @@
           "target": "components/zweihander/notifications/InlineAlert.module.css"
         }
       ]
+    },
+    {
+      "name": "error-state",
+      "type": "registry:component",
+      "title": "Error State",
+      "description": "What a list, panel or page shows when loading failed: Empty State in the danger tone, with details and a live announcement.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/icon.json",
+        "https://ontheshore.biz/zweihander/r/empty-state.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/states/ErrorState.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/states/ErrorState.tsx"
+        },
+        {
+          "path": "src/components/states/ErrorState.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/states/ErrorState.module.css"
+        }
+      ]
+    },
+    {
+      "name": "success-state",
+      "type": "registry:component",
+      "title": "Success State",
+      "description": "What a finished flow shows: Empty State in the success tone, with the next step as its action.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/icon.json",
+        "https://ontheshore.biz/zweihander/r/empty-state.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/states/SuccessState.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/states/SuccessState.tsx"
+        },
+        {
+          "path": "src/components/states/SuccessState.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/states/SuccessState.module.css"
+        }
+      ]
     }
   ]
 }

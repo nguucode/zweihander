@@ -44,6 +44,8 @@ export default defineConfig({
         'components/navigation/Tabs': 'src/components/navigation/Tabs.tsx',
         'components/notifications/Toast': 'src/components/notifications/Toast.tsx',
         'components/notifications/InlineAlert': 'src/components/notifications/InlineAlert.tsx',
+        'components/states/ErrorState': 'src/components/states/ErrorState.tsx',
+        'components/states/SuccessState': 'src/components/states/SuccessState.tsx',
         'theme/Theme': 'src/theme/Theme.tsx',
         'lib/utils': 'src/lib/utils.ts',
       },

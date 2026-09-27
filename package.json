@@ -144,6 +144,14 @@
       "types": "./dist/components/notifications/InlineAlert.d.ts",
       "import": "./dist/components/notifications/InlineAlert.js"
     },
+    "./error-state": {
+      "types": "./dist/components/states/ErrorState.d.ts",
+      "import": "./dist/components/states/ErrorState.js"
+    },
+    "./success-state": {
+      "types": "./dist/components/states/SuccessState.d.ts",
+      "import": "./dist/components/states/SuccessState.js"
+    },
     "./theme": {
       "types": "./dist/theme/Theme.d.ts",
       "import": "./dist/theme/Theme.js"

@@ -190,6 +190,8 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/pagination.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/tabs.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/toast.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/inline-alert.json
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/error-state.json
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/success-state.json
 ```
 
 Or register Zweihänder as a named registry in the project's `components.json`
@@ -248,6 +250,8 @@ import { Breadcrumbs } from 'zweihander/breadcrumbs'
 import { Pagination } from 'zweihander/pagination'
 import { Tabs } from 'zweihander/tabs'
 import { InlineAlert } from 'zweihander/inline-alert'
+import { ErrorState } from 'zweihander/error-state'
+import { SuccessState } from 'zweihander/success-state'
 import { ToastProvider, useToast } from 'zweihander/toast'
 ```
 
