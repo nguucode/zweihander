@@ -156,6 +156,10 @@
       "types": "./dist/components/data-display/Collapse.d.ts",
       "import": "./dist/components/data-display/Collapse.js"
     },
+    "./slider": {
+      "types": "./dist/components/controls/Slider.d.ts",
+      "import": "./dist/components/controls/Slider.js"
+    },
     "./theme": {
       "types": "./dist/theme/Theme.d.ts",
       "import": "./dist/theme/Theme.js"

@@ -978,6 +978,31 @@
           "target": "components/zweihander/data-display/Collapse.module.css"
         }
       ]
+    },
+    {
+      "name": "slider",
+      "type": "registry:component",
+      "title": "Slider",
+      "description": "Single-value or range slider with label, formatted value, per-thumb names and vertical orientation, on Base UI Slider.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "files": [
+        {
+          "path": "src/components/controls/Slider.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/controls/Slider.tsx"
+        },
+        {
+          "path": "src/components/controls/Slider.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/controls/Slider.module.css"
+        }
+      ]
     }
   ]
 }

@@ -1,0 +1,83 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import * as SliderStories from './Slider.stories'
+
+<Meta of={SliderStories} />
+
+# Slider
+
+Picks a number, or a range, by dragging along a track: volume, a price
+range, a brush size. Spec:
+[uiguideline.com/components/slider](https://www.uiguideline.com/components/slider).
+Behaviour from Base UI's [Slider](https://base-ui.com/react/components/slider).
+
+<Canvas of={SliderStories.Range} />
+
+## Anatomy
+
+| Part | What it is |
+| --- | --- |
+| **Label** | Optional, medium weight. Names a single thumb. |
+| **Value** | Optional, after the label: the value or range, formatted, in tabular figures. |
+| **Track** | `--secondary`, 6px (4px at `sm`), pill-ended. |
+| **Indicator** | The filled part, `--primary-text`. |
+| **Thumb** | 20px (16px at `sm`): `--background` with a 2px `--primary-text` ring. One per value. |
+
+## Props
+
+| Prop | Values | Default | |
+| --- | --- | --- | --- |
+| `value`, `defaultValue` | number, or `[number, number]` | `min` | An array makes it a range. |
+| `onValueChange` | function | – | While dragging. |
+| `onValueCommitted` | function | – | Once, on release. Use it for anything expensive. |
+| `min`, `max`, `step` | number | `0`, `100`, `1` | |
+| `largeStep` | number | `10` | Page Up / Page Down, Shift+arrows. |
+| `label` | node | – | |
+| `showValue` | boolean | `false` | |
+| `format` | `Intl.NumberFormatOptions` | – | E.g. currency, percent. |
+| `thumbLabels` | string[] | – | A name per thumb, for a range. |
+| `size` | `sm`, `md` | `md` | |
+| `orientation` | `horizontal`, `vertical` | `horizontal` | |
+| `disabled` | boolean | `false` | |
+| `name` | string | – | Submitted with a form. |
+| `aria-label` | string | – | The name when there is no visible `label`. |
+
+<Controls of={SliderStories.Default} />
+
+### Design notes
+
+- **The fill is a text colour**, as on Progress Bar: `--primary-text`
+  clears 3:1 on the `--secondary` track for every accent, where the
+  solid `--primary` does not.
+- **The whole 20px strip is the target**, not just the 6px track: a
+  press anywhere along it moves the nearest thumb there.
+- **Disabled dims the control, not the words.** The label turns
+  `--muted-foreground` and the value stays readable.
+
+## Usage
+
+<Canvas of={SliderStories.Default} />
+
+<Canvas of={SliderStories.Steps} />
+
+<Canvas of={SliderStories.Small} />
+
+<Canvas of={SliderStories.Vertical} />
+
+<Canvas of={SliderStories.Disabled} />
+
+A slider is quick but imprecise. When the exact number matters (a price,
+a quantity), pair it with a Number Input or use one instead.
+
+## Accessibility
+
+- Each thumb is a `role="slider"` (a real range input) with
+  `aria-valuenow`, `aria-valuemin`, `aria-valuemax` and a formatted
+  `aria-valuetext`.
+- A single thumb is named by `label`, or `aria-label`; a range needs
+  `thumbLabels` so each thumb says which end it is.
+- Keyboard: arrows move by `step`, Page Up / Page Down and Shift+arrows
+  by `largeStep`, Home and End jump to `min` and `max`.
+- Thumbs keep their 20px size and grow a 44px hit area on coarse
+  pointers.
+
+<Canvas of={SliderStories.WithoutVisibleLabel} />

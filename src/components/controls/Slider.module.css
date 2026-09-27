@@ -1,0 +1,124 @@
+.slider {
+  --slider-track: var(--space-1-5);
+  /* 20px, as Button's lg icon: the spacing scale has no 5. */
+  --slider-thumb: calc(var(--space-4) + var(--space-1));
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--foreground);
+}
+
+.sm {
+  --slider-track: var(--space-1);
+  --slider-thumb: var(--space-4);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+}
+
+.vertical {
+  block-size: 12rem;
+}
+
+.header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.label {
+  font-weight: 500;
+}
+
+.value {
+  font-variant-numeric: tabular-nums;
+  color: var(--muted-foreground);
+}
+
+/* The control is as tall as the thumb, so the whole strip is a target,
+   not just the 6px track. */
+.control {
+  display: flex;
+  align-items: center;
+  block-size: var(--slider-thumb);
+  touch-action: none;
+  user-select: none;
+}
+.vertical .control {
+  flex: 1;
+  flex-direction: column;
+  inline-size: var(--slider-thumb);
+  block-size: auto;
+}
+
+.track {
+  position: relative;
+  inline-size: 100%;
+  block-size: var(--slider-track);
+  border-radius: 9999px;
+  background: var(--secondary);
+}
+.vertical .track {
+  inline-size: var(--slider-track);
+  block-size: 100%;
+}
+
+/* The fill carries the value, so it takes a text colour that clears 3:1
+   on the track, as on Progress Bar. */
+.indicator {
+  border-radius: inherit;
+  background: var(--primary-text);
+}
+
+.thumb {
+  box-sizing: border-box;
+  inline-size: var(--slider-thumb);
+  block-size: var(--slider-thumb);
+  border: 2px solid var(--primary-text);
+  border-radius: 9999px;
+  background: var(--background);
+  box-shadow: var(--shadow-xs);
+  cursor: grab;
+  transition: scale 100ms;
+}
+.thumb:active {
+  cursor: grabbing;
+}
+.thumb:has(:focus-visible) {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* Disabled dims the control only. The label and value stay readable in
+   --muted-foreground (4.5:1): they are not a native <label>, so a faded
+   label would fail contrast rather than be exempt as a disabled control. */
+.slider[data-disabled] .control {
+  opacity: 0.5;
+}
+.slider[data-disabled] .label {
+  color: var(--muted-foreground);
+}
+.slider[data-disabled] .thumb {
+  cursor: var(--cursor-disabled);
+}
+
+/* 20px thumbs grow a 44px hit area on coarse pointers without growing. */
+@media (pointer: coarse) {
+  .thumb::before {
+    content: '';
+    position: absolute;
+    inset: 50% auto auto 50%;
+    inline-size: 44px;
+    block-size: 44px;
+    translate: -50% -50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .thumb {
+    transition: none;
+  }
+}

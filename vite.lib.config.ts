@@ -47,6 +47,7 @@ export default defineConfig({
         'components/states/ErrorState': 'src/components/states/ErrorState.tsx',
         'components/states/SuccessState': 'src/components/states/SuccessState.tsx',
         'components/data-display/Collapse': 'src/components/data-display/Collapse.tsx',
+        'components/controls/Slider': 'src/components/controls/Slider.tsx',
         'theme/Theme': 'src/theme/Theme.tsx',
         'lib/utils': 'src/lib/utils.ts',
       },

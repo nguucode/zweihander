@@ -193,6 +193,7 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/inline-alert.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/error-state.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/success-state.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/collapse.json
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/slider.json
 ```
 
 Or register Zweihänder as a named registry in the project's `components.json`
@@ -254,6 +255,7 @@ import { InlineAlert } from 'zweihander/inline-alert'
 import { ErrorState } from 'zweihander/error-state'
 import { SuccessState } from 'zweihander/success-state'
 import { Collapse } from 'zweihander/collapse'
+import { Slider } from 'zweihander/slider'
 import { ToastProvider, useToast } from 'zweihander/toast'
 ```
 
