@@ -656,6 +656,28 @@
           "target": "components/zweihander/notifications/Alert.module.css"
         }
       ]
+    },
+    {
+      "name": "empty-state",
+      "type": "registry:component",
+      "title": "Empty State",
+      "description": "What an empty list, table or page shows: icon, title as a real heading, description and next action, in two sizes.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/states/EmptyState.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/states/EmptyState.tsx"
+        },
+        {
+          "path": "src/components/states/EmptyState.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/states/EmptyState.module.css"
+        }
+      ]
     }
   ]
 }

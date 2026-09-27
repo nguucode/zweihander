@@ -1,0 +1,64 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import * as EmptyStateStories from './EmptyState.stories'
+
+<Meta of={EmptyStateStories} />
+
+# Empty State
+
+What a list, a table or a page shows when there is nothing in it yet:
+why it is empty, and what to do about it. Spec:
+[uiguideline.com/components/empty-state](https://www.uiguideline.com/components/empty-state).
+A plain element.
+
+<Canvas of={EmptyStateStories.FirstUse} />
+
+## Anatomy
+
+| Part | What it is |
+| --- | --- |
+| **Icon** | Optional. An icon on a `--muted` disc, or a small illustration. Decorative. |
+| **Title** | A real heading, level set by `headingLevel`. Says what is empty. |
+| **Description** | Optional, `--muted-foreground`, at most 40 characters wide. Says why, or what will appear here. |
+| **Action** | Optional. The way forward: usually one Button, at most two. |
+
+## Props
+
+| Prop | Values | Default | |
+| --- | --- | --- | --- |
+| `title` | node | – | Required. |
+| `description` | node | – | |
+| `icon` | node | – | |
+| `action` | node | – | |
+| `size` | `sm`, `md` | `md` | `sm` for a panel or a table body. |
+| `headingLevel` | 2–6 | `2` | |
+
+Every other `<div>` attribute passes through.
+
+<Controls of={EmptyStateStories.Default} />
+
+### Design notes
+
+- **Three kinds of empty, three kinds of copy.** First use ("No projects
+  yet", with a way to create one), no results ("No projects match", with
+  a way to clear the filter) and cleared out ("All caught up", often
+  with no action at all). The component is the same; the words are not.
+- **The icon sits on a disc** rather than floating alone, so an empty
+  area gets a centre of gravity without needing an illustration.
+
+## Usage
+
+<Canvas of={EmptyStateStories.Default} />
+
+<Canvas of={EmptyStateStories.Small} />
+
+<Canvas of={EmptyStateStories.TitleOnly} />
+
+## Accessibility
+
+- The title is a heading, so a screen reader user jumping by headings
+  finds out the area is empty. Set `headingLevel` to fit the outline:
+  `3` inside a section headed by an `h2`.
+- The icon is `aria-hidden`; the title has to say it all.
+- An empty state that replaces results after a search is not announced by
+  itself. If the search updates as you type, announce the count
+  elsewhere (a `role="status"` line such as "0 results").

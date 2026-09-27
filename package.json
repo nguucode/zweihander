@@ -104,6 +104,10 @@
       "types": "./dist/components/notifications/Alert.d.ts",
       "import": "./dist/components/notifications/Alert.js"
     },
+    "./empty-state": {
+      "types": "./dist/components/states/EmptyState.d.ts",
+      "import": "./dist/components/states/EmptyState.js"
+    },
     "./theme": {
       "types": "./dist/theme/Theme.d.ts",
       "import": "./dist/theme/Theme.js"

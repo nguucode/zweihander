@@ -34,6 +34,7 @@ export default defineConfig({
         'components/loaders/Skeleton': 'src/components/loaders/Skeleton.tsx',
         'components/navigation/Link': 'src/components/navigation/Link.tsx',
         'components/notifications/Alert': 'src/components/notifications/Alert.tsx',
+        'components/states/EmptyState': 'src/components/states/EmptyState.tsx',
         'theme/Theme': 'src/theme/Theme.tsx',
         'lib/utils': 'src/lib/utils.ts',
       },

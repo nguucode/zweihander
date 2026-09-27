@@ -180,6 +180,7 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/progress-bar.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/skeleton.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/link.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/alert.json
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/empty-state.json
 ```
 
 Or register Zweihänder as a named registry in the project's `components.json`
@@ -229,6 +230,7 @@ import { ProgressBar } from 'zweihander/progress-bar'
 import { Skeleton } from 'zweihander/skeleton'
 import { Link } from 'zweihander/link'
 import { Alert } from 'zweihander/alert'
+import { EmptyState } from 'zweihander/empty-state'
 ```
 
 ```css
