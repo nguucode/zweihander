@@ -172,6 +172,10 @@
       "types": "./dist/components/controls/Rating.d.ts",
       "import": "./dist/components/controls/Rating.js"
     },
+    "./table": {
+      "types": "./dist/components/data-display/Table.d.ts",
+      "import": "./dist/components/data-display/Table.js"
+    },
     "./theme": {
       "types": "./dist/theme/Theme.d.ts",
       "import": "./dist/theme/Theme.js"

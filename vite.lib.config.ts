@@ -51,6 +51,7 @@ export default defineConfig({
         'components/navigation/Stepper': 'src/components/navigation/Stepper.tsx',
         'components/navigation/Sidebar': 'src/components/navigation/Sidebar.tsx',
         'components/controls/Rating': 'src/components/controls/Rating.tsx',
+        'components/data-display/Table': 'src/components/data-display/Table.tsx',
         'theme/Theme': 'src/theme/Theme.tsx',
         'lib/utils': 'src/lib/utils.ts',
       },

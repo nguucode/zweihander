@@ -1076,6 +1076,33 @@
           "target": "components/zweihander/controls/Rating.module.css"
         }
       ]
+    },
+    {
+      "name": "table",
+      "type": "registry:component",
+      "title": "Table",
+      "description": "Native table with captions, row headers, sortable columns (aria-sort), row selection, density, sticky header and an empty state.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/icon.json",
+        "https://ontheshore.biz/zweihander/r/checkbox.json"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "files": [
+        {
+          "path": "src/components/data-display/Table.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/data-display/Table.tsx"
+        },
+        {
+          "path": "src/components/data-display/Table.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/data-display/Table.module.css"
+        }
+      ]
     }
   ]
 }
