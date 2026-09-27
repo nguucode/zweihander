@@ -1,12 +1,12 @@
 import type { Decorator, Preview } from '@storybook/react-vite'
-import { useEffect } from 'react'
 import '../src/index.css'
 
+// Puts the toolbar's theme on <html>, where the dark token set is scoped.
+// Set while rendering rather than in an effect: a decorator is a plain
+// function, not a component, so it cannot call hooks, and toggling a class
+// to the same value twice is harmless.
 const withTheme: Decorator = (Story, context) => {
-  const theme = context.globals.theme ?? 'light'
-  useEffect(() => {
-    document.documentElement.classList.toggle('dark', theme === 'dark')
-  }, [theme])
+  document.documentElement.classList.toggle('dark', (context.globals.theme ?? 'light') === 'dark')
   return <Story />
 }
 
