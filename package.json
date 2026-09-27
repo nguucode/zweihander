@@ -96,6 +96,10 @@
       "types": "./dist/components/loaders/Skeleton.d.ts",
       "import": "./dist/components/loaders/Skeleton.js"
     },
+    "./link": {
+      "types": "./dist/components/navigation/Link.d.ts",
+      "import": "./dist/components/navigation/Link.js"
+    },
     "./theme": {
       "types": "./dist/theme/Theme.d.ts",
       "import": "./dist/theme/Theme.js"

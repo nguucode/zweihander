@@ -1,0 +1,79 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import * as LinkStories from './Link.stories'
+
+<Meta of={LinkStories} />
+
+# Link
+
+Text that takes you somewhere: another page, a section of this one, an
+outside site. It navigates; it does not act. For an action, use a
+[Button](?path=/docs/components-buttons-button--docs). Spec:
+[uiguideline.com/components/link](https://www.uiguideline.com/components/link).
+
+<Canvas of={LinkStories.InText} />
+
+## Anatomy
+
+| Part | What it is |
+| --- | --- |
+| **Text** | The link's name. Say where it goes ("See pricing"), not "click here". |
+| **Underline** | 1px, thickening to 2px on hover. |
+| **External icon** | With `isExternal`: an arrow out of a box, plus "(opens in a new tab)" for screen readers. |
+
+## Props
+
+| Prop | Values | Default | |
+| --- | --- | --- | --- |
+| `href` | string | – | |
+| `variant` | `primary`, `accent`, `secondary` | `primary` | Colour. `accent` is the foreground. |
+| `size` | `sm`, `md`, `lg` | – | Omitted, it inherits the size of the text around it. |
+| `underline` | `always`, `hover` | `always` | See below. |
+| `isExternal` | boolean | `false` | New tab, `rel="noopener noreferrer"`, icon and announcement. |
+| `isDisabled` | boolean | `false` | Drops `href`, sets `aria-disabled`. |
+| `render` | element or function | – | Replaces the `<a>`, e.g. a router's `<Link />`. |
+
+Every other `<a>` attribute passes through, including `ref`.
+
+<Controls of={LinkStories.Default} />
+
+### Design notes
+
+- **Underlined by default.** Colour alone does not mark a link for
+  someone who cannot tell the colours apart (WCAG 1.4.1), so a link in
+  running text keeps its line. `underline="hover"` is for places where
+  the context already says "these are links": a nav list, a footer
+  column.
+- **Hover thickens the line, it does not change the colour.** Every
+  variant is a text colour measured at 4.5:1; a hover colour would need
+  measuring again for every accent and mode.
+- **No `visited` style.** Most links in an app lead to screens, not
+  documents, and a purple "seen it" marker there is noise.
+
+## Usage
+
+<Canvas of={LinkStories.Variants} />
+
+<Canvas of={LinkStories.Sizes} />
+
+<Canvas of={LinkStories.UnderlineOnHover} />
+
+<Canvas of={LinkStories.External} />
+
+With a router, pass its link as `render`. Link merges its class and props
+onto it, and the router keeps control of navigation:
+
+```tsx
+<Link render={<RouterLink to="/settings" />}>Settings</Link>
+```
+
+## Accessibility
+
+- A real `<a href>`, so it is in the tab order, opens with Enter, and
+  shows up in a screen reader's list of links.
+- `isExternal` adds "(opens in a new tab)" to the accessible name: a new
+  tab that opens without warning strands people who cannot see it happen.
+- `isDisabled` removes `href`, the only thing that stops an `<a>`
+  navigating, and marks it `aria-disabled`. Without an `href` it leaves
+  the tab order. Prefer hiding a link that cannot be followed, or saying
+  in text why it is unavailable.
+- Focus shows a 2px `--ring` outline, offset 2px.

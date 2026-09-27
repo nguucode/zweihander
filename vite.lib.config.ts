@@ -32,6 +32,7 @@ export default defineConfig({
         'components/loaders/Spinner': 'src/components/loaders/Spinner.tsx',
         'components/loaders/ProgressBar': 'src/components/loaders/ProgressBar.tsx',
         'components/loaders/Skeleton': 'src/components/loaders/Skeleton.tsx',
+        'components/navigation/Link': 'src/components/navigation/Link.tsx',
         'theme/Theme': 'src/theme/Theme.tsx',
         'lib/utils': 'src/lib/utils.ts',
       },
