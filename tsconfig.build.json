@@ -40,6 +40,7 @@
     "src/components/navigation/Pagination.tsx",
     "src/components/navigation/Tabs.tsx",
     "src/components/notifications/Toast.tsx",
+    "src/components/notifications/InlineAlert.tsx",
     "src/theme/Theme.tsx",
     "src/lib/utils.ts"
   ]

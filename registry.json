@@ -881,6 +881,29 @@
           "target": "components/zweihander/notifications/Toast.module.css"
         }
       ]
+    },
+    {
+      "name": "inline-alert",
+      "type": "registry:component",
+      "title": "Inline Alert",
+      "description": "One-line message in the flow of a form or section: icon, text in the variant's colour, optional action and live announcement.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/icon.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/notifications/InlineAlert.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/notifications/InlineAlert.tsx"
+        },
+        {
+          "path": "src/components/notifications/InlineAlert.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/notifications/InlineAlert.module.css"
+        }
+      ]
     }
   ]
 }

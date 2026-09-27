@@ -140,6 +140,10 @@
       "types": "./dist/components/notifications/Toast.d.ts",
       "import": "./dist/components/notifications/Toast.js"
     },
+    "./inline-alert": {
+      "types": "./dist/components/notifications/InlineAlert.d.ts",
+      "import": "./dist/components/notifications/InlineAlert.js"
+    },
     "./theme": {
       "types": "./dist/theme/Theme.d.ts",
       "import": "./dist/theme/Theme.js"

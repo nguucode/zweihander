@@ -43,6 +43,7 @@ export default defineConfig({
         'components/navigation/Pagination': 'src/components/navigation/Pagination.tsx',
         'components/navigation/Tabs': 'src/components/navigation/Tabs.tsx',
         'components/notifications/Toast': 'src/components/notifications/Toast.tsx',
+        'components/notifications/InlineAlert': 'src/components/notifications/InlineAlert.tsx',
         'theme/Theme': 'src/theme/Theme.tsx',
         'lib/utils': 'src/lib/utils.ts',
       },
