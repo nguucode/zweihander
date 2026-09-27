@@ -67,6 +67,9 @@ type.
 - **Keyboard:** Space, Enter or Up/Down open it; arrows move, typing
   jumps to a matching option, Enter selects, Escape closes, and focus
   returns to the field.
+- **Read-only** locks the value, not the list: it still opens so the
+  options can be read, but choosing one changes nothing. The field has
+  `aria-readonly`. Use `disabled` when the list should not open at all.
 - The label is associated with the field (it is a `<div>` because a
   `<label>` would also click the button).
 - The list renders in a portal at the end of `<body>`: it reads the
