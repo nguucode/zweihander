@@ -47,6 +47,7 @@
     "src/components/controls/Slider.tsx",
     "src/components/navigation/Stepper.tsx",
     "src/components/navigation/Sidebar.tsx",
+    "src/components/controls/Rating.tsx",
     "src/theme/Theme.tsx",
     "src/lib/utils.ts"
   ]

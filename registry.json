@@ -1053,6 +1053,29 @@
           "target": "components/zweihander/navigation/Sidebar.module.css"
         }
       ]
+    },
+    {
+      "name": "rating",
+      "type": "registry:component",
+      "title": "Rating",
+      "description": "Star rating on native radios, interactive or read-only with fractional stars, three sizes and custom value text.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/icon.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/controls/Rating.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/controls/Rating.tsx"
+        },
+        {
+          "path": "src/components/controls/Rating.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/controls/Rating.module.css"
+        }
+      ]
     }
   ]
 }

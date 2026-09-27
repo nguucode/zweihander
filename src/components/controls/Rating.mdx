@@ -1,0 +1,72 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import * as RatingStories from './Rating.stories'
+
+<Meta of={RatingStories} />
+
+# Rating
+
+Asks for, or shows, a score out of a few stars: a review, a template's
+rating, a difficulty. Spec:
+[uiguideline.com/components/rating](https://www.uiguideline.com/components/rating).
+Built on native radio buttons; no Base UI part covers it.
+
+<Canvas of={RatingStories.Default} />
+
+## Anatomy
+
+| Part | What it is |
+| --- | --- |
+| **Label** | Optional legend over the stars; names the group. |
+| **Star** | Filled in `--warning-text` up to the value, outlined in `--control-border` after it. 24px (16px at `sm`, 32px at `lg`). |
+
+## Props
+
+| Prop | Values | Default | |
+| --- | --- | --- | --- |
+| `value`, `defaultValue`, `onValueChange` | number | `0` | 0 is unrated. |
+| `max` | number | `5` | |
+| `size` | `sm`, `md`, `lg` | `md` | |
+| `readOnly` | boolean | `false` | Shows a rating; fractions allowed. |
+| `disabled` | boolean | `false` | |
+| `label` | node | – | |
+| `aria-label` | string | – | The name when there is no visible `label`. |
+| `name` | string | – | Submitted with a form. |
+| `getValueText` | `(value, max) => string` | "3 out of 5 stars" | How each value is spoken. |
+
+<Controls of={RatingStories.Default} />
+
+### Design notes
+
+- **Native radios, not a custom widget.** A rating is "pick one of five",
+  which is what a radio group is: arrows, Tab, focus and form
+  submission come from the browser, and a screen reader already knows
+  how to read it. Each radio sits invisibly over its star.
+- **Stars in `--warning-text`, not the amber solid.** A star that carries
+  the score needs 3:1 against the page; the bright amber solid is 2.1:1 on
+  white, the warning text colour 7.1:1. Empty stars use
+  `--control-border`, also 3:1.
+- **Read-only is one image.** "4.5 out of 5 stars" is one fact, so it is
+  read once, and a fraction draws as a star filled part-way.
+
+## Usage
+
+<Canvas of={RatingStories.ReadOnly} />
+
+<Canvas of={RatingStories.Sizes} />
+
+<Canvas of={RatingStories.CustomText} />
+
+<Canvas of={RatingStories.Unrated} />
+
+<Canvas of={RatingStories.Disabled} />
+
+## Accessibility
+
+- Interactive: a `<fieldset>` named by its legend, with one radio per
+  star named "1 out of 5 stars" and so on (change the words with
+  `getValueText`). Arrows move the choice; Tab moves into and out of
+  the group.
+- Hover previews the score up to the star under the pointer; focus shows
+  the 2px ring around the star.
+- Read-only: `role="img"` named with the value, "4.5 out of 5 stars".
+- Stars are 16px at `sm` and grow a 44px target on coarse pointers.

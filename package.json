@@ -168,6 +168,10 @@
       "types": "./dist/components/navigation/Sidebar.d.ts",
       "import": "./dist/components/navigation/Sidebar.js"
     },
+    "./rating": {
+      "types": "./dist/components/controls/Rating.d.ts",
+      "import": "./dist/components/controls/Rating.js"
+    },
     "./theme": {
       "types": "./dist/theme/Theme.d.ts",
       "import": "./dist/theme/Theme.js"
