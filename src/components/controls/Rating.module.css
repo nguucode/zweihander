@@ -49,12 +49,14 @@ label.star {
   cursor: var(--cursor-button);
 }
 
-/* Hover previews the rating up to the star under the pointer. */
-.stars:has(label.star:hover) label.star {
+/* Hover previews the rating up to the star under the pointer, and only
+   while the rating can be changed. The "on" selectors outrank the "off"
+   one (each adds a pseudo-class to it), so the hovered star lights too. */
+fieldset:enabled .stars:has(label.star:hover) label.star {
   color: var(--rating-off);
 }
-.stars:has(label.star:hover) label.star:has(~ label.star:hover),
-.stars label.star:hover {
+fieldset:enabled .stars:has(label.star:hover) label.star:has(~ label.star:hover),
+fieldset:enabled .stars:has(label.star:hover) label.star:hover {
   color: var(--rating-on);
 }
 
