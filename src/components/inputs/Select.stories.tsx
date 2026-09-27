@@ -36,6 +36,7 @@ export const Default: Story = {
     await userEvent.click(await screen.findByRole('option', { name: 'Phoenix Hickman' }))
     await expect(args.onValueChange).toHaveBeenLastCalledWith('phoenix')
     await waitFor(() => expect(trigger).toHaveTextContent('Phoenix Hickman'))
+    await waitFor(() => expect(screen.queryByRole('listbox')).toBeNull())
   },
 }
 
@@ -105,8 +106,6 @@ export const Disabled: Story = {
   args: { disabled: true, defaultValue: 'miya' },
   play: async ({ canvas, userEvent }) => {
     await userEvent.click(canvas.getByRole('combobox'))
-    // The list opens asynchronously, so give it time before asserting it did not.
-    await new Promise((r) => setTimeout(r, 150))
     await expect(screen.queryByRole('listbox')).toBeNull()
   },
 }
@@ -121,19 +120,17 @@ export const DisabledLook: Story = {
 
 export const ReadOnly: Story = {
   args: { readOnly: true, defaultValue: 'miya' },
-  play: async ({ args, canvas, userEvent }) => {
-    // Base UI's readOnly locks the value, not the list: it can be opened to
-    // see the options, but choosing one changes nothing. (Asserting that it
-    // stays closed only raced the popup's asynchronous open.)
+  play: async ({ canvas, userEvent, args }) => {
+    // Base UI's readOnly locks the value, not the popup: it still opens so
+    // the options can be read, but choosing one changes nothing.
     const trigger = canvas.getByRole('combobox')
     await expect(trigger).toHaveAttribute('aria-readonly', 'true')
     await userEvent.click(trigger)
-    await userEvent.click(await screen.findByRole('option', { name: 'Phoenix Hickman' }))
-    await expect(args.onValueChange).not.toHaveBeenCalled()
-    await expect(trigger).toHaveTextContent('Miya Burns')
-    // Close it, so the list does not leak into the next story.
+    await userEvent.click(await screen.findByRole('option', { name: 'Candice Wu' }))
     await userEvent.keyboard('{Escape}')
     await waitFor(() => expect(screen.queryByRole('listbox')).toBeNull())
+    await expect(args.onValueChange).not.toHaveBeenCalled()
+    await expect(trigger).toHaveTextContent('Miya Burns')
   },
 }
 
@@ -151,6 +148,11 @@ export const Controlled: Story = {
     await userEvent.click(canvas.getByRole('combobox'))
     await userEvent.click(await screen.findByRole('option', { name: 'Candice Wu' }))
     await expect(canvas.getByText('Assigned: candice')).toBeVisible()
+    // The a11y check runs as soon as play returns. Until the exit transition
+    // ends, the closing popup keeps Base UI's focus guards (aria-hidden,
+    // tabindex=0) without its modal state, which axe reports as
+    // aria-hidden-focus. Wait for it to finish closing.
+    await waitFor(() => expect(screen.queryByRole('listbox')).toBeNull())
   },
 }
 
