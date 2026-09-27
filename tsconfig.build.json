@@ -37,6 +37,7 @@
     "src/components/overlays/Modal.tsx",
     "src/components/navigation/Menu.tsx",
     "src/components/navigation/Breadcrumbs.tsx",
+    "src/components/navigation/Pagination.tsx",
     "src/theme/Theme.tsx",
     "src/lib/utils.ts"
   ]

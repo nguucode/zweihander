@@ -40,6 +40,7 @@ export default defineConfig({
         'components/overlays/Modal': 'src/components/overlays/Modal.tsx',
         'components/navigation/Menu': 'src/components/navigation/Menu.tsx',
         'components/navigation/Breadcrumbs': 'src/components/navigation/Breadcrumbs.tsx',
+        'components/navigation/Pagination': 'src/components/navigation/Pagination.tsx',
         'theme/Theme': 'src/theme/Theme.tsx',
         'lib/utils': 'src/lib/utils.ts',
       },

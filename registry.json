@@ -807,6 +807,29 @@
           "target": "components/zweihander/navigation/Breadcrumbs.module.css"
         }
       ]
+    },
+    {
+      "name": "pagination",
+      "type": "registry:component",
+      "title": "Pagination",
+      "description": "Previous, next and a stable range of page numbers with ellipses, as buttons or links.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/icon.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/navigation/Pagination.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/navigation/Pagination.tsx"
+        },
+        {
+          "path": "src/components/navigation/Pagination.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/navigation/Pagination.module.css"
+        }
+      ]
     }
   ]
 }

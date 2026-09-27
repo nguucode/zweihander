@@ -186,6 +186,7 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/popover.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/modal.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/menu.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/breadcrumbs.json
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/pagination.json
 ```
 
 Or register Zweihänder as a named registry in the project's `components.json`
@@ -241,6 +242,7 @@ import { Popover } from 'zweihander/popover'
 import { Modal } from 'zweihander/modal'
 import { Menu } from 'zweihander/menu'
 import { Breadcrumbs } from 'zweihander/breadcrumbs'
+import { Pagination } from 'zweihander/pagination'
 ```
 
 ```css

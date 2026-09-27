@@ -1,0 +1,90 @@
+.pagination {
+  --pagination-size: var(--space-10);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+}
+
+.sm {
+  --pagination-size: var(--space-8);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Square, ghost-button controls: the current page is the only solid. */
+.control {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-inline-size: var(--pagination-size);
+  block-size: var(--pagination-size);
+  margin: 0;
+  padding: 0 var(--space-2);
+  border: 0;
+  border-radius: var(--radius-control);
+  background: transparent;
+  color: var(--foreground);
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+  text-decoration: none;
+  cursor: var(--cursor-button);
+  transition:
+    background-color 150ms,
+    color 150ms;
+}
+a.control[href] {
+  cursor: var(--cursor-link);
+}
+
+.control:hover:not(:disabled, [aria-disabled='true'], .current) {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+
+.control:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.current {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  font-weight: 500;
+  cursor: default;
+}
+
+.step {
+  font-size: calc(var(--pagination-size) / 2.5);
+}
+
+.control:disabled,
+.control[aria-disabled='true'] {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.ellipsis {
+  display: inline-flex;
+  justify-content: center;
+  min-inline-size: var(--space-6);
+  color: var(--muted-foreground);
+}
+
+/* 40px at md is below the 44px touch target; grow it on coarse pointers. */
+@media (pointer: coarse) {
+  .control {
+    min-inline-size: 44px;
+    block-size: 44px;
+  }
+}
