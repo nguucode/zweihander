@@ -830,6 +830,31 @@
           "target": "components/zweihander/navigation/Pagination.module.css"
         }
       ]
+    },
+    {
+      "name": "tabs",
+      "type": "registry:component",
+      "title": "Tabs",
+      "description": "Underline or pill tabs with a sliding indicator, icons, vertical orientation and panels, on Base UI Tabs.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "files": [
+        {
+          "path": "src/components/navigation/Tabs.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/navigation/Tabs.tsx"
+        },
+        {
+          "path": "src/components/navigation/Tabs.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/navigation/Tabs.module.css"
+        }
+      ]
     }
   ]
 }

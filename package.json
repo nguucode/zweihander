@@ -132,6 +132,10 @@
       "types": "./dist/components/navigation/Pagination.d.ts",
       "import": "./dist/components/navigation/Pagination.js"
     },
+    "./tabs": {
+      "types": "./dist/components/navigation/Tabs.d.ts",
+      "import": "./dist/components/navigation/Tabs.js"
+    },
     "./theme": {
       "types": "./dist/theme/Theme.d.ts",
       "import": "./dist/theme/Theme.js"
