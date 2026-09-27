@@ -678,6 +678,31 @@
           "target": "components/zweihander/states/EmptyState.module.css"
         }
       ]
+    },
+    {
+      "name": "tooltip",
+      "type": "registry:component",
+      "title": "Tooltip",
+      "description": "Short inverted label on hover or focus, with arrow, side and delay, on Base UI Tooltip; TooltipGroup shares the delay.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "files": [
+        {
+          "path": "src/components/overlays/Tooltip.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/overlays/Tooltip.tsx"
+        },
+        {
+          "path": "src/components/overlays/Tooltip.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/overlays/Tooltip.module.css"
+        }
+      ]
     }
   ]
 }
