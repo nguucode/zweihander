@@ -1,0 +1,94 @@
+.collapse {
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--foreground);
+}
+
+.sm {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+}
+
+/* A text button: it belongs to the content around it, not to a toolbar. */
+.trigger {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--foreground);
+  font: inherit;
+  font-weight: 500;
+  cursor: var(--cursor-button);
+}
+.trigger:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.trigger:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+.trigger[data-disabled] {
+  opacity: 0.5;
+  cursor: var(--cursor-disabled);
+  text-decoration: none;
+}
+
+.chevron {
+  display: inline-flex;
+  font-size: var(--space-4);
+  color: var(--muted-foreground);
+  transition: rotate 150ms;
+}
+.trigger[data-panel-open] .chevron {
+  rotate: 90deg;
+}
+
+/* Both labels are rendered and one is hidden, so the button's name follows
+   its state without a re-render flicker. */
+.trigger[data-panel-open] .closedLabel,
+.trigger:not([data-panel-open]) .openLabel {
+  display: none;
+}
+
+/* Base UI measures the content into --collapsible-panel-height; animating
+   height to it and to 0 at the start and end states is its documented
+   pattern, as on Accordion. */
+.panel {
+  block-size: var(--collapsible-panel-height);
+  overflow: hidden;
+  transition: block-size 150ms ease-out;
+}
+.panel[data-starting-style],
+.panel[data-ending-style] {
+  block-size: 0;
+}
+.content {
+  padding-block-start: var(--space-2);
+}
+
+/* The 20px text button grows to a 44px target on coarse pointers. */
+@media (pointer: coarse) {
+  .trigger::before {
+    content: '';
+    position: absolute;
+    inset: 50% auto auto 0;
+    inline-size: 100%;
+    min-inline-size: 44px;
+    block-size: 44px;
+    translate: 0 -50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel,
+  .chevron {
+    transition: none;
+  }
+}

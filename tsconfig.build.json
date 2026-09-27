@@ -43,6 +43,7 @@
     "src/components/notifications/InlineAlert.tsx",
     "src/components/states/ErrorState.tsx",
     "src/components/states/SuccessState.tsx",
+    "src/components/data-display/Collapse.tsx",
     "src/theme/Theme.tsx",
     "src/lib/utils.ts"
   ]

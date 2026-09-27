@@ -1,0 +1,66 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import * as CollapseStories from './Collapse.stories'
+
+<Meta of={CollapseStories} />
+
+# Collapse
+
+One show/hide section: "Show details", "Advanced settings". A text button
+with a chevron, and the content it reveals under it. For a list of
+sections, use an [Accordion](?path=/docs/components-data-display-accordion--docs).
+Our own spec: uiguideline.com has no page for it. Behaviour from Base
+UI's [Collapsible](https://base-ui.com/react/components/collapsible).
+
+<Canvas of={CollapseStories.Open} />
+
+## Anatomy
+
+| Part | What it is |
+| --- | --- |
+| **Trigger** | A medium-weight text button, underlined on hover, with a chevron that turns from right to down. |
+| **Panel** | The content, 8px under the trigger. Its height animates open and shut. |
+
+## Props
+
+| Prop | Values | Default | |
+| --- | --- | --- | --- |
+| `label` | node | – | Required. The trigger's text. |
+| `openLabel` | node | `label` | The trigger's text while open, e.g. "Hide details". |
+| `children` | node | – | Required. |
+| `open`, `defaultOpen`, `onOpenChange` | | | Controlled or uncontrolled. |
+| `size` | `sm`, `md` | `md` | `body-sm` or `body`. |
+| `disabled` | boolean | `false` | |
+| `hiddenUntilFound` | boolean | `true` | Closed content stays findable. |
+
+<Controls of={CollapseStories.Default} />
+
+### Design notes
+
+- **A text button, not a bar.** Accordion items are full-width bars with
+  dividers because they are the page's structure; a Collapse is one
+  aside in running content, so its trigger reads like a link in a
+  sentence.
+- **Findable when closed.** By default closed content is kept as
+  `hidden="until-found"`: the browser's find-in-page still matches it and
+  opens the section. Turn it off only for content that is expensive to
+  render.
+
+## Usage
+
+<Canvas of={CollapseStories.Default} />
+
+<Canvas of={CollapseStories.Small} />
+
+<Canvas of={CollapseStories.Disabled} />
+
+## Accessibility
+
+- The trigger is a `<button>` with `aria-expanded` and `aria-controls`
+  pointing at the panel.
+- Enter or Space toggles it. With `openLabel`, the button's name changes
+  with its state ("Show details" / "Hide details"), and `aria-expanded`
+  says it either way.
+- The chevron is decorative. The trigger grows to a 44px target on
+  coarse pointers.
+- Under `prefers-reduced-motion` the panel and chevron change without
+  animating.

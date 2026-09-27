@@ -46,6 +46,7 @@ export default defineConfig({
         'components/notifications/InlineAlert': 'src/components/notifications/InlineAlert.tsx',
         'components/states/ErrorState': 'src/components/states/ErrorState.tsx',
         'components/states/SuccessState': 'src/components/states/SuccessState.tsx',
+        'components/data-display/Collapse': 'src/components/data-display/Collapse.tsx',
         'theme/Theme': 'src/theme/Theme.tsx',
         'lib/utils': 'src/lib/utils.ts',
       },

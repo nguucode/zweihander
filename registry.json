@@ -952,6 +952,32 @@
           "target": "components/zweihander/states/SuccessState.module.css"
         }
       ]
+    },
+    {
+      "name": "collapse",
+      "type": "registry:component",
+      "title": "Collapse",
+      "description": "One show/hide section with a text-button trigger, changing label and find-in-page support, on Base UI Collapsible.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/icon.json"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "files": [
+        {
+          "path": "src/components/data-display/Collapse.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/data-display/Collapse.tsx"
+        },
+        {
+          "path": "src/components/data-display/Collapse.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/data-display/Collapse.module.css"
+        }
+      ]
     }
   ]
 }

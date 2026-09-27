@@ -152,6 +152,10 @@
       "types": "./dist/components/states/SuccessState.d.ts",
       "import": "./dist/components/states/SuccessState.js"
     },
+    "./collapse": {
+      "types": "./dist/components/data-display/Collapse.d.ts",
+      "import": "./dist/components/data-display/Collapse.js"
+    },
     "./theme": {
       "types": "./dist/theme/Theme.d.ts",
       "import": "./dist/theme/Theme.js"
