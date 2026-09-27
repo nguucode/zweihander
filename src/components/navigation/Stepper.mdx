@@ -1,0 +1,72 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import * as StepperStories from './Stepper.stories'
+
+<Meta of={StepperStories} />
+
+# Stepper
+
+Shows where the reader is in a flow of a few ordered steps: sign-up,
+checkout, a setup wizard. Spec:
+[uiguideline.com/components/stepper](https://www.uiguideline.com/components/stepper).
+A plain element.
+
+<Canvas of={StepperStories.Default} />
+
+## Anatomy
+
+| Part | What it is |
+| --- | --- |
+| **Marker** | A 32px disc (24px at `sm`): a check when complete, the number when current (primary ring) or upcoming (grey ring), a warning icon on error. |
+| **Label** | Medium weight; muted for upcoming steps, danger for an error. |
+| **Description** | Optional, small, muted. |
+| **Connector** | The line to the next step: primary once the step is complete, `--border` ahead. |
+
+## Props
+
+| Prop | Values | Default | |
+| --- | --- | --- | --- |
+| `steps` | `{ label, description?, status? }[]` | – | Required. |
+| `current` | number (0-based) | – | Required. Earlier steps are complete. |
+| `orientation` | `horizontal`, `vertical` | `horizontal` | |
+| `size` | `sm`, `md` | `md` | |
+| `onStepClick` | `(index) => void` | – | Makes finished and current steps buttons. |
+| `aria-label` | string | `Progress` | The landmark's name. |
+
+A step's `status` (`complete`, `current`, `upcoming`, `error`) overrides
+the one worked out from `current`. Every other `<nav>` attribute passes
+through.
+
+<Controls of={StepperStories.Default} />
+
+### Design notes
+
+- **Horizontal puts the text under the marker**, so the connectors run
+  marker to marker and every step gets the same width whatever the
+  length of its label. Use vertical when the steps have long
+  descriptions, or in a narrow sidebar.
+- **Only finished steps can be revisited.** With `onStepClick`, complete
+  and current steps become buttons; upcoming ones stay text, because a
+  flow that can be skipped ahead is a set of Tabs.
+- **Complete is filled, current is ringed.** Both use the primary
+  colour; the fill says "done", the ring says "you are here".
+
+## Usage
+
+<Canvas of={StepperStories.Navigable} />
+
+<Canvas of={StepperStories.Vertical} />
+
+<Canvas of={StepperStories.WithError} />
+
+<Canvas of={StepperStories.Small} />
+
+## Accessibility
+
+- A `<nav>` landmark named "Progress" around an ordered list: screen
+  readers announce the number of steps and the position of each.
+- The current step has `aria-current="step"`.
+- The marker is decorative, so each label carries its status in
+  visually hidden text: "Account, completed", "Invite, not started",
+  "Workspace, has an error".
+- With `onStepClick`, the clickable steps are real buttons with the
+  focus ring, and grow to 44px on coarse pointers.

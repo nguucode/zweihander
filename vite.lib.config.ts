@@ -48,6 +48,7 @@ export default defineConfig({
         'components/states/SuccessState': 'src/components/states/SuccessState.tsx',
         'components/data-display/Collapse': 'src/components/data-display/Collapse.tsx',
         'components/controls/Slider': 'src/components/controls/Slider.tsx',
+        'components/navigation/Stepper': 'src/components/navigation/Stepper.tsx',
         'theme/Theme': 'src/theme/Theme.tsx',
         'lib/utils': 'src/lib/utils.ts',
       },

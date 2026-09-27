@@ -160,6 +160,10 @@
       "types": "./dist/components/controls/Slider.d.ts",
       "import": "./dist/components/controls/Slider.js"
     },
+    "./stepper": {
+      "types": "./dist/components/navigation/Stepper.d.ts",
+      "import": "./dist/components/navigation/Stepper.js"
+    },
     "./theme": {
       "types": "./dist/theme/Theme.d.ts",
       "import": "./dist/theme/Theme.js"

@@ -1003,6 +1003,29 @@
           "target": "components/zweihander/controls/Slider.module.css"
         }
       ]
+    },
+    {
+      "name": "stepper",
+      "type": "registry:component",
+      "title": "Stepper",
+      "description": "Progress through ordered steps, horizontal or vertical, with complete/current/upcoming/error states and optional back navigation.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/icon.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/navigation/Stepper.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/navigation/Stepper.tsx"
+        },
+        {
+          "path": "src/components/navigation/Stepper.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/navigation/Stepper.module.css"
+        }
+      ]
     }
   ]
 }
