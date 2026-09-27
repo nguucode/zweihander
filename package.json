@@ -100,6 +100,10 @@
       "types": "./dist/components/navigation/Link.d.ts",
       "import": "./dist/components/navigation/Link.js"
     },
+    "./alert": {
+      "types": "./dist/components/notifications/Alert.d.ts",
+      "import": "./dist/components/notifications/Alert.js"
+    },
     "./theme": {
       "types": "./dist/theme/Theme.d.ts",
       "import": "./dist/theme/Theme.js"

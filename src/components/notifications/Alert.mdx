@@ -1,0 +1,84 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import * as AlertStories from './Alert.stories'
+
+<Meta of={AlertStories} />
+
+# Alert
+
+A message about a page or a section: something went wrong, something
+needs attention, something worked. It stays where it is until the
+situation changes or the reader dismisses it. For a message that comes
+and goes on its own, use a Toast. Spec:
+[uiguideline.com/components/alert](https://www.uiguideline.com/components/alert).
+A plain element.
+
+<Canvas of={AlertStories.WithAction} />
+
+## Anatomy
+
+| Part | What it is |
+| --- | --- |
+| **Icon** | The variant's icon: `info`, `success`, `warning`, `danger`. Replaceable, or `false` for none. |
+| **Title** | Optional, semibold. Says what happened in a few words. |
+| **Description** | `children`. What it means and what to do. |
+| **Action** | Optional buttons or links under the description. |
+| **Close button** | Shown when `onClose` is given. |
+
+## Props
+
+| Prop | Values | Default | |
+| --- | --- | --- | --- |
+| `variant` | `info`, `success`, `warning`, `danger` | `info` | |
+| `appearance` | `subtle`, `outlined`, `solid` | `subtle` | The same three as Tag. |
+| `title` | node | – | |
+| `children` | node | – | The description. |
+| `icon` | node or `false` | variant's icon | |
+| `action` | node | – | |
+| `onClose` | function | – | Shows the close button. The alert does not hide itself. |
+| `closeLabel` | string | `Dismiss` | The close button's accessible name. |
+| `isLive` | boolean | `false` | Announce it when it appears. See Accessibility. |
+
+Every other `<div>` attribute passes through.
+
+<Controls of={AlertStories.Default} />
+
+### Design notes
+
+- **The message stays in `--foreground`** on subtle and outlined. A
+  paragraph in the variant's text colour is tiring to read, so the colour
+  goes on the icon and the title, where the eye lands first.
+- **Colours are Tag's.** Each variant reads the same four tokens, e.g.
+  `--danger`, `--danger-foreground`, `--danger-subtle`, `--danger-text`,
+  so an Alert and a Tag of the same variant always agree.
+- **Closing is the parent's job.** `onClose` reports the click; the alert
+  is removed by whoever rendered it. That keeps "dismissed" in your state,
+  where it can be remembered across visits.
+
+## Usage
+
+<Canvas of={AlertStories.Variants} />
+
+<Canvas of={AlertStories.Appearances} />
+
+<Canvas of={AlertStories.Dismissible} />
+
+<Canvas of={AlertStories.WithoutIcon} />
+
+## Accessibility
+
+- By default an alert is a plain `<div>`: one that is on the page when it
+  loads is read in order, like the text around it.
+- An alert that **appears** in response to something (a failed save)
+  needs `isLive`. `danger` and `warning` become `role="alert"` and are
+  read at once; `info` and `success` become `role="status"` and wait for
+  the screen reader to finish.
+
+  <Canvas of={AlertStories.Live} />
+
+- The icon is decorative (`aria-hidden`): the variant has to be clear
+  from the words too. "Upload failed", not just a red box.
+- The close button is named `Dismiss` (change it with `closeLabel`),
+  shows the 2px `--ring` on focus, and has a 44px touch target on coarse
+  pointers.
+- Every variant and appearance is checked for contrast by the story
+  tests (light mode).

@@ -633,6 +633,29 @@
           "target": "components/zweihander/navigation/Link.module.css"
         }
       ]
+    },
+    {
+      "name": "alert",
+      "type": "registry:component",
+      "title": "Alert",
+      "description": "Page or section message in info, success, warning or danger, subtle/outlined/solid, with optional title, action, close button and live announcement.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/icon.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/notifications/Alert.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/notifications/Alert.tsx"
+        },
+        {
+          "path": "src/components/notifications/Alert.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/notifications/Alert.module.css"
+        }
+      ]
     }
   ]
 }
