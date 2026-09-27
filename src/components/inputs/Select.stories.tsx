@@ -105,6 +105,8 @@ export const Disabled: Story = {
   args: { disabled: true, defaultValue: 'miya' },
   play: async ({ canvas, userEvent }) => {
     await userEvent.click(canvas.getByRole('combobox'))
+    // The list opens asynchronously, so give it time before asserting it did not.
+    await new Promise((r) => setTimeout(r, 150))
     await expect(screen.queryByRole('listbox')).toBeNull()
   },
 }
@@ -119,9 +121,19 @@ export const DisabledLook: Story = {
 
 export const ReadOnly: Story = {
   args: { readOnly: true, defaultValue: 'miya' },
-  play: async ({ canvas, userEvent }) => {
-    await userEvent.click(canvas.getByRole('combobox'))
-    await expect(screen.queryByRole('listbox')).toBeNull()
+  play: async ({ args, canvas, userEvent }) => {
+    // Base UI's readOnly locks the value, not the list: it can be opened to
+    // see the options, but choosing one changes nothing. (Asserting that it
+    // stays closed only raced the popup's asynchronous open.)
+    const trigger = canvas.getByRole('combobox')
+    await expect(trigger).toHaveAttribute('aria-readonly', 'true')
+    await userEvent.click(trigger)
+    await userEvent.click(await screen.findByRole('option', { name: 'Phoenix Hickman' }))
+    await expect(args.onValueChange).not.toHaveBeenCalled()
+    await expect(trigger).toHaveTextContent('Miya Burns')
+    // Close it, so the list does not leak into the next story.
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(screen.queryByRole('listbox')).toBeNull())
   },
 }
 
