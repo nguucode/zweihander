@@ -1026,6 +1026,33 @@
           "target": "components/zweihander/navigation/Stepper.module.css"
         }
       ]
+    },
+    {
+      "name": "sidebar",
+      "type": "registry:component",
+      "title": "Sidebar",
+      "description": "App navigation with header, grouped links, badges, current page and a collapsible icon rail with tooltips.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/icon.json",
+        "https://ontheshore.biz/zweihander/r/tooltip.json"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "files": [
+        {
+          "path": "src/components/navigation/Sidebar.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/navigation/Sidebar.tsx"
+        },
+        {
+          "path": "src/components/navigation/Sidebar.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/navigation/Sidebar.module.css"
+        }
+      ]
     }
   ]
 }

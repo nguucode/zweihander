@@ -195,6 +195,7 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/success-state.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/collapse.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/slider.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/stepper.json
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/sidebar.json
 ```
 
 Or register Zweihänder as a named registry in the project's `components.json`
@@ -258,6 +259,7 @@ import { SuccessState } from 'zweihander/success-state'
 import { Collapse } from 'zweihander/collapse'
 import { Slider } from 'zweihander/slider'
 import { Stepper } from 'zweihander/stepper'
+import { Sidebar } from 'zweihander/sidebar'
 import { ToastProvider, useToast } from 'zweihander/toast'
 ```
 

@@ -49,6 +49,7 @@ export default defineConfig({
         'components/data-display/Collapse': 'src/components/data-display/Collapse.tsx',
         'components/controls/Slider': 'src/components/controls/Slider.tsx',
         'components/navigation/Stepper': 'src/components/navigation/Stepper.tsx',
+        'components/navigation/Sidebar': 'src/components/navigation/Sidebar.tsx',
         'theme/Theme': 'src/theme/Theme.tsx',
         'lib/utils': 'src/lib/utils.ts',
       },
