@@ -38,10 +38,11 @@ export const Default: Story = {
     await expect(canvas.getByRole('tablist', { name: 'Project' })).toBeVisible()
     // The first enabled tab is selected by default, and labels its panel.
     await expect(overview).toHaveAttribute('aria-selected', 'true')
-    await expect(canvas.getByRole('tabpanel', { name: 'Overview' })).toHaveTextContent('design system')
+    await expect(await canvas.findByRole('tabpanel', { name: 'Overview' })).toHaveTextContent('design system')
     await userEvent.click(canvas.getByRole('tab', { name: 'Activity' }))
     await expect(args.onValueChange).toHaveBeenLastCalledWith('activity')
-    await expect(canvas.getByRole('tabpanel')).toHaveTextContent('12 changes')
+    // The panel swaps after the click; wait for it rather than race it.
+    await waitFor(() => expect(canvas.getByRole('tabpanel')).toHaveTextContent('12 changes'))
     // Arrows move focus without selecting. A disabled tab still takes focus
     // (aria-disabled), so it is found and announced, but cannot be selected.
     await userEvent.keyboard('{ArrowRight}')
@@ -54,7 +55,7 @@ export const Default: Story = {
     await waitFor(() => expect(canvas.getByRole('tab', { name: 'Settings' })).toHaveFocus())
     await expect(canvas.getByRole('tab', { name: 'Settings' })).toHaveAttribute('aria-selected', 'false')
     await userEvent.keyboard('{Enter}')
-    await expect(canvas.getByRole('tab', { name: 'Settings' })).toHaveAttribute('aria-selected', 'true')
+    await waitFor(() => expect(canvas.getByRole('tab', { name: 'Settings' })).toHaveAttribute('aria-selected', 'true'))
     // Home and End jump to the ends.
     await userEvent.keyboard('{Home}')
     await waitFor(() => expect(overview).toHaveFocus())

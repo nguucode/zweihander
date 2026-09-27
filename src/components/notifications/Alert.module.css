@@ -65,8 +65,9 @@
 .icon {
   display: inline-flex;
   flex-shrink: 0;
-  /* One line of body text tall, so it sits on the title's line. */
-  font-size: var(--leading-body);
+  /* One line of body text tall, so it sits on the title's line.
+     --leading-body is a ratio, so it is multiplied by 1em. */
+  font-size: calc(var(--leading-body) * 1em);
 }
 
 .body {
