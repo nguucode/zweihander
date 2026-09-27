@@ -152,6 +152,27 @@ for (const g of GRAYS) {
 }
 
 /**
+ * --muted-foreground is body text (descriptions, hints, captions), so it
+ * needs 4.5:1 on every surface it sits on, on every gray ramp. The lightest
+ * gray step of each ramp sits at a slightly different luminance, so one ramp
+ * can pass where its neighbour fails.
+ */
+let worstMuted = Infinity
+for (const g of GRAYS) {
+  for (const mode of ['light', 'dark']) {
+    const c = semantic.color[mode]
+    const gray = Object.fromEntries(entries(primitives.gray[g]).map(([s, v]) => [s, v.$value]))
+    const val = (k) => alias(c[k].$value, { accent: {}, gray })
+    for (const bg of ['background', 'card', 'surface-subtle']) {
+      const ratio = contrast(val('muted-foreground'), val(bg))
+      worstMuted = Math.min(worstMuted, ratio)
+      if (ratio < AA_TEXT)
+        throw new Error(`${mode} --muted-foreground on --${bg} on the ${g} ramp is ${ratio.toFixed(2)}:1, below ${AA_TEXT}:1.`)
+    }
+  }
+}
+
+/**
  * Only the light shadows are authored. Dark scales every alpha and clamps
  * it, so the two modes cannot drift: editing a step edits both.
  */
@@ -548,6 +569,6 @@ if (check) {
 } else {
   const worst = palettes.reduce((a, p) => Math.min(a, p.light.ratio, p.dark.ratio), Infinity)
   console.log(
-    `\n${palettes.length} accents, ${GRAYS.length} grays. Lowest label contrast: ${worst.toFixed(2)}:1 (floor ${AA_TEXT}).`,
+    `\n${palettes.length} accents, ${GRAYS.length} grays. Lowest label contrast: ${worst.toFixed(2)}:1, muted text ${worstMuted.toFixed(2)}:1 (floor ${AA_TEXT}).`,
   )
 }

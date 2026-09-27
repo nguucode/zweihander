@@ -131,9 +131,10 @@ heavier.
 
 **`--surface-subtle` is a filled panel that muted text can sit on.**
 `--muted` is the obvious fill, but muted text on it is 4.34:1; on
-gray-50 it is 4.53:1 (neutral), and 5.83:1 on gray-800 in dark — a step off `--card` so a filled panel still reads as filled. Two gray ramps miss
-even the page: olive and mist put `--muted-foreground` at 4.26:1 and
-4.61:1 on white, and 4.12:1 and 4.45:1 on this surface.
+gray-50 it is 4.53:1 (neutral), and 5.83:1 on gray-800 in dark — a step off `--card` so a filled panel still reads as filled. The build
+measures `--muted-foreground` on `--background`, `--card` and
+`--surface-subtle` in both modes on all nine gray ramps, and stops if any
+pair drops under 4.5:1. The tightest is neutral on this surface, at 4.53:1.
 
 **`--control-border` outlines a checkbox, radio or switch track.** Those
 controls have nothing else that shows they are there, so WCAG 1.4.11 wants
