@@ -184,6 +184,10 @@
       "types": "./dist/components/inputs/DatePicker.d.ts",
       "import": "./dist/components/inputs/DatePicker.js"
     },
+    "./carousel": {
+      "types": "./dist/components/data-display/Carousel.d.ts",
+      "import": "./dist/components/data-display/Carousel.js"
+    },
     "./theme": {
       "types": "./dist/theme/Theme.d.ts",
       "import": "./dist/theme/Theme.js"

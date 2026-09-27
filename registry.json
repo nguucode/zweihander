@@ -1154,6 +1154,29 @@
           "target": "components/zweihander/inputs/DatePicker.module.css"
         }
       ]
+    },
+    {
+      "name": "carousel",
+      "type": "registry:component",
+      "title": "Carousel",
+      "description": "Slides in a native scroll-snap track, with previous/next, dots, loop and pausable autoplay.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/icon.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/data-display/Carousel.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/data-display/Carousel.tsx"
+        },
+        {
+          "path": "src/components/data-display/Carousel.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/data-display/Carousel.module.css"
+        }
+      ]
     }
   ]
 }

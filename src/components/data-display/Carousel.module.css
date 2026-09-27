@@ -1,0 +1,119 @@
+.carousel {
+  --carousel-gap: var(--space-4);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+  font-family: var(--font-sans);
+  color: var(--foreground);
+}
+
+/* Controls sit above the track, at its end: they never cover a slide. */
+.controls {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-1);
+}
+
+.button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--space-8);
+  block-size: var(--space-8);
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--control-border);
+  border-radius: 9999px;
+  background: var(--background);
+  color: var(--foreground);
+  font-size: var(--space-4);
+  cursor: var(--cursor-button);
+}
+.button:hover:not(:disabled) {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+.button:disabled {
+  opacity: 0.5;
+  cursor: var(--cursor-disabled);
+}
+
+/* Native scrolling with snap points: swipe and trackpad for free. */
+.track {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: calc(
+    (100% - (var(--carousel-per-view) - 1) * var(--carousel-gap)) / var(--carousel-per-view)
+  );
+  column-gap: var(--carousel-gap);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+.track::-webkit-scrollbar {
+  display: none;
+}
+
+.slide {
+  min-inline-size: 0;
+  scroll-snap-align: start;
+}
+
+.dots {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-2);
+}
+
+/* 8px dots on a 24px target; the current one is a longer pill. */
+.dot {
+  position: relative;
+  inline-size: var(--space-2);
+  block-size: var(--space-2);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 9999px;
+  background: var(--control-border);
+  cursor: var(--cursor-button);
+  transition: inline-size 150ms;
+}
+.dot::before {
+  content: '';
+  position: absolute;
+  inset: 50% auto auto 50%;
+  inline-size: var(--space-6);
+  block-size: var(--space-6);
+  translate: -50% -50%;
+}
+.dotActive {
+  inline-size: var(--space-6);
+  background: var(--foreground);
+}
+
+.track:focus-visible,
+.button:focus-visible,
+.dot:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+@media (pointer: coarse) {
+  .button::before,
+  .dot::before {
+    content: '';
+    position: absolute;
+    inset: 50% auto auto 50%;
+    inline-size: 44px;
+    block-size: 44px;
+    translate: -50% -50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dot {
+    transition: none;
+  }
+}
