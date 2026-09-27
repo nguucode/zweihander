@@ -37,6 +37,7 @@ export default defineConfig({
         'components/states/EmptyState': 'src/components/states/EmptyState.tsx',
         'components/overlays/Tooltip': 'src/components/overlays/Tooltip.tsx',
         'components/overlays/Popover': 'src/components/overlays/Popover.tsx',
+        'components/overlays/Modal': 'src/components/overlays/Modal.tsx',
         'theme/Theme': 'src/theme/Theme.tsx',
         'lib/utils': 'src/lib/utils.ts',
       },

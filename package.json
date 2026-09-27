@@ -116,6 +116,10 @@
       "types": "./dist/components/overlays/Popover.d.ts",
       "import": "./dist/components/overlays/Popover.js"
     },
+    "./modal": {
+      "types": "./dist/components/overlays/Modal.d.ts",
+      "import": "./dist/components/overlays/Modal.js"
+    },
     "./theme": {
       "types": "./dist/theme/Theme.d.ts",
       "import": "./dist/theme/Theme.js"

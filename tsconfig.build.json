@@ -34,6 +34,7 @@
     "src/components/states/EmptyState.tsx",
     "src/components/overlays/Tooltip.tsx",
     "src/components/overlays/Popover.tsx",
+    "src/components/overlays/Modal.tsx",
     "src/theme/Theme.tsx",
     "src/lib/utils.ts"
   ]

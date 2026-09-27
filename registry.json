@@ -729,6 +729,32 @@
           "target": "components/zweihander/overlays/Popover.module.css"
         }
       ]
+    },
+    {
+      "name": "modal",
+      "type": "registry:component",
+      "title": "Modal",
+      "description": "Centred dialog with title, description, scrolling body and footer, or an alert dialog for decisions, on Base UI Dialog and Alert Dialog.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/icon.json"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "files": [
+        {
+          "path": "src/components/overlays/Modal.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/overlays/Modal.tsx"
+        },
+        {
+          "path": "src/components/overlays/Modal.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/overlays/Modal.module.css"
+        }
+      ]
     }
   ]
 }
