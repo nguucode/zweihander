@@ -153,7 +153,8 @@ function Entries({ items }: { items: MenuEntry[] }) {
             </BaseMenu.SubmenuRoot>
           )
         }
-        if (entry.href !== undefined) {
+        // A disabled link is an inert item: Base UI's LinkItem has no disabled state.
+        if (entry.href !== undefined && !entry.disabled) {
           return (
             <BaseMenu.LinkItem key={i} href={entry.href} label={text(entry.label, entry.textValue)} className={className}>
               {content}

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { expect } from 'storybook/test'
+import { expect, fn, userEvent } from 'storybook/test'
 import { Link } from './Link'
 
 const meta = {
@@ -92,12 +92,15 @@ export const External: Story = {
 }
 
 export const Disabled: Story = {
-  args: { isDisabled: true },
-  play: async ({ canvasElement }) => {
+  args: { isDisabled: true, onClick: fn() },
+  play: async ({ args, canvasElement }) => {
     // No href: it cannot navigate, and so is no longer a link role.
     const a = canvasElement.querySelector('a')!
     await expect(a).not.toHaveAttribute('href')
     await expect(a).toHaveAttribute('aria-disabled', 'true')
+    // Its handlers are dropped too: a click does nothing.
+    await userEvent.click(a)
+    await expect(args.onClick).not.toHaveBeenCalled()
   },
 }
 

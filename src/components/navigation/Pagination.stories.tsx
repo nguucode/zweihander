@@ -42,8 +42,14 @@ export const FewPages: Story = {
 /** Pages with their own URL: links, not buttons. */
 export const Links: Story = {
   args: { defaultPage: 3, getHref: (p) => `#page-${p}` },
-  play: async ({ canvas }) => {
+  play: async ({ args, canvas, canvasElement }) => {
     await expect(canvas.getByRole('link', { name: 'Page 4' })).toHaveAttribute('href', '#page-4')
+    // Keep the test page where it is while links are clicked.
+    canvasElement.addEventListener('click', (e) => e.preventDefault())
+    // Clicking the page already shown does not report a change.
+    ;(args.onPageChange as ReturnType<typeof fn>).mockClear()
+    await userEvent.click(canvas.getByRole('link', { name: 'Page 3' }))
+    await expect(args.onPageChange).not.toHaveBeenCalled()
     await expect(canvas.getByRole('link', { name: 'Page 3' })).toHaveAttribute('aria-current', 'page')
   },
 }

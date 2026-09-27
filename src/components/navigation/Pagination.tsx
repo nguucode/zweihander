@@ -72,7 +72,7 @@ export function Pagination({
           {content}
         </a>
       ) : (
-        <a {...common} href={getHref(target)} onClick={() => go(target)}>
+        <a {...common} href={getHref(target)} onClick={() => !current && go(target)}>
           {content}
         </a>
       )

@@ -118,6 +118,36 @@ export const PromiseToast: Story = {
   },
 }
 
+function UpdateDemo() {
+  const toast = useToast()
+  return (
+    <Button
+      onClick={() => {
+        const id = toast.add({ variant: 'success', title: 'Moved', action: { label: 'Undo', onClick: () => {} } })
+        setTimeout(() => toast.update(id, { description: '3 files' }), 100)
+      }}
+    >
+      Move
+    </Button>
+  )
+}
+
+/** A partial update changes only what it names: the variant and action stay. */
+export const Update: Story = {
+  render: (args) => (
+    <ToastProvider {...args}>
+      <UpdateDemo />
+    </ToastProvider>
+  ),
+  play: async ({ canvas }) => {
+    await userEvent.click(canvas.getByRole('button', { name: 'Move' }))
+    await body().findByText('3 files', {}, { timeout: 3000 })
+    const toast = document.querySelector('[role="dialog"]')!
+    await expect(toast).toHaveAttribute('data-type', 'success')
+    await expect(within(toast as HTMLElement).getByRole('button', { name: 'Undo' })).toBeVisible()
+  },
+}
+
 export const TopCenter: Story = {
   args: { placement: 'top-center' },
   render: (args) => (

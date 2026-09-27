@@ -36,6 +36,10 @@ export function Link({
   ...props
 }: LinkProps) {
   const external = isExternal && !isDisabled
+  // A disabled link does nothing: its handlers are dropped along with href.
+  const own = isDisabled
+    ? Object.fromEntries(Object.entries(props).filter(([key]) => !/^on[A-Z]/.test(key)))
+    : props
   return useRender({
     // Disabled drops the render element as well: a router's Link keeps its
     // own navigation, and only an <a> with no href is truly inert.
@@ -62,7 +66,7 @@ export function Link({
           </>
         ),
       },
-      props as ComponentProps<'a'>,
+      own as ComponentProps<'a'>,
       {
         ...(!isDisabled && href !== undefined && { href }),
         target: external ? '_blank' : target,

@@ -93,12 +93,16 @@ export function ToastProvider({ children, placement = 'bottom-right', timeout = 
 /** Show, update and close toasts from anywhere inside a ToastProvider. */
 export function useToast() {
   const manager = BaseToast.useToastManager()
-  const toOptions = ({ variant, action, priority, ...rest }: ToastOptions) => ({
-    ...rest,
-    type: variant,
-    priority: priority ?? (variant === 'danger' ? ('high' as const) : undefined),
-    actionProps: action && { children: action.label, onClick: action.onClick },
-  })
+  // Only the fields that were given: Base UI merges an update over the
+  // toast, so an explicit undefined would wipe its variant or action.
+  const toOptions = ({ variant, action, priority, ...rest }: ToastOptions) => {
+    const options: Record<string, unknown> = { ...rest }
+    if (variant !== undefined) options.type = variant
+    const p = priority ?? (variant === 'danger' ? 'high' : undefined)
+    if (p !== undefined) options.priority = p
+    if (action !== undefined) options.actionProps = { children: action.label, onClick: action.onClick }
+    return options
+  }
   return {
     /** Returns the toast's id. */
     add: (options: ToastOptions) => manager.add(toOptions(options)),

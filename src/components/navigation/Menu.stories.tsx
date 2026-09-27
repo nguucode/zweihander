@@ -148,6 +148,7 @@ export const Links: Story = {
     items: [
       { label: 'Documentation', href: '#docs' },
       { label: 'Keyboard shortcuts', href: '#shortcuts' },
+      { label: 'Billing', href: '#billing', disabled: true },
       { type: 'separator' },
       { label: 'Contact support', href: '#support' },
     ],
@@ -156,5 +157,9 @@ export const Links: Story = {
     await userEvent.click(canvas.getByRole('button', { name: 'Help' }))
     const menu = await body().findByRole('menu')
     await expect(within(menu).getByRole('menuitem', { name: 'Documentation' })).toHaveAttribute('href', '#docs')
+    // A disabled link is inert: no href to follow.
+    const billing = within(menu).getByRole('menuitem', { name: 'Billing' })
+    await expect(billing).toHaveAttribute('aria-disabled', 'true')
+    await expect(billing).not.toHaveAttribute('href')
   },
 }
