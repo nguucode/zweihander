@@ -1,0 +1,186 @@
+/* 70: above popups (50) and tooltips (60). A toast can arrive while a
+   modal is open and must not be hidden behind it. */
+.viewport {
+  position: fixed;
+  z-index: 70;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  inline-size: min(24rem, calc(100vw - 2 * var(--space-4)));
+  margin: 0;
+  padding: 0;
+  outline: none;
+}
+.top {
+  inset-block-start: var(--space-4);
+}
+.bottom {
+  inset-block-end: var(--space-4);
+  /* The newest toast sits nearest the edge it grows from. */
+  flex-direction: column-reverse;
+}
+.left {
+  inset-inline-start: var(--space-4);
+}
+.right {
+  inset-inline-end: var(--space-4);
+}
+.center {
+  inset-inline-start: 50%;
+  translate: -50% 0;
+}
+
+.toast {
+  --toast-accent: var(--foreground);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  box-sizing: border-box;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-panel);
+  background: var(--popover);
+  box-shadow: var(--shadow-lg);
+  color: var(--popover-foreground);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  /* Follows the finger while it is swiped away. */
+  translate: var(--toast-swipe-movement-x) var(--toast-swipe-movement-y);
+  transition:
+    opacity 200ms,
+    translate 200ms;
+}
+.toast[data-swiping] {
+  transition: none;
+}
+.toast[data-starting-style],
+.toast[data-ending-style] {
+  opacity: 0;
+}
+.top .toast[data-starting-style] {
+  translate: 0 -8px;
+}
+.bottom .toast[data-starting-style] {
+  translate: 0 8px;
+}
+
+/* The variant colours only the icon: the message stays --popover-foreground. */
+.info {
+  --toast-accent: var(--info-text);
+}
+.success {
+  --toast-accent: var(--success-text);
+}
+.warning {
+  --toast-accent: var(--warning-text);
+}
+.danger {
+  --toast-accent: var(--danger-text);
+}
+
+.icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  /* One line of body text tall. --leading-body is a ratio, so it is
+     multiplied by the body size (1em here would be the icon's own size). */
+  block-size: calc(var(--leading-body) * var(--text-body));
+  color: var(--toast-accent);
+  font-size: calc(var(--leading-body) * 1em);
+}
+
+.spinner {
+  inline-size: var(--space-4);
+  block-size: var(--space-4);
+  margin-block-start: 2px;
+  border: 2px solid var(--border);
+  border-block-start-color: var(--foreground);
+  border-radius: 9999px;
+  animation: spin 800ms linear infinite;
+}
+@keyframes spin {
+  to {
+    rotate: 360deg;
+  }
+}
+
+.content {
+  display: grid;
+  flex: 1;
+  gap: var(--space-1);
+  min-inline-size: 0;
+}
+
+.title {
+  margin: 0;
+  font-size: inherit;
+  font-weight: 600;
+}
+
+.description {
+  margin: 0;
+  color: var(--muted-foreground);
+}
+
+.action {
+  justify-self: start;
+  margin: var(--space-1) 0 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--primary-text);
+  font: inherit;
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  cursor: var(--cursor-button);
+}
+
+.close {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  margin: 0 calc(var(--space-1) * -1) 0 0;
+  /* 2px around a 16px icon: a 20px button, one line tall. */
+  padding: 2px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--muted-foreground);
+  font-size: var(--space-4);
+  cursor: var(--cursor-button);
+}
+.close:hover {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+.action:focus-visible,
+.close:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 1px;
+}
+@media (pointer: coarse) {
+  .close::before {
+    content: '';
+    position: absolute;
+    inset: 50% auto auto 50%;
+    inline-size: 44px;
+    block-size: 44px;
+    translate: -50% -50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toast {
+    transition: opacity 200ms;
+  }
+  .top .toast[data-starting-style],
+  .bottom .toast[data-starting-style] {
+    translate: none;
+  }
+  .spinner {
+    animation-duration: 2.5s;
+  }
+}

@@ -855,6 +855,32 @@
           "target": "components/zweihander/navigation/Tabs.module.css"
         }
       ]
+    },
+    {
+      "name": "toast",
+      "type": "registry:component",
+      "title": "Toast",
+      "description": "Corner notifications with variants, action, timeout, promise and swipe to dismiss: ToastProvider plus useToast(), on Base UI Toast.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/icon.json"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "files": [
+        {
+          "path": "src/components/notifications/Toast.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/notifications/Toast.tsx"
+        },
+        {
+          "path": "src/components/notifications/Toast.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/notifications/Toast.module.css"
+        }
+      ]
     }
   ]
 }

@@ -1,0 +1,105 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import * as ToastStories from './Toast.stories'
+
+<Meta of={ToastStories} />
+
+# Toast
+
+A short message in a corner of the screen about something that just
+happened: saved, sent, moved, failed. It closes itself after a few
+seconds and never blocks the page. Spec:
+[uiguideline.com/components/toast](https://www.uiguideline.com/components/toast).
+Behaviour from Base UI's [Toast](https://base-ui.com/react/components/toast).
+
+<Canvas of={ToastStories.Default} />
+
+## Anatomy
+
+| Part | What it is |
+| --- | --- |
+| **Icon** | The variant's icon in its text colour; none for `default`, a spinner while a promise is pending. |
+| **Title** | Semibold. What happened. |
+| **Description** | Optional, `--muted-foreground`. |
+| **Action** | Optional, one text button, e.g. "Undo". |
+| **Close button** | Always there. |
+
+The surface is `--popover` with `--shadow-lg`, at most 24rem wide.
+
+## API
+
+Wrap the app once in `ToastProvider`, then call `useToast()` anywhere
+inside it:
+
+```tsx
+<ToastProvider placement="bottom-right">
+  <App />
+</ToastProvider>
+
+const toast = useToast()
+toast.add({ title: 'File moved to Trash', action: { label: 'Undo', onClick: restore } })
+```
+
+| `ToastProvider` prop | Values | Default | |
+| --- | --- | --- | --- |
+| `placement` | `top-` or `bottom-` + `left`, `center`, `right` | `bottom-right` | |
+| `timeout` | number (ms) | `5000` | Default time on screen. |
+| `limit` | number | `3` | Shown at once; the rest wait. |
+
+| `useToast()` | |
+| --- | --- |
+| `add(options)` | Shows a toast, returns its id. |
+| `update(id, options)` | Changes one in place. |
+| `close(id?)` | Closes one, or all. |
+| `promise(promise, { loading, success, error })` | A loading toast that becomes success or danger when the promise settles. |
+
+| Option | Values | |
+| --- | --- | --- |
+| `title`, `description` | node | |
+| `variant` | `default`, `info`, `success`, `warning`, `danger` | |
+| `action` | `{ label, onClick }` | |
+| `timeout` | number (ms) | `0` keeps it until dismissed. |
+| `priority` | `low`, `high` | `high` by default for `danger`. |
+| `onClose` | function | |
+
+<Controls of={ToastStories.Default} />
+
+### Design notes
+
+- **The variant colours only the icon.** The message stays in
+  `--popover-foreground`, the same as Alert's subtle and outlined
+  appearances: a toast is read in passing, and body text in an accent
+  colour reads worse.
+- **Above everything, at z-index 70**, over popups (50) and tooltips
+  (60): a toast raised from inside a modal shows over the modal and is
+  not hidden from assistive tech by it.
+
+  <Canvas of={ToastStories.FromModal} />
+
+- **Swipe to dismiss** toward the nearest edge on touch.
+
+## Usage
+
+<Canvas of={ToastStories.Variants} />
+
+<Canvas of={ToastStories.PromiseToast} />
+
+<Canvas of={ToastStories.Timeout} />
+
+<Canvas of={ToastStories.TopCenter} />
+
+A toast disappears. Anything the reader must act on, or might need to
+read twice, belongs in an Alert on the page or a Modal; the action on a
+toast ("Undo") should also be reachable some other way.
+
+## Accessibility
+
+- The viewport is a polite live region: new toasts are announced
+  without interrupting. `danger` toasts (and any with `priority: 'high'`)
+  are `role="alertdialog"` and announced assertively.
+- Each toast is a non-modal dialog named by its title, or by its
+  description when it has none (as `promise()` toasts do).
+- Timers pause while the pointer is over the toasts or focus is in
+  them, so there is time to reach the action. F6 moves focus to the
+  toast region.
+- The close button is named `Dismiss` and has a 44px touch target on
+  coarse pointers.

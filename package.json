@@ -136,6 +136,10 @@
       "types": "./dist/components/navigation/Tabs.d.ts",
       "import": "./dist/components/navigation/Tabs.js"
     },
+    "./toast": {
+      "types": "./dist/components/notifications/Toast.d.ts",
+      "import": "./dist/components/notifications/Toast.js"
+    },
     "./theme": {
       "types": "./dist/theme/Theme.d.ts",
       "import": "./dist/theme/Theme.js"

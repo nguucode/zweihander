@@ -42,6 +42,7 @@ export default defineConfig({
         'components/navigation/Breadcrumbs': 'src/components/navigation/Breadcrumbs.tsx',
         'components/navigation/Pagination': 'src/components/navigation/Pagination.tsx',
         'components/navigation/Tabs': 'src/components/navigation/Tabs.tsx',
+        'components/notifications/Toast': 'src/components/notifications/Toast.tsx',
         'theme/Theme': 'src/theme/Theme.tsx',
         'lib/utils': 'src/lib/utils.ts',
       },
