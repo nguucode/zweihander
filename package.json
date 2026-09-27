@@ -120,6 +120,10 @@
       "types": "./dist/components/overlays/Modal.d.ts",
       "import": "./dist/components/overlays/Modal.js"
     },
+    "./menu": {
+      "types": "./dist/components/navigation/Menu.d.ts",
+      "import": "./dist/components/navigation/Menu.js"
+    },
     "./theme": {
       "types": "./dist/theme/Theme.d.ts",
       "import": "./dist/theme/Theme.js"

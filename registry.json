@@ -755,6 +755,32 @@
           "target": "components/zweihander/overlays/Modal.module.css"
         }
       ]
+    },
+    {
+      "name": "menu",
+      "type": "registry:component",
+      "title": "Menu",
+      "description": "Dropdown of actions, links, checkbox and radio items, groups and submenus from an items array, on Base UI Menu.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/icon.json"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "files": [
+        {
+          "path": "src/components/navigation/Menu.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/navigation/Menu.tsx"
+        },
+        {
+          "path": "src/components/navigation/Menu.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/navigation/Menu.module.css"
+        }
+      ]
     }
   ]
 }

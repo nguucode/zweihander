@@ -38,6 +38,7 @@ export default defineConfig({
         'components/overlays/Tooltip': 'src/components/overlays/Tooltip.tsx',
         'components/overlays/Popover': 'src/components/overlays/Popover.tsx',
         'components/overlays/Modal': 'src/components/overlays/Modal.tsx',
+        'components/navigation/Menu': 'src/components/navigation/Menu.tsx',
         'theme/Theme': 'src/theme/Theme.tsx',
         'lib/utils': 'src/lib/utils.ts',
       },
