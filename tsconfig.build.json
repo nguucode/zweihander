@@ -33,6 +33,7 @@
     "src/components/notifications/Alert.tsx",
     "src/components/states/EmptyState.tsx",
     "src/components/overlays/Tooltip.tsx",
+    "src/components/overlays/Popover.tsx",
     "src/theme/Theme.tsx",
     "src/lib/utils.ts"
   ]

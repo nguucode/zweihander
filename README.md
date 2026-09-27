@@ -182,6 +182,7 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/link.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/alert.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/empty-state.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/tooltip.json
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/popover.json
 ```
 
 Or register Zweihänder as a named registry in the project's `components.json`
@@ -233,6 +234,7 @@ import { Link } from 'zweihander/link'
 import { Alert } from 'zweihander/alert'
 import { EmptyState } from 'zweihander/empty-state'
 import { Tooltip } from 'zweihander/tooltip'
+import { Popover } from 'zweihander/popover'
 ```
 
 ```css

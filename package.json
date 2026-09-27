@@ -112,6 +112,10 @@
       "types": "./dist/components/overlays/Tooltip.d.ts",
       "import": "./dist/components/overlays/Tooltip.js"
     },
+    "./popover": {
+      "types": "./dist/components/overlays/Popover.d.ts",
+      "import": "./dist/components/overlays/Popover.js"
+    },
     "./theme": {
       "types": "./dist/theme/Theme.d.ts",
       "import": "./dist/theme/Theme.js"
