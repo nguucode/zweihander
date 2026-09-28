@@ -39,6 +39,15 @@ export const Simple: Story = {
   },
 }
 
+/** Tabs switched off, e.g. `tabs={hasSections && <Tabs />}`: the heading keeps its own edge. */
+export const TabsSwitchedOff: Story = {
+  args: { ...Simple.args, tabs: false },
+  play: async ({ canvas }) => {
+    const heading = canvas.getByRole('heading', { level: 1, name: 'Projects' }).closest('header')!
+    await expect(getComputedStyle(heading).borderBlockEndStyle).not.toBe('none')
+  },
+}
+
 /** A record's page: where it sits, its status and facts, and actions with an overflow menu. */
 export const WithBreadcrumbsAndMeta: Story = {
   args: {

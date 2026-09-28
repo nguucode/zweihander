@@ -51,7 +51,11 @@ pressing Escape closes it, and focus returns to the button.
 | `header` | node | – | An AppHeader. |
 | `mobileNavigation` | node | `sidebar` | What the drawer holds. |
 | `navigationLabel` | string | `Navigation` | Names the drawer and its buttons. |
-| `children` | node | – | The page, inside `<main id="main">`. |
+| `mainId` | string | generated | The `id` of the `main` element, the skip link's target. |
+| `children` | node | – | The page, inside `<main>`. |
+
+`sidebar={isAdmin && <Sidebar … />}` works: `false` and `null` count as
+no sidebar, so there is no empty column, no drawer and no menu button.
 
 **AppHeader** takes `start` (breadcrumbs, or a logo and AppNav), `end`
 (search, notifications, the account menu) and `children` for the middle.
@@ -66,16 +70,29 @@ pressing Escape closes it, and focus returns to the button.
 - **Breakpoints are the shell's own width**, which in an app is the
   viewport's. That is also what lets the stories show the phone layout in
   a 390px box.
+- **The shell is a size container** (`container-type: inline-size`), so
+  it takes its width from where it sits, never from its content. In a
+  block it fills the line as usual; as a flex or grid item that would
+  otherwise shrink to fit, give it a width (`inline-size: 100%` or
+  `flex: 1`), or it collapses.
+- **The drawer holds the same Sidebar.** A collapsible one opens there
+  as the icon rail if it is collapsed, so for a collapsed rail pass a
+  plain Sidebar as `mobileNavigation`.
 
 ## Accessibility
 
 - A "Skip to content" link is the first thing in the shell, visible when
-  focused. It jumps past the navigation to `<main id="main">`.
+  focused. It moves focus past the navigation to the `main` element. Give
+  `mainId` when something else should link there too; otherwise the id is
+  generated, so two shells in one page (as in these docs) never share it.
 - The page is the `main` landmark; the sidebar and AppNav are `nav`
   landmarks named "Main". Only one is in the page at a time: the hidden
   one is `display: none`, so it is out of the accessibility tree too.
 - The drawer is a modal dialog named "Navigation": focus moves into it,
-  the page behind is inert, and Escape closes it. It slides in from the
-  start edge, from the right in a right-to-left page.
+  the page behind is inert, and Escape closes it. The menu button says
+  so with `aria-haspopup="dialog"` and `aria-expanded`.
+- The drawer slides in from the start edge, from the right in a
+  right-to-left page. It is portalled to the body, so it reads the page's
+  direction: set `dir="rtl"` on `<html>`, not only on the shell.
 - The current page is marked `aria-current="page"` in both kinds of
   navigation, and shown by more than colour.

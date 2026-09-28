@@ -1,7 +1,10 @@
-import type { ComponentProps, ReactNode } from 'react'
+import { useLayoutEffect, useRef, type ComponentProps, type ReactNode } from 'react'
 import { cn } from '@/lib/utils'
 import { Button } from '../../buttons/Button'
 import styles from './DataTablePage.module.css'
+
+const focusable =
+  'input:not([disabled]):not([type="hidden"]), button:not([disabled]), select:not([disabled]), textarea:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])'
 
 export interface TableToolbarProps extends ComponentProps<'div'> {
   /** Search, filters and the primary action. Shown while nothing is selected. */
@@ -26,11 +29,39 @@ export function TableToolbar({
   onClearSelection,
   selectionLabel = (n) => `${n} selected`,
   className,
+  ref,
   ...props
 }: TableToolbarProps) {
   const selecting = selectedCount > 0
+  const toolbarRef = useRef<HTMLDivElement>(null)
+  const wasSelecting = useRef(selecting)
+  // Archive or Clear selection unmounts the button that had focus, which
+  // drops it on the body. Pick it up in the tools that came back instead.
+  useLayoutEffect(() => {
+    const toolbar = toolbarRef.current
+    if (wasSelecting.current && !selecting && toolbar) {
+      const active = document.activeElement
+      if (!active || active === document.body || !active.isConnected) {
+        const first = toolbar.querySelector<HTMLElement>(focusable)
+        if (first) first.focus()
+        else {
+          toolbar.tabIndex = -1
+          toolbar.focus()
+        }
+      }
+    }
+    wasSelecting.current = selecting
+  }, [selecting])
   return (
-    <div className={cn(styles.toolbar, selecting && styles.selecting, className)} {...props}>
+    <div
+      ref={(node) => {
+        toolbarRef.current = node
+        if (typeof ref === 'function') ref(node)
+        else if (ref) ref.current = node
+      }}
+      className={cn(styles.toolbar, selecting && styles.selecting, className)}
+      {...props}
+    >
       {/* Always in the page, so the count is announced as it changes. */}
       <p role="status" className={selecting ? styles.count : styles.srOnly}>
         {selecting ? selectionLabel(selectedCount) : ''}

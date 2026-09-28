@@ -114,8 +114,12 @@ export const WithSidebar: Story = {
     await expect(within(nav).getByRole('link', { name: 'Dashboard' })).toHaveAttribute('aria-current', 'page')
     // Wide: the sidebar is the navigation, so no menu button.
     await expect(canvas.queryByRole('button', { name: 'Open navigation' })).toBeNull()
-    await expect(canvas.getByRole('main')).toHaveAttribute('id', 'main')
-    await expect(canvas.getByRole('link', { name: 'Skip to content' })).toHaveAttribute('href', '#main')
+    // The skip link targets the shell's own main, and moves focus to it.
+    const main = canvas.getByRole('main')
+    const skip = canvas.getByRole('link', { name: 'Skip to content' })
+    await expect(skip).toHaveAttribute('href', `#${main.id}`)
+    await userEvent.click(skip)
+    await expect(main).toHaveFocus()
   },
 }
 
@@ -149,12 +153,15 @@ export const TopNavigation: Story = {
   args: {
     header: <AppHeader start={<>{brand}<AppNav items={topLinks} currentHref="#dashboard" /></>} end={headerEnd} />,
     mobileNavigation: <Sidebar items={entries.slice(0, 4)} currentHref="#dashboard" header={brand} style={{ blockSize: '100%' }} />,
+    mainId: 'content',
   },
   decorators: box(1100),
   play: async ({ canvas }) => {
     const nav = canvas.getByRole('navigation', { name: 'Main' })
     await expect(within(nav).getByRole('link', { name: 'Dashboard' })).toHaveAttribute('aria-current', 'page')
     await expect(canvas.queryByRole('button', { name: 'Open navigation' })).toBeNull()
+    await expect(canvas.getByRole('main')).toHaveAttribute('id', 'content')
+    await expect(canvas.getByRole('link', { name: 'Skip to content' })).toHaveAttribute('href', '#content')
   },
 }
 
@@ -168,8 +175,12 @@ export const Mobile: Story = {
   play: async ({ canvas }) => {
     // Hidden, so out of the accessibility tree too: no second, unreachable navigation.
     await expect(canvas.queryByRole('navigation', { name: 'Main' })).toBeNull()
-    await userEvent.click(canvas.getByRole('button', { name: 'Open navigation' }))
+    const menu = canvas.getByRole('button', { name: 'Open navigation' })
+    await expect(menu).toHaveAttribute('aria-haspopup', 'dialog')
+    await expect(menu).toHaveAttribute('aria-expanded', 'false')
+    await userEvent.click(menu)
     const drawer = await within(document.body).findByRole('dialog', { name: 'Navigation' })
+    await expect(menu).toHaveAttribute('aria-expanded', 'true')
     await userEvent.click(within(drawer).getByRole('link', { name: 'Team' }))
     await waitFor(() => expect(within(document.body).queryByRole('dialog')).toBeNull())
     // Focus is back on the button that opened it.
@@ -189,5 +200,23 @@ export const TopNavigationMobile: Story = {
     await expect(within(drawer).getByRole('link', { name: /^Projects/ })).toBeVisible()
     await userEvent.keyboard('{Escape}')
     await waitFor(() => expect(within(document.body).queryByRole('dialog')).toBeNull())
+  },
+}
+
+/**
+ * A sidebar that is switched off, e.g. `sidebar={isAdmin && <Sidebar />}`:
+ * no sidebar column, no drawer and no menu button, as with no sidebar at all.
+ */
+export const WithoutNavigation: Story = {
+  args: {
+    sidebar: false,
+    mobileNavigation: null,
+    header: <AppHeader start={brand} end={headerEnd} />,
+  },
+  decorators: box(390),
+  play: async ({ canvas }) => {
+    // A menu button here would open nothing.
+    await expect(canvas.queryByRole('button', { name: 'Open navigation' })).toBeNull()
+    await expect(canvas.getByRole('main')).toBeVisible()
   },
 }

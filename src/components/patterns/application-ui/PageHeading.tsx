@@ -36,7 +36,7 @@ export function PageHeading({
 }: PageHeadingProps) {
   const Heading = `h${headingLevel}` as const
   return (
-    <header className={cn(styles.pageHeading, tabs !== undefined && styles.withTabs, className)} {...props}>
+    <header className={cn(styles.pageHeading, tabs != null && tabs !== false && styles.withTabs, className)} {...props}>
       {breadcrumbs && <Breadcrumbs items={breadcrumbs} size="sm" className={styles.breadcrumbs} />}
       <div className={styles.row}>
         <div className={styles.text}>

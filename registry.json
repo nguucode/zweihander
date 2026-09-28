@@ -1356,7 +1356,8 @@
         "https://ontheshore.biz/zweihander/r/utils.json",
         "https://ontheshore.biz/zweihander/r/tokens.json",
         "https://ontheshore.biz/zweihander/r/icon.json",
-        "https://ontheshore.biz/zweihander/r/button.json"
+        "https://ontheshore.biz/zweihander/r/button.json",
+        "https://ontheshore.biz/zweihander/r/sidebar.json"
       ],
       "files": [
         {

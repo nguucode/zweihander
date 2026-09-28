@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, type ComponentProps, type MouseEvent, type ReactNode } from 'react'
+import { createContext, useContext, useId, useRef, useState, type ComponentProps, type MouseEvent, type ReactNode } from 'react'
 import { Dialog } from '@base-ui/react/dialog'
 import { Icon } from '@/lib/icon'
 import { cn } from '@/lib/utils'
@@ -6,11 +6,15 @@ import { Button } from '../../buttons/Button'
 import styles from './AppShell.module.css'
 
 /** Whether the shell has a navigation drawer for narrow screens, and how to open it. */
-const DrawerContext = createContext<{ hasDrawer: boolean; open: () => void; label: string }>({
+const DrawerContext = createContext<{ hasDrawer: boolean; isOpen: boolean; open: () => void; label: string }>({
   hasDrawer: false,
+  isOpen: false,
   open: () => {},
   label: 'Navigation',
 })
+
+/** `null`, `false` and `undefined` render nothing, so they are no navigation either. */
+const given = (node: ReactNode) => node != null && node !== false
 
 export interface AppShellProps extends ComponentProps<'div'> {
   /** A Sidebar. Beside the content from 64rem; in the drawer below that. */
@@ -24,6 +28,8 @@ export interface AppShellProps extends ComponentProps<'div'> {
   mobileNavigation?: ReactNode
   /** Names the drawer and its button. */
   navigationLabel?: string
+  /** The `id` of the `main` element, which the skip link targets. Generated if not given. */
+  mainId?: string
   children: ReactNode
 }
 
@@ -37,35 +43,51 @@ export function AppShell({
   header,
   mobileNavigation,
   navigationLabel = 'Navigation',
+  mainId,
   children,
   className,
   ...props
 }: AppShellProps) {
   const [open, setOpen] = useState(false)
-  const drawerContent = mobileNavigation ?? sidebar
+  const autoId = useId()
+  const mainRef = useRef<HTMLElement>(null)
+  const id = mainId ?? `${autoId}main`
+  const hasSidebar = given(sidebar)
+  const hasMobileNavigation = given(mobileNavigation)
+  const drawerContent = hasMobileNavigation ? mobileNavigation : hasSidebar ? sidebar : null
+  const hasDrawer = drawerContent !== null
   // A link chosen in the drawer navigates; the drawer should not stay over the new page.
   const closeOnLink = (e: MouseEvent) => {
     if ((e.target as HTMLElement).closest('a[href]')) setOpen(false)
   }
   return (
-    <DrawerContext.Provider value={{ hasDrawer: drawerContent !== undefined, open: () => setOpen(true), label: navigationLabel }}>
-      <div className={cn(styles.shell, sidebar !== undefined && styles.withSidebar, mobileNavigation !== undefined && styles.withMobileNavigation, className)} {...props}>
-        <a href="#main" className={styles.skip}>
+    <DrawerContext.Provider value={{ hasDrawer, isOpen: open, open: () => setOpen(true), label: navigationLabel }}>
+      <div className={cn(styles.shell, hasSidebar && styles.withSidebar, hasMobileNavigation && styles.withMobileNavigation, className)} {...props}>
+        {/* Focus is moved by hand: the browser's own jump would also scroll
+            the window, and a generated id is not a tidy URL fragment. */}
+        <a
+          href={`#${id}`}
+          className={styles.skip}
+          onClick={(e) => {
+            e.preventDefault()
+            mainRef.current?.focus()
+          }}
+        >
           Skip to content
         </a>
         {/* The shell is the size container and the frame its grid, so the
             layout follows the shell's own width: an element cannot query itself. */}
         <div className={styles.frame}>
-          {sidebar && <div className={styles.sidebar}>{sidebar}</div>}
+          {hasSidebar && <div className={styles.sidebar}>{sidebar}</div>}
           <div className={styles.column}>
             {header}
-            <main id="main" tabIndex={-1} className={styles.main}>
+            <main ref={mainRef} id={id} tabIndex={-1} className={styles.main}>
               {children}
             </main>
           </div>
         </div>
       </div>
-      {drawerContent && (
+      {hasDrawer && (
         <Dialog.Root open={open} onOpenChange={setOpen}>
           <Dialog.Portal>
             <Dialog.Backdrop className={styles.backdrop} />
@@ -102,6 +124,8 @@ export function AppHeader({ start, end, children, className, ...props }: AppHead
           appearance="ghost"
           isIconOnly
           aria-label={`Open ${drawer.label.toLowerCase()}`}
+          aria-haspopup="dialog"
+          aria-expanded={drawer.isOpen}
           className={styles.menuButton}
           onClick={drawer.open}
         >
