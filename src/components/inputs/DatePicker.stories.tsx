@@ -2,6 +2,14 @@ import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test'
 import { DatePicker } from './DatePicker'
 
+/**
+ * A day's accessible name, from the same formatter the calendar uses. Not
+ * written out: CLDR changes the en-GB full date between browser versions
+ * ("Friday 18 September 2026", then "Friday, 18 September 2026").
+ */
+const day = (year: number, month: number, date: number) =>
+  new Intl.DateTimeFormat('en-GB', { dateStyle: 'full', calendar: 'gregory' }).format(new Date(year, month - 1, date))
+
 const meta = {
   title: 'Components/Inputs/DatePicker',
   component: DatePicker,
@@ -32,8 +40,8 @@ export const Default: Story = {
     // Pick from the calendar: it opens on the selected day, with focus there.
     await userEvent.click(canvas.getByRole('button', { name: 'Choose date, 18/09/2026 selected' }))
     const dialog = await body().findByRole('dialog', { name: 'Choose date' })
-    await waitFor(() => expect(document.activeElement).toHaveAccessibleName('Friday 18 September 2026'))
-    await userEvent.click(within(dialog).getByRole('button', { name: 'Thursday 24 September 2026' }))
+    await waitFor(() => expect(document.activeElement).toHaveAccessibleName(day(2026, 9, 18)))
+    await userEvent.click(within(dialog).getByRole('button', { name: day(2026, 9, 24) }))
     await expect(args.onValueChange).toHaveBeenLastCalledWith(new Date(2026, 8, 24))
     await waitFor(() => expect(body().queryByRole('dialog')).toBeNull())
     await expect(input).toHaveValue('24/09/2026')
