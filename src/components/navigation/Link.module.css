@@ -1,0 +1,77 @@
+.link {
+  --link-color: var(--primary-text);
+  color: var(--link-color);
+  /* Inherit the sentence around it unless a size is given. */
+  font: inherit;
+  font-weight: 500;
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  border-radius: var(--radius-sm);
+  cursor: var(--cursor-link);
+  transition: text-decoration-thickness 150ms;
+}
+
+/* Every colour here is a text colour at 4.5:1 on the page. */
+.primary {
+  --link-color: var(--primary-text);
+}
+.accent {
+  --link-color: var(--foreground);
+}
+.secondary {
+  --link-color: var(--muted-foreground);
+}
+
+.sm {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+}
+.md {
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+}
+.lg {
+  font-size: var(--text-body-lg);
+  line-height: var(--leading-body-lg);
+}
+
+/* Hover thickens the line rather than changing colour, so the link keeps
+   the contrast it was measured at. */
+.link[href]:hover {
+  text-decoration-thickness: 2px;
+}
+
+.underlineHover {
+  text-decoration-line: none;
+}
+.underlineHover[href]:hover {
+  text-decoration-line: underline;
+}
+
+.link:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.link[aria-disabled='true'] {
+  opacity: 0.5;
+  cursor: var(--cursor-disabled);
+}
+
+.icon {
+  display: inline-block;
+  margin-inline-start: 0.2em;
+  inline-size: 0.9em;
+  block-size: 0.9em;
+  vertical-align: -0.1em;
+}
+
+.srOnly {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

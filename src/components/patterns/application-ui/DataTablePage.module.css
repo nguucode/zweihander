@@ -1,0 +1,68 @@
+/* Both bars wrap: on a phone the search takes its own line and the rest
+   flows under it, instead of anything shrinking below use. */
+.toolbar,
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--foreground);
+}
+
+.toolbar {
+  min-block-size: var(--space-10);
+  margin-block-end: var(--space-4);
+}
+
+/* The selection bar sits on the accent surface so the change of mode is
+   visible, not only the change of buttons. */
+.selecting {
+  padding: var(--space-1) var(--space-2) var(--space-1) var(--space-4);
+  border-radius: var(--radius-field);
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+
+.group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  flex: 1 1 16rem;
+}
+
+.count {
+  margin: 0;
+  font-weight: 500;
+}
+
+.selectionActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-inline-start: auto;
+}
+
+.footer {
+  justify-content: space-between;
+  margin-block-start: var(--space-4);
+}
+
+.summary {
+  margin: 0;
+  color: var(--muted-foreground);
+  font-variant-numeric: tabular-nums;
+}
+
+.srOnly {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  margin: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

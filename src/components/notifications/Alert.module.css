@@ -1,0 +1,130 @@
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  box-sizing: border-box;
+  padding: var(--space-3) var(--space-4);
+  /* Always present, transparent unless outlined, so appearances never
+     shift the layout. */
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+}
+
+/* One rule per variant, the same four colours as Tag. */
+.info {
+  --alert-solid: var(--info);
+  --alert-on-solid: var(--info-foreground);
+  --alert-subtle: var(--info-subtle);
+  --alert-text: var(--info-text);
+}
+.success {
+  --alert-solid: var(--success);
+  --alert-on-solid: var(--success-foreground);
+  --alert-subtle: var(--success-subtle);
+  --alert-text: var(--success-text);
+}
+.warning {
+  --alert-solid: var(--warning);
+  --alert-on-solid: var(--warning-foreground);
+  --alert-subtle: var(--warning-subtle);
+  --alert-text: var(--warning-text);
+}
+.danger {
+  --alert-solid: var(--danger);
+  --alert-on-solid: var(--danger-foreground);
+  --alert-subtle: var(--danger-subtle);
+  --alert-text: var(--danger-text);
+}
+
+/* Subtle and outlined keep the message in --foreground: a paragraph in
+   the variant's text colour is tiring to read. The colour goes on the icon
+   and the title, which is where the eye lands first. */
+.subtle {
+  background: var(--alert-subtle);
+  color: var(--foreground);
+}
+.outlined {
+  border-color: var(--alert-text);
+  background: var(--background);
+  color: var(--foreground);
+}
+.subtle .icon,
+.subtle .title,
+.outlined .icon,
+.outlined .title {
+  color: var(--alert-text);
+}
+.solid {
+  background: var(--alert-solid);
+  color: var(--alert-on-solid);
+}
+
+.icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  /* One line of body text tall, so it sits on the title's line.
+     --leading-body is a ratio, so it is multiplied by 1em. */
+  font-size: calc(var(--leading-body) * 1em);
+}
+
+.body {
+  display: grid;
+  flex: 1;
+  gap: var(--space-1);
+  min-inline-size: 0;
+}
+
+.title {
+  font-weight: 600;
+}
+
+.action {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-block-start: var(--space-2);
+}
+
+.close {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  margin-inline-end: calc(var(--space-1) * -1);
+  /* 2px around a 16px icon: a 20px button, one line of body text tall.
+     Below the spacing scale on purpose, as on Tag. */
+  padding: 2px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: inherit;
+  font-size: var(--space-4);
+  cursor: var(--cursor-button);
+}
+
+/* A tint of the alert's own text colour, so hover reads on every variant
+   and appearance. */
+.close:hover {
+  background: color-mix(in oklch, currentColor 15%, transparent);
+}
+
+.close:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 1px;
+}
+
+@media (pointer: coarse) {
+  .close::before {
+    content: '';
+    position: absolute;
+    inset: 50% auto auto 50%;
+    inline-size: 44px;
+    block-size: 44px;
+    translate: -50% -50%;
+  }
+}

@@ -14,8 +14,8 @@ type Story = StoryObj<typeof meta>
 
 const names = [
   'calendar', 'check', 'chevron-down', 'chevron-left', 'chevron-right', 'chevron-up',
-  'chevrons-up-down', 'close', 'danger', 'info', 'menu', 'minus', 'more', 'plus',
-  'search', 'star', 'star-filled', 'success', 'user', 'warning',
+  'chevrons-up-down', 'close', 'danger', 'external', 'file', 'info', 'menu', 'minus', 'more', 'pause', 'play', 'plus',
+  'search', 'star', 'star-filled', 'success', 'upload', 'user', 'warning',
 ] satisfies IconName[]
 
 /** Every icon the kit ships, by the name components use. Boxicons free, MIT. */

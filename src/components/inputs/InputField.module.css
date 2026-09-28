@@ -186,8 +186,9 @@
    The option list shared by Select and Combobox. It renders in a portal
    at the end of <body>, so it reads the tokens from the root: a Theme
    scope around the field does not reach it. */
-/* 50: above page content and sticky headers; below the modal layer, which
-   the overlay components will put higher. */
+/* 50: above page content and sticky headers. Modal and Popover share the
+   layer: overlays portal to the end of <body>, so the one opened last is
+   on top, and a list opened inside a modal shows above it. */
 .positioner {
   z-index: 50;
   outline: none;

@@ -1,0 +1,74 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import * as DatePickerStories from './DatePicker.stories'
+
+<Meta of={DatePickerStories} />
+
+# Date Picker
+
+A date field: type the date, or pick it from a calendar. Spec:
+[uiguideline.com/components/date-picker](https://www.uiguideline.com/components/date-picker).
+Built from the kit's field, Base UI's
+[Popover](https://base-ui.com/react/components/popover) and
+[Calendar](?path=/docs/components-data-display-calendar--docs).
+
+<Canvas of={DatePickerStories.Default} />
+
+## Anatomy
+
+The field's parts (label, box, helper), plus:
+
+| Part | What it is |
+| --- | --- |
+| **Input** | Typed date in the locale's numeric order: `dd/mm/yyyy` in `en-GB` and `vi-VN`, `mm/dd/yyyy` in `en-US`. |
+| **Calendar button** | Opens the calendar in a popover, aligned to the field's end. |
+
+## Props
+
+| Prop | Values | Default | |
+| --- | --- | --- | --- |
+| `value`, `defaultValue`, `onValueChange` | `Date \| null` | `null` | `null` when cleared. |
+| `label`, `helperText`, `validationState` | | | As on Text Input. |
+| `size`, `appearance`, `isFullWidth` | | `md`, `outlined` | As on Text Input. |
+| `min`, `max`, `isDateDisabled` | | – | Passed to the calendar and checked when typing. |
+| `locale`, `weekStartsOn` | | the browser's | |
+| `placeholder` | string | the locale's pattern | |
+| `name` | string | – | Submitted as `yyyy-mm-dd`. |
+| `disabled`, `required` | boolean | `false` | |
+
+<Controls of={DatePickerStories.Default} />
+
+### Design notes
+
+- **Typing is first-class.** Many people type a known date faster than
+  they can page to it. Any separator works (`3.10.26`, `3/10/2026`); the
+  field reformats on blur or Enter.
+- **An impossible date is kept, not guessed.** `31/02/2026` stays as
+  typed, the field turns to its error state and the helper shows the
+  expected pattern; nothing is reported until it is a real date.
+- **The form gets ISO.** Whatever the display order, `name` submits
+  `yyyy-mm-dd`, so the server never has to guess the locale.
+
+## Usage
+
+<Canvas of={DatePickerStories.Typing} />
+
+<Canvas of={DatePickerStories.UnitedStates} />
+
+<Canvas of={DatePickerStories.Vietnamese} />
+
+<Canvas of={DatePickerStories.Range} />
+
+<Canvas of={DatePickerStories.Disabled} />
+
+## Accessibility
+
+- The input is a labelled text box with `inputmode="numeric"` for a
+  number keypad; while the text is not a valid date it has
+  `aria-invalid` and the helper explains the format.
+- The calendar button is named "Choose date", with the current date when
+  there is one. Alt+Down in the input opens it too.
+- The calendar opens as a dialog with focus on the selected day; picking
+  a day closes it and returns focus to the button, Escape closes it
+  without a change.
+- The field and calendar's own labels ("Choose date", "Previous month")
+  are in English, like the rest of the kit's built-in labels.

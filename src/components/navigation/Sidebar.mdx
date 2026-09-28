@@ -1,0 +1,69 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import * as SidebarStories from './Sidebar.stories'
+
+<Meta of={SidebarStories} />
+
+# Sidebar
+
+The app's main navigation, down the side of the screen: a header,
+links in named groups, and a footer. It can collapse to an icon rail.
+Our own spec: uiguideline.com has no page for it. A plain element; the
+rail's labels use [Tooltip](?path=/docs/components-overlays-tooltip--docs).
+
+<Canvas of={SidebarStories.Default} />
+
+## Anatomy
+
+| Part | What it is |
+| --- | --- |
+| **Header** | Optional: the product name, a workspace switcher. The collapse button sits here. |
+| **Item** | Icon, label and optional badge, a 40px row (44px on touch). |
+| **Current item** | Lifted onto `--background` with a `--control-border` edge and medium weight, like a selected pill tab. |
+| **Group** | A small muted label over its items. In the rail, a rule. |
+| **Footer** | Optional, pinned to the bottom: the signed-in user, help. Hidden in the rail. |
+
+## Props
+
+| Prop | Values | Default | |
+| --- | --- | --- | --- |
+| `items` | `SidebarEntry[]` | – | Required. Items `{ label, href, icon?, badge?, render? }` and groups `{ type: 'group', label, items }`. |
+| `currentHref` | string | – | That item gets `aria-current="page"`. |
+| `header`, `footer` | node | – | |
+| `isCollapsed`, `defaultCollapsed`, `onCollapsedChange` | boolean | `false` | Controlled or uncontrolled. |
+| `isCollapsible` | boolean | `false` | Show the collapse button. |
+| `aria-label` | string | `Main` | The landmark's name. |
+
+`render` on an item replaces its `<a>`, e.g. with a router's link. Every
+other `<nav>` attribute passes through.
+
+<Controls of={SidebarStories.Default} />
+
+### Design notes
+
+- **The current page is lifted, not just tinted.** The sidebar sits on
+  `--surface-subtle`, one grey step from a hover fill, so the current
+  item gets the selected-pill treatment used by Tabs: background, edge
+  and weight.
+- **Group names are labels, not headings.** They name their list
+  ("Projects, list, 3 items") without adding `<h2>`s that would compete
+  with the page's own outline.
+- **The rail needs an icon on every item.** Collapsed, the label moves
+  into a tooltip on hover and focus, and stays the link's name.
+
+## Usage
+
+<Canvas of={SidebarStories.Collapsible} />
+
+<Canvas of={SidebarStories.Plain} />
+
+## Accessibility
+
+- A `<nav>` landmark named "Main". The current item has
+  `aria-current="page"`.
+- Each group's label names its list through `aria-labelledby`, and
+  keeps doing so in the rail, where it is only visually hidden.
+- In the rail each link keeps its name through `aria-label`, badge
+  included ("Inbox, 12"), and a tooltip shows the same text on hover
+  and keyboard focus.
+- The collapse button is named "Collapse sidebar" / "Expand sidebar"
+  and carries `aria-expanded`.

@@ -1,0 +1,75 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import * as TabsStories from './Tabs.stories'
+
+<Meta of={TabsStories} />
+
+# Tabs
+
+Switches between views of the same thing without leaving the page:
+Overview, Activity, Settings of one project. Spec:
+[uiguideline.com/components/tabs](https://www.uiguideline.com/components/tabs).
+Behaviour from Base UI's [Tabs](https://base-ui.com/react/components/tabs).
+
+<Canvas of={TabsStories.Default} />
+
+## Anatomy
+
+| Part | What it is |
+| --- | --- |
+| **Tab list** | The row (or column) of tabs. |
+| **Tab** | Optional icon and a label, medium weight. `--muted-foreground` until selected (`--foreground` on pills). |
+| **Indicator** | `underline`: a 2px `--foreground` bar that slides to the selected tab. `pills`: a `--background` segment with a `--control-border` edge. |
+| **Panel** | The selected tab's `content`. |
+
+## Props
+
+| Prop | Values | Default | |
+| --- | --- | --- | --- |
+| `items` | `{ value, label, content?, icon?, disabled? }[]` | – | Required. |
+| `value`, `defaultValue`, `onValueChange` | string | first enabled | Controlled or uncontrolled. |
+| `appearance` | `underline`, `pills` | `underline` | |
+| `size` | `sm`, `md` | `md` | 32 or 40px tabs. |
+| `orientation` | `horizontal`, `vertical` | `horizontal` | |
+| `isFullWidth` | boolean | `false` | Tabs share the width equally. |
+| `activateOnFocus` | boolean | `false` | Select as focus moves. |
+| `keepMounted` | boolean | `false` | Keep hidden panels in the DOM. |
+| `aria-label` | string | – | Names the tab list. |
+
+<Controls of={TabsStories.Default} />
+
+### Design notes
+
+- **Underline for sections, pills for view switches.** Underline tabs
+  sit on a 1px rule and read as the sections of a page; pills sit in a
+  `--muted` track and suit a compact "List / Board" switch in a toolbar.
+- **Pills keep full-strength labels.** `--muted-foreground` is 4.3:1 on
+  the `--muted` track, under the 4.5:1 floor, so every pill label is
+  `--foreground` and the selected one is marked by its lifted,
+  outlined segment rather than by colour.
+- **Selection is manual by default.** Arrow keys move focus; Enter or
+  Space selects. That keeps a slow panel from loading on every keypress;
+  `activateOnFocus` switches to selecting as you go, for light panels.
+
+## Usage
+
+<Canvas of={TabsStories.Pills} />
+
+<Canvas of={TabsStories.FullWidth} />
+
+<Canvas of={TabsStories.WithIcons} />
+
+<Canvas of={TabsStories.Vertical} />
+
+<Canvas of={TabsStories.Small} />
+
+## Accessibility
+
+- `role="tablist"` of `role="tab"` buttons with `aria-selected` and
+  `aria-controls`; each panel is a `role="tabpanel"` labelled by its tab.
+  Name the list with `aria-label` when no heading does.
+- One tab stop: Tab moves into the list and out to the panel; arrows
+  move between tabs (Up and Down when vertical), Home and End jump to
+  the ends.
+- A disabled tab still takes focus, marked `aria-disabled`, so it is
+  found and announced, but it cannot be selected.
+- Tabs are 32 or 40px tall and grow to 44px on coarse pointers.

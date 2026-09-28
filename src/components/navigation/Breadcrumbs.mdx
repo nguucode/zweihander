@@ -1,0 +1,62 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import * as BreadcrumbsStories from './Breadcrumbs.stories'
+
+<Meta of={BreadcrumbsStories} />
+
+# Breadcrumbs
+
+The trail from the top of a hierarchy down to the current page, each
+step a link back up. Spec:
+[uiguideline.com/components/breadcrumbs](https://www.uiguideline.com/components/breadcrumbs).
+A plain element.
+
+<Canvas of={BreadcrumbsStories.Default} />
+
+## Anatomy
+
+| Part | What it is |
+| --- | --- |
+| **Link** | Each level above the current page, `--muted-foreground`, underlined on hover. |
+| **Separator** | A chevron (or any node), decorative. |
+| **Current page** | The last item, `--foreground`, medium weight, not a link. |
+| **Ellipsis** | With `maxItems`, a button standing in for the collapsed middle. |
+
+## Props
+
+| Prop | Values | Default | |
+| --- | --- | --- | --- |
+| `items` | `{ label, href?, render? }[]` | – | Required. Top level first; the last is the current page. |
+| `maxItems` | number (2 or more) | – | Collapse the middle beyond this many. |
+| `separator` | node | chevron | |
+| `size` | `sm`, `md` | `md` | `body-sm` or `body`. |
+| `aria-label` | string | `Breadcrumb` | The landmark's name. |
+
+`render` on an item replaces its `<a>`, e.g. with a router's link. Every
+other `<nav>` attribute passes through.
+
+<Controls of={BreadcrumbsStories.Default} />
+
+### Design notes
+
+- **Muted links, underlined on hover.** The trail is obviously a row of
+  links, so it can drop the permanent underline that links in running
+  text keep; the current page stands out by colour and weight instead.
+- **The current page is not a link.** A link to the page you are on does
+  nothing useful and reads as one more place to go.
+
+## Usage
+
+<Canvas of={BreadcrumbsStories.Collapsed} />
+
+<Canvas of={BreadcrumbsStories.Small} />
+
+<Canvas of={BreadcrumbsStories.CustomSeparator} />
+
+## Accessibility
+
+- A `<nav>` landmark named "Breadcrumb", around an ordered list: screen
+  readers announce "list, 4 items" and the position of each.
+- The last item has `aria-current="page"`.
+- Separators are `aria-hidden`, so they are not read between items.
+- The ellipsis is a button named "Show 3 more". Pressing it expands the
+  trail and moves focus to the first item it revealed.

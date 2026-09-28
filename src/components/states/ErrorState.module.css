@@ -1,0 +1,15 @@
+/* The disc in the danger tone: --danger-subtle behind --danger-text,
+   4.5:1 and more. */
+.error {
+  --empty-icon-bg: var(--danger-subtle);
+  --empty-icon-fg: var(--danger-text);
+}
+
+.details {
+  display: block;
+  margin-block-start: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  user-select: all;
+}

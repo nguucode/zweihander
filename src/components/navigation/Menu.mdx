@@ -1,0 +1,79 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import * as MenuStories from './Menu.stories'
+
+<Meta of={MenuStories} />
+
+# Menu
+
+A list of actions that opens from a button: the "…" on a row, an
+"Actions" dropdown, a "View" menu of toggles. It acts or toggles; to pick
+a value for a form, use a Select. Spec:
+[uiguideline.com/components/menu](https://www.uiguideline.com/components/menu).
+Behaviour from Base UI's [Menu](https://base-ui.com/react/components/menu).
+
+<Canvas of={MenuStories.Default} />
+
+## Anatomy
+
+| Part | What it is |
+| --- | --- |
+| **Trigger** | `trigger`: one button. Menu merges its props onto it. |
+| **Popup** | The Select list's surface: `--popover`, border, `--shadow-md`, `--radius-field`, at least 12rem wide. |
+| **Item** | Icon (optional), label, shortcut (optional). 32px tall, 44px on touch. |
+| **Checkbox / radio item** | A check or a dot in the icon column. They do not close the menu. |
+| **Submenu trigger** | An item with `items`, and a chevron. |
+| **Group label**, **separator** | Structure for longer menus. |
+
+## Props
+
+| Prop | Values | Default | |
+| --- | --- | --- | --- |
+| `trigger` | element | – | Required. |
+| `items` | `MenuEntry[]` | – | Required. See below. |
+| `side` | `top`, `right`, `bottom`, `left` | `bottom` | |
+| `align` | `start`, `center`, `end` | `start` | |
+| `open`, `defaultOpen`, `onOpenChange` | | | Controlled or uncontrolled. |
+
+<Controls of={MenuStories.Default} />
+
+`items` is data, like Select's `options`. Each entry is one of:
+
+| `type` | Fields | |
+| --- | --- | --- |
+| omitted or `'item'` | `label`, `onSelect`, `icon`, `shortcut`, `isDestructive`, `disabled`, `href`, `items` | `href` makes it a link; `items` makes it a submenu. |
+| `'checkbox'` | `label`, `checked`, `defaultChecked`, `onCheckedChange`, `disabled` | |
+| `'radio'` | `label`, `value`, `defaultValue`, `onValueChange`, `options` | One labelled group of radio items. |
+| `'group'` | `label`, `items` | A labelled group. |
+| `'separator'` | | |
+
+Give a `textValue` when `label` is not plain text, for typeahead.
+
+### Design notes
+
+- **Destructive items use the danger text colour**, on a `--danger-subtle`
+  highlight, both at 4.5:1. Put them last, after a separator.
+- **Toggles keep the menu open**, so several can be changed in one go;
+  actions close it.
+- **Shortcuts are display only.** `shortcut` shows "⌘ D"; binding the
+  key is up to the page.
+
+## Usage
+
+<Canvas of={MenuStories.Groups} />
+
+<Canvas of={MenuStories.Submenu} />
+
+<Canvas of={MenuStories.Links} />
+
+## Accessibility
+
+- The trigger has `aria-haspopup="menu"` and `aria-expanded`; the popup
+  is a `role="menu"` of `menuitem`, `menuitemcheckbox` and
+  `menuitemradio`, with `aria-checked` on the toggles and
+  `aria-disabled` on disabled items.
+- Keyboard: Enter, Space or Arrow Down on the trigger opens it; arrows
+  move (disabled items are skipped), typing a few letters jumps to the
+  matching item, Enter selects, Arrow Right opens a submenu and Arrow
+  Left closes it, Escape closes and returns focus to the trigger.
+- The icon and shortcut are hidden from assistive tech; the label names
+  the item.

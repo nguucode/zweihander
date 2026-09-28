@@ -1,0 +1,81 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import * as PopoverStories from './Popover.stories'
+
+<Meta of={PopoverStories} />
+
+# Popover
+
+A small panel anchored to a button, for content you interact with: a
+share form, a filter, a set of options. It opens on click, stays until
+you close it, and holds links, inputs and buttons, which a Tooltip must
+not. Spec:
+[uiguideline.com/components/popover](https://www.uiguideline.com/components/popover).
+Behaviour from Base UI's [Popover](https://base-ui.com/react/components/popover).
+
+<Canvas of={PopoverStories.Open} />
+
+## Anatomy
+
+| Part | What it is |
+| --- | --- |
+| **Trigger** | `trigger`: one button. Popover merges its props onto it. |
+| **Popup** | `--popover` surface, 1px `--border`, `--shadow-md`, `--radius-panel`, 16px padding, at most 22rem wide. |
+| **Title** | Optional. Names the dialog. |
+| **Description** | Optional, `--muted-foreground`. Describes the dialog. |
+| **Body** | `children`. |
+| **Close button** | Optional, in the corner. |
+| **Arrow** | Optional. |
+
+## Props
+
+| Prop | Values | Default | |
+| --- | --- | --- | --- |
+| `trigger` | element | – | Required. |
+| `title` | node | – | Or `aria-label` when there is none. |
+| `description` | node | – | |
+| `children` | node | – | |
+| `side` | `top`, `right`, `bottom`, `left` | `bottom` | Flips if there is no room. |
+| `align` | `start`, `center`, `end` | `center` | |
+| `hasArrow` | boolean | `false` | |
+| `hasCloseButton` | boolean | `false` | |
+| `closeLabel` | string | `Close` | |
+| `openOnHover` | boolean | `false` | Also opens on hover, for previews. |
+| `isModal` | boolean | `false` | See Accessibility. |
+| `open`, `defaultOpen`, `onOpenChange` | | | Controlled or uncontrolled. |
+
+<Controls of={PopoverStories.Default} />
+
+### Design notes
+
+- **Same surface as the Select list.** Popover, Select and Combobox
+  popups share the `--popover` colour, border and shadow, and the same
+  z-index layer (50); tooltips sit above them at 60.
+- **No arrow by default.** The popup opens 6px from its trigger and
+  lines up with it; the arrow is there for when the popover could be
+  read as belonging to something else nearby.
+
+## Usage
+
+<Canvas of={PopoverStories.Default} />
+
+<Canvas of={PopoverStories.ContentOnly} />
+
+## Accessibility
+
+- The popup is a `role="dialog"` named by `title` (or `aria-label`) and
+  described by `description`. The trigger carries `aria-expanded` and
+  `aria-haspopup`.
+- Opening moves focus into the popup; Escape or a click outside closes
+  it and returns focus to the trigger.
+- **Non-modal by default:** Tab can leave the popup, and the page stays
+  usable. `isModal` switches to Base UI's modal mode: focus is trapped,
+  page scroll is locked and clicks outside are blocked.
+- Base UI only traps focus when the popup contains a close button, and a
+  touch screen reader needs one to get out. So a modal popover without
+  `hasCloseButton` still renders one: hidden until it has keyboard focus,
+  then shown in the corner, so focus is never invisible.
+
+  <Canvas of={PopoverStories.Modal} />
+
+- `openOnHover` adds hover to click, it does not replace it: the content
+  stays reachable by keyboard and touch.

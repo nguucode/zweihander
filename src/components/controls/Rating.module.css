@@ -1,0 +1,110 @@
+.rating {
+  --rating-star: var(--space-6);
+  --rating-on: var(--warning-text);
+  --rating-off: var(--control-border);
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--space-1-5);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-inline-size: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--foreground);
+}
+.sm {
+  --rating-star: var(--space-4);
+}
+.lg {
+  --rating-star: var(--space-8);
+}
+
+.label {
+  padding: 0;
+  font-weight: 500;
+}
+
+.stars {
+  display: inline-flex;
+  /* 2px between stars: below the spacing scale on purpose, as on Tag. */
+  gap: 2px;
+}
+
+/* Filled stars in --warning-text (the amber of a star, at 4.5:1 on the
+   page), empty ones outlined in --control-border (3:1): both clear the
+   3:1 a graphic that carries meaning needs. */
+.star {
+  position: relative;
+  display: inline-flex;
+  font-size: var(--rating-star);
+  color: var(--rating-off);
+}
+.on {
+  color: var(--rating-on);
+}
+
+label.star {
+  cursor: var(--cursor-button);
+}
+
+/* Hover previews the rating up to the star under the pointer, and only
+   while the rating can be changed. The "on" selectors outrank the "off"
+   one (each adds a pseudo-class to it), so the hovered star lights too. */
+fieldset:enabled .stars:has(label.star:hover) label.star {
+  color: var(--rating-off);
+}
+fieldset:enabled .stars:has(label.star:hover) label.star:has(~ label.star:hover),
+fieldset:enabled .stars:has(label.star:hover) label.star:hover {
+  color: var(--rating-on);
+}
+
+.input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+}
+
+.star:has(.input:focus-visible) {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+fieldset:disabled .star {
+  opacity: 0.5;
+  cursor: var(--cursor-disabled);
+}
+
+/* Read-only: an outlined star with a filled one clipped to the fraction. */
+.fill {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  display: inline-flex;
+  overflow: hidden;
+  color: var(--rating-on);
+}
+.empty {
+  color: var(--rating-off);
+}
+/* The filled star keeps its full size and is cut by the span, rather than
+   shrinking into it. */
+.fill > :global(svg) {
+  flex-shrink: 0;
+}
+
+/* 16px stars grow a 44px target on coarse pointers. */
+@media (pointer: coarse) {
+  label.star::after {
+    content: '';
+    position: absolute;
+    inset: 50% auto auto 50%;
+    inline-size: 44px;
+    block-size: 44px;
+    translate: -50% -50%;
+  }
+}

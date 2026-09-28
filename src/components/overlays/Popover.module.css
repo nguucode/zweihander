@@ -1,0 +1,140 @@
+/* 50: the popup layer, shared with Select and Combobox. Tooltips sit
+   above at 60. */
+.positioner {
+  z-index: 50;
+}
+
+.popup {
+  box-sizing: border-box;
+  inline-size: max-content;
+  max-inline-size: min(22rem, var(--available-width));
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-panel);
+  background: var(--popover);
+  box-shadow: var(--shadow-md);
+  color: var(--popover-foreground);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  outline: none;
+  transform-origin: var(--transform-origin);
+  transition:
+    opacity 120ms,
+    scale 120ms;
+}
+
+.popup[data-starting-style],
+.popup[data-ending-style] {
+  opacity: 0;
+  scale: 0.97;
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  font-weight: 600;
+}
+
+.description {
+  margin: var(--space-1) 0 0;
+  color: var(--muted-foreground);
+}
+
+.header + .body,
+.description + .body {
+  margin-block-start: var(--space-3);
+}
+
+/* A 10px square turned 45deg: half pokes out, the border on two edges
+   continues the popup's. */
+.arrow {
+  inline-size: 10px;
+  block-size: 10px;
+  background: var(--popover);
+  rotate: 45deg;
+}
+.arrow[data-side='bottom'] {
+  top: -6px;
+  border-block-start: 1px solid var(--border);
+  border-inline-start: 1px solid var(--border);
+}
+.arrow[data-side='top'] {
+  bottom: -6px;
+  border-block-end: 1px solid var(--border);
+  border-inline-end: 1px solid var(--border);
+}
+.arrow[data-side='right'] {
+  left: -6px;
+  border-block-end: 1px solid var(--border);
+  border-inline-start: 1px solid var(--border);
+}
+.arrow[data-side='left'] {
+  right: -6px;
+  border-block-start: 1px solid var(--border);
+  border-inline-end: 1px solid var(--border);
+}
+
+.close {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  margin: calc(var(--space-1) * -1) calc(var(--space-1) * -1) 0 auto;
+  /* 2px around a 16px icon: a 20px button, one line of text tall. */
+  padding: 2px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--muted-foreground);
+  font-size: var(--space-4);
+  cursor: var(--cursor-button);
+}
+.close:hover {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+.close:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 1px;
+}
+@media (pointer: coarse) {
+  .close::before {
+    content: '';
+    position: absolute;
+    inset: 50% auto auto 50%;
+    inline-size: 44px;
+    block-size: 44px;
+    translate: -50% -50%;
+  }
+}
+
+/* The modal's close button when none is shown: out of sight until it
+   has keyboard focus, then in the corner like a skip link, so focus is
+   never invisible. */
+.hiddenClose {
+  position: absolute;
+  inset-block-start: var(--space-2);
+  inset-inline-end: var(--space-2);
+  margin: 0;
+}
+.hiddenClose:not(:focus-visible) {
+  inline-size: 1px;
+  block-size: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .popup {
+    transition: none;
+  }
+}

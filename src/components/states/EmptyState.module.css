@@ -1,0 +1,62 @@
+.empty {
+  --empty-icon: var(--space-12);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  padding: var(--space-12) var(--space-6);
+  font-family: var(--font-sans);
+  text-align: center;
+  color: var(--foreground);
+}
+
+.sm {
+  --empty-icon: var(--space-10);
+  padding: var(--space-8) var(--space-4);
+}
+
+/* A soft disc behind the icon: it gives an empty area a centre of gravity
+   without an illustration. */
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--empty-icon);
+  block-size: var(--empty-icon);
+  margin-block-end: var(--space-4);
+  border-radius: 9999px;
+  /* Error State and Success State set these to their own tone. */
+  background: var(--empty-icon-bg, var(--muted));
+  color: var(--empty-icon-fg, var(--muted-foreground));
+  font-size: calc(var(--empty-icon) / 2);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--text-heading-md);
+  line-height: var(--leading-heading-md);
+  font-weight: 600;
+}
+.sm .title {
+  font-size: var(--text-heading-sm);
+  line-height: var(--leading-heading-sm);
+}
+
+.description {
+  max-inline-size: 40ch;
+  margin: var(--space-2) 0 0;
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--muted-foreground);
+}
+
+.action {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-2);
+  margin-block-start: var(--space-6);
+}
+.sm .action {
+  margin-block-start: var(--space-4);
+}

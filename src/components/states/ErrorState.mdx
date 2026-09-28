@@ -1,0 +1,62 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import * as ErrorStateStories from './ErrorState.stories'
+
+<Meta of={ErrorStateStories} />
+
+# Error State
+
+What a list, a panel or a page shows when loading it failed: what went
+wrong, and a way forward, usually "Try again". Our own spec:
+uiguideline.com has no page for it. Built on
+[Empty State](?path=/docs/components-states-emptystate--docs), in the
+danger tone.
+
+<Canvas of={ErrorStateStories.WithDetails} />
+
+## Anatomy
+
+Empty State's parts (icon disc, title, description, action), plus:
+
+| Part | What it is |
+| --- | --- |
+| **Icon disc** | `--danger-subtle` behind the `danger` icon in `--danger-text`. |
+| **Details** | Optional, under the description: an error code or request id, monospaced and selectable in one click. |
+
+## Props
+
+Every Empty State prop (`icon`, `description`, `action`, `size`,
+`headingLevel`), and:
+
+| Prop | Values | Default | |
+| --- | --- | --- | --- |
+| `title` | node | `Something went wrong` | |
+| `details` | node | – | |
+| `isLive` | boolean | `false` | `role="alert"`. |
+
+<Controls of={ErrorStateStories.Default} />
+
+### Design notes
+
+- **Say what failed and that nothing is lost.** "Couldn’t load projects.
+  Your projects are safe" beats "Error". The default title is the last
+  resort, for failures you cannot describe.
+- **Details are for support, not for the reader.** Keep them small and
+  selectable so they can be pasted into a message.
+
+## Usage
+
+<Canvas of={ErrorStateStories.Default} />
+
+<Canvas of={ErrorStateStories.Small} />
+
+<Canvas of={ErrorStateStories.DefaultTitle} />
+
+## Accessibility
+
+- The title is a heading, as on Empty State.
+- `isLive` makes it a `role="alert"`: use it when the error replaces
+  content that was loading, so a screen reader hears that it failed.
+
+  <Canvas of={ErrorStateStories.Live} />
+
+- The icon is `aria-hidden`; the title says it.

@@ -1,0 +1,6 @@
+/* The disc in the success tone: --success-subtle behind --success-text,
+   4.5:1 and more. */
+.success {
+  --empty-icon-bg: var(--success-subtle);
+  --empty-icon-fg: var(--success-text);
+}

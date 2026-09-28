@@ -1,0 +1,102 @@
+.section {
+  font-family: var(--font-sans);
+  color: var(--foreground);
+  container-type: inline-size;
+}
+
+.layout {
+  display: grid;
+  gap: var(--space-4) var(--space-8);
+}
+
+.intro {
+  display: grid;
+  align-content: start;
+  gap: var(--space-1);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--text-heading-sm);
+  line-height: var(--leading-heading-sm);
+  font-weight: 600;
+}
+
+.description {
+  margin: 0;
+  max-inline-size: 60ch;
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--muted-foreground);
+}
+
+.body {
+  display: grid;
+  min-inline-size: 0;
+  /* The fields query the body's width for their two columns. */
+  container-type: inline-size;
+}
+
+.fields {
+  display: grid;
+  gap: var(--space-6);
+  min-inline-size: 0;
+}
+
+/* Split: the intro a third, the fields the rest, from 48rem of section
+   width. The section is the container, so a split form in a narrow panel
+   stacks just as it does on a phone. */
+@container (min-width: 48rem) {
+  .split > .layout {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  }
+}
+
+/* Two to a row from 32rem of the body's width. */
+@container (min-width: 32rem) {
+  .twoColumns {
+    grid-template-columns: 1fr 1fr;
+    column-gap: var(--space-4);
+  }
+}
+.fullWidth {
+  grid-column: 1 / -1;
+  display: grid;
+}
+
+/* ---------------------------------------------------------------- card */
+.card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-panel);
+  background: var(--card);
+  color: var(--card-foreground);
+  box-shadow: var(--shadow-xs);
+  overflow: hidden;
+}
+.card > .fields {
+  padding: var(--space-6);
+}
+.card > .footer {
+  padding: var(--space-4) var(--space-6);
+  border-block-start: 1px solid var(--border);
+  background: var(--surface-subtle);
+}
+
+.footer {
+  padding-block-start: var(--space-6);
+}
+
+/* ------------------------------------------------------------- actions */
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-3);
+}
+
+/* Consecutive sections of one form, a line between them. */
+.section + .section {
+  margin-block-start: var(--space-8);
+  padding-block-start: var(--space-8);
+  border-block-start: 1px solid var(--border);
+}
