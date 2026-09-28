@@ -258,6 +258,21 @@ const colorBlock = (mode) =>
     .map(([k, v]) => `  --${k}: ${alias(v.$value, { accent: accentOf(mode), gray: grayOf() })};`)
     .join('\n')
 
+/* The tokens a [data-gray] scope restates: any that read a gray step in
+   either appearance, each resolved for whichever appearance is nearest. */
+const grayScopeDecls = () => {
+  const values = (mode) =>
+    Object.fromEntries(
+      entries(semantic.color[mode]).map(([k, v]) => [k, alias(v.$value, { accent: accentOf(mode), gray: grayOf() })]),
+    )
+  const light = values('light')
+  const dark = values('dark')
+  return Object.keys(light)
+    .filter((k) => light[k].includes('var(--gray-') || dark[k]?.includes('var(--gray-'))
+    .map((k) => `  --${k}: var(--use-light, ${light[k]}) var(--use-dark, ${dark[k]});`)
+    .join('\n')
+}
+
 const spaceDecls = entries(semantic.space)
   .map(([k, v]) => `  --space-${k}: calc(${v.$value} * var(--scaling));`)
   .join('\n')
@@ -300,50 +315,52 @@ ${GRAYS.map((hue) => `[data-gray='${hue}'] {\n${grayVars(hue)}\n}`).join('\n')}
 
 /* \`.light\` carries the same values as \`:root\` so a light scope can be nested
    inside a dark one. \`.dark\` is declared after it at equal specificity, so on
-   an element carrying both, dark wins. */
+   an element carrying both, dark wins.
+
+   Each scope also sets two switches that say which appearance is nearest.
+   \`initial\` makes a custom property invalid, so var(--use-light, X) gives X
+   inside a light scope and nothing inside a dark one, and --use-dark the
+   reverse. [data-accent] and [data-gray] below read them instead of matching
+   \`.dark [data-accent]\`: a descendant selector matches ANY dark ancestor, so a
+   light island in a dark page would take the dark palette. The switches
+   inherit, so the nearest scope wins at any depth. */
 :root,
 .light {
 ${colorBlock('light')}
 
 ${shadowDecls('light')}
+
+  --use-light: initial;
+  --use-dark: ;
 }
 
 .dark {
 ${colorBlock('dark')}
 
 ${shadowDecls('dark')}
+
+  --use-light: ;
+  --use-dark: initial;
 }
 
 /* A custom property that reads another one is resolved where it is DECLARED
    and inherits as a finished value, so setting --accent-solid-* further down
    the tree cannot reach a --primary already computed at :root. Every element
-   that changes the palette therefore has to restate the mapping. */
+   that changes the palette therefore has to restate the mapping, for the
+   appearance it is in. */
 [data-accent] {
-  --primary: var(--accent-solid-light);
-  --primary-foreground: var(--accent-contrast-light);
-  --ring: var(--accent-ring-light);
-  --primary-text: var(--accent-text-light);
-}
-.dark [data-accent],
-[data-accent].dark {
-  --primary: var(--accent-solid-dark);
-  --primary-foreground: var(--accent-contrast-dark);
-  --ring: var(--accent-ring-dark);
-  --primary-text: var(--accent-text-dark);
+${[
+  ['primary', 'solid'],
+  ['primary-foreground', 'contrast'],
+  ['ring', 'ring'],
+  ['primary-text', 'text'],
+]
+  .map(([k, v]) => `  --${k}: var(--use-light, var(--accent-${v}-light)) var(--use-dark, var(--accent-${v}-dark));`)
+  .join('\n')}
 }
 
 [data-gray] {
-${colorBlock('light')
-  .split('\n')
-  .filter((l) => l.includes('var(--gray-'))
-  .join('\n')}
-}
-.dark [data-gray],
-[data-gray].dark {
-${colorBlock('dark')
-  .split('\n')
-  .filter((l) => l.includes('var(--gray-'))
-  .join('\n')}
+${grayScopeDecls()}
 }
 
 /* Derived tokens are declared on \`*\`, not \`:root\`, and that is load-bearing

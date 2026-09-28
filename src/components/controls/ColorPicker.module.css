@@ -109,8 +109,10 @@
   border: 0;
   border-radius: var(--radius-sm);
   background: var(--swatch);
-  /* An inner edge so white and near-page colours still show their shape. */
-  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.15);
+  /* An inner edge so a swatch the colour of the page still shows its shape:
+     --control-border, 3:1 on the page in either appearance. A fixed black
+     edge disappeared round a black swatch in dark mode. */
+  box-shadow: inset 0 0 0 1px var(--control-border);
   cursor: var(--cursor-button);
 }
 .swatch:focus-visible {
@@ -138,7 +140,7 @@
   block-size: calc(var(--space-4) + var(--space-1));
   border-radius: var(--radius-sm);
   background: var(--swatch);
-  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.2);
+  box-shadow: inset 0 0 0 1px var(--control-border);
 }
 
 .hexInput {

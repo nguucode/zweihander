@@ -162,3 +162,39 @@ export const Nested: Story = {
     await expect(bg(island!)).not.toBe(bg(island!.parentElement!.closest('.dark')!))
   },
 }
+
+/**
+ * An accent or gray set on a light island inside a dark page takes the
+ * island's appearance, not the page's: the nearest scope wins at any depth.
+ */
+export const NestedPalettes: Story = {
+  render: () => (
+    <Theme appearance="dark" accentColor="orange" grayColor="slate" data-testid="dark" style={{ background: 'var(--background)', padding: 'var(--space-4)' }}>
+      <Theme appearance="light" style={{ background: 'var(--background)', padding: 'var(--space-4)' }}>
+        <Theme accentColor="orange" grayColor="slate" data-testid="island">
+          <Panel label="orange on slate, light, inside dark" />
+          <Theme appearance="dark" style={{ padding: 'var(--space-2)' }}>
+            <Theme accentColor="orange" grayColor="slate" data-testid="deep">
+              <Panel label="and dark again inside that" />
+            </Theme>
+          </Theme>
+        </Theme>
+        <Theme accentColor="orange" grayColor="slate" appearance="dark" data-testid="same-element">
+          <Panel label="accent and appearance on one element" />
+        </Theme>
+      </Theme>
+    </Theme>
+  ),
+  play: async ({ canvas }) => {
+    const v = (el: Element, name: string) => getComputedStyle(el).getPropertyValue(name).trim()
+    const dark = canvas.getByTestId('dark')
+    const island = canvas.getByTestId('island')
+    for (const name of ['--primary-text', '--primary', '--ring', '--foreground', '--muted-foreground', '--control-border']) {
+      // Light inside dark: the light palette, not the page's dark one.
+      await expect(v(island, name)).not.toBe(v(dark, name))
+      // Dark again one level down, and on the same element: the dark palette.
+      await expect(v(canvas.getByTestId('deep'), name)).toBe(v(dark, name))
+      await expect(v(canvas.getByTestId('same-element'), name)).toBe(v(dark, name))
+    }
+  },
+}

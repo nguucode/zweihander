@@ -310,7 +310,15 @@
 
 /* `.light` carries the same values as `:root` so a light scope can be nested
    inside a dark one. `.dark` is declared after it at equal specificity, so on
-   an element carrying both, dark wins. */
+   an element carrying both, dark wins.
+
+   Each scope also sets two switches that say which appearance is nearest.
+   `initial` makes a custom property invalid, so var(--use-light, X) gives X
+   inside a light scope and nothing inside a dark one, and --use-dark the
+   reverse. [data-accent] and [data-gray] below read them instead of matching
+   `.dark [data-accent]`: a descendant selector matches ANY dark ancestor, so a
+   light island in a dark page would take the dark palette. The switches
+   inherit, so the nearest scope wins at any depth. */
 :root,
 .light {
   --background: oklch(100% 0 0);
@@ -360,6 +368,9 @@
   --elevation-lg: 0 12px 24px -6px rgb(0 0 0 / 0.1), 0 6px 12px -6px rgb(0 0 0 / 0.07);
   --elevation-xl: 0 20px 40px -10px rgb(0 0 0 / 0.12), 0 10px 20px -10px rgb(0 0 0 / 0.08);
   --elevation-2xl: 0 32px 64px -16px rgb(0 0 0 / 0.16), 0 16px 32px -16px rgb(0 0 0 / 0.1);
+
+  --use-light: initial;
+  --use-dark: ;
 }
 
 .dark {
@@ -410,57 +421,40 @@
   --elevation-lg: 0 12px 24px -6px rgb(0 0 0 / 0.4), 0 6px 12px -6px rgb(0 0 0 / 0.28);
   --elevation-xl: 0 20px 40px -10px rgb(0 0 0 / 0.48), 0 10px 20px -10px rgb(0 0 0 / 0.32);
   --elevation-2xl: 0 32px 64px -16px rgb(0 0 0 / 0.6), 0 16px 32px -16px rgb(0 0 0 / 0.4);
+
+  --use-light: ;
+  --use-dark: initial;
 }
 
 /* A custom property that reads another one is resolved where it is DECLARED
    and inherits as a finished value, so setting --accent-solid-* further down
    the tree cannot reach a --primary already computed at :root. Every element
-   that changes the palette therefore has to restate the mapping. */
+   that changes the palette therefore has to restate the mapping, for the
+   appearance it is in. */
 [data-accent] {
-  --primary: var(--accent-solid-light);
-  --primary-foreground: var(--accent-contrast-light);
-  --ring: var(--accent-ring-light);
-  --primary-text: var(--accent-text-light);
-}
-.dark [data-accent],
-[data-accent].dark {
-  --primary: var(--accent-solid-dark);
-  --primary-foreground: var(--accent-contrast-dark);
-  --ring: var(--accent-ring-dark);
-  --primary-text: var(--accent-text-dark);
+  --primary: var(--use-light, var(--accent-solid-light)) var(--use-dark, var(--accent-solid-dark));
+  --primary-foreground: var(--use-light, var(--accent-contrast-light)) var(--use-dark, var(--accent-contrast-dark));
+  --ring: var(--use-light, var(--accent-ring-light)) var(--use-dark, var(--accent-ring-dark));
+  --primary-text: var(--use-light, var(--accent-text-light)) var(--use-dark, var(--accent-text-dark));
 }
 
 [data-gray] {
-  --foreground: var(--gray-950);
-  --card-foreground: var(--gray-950);
-  --popover-foreground: var(--gray-950);
-  --secondary: var(--gray-100);
-  --secondary-foreground: var(--gray-900);
-  --muted: var(--gray-100);
-  --muted-foreground: var(--gray-500);
-  --surface-subtle: var(--gray-50);
-  --accent: var(--gray-100);
-  --accent-foreground: var(--gray-900);
-  --border: var(--gray-200);
-  --input: var(--gray-200);
-  --control-border: var(--gray-500);
-}
-.dark [data-gray],
-[data-gray].dark {
-  --background: var(--gray-950);
-  --foreground: var(--gray-50);
-  --card: var(--gray-900);
-  --card-foreground: var(--gray-50);
-  --popover: var(--gray-900);
-  --popover-foreground: var(--gray-50);
-  --secondary: var(--gray-800);
-  --secondary-foreground: var(--gray-50);
-  --muted: var(--gray-800);
-  --muted-foreground: var(--gray-400);
-  --surface-subtle: var(--gray-800);
-  --accent: var(--gray-800);
-  --accent-foreground: var(--gray-50);
-  --control-border: var(--gray-400);
+  --background: var(--use-light, oklch(100% 0 0)) var(--use-dark, var(--gray-950));
+  --foreground: var(--use-light, var(--gray-950)) var(--use-dark, var(--gray-50));
+  --card: var(--use-light, oklch(100% 0 0)) var(--use-dark, var(--gray-900));
+  --card-foreground: var(--use-light, var(--gray-950)) var(--use-dark, var(--gray-50));
+  --popover: var(--use-light, oklch(100% 0 0)) var(--use-dark, var(--gray-900));
+  --popover-foreground: var(--use-light, var(--gray-950)) var(--use-dark, var(--gray-50));
+  --secondary: var(--use-light, var(--gray-100)) var(--use-dark, var(--gray-800));
+  --secondary-foreground: var(--use-light, var(--gray-900)) var(--use-dark, var(--gray-50));
+  --muted: var(--use-light, var(--gray-100)) var(--use-dark, var(--gray-800));
+  --muted-foreground: var(--use-light, var(--gray-500)) var(--use-dark, var(--gray-400));
+  --surface-subtle: var(--use-light, var(--gray-50)) var(--use-dark, var(--gray-800));
+  --accent: var(--use-light, var(--gray-100)) var(--use-dark, var(--gray-800));
+  --accent-foreground: var(--use-light, var(--gray-900)) var(--use-dark, var(--gray-50));
+  --border: var(--use-light, var(--gray-200)) var(--use-dark, oklch(100% 0 0 / 10%));
+  --input: var(--use-light, var(--gray-200)) var(--use-dark, oklch(100% 0 0 / 15%));
+  --control-border: var(--use-light, var(--gray-500)) var(--use-dark, var(--gray-400));
 }
 
 /* Derived tokens are declared on `*`, not `:root`, and that is load-bearing
