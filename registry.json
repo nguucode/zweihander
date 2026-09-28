@@ -1343,6 +1343,33 @@
           "target": "components/zweihander/patterns/application-ui/DataTablePage.module.css"
         }
       ]
+    },
+    {
+      "name": "app-shell",
+      "type": "registry:block",
+      "title": "App Shell",
+      "description": "Application UI pattern: AppShell (sidebar or top navigation, sticky header, skip link, a navigation drawer on narrow screens), AppHeader and AppNav.",
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/icon.json",
+        "https://ontheshore.biz/zweihander/r/button.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/patterns/application-ui/AppShell.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/patterns/application-ui/AppShell.tsx"
+        },
+        {
+          "path": "src/components/patterns/application-ui/AppShell.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/patterns/application-ui/AppShell.module.css"
+        }
+      ]
     }
   ]
 }

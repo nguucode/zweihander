@@ -1,0 +1,250 @@
+/* The shell fills the viewport by default; set block-size on it to put it
+   in a smaller box, as the stories do. The content column scrolls, so the
+   sidebar and the header stay where they are. Breakpoints are the shell's
+   own width (a container), which in an app is the viewport's. */
+.shell {
+  position: relative;
+  container-type: inline-size;
+  block-size: 100dvh;
+  overflow: hidden;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+.frame {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  block-size: 100%;
+}
+
+.sidebar {
+  display: none;
+  min-block-size: 0;
+  border-inline-end: 1px solid var(--border);
+}
+
+/* The sidebar from 64rem; below that it lives in the drawer. */
+@container (min-width: 64rem) {
+  .withSidebar .frame {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+  .withSidebar .sidebar {
+    display: block;
+  }
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  min-inline-size: 0;
+  min-block-size: 0;
+  overflow: auto;
+}
+
+.main {
+  flex: 1;
+  padding: var(--space-6);
+  outline: none;
+}
+@container (min-width: 64rem) {
+  .main {
+    padding: var(--space-8);
+  }
+}
+
+/* ---------------------------------------------------------------- skip
+   Off screen until focused: the first Tab on the page, straight past the
+   navigation to the content. */
+.skip {
+  position: absolute;
+  inset-block-start: var(--space-2);
+  inset-inline-start: var(--space-2);
+  z-index: 60;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-field);
+  background: var(--primary);
+  color: var(--primary-foreground);
+  font-size: var(--text-body);
+  font-weight: 500;
+  text-decoration: none;
+  translate: 0 calc(-100% - var(--space-4));
+}
+.skip:focus-visible {
+  translate: 0;
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* -------------------------------------------------------------- header */
+.header {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  min-block-size: calc(var(--space-8) * 2);
+  padding-inline: var(--space-4);
+  border-block-end: 1px solid var(--border);
+  background: var(--background);
+}
+@container (min-width: 64rem) {
+  .header {
+    padding-inline: var(--space-8);
+  }
+}
+
+.start {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  min-inline-size: 0;
+}
+.center {
+  flex: 1;
+  min-inline-size: 0;
+}
+.end {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-inline-start: auto;
+}
+
+/* The menu button only where the drawer is the navigation. */
+@container (min-width: 64rem) {
+  .withSidebar .menuButton {
+    display: none;
+  }
+}
+@container (min-width: 48rem) {
+  .withMobileNavigation:not(.withSidebar) .menuButton {
+    display: none;
+  }
+}
+
+/* ----------------------------------------------------------------- nav */
+.nav ul {
+  display: flex;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+@container (max-width: 47.99rem) {
+  .nav {
+    display: none;
+  }
+}
+
+.navLink {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: calc(var(--space-8) + var(--space-1));
+  padding-inline: var(--space-3);
+  border-radius: var(--radius-field);
+  color: var(--muted-foreground);
+  font-size: var(--text-body);
+  font-weight: 500;
+  text-decoration: none;
+}
+.navLink:hover {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+.navLink:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+/* The current page: foreground text on the subtle surface, not colour alone. */
+.navLink[aria-current='page'] {
+  background: var(--accent);
+  color: var(--foreground);
+}
+
+/* -------------------------------------------------------------- drawer */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: oklch(0% 0 0 / 50%);
+  transition: opacity 150ms;
+}
+.backdrop[data-starting-style],
+.backdrop[data-ending-style] {
+  opacity: 0;
+}
+
+.drawer {
+  position: fixed;
+  inset-block: 0;
+  inset-inline-start: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  inline-size: min(20rem, 85vw);
+  background: var(--background);
+  color: var(--foreground);
+  box-shadow: var(--shadow-lg);
+  outline: none;
+  transition: translate 200ms;
+}
+/* The navigation inside (a Sidebar) takes the drawer's width, not its own. */
+.drawer > :not(.drawerClose) {
+  flex: 1;
+  min-block-size: 0;
+  inline-size: 100%;
+}
+.drawer[data-starting-style],
+.drawer[data-ending-style] {
+  translate: -100% 0;
+}
+/* [dir] rather than :dir(), which the build lowers to a :lang() list. */
+:global([dir='rtl']) .drawer[data-starting-style],
+:global([dir='rtl']) .drawer[data-ending-style] {
+  translate: 100% 0;
+}
+
+.drawerClose {
+  position: absolute;
+  inset-block-start: var(--space-3);
+  inset-inline-end: var(--space-3);
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--space-8);
+  block-size: var(--space-8);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-field);
+  background: transparent;
+  color: var(--muted-foreground);
+  font-size: var(--space-4);
+  cursor: var(--cursor-button);
+}
+.drawerClose:hover {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+.drawerClose:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .backdrop,
+  .drawer {
+    transition: none;
+  }
+}
+
+.srOnly {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
