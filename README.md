@@ -34,7 +34,7 @@ Storybook sidebar is ordered Foundations → Components → Patterns (`.storyboo
 | --- | --- | --- | --- |
 | **Foundations** (atoms) | `src/foundations/` | `Foundations/*` | Overview, color, dark mode, typography, spacing, breakpoints, radius, shadows, cursors |
 | **Components** (molecules) | `src/components/<category>/` | `Components/<Category>/*` | Single components (Button, Input, Modal, ...) — see [`src/components/Overview.mdx`](src/components/Overview.mdx) for the full category list |
-| **Patterns** (organisms) | `src/patterns/<category>/` | `Patterns/<Category>/*` | Full sections assembled from Components (Marketing, Application UI, E-commerce) — see [`src/patterns/Overview.mdx`](src/patterns/Overview.mdx) |
+| **Patterns** (organisms) | `src/components/patterns/<category>/` | `Patterns/<Category>/*` | Full sections assembled from Components (Marketing, Application UI, E-commerce), shipped through the registry only. See [`src/components/patterns/Overview.mdx`](src/components/patterns/Overview.mdx) |
 
 **Every topic gets a hand-written `.mdx` doc page**, not an autodocs blurb —
 a story alone is a visual, not documentation. The `.mdx` file imports its

@@ -1,0 +1,73 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks'
+import * as DataTablePageStories from './DataTablePage.stories'
+
+<Meta of={DataTablePageStories} />
+
+# Data Table Page
+
+A list screen: search and filters above a [Table](?path=/docs/components-data-display-table--docs),
+what is shown and the pages below it, and, while rows are selected, what
+you can do with them. Two pieces, `TableToolbar` (with
+`TableToolbarGroup`) and `TableFooter`, around the kit's Table, Search,
+Select and Pagination. Filtering, paging and the data are yours: the
+stories show one way to wire them.
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/data-table-page.json
+```
+
+## Toolbar and pagination
+
+<Canvas of={DataTablePageStories.ToolbarAndPagination} />
+
+## Bulk actions
+
+With `selectedCount` above zero the toolbar swaps its tools for the
+selection's actions and a "Clear selection" button, on the accent
+surface so the change of mode is visible.
+
+<Canvas of={DataTablePageStories.BulkActions} />
+
+## Empty result
+
+When nothing matches, the Table's `emptyState` says so and offers the way
+back; the footer goes away.
+
+<Canvas of={DataTablePageStories.EmptyResult} />
+
+## Props
+
+**TableToolbar**
+
+| Prop | Values | Default | |
+| --- | --- | --- | --- |
+| `children` | node | – | Search, filters, the primary action. |
+| `selectedCount` | number | `0` | From 1, the selection bar replaces the children. |
+| `selectionActions` | node | – | |
+| `onClearSelection` | function | – | Shows "Clear selection". |
+| `selectionLabel` | `(n) => string` | `"{n} selected"` | |
+
+`TableToolbarGroup` wraps the part that should take the free space and
+wrap first, usually the search and filters.
+
+**TableFooter** takes `summary` ("Showing 1–5 of 12") and, as children,
+usually a Pagination.
+
+## Behaviour to copy
+
+- **Filtering returns to page 1.** A new query on page 3 would otherwise
+  show an empty page, or a page the reader never asked for.
+- **Selection is by id**, so it survives sorting and paging (Table's
+  `getRowId`), and an action clears it once it has been applied.
+- Both bars wrap: on a phone the search takes its own line and the
+  filters and action flow under it.
+
+## Accessibility
+
+- The selection count is a polite status line that is always in the page,
+  so "2 selected" is announced as it changes, and silence when it clears.
+- Search and the status filter are named ("Search projects", "Status")
+  without visible labels, since the table's caption and placeholder make
+  their purpose clear on screen.
+- The empty state is a heading inside the table's body, so a screen reader
+  reaching the table hears why it is empty.

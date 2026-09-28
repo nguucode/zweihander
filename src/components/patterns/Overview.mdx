@@ -1,0 +1,42 @@
+import { Meta } from '@storybook/addon-docs/blocks'
+
+<Meta title="Patterns/Overview" />
+
+# Patterns
+
+Whole sections of a screen, assembled from Components (atomic design's
+"organisms"). Where a component is a building block, a pattern is a
+finished arrangement of them: a page heading, a row of stats, a settings
+form.
+
+Patterns are meant to be **copied and edited**, like Tailwind Plus blocks.
+They ship through the registry only, not the npm package: install one and
+its file lands in your project, next to the components it uses, as code
+you own.
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/page-heading.json
+```
+
+Each pattern is a small React component that takes its content as props,
+so a variant is usually a matter of which props you pass. The stories show
+the variants side by side, and each one is checked for accessibility like
+any component.
+
+## Application UI
+
+| Pattern | Variants | |
+| --- | --- | --- |
+| [Page Heading](?path=/docs/patterns-application-ui-page-heading--docs) | Simple, with breadcrumbs and meta, with tabs | ✅ |
+| [Stats](?path=/docs/patterns-application-ui-stats--docs) | Simple, with trend, with icon and link | ✅ |
+| [Description List](?path=/docs/patterns-application-ui-description-list--docs) | Columns, in a card, stacked | ✅ |
+| [Form Layouts](?path=/docs/patterns-application-ui-form-layouts--docs) | Settings sections, stacked in a card, in a modal | ✅ |
+| [Data Table Page](?path=/docs/patterns-application-ui-data-table-page--docs) | Toolbar and pagination, bulk actions, empty result | ✅ |
+| [App Shell](?path=/docs/patterns-application-ui-app-shell--docs) | Sidebar, collapsed rail, top navigation | ✅ |
+
+## Later
+
+| Category | Typical patterns |
+| --- | --- |
+| **Marketing** | Hero, header/nav, feature sections, pricing, testimonials, CTA sections, footers |
+| **E-commerce** | Product overviews/lists, category filters, shopping cart, checkout, order history, reviews |

@@ -1,0 +1,69 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import * as DescriptionListStories from './DescriptionList.stories'
+
+<Meta of={DescriptionListStories} />
+
+# Description List
+
+The fields of a record, as terms and their details: a profile, an order,
+an application. It is read-only; its editable twin is a settings form in
+Form Layouts.
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/description-list.json
+```
+
+## Columns
+
+Term and details side by side, a line between rows, and an optional
+action at the end of each row ("Update").
+
+<Canvas of={DescriptionListStories.Columns} />
+
+## In a card
+
+`isCard` puts the header in a top band and the list below it, inside one
+border. With `layout="grid"`, fields run two to a row; `isWide` gives
+long text and attachments the full width.
+
+<Canvas of={DescriptionListStories.InCard} />
+
+## Stacked
+
+Term over details, one field after another: for a sidebar or a narrow
+panel.
+
+<Canvas of={DescriptionListStories.Stacked} />
+
+## Props
+
+| Prop | Values | Default | |
+| --- | --- | --- | --- |
+| `items` | `DescriptionItem[]` | – | Required. `{ term, details, action?, isWide? }` |
+| `title` | node | – | |
+| `description` | node | – | |
+| `actions` | node | – | Buttons at the end of the header. |
+| `layout` | `columns`, `grid`, `stacked` | `columns` | |
+| `isCard` | boolean | `false` | |
+| `headingLevel` | `2`, `3` | `2` | |
+
+<Controls of={DescriptionListStories.Columns} />
+
+## Layout
+
+- **It responds to its own width, not the viewport's.** Columns and grid
+  are container queries: under 36rem of list width they stack, so the
+  same list works in a main column, a sidebar and a phone.
+
+  <Canvas of={DescriptionListStories.ColumnsNarrow} />
+
+- Details wrap anywhere, so a long email address or URL never pushes the
+  layout wide.
+
+## Accessibility
+
+- A real `<dl>`: a screen reader announces a list of terms and reads each
+  detail with its term.
+- Row actions sit in their own `<dd>` after the details. Give each one the
+  field it acts on ("Update Email address"), hidden if you like, so a
+  list of links is not six identical "Update"s.

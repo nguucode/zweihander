@@ -1,0 +1,81 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks'
+import * as AppShellStories from './AppShell.stories'
+
+<Meta of={AppShellStories} />
+
+# App Shell
+
+The frame of an application: navigation, a header, and the page. The
+navigation stays put while the page scrolls, and on a phone it moves into
+a drawer that the header's menu button opens. Four pieces: `AppShell`,
+`AppHeader`, `AppNav` for top navigation, and the kit's
+[Sidebar](?path=/docs/components-navigation-sidebar--docs).
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/app-shell.json
+```
+
+## With sidebar
+
+<Canvas of={AppShellStories.WithSidebar} />
+
+## Collapsed rail
+
+Sidebar's `isCollapsible` turns it into an icon rail that the reader can
+expand. The links keep their names, and show them as tooltips.
+
+<Canvas of={AppShellStories.CollapsedRail} />
+
+## Top navigation
+
+No sidebar: a logo and `AppNav` links in the header. `mobileNavigation`
+says what the drawer holds on a phone, where the links move.
+
+<Canvas of={AppShellStories.TopNavigation} />
+
+## On a phone
+
+Under 64rem of shell width (48rem for top navigation) the navigation is a
+drawer. The header gets a menu button that opens it; choosing a link or
+pressing Escape closes it, and focus returns to the button.
+
+<Canvas of={AppShellStories.Mobile} />
+
+## Props
+
+**AppShell**
+
+| Prop | Values | Default | |
+| --- | --- | --- | --- |
+| `sidebar` | node | – | A Sidebar. Beside the content from 64rem, in the drawer below. |
+| `header` | node | – | An AppHeader. |
+| `mobileNavigation` | node | `sidebar` | What the drawer holds. |
+| `navigationLabel` | string | `Navigation` | Names the drawer and its buttons. |
+| `children` | node | – | The page, inside `<main id="main">`. |
+
+**AppHeader** takes `start` (breadcrumbs, or a logo and AppNav), `end`
+(search, notifications, the account menu) and `children` for the middle.
+
+**AppNav** takes `items` (`{ label, href }[]`) and `currentHref`.
+
+## Layout
+
+- **The shell fills the viewport** (`block-size: 100dvh`) and its content
+  column scrolls, so the sidebar and the sticky header stay in place. Set
+  `block-size` on it to put it in a smaller box.
+- **Breakpoints are the shell's own width**, which in an app is the
+  viewport's. That is also what lets the stories show the phone layout in
+  a 390px box.
+
+## Accessibility
+
+- A "Skip to content" link is the first thing in the shell, visible when
+  focused. It jumps past the navigation to `<main id="main">`.
+- The page is the `main` landmark; the sidebar and AppNav are `nav`
+  landmarks named "Main". Only one is in the page at a time: the hidden
+  one is `display: none`, so it is out of the accessibility tree too.
+- The drawer is a modal dialog named "Navigation": focus moves into it,
+  the page behind is inert, and Escape closes it. It slides in from the
+  start edge, from the right in a right-to-left page.
+- The current page is marked `aria-current="page"` in both kinds of
+  navigation, and shown by more than colour.
