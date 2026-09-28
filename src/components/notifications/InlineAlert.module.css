@@ -1,0 +1,53 @@
+.inlineAlert {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  /* The whole line takes the variant's text colour, measured at 4.5:1 on
+     the page: an inline alert has no box to carry the colour instead. */
+  color: var(--inline-alert-text);
+}
+
+.sm {
+  gap: var(--space-1-5);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+}
+
+.info {
+  --inline-alert-text: var(--info-text);
+}
+.success {
+  --inline-alert-text: var(--success-text);
+}
+.warning {
+  --inline-alert-text: var(--warning-text);
+}
+.danger {
+  --inline-alert-text: var(--danger-text);
+}
+
+/* One line tall, so the icon sits on the first line of a wrapped message.
+   --leading-* is a ratio; times the text size it is a length. */
+.icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  block-size: calc(var(--leading-body) * var(--text-body));
+  font-size: var(--space-4);
+}
+.sm .icon {
+  block-size: calc(var(--leading-body-sm) * var(--text-body-sm));
+  font-size: var(--space-3);
+}
+
+.message {
+  min-inline-size: 0;
+}
+
+.action {
+  flex-shrink: 0;
+  margin-inline-start: var(--space-1);
+}

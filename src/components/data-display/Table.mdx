@@ -1,0 +1,81 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import * as TableStories from './Table.stories'
+
+<Meta of={TableStories} />
+
+# Table
+
+Rows of records with the same fields, to scan and compare: projects,
+invoices, members. Columns can sort, rows can be selected. Spec:
+[uiguideline.com/components/table](https://www.uiguideline.com/components/table).
+A native `<table>`; selection uses the kit's Checkbox.
+
+<Canvas of={TableStories.Selectable} />
+
+## Anatomy
+
+| Part | What it is |
+| --- | --- |
+| **Caption** | Names the table. Visually hidden unless `showCaption`. |
+| **Header row** | `--surface-subtle`, small muted labels. Sortable headers are buttons with a sort icon. |
+| **Row** | 48px (40px at `sm`), divided by `--border`. |
+| **Row header** | The column marked `isRowHeader`, medium weight: the name a row is known by. |
+| **Selection column** | Optional checkboxes; the header one selects all and shows "mixed". |
+
+## Props
+
+| Prop | Values | Default | |
+| --- | --- | --- | --- |
+| `columns` | `TableColumn[]` | – | Required. `{ key, header, cell?, sortable?, sortValue?, align?, width?, isRowHeader? }` |
+| `rows` | array | – | Required. |
+| `caption` | node | – | Required. |
+| `showCaption` | boolean | `false` | |
+| `getRowId` | `(row, index) => string` | index | Needed for selection that survives re-sorting and paging. |
+| `sort`, `defaultSort`, `onSortChange` | `{ key, direction } \| null` | `null` | Controlled sort leaves the sorting to you. |
+| `isSelectable` | boolean | `false` | |
+| `selectedIds`, `defaultSelectedIds`, `onSelectionChange` | string[] | `[]` | |
+| `density` | `sm`, `md` | `md` | |
+| `hasStickyHeader` | boolean | `false` | Header stays in view while the container scrolls. |
+| `emptyState` | node | – | Shown when there are no rows. |
+
+<Controls of={TableStories.Default} />
+
+### Design notes
+
+- **Numbers align to the end, in tabular figures,** so digits line up
+  column-wide. Set `align: 'end'` on every numeric or date column.
+- **Sort cycles ascending, descending, off.** The third click returns to
+  the original order, which is often the one that meant something.
+  Uncontrolled, the table sorts a copy: dates as dates, numbers as
+  numbers, text by locale with "file 2" before "file 10".
+- **Paging is not built in.** Put a Pagination under the table and pass
+  it one page of `rows`; with `getRowId`, selection keeps working across
+  pages.
+
+## Usage
+
+<Canvas of={TableStories.Default} />
+
+<Canvas of={TableStories.Compact} />
+
+<Canvas of={TableStories.Empty} />
+
+<Canvas of={TableStories.StickyHeader} />
+
+With server-side sorting, pass `sort` and `onSortChange` and hand back
+the rows already sorted:
+
+<Canvas of={TableStories.ControlledSort} />
+
+## Accessibility
+
+- A real `<table>` with a `<caption>`, `<th scope="col">` headers and a
+  `<th scope="row">` for the row header column: screen readers announce
+  the column and row for every cell.
+- Sortable headers carry `aria-sort` (`ascending`, `descending` or
+  `none`); the sort control is a button inside the header.
+- Row checkboxes are named after the row header ("Select Atlas"); the
+  header checkbox is "Select all rows" and reports `mixed` when some are
+  selected.
+- The table scrolls sideways inside its container on narrow screens
+  instead of squeezing columns.

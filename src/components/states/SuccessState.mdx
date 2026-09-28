@@ -1,0 +1,50 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import * as SuccessStateStories from './SuccessState.stories'
+
+<Meta of={SuccessStateStories} />
+
+# Success State
+
+What a flow shows when it has finished: the invites are sent, the import
+is done, the inbox is empty. It confirms what happened and offers the
+next step. Our own spec: uiguideline.com has no page for it. Built on
+[Empty State](?path=/docs/components-states-emptystate--docs), in the
+success tone.
+
+<Canvas of={SuccessStateStories.Default} />
+
+## Anatomy
+
+Empty State's parts, with the icon disc in `--success-subtle` behind the
+`success` icon in `--success-text`.
+
+## Props
+
+Every Empty State prop (`icon`, `title`, `description`, `action`,
+`size`, `headingLevel`), and:
+
+| Prop | Values | Default | |
+| --- | --- | --- | --- |
+| `isLive` | boolean | `false` | `role="status"`. |
+
+<Controls of={SuccessStateStories.Default} />
+
+### Design notes
+
+- **A success state ends a flow; a Toast confirms an action.** Use this
+  when the screen the reader was on is finished (a sent form, a completed
+  import) and needs replacing. For a quick "Saved" that leaves the screen
+  as it was, use a Toast.
+- **Lead with the next step.** The action is where the reader goes now.
+
+## Usage
+
+<Canvas of={SuccessStateStories.Small} />
+
+## Accessibility
+
+- The title is a heading, as on Empty State.
+- `isLive` makes it a `role="status"`, read politely when it replaces a
+  form or a progress view.
+
+  <Canvas of={SuccessStateStories.AfterSubmit} />

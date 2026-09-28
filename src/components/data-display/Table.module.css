@@ -1,0 +1,137 @@
+/* Scrolls sideways on a narrow screen rather than squeezing the columns. */
+.container {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-panel);
+  background: var(--card);
+}
+.sticky {
+  overflow-y: auto;
+}
+
+.table {
+  --table-row: var(--space-12);
+  inline-size: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--card-foreground);
+  font-variant-numeric: tabular-nums;
+}
+.sm {
+  --table-row: var(--space-10);
+}
+
+.caption {
+  padding: var(--space-3) var(--space-4);
+  text-align: start;
+  font-weight: 600;
+  caption-side: top;
+}
+
+.th,
+.td,
+.select {
+  box-sizing: border-box;
+  block-size: var(--table-row);
+  padding: 0 var(--space-4);
+  border-block-end: 1px solid var(--border);
+  text-align: start;
+  vertical-align: middle;
+}
+tbody tr:last-child > * {
+  border-block-end: 0;
+}
+
+.th {
+  background: var(--surface-subtle);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  font-weight: 500;
+  color: var(--muted-foreground);
+  white-space: nowrap;
+}
+.sticky thead .th,
+.sticky thead .select {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: 1;
+  background: var(--surface-subtle);
+}
+
+.rowHeader {
+  font-weight: 500;
+}
+
+.center {
+  text-align: center;
+}
+.end {
+  text-align: end;
+}
+
+/* The whole header is the sort button, so the target is the full cell. */
+.sortButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin: 0 calc(var(--space-2) * -1);
+  padding: var(--space-1) var(--space-2);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: var(--cursor-button);
+}
+.end .sortButton {
+  flex-direction: row-reverse;
+}
+.sortButton:hover {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+.sortButton:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: -2px;
+}
+
+.sortIcon {
+  display: inline-flex;
+  font-size: var(--space-4);
+  opacity: 0.6;
+}
+.sortActive {
+  opacity: 1;
+  color: var(--foreground);
+}
+
+tbody tr:hover > * {
+  background: var(--accent);
+}
+.selected > * {
+  background: var(--accent);
+}
+
+.select {
+  inline-size: var(--space-10);
+  padding-inline-end: 0;
+}
+thead .select {
+  background: var(--surface-subtle);
+}
+
+.empty {
+  padding: 0;
+}
+
+.srOnly {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

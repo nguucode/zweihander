@@ -1,0 +1,79 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import * as CalendarStories from './Calendar.stories'
+
+<Meta of={CalendarStories} />
+
+# Calendar
+
+A month grid to pick one day from, or to show one: a booking page, the
+inside of a Date Picker. Spec:
+[uiguideline.com/components/calendar](https://www.uiguideline.com/components/calendar).
+A plain element, using `Intl` for names and the week's first day: no
+date library.
+
+<Canvas of={CalendarStories.Default} />
+
+## Anatomy
+
+| Part | What it is |
+| --- | --- |
+| **Header** | Previous and next month buttons around the month and year. |
+| **Weekdays** | Short names, the locale's first day first. |
+| **Day** | A 40px button (44px on touch). Days of the months either side are shown muted, and still pickable. |
+| **Today** | A ring and bold figure. |
+| **Selected** | `--primary` behind `--primary-foreground`. |
+| **Unavailable** | Muted and struck through; before `min`, after `max`, or ruled out by `isDateDisabled`. |
+
+## Props
+
+| Prop | Values | Default | |
+| --- | --- | --- | --- |
+| `value`, `defaultValue`, `onValueChange` | `Date` | `null` | Local midnight; times are ignored. |
+| `month`, `defaultMonth`, `onMonthChange` | `Date` | value's or today's | The month shown. |
+| `min`, `max` | `Date` | – | |
+| `isDateDisabled` | `(date) => boolean` | – | Rule out single days. |
+| `locale` | BCP 47 tag | the browser's | Month and weekday names. |
+| `weekStartsOn` | 0–6 | the locale's | 0 is Sunday. |
+| `autoFocus` | boolean | `false` | Focus the selected day, e.g. inside a popover. |
+
+`isSameDay`, `addDays`, `addMonths`, `startOfDay` and `firstDayOfWeek`
+are exported for working with the same plain dates.
+
+<Controls of={CalendarStories.Default} />
+
+### Design notes
+
+- **Six rows always.** Months span four to six weeks; a fixed height
+  keeps a popover or a page from jumping as you page through them.
+- **The locale decides the week.** `vi-VN` and `en-GB` start on Monday,
+  `en-US` on Sunday, read from `Intl.Locale` where the browser knows it
+  (Monday otherwise).
+- **Month steps keep the day where they can.** 31 January plus a month
+  is 28 February, not 3 March.
+
+  <Canvas of={CalendarStories.MonthEnds} />
+
+## Usage
+
+<Canvas of={CalendarStories.MinMax} />
+
+<Canvas of={CalendarStories.NoWeekends} />
+
+<Canvas of={CalendarStories.Vietnamese} />
+
+## Accessibility
+
+- A `role="grid"` named by the month and year, with column headers
+  carrying the full weekday name. The selected cell has
+  `aria-selected`, today's day `aria-current="date"`, and each day
+  button the full date as its name ("Friday 18 September 2026").
+- One tab stop: the selected day (or today). Arrows move a day or a
+  week, Home and End go to the week's ends, Page Up and Page Down move a
+  month and Shift+Page Up/Down a year, Enter or Space selects. Moving
+  past the month shows the next one.
+
+  <Canvas of={CalendarStories.Keyboard} />
+
+- The month and year are a polite live region, so paging is announced.
+- Unavailable days stay focusable with `aria-disabled`, so they are
+  found and announced as unavailable rather than skipped silently.

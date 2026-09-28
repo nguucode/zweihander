@@ -1,0 +1,200 @@
+.panel {
+  display: grid;
+  gap: var(--space-3);
+  /* Eight 24px swatches and their gaps fit in one row. */
+  inline-size: 16rem;
+  font-family: var(--font-sans);
+}
+
+.disabled {
+  opacity: 0.5;
+}
+
+/* ------------------------------------------------------------------ area
+   White to the hue left to right, then black from the bottom. */
+.area {
+  position: relative;
+  block-size: 10rem;
+  border-radius: var(--radius-md);
+  background:
+    linear-gradient(to top, #000, transparent),
+    linear-gradient(to right, #fff, hsl(var(--picker-hue) 100% 50%));
+  /* Drags must not scroll the page on touch. */
+  touch-action: none;
+  cursor: crosshair;
+}
+.area[data-disabled] {
+  cursor: var(--cursor-disabled);
+}
+
+/* The thumbs are white rings with a dark edge: one of the two is at least
+   3:1 against any colour under them. */
+.areaThumb,
+.hueThumb {
+  box-sizing: border-box;
+  inline-size: var(--space-4);
+  block-size: var(--space-4);
+  border: 2px solid #fff;
+  border-radius: 9999px;
+  background: var(--picker-color);
+  box-shadow:
+    0 0 0 1px rgb(0 0 0 / 0.6),
+    inset 0 0 0 1px rgb(0 0 0 / 0.2);
+}
+
+.areaThumb {
+  position: absolute;
+  translate: -50% -50%;
+  pointer-events: none;
+}
+
+.areaThumb:has(:focus-visible),
+.hueThumb:has(:focus-visible) {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* ------------------------------------------------------------------- hue */
+.hue {
+  inline-size: 100%;
+}
+
+.hueControl {
+  display: flex;
+  align-items: center;
+  block-size: var(--space-4);
+  touch-action: none;
+}
+
+.hueTrack {
+  position: relative;
+  inline-size: 100%;
+  block-size: var(--space-3);
+  border-radius: 9999px;
+  background: linear-gradient(
+    to right,
+    hsl(0 100% 50%),
+    hsl(60 100% 50%),
+    hsl(120 100% 50%),
+    hsl(180 100% 50%),
+    hsl(240 100% 50%),
+    hsl(300 100% 50%),
+    hsl(360 100% 50%)
+  );
+}
+
+.hueThumb {
+  background: hsl(var(--picker-hue) 100% 50%);
+  cursor: grab;
+}
+.hueThumb:active {
+  cursor: grabbing;
+}
+
+/* -------------------------------------------------------------- swatches */
+.swatches {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--space-6), 1fr));
+  gap: var(--space-2);
+}
+
+.swatch {
+  position: relative;
+  appearance: none;
+  aspect-ratio: 1;
+  inline-size: auto;
+  block-size: auto;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--swatch);
+  /* An inner edge so white and near-page colours still show their shape. */
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.15);
+  cursor: var(--cursor-button);
+}
+.swatch:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+/* The chosen one gets a ring in --foreground, not a tick that would need a
+   contrasting colour per swatch. */
+.swatch:checked {
+  outline: 2px solid var(--foreground);
+  outline-offset: 2px;
+}
+/* Focus on the chosen swatch: the ring colour, a step further out. */
+.swatch:checked:focus-visible {
+  outline-color: var(--ring);
+  outline-offset: 3px;
+}
+.swatch:disabled {
+  cursor: var(--cursor-disabled);
+}
+
+/* ---------------------------------------------------------------- field */
+.trigger {
+  inline-size: calc(var(--space-4) + var(--space-1));
+  block-size: calc(var(--space-4) + var(--space-1));
+  border-radius: var(--radius-sm);
+  background: var(--swatch);
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.2);
+}
+
+.hexInput {
+  font-family: var(--font-mono);
+  text-transform: lowercase;
+}
+
+/* The popup layer, with Select, Popover and Date Picker. */
+.positioner {
+  z-index: 50;
+}
+
+.popup {
+  box-sizing: border-box;
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-panel);
+  background: var(--popover);
+  box-shadow: var(--shadow-md);
+  color: var(--popover-foreground);
+  outline: none;
+  transform-origin: var(--transform-origin);
+  transition:
+    opacity 100ms,
+    scale 100ms;
+}
+.popup[data-starting-style],
+.popup[data-ending-style] {
+  opacity: 0;
+  scale: 0.98;
+}
+
+.srOnly {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Swatches are at least 24px apart edge to edge (WCAG 2.5.8); a 44px area
+   round each would overlap its neighbours, so only the hue thumb grows one. */
+@media (pointer: coarse) {
+  .hueThumb::before {
+    content: '';
+    position: absolute;
+    inset: 50% auto auto 50%;
+    inline-size: 44px;
+    block-size: 44px;
+    translate: -50% -50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .popup {
+    transition: none;
+  }
+}

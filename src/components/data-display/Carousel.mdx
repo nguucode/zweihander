@@ -1,0 +1,82 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import * as CarouselStories from './Carousel.stories'
+
+<Meta of={CarouselStories} />
+
+# Carousel
+
+A row of slides seen one (or a few) at a time: featured items, a gallery,
+onboarding cards. Everything in it is hidden until the reader goes
+looking, so use it for content that is fine to miss; a list or a grid
+shows more at once. Spec:
+[uiguideline.com/components/carousel](https://www.uiguideline.com/components/carousel).
+A native scrolling track with snap points, following the
+[WAI-ARIA carousel pattern](https://www.w3.org/WAI/ARIA/apg/patterns/carousel/).
+
+<Canvas of={CarouselStories.Default} />
+
+## Anatomy
+
+| Part | What it is |
+| --- | --- |
+| **Controls** | Previous and next, plus stop/start when it rotates. Above the track, at its end, so they never cover a slide. |
+| **Track** | A horizontal scroller with snap points. Swipe, trackpad and arrow keys scroll it natively. |
+| **Slide** | One child. Labelled "2 of 5". |
+| **Dots** | One per stop. The current one is a wider bar. |
+
+## Props
+
+| Prop | Values | Default | |
+| --- | --- | --- | --- |
+| `children` | nodes | – | One per slide. |
+| `label` | string | – | Required. Names the carousel. |
+| `slidesPerView` | number | `1` | Slides in view at once. |
+| `showDots` | boolean | `true` | |
+| `loop` | boolean | `false` | Previous and next wrap at the ends. |
+| `autoPlay` | number (ms) | – | Advance on a timer. See Accessibility. |
+| `index` | number | – | Controlled: the first slide in view. |
+| `defaultIndex` | number | `0` | |
+| `onIndexChange` | `(index) => void` | – | Called for buttons, dots, swipes and the timer. |
+
+<Controls of={CarouselStories.Default} />
+
+### Design notes
+
+- **Native scrolling.** No transform maths and no gesture library: the
+  track is `overflow-x: auto` with `scroll-snap-type`, so touch, trackpad
+  and momentum behave as the platform does. The index is read back once
+  the track comes to rest.
+- **Stops, not slides.** With three in view, five slides have three stops
+  (1-3, 2-4, 3-5), and the dots count stops.
+- **Right to left works.** Offsets are measured from the first slide, so
+  the negative `scrollLeft` of an RTL track reads correctly, and the
+  previous/next chevrons are mirrored.
+- **`defaultIndex` starts there.** The track jumps to it on mount, without
+  a scroll animation.
+
+## Usage
+
+<Canvas of={CarouselStories.ThreeInView} />
+
+<Canvas of={CarouselStories.Loop} />
+
+<Canvas of={CarouselStories.AutoPlay} />
+
+## Accessibility
+
+- A `<section>` with `aria-roledescription="carousel"` and your `label`;
+  each slide is a group with `aria-roledescription="slide"` and a name
+  like "2 of 5".
+- **Autoplay** (WCAG 2.2.2) pauses while the pointer is over the carousel
+  or focus is inside it, has a stop/start button as its first control, and
+  never runs under `prefers-reduced-motion`.
+- A visually hidden line says where you are ("Slide 3 of 5", or "Slides
+  2 to 4 of 5"). It is `aria-live="polite"` when the reader moves the
+  carousel, so a screen reader hears the change, and `off` while it
+  rotates on its own. The slides themselves never change in the DOM, so a
+  live region round them would stay silent.
+- Previous and next are disabled at the ends unless `loop`. Dots are
+  buttons named "Slide 3" with `aria-current` on the current stop.
+- The track is focusable (`tabindex="0"`) so a keyboard can scroll it,
+  and shows the 2px `--ring`. Buttons and dots have 44px touch targets on
+  coarse pointers.

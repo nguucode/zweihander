@@ -189,6 +189,20 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/breadcrumbs.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/pagination.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/tabs.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/toast.json
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/inline-alert.json
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/error-state.json
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/success-state.json
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/collapse.json
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/slider.json
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/stepper.json
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/sidebar.json
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/rating.json
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/table.json
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/calendar.json
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/date-picker.json
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/carousel.json
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/color-picker.json
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/file-uploader.json
 ```
 
 Or register Zweihänder as a named registry in the project's `components.json`
@@ -246,6 +260,20 @@ import { Menu } from 'zweihander/menu'
 import { Breadcrumbs } from 'zweihander/breadcrumbs'
 import { Pagination } from 'zweihander/pagination'
 import { Tabs } from 'zweihander/tabs'
+import { InlineAlert } from 'zweihander/inline-alert'
+import { ErrorState } from 'zweihander/error-state'
+import { SuccessState } from 'zweihander/success-state'
+import { Collapse } from 'zweihander/collapse'
+import { Slider } from 'zweihander/slider'
+import { Stepper } from 'zweihander/stepper'
+import { Sidebar } from 'zweihander/sidebar'
+import { Rating } from 'zweihander/rating'
+import { Table } from 'zweihander/table'
+import { Calendar } from 'zweihander/calendar'
+import { DatePicker } from 'zweihander/date-picker'
+import { Carousel } from 'zweihander/carousel'
+import { ColorPicker } from 'zweihander/color-picker'
+import { FileUploader } from 'zweihander/file-uploader'
 import { ToastProvider, useToast } from 'zweihander/toast'
 ```
 
