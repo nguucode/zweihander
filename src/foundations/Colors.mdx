@@ -114,27 +114,26 @@ component boundaries such as a focus ring.
 | `secondary` / `secondary-foreground` | 16.42:1 | 14.48:1 |
 | `accent` / `accent-foreground` | 16.42:1 | 14.48:1 |
 | `destructive` / `destructive-foreground` | 4.56:1 | 6.19:1 |
-| `muted` / `muted-foreground` | **4.34:1** | 5.83:1 |
-| `background` / `muted-foreground` | 4.73:1 | 7.63:1 |
+| `muted` / `muted-foreground` | 4.60:1 | 5.83:1 |
+| `background` / `muted-foreground` | 5.02:1 | 7.63:1 |
 | `background` / `ring` | 8.07:1 | 6.34:1 |
 
 The `primary` row is the default indigo accent. Every one of the seventeen
 accents is measured the same way and clears 4.5:1 for its own label — see
 [Overview → Accent color](?path=/docs/foundations-overview--docs).
 
-**`--muted-foreground` on `--muted` is 4.34:1 in light mode, under AA.**
-On the page background — where secondary text usually lives — the same
-token is 4.73:1 and passes. Muted text on a muted fill is the combination
-to avoid; if you need it, darken `--muted-foreground` to neutral-600
-(7.15:1 on muted) and accept that all secondary text in the kit gets
-heavier.
+**`--muted-foreground` on `--muted` is 4.60:1 in light mode**, the
+tightest pair it forms. It used to be 4.34:1, under AA: gray-500 on every
+ramp has since been darkened to the lightest value that clears 4.6:1 on
+its own gray-100, so muted text can now sit on a muted fill. On the page background, where secondary
+text usually lives, the same token is 5.02:1.
 
 **`--surface-subtle` is a filled panel that muted text can sit on.**
-`--muted` is the obvious fill, but muted text on it is 4.34:1; on
-gray-50 it is 4.53:1 (neutral), and 5.83:1 on gray-800 in dark — a step off `--card` so a filled panel still reads as filled. The build
-measures `--muted-foreground` on `--background`, `--card` and
-`--surface-subtle` in both modes on all nine gray ramps, and stops if any
-pair drops under 4.5:1. The tightest is neutral on this surface, at 4.53:1.
+Muted text reads 4.81:1 on it (gray-50, neutral) and 5.83:1 on gray-800 in dark — a step off `--card` so a filled panel still reads as filled. The build
+measures `--muted-foreground` on `--background`, `--card`,
+`--surface-subtle` and `--muted` in both modes on all nine gray ramps, and
+stops if any pair drops under 4.5:1. The tightest is neutral on `--muted`,
+at 4.60:1.
 
 **`--control-border` outlines a checkbox, radio or switch track.** Those
 controls have nothing else that shows they are there, so WCAG 1.4.11 wants

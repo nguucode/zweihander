@@ -153,9 +153,9 @@ for (const g of GRAYS) {
 
 /**
  * --muted-foreground is body text (descriptions, hints, captions), so it
- * needs 4.5:1 on every surface it sits on, on every gray ramp. The lightest
- * gray step of each ramp sits at a slightly different luminance, so one ramp
- * can pass where its neighbour fails.
+ * needs 4.5:1 on every surface it sits on, on every gray ramp, the --muted
+ * fill included. The lightest gray step of each ramp sits at a slightly
+ * different luminance, so one ramp can pass where its neighbour fails.
  */
 let worstMuted = Infinity
 for (const g of GRAYS) {
@@ -163,7 +163,7 @@ for (const g of GRAYS) {
     const c = semantic.color[mode]
     const gray = Object.fromEntries(entries(primitives.gray[g]).map(([s, v]) => [s, v.$value]))
     const val = (k) => alias(c[k].$value, { accent: {}, gray })
-    for (const bg of ['background', 'card', 'surface-subtle']) {
+    for (const bg of ['background', 'card', 'surface-subtle', 'muted']) {
       const ratio = contrast(val('muted-foreground'), val(bg))
       worstMuted = Math.min(worstMuted, ratio)
       if (ratio < AA_TEXT)

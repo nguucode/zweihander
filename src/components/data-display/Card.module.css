@@ -57,8 +57,8 @@
   background: var(--card);
 }
 
-/* Not --muted: muted text on it is 4.34:1. The subtle surface keeps it
-   above 4.5:1. */
+/* Not --muted: muted text reads 4.81:1 on the subtle surface against
+   4.60:1 on --muted, the tighter margin. */
 .filled {
   background: var(--surface-subtle);
 }
