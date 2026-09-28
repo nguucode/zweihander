@@ -23,7 +23,7 @@
 
 /* The indicator is the part that must be seen, so it takes a colour that
    clears 3:1 on the page: --primary-text (measured per accent at 4.5:1),
-   --muted-foreground (4.7:1), --foreground. */
+   --muted-foreground (5.0:1), --foreground. */
 .primary {
   --spinner-color: var(--primary-text);
 }
