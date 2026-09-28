@@ -1,0 +1,81 @@
+.pageHeading {
+  display: grid;
+  gap: var(--space-3);
+  padding-block-end: var(--space-6);
+  border-block-end: 1px solid var(--border);
+  font-family: var(--font-sans);
+  color: var(--foreground);
+}
+
+/* With tabs, the tab list's own underline is the bottom edge. */
+.withTabs {
+  gap: var(--space-4);
+  padding-block-end: 0;
+  border-block-end: 0;
+}
+
+.breadcrumbs {
+  margin-block-end: var(--space-1);
+}
+
+/* Title and actions share a row while there is room; the actions drop
+   under the title when there is not, rather than squeezing it. */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.text {
+  display: grid;
+  gap: var(--space-2);
+  flex: 1 1 20rem;
+  min-inline-size: 0;
+}
+
+.title {
+  margin: 0;
+  font-size: var(--text-heading-xl);
+  line-height: var(--leading-heading-xl);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.description {
+  margin: 0;
+  max-inline-size: 65ch;
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--muted-foreground);
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--muted-foreground);
+}
+
+.meta > li {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1-5);
+}
+
+.meta > li > :global(svg) {
+  flex-shrink: 0;
+  font-size: var(--space-4);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}

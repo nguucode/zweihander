@@ -1228,6 +1228,29 @@
           "target": "components/zweihander/inputs/FileUploader.module.css"
         }
       ]
+    },
+    {
+      "name": "page-heading",
+      "type": "registry:block",
+      "title": "Page Heading",
+      "description": "Application UI pattern: breadcrumbs, title, description, meta, actions and optional tabs at the top of a page.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/breadcrumbs.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/patterns/application-ui/PageHeading.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/patterns/application-ui/PageHeading.tsx"
+        },
+        {
+          "path": "src/components/patterns/application-ui/PageHeading.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/patterns/application-ui/PageHeading.module.css"
+        }
+      ]
     }
   ]
 }

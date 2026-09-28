@@ -1,0 +1,73 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import * as PageHeadingStories from './PageHeading.stories'
+
+<Meta of={PageHeadingStories} />
+
+# Page Heading
+
+The top of a page: where it is, what it is, and what you can do with it.
+Breadcrumbs, title, a line of description, a few facts, the page's
+actions, and optionally tabs for sections of the same page.
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/page-heading.json
+```
+
+## Simple
+
+Title, description and the page's main actions. Keep it to one primary
+action; everything else is secondary.
+
+<Canvas of={PageHeadingStories.Simple} />
+
+## With breadcrumbs and meta
+
+A record's page. Breadcrumbs say where it sits; meta holds short facts,
+each optionally led by an icon or a Tag for a status. Rarely used actions
+go in a Menu behind "More actions" so the row stays short.
+
+<Canvas of={PageHeadingStories.WithBreadcrumbsAndMeta} />
+
+## With tabs
+
+Sections of the same page as Tabs under the heading. The tab list's line
+replaces the heading's own bottom border.
+
+<Canvas of={PageHeadingStories.WithTabs} />
+
+## Props
+
+| Prop | Values | Default | |
+| --- | --- | --- | --- |
+| `title` | node | – | Required. |
+| `description` | node | – | Muted, capped at 65 characters a line. |
+| `breadcrumbs` | `BreadcrumbItem[]` | – | Rendered small, above the title. |
+| `meta` | `ReactNode[]` | – | A list of short facts. |
+| `actions` | node | – | Buttons, a Menu. |
+| `tabs` | node | – | A `Tabs` element. |
+| `headingLevel` | `1`, `2` | `1` | 2 when the heading sits inside a larger page. |
+
+Every other `<header>` attribute passes through.
+
+<Controls of={PageHeadingStories.Simple} />
+
+## Layout
+
+- **Actions wrap, the title does not squeeze.** The title takes the row
+  down to 20rem, then the actions drop underneath it, keeping their order.
+  On a phone that means title first, then buttons.
+
+  <Canvas of={PageHeadingStories.Narrow} />
+
+- **Long titles break anywhere** rather than overflow, so a record named
+  with one long word still fits.
+
+## Accessibility
+
+- The title is the page's `h1` by default. A page has one; pass
+  `headingLevel={2}` if the heading sits under another.
+- Breadcrumbs are a `nav` named "Breadcrumb", with the current page
+  marked `aria-current="page"`.
+- Meta is a list, so a screen reader announces how many facts there are.
+  Icons in it are decorative; say the fact in words ("12 applicants").
+- An icon-only action needs an `aria-label`, as on any Button.
