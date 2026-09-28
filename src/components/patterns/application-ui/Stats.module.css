@@ -1,0 +1,119 @@
+.stats {
+  display: grid;
+  gap: var(--space-4);
+  font-family: var(--font-sans);
+  color: var(--foreground);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--text-heading-sm);
+  line-height: var(--leading-heading-sm);
+  font-weight: 600;
+}
+
+/* As many 14rem columns as fit: three or four on a desktop, one on a phone. */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr));
+  gap: var(--space-4);
+  margin: 0;
+}
+
+.card {
+  display: grid;
+  grid-template-columns: 1fr;
+  align-content: start;
+  gap: var(--space-2);
+}
+
+/* With an icon: the disc sits in the start padding, beside the label and
+   value, and the footer runs the full width under both. */
+.withIcon {
+  position: relative;
+  padding-inline-start: calc(var(--space-6) + var(--space-12) + var(--space-4));
+}
+.withIcon > .footer {
+  margin-inline-start: calc(-1 * (var(--space-12) + var(--space-4)));
+}
+
+.icon {
+  position: absolute;
+  inset-block-start: var(--space-6);
+  inset-inline-start: var(--space-6);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--space-12);
+  block-size: var(--space-12);
+  border-radius: var(--radius-field);
+  background: var(--primary);
+  color: var(--primary-foreground);
+  font-size: calc(var(--space-4) + var(--space-1));
+}
+
+.label {
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--muted-foreground);
+}
+
+.figures {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-1) var(--space-2);
+  margin: 0;
+}
+
+.value {
+  flex-basis: 100%;
+  font-size: var(--text-heading-xl);
+  line-height: var(--leading-heading-xl);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.previous {
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--muted-foreground);
+}
+
+/* The value has its own line; under it, the previous figure on the start
+   and the change on the end, so every card in a row lines up the same. */
+.change {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.125rem;
+  margin-inline-start: auto;
+  padding: 0.125rem var(--space-2);
+  border-radius: 9999px;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  font-weight: 500;
+}
+.positive {
+  background: var(--success-subtle);
+  color: var(--success-text);
+}
+.negative {
+  background: var(--danger-subtle);
+  color: var(--danger-text);
+}
+
+.footer {
+  margin: 0;
+  margin-block-start: var(--space-2);
+  padding-block-start: var(--space-3);
+  border-block-start: 1px solid var(--border);
+}
+
+.srOnly {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

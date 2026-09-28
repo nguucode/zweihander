@@ -1,0 +1,70 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import * as StatsStories from './Stats.stories'
+
+<Meta of={StatsStories} />
+
+# Stats
+
+Key figures in a row of cards: what is measured, the figure, and
+optionally how it moved since the last period, an icon, and a link to
+the details. The top of a dashboard or a report.
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/stats.json
+```
+
+## Simple
+
+<Canvas of={StatsStories.Simple} />
+
+## With trend
+
+`previous` gives the figure to compare against; `change` says by how
+much and which way. The colour follows whether the change is good news,
+not its direction: pass `isPositive: true` for figures where down is
+good, like churn or response time.
+
+<Canvas of={StatsStories.WithTrend} />
+
+## With icon and link
+
+An icon in a disc of the accent colour, and a link at the foot of each
+card to where the figure comes from.
+
+<Canvas of={StatsStories.WithIconAndLink} />
+
+## Props
+
+| Prop | Values | Default | |
+| --- | --- | --- | --- |
+| `stats` | `Stat[]` | – | Required. See below. |
+| `title` | node | – | A heading above the cards. |
+| `headingLevel` | `2`, `3` | `2` | |
+
+Each `Stat` has `label`, `value`, and optionally `previous`, `change`
+(`{ value, direction: 'up' \| 'down', isPositive? }`), `icon`, `href` and
+`linkLabel` (default "View all").
+
+<Controls of={StatsStories.Simple} />
+
+## Layout
+
+- As many 14rem columns as fit: three or four on a desktop, one on a
+  phone. Cards in a row share a height.
+
+  <Canvas of={StatsStories.Narrow} />
+
+- Figures use tabular numbers, so a row of values lines up digit by digit
+  and does not jitter when it updates.
+
+## Accessibility
+
+- A definition list: each figure is the definition of its label, so a
+  screen reader reads "Total subscribers, 71,897".
+- The change is read as words ("Increased by 12%"), not only shown as an
+  arrow and a colour. The colours are `--success-text` and `--danger-text`
+  on their subtle surfaces, 4.5:1 in both appearances.
+- Each "View all" link carries its figure's label for screen readers
+  ("View all Avg. open rate"), so a list of links is not three identical
+  entries.
+- The icon is decorative.

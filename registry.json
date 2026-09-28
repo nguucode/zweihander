@@ -1251,6 +1251,31 @@
           "target": "components/zweihander/patterns/application-ui/PageHeading.module.css"
         }
       ]
+    },
+    {
+      "name": "stats",
+      "type": "registry:block",
+      "title": "Stats",
+      "description": "Application UI pattern: key figures in cards, with optional change since last period, icon and link.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/icon.json",
+        "https://ontheshore.biz/zweihander/r/card.json",
+        "https://ontheshore.biz/zweihander/r/link.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/patterns/application-ui/Stats.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/patterns/application-ui/Stats.tsx"
+        },
+        {
+          "path": "src/components/patterns/application-ui/Stats.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/patterns/application-ui/Stats.module.css"
+        }
+      ]
     }
   ]
 }
