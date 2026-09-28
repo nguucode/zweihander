@@ -1276,6 +1276,28 @@
           "target": "components/zweihander/patterns/application-ui/Stats.module.css"
         }
       ]
+    },
+    {
+      "name": "description-list",
+      "type": "registry:block",
+      "title": "Description List",
+      "description": "Application UI pattern: a record's fields as terms and details, in columns, a two-column grid or stacked, optionally on a card.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/patterns/application-ui/DescriptionList.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/patterns/application-ui/DescriptionList.tsx"
+        },
+        {
+          "path": "src/components/patterns/application-ui/DescriptionList.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/patterns/application-ui/DescriptionList.module.css"
+        }
+      ]
     }
   ]
 }

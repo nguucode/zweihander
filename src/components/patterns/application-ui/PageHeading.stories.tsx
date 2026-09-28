@@ -85,6 +85,8 @@ export const WithBreadcrumbsAndMeta: Story = {
     const archive = await within(document.body).findByRole('menuitem', { name: 'Archive' })
     await waitFor(() => expect(archive).toBeVisible())
     await userEvent.keyboard('{Escape}')
+    // Let it finish closing: its focus guards are still in the page until then.
+    await waitFor(() => expect(within(document.body).queryByRole('menu')).toBeNull())
   },
 }
 
