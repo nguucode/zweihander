@@ -191,11 +191,18 @@ The light island works because `tokens.css` declares the light values on
 equal specificity, so the nearer scope's class is what an element inside
 it resolves against.
 
+An `accentColor` or `grayColor` inside a nested scope follows the same
+rule. Each appearance sets two switches, `--use-light` and `--use-dark`,
+and the palette scopes pick their light or dark values through them, so
+the nearest appearance wins at any depth, on the same element too.
+
+<Canvas of={OverviewStories.NestedPalettes} />
+
 **One caveat.** If your own CSS branches on theme with a descendant
-selector — `.dark .thing { … }` — that selector still matches inside a
-light island nested in a dark ancestor, and will style it as dark. Zweihänder
-Kit's own CSS never branches on theme, so it is unaffected. Read the
-tokens instead of matching on `.dark` and the problem does not arise.
+selector (`.dark .thing { … }`), that selector still matches inside a
+light island nested in a dark ancestor, and will style it as dark.
+Zweihänder's own CSS never branches on theme, so it is unaffected. Read
+the tokens instead of matching on `.dark` and the problem does not arise.
 
 ## Installing
 

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test'
+import { Theme } from '@/theme/Theme'
 import { ColorPanel, ColorPicker, normalizeHex } from './ColorPicker'
 
 const brand = [
@@ -134,6 +135,35 @@ export const Panel: Story = {
     for (let i = 0; i < 11; i++) await userEvent.keyboard('{Shift>}{ArrowDown}{/Shift}')
     await expect(canvas.getByRole('status')).toHaveTextContent('#000000')
     await expect(canvas.getByRole('slider', { name: 'Hue' })).toHaveAttribute('aria-valuetext', '217 degrees')
+  },
+}
+
+/** Every swatch keeps a visible edge on its surface, the page-coloured ones included. */
+export const SwatchEdgesInDark: Story = {
+  render: () => (
+    <Theme appearance="dark" style={{ background: 'var(--popover)', padding: 'var(--space-4)' }}>
+      <ColorPanel swatches={brand} />
+    </Theme>
+  ),
+  play: async ({ canvas }) => {
+    const cv = document.createElement('canvas').getContext('2d', { willReadFrequently: true })!
+    const rgb = (c: string) => {
+      cv.clearRect(0, 0, 1, 1)
+      cv.fillStyle = c
+      cv.fillRect(0, 0, 1, 1)
+      return [...cv.getImageData(0, 0, 1, 1).data.slice(0, 3)]
+    }
+    const lum = (c: number[]) =>
+      c.map((v) => v / 255).map((v) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4)).reduce((a, v, i) => a + v * [0.2126, 0.7152, 0.0722][i], 0)
+    const ratio = (a: string, b: string) => {
+      const [x, y] = [lum(rgb(a)), lum(rgb(b))]
+      return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05)
+    }
+    const ink = canvas.getByRole('radio', { name: 'Ink' })
+    const surface = getComputedStyle(ink.closest('.dark')!).backgroundColor
+    // The inset edge: the colour inside box-shadow.
+    const edge = getComputedStyle(ink).boxShadow.match(/(rgba?|oklch|oklab|color)\([^)]*\)/)![0]
+    await expect(ratio(edge, surface)).toBeGreaterThanOrEqual(3)
   },
 }
 
