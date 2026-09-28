@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { Icon } from '@/lib/icon'
@@ -52,6 +52,7 @@ function ProjectsTable({ isSelectable = false, initialQuery = '' }: { isSelectab
   const [status, setStatus] = useState<string | null>('All')
   const [page, setPage] = useState(1)
   const [selected, setSelected] = useState<string[]>([])
+  const searchRef = useRef<HTMLInputElement>(null)
 
   const matches = useMemo(() => {
     const q = query.trim().toLowerCase()
@@ -92,7 +93,7 @@ function ProjectsTable({ isSelectable = false, initialQuery = '' }: { isSelectab
         }
       >
         <TableToolbarGroup>
-          <Search aria-label="Search projects" placeholder="Search projects" value={query} onChange={(e) => filter(() => setQuery(e.target.value))} />
+          <Search ref={searchRef} aria-label="Search projects" placeholder="Search projects" value={query} onChange={(e) => filter(() => setQuery(e.target.value))} />
           <Select
             aria-label="Status"
             options={['All', 'Active', 'Paused', 'Archived']}
@@ -117,7 +118,11 @@ function ProjectsTable({ isSelectable = false, initialQuery = '' }: { isSelectab
             title={query ? `No projects match “${query}”` : 'No projects'}
             description="Try another name or owner, or clear the filters."
             action={
-              <Button size="sm" variant="secondary" appearance="outlined" onClick={() => filter(() => (setQuery(''), setStatus('All')))}>
+              <Button size="sm" variant="secondary" appearance="outlined" onClick={() => {
+                  filter(() => (setQuery(''), setStatus('All')))
+                  // The empty state, and this button with it, is about to go.
+                  searchRef.current?.focus()
+                }}>
                 Clear filters
               </Button>
             }
@@ -171,8 +176,11 @@ export const BulkActions: Story = {
     await expect(canvas.getByRole('status')).toHaveTextContent('2 selected')
     await expect(canvas.queryByRole('searchbox')).toBeNull()
     await userEvent.click(canvas.getByRole('button', { name: 'Archive' }))
-    // Back to the tools, and the rows changed.
-    await expect(canvas.getByRole('searchbox', { name: 'Search projects' })).toBeVisible()
+    // Back to the tools, and the rows changed. Focus went with the button
+    // that had it, so the toolbar hands it to the first tool.
+    const search = canvas.getByRole('searchbox', { name: 'Search projects' })
+    await expect(search).toBeVisible()
+    await waitFor(() => expect(search).toHaveFocus())
     const atlas = canvas.getByRole('rowheader', { name: 'Atlas' }).closest('tr')!
     await expect(within(atlas).getByText('Archived')).toBeVisible()
   },
@@ -186,5 +194,6 @@ export const EmptyResult: Story = {
     await expect(canvas.queryByRole('navigation', { name: 'Projects pages' })).toBeNull()
     await userEvent.click(canvas.getByRole('button', { name: 'Clear filters' }))
     await waitFor(() => expect(rowNames(canvas)).toHaveLength(5))
+    await expect(canvas.getByRole('searchbox', { name: 'Search projects' })).toHaveFocus()
   },
 }

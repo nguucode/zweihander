@@ -59,8 +59,12 @@ first, the primary one last.
 ## Layout
 
 - **Sections respond to their own width.** Split turns into stacked under
-  48rem of section width, and two columns into one under 32rem of the
-  fields' width. A form in a sidebar or a phone needs no extra props.
+  48rem of section width, and two columns into one when the fields' side
+  of the section (its whole width once stacked) is under 32rem. A form in
+  a sidebar or a phone needs no extra props.
+- **Sections are size containers**, so they take their width from where
+  they sit. As a flex or grid item that would shrink to fit, give the
+  section a width (`inline-size: 100%`), or it collapses.
 
   <Canvas of={FormLayoutsStories.Narrow} />
 
