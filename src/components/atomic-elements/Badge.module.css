@@ -85,7 +85,8 @@
 }
 
 /* start/end are physical left/right, so RTL pages get mirrored
-   placement; switch to :dir(rtl) overrides when an RTL consumer appears. */
+   placement. Add [dir='rtl'] overrides when an RTL consumer appears; not
+   :dir(rtl), which the build lowers to a :lang() list (see Switch). */
 .top-start {
   top: 0;
   left: 0;

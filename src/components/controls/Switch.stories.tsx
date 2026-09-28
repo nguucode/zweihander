@@ -87,16 +87,28 @@ export const Validation: Story = {
 export const RightToLeft: Story = {
   args: { defaultChecked: true },
   render: (args) => (
-    <div dir="rtl">
-      <Switch {...args} />
+    <div dir="rtl" style={{ display: 'grid', gap: 'var(--space-3)', justifyItems: 'start' }}>
+      <Switch {...args} label="Right to left" />
+      {/* A left-to-right island inside a right-to-left page. */}
+      <div dir="ltr">
+        <Switch {...args} label="Left to right" />
+      </div>
     </div>
   ),
   play: async ({ canvas }) => {
-    const track = canvas.getByRole('switch').getBoundingClientRect()
-    const thumb = canvas.getByRole('switch').firstElementChild!.getBoundingClientRect()
-    // On is the start side, which is the left in RTL; the thumb stays inside.
-    await expect(thumb.left).toBeGreaterThanOrEqual(track.left)
-    await expect(thumb.left - track.left).toBeLessThan(track.right - thumb.right)
+    const gaps = (name: string) => {
+      const sw = canvas.getByRole('switch', { name })
+      const track = sw.getBoundingClientRect()
+      const thumb = sw.firstElementChild!.getBoundingClientRect()
+      return { start: thumb.left - track.left, end: track.right - thumb.right }
+    }
+    // On is the end side: the left in RTL, the right in LTR. The thumb stays inside.
+    const rtl = gaps('Right to left')
+    await expect(rtl.start).toBeGreaterThanOrEqual(0)
+    await expect(rtl.start).toBeLessThan(rtl.end)
+    const ltr = gaps('Left to right')
+    await expect(ltr.end).toBeGreaterThanOrEqual(0)
+    await expect(ltr.end).toBeLessThan(ltr.start)
   },
 }
 

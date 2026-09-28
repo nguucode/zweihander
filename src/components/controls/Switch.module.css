@@ -85,9 +85,13 @@
 }
 
 /* translate is physical; in a right-to-left page the thumb starts on the
-   right and travels left. */
-.thumb[data-checked]:dir(rtl) {
+   right and travels left. Not :dir(rtl): the build lowers it to a list of
+   :lang()s, which misses a dir="rtl" page in any other language. */
+:global([dir='rtl']) .thumb[data-checked] {
   translate: calc(var(--choice-control-block) - var(--choice-control)) 0;
+}
+:global([dir='rtl'] [dir='ltr']) .thumb[data-checked] {
+  translate: calc(var(--choice-control) - var(--choice-control-block)) 0;
 }
 
 @media (prefers-reduced-motion: reduce) {
