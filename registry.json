@@ -1298,6 +1298,28 @@
           "target": "components/zweihander/patterns/application-ui/DescriptionList.module.css"
         }
       ]
+    },
+    {
+      "name": "form-layouts",
+      "type": "registry:block",
+      "title": "Form Layouts",
+      "description": "Application UI pattern: FormSection (split or stacked, one or two columns, optionally on a card), FormFullWidth and FormActions.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/patterns/application-ui/FormLayouts.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/patterns/application-ui/FormLayouts.tsx"
+        },
+        {
+          "path": "src/components/patterns/application-ui/FormLayouts.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/patterns/application-ui/FormLayouts.module.css"
+        }
+      ]
     }
   ]
 }
