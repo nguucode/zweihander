@@ -1,0 +1,34 @@
+import{n as e}from"./rolldown-runtime-DkW27tQK.js";import{n as t}from"./iframe-Crmh4rpo.js";import{i as n,r}from"./react-ChU3Unfn.js";import{c as i,i as a,n as o,s}from"./blocks-DfpLWjEg.js";import{a as c,i as l,n as u,r as d,t as f}from"./Search.stories-DO-zHFhI.js";function p(e){let t={a:`a`,code:`code`,h1:`h1`,h2:`h2`,h3:`h3`,li:`li`,p:`p`,strong:`strong`,table:`table`,tbody:`tbody`,td:`td`,th:`th`,thead:`thead`,tr:`tr`,ul:`ul`,...n(),...e.components};return(0,h.jsxs)(h.Fragment,{children:[(0,h.jsx)(s,{of:d}),`
+`,(0,h.jsx)(t.h1,{id:`search`,children:`Search`}),`
+`,(0,h.jsxs)(t.p,{children:[`A field for a search query, with a button to clear it. Spec:
+`,(0,h.jsx)(t.a,{href:`https://www.uiguideline.com/components/search`,rel:`nofollow`,children:`uiguideline.com/components/search`}),`.
+The field is `,(0,h.jsx)(t.a,{href:`?path=/docs/components-inputs-textinput--docs`,children:`Text Input`}),`'s.`]}),`
+`,(0,h.jsx)(o,{of:f}),`
+`,(0,h.jsx)(t.h2,{id:`anatomy`,children:`Anatomy`}),`
+`,(0,h.jsxs)(t.table,{children:[(0,h.jsx)(t.thead,{children:(0,h.jsxs)(t.tr,{children:[(0,h.jsx)(t.th,{children:`Part`}),(0,h.jsx)(t.th,{children:`What it is`})]})}),(0,h.jsxs)(t.tbody,{children:[(0,h.jsxs)(t.tr,{children:[(0,h.jsx)(t.td,{children:(0,h.jsx)(t.strong,{children:`Search icon`})}),(0,h.jsxs)(t.td,{children:[`The `,(0,h.jsx)(t.code,{children:`search`}),` icon at the start. Decorative.`]})]}),(0,h.jsxs)(t.tr,{children:[(0,h.jsx)(t.td,{children:(0,h.jsx)(t.strong,{children:`Input`})}),(0,h.jsxs)(t.td,{children:[(0,h.jsx)(t.code,{children:`type="search"`}),`.`]})]}),(0,h.jsxs)(t.tr,{children:[(0,h.jsx)(t.td,{children:(0,h.jsx)(t.strong,{children:`Placeholder`})}),(0,h.jsx)(t.td,{children:`"Search" unless given.`})]}),(0,h.jsxs)(t.tr,{children:[(0,h.jsx)(t.td,{children:(0,h.jsx)(t.strong,{children:`Clean button`})}),(0,h.jsx)(t.td,{children:`"Clear search": shown while there is text, hidden when disabled or read-only.`})]})]})]}),`
+`,(0,h.jsx)(t.h2,{id:`props`,children:`Props`}),`
+`,(0,h.jsxs)(t.table,{children:[(0,h.jsx)(t.thead,{children:(0,h.jsxs)(t.tr,{children:[(0,h.jsx)(t.th,{children:`Prop`}),(0,h.jsx)(t.th,{children:`Values`}),(0,h.jsx)(t.th,{children:`Default`}),(0,h.jsx)(t.th,{})]})}),(0,h.jsxs)(t.tbody,{children:[(0,h.jsxs)(t.tr,{children:[(0,h.jsxs)(t.td,{children:[(0,h.jsx)(t.code,{children:`value`}),`, `,(0,h.jsx)(t.code,{children:`defaultValue`})]}),(0,h.jsx)(t.td,{children:`string`}),(0,h.jsx)(t.td,{children:(0,h.jsx)(t.code,{children:`''`})}),(0,h.jsx)(t.td,{})]}),(0,h.jsxs)(t.tr,{children:[(0,h.jsx)(t.td,{children:(0,h.jsx)(t.code,{children:`onChange`})}),(0,h.jsx)(t.td,{children:(0,h.jsx)(t.code,{children:`(event) => void`})}),(0,h.jsx)(t.td,{children:`–`}),(0,h.jsx)(t.td,{children:`Native event, including when cleared.`})]}),(0,h.jsxs)(t.tr,{children:[(0,h.jsx)(t.td,{children:(0,h.jsx)(t.code,{children:`placeholder`})}),(0,h.jsx)(t.td,{children:`string`}),(0,h.jsx)(t.td,{children:(0,h.jsx)(t.code,{children:`"Search"`})}),(0,h.jsx)(t.td,{})]}),(0,h.jsxs)(t.tr,{children:[(0,h.jsx)(t.td,{children:(0,h.jsx)(t.code,{children:`label`})}),(0,h.jsx)(t.td,{children:`node`}),(0,h.jsx)(t.td,{children:`–`}),(0,h.jsx)(t.td,{children:`Optional visible label.`})]}),(0,h.jsxs)(t.tr,{children:[(0,h.jsx)(t.td,{children:(0,h.jsx)(t.code,{children:`aria-label`})}),(0,h.jsx)(t.td,{children:`string`}),(0,h.jsx)(t.td,{children:(0,h.jsx)(t.code,{children:`"Search"`})}),(0,h.jsxs)(t.td,{children:[`Used when there is no `,(0,h.jsx)(t.code,{children:`label`}),`.`]})]}),(0,h.jsxs)(t.tr,{children:[(0,h.jsx)(t.td,{children:(0,h.jsx)(t.code,{children:`size`})}),(0,h.jsxs)(t.td,{children:[(0,h.jsx)(t.code,{children:`sm`}),`, `,(0,h.jsx)(t.code,{children:`md`}),`, `,(0,h.jsx)(t.code,{children:`lg`})]}),(0,h.jsx)(t.td,{children:(0,h.jsx)(t.code,{children:`md`})}),(0,h.jsx)(t.td,{})]}),(0,h.jsxs)(t.tr,{children:[(0,h.jsx)(t.td,{children:(0,h.jsx)(t.code,{children:`appearance`})}),(0,h.jsxs)(t.td,{children:[(0,h.jsx)(t.code,{children:`outlined`}),`, `,(0,h.jsx)(t.code,{children:`filled`}),`, `,(0,h.jsx)(t.code,{children:`underlined`}),`, `,(0,h.jsx)(t.code,{children:`unstyled`})]}),(0,h.jsx)(t.td,{children:(0,h.jsx)(t.code,{children:`outlined`})}),(0,h.jsx)(t.td,{})]}),(0,h.jsxs)(t.tr,{children:[(0,h.jsx)(t.td,{children:(0,h.jsx)(t.code,{children:`isFullWidth`})}),(0,h.jsx)(t.td,{children:`boolean`}),(0,h.jsx)(t.td,{children:(0,h.jsx)(t.code,{children:`false`})}),(0,h.jsx)(t.td,{})]}),(0,h.jsxs)(t.tr,{children:[(0,h.jsxs)(t.td,{children:[(0,h.jsx)(t.code,{children:`disabled`}),`, `,(0,h.jsx)(t.code,{children:`readOnly`}),`, `,(0,h.jsx)(t.code,{children:`autoFocus`})]}),(0,h.jsx)(t.td,{children:`boolean`}),(0,h.jsx)(t.td,{children:(0,h.jsx)(t.code,{children:`false`})}),(0,h.jsx)(t.td,{children:`Native.`})]})]})]}),`
+`,(0,h.jsx)(a,{of:u}),`
+`,(0,h.jsx)(t.h3,{id:`differences-from-the-spec`,children:`Differences from the spec`}),`
+`,(0,h.jsxs)(t.ul,{children:[`
+`,(0,h.jsxs)(t.li,{children:[(0,h.jsxs)(t.strong,{children:[(0,h.jsx)(t.code,{children:`label`}),`, `,(0,h.jsx)(t.code,{children:`size`}),` and `,(0,h.jsx)(t.code,{children:`appearance`}),` are added`]}),`, from the shared field,
+so a search box can match the form or toolbar it sits in.`]}),`
+`,(0,h.jsxs)(t.li,{children:[(0,h.jsxs)(t.strong,{children:[(0,h.jsx)(t.code,{children:`value`}),` is added`]}),` for a controlled query.`]}),`
+`,(0,h.jsxs)(t.li,{children:[`Native `,(0,h.jsx)(t.code,{children:`disabled`}),`, `,(0,h.jsx)(t.code,{children:`readOnly`}),` names.`]}),`
+`]}),`
+`,(0,h.jsx)(t.h2,{id:`usage`,children:`Usage`}),`
+`,(0,h.jsx)(o,{of:l}),`
+`,(0,h.jsxs)(t.p,{children:[`Put the field inside a `,(0,h.jsx)(t.code,{children:`<form role="search">`}),` (or `,(0,h.jsx)(t.code,{children:`<search>`}),`) when it
+searches the site, so it becomes a landmark. The component is only the
+field: filtering a list in place does not need a landmark.`]}),`
+`,(0,h.jsx)(t.h2,{id:`accessibility`,children:`Accessibility`}),`
+`,(0,h.jsxs)(t.ul,{children:[`
+`,(0,h.jsxs)(t.li,{children:[(0,h.jsx)(t.code,{children:`type="search"`}),`, exposed as a `,(0,h.jsx)(t.code,{children:`searchbox`}),`, named by the visible label
+or "Search". A placeholder is not a name.`]}),`
+`,(0,h.jsxs)(t.li,{children:[(0,h.jsx)(t.strong,{children:`Clearing works the same everywhere:`}),` the button, and Escape in the
+field (Chrome and Safari do this natively; Firefox did not). Either way
+`,(0,h.jsx)(t.code,{children:`onChange`}),` fires with a real event and focus stays in the field.`]}),`
+`,(0,h.jsx)(t.li,{children:`The clear button is a real button named "Clear search", with a 44px
+touch target. The browser's own clear control is hidden so there are
+not two.`}),`
+`]})]})}function m(e={}){let{wrapper:t}={...n(),...e.components};return t?(0,h.jsx)(t,{...e,children:(0,h.jsx)(p,{...e})}):p(e)}var h;function g(){return(g=e((()=>{h=t(),r(),i(),c()})))()}g();export{m as default};

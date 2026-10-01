@@ -1,0 +1,25 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "divider",
+  "title": "Divider",
+  "description": "Horizontal or vertical separator line, solid or dashed, in three thicknesses.",
+  "registryDependencies": [
+    "https://ontheshore.biz/zweihander/r/utils.json",
+    "https://ontheshore.biz/zweihander/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/atomic-elements/Divider.tsx",
+      "content": "import type { ComponentProps } from 'react'\nimport { cn } from '@/lib/utils'\nimport styles from './Divider.module.css'\n\nexport interface DividerProps extends ComponentProps<'hr'> {\n  orientation?: 'horizontal' | 'vertical'\n  /** Indents both ends so the line stops short of its container's edges. */\n  inset?: boolean\n  /** Line thickness: 1px, 2px, 4px. */\n  size?: 'sm' | 'md' | 'lg'\n  /** uiguideline calls this `variant`; renamed because `variant` means color here. */\n  appearance?: 'solid' | 'dashed'\n}\n\nexport function Divider({\n  orientation = 'horizontal',\n  inset = false,\n  size = 'sm',\n  appearance = 'solid',\n  className,\n  ...props\n}: DividerProps) {\n  return (\n    <hr\n      // <hr> is already role=\"separator\" (horizontal). Only the vertical\n      // case needs saying, or a screen reader announces the wrong axis.\n      aria-orientation={orientation === 'vertical' ? 'vertical' : undefined}\n      className={cn(\n        styles.divider,\n        styles[orientation],\n        styles[size],\n        styles[appearance],\n        inset && styles.inset,\n        className,\n      )}\n      {...props}\n    />\n  )\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/atomic-elements/Divider.tsx"
+    },
+    {
+      "path": "src/components/atomic-elements/Divider.module.css",
+      "content": "/* The line is a border, not a background: that is what makes `dashed` a\n   one-word change. Thickness is a raw px value because the token layer has\n   no border-width scale, and 1/2/4 are the only values the spec asks for.\n   Solid comes from the fallback; only .dashed sets --divider-style. */\n.divider {\n  margin: 0;\n  border: 0 var(--divider-style, solid) var(--border);\n  flex-shrink: 0;\n  align-self: stretch;\n}\n\n.horizontal {\n  border-block-start-width: var(--divider-width);\n}\n\n/* No fixed height: in a flex row it stretches to the row, which is where a\n   vertical divider almost always lives. Outside one, give it a height.\n   inline-size: 0 shrinks the box to its border; an <hr> is a block and\n   would otherwise take the whole row. */\n.vertical {\n  inline-size: 0;\n  border-inline-start-width: var(--divider-width);\n}\n\n.sm {\n  --divider-width: 1px;\n}\n\n.md {\n  --divider-width: 2px;\n}\n\n.lg {\n  --divider-width: 4px;\n}\n\n.dashed {\n  --divider-style: dashed;\n}\n\n.horizontal.inset {\n  margin-inline: var(--space-4);\n}\n\n.vertical.inset {\n  margin-block: var(--space-2);\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/atomic-elements/Divider.module.css"
+    }
+  ],
+  "type": "registry:component"
+}

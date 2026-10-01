@@ -1,0 +1,28 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "tooltip",
+  "title": "Tooltip",
+  "description": "Short inverted label on hover or focus, with arrow, side and delay, on Base UI Tooltip; TooltipGroup shares the delay.",
+  "dependencies": [
+    "@base-ui/react"
+  ],
+  "registryDependencies": [
+    "https://ontheshore.biz/zweihander/r/utils.json",
+    "https://ontheshore.biz/zweihander/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/overlays/Tooltip.tsx",
+      "content": "import { useId, useState, type ReactElement, type ReactNode } from 'react'\nimport { Tooltip as BaseTooltip } from '@base-ui/react/tooltip'\nimport { cn } from '@/lib/utils'\nimport styles from './Tooltip.module.css'\n\nexport interface TooltipProps {\n  /** What the tooltip says. Short: a label or a hint, never the only way to learn something essential. */\n  content: ReactNode\n  /** The trigger: one focusable element, such as a Button. Its props are merged, not wrapped. */\n  children: ReactElement\n  side?: 'top' | 'right' | 'bottom' | 'left'\n  align?: 'start' | 'center' | 'end'\n  /** Milliseconds of hover before it opens. Focus opens it at once. */\n  delay?: number\n  closeDelay?: number\n  hasArrow?: boolean\n  open?: boolean\n  defaultOpen?: boolean\n  onOpenChange?: (open: boolean) => void\n  /** Never open, e.g. while the trigger's label is already visible. */\n  disabled?: boolean\n  className?: string\n}\n\nexport function Tooltip({\n  content,\n  children,\n  side = 'top',\n  align = 'center',\n  delay = 600,\n  closeDelay = 0,\n  hasArrow = true,\n  open: openProp,\n  defaultOpen = false,\n  onOpenChange,\n  disabled = false,\n  className,\n}: TooltipProps) {\n  const id = useId()\n  const [openState, setOpenState] = useState(defaultOpen)\n  const open = openProp ?? openState\n  return (\n    <BaseTooltip.Root\n      open={open}\n      onOpenChange={(next) => {\n        setOpenState(next)\n        onOpenChange?.(next)\n      }}\n      disabled={disabled}\n    >\n      <BaseTooltip.Trigger\n        delay={delay}\n        closeDelay={closeDelay}\n        render={children}\n        // Base UI leaves tooltips out of the accessibility tree; while one is\n        // open, point the trigger at it so it is read as a description.\n        aria-describedby={open ? id : undefined}\n      />\n      <BaseTooltip.Portal>\n        <BaseTooltip.Positioner className={styles.positioner} side={side} align={align} sideOffset={hasArrow ? 8 : 6}>\n          <BaseTooltip.Popup id={id} role=\"tooltip\" className={cn(styles.popup, className)}>\n            {hasArrow && <BaseTooltip.Arrow className={styles.arrow} />}\n            {content}\n          </BaseTooltip.Popup>\n        </BaseTooltip.Positioner>\n      </BaseTooltip.Portal>\n    </BaseTooltip.Root>\n  )\n}\n\n/** Tooltips inside share one delay: once one has opened, moving to the next opens it at once. */\nexport const TooltipGroup = BaseTooltip.Provider\n",
+      "type": "registry:component",
+      "target": "components/zweihander/overlays/Tooltip.tsx"
+    },
+    {
+      "path": "src/components/overlays/Tooltip.module.css",
+      "content": "/* 60: above popups (50), so a tooltip on a control inside a popover or a\n   modal still shows. */\n.positioner {\n  z-index: 60;\n}\n\n/* Inverted: --foreground on --background reads as \"not part of the page\"\n   in both modes, at the same 16:1 or more as body text. */\n.popup {\n  box-sizing: border-box;\n  max-inline-size: min(20rem, var(--available-width));\n  padding: var(--space-1) var(--space-2);\n  border-radius: var(--radius-sm);\n  background: var(--foreground);\n  color: var(--background);\n  font-family: var(--font-sans);\n  font-size: var(--text-body-sm);\n  line-height: var(--leading-body-sm);\n  overflow-wrap: break-word;\n  transform-origin: var(--transform-origin);\n  transition:\n    opacity 100ms,\n    scale 100ms;\n}\n\n.popup[data-starting-style],\n.popup[data-ending-style] {\n  opacity: 0;\n  scale: 0.96;\n}\n\n/* A 10px square turned 45deg, half of it outside the popup. */\n.arrow {\n  inline-size: 10px;\n  block-size: 10px;\n  background: inherit;\n  rotate: 45deg;\n}\n.arrow[data-side='top'] {\n  bottom: -4px;\n}\n.arrow[data-side='bottom'] {\n  top: -4px;\n}\n.arrow[data-side='left'] {\n  right: -4px;\n}\n.arrow[data-side='right'] {\n  left: -4px;\n}\n\n@media (prefers-reduced-motion: reduce) {\n  .popup {\n    transition: none;\n  }\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/overlays/Tooltip.module.css"
+    }
+  ],
+  "type": "registry:component"
+}

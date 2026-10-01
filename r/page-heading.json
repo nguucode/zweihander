@@ -1,0 +1,26 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "page-heading",
+  "title": "Page Heading",
+  "description": "Application UI pattern: breadcrumbs, title, description, meta, actions and optional tabs at the top of a page.",
+  "registryDependencies": [
+    "https://ontheshore.biz/zweihander/r/utils.json",
+    "https://ontheshore.biz/zweihander/r/tokens.json",
+    "https://ontheshore.biz/zweihander/r/breadcrumbs.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/patterns/application-ui/PageHeading.tsx",
+      "content": "import type { ComponentProps, ReactNode } from 'react'\nimport { cn } from '@/lib/utils'\nimport { Breadcrumbs, type BreadcrumbItem } from '../../navigation/Breadcrumbs'\nimport styles from './PageHeading.module.css'\n\nexport interface PageHeadingProps extends Omit<ComponentProps<'header'>, 'title'> {\n  title: ReactNode\n  /** One or two lines under the title. */\n  description?: ReactNode\n  /** Where this page sits. Rendered above the title. */\n  breadcrumbs?: BreadcrumbItem[]\n  /** Short facts about the page's subject: a status, a date, an owner. Each may start with an icon. */\n  meta?: ReactNode[]\n  /** Buttons at the end of the title row. They wrap under the title on narrow screens. */\n  actions?: ReactNode\n  /** A Tabs element under the heading, for sections of the same page. */\n  tabs?: ReactNode\n  /** The page's own heading is h1; use 2 when the heading sits inside a larger page. */\n  headingLevel?: 1 | 2\n}\n\n/**\n * The top of a page: where it is, what it is, and what you can do with it.\n * Built from Breadcrumbs and whatever buttons and Tabs you pass in.\n */\nexport function PageHeading({\n  title,\n  description,\n  breadcrumbs,\n  meta,\n  actions,\n  tabs,\n  headingLevel = 1,\n  className,\n  ...props\n}: PageHeadingProps) {\n  const Heading = `h${headingLevel}` as const\n  return (\n    <header className={cn(styles.pageHeading, tabs != null && tabs !== false && styles.withTabs, className)} {...props}>\n      {breadcrumbs && <Breadcrumbs items={breadcrumbs} size=\"sm\" className={styles.breadcrumbs} />}\n      <div className={styles.row}>\n        <div className={styles.text}>\n          <Heading className={styles.title}>{title}</Heading>\n          {description && <p className={styles.description}>{description}</p>}\n          {meta && meta.length > 0 && (\n            <ul className={styles.meta}>\n              {meta.map((item, i) => (\n                <li key={i}>{item}</li>\n              ))}\n            </ul>\n          )}\n        </div>\n        {actions && <div className={styles.actions}>{actions}</div>}\n      </div>\n      {tabs}\n    </header>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/patterns/application-ui/PageHeading.tsx"
+    },
+    {
+      "path": "src/components/patterns/application-ui/PageHeading.module.css",
+      "content": ".pageHeading {\n  display: grid;\n  gap: var(--space-3);\n  padding-block-end: var(--space-6);\n  border-block-end: 1px solid var(--border);\n  font-family: var(--font-sans);\n  color: var(--foreground);\n}\n\n/* With tabs, the tab list's own underline is the bottom edge. */\n.withTabs {\n  gap: var(--space-4);\n  padding-block-end: 0;\n  border-block-end: 0;\n}\n\n.breadcrumbs {\n  margin-block-end: var(--space-1);\n}\n\n/* Title and actions share a row while there is room; the actions drop\n   under the title when there is not, rather than squeezing it. */\n.row {\n  display: flex;\n  flex-wrap: wrap;\n  align-items: flex-start;\n  justify-content: space-between;\n  gap: var(--space-4);\n}\n\n.text {\n  display: grid;\n  gap: var(--space-2);\n  flex: 1 1 20rem;\n  min-inline-size: 0;\n}\n\n.title {\n  margin: 0;\n  font-size: var(--text-heading-xl);\n  line-height: var(--leading-heading-xl);\n  font-weight: 600;\n  overflow-wrap: anywhere;\n}\n\n.description {\n  margin: 0;\n  max-inline-size: 65ch;\n  font-size: var(--text-body);\n  line-height: var(--leading-body);\n  color: var(--muted-foreground);\n}\n\n.meta {\n  display: flex;\n  flex-wrap: wrap;\n  gap: var(--space-2) var(--space-6);\n  margin: 0;\n  padding: 0;\n  list-style: none;\n  font-size: var(--text-body);\n  line-height: var(--leading-body);\n  color: var(--muted-foreground);\n}\n\n.meta > li {\n  display: inline-flex;\n  align-items: center;\n  gap: var(--space-1-5);\n}\n\n.meta > li > :global(svg) {\n  flex-shrink: 0;\n  font-size: var(--space-4);\n}\n\n.actions {\n  display: flex;\n  flex-wrap: wrap;\n  gap: var(--space-2);\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/patterns/application-ui/PageHeading.module.css"
+    }
+  ],
+  "type": "registry:block"
+}

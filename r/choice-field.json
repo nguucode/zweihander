@@ -1,0 +1,28 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "choice-field",
+  "title": "Choice field",
+  "description": "Internal: the label, helper text and validation wiring shared by Checkbox, Radio and Switch.",
+  "dependencies": [
+    "@base-ui/react"
+  ],
+  "registryDependencies": [
+    "https://ontheshore.biz/zweihander/r/utils.json",
+    "https://ontheshore.biz/zweihander/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/controls/ChoiceField.tsx",
+      "content": "import type { ReactNode } from 'react'\nimport { Field } from '@base-ui/react/field'\nimport { cn } from '@/lib/utils'\nimport styles from './ChoiceField.module.css'\n\nexport type ValidationState = 'default' | 'success' | 'error'\n\n/**\n * The shared classes, for controls that lay out their own field (Radio's\n * group). `control` goes on the control itself: first-line alignment,\n * focus ring, 44px touch target.\n */\nexport const choiceStyles = styles\n\nexport interface ChoiceFieldProps {\n  /** The control: a Checkbox or Switch root, carrying `choiceStyles.control`. */\n  children: ReactNode\n  label?: ReactNode\n  helperText?: ReactNode\n  validationState?: ValidationState\n  required?: boolean\n  disabled?: boolean\n  name?: string\n  className?: string\n}\n\n/**\n * The label, helper text and validation wiring shared by Checkbox and Switch.\n * Base UI's Field does the ARIA: the label wraps the control, the helper is\n * its description, and `invalid` reaches the control as aria-invalid.\n * Internal — not exported from the package.\n */\nexport function ChoiceField({\n  children,\n  label,\n  helperText,\n  validationState = 'default',\n  required,\n  disabled,\n  name,\n  className,\n}: ChoiceFieldProps) {\n  return (\n    <Field.Root\n      name={name}\n      disabled={disabled}\n      invalid={validationState === 'error'}\n      className={cn(styles.field, styles[validationState], className)}\n    >\n      <Field.Label className={styles.label}>\n        {children}\n        {label && (\n          <span>\n            {label}\n            {required && (\n              <span aria-hidden=\"true\" className={styles.required}>\n                *\n              </span>\n            )}\n          </span>\n        )}\n      </Field.Label>\n      {helperText && <Field.Description className={styles.helper}>{helperText}</Field.Description>}\n    </Field.Root>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/controls/ChoiceField.tsx"
+    },
+    {
+      "path": "src/components/controls/ChoiceField.module.css",
+      "content": "/* Shared by Checkbox, Radio and Switch. Each control sets --choice-control\n   (its width) so the helper text lines up under the label, not the control. */\n.field {\n  --choice-control: var(--space-4);\n  display: grid;\n  gap: var(--space-1);\n  font-family: var(--font-sans);\n}\n\n.label {\n  display: inline-flex;\n  align-items: flex-start;\n  gap: var(--space-2);\n  inline-size: fit-content;\n  font-size: var(--text-body);\n  line-height: var(--leading-body);\n  color: var(--foreground);\n}\n\n.label[data-disabled] {\n  cursor: var(--cursor-disabled);\n  opacity: 0.5;\n}\n\n.required {\n  margin-inline-start: 0.125rem;\n  color: var(--danger-text);\n}\n\n.helper {\n  margin: 0;\n  padding-inline-start: calc(var(--choice-control) + var(--space-2));\n  font-size: var(--text-body);\n  line-height: var(--leading-body);\n  color: var(--muted-foreground);\n}\n\n.success .helper {\n  color: var(--success-text);\n}\n\n.error .helper {\n  color: var(--danger-text);\n}\n\n/* Shared control plumbing: every control is centred on the first line of\n   its label, and gets a 44px hit area on touch screens without growing. */\n.control {\n  position: relative;\n  flex-shrink: 0;\n  box-sizing: border-box;\n  /* (line-height - control height) / 2, so the control sits on the first\n     line of a label that wraps. */\n  margin-block: calc((1em * var(--leading-body) - var(--choice-control-block, var(--choice-control))) / 2);\n  outline-offset: 2px;\n}\n\n.control:focus-visible {\n  outline: 2px solid var(--ring);\n}\n\n@media (pointer: coarse) {\n  .control::after {\n    content: '';\n    position: absolute;\n    inset: 50% auto auto 50%;\n    inline-size: max(100%, 44px);\n    block-size: max(100%, 44px);\n    translate: -50% -50%;\n  }\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/controls/ChoiceField.module.css"
+    }
+  ],
+  "type": "registry:component"
+}
