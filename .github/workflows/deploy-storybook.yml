@@ -6,12 +6,10 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 concurrency:
-  group: pages
+  group: deploy
   cancel-in-progress: false
 
 jobs:
@@ -40,16 +38,18 @@ jobs:
       # shadcn-CLI-compatible component registry, served at /r/<name>.json
       # so consumers can run `npx shadcn add https://.../zweihander/r/button.json`.
       - run: npx shadcn build --output storybook-static/r
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: storybook-static
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+      # ontheshore.biz is served by the nguucode/ontheshore repo, not this one
+      # (a project site only inherits the custom domain from a repo named
+      # nguucode.github.io). So publish the build to this repo's gh-pages
+      # branch and have ontheshore redeploy with it under /zweihander/.
+      - name: Publish build to gh-pages
+        working-directory: storybook-static
+        run: |
+          git init -q -b gh-pages
+          git add -A
+          git -c user.name=github-actions -c user.email=github-actions@users.noreply.github.com commit -qm "Build ${GITHUB_SHA}"
+          git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" gh-pages
+      # Fine-grained PAT scoped to nguucode/ontheshore, Actions: read and write.
+      - run: gh workflow run deploy.yml --repo nguucode/ontheshore
+        env:
+          GH_TOKEN: ${{ secrets.ONTHESHORE_DISPATCH_TOKEN }}
