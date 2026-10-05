@@ -1,12 +1,17 @@
-/* Docs home. Pixel art per brand kit v0.3: Press Start 2P for display only,
-   Silkscreen for labels, the token sans for body. Hard 2px borders and
-   offset shadows with no blur stand in for elevation. */
+/* Docs home as a game title screen. Pixel art per brand kit v0.3: Press
+   Start 2P for display only, Silkscreen for labels, the token sans for body.
+   Palette stays ink, paper and the accent: every sky and hill colour is a
+   mix of --primary with --background, so it follows the theme and accent.
+   Hard 2px borders and offset shadows with no blur stand in for elevation;
+   motion uses steps() so it moves like sprites, not tweens. */
 
 .page {
   --px: 2px;
   --pixel: 'Press Start 2P', var(--font-mono);
   --label: 'Silkscreen', var(--font-mono);
   --edge: var(--foreground);
+  --ink: #0a0a0a;
+  --paper: #fff;
   --step: steps(3, end);
 
   min-block-size: 100dvh;
@@ -15,20 +20,7 @@
   font-family: var(--font-sans);
   font-size: var(--text-body-lg);
   line-height: var(--leading-body-lg);
-}
-
-/* Dot grid on a fixed layer so it never repaints with scroll. */
-.page::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background-image: radial-gradient(var(--border) 1px, transparent 1px);
-  background-size: 16px 16px;
-}
-
-.page > * {
-  position: relative;
+  overflow-x: clip;
 }
 
 .page a {
@@ -40,16 +32,23 @@
   outline-offset: var(--px);
 }
 
-.page code {
+.page code,
+.page kbd {
   font-family: var(--font-mono);
   font-size: 0.9em;
+}
+
+.page kbd {
+  padding: 0 4px;
+  border: var(--px) solid var(--edge);
+  box-shadow: 0 var(--px) 0 var(--edge);
 }
 
 .skip {
   position: absolute;
   inset-inline-start: 16px;
   inset-block-start: -64px;
-  z-index: 2;
+  z-index: 3;
   padding: 8px 12px;
   background: var(--primary);
   color: var(--primary-foreground) !important;
@@ -59,18 +58,16 @@
   inset-block-start: 8px;
 }
 
-/* ---------- header ---------- */
+/* ---------- header / HUD ---------- */
 
 .header {
   position: sticky;
   inset-block-start: 0;
-  z-index: 1;
+  z-index: 2;
   display: flex;
   align-items: center;
   gap: 16px;
-  max-inline-size: 1200px;
-  margin-inline: auto;
-  padding: 12px 24px;
+  padding: 10px max(24px, (100% - 1200px) / 2);
   background: var(--background);
   border-block-end: var(--px) solid var(--edge);
 }
@@ -84,11 +81,20 @@
   text-decoration: none;
 }
 
-.version {
+.version,
+.hiScore {
   padding: 2px 6px;
   border: var(--px) solid var(--edge);
   font-family: var(--label);
   font-size: 0.75rem;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.hiScore {
+  background: var(--foreground);
+  color: var(--background);
+  font-variant-numeric: tabular-nums;
 }
 
 .nav {
@@ -124,14 +130,22 @@
   fill: var(--primary);
 }
 
+/* Rows not forged yet: an outline of where the steel will go. */
+.ghost {
+  fill: color-mix(in oklab, var(--foreground) 10%, transparent);
+}
+
 .drawn rect {
   animation: pixel-in 0.12s var(--step) both;
   animation-delay: calc(var(--row) * 55ms);
 }
 
 .drawn .hooks {
-  animation-name: pixel-in, blink 2.4s steps(1, end) 1.6s infinite;
+  animation-name: pixel-in, blink;
   animation-duration: 0.12s, 2.4s;
+  animation-timing-function: var(--step), steps(1, end);
+  animation-delay: calc(var(--row) * 55ms), 1.6s;
+  animation-iteration-count: 1, infinite;
 }
 
 @keyframes pixel-in {
@@ -149,36 +163,11 @@
 /* ---------- shared type ---------- */
 
 .eyebrow {
-  margin: 0 0 16px;
+  margin: 0 0 20px;
   font-family: var(--label);
   font-size: 0.8125rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: var(--primary-text);
-}
-
-.display {
-  margin: 0;
-  font-family: var(--pixel);
-  font-weight: 400;
-  font-size: clamp(1.5rem, 1rem + 2.4vw, 2.75rem);
-  line-height: 1.35;
-}
-
-.caret {
-  display: inline-block;
-  inline-size: 0.6em;
-  block-size: 0.9em;
-  margin-inline-start: 0.2em;
-  vertical-align: -0.05em;
-  background: var(--primary);
-  animation: caret 1s steps(1, end) infinite;
-}
-
-@keyframes caret {
-  50% {
-    opacity: 0;
-  }
 }
 
 .h2 {
@@ -195,71 +184,400 @@
   line-height: var(--leading-heading-md);
 }
 
-.lede {
-  max-inline-size: 58ch;
-  margin: 24px 0 0;
-  color: var(--muted-foreground);
-}
-
 .note {
   margin: 16px 0 0;
   font-size: var(--text-body);
   color: var(--muted-foreground);
 }
 
-/* ---------- hero ---------- */
+/* Pixel "button": chunky border, hard shadow, presses down on click. */
+.pressStart {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  border: var(--px) solid var(--ink);
+  background: var(--paper);
+  color: var(--ink) !important;
+  box-shadow: 4px 4px 0 var(--ink);
+  font-family: var(--pixel);
+  font-size: 0.875rem;
+  text-decoration: none;
+  text-transform: uppercase;
+  cursor: var(--cursor-button);
+  transition: transform 0.1s steps(1, end), box-shadow 0.1s steps(1, end);
+}
+
+/* Blinking selector arrow, drawn as a CSS triangle. */
+.pressStart::before {
+  content: '';
+  border-block: 6px solid transparent;
+  border-inline-start: 8px solid var(--primary);
+  animation: caret 0.8s steps(1, end) infinite;
+}
+
+.pressStart:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+.pressStart:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0 0 0 var(--ink);
+}
+
+.ghostLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--label);
+  font-size: 0.875rem;
+  text-decoration: none;
+}
+
+.ghostLink:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+@keyframes caret {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* ---------- hero: title screen ---------- */
 
 .hero {
+  /* Band strength per theme: day runs from a full accent sky to paper,
+     night from near-ink to a low horizon glow. */
+  --b0: var(--use-light, 100%) var(--use-dark, 16%);
+  --b1: var(--use-light, 80%) var(--use-dark, 22%);
+  --b2: var(--use-light, 60%) var(--use-dark, 30%);
+  --b3: var(--use-light, 40%) var(--use-dark, 40%);
+  --b4: var(--use-light, 22%) var(--use-dark, 26%);
+  --cloud: color-mix(in oklab, var(--primary) 10%, var(--paper));
+  --cloud-shade: color-mix(in oklab, var(--primary) 32%, var(--paper));
+
+  position: relative;
   display: grid;
-  grid-template-columns: 1.25fr 1fr;
+  align-content: start;
+  min-block-size: min(100dvh, 980px);
+  padding: 72px max(24px, (100% - 1200px) / 2) 64px;
+  isolation: isolate;
+  color: var(--paper);
+}
+
+.sky {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--background);
+}
+
+.band {
+  --c: color-mix(in oklab, var(--primary) var(--b0), var(--background));
+
+  position: relative;
+  flex: 1;
+  background: var(--c);
+}
+
+.band:nth-child(2) { --c: color-mix(in oklab, var(--primary) var(--b1), var(--background)); }
+.band:nth-child(3) { --c: color-mix(in oklab, var(--primary) var(--b2), var(--background)); }
+.band:nth-child(4) { --c: color-mix(in oklab, var(--primary) var(--b3), var(--background)); }
+.band:nth-child(5) { --c: color-mix(in oklab, var(--primary) var(--b4), var(--background)); flex: 1.6; }
+
+/* A 50% checkerboard of this band's colour bleeding up into the one above,
+   the way 16-bit skies fake a gradient. */
+.band:not(:first-child)::before {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: -8px;
+  block-size: 8px;
+  background: conic-gradient(var(--c) 25%, transparent 0 50%, var(--c) 0 75%, transparent 0) 0 0 / 4px 4px;
+}
+
+.band:not(:first-child)::after {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: -16px;
+  block-size: 8px;
+  background: conic-gradient(var(--c) 25%, transparent 0 50%, transparent 0) 0 0 / 8px 8px;
+}
+
+.star {
+  position: absolute;
+  inline-size: 10px;
+  fill: var(--paper);
+  opacity: var(--use-light, 0.7) var(--use-dark, 1);
+  animation: twinkle 2.4s steps(1, end) infinite;
+  animation-delay: calc(var(--d) * -0.4s);
+}
+
+.star:nth-of-type(3n) {
+  inline-size: 6px;
+}
+
+@keyframes twinkle {
+  40% {
+    opacity: 0.15;
+  }
+}
+
+.cloud {
+  position: absolute;
+  inline-size: 128px;
+  animation: drift 48s steps(96, end) infinite alternate;
+}
+
+.cloudLit {
+  fill: var(--cloud);
+}
+
+.cloudShade {
+  fill: var(--cloud-shade);
+}
+
+.cloudA {
+  inset-block-start: 10%;
+  inset-inline-start: 4%;
+}
+
+.cloudB {
+  inset-block-start: 34%;
+  inset-inline-end: 6%;
+  inline-size: 192px;
+  animation-duration: 64s;
+  animation-direction: alternate-reverse;
+}
+
+.cloudC {
+  inset-block-start: 58%;
+  inset-inline-start: 38%;
+  inline-size: 96px;
+  animation-duration: 40s;
+}
+
+@keyframes drift {
+  to {
+    transform: translateX(96px);
+  }
+}
+
+.hills {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 0;
+  inline-size: 100%;
+  block-size: 120px;
+}
+
+.hillFar {
+  fill: color-mix(in oklab, var(--primary) 30%, var(--ink));
+}
+
+.hillNear {
+  fill: var(--background);
+}
+
+.heroInner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
   align-items: center;
   gap: 48px;
-  max-inline-size: 1200px;
-  margin-inline: auto;
-  padding: 96px 24px 64px;
+}
+
+.heroCopy {
+  min-inline-size: 0;
+}
+
+/* Paper face, ink outline, and a block extrusion in a dark accent mix:
+   the chunky title of a cartridge box. */
+.title {
+  --x: color-mix(in oklab, var(--primary) 45%, var(--ink));
+
+  display: grid;
+  margin: 0;
+  font-family: var(--pixel);
+  font-weight: 400;
+  font-size: clamp(2.25rem, 1rem + 6vw, 5.5rem);
+  line-height: 1.15;
+  text-transform: uppercase;
+  color: var(--paper);
+  text-shadow:
+    -0.04em 0 var(--ink), 0.04em 0 var(--ink), 0 -0.04em var(--ink), 0 0.04em var(--ink),
+    0.04em 0.04em var(--ink),
+    0.06em 0.06em var(--x), 0.08em 0.08em var(--x), 0.1em 0.1em var(--x),
+    0.12em 0.12em var(--ink), 0.14em 0.14em var(--ink);
+}
+
+.title > span:last-child {
+  margin-inline-start: 0.5em;
+}
+
+/* The wordmark's ä: two accent squares instead of a diaeresis. */
+.umlaut {
+  position: relative;
+}
+
+.umlaut::before {
+  content: '';
+  position: absolute;
+  inset-block-start: -0.18em;
+  inset-inline-start: 0.14em;
+  inline-size: 0.18em;
+  block-size: 0.18em;
+  background: var(--primary);
+  box-shadow: 0.34em 0 var(--primary), 0 0 0 0.04em var(--ink), 0.34em 0 0 0.04em var(--ink);
+}
+
+.tagline {
+  margin: 28px 0 0;
+  font-family: var(--label);
+  font-size: clamp(1rem, 0.85rem + 0.6vw, 1.375rem);
+  text-transform: uppercase;
+  text-shadow: 2px 2px 0 var(--ink);
+}
+
+/* Big counter digits, like the countdown on a launch screen. */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, max-content);
+  gap: 32px;
+  margin: 40px 0 0;
+}
+
+.stats > div {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 8px;
+  animation: pop 0.3s steps(3, end) both;
+  animation-delay: calc(0.9s + var(--i) * 0.12s);
+}
+
+.stats dd {
+  margin: 0;
+  font-family: var(--pixel);
+  font-size: clamp(1.75rem, 1.2rem + 2vw, 2.75rem);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 3px 0 var(--ink), -3px 0 var(--ink), 0 3px var(--ink), 0 -3px var(--ink), 5px 5px var(--ink);
+}
+
+.stats dt {
+  font-family: var(--label);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  text-shadow: 2px 2px 0 var(--ink);
+}
+
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
 }
 
 .actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
-  margin-block: 32px 24px;
+  align-items: center;
+  gap: 24px;
+  margin-block-start: 40px;
+}
+
+.actions .ghostLink {
+  text-shadow: 2px 2px 0 var(--ink);
 }
 
 .heroArt {
   display: grid;
-  justify-items: end;
+  justify-items: center;
 }
 
-.cartridge {
-  padding: 32px 32px 16px;
-  background: var(--card);
-  border: var(--px) solid var(--edge);
-  box-shadow: 8px 8px 0 var(--edge);
-  animation: bob 3.2s steps(2, end) infinite;
-}
-
-.cartridge svg {
+.heroArt svg {
   display: block;
   inline-size: min(256px, 60vw);
   block-size: auto;
+  filter: drop-shadow(8px 8px 0 var(--ink));
+  animation: bob 3.2s steps(2, end) infinite;
 }
 
 @keyframes bob {
   50% {
-    transform: translateY(-4px);
+    transform: translateY(-8px);
   }
 }
 
-.cartLabel {
-  display: flex;
-  justify-content: space-between;
-  margin: 16px 0 0;
-  padding-block-start: 12px;
-  border-block-start: var(--px) dashed var(--border);
+/* RPG text box sitting on the ground line. */
+.dialog {
+  position: relative;
+  display: grid;
+  gap: 16px;
+  max-inline-size: 760px;
+  margin-block-start: 72px;
+  padding: 24px 28px 28px;
+  background: var(--card);
+  color: var(--card-foreground);
+  border: var(--px) solid var(--edge);
+  outline: var(--px) solid var(--card);
+  box-shadow: 0 0 0 calc(var(--px) * 2) var(--edge), 8px 8px 0 calc(var(--px) * 2) var(--ink);
+}
+
+.speaker {
+  position: absolute;
+  inset-block-start: -14px;
+  inset-inline-start: 20px;
+  margin: 0;
+  padding: 4px 10px;
+  background: var(--foreground);
+  color: var(--background);
   font-family: var(--label);
   font-size: 0.75rem;
-  color: var(--muted-foreground);
+  text-transform: uppercase;
+}
+
+.typed {
+  display: grid;
+  margin: 0;
+}
+
+.typedGhost,
+.typedLive {
+  grid-area: 1 / 1;
+}
+
+.typedGhost {
+  visibility: hidden;
+}
+
+.typedCaret {
+  display: inline-block;
+  inline-size: 0.55em;
+  block-size: 1em;
+  vertical-align: -0.15em;
+  background: var(--primary);
+}
+
+.more {
+  position: absolute;
+  inset-inline-end: 16px;
+  inset-block-end: 10px;
+  border-inline: 6px solid transparent;
+  border-block-start: 8px solid var(--foreground);
+  animation: nudge 0.8s steps(1, end) infinite;
+}
+
+@keyframes nudge {
+  50% {
+    transform: translateY(3px);
+  }
 }
 
 /* ---------- copy command ---------- */
@@ -270,6 +588,7 @@
   max-inline-size: 100%;
   border: var(--px) solid var(--edge);
   background: var(--surface-subtle);
+  color: var(--foreground);
 }
 
 .command code {
@@ -306,17 +625,41 @@
   transform: translateY(1px);
 }
 
-/* ---------- sections ---------- */
+/* ---------- stages ---------- */
 
 .section {
   max-inline-size: 1200px;
   margin-inline: auto;
-  padding: 64px 24px;
+  padding: 80px 24px;
+}
+
+.section + .section {
   border-block-start: var(--px) dashed var(--border);
 }
 
 .sectionHead {
-  margin-block-end: 32px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-block-end: 40px;
+}
+
+.stageNo {
+  margin: 0;
+  padding: 10px 12px;
+  background: var(--foreground);
+  color: var(--background);
+  font-family: var(--pixel);
+  font-size: 0.875rem;
+  box-shadow: 4px 4px 0 var(--primary);
+}
+
+.kicker {
+  margin: 8px 0 0;
+  font-family: var(--label);
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  color: var(--primary-text);
 }
 
 .stack {
@@ -326,7 +669,6 @@
 }
 
 .stack > *,
-.heroCopy,
 .install {
   min-inline-size: 0;
 }
@@ -335,7 +677,225 @@
   margin: 0;
 }
 
-/* ---------- playground ---------- */
+/* ---------- forge mini-game ---------- */
+
+.forge {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: 32px;
+  align-items: start;
+}
+
+.screen {
+  position: relative;
+  display: grid;
+  gap: 20px;
+  padding: 20px;
+  background: var(--card);
+  border: var(--px) solid var(--edge);
+  box-shadow: 8px 8px 0 var(--edge);
+  overflow: hidden;
+}
+
+.screen[data-shake='0'] {
+  animation: shake-a 0.3s steps(6, end);
+}
+
+.screen[data-shake='1'] {
+  animation: shake-b 0.3s steps(6, end);
+}
+
+@keyframes shake-a {
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+
+@keyframes shake-b {
+  20%, 60% { transform: translateX(6px); }
+  40%, 80% { transform: translateX(-6px); }
+}
+
+.screenHud {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 24px;
+  font-family: var(--label);
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+
+.lives {
+  display: inline-flex;
+  gap: 4px;
+  margin-inline-start: auto;
+}
+
+.heart {
+  fill: var(--primary);
+}
+
+.heartEmpty {
+  fill: none;
+  stroke: var(--muted-foreground);
+  stroke-width: 0.5;
+}
+
+.anvil {
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding-block: 12px;
+  background: conic-gradient(var(--surface-subtle) 25%, transparent 0 50%, var(--surface-subtle) 0 75%, transparent 0) 0 0 / 16px 16px;
+  border: var(--px) solid var(--border);
+}
+
+.anvil svg {
+  display: block;
+}
+
+.verdict {
+  position: absolute;
+  inset-block-start: 16px;
+  font-family: var(--pixel);
+  font-size: 1rem;
+  text-transform: uppercase;
+  color: var(--primary-text);
+  animation: rise 0.7s steps(5, end) forwards;
+}
+
+.verdict[data-kind='Miss'] {
+  color: var(--danger-text);
+}
+
+@keyframes rise {
+  from {
+    transform: translateY(12px);
+  }
+
+  70% {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+}
+
+.sparks {
+  position: absolute;
+  inset: 50%;
+}
+
+.sparks i {
+  position: absolute;
+  inline-size: 6px;
+  block-size: 6px;
+  background: var(--primary);
+  animation: spark 0.45s steps(4, end) forwards;
+}
+
+@keyframes spark {
+  to {
+    opacity: 0;
+    transform: rotate(var(--a)) translateX(96px);
+  }
+}
+
+/* 32 cells; the zone and cursor are positioned in whole cells. */
+.track {
+  position: relative;
+  block-size: 32px;
+  border: var(--px) solid var(--edge);
+  background:
+    repeating-linear-gradient(90deg, transparent 0 calc(100% / 32 - 1px), var(--border) 0 calc(100% / 32)),
+    var(--surface-subtle);
+}
+
+.zone {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: calc(var(--from) * 100% / 32);
+  inline-size: calc(var(--span) * 100% / 32);
+  background: color-mix(in oklab, var(--primary) 35%, transparent);
+  box-shadow: inset 0 0 0 var(--px) var(--primary);
+}
+
+.cursor {
+  position: absolute;
+  inset-block: -6px;
+  inset-inline-start: 0;
+  inline-size: calc(100% / 32);
+  background: var(--foreground);
+  will-change: transform;
+}
+
+.forged {
+  font-size: var(--text-body);
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 16px;
+  padding: 24px;
+  text-align: center;
+  background: color-mix(in oklab, var(--card) 88%, transparent);
+}
+
+.overlayTitle {
+  margin: 0;
+  font-family: var(--pixel);
+  font-size: 1.125rem;
+  text-transform: uppercase;
+}
+
+.overlayBody {
+  max-inline-size: 42ch;
+  margin: 0;
+  color: var(--muted-foreground);
+  font-size: var(--text-body);
+}
+
+.forgeSide {
+  display: grid;
+  gap: 8px;
+}
+
+.strike {
+  inline-size: 100%;
+  font-family: var(--pixel);
+  text-transform: uppercase;
+}
+
+.hiTable {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px 16px;
+  margin: 16px 0 0;
+  padding-block-start: 16px;
+  border-block-start: var(--px) dashed var(--border);
+  font-family: var(--label);
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+}
+
+.hiTable dt {
+  color: var(--muted-foreground);
+}
+
+.hiTable dd {
+  margin: 0;
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- options (theme playground) ---------- */
 
 .playground {
   display: grid;
@@ -414,110 +974,90 @@
   flex: 1;
 }
 
-/* ---------- principles ---------- */
+/* ---------- inventory ---------- */
 
-.principles {
+.worlds {
   display: grid;
-  gap: 0;
-  margin: 0;
-  padding: 0;
-  list-style: none;
+  gap: 40px;
 }
 
-.principles li {
-  display: grid;
-  grid-template-columns: 96px minmax(0, 60ch);
-  gap: 24px;
-  padding-block: 28px;
-  border-block-start: 1px solid var(--border);
-}
-
-/* Offset every other row so the list reads as a zig-zag, not a stack. */
-.principles li:nth-child(even) {
-  margin-inline-start: 18%;
-}
-
-.principles p {
-  margin: 0;
-  color: var(--muted-foreground);
-}
-
-.num {
-  font-family: var(--pixel);
-  font-size: 1.5rem;
-  color: var(--primary-text);
-}
-
-.more {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  margin-block-start: 12px;
-  font-family: var(--label);
-  font-size: 0.8125rem;
-  text-decoration: none;
-}
-
-.more:hover {
-  color: var(--primary-text);
-}
-
-/* ---------- component index ---------- */
-
-.index {
-  columns: 4 220px;
-  column-gap: 32px;
-}
-
-.group {
-  break-inside: avoid;
-  margin-block-end: 32px;
-}
-
-.groupTitle {
+.worldTitle {
   display: flex;
-  justify-content: space-between;
-  margin: 0 0 8px;
-  padding-block-end: 8px;
-  border-block-end: var(--px) solid var(--edge);
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 16px;
   font-family: var(--label);
   font-weight: 400;
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   text-transform: uppercase;
 }
 
-.groupTitle span {
+.worldNo {
+  padding: 2px 6px;
+  border: var(--px) solid var(--edge);
+}
+
+.worldCount {
+  margin-inline-start: auto;
   color: var(--muted-foreground);
 }
 
-.group ul {
+.slots {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.group a {
-  display: block;
-  padding: 6px 8px;
-  margin-inline: -8px;
-  text-decoration: none;
-  font-size: var(--text-body);
+.slots li {
+  animation: pop 0.25s steps(3, end) both;
+  animation-delay: calc(var(--i, 0) * 25ms);
 }
 
-.group a:hover {
+.slot {
+  display: grid;
+  gap: 10px;
+  min-block-size: 76px;
+  padding: 10px 12px;
+  border: var(--px) solid var(--edge);
+  background: var(--card);
+  font-size: var(--text-body);
+  text-decoration: none;
+  transition: transform 0.1s steps(1, end), box-shadow 0.1s steps(1, end);
+}
+
+.slot:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 3px 3px 0 var(--edge);
   background: var(--foreground);
   color: var(--background);
 }
 
+.slot:active {
+  transform: none;
+  box-shadow: none;
+}
+
+.slotNo {
+  font-family: var(--label);
+  font-size: 0.6875rem;
+  color: var(--muted-foreground);
+}
+
+.slot:hover .slotNo {
+  color: inherit;
+}
+
 .skeletonTitle {
   block-size: 18px;
+  inline-size: 30%;
   margin-block-end: 16px;
 }
 
-.skeletonRow {
-  block-size: 14px;
-  inline-size: 70%;
-  margin-block: 12px;
+.skeletonSlot {
+  block-size: 76px;
 }
 
 .empty {
@@ -530,6 +1070,53 @@
 
 .empty p {
   margin: 0;
+}
+
+/* ---------- quest log ---------- */
+
+.quests {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.quests li {
+  display: grid;
+  grid-template-columns: 32px minmax(0, 60ch);
+  gap: 24px;
+  padding-block: 28px;
+  border-block-start: 1px solid var(--border);
+}
+
+/* Offset every other entry so the log reads as a zig-zag, not a stack. */
+.quests li:nth-child(even) {
+  margin-inline-start: 18%;
+}
+
+.quests p {
+  margin: 0 0 12px;
+  color: var(--muted-foreground);
+}
+
+/* Ticked checkbox in pixels. */
+.questBox {
+  inline-size: 24px;
+  block-size: 24px;
+  margin-block-start: 4px;
+  border: var(--px) solid var(--edge);
+  background:
+    linear-gradient(var(--primary), var(--primary)) 4px 10px / 4px 4px no-repeat,
+    linear-gradient(var(--primary), var(--primary)) 8px 14px / 4px 4px no-repeat,
+    linear-gradient(var(--primary), var(--primary)) 12px 10px / 4px 4px no-repeat,
+    linear-gradient(var(--primary), var(--primary)) 16px 6px / 4px 4px no-repeat;
+}
+
+.questNo {
+  font-family: var(--label);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--primary-text) !important;
 }
 
 /* ---------- install ---------- */
@@ -551,23 +1138,58 @@
 /* ---------- footer ---------- */
 
 .footer {
+  padding: 64px max(24px, (100% - 1200px) / 2) 48px;
+  background: var(--foreground);
+  color: var(--background);
+}
+
+.thanks {
+  margin: 0 0 40px;
+  font-family: var(--pixel);
+  font-size: clamp(1rem, 0.8rem + 1vw, 1.5rem);
+  text-transform: uppercase;
+}
+
+.thanks::after {
+  content: '';
+  display: inline-block;
+  inline-size: 0.6em;
+  block-size: 0.9em;
+  margin-inline-start: 0.3em;
+  vertical-align: -0.05em;
+  background: var(--primary);
+  animation: caret 1s steps(1, end) infinite;
+}
+
+.credits {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 16px;
-  max-inline-size: 1200px;
-  margin-inline: auto;
-  padding: 32px 24px 48px;
-  border-block-start: var(--px) solid var(--edge);
   font-size: var(--text-body);
-  color: var(--muted-foreground);
 }
 
-.footer p {
+.credits p {
   margin: 0;
+  opacity: 0.75;
+}
+
+/* The logo is drawn in the page's colours; flip it on the inverted footer. */
+.credits .body {
+  fill: var(--background);
+}
+
+.credits .blade {
+  fill: var(--foreground);
 }
 
 /* ---------- small screens ---------- */
+
+@media (max-width: 1023px) {
+  .hiScore {
+    display: none;
+  }
+}
 
 @media (max-width: 767px) {
   .header {
@@ -580,13 +1202,14 @@
     display: none;
   }
 
-  .hero,
-  .playground {
-    grid-template-columns: minmax(0, 1fr);
+  .hero {
+    padding: 40px 16px 48px;
   }
 
-  .hero {
-    padding: 48px 16px 32px;
+  .heroInner,
+  .playground,
+  .forge {
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .heroArt {
@@ -594,27 +1217,46 @@
     order: -1;
   }
 
-  .cartridge svg {
-    inline-size: 128px;
+  .heroArt svg {
+    inline-size: 96px;
+  }
+
+  .stats {
+    grid-template-columns: repeat(2, max-content);
+    gap: 24px 40px;
+  }
+
+  .dialog {
+    margin-block-start: 48px;
+    padding: 24px 16px 28px;
   }
 
   .section {
-    padding: 48px 16px;
+    padding: 56px 16px;
   }
 
-  .principles li {
-    grid-template-columns: 1fr;
-    gap: 8px;
+  .sectionHead {
+    align-items: flex-start;
   }
 
-  .principles li:nth-child(even) {
+  .quests li {
+    grid-template-columns: 24px minmax(0, 1fr);
+    gap: 16px;
+  }
+
+  .quests li:nth-child(even) {
     margin-inline-start: 0;
+  }
+
+  .footer {
+    padding-inline: 16px;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .page *,
-  .page *::before {
+  .page *::before,
+  .page *::after {
     animation: none !important;
     transition: none !important;
   }
