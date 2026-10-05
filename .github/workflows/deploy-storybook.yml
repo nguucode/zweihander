@@ -1,4 +1,4 @@
-name: Deploy Storybook & registry
+name: Deploy docs site, Storybook & registry
 
 on:
   push:
@@ -7,6 +7,8 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 concurrency:
   group: deploy
@@ -15,6 +17,9 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: https://zweihander.ontheshore.biz
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -34,21 +39,22 @@ jobs:
       # Verifies the npm package still builds; output isn't published here
       # (that's a separate, explicit `npm publish` step).
       - run: npm run build:lib
-      - run: npm run build-storybook
-      # shadcn-CLI-compatible component registry, served at /r/<name>.json
-      # so consumers can run `npx shadcn add https://.../zweihander/r/button.json`.
-      - run: npx shadcn build --output storybook-static/r
-      # ontheshore.biz is served by the nguucode/ontheshore repo, not this one
-      # (a project site only inherits the custom domain from a repo named
-      # nguucode.github.io). So publish the build to this repo's gh-pages
-      # branch and have ontheshore redeploy with it under /zweihander/.
+      # Docs home at /, Storybook at /storybook/, shadcn-CLI registry at /r/<name>.json
+      # so consumers can run `npx shadcn add https://zweihander.ontheshore.biz/r/button.json`.
+      - run: npm run build:site
       - name: Publish build to gh-pages
-        working-directory: storybook-static
+        working-directory: site
         run: |
           git init -q -b gh-pages
           git add -A
           git -c user.name=github-actions -c user.email=github-actions@users.noreply.github.com commit -qm "Build ${GITHUB_SHA}"
           git push -qf "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" gh-pages
+      # zweihander.ontheshore.biz: this repo's own GitHub Pages site (custom
+      # domain set in repo settings, CNAME record in Cloudflare DNS).
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - uses: actions/deploy-pages@v4
       # Fine-grained PAT scoped to nguucode/ontheshore, Actions: read and write.
       - run: gh workflow run deploy.yml --repo nguucode/ontheshore
         env:

@@ -10,7 +10,7 @@ Front-end UI kit for React, documented in Storybook. No CSS framework and no
 primitive library — components are plain elements styled with CSS Modules
 against a token layer of CSS custom properties.
 
-**Storybook:** https://ontheshore.biz/zweihander/ (auto-deployed from `main` via [GitHub Actions](.github/workflows/deploy-storybook.yml))
+**Docs:** https://zweihander.ontheshore.biz (Storybook at [`/storybook/`](https://zweihander.ontheshore.biz/storybook/); auto-deployed from `main` via [GitHub Actions](.github/workflows/deploy-storybook.yml))
 
 ## Stack
 
@@ -23,7 +23,7 @@ against a token layer of CSS custom properties.
 ```bash
 npm install
 npm run storybook   # component catalog at http://localhost:6006
-npm run dev          # app shell at http://localhost:5173
+npm run dev          # docs home at http://localhost:5173 (src/App.tsx)
 ```
 
 ## Structure (Atomic Design)
