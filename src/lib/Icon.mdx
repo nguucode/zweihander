@@ -46,5 +46,42 @@ filled sets), MIT. The licence text is in the file header, so it travels
 with the file when the registry copies it into another project. There is
 no npm dependency on Boxicons.
 
-To add an icon: copy its `d` attribute(s) into the `paths` map under a
-purpose name, and add the name to the catalog story.
+## Names in Boxicons and in Figma
+
+The Figma library has the whole free set on its **Icons** page, named
+`Boxicons/<Pack>/<name>` with the Boxicons name unchanged (pack is
+`Basic`, `Filled` or `Brands`). Components in the library use those
+directly. Each purpose name in code is one of them:
+
+| Code (`name`) | Figma component |
+| --- | --- |
+| `calendar` | `Boxicons/Basic/calendar` |
+| `check` | `Boxicons/Basic/check` |
+| `chevron-down` | `Boxicons/Basic/chevron-down` |
+| `chevron-left` | `Boxicons/Basic/chevron-left` |
+| `chevron-right` | `Boxicons/Basic/chevron-right` |
+| `chevron-up` | `Boxicons/Basic/chevron-up` |
+| `chevrons-up-down` | `Boxicons/Basic/chevrons-up-down` |
+| `close` | `Boxicons/Basic/x` |
+| `danger` | `Boxicons/Basic/alert-circle` |
+| `external` | `Boxicons/Basic/arrow-out-up-right-square` |
+| `file` | `Boxicons/Basic/file` |
+| `info` | `Boxicons/Basic/info-circle` |
+| `menu` | `Boxicons/Basic/menu` |
+| `minus` | `Boxicons/Basic/minus` |
+| `more` | `Boxicons/Basic/dots-horizontal-rounded` |
+| `pause` | `Boxicons/Basic/pause` |
+| `play` | `Boxicons/Basic/play` |
+| `plus` | `Boxicons/Basic/plus` |
+| `search` | `Boxicons/Basic/search` |
+| `star` | `Boxicons/Basic/star` |
+| `star-filled` | `Boxicons/Filled/star` |
+| `success` | `Boxicons/Basic/check-circle` |
+| `upload` | `Boxicons/Basic/archive-arrow-up` |
+| `user` | `Boxicons/Basic/user` |
+| `warning` | `Boxicons/Basic/alert-triangle` |
+
+To add an icon: pick it in Figma, copy the `d` attribute(s) from
+`svg/<pack>/bx-<name>.svg` in `@boxicons/core` into the `paths` map under
+a purpose name, add a row to this table, and add the name to the catalog
+story.
