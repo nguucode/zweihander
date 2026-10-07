@@ -42,6 +42,26 @@
   border-color: var(--danger-text);
 }
 
+/* Relief: an empty box is a small well cut into the page; checked, it
+   fills up into a raised bead, lit from above like a contained Button. In
+   dark the well is darker than the page. */
+.box:not([data-checked], [data-indeterminate]) {
+  background-color: var(--use-light, var(--background))
+    var(--use-dark, color-mix(in oklab, var(--background), black 35%));
+  background-image: linear-gradient(
+    var(--use-light, color-mix(in oklab, var(--foreground) 6%, transparent)) var(--use-dark, oklch(0% 0 0 / 0.25)),
+    transparent
+  );
+  box-shadow: inset 0 1px 2px 0 oklch(0% 0 0 / var(--use-light, 0.15) var(--use-dark, 0.5));
+}
+.box[data-checked],
+.box[data-indeterminate] {
+  background-image: linear-gradient(oklch(100% 0 0 / 0.16), oklch(0% 0 0 / 0.1));
+  box-shadow:
+    0 1px 2px 0 oklch(0% 0 0 / var(--use-light, 0.25) var(--use-dark, 0.6)),
+    inset 0 1px 0 0 oklch(100% 0 0 / 0.3);
+}
+
 .box[data-readonly] {
   cursor: default;
 }

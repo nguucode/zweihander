@@ -15,3 +15,18 @@
   --button-fg-hover: var(--secondary-foreground);
   --button-fg-active: var(--secondary-foreground);
 }
+
+/* Relief: a pressed contained toggle is held down — Button's press look,
+   kept for as long as it is on: the glow gone, shade falling in from the
+   top edge, the press fill and label (measured like any press), one pixel
+   lower. Three classes to outrank Button's :hover and :active rules,
+   whichever stylesheet loads first. */
+.held.held.held {
+  background-color: var(--button-bg-active);
+  background-image: linear-gradient(var(--button-shade), var(--button-shade));
+  box-shadow:
+    0 0 0 1px var(--button-edge),
+    inset 0 1px 3px 0 oklch(0% 0 0 / 0.35);
+  color: var(--button-fg-active);
+  translate: 0 1px;
+}

@@ -60,6 +60,9 @@
   block-size: var(--slider-track);
   border-radius: 9999px;
   background: var(--secondary);
+  /* Relief: a groove cut into the page, the fill lying in it and the
+     thumb a knob standing on it, as on Switch. */
+  box-shadow: inset 0 1px 2px 0 oklch(0% 0 0 / var(--use-light, 0.2) var(--use-dark, 0.6));
 }
 .vertical .track {
   inline-size: var(--slider-track);
@@ -71,6 +74,8 @@
 .indicator {
   border-radius: inherit;
   background: var(--primary-text);
+  background-image: linear-gradient(oklch(100% 0 0 / 0.2), transparent);
+  box-shadow: inset 0 1px 1px 0 oklch(0% 0 0 / 0.15);
 }
 
 .thumb {
@@ -80,11 +85,16 @@
   border: 2px solid var(--primary-text);
   border-radius: 9999px;
   background: var(--background);
-  box-shadow: var(--shadow-xs);
+  background-image: linear-gradient(transparent, oklch(0% 0 0 / 0.08));
+  box-shadow:
+    0 2px 3px -1px oklch(0% 0 0 / var(--use-light, 0.3) var(--use-dark, 0.7)),
+    inset 0 1px 0 0 oklch(100% 0 0 / 0.6);
   cursor: grab;
   transition: scale 100ms;
 }
+/* Held, the knob is pressed in, as a Button is. */
 .thumb:active {
+  box-shadow: inset 0 1px 2px 0 oklch(0% 0 0 / 0.25);
   cursor: grabbing;
 }
 .thumb:has(:focus-visible) {

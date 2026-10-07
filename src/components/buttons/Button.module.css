@@ -31,7 +31,7 @@ a[href].button {
 }
 
 .button:focus-visible {
-  outline: 2px solid var(--ring);
+  outline: 1px solid var(--ring);
   outline-offset: 2px;
 }
 
@@ -94,22 +94,28 @@ a[href].button {
    the label's lightness inverted, dark under a white label and light under
    a dark one — and gains contrast. accent and secondary have 16:1 or more
    to spend, so they move TOWARD their label, which is the only direction
-   that is visible on black or near-white fills. */
+   that is visible on black or near-white fills.
+
+   Press is the exception: it always goes darker, because a pressed button
+   sinks below the page and a lighter one reads as raised. Under a dark
+   label that costs contrast, so the label goes to black to win it back.
+   0.05 is the step every accent survives that way: the tightest (orange,
+   emerald and teal in light) hold 4.5:1 down to 0.06. */
 
 .contained {
   --button-bg: var(--button-solid);
   --button-fg: var(--button-on-solid);
   --button-anti-label: oklch(from var(--button-on-solid) calc(1 - l) 0 0);
   --button-bg-hover: color-mix(in oklab, var(--button-solid) 88%, var(--button-anti-label));
-  --button-bg-active: color-mix(in oklab, var(--button-solid) 76%, var(--button-anti-label));
+  --button-bg-active: oklch(from var(--button-solid) calc(l - 0.05) c h);
   --button-fg-hover: var(--button-on-solid);
-  --button-fg-active: var(--button-on-solid);
+  /* A dark label (l < 0.5) goes to black; a light one stays as it is. */
+  --button-fg-active: oklch(from var(--button-on-solid) clamp(0, (l - 0.5) * 100, l) c h);
 }
 
 .contained.accent,
 .contained.secondary {
   --button-bg-hover: color-mix(in oklab, var(--button-solid) 90%, var(--button-on-solid));
-  --button-bg-active: color-mix(in oklab, var(--button-solid) 82%, var(--button-on-solid));
 }
 
 /* Outlined and ghost tint the background with their own tone, which pulls
@@ -129,17 +135,96 @@ a[href].button {
   border-color: var(--button-border);
 }
 
+/* Secondary has the contrast to sink further when pressed.
+
+   In dark it is not a grey at all but white laid over whatever is behind
+   it, so it sits one step above the page, a card or a popover alike; an
+   opaque gray-800 all but vanishes on a gray-900 card. Pressed, it goes
+   below the surface instead. */
+.contained.secondary {
+  --button-bg: var(--use-light, var(--secondary)) var(--use-dark, oklch(100% 0 0 / 0.1));
+  --button-bg-hover: var(--use-light, color-mix(in oklab, var(--secondary) 90%, var(--secondary-foreground)))
+    var(--use-dark, oklch(100% 0 0 / 0.16));
+  --button-bg-active: var(--use-light, oklch(from var(--secondary) calc(l - 0.13) c h))
+    var(--use-dark, oklch(0% 0 0 / 0.25));
+}
+
 .button {
-  background: var(--button-bg);
+  background-color: var(--button-bg);
   color: var(--button-fg);
 }
 .button:hover {
-  background: var(--button-bg-hover);
+  background-color: var(--button-bg-hover);
   color: var(--button-fg-hover);
 }
 .button:active {
-  background: var(--button-bg-active);
+  background-color: var(--button-bg-active);
   color: var(--button-fg-active);
+}
+
+/* Relief. A contained button is lit from above: a hairline highlight on the
+   top edge, a ring a step darker than the fill, and a glow a step lighter
+   underneath that lifts it off the page.
+
+   The fill gains a gradient by laying an overlay over the state colour, so
+   hover and press still move it. The overlay only ever moves AWAY from the
+   label, like hover does, so --button-bg stays the lowest contrast on the
+   button: under a light label the bottom darkens, under a dark one the top
+   lightens. The l test picks the side; nothing here knows the palette.
+   Secondary lifts all the way to white, which is its Relief look; it has the
+   contrast to spare.
+
+   The ring and the glow carry no text, so they ignore the label. The ring
+   always goes toward black; under a dark label the anti-label is white and
+   would turn it into a pale halo. On a dark page anything lighter than the
+   page blooms past the ring and blurs the edge, so there the glow becomes
+   a plain drop shadow and the ring goes a step darker to stay crisp. */
+.contained {
+  --button-lift: 0.12;
+  --button-sink: 0.12;
+  --button-shine: oklch(from var(--button-on-solid) 100% 0 0 / clamp(0, (0.5 - l) * 100, var(--button-lift)));
+  --button-shade: oklch(from var(--button-on-solid) 0% 0 0 / clamp(0, (l - 0.5) * 100, var(--button-sink)));
+  --button-edge: color-mix(in oklab, var(--button-solid) var(--use-light, 70%) var(--use-dark, 50%), black);
+  --button-glow: var(--use-light, color-mix(in oklab, var(--button-solid) 65%, white))
+    var(--use-dark, oklch(0% 0 0 / 0.5));
+  --button-highlight: oklch(100% 0 0 / 0.33);
+  background-image: linear-gradient(var(--button-shine), var(--button-shade));
+  box-shadow:
+    0 0 0 1px var(--button-edge),
+    0 3px 4px -1px var(--button-glow),
+    inset 0 1px 0 0 var(--button-highlight);
+}
+
+/* Pressed, the button sinks into the page: the glow and the top highlight
+   go, a shadow falls inside from the top edge, and it drops the pixel the
+   glow lifted it.
+   No transition: a press that eases in reads as lag. The shine goes, it
+   would lift the bottom back up; the shade covers the whole fill, which
+   under a light label darkens the press past hover at no cost. */
+.contained:active {
+  background-image: linear-gradient(var(--button-shade), var(--button-shade));
+  box-shadow:
+    0 0 0 1px var(--button-edge),
+    inset 0 1px 3px 0 oklch(0% 0 0 / 0.3);
+  translate: 0 1px;
+}
+
+/* A near-white fill has no darker step to ring it, so in light it takes
+   the strong border instead and a glow of the plain border colour. Outlined
+   secondary keeps the quieter input border: it has no fill to separate
+   from.
+
+   In dark it is flat: the translucent fill is the whole edge, with no
+   border, no shadow and no shade, only a faint top highlight to keep it in
+   the family. A highlight that faint is invisible on the white top in
+   light, so it needs no switch. */
+.contained.secondary {
+  --button-lift: 1;
+  --button-sink: var(--use-light, 0.12) var(--use-dark, 0);
+  --button-edge: transparent;
+  --button-glow: var(--use-light, var(--border)) var(--use-dark, transparent);
+  --button-highlight: oklch(100% 0 0 / 0.1);
+  border-color: var(--use-light, var(--border-strong)) var(--use-dark, transparent);
 }
 
 /* ---------------------------------------------------------------- sizes */
@@ -190,7 +275,7 @@ a[href].button {
 
 /* A ring of currentColor with one clear side. The label stays in place but
    invisible, so the button keeps its width and its accessible name. The
-   2px wall matches the focus ring; 700ms is one turn, quick enough to read
+   2px wall reads at 16px; 700ms is one turn, quick enough to read
    as busy without flicker, slowed to 2s for reduced motion rather than
    stopped, so "still working" still shows. */
 .spinner {

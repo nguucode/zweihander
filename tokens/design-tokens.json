@@ -1284,6 +1284,10 @@
         "$type": "color",
         "$value": "{primitive.gray.neutral.200}"
       },
+      "border-strong": {
+        "$type": "color",
+        "$value": "{primitive.gray.neutral.300}"
+      },
       "control-border": {
         "$type": "color",
         "$value": "{primitive.gray.neutral.500}"
@@ -1437,6 +1441,10 @@
       "input": {
         "$type": "color",
         "$value": "oklch(100% 0 0 / 15%)"
+      },
+      "border-strong": {
+        "$type": "color",
+        "$value": "oklch(100% 0 0 / 20%)"
       },
       "control-border": {
         "$type": "color",

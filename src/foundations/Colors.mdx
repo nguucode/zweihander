@@ -75,7 +75,9 @@ the token contract the registry is compatible with.
 ## Lines and focus
 
 `--border` is a divider or a container edge, `--input` is a form control's
-edge, `--ring` is the focus indicator. None of them take a foreground —
+edge, `--border-strong` is the edge of a raised neutral control (a
+contained secondary button in light; in dark that button is a translucent
+fill with no edge), `--ring` is the focus indicator. None of them take a foreground —
 they are only ever an outline color, never a fill behind text.
 
 `--border` and `--input` are the same value in both modes and, like
@@ -213,6 +215,7 @@ swappable on its own: an **accent** (indigo by default) for `--primary` and
 | `destructive` | red-600 | red-400 | fixed |
 | `destructive-foreground` | neutral-50 | neutral-900 | fixed |
 | `border`, `input` | gray-200 | white 10% / 15% | gray |
+| `border-strong` | gray-300 | white 20% | gray |
 | `control-border` | gray-500 | gray-400 | gray |
 | `ring` | accent-700 | accent-400 | **accent** |
 | `primary-text` | first of accent-600…900 at 4.5:1 on white | first of accent-400…200 at 4.5:1 on the dark page | **accent** |
@@ -221,7 +224,8 @@ The light accent step is `-600` for most hues but `-700` for sky, fuchsia,
 pink and rose, and the label is white or near-black depending on which one
 clears 4.5:1 on that fill — the warm hues take dark labels. Exceptions to
 the ramp rule: light `--background` (pure white, not gray-50) and dark
-`--border`/`--input` (alpha, so edges work over any surface).
+`--border`/`--input`/`--border-strong` (alpha, so edges work over any
+surface).
 
 `--destructive` deliberately does **not** follow the accent. A status
 colour that changes with the brand stops being a status.

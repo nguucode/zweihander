@@ -58,10 +58,11 @@ export function ToggleButton({
       render={(toggleProps, state) => {
         const buttonProps = {
           ...toggleProps,
-          // Off is the same neutral button whatever the pressed style is, so
-          // "on" is always the one that stands out.
+          // Off is the neutral button in the pressed style's family, so "on"
+          // is always the one that stands out. A contained toggle stands up
+          // as a raised secondary and, pressed, stays held down.
           variant: state.pressed ? variant : 'secondary',
-          appearance: state.pressed ? appearance : appearance === 'ghost' ? 'ghost' : 'outlined',
+          appearance: state.pressed || appearance === 'contained' ? appearance : appearance === 'ghost' ? 'ghost' : 'outlined',
           size,
           startIcon,
           endIcon,
@@ -71,7 +72,10 @@ export function ToggleButton({
           // in toggleProps, which is what Button's icon-only type asks for.
           isIconOnly,
           disabled,
-          className: cn(state.pressed && appearance !== 'contained' && styles.tinted, className),
+          className: cn(
+            state.pressed && (appearance === 'contained' ? styles.held : styles.tinted),
+            className,
+          ),
           children,
         } as ButtonProps
         return <Button {...buttonProps} />
