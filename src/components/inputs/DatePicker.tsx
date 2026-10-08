@@ -151,12 +151,20 @@ function PickerField({
   // Whether the last press in the popup was the pointer's. A pointer pick
   // sends the field back to rest (no caret, no ring); a keyboard pick or
   // Escape returns focus to where it came from, so keyboard users stay put.
-  const byPointer = useRef(false)
+  const [byPointer, setByPointer] = useState(false)
   const show = (byInput: boolean) => {
     onShow()
-    byPointer.current = false
+    setByPointer(false)
     setFromInput(byInput)
     setOpen(true)
+  }
+  /** After a pick. */
+  const close = () => {
+    setOpen(false)
+    // Opened from the input, focus never left it (the only other holder is
+    // the picked day, on its way out). After the render, so the input's
+    // blur commit reads the picked text.
+    if (byPointer) setTimeout(() => (document.activeElement as HTMLElement | null)?.blur())
   }
 
   return (
@@ -215,19 +223,11 @@ function PickerField({
                 aria-label={popupLabel}
                 className={cn(styles.popup, popupClassName)}
                 initialFocus={!fromInput}
-                finalFocus={() => (byPointer.current ? false : fromInput ? inputRef.current : true)}
-                onPointerDownCapture={() => (byPointer.current = true)}
-                onKeyDownCapture={() => (byPointer.current = false)}
+                finalFocus={byPointer ? false : fromInput ? inputRef : true}
+                onPointerDownCapture={() => setByPointer(true)}
+                onKeyDownCapture={() => setByPointer(false)}
               >
-                {children({
-                  autoFocus: !fromInput,
-                  close: () => {
-                    setOpen(false)
-                    // Opened from the input, focus never left it. After the
-                    // render, so the blur's commit reads the picked text.
-                    if (byPointer.current) setTimeout(() => inputRef.current?.blur())
-                  },
-                })}
+                {children({ autoFocus: !fromInput, close })}
               </Popover.Popup>
             </Popover.Positioner>
           </Popover.Portal>
