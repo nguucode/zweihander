@@ -1,3 +1,5 @@
+'use client'
+
 import { Children, useCallback, useEffect, useId, useRef, useState, useSyncExternalStore, type CSSProperties, type ReactNode } from 'react'
 import { Icon } from '@/lib/icon'
 import { cn } from '@/lib/utils'
@@ -81,7 +83,12 @@ export function Carousel({
   // smooth scroll passes, including the one it started from.
   const settle = useRef<ReturnType<typeof setTimeout>>(undefined)
   useEffect(() => () => clearTimeout(settle.current), [])
+  // scrollend where the browser has it: Firefox pauses longer than 100ms
+  // between the events of one smooth scroll, so the timer read a slide mid-way.
+  // Safari has no scrollend and keeps the timer.
+  const hasScrollEnd = typeof window !== 'undefined' && 'onscrollend' in window
   const onScroll = () => {
+    if (hasScrollEnd) return
     clearTimeout(settle.current)
     settle.current = setTimeout(readIndex, 100)
   }
@@ -173,6 +180,7 @@ export function Carousel({
         // Focusable so arrow keys scroll it, like any scrolling region.
         tabIndex={0}
         onScroll={onScroll}
+        onScrollEnd={hasScrollEnd ? readIndex : undefined}
       >
         {slides.map((slide, i) => (
           <div

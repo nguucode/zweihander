@@ -16,9 +16,8 @@ const brand = [
 
 const meta = {
   title: 'Components/Controls/Color Picker',
+  tags: ['beta'],
   component: ColorPicker,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
-  parameters: { a11y: { test: 'error' } },
   args: { label: 'Brand colour', defaultValue: '#3b82f6', swatches: brand, onValueChange: fn() },
 } satisfies Meta<typeof ColorPicker>
 
@@ -104,7 +103,12 @@ const room = (input: HTMLInputElement, text: string) => {
   const cs = getComputedStyle(input)
   const cv = document.createElement('canvas').getContext('2d')!
   cv.font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`
-  const inner = input.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight)
+  // From the computed border-box width: Firefox's clientWidth on an input
+  // already leaves out the padding.
+  const inner = ['paddingLeft', 'paddingRight', 'borderLeftWidth', 'borderRightWidth'].reduce(
+    (w, k) => w - parseFloat(cs[k as 'paddingLeft']),
+    parseFloat(cs.width),
+  )
   return inner - cv.measureText(text).width
 }
 

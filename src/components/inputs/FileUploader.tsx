@@ -1,3 +1,5 @@
+'use client'
+
 import { useEffect, useId, useRef, useState, type DragEvent, type ReactNode } from 'react'
 import { Icon } from '@/lib/icon'
 import { cn } from '@/lib/utils'

@@ -4,9 +4,8 @@ import { Pagination, paginationItems } from './Pagination'
 
 const meta = {
   title: 'Components/Navigation/Pagination',
+  tags: ['beta'],
   component: Pagination,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
-  parameters: { a11y: { test: 'error' } },
   args: { totalPages: 10, defaultPage: 1, onPageChange: fn() },
   argTypes: { size: { control: 'inline-radio', options: ['sm', 'md'] }, getHref: { control: false } },
 } satisfies Meta<typeof Pagination>

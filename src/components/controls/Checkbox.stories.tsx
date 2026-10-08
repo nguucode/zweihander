@@ -5,9 +5,8 @@ import { Checkbox } from './Checkbox'
 
 const meta = {
   title: 'Components/Controls/Checkbox',
+  tags: ['beta'],
   component: Checkbox,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
-  parameters: { a11y: { test: 'error' } },
   argTypes: {
     variant: { control: 'inline-radio', options: ['primary', 'neutral'] },
     validationState: { control: 'inline-radio', options: ['default', 'success', 'error'] },

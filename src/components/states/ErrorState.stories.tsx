@@ -6,9 +6,8 @@ import { ErrorState } from './ErrorState'
 
 const meta = {
   title: 'Components/States/ErrorState',
+  tags: ['beta'],
   component: ErrorState,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
-  parameters: { a11y: { test: 'error' } },
   args: {
     title: 'Couldn’t load projects',
     description: 'The server didn’t answer. Your projects are safe; try again in a moment.',

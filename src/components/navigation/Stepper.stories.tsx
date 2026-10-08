@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { expect, userEvent, within } from 'storybook/test'
 import { Button } from '../buttons/Button'
 import { Stepper } from './Stepper'
+import { mediaRules } from '@/test/story-helpers'
 
 const steps = [
   { label: 'Account', description: 'Email and password' },
@@ -13,9 +14,8 @@ const steps = [
 
 const meta = {
   title: 'Components/Navigation/Stepper',
+  tags: ['beta'],
   component: Stepper,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
-  parameters: { a11y: { test: 'error' } },
   args: { steps, current: 1 },
   argTypes: {
     orientation: { control: 'inline-radio', options: ['horizontal', 'vertical'] },
@@ -32,6 +32,8 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {
   play: async ({ canvas }) => {
     const nav = canvas.getByRole('navigation', { name: 'Progress' })
+    // An ordered list, so screen readers announce the count and each position.
+    await expect(within(nav).getByRole('list').tagName).toBe('OL')
     const items = within(nav).getAllByRole('listitem')
     await expect(items).toHaveLength(4)
     await expect(items[1]).toHaveAttribute('aria-current', 'step')
@@ -79,7 +81,16 @@ export const Navigable: Story = {
     const nav = canvas.getByRole('navigation')
     // Account, Workspace (done) and Invite (current) are buttons; Done is not.
     await expect(within(nav).getAllByRole('button')).toHaveLength(3)
-    await userEvent.click(within(nav).getByRole('button', { name: /Account/ }))
+    // The marker ("3") is decorative: the name starts with the label and its status.
+    await expect(within(nav).getByRole('button', { name: /^Invite\s*, current/ })).toBeInTheDocument()
+    // Real buttons: reached with Tab, showing the focus ring, pressed with Enter.
+    await userEvent.tab()
+    const account = within(nav).getByRole('button', { name: /^Account\s*, completed/ })
+    await expect(account).toHaveFocus()
+    await expect(getComputedStyle(account).outlineStyle).toBe('solid')
+    // 44px on coarse pointers. The runner's pointer is fine, so read the rule the media query applies.
+    await expect(mediaRules('pointer: coarse', account).find((r) => r.style.minBlockSize)?.style.minBlockSize).toBe('44px')
+    await userEvent.keyboard('{Enter}')
     await expect(within(nav).getAllByRole('listitem')[0]).toHaveAttribute('aria-current', 'step')
   },
 }

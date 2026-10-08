@@ -148,6 +148,8 @@
 .badgeText {
   fill: #fff;
   font-family: var(--font-sans);
+  /* SVG user units on the icon's 20-unit viewBox, not page pixels: the
+     label scales with the icon. */
   font-size: 9px;
   font-weight: 700;
 }

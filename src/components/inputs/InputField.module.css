@@ -260,6 +260,9 @@
 /* A field that is a button (Select) or has buttons in it (Combobox). */
 .trigger {
   justify-content: space-between;
+  /* The trigger is a <button>: WebKit's default block padding made sm 27px
+     tall instead of 24. The box sets its own inline padding. */
+  padding-block: 0;
   text-align: start;
   font: inherit;
   cursor: var(--cursor-button);

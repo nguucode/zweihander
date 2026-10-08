@@ -14,9 +14,8 @@ const gif = file('party.gif', 90_000, 'image/gif')
 
 const meta = {
   title: 'Components/Inputs/File Uploader',
+  tags: ['beta'],
   component: FileUploader,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
-  parameters: { a11y: { test: 'error' } },
   args: {
     label: 'Attachments',
     helperText: 'PDF, PNG or JPG, up to 5 MB each.',

@@ -33,9 +33,9 @@ const personal = (
 
 const meta = {
   title: 'Patterns/Application UI/Form Layouts',
+  tags: ['experimental'],
   component: FormSection,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
-  parameters: { a11y: { test: 'error' }, layout: 'padded' },
+  parameters: { layout: 'padded' },
   args: { title: 'Personal information', children: personal },
   argTypes: { children: { control: false }, footer: { control: false } },
   beforeEach: () => onSubmit.mockClear(),

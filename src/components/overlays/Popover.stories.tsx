@@ -6,9 +6,8 @@ import { Popover } from './Popover'
 
 const meta = {
   title: 'Components/Overlays/Popover',
+  tags: ['beta'],
   component: Popover,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
-  parameters: { a11y: { test: 'error' } },
   args: {
     trigger: <Button appearance="outlined" variant="accent">Share</Button>,
     title: 'Share this file',
@@ -35,6 +34,23 @@ type Story = StoryObj<typeof meta>
 
 const body = () => within(document.body)
 
+/** A Share popover with another button beside it, to test what happens to the page around it. */
+const withNeighbour: Story['render'] = (args) => (
+  <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
+    <Popover {...args} />
+    <Button appearance="outlined">Next</Button>
+  </div>
+)
+
+/** Whether a real click at the centre of `el` would land on it (user-event does not hit-test). */
+const takesClicks = (el: Element) => {
+  const r = el.getBoundingClientRect()
+  return el.contains(document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2))
+}
+
+const isScrollLocked = () =>
+  [document.documentElement, document.body].some((el) => /hidden|clip/.test(getComputedStyle(el).overflowY))
+
 export const Default: Story = {
   play: async ({ args, canvas }) => {
     const trigger = canvas.getByRole('button', { name: 'Share' })
@@ -42,11 +58,83 @@ export const Default: Story = {
     const dialog = await body().findByRole('dialog', { name: 'Share this file' })
     await expect(dialog).toHaveAccessibleDescription('Anyone you invite can view and comment.')
     await expect(trigger).toHaveAttribute('aria-expanded', 'true')
+    await expect(trigger).toHaveAttribute('aria-haspopup', 'dialog')
     await expect(args.onOpenChange).toHaveBeenLastCalledWith(true)
+    // Opening moves focus into the popup.
+    await waitFor(() => expect(dialog.contains(document.activeElement)).toBe(true))
     // Escape closes it and puts focus back on the trigger.
     await userEvent.keyboard('{Escape}')
     await waitFor(() => expect(body().queryByRole('dialog')).toBeNull())
     await expect(trigger).toHaveFocus()
+  },
+}
+
+/** A click outside closes it and puts focus back on the trigger. */
+export const ClickOutside: Story = {
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByRole('button', { name: 'Share' })
+    await userEvent.click(trigger)
+    const dialog = await body().findByRole('dialog')
+    await waitFor(() => expect(dialog.contains(document.activeElement)).toBe(true))
+    await userEvent.click(document.body)
+    await waitFor(() => expect(body().queryByRole('dialog')).toBeNull())
+    await waitFor(() => expect(trigger).toHaveFocus())
+  },
+}
+
+/** Non-modal: Tab can leave the popup, and the page around it still takes clicks and scrolls. */
+export const NonModal: Story = {
+  render: withNeighbour,
+  play: async ({ canvas }) => {
+    const next = canvas.getByRole('button', { name: 'Next' })
+    await userEvent.click(canvas.getByRole('button', { name: 'Share' }))
+    const dialog = await body().findByRole('dialog')
+    await waitFor(() => expect(dialog.contains(document.activeElement)).toBe(true))
+    await expect(takesClicks(next)).toBe(true)
+    await expect(isScrollLocked()).toBe(false)
+    // Tab past the last control and focus is out of the popup.
+    for (let i = 0; i < 5 && dialog.contains(document.activeElement); i++) await userEvent.tab()
+    await expect(dialog.contains(document.activeElement)).toBe(false)
+  },
+}
+
+/** Modal: page scroll is locked and clicks outside are blocked while it is open. */
+export const ModalBlocksPage: Story = {
+  args: { isModal: true },
+  render: withNeighbour,
+  play: async ({ canvas }) => {
+    const next = canvas.getByRole('button', { name: 'Next' })
+    await userEvent.click(canvas.getByRole('button', { name: 'Share' }))
+    await body().findByRole('dialog')
+    await waitFor(() => expect(isScrollLocked()).toBe(true))
+    await expect(takesClicks(next)).toBe(false)
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(body().queryByRole('dialog')).toBeNull())
+    await waitFor(() => expect(isScrollLocked()).toBe(false))
+    await expect(takesClicks(next)).toBe(true)
+  },
+}
+
+/** `openOnHover` adds hover to click: keyboard and touch still open it. */
+export const OpenOnHover: Story = {
+  args: { openOnHover: true },
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByRole('button', { name: 'Share' })
+    // Keyboard.
+    await userEvent.tab()
+    await expect(trigger).toHaveFocus()
+    await userEvent.keyboard('{Enter}')
+    await body().findByRole('dialog')
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(body().queryByRole('dialog')).toBeNull())
+    // Touch: a tap.
+    await userEvent.pointer({ keys: '[TouchA]', target: trigger })
+    await body().findByRole('dialog')
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(body().queryByRole('dialog')).toBeNull())
+    // Hover.
+    await userEvent.hover(trigger)
+    await body().findByRole('dialog')
   },
 }
 
@@ -95,6 +183,16 @@ export const Modal: Story = {
     // it there; a synthetic Tab cannot exercise that trap, so it is not asserted.
     // With no visible close button, a hidden one is rendered: Base UI only
     // traps focus when there is one, and it takes focus first.
-    await expect(within(dialog).getByRole('button', { name: 'Close' })).toHaveFocus()
+    const close = within(dialog).getByRole('button', { name: 'Close' })
+    await expect(close).toHaveFocus()
+    // Shown while it has keyboard focus, so focus is never invisible...
+    await expect(close.getBoundingClientRect().width).toBeGreaterThan(1)
+    // ...and out of sight once focus moves on.
+    await userEvent.tab()
+    await expect(close).not.toHaveFocus()
+    await expect(close.getBoundingClientRect().width).toBeLessThanOrEqual(1)
+    await userEvent.tab({ shift: true })
+    await expect(close).toHaveFocus()
+    await expect(close.getBoundingClientRect().width).toBeGreaterThan(1)
   },
 }

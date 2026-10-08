@@ -18,14 +18,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # changeset status compares against origin/main.
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
       - run: npm ci
+      - run: npx changeset status --since=origin/main
       - run: npm run tokens:check
       - run: npm run registry:check
-      - run: npx playwright install --with-deps chromium
+      - run: npx playwright install --with-deps chromium firefox webkit
       - run: npx tsc -b
       - run: npx vitest --project storybook run
       - run: npm run build:lib

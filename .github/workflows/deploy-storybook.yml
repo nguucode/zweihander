@@ -33,7 +33,7 @@ jobs:
       # The copy-source path has no build step on our side, so a registry item
       # that ships an unresolvable import only fails in someone else's repo.
       - run: npm run registry:check
-      - run: npx playwright install --with-deps chromium
+      - run: npx playwright install --with-deps chromium firefox webkit
       - run: npx tsc -b
       - run: npx vitest --project storybook run
       # Verifies the npm package still builds; output isn't published here

@@ -140,9 +140,9 @@ function ProjectsTable({ isSelectable = false, initialQuery = '' }: { isSelectab
 
 const meta = {
   title: 'Patterns/Application UI/Data Table Page',
+  tags: ['experimental'],
   component: TableToolbar,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
-  parameters: { a11y: { test: 'error' }, layout: 'padded' },
+  parameters: { layout: 'padded' },
   args: { children: null },
   argTypes: { children: { control: false } },
 } satisfies Meta<typeof TableToolbar>

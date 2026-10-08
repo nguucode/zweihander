@@ -61,6 +61,8 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const SideBySide: Story = {
+  // Token specimen, not UI: the second label shows the token name in the swatch's own muted tone on purpose.
+  parameters: { a11y: { test: 'off' } },
   name: 'Side by side',
   render: () => (
     <div className={docs.gridHalves} style={{ gap: 'var(--space-4)' }}>

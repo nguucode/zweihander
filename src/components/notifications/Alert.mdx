@@ -64,6 +64,9 @@ Every other `<div>` attribute passes through.
 
 <Canvas of={AlertStories.WithoutIcon} />
 
+The icon is decorative, so the variant has to be clear from the words
+too. "Upload failed", not just a red box.
+
 ## Accessibility
 
 - By default an alert is a plain `<div>`: one that is on the page when it
@@ -75,8 +78,7 @@ Every other `<div>` attribute passes through.
 
   <Canvas of={AlertStories.Live} />
 
-- The icon is decorative (`aria-hidden`): the variant has to be clear
-  from the words too. "Upload failed", not just a red box.
+- The icon is decorative (`aria-hidden`).
 - The close button is named `Dismiss` (change it with `closeLabel`),
   shows the 2px `--ring` on focus, and has a 44px touch target on coarse
   pointers.

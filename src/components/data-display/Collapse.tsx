@@ -1,3 +1,5 @@
+'use client'
+
 import type { ReactNode } from 'react'
 import { Collapsible } from '@base-ui/react/collapsible'
 import { Icon } from '@/lib/icon'

@@ -6,9 +6,8 @@ import { Tooltip, TooltipGroup } from './Tooltip'
 
 const meta = {
   title: 'Components/Overlays/Tooltip',
+  tags: ['beta'],
   component: Tooltip,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
-  parameters: { a11y: { test: 'error' } },
   args: {
     content: 'Copy link',
     children: (
@@ -39,8 +38,9 @@ export const Default: Story = {
     // Focus opens it at once, without the 300ms hover delay.
     const tip = await body().findByRole('tooltip', {}, { timeout: 300 })
     await expect(tip).toHaveTextContent('Copy link')
-    // Read as the trigger's description while it is open.
+    // Read as the trigger's description while it is open, not as its name.
     await expect(trigger).toHaveAttribute('aria-describedby', tip.id)
+    await expect(trigger).toHaveAccessibleDescription('Copy link')
     await userEvent.keyboard('{Escape}')
     await waitFor(() => expect(body().queryByRole('tooltip')).toBeNull())
     await expect(trigger).not.toHaveAttribute('aria-describedby')
@@ -53,6 +53,44 @@ export const LongContent: Story = {
     content: 'Anyone with the link can view this file. Change it under Share → General access.',
     defaultOpen: true,
     children: <Button appearance="outlined">Link sharing on</Button>,
+  },
+  play: async ({ canvas }) => {
+    // The tooltip describes the trigger; it does not rename it.
+    const trigger = canvas.getByRole('button', { name: 'Link sharing on' })
+    await expect(trigger).toHaveAccessibleDescription(
+      'Anyone with the link can view this file. Change it under Share → General access.',
+    )
+  },
+}
+
+/** Hover opens it after `delay`; pointer leave closes it. */
+export const Hover: Story = {
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByRole('button', { name: 'Copy link' })
+    await userEvent.hover(trigger)
+    // Not yet: the 300ms delay is still running.
+    await new Promise((r) => setTimeout(r, 100))
+    await expect(body().queryByRole('tooltip')).toBeNull()
+    await expect(await body().findByRole('tooltip')).toHaveTextContent('Copy link')
+    await userEvent.unhover(trigger)
+    await waitFor(() => expect(body().queryByRole('tooltip')).toBeNull())
+  },
+}
+
+/** Moving focus away closes it. */
+export const Blur: Story = {
+  render: (args) => (
+    <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
+      <Tooltip {...args} />
+      <Button appearance="outlined">Next</Button>
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    await userEvent.tab()
+    await body().findByRole('tooltip', {}, { timeout: 300 })
+    await userEvent.tab()
+    await expect(canvas.getByRole('button', { name: 'Next' })).toHaveFocus()
+    await waitFor(() => expect(body().queryByRole('tooltip')).toBeNull())
   },
 }
 

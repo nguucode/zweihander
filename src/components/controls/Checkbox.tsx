@@ -1,3 +1,5 @@
+'use client'
+
 import { useCallback, useRef, type ReactNode, type Ref } from 'react'
 import { Checkbox as BaseCheckbox } from '@base-ui/react/checkbox'
 import { Icon } from '@/lib/icon'

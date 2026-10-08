@@ -96,6 +96,22 @@ tbody tr:last-child > * {
   outline-offset: -2px;
 }
 
+/* The sort button is one text line tall. On touch screens its hit area
+   grows to 44px without the header row growing with it. */
+@media (pointer: coarse) {
+  .sortButton {
+    position: relative;
+  }
+  .sortButton::after {
+    content: '';
+    position: absolute;
+    inset: 50% auto auto 50%;
+    inline-size: max(100%, 44px);
+    block-size: max(100%, 44px);
+    translate: -50% -50%;
+  }
+}
+
 .sortIcon {
   display: inline-flex;
   font-size: var(--space-4);

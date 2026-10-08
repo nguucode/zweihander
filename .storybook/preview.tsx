@@ -1,4 +1,5 @@
 import type { Decorator, Preview } from '@storybook/react-vite'
+import { configure } from 'storybook/test'
 // Docs-only: the tokens name these faces, but the package never loads a
 // font for its consumers.
 import '../src/index.css'
@@ -7,6 +8,10 @@ import '../src/index.css'
 // Set while rendering rather than in an effect: a decorator is a plain
 // function, not a component, so it cannot call hooks, and toggling a class
 // to the same value twice is harmless.
+// findBy/waitFor wait up to 3s, not 1s: WebKit on the CI's Linux runner plays
+// popup open and close transitions well past a second.
+configure({ asyncUtilTimeout: 3000 })
+
 const withTheme: Decorator = (Story, context) => {
   document.documentElement.classList.toggle('dark', (context.globals.theme ?? 'light') === 'dark')
   return <Story />
@@ -40,10 +45,20 @@ const preview: Preview = {
     },
 
     a11y: {
-      // 'todo' - show a11y violations in the test UI only
-      // 'error' - fail CI on a11y violations
-      // 'off' - skip a11y checks entirely
-      test: 'todo'
+      // Definition of done: an a11y violation fails the story test. A story
+      // that has to opt out sets test: 'off' with a comment saying why.
+      test: 'error',
+      config: {
+        rules: [
+          // Base UI's focus guards round an open popup: invisible spans that
+          // hand focus back to the trigger. In WebKit they carry role="button"
+          // for VoiceOver's sake, which axe flags as a nameless command.
+          { id: 'aria-command-name', selector: '[role="link"], [role="button"]:not([data-base-ui-focus-guard]), [role="menuitem"]' },
+          // Same guards: aria-hidden yet focusable by design, so Tab lands on them
+          // and is sent back into or out of the popup.
+          { id: 'aria-hidden-focus', selector: '[aria-hidden="true"]:not([data-base-ui-focus-guard])' },
+        ],
+      },
     },
 
     options: {

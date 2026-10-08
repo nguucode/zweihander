@@ -1,3 +1,5 @@
+'use client'
+
 import type { CSSProperties, MouseEvent, ReactNode, Ref } from 'react'
 import { Field } from '@base-ui/react/field'
 import { cn } from '@/lib/utils'

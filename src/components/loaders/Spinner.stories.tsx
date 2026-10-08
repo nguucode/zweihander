@@ -4,9 +4,8 @@ import { Spinner } from './Spinner'
 
 const meta = {
   title: 'Components/Loaders/Spinner',
+  tags: ['beta'],
   component: Spinner,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
-  parameters: { a11y: { test: 'error' } },
   argTypes: {
     size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] },
     variant: { control: 'inline-radio', options: ['primary', 'accent', 'secondary'] },
@@ -45,7 +44,9 @@ export const Sizes: Story = {
   ),
   play: async ({ canvasElement }) => {
     await waitFor(() => expect(canvasElement.querySelectorAll('svg')).toHaveLength(3))
-    const widths = [...canvasElement.querySelectorAll('svg')].map((s) => s.getBoundingClientRect().width)
+    // Layout width, not the bounding box: the ring is spinning, and a rotated
+    // square's box is wider than the square.
+    const widths = [...canvasElement.querySelectorAll('svg')].map((s) => parseFloat(getComputedStyle(s).width))
     await expect(widths).toEqual([16, 24, 32])
   },
 }

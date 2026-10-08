@@ -123,6 +123,8 @@ export const Appearance: Story = {
 }
 
 export const TokenOverride: Story = {
+  // Shows a consumer's own --primary override; its contrast is the consumer's, not the kit's.
+  parameters: { a11y: { test: 'off' } },
   name: 'Token override',
   render: () => (
     <div className={docs.gridHalves} style={{ gap: 'var(--space-4)' }}>

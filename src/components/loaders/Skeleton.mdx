@@ -54,14 +54,17 @@ same gaps. A skeleton that jumps to a different layout on load is worse
 than a spinner. For content whose shape is unknown, use a
 [Spinner](?path=/docs/components-loaders-spinner--docs).
 
+A skeleton says nothing to a screen reader, so the region it stands in for
+has to: put `aria-busy="true"` on it (as the CardPlaceholder story does)
+and remove it when the content arrives.
+
+If the wait matters, announce it: a visually hidden status, or a Spinner
+with a label.
+
 ## Accessibility
 
 - **A skeleton is decoration** and is `aria-hidden`. It says nothing to
-  a screen reader, so the region it stands in for has to: put
-  `aria-busy="true"` on it (as the CardPlaceholder story does) and remove
-  it when the content arrives.
-- If the wait matters, announce it: a visually hidden status, or a
-  Spinner with a label.
+  a screen reader.
 - `--muted` is below any contrast floor on purpose. It is not content,
   and should not compete with content that has arrived.
 - The pulse stops under `prefers-reduced-motion`.

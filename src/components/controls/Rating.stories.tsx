@@ -4,9 +4,8 @@ import { Rating } from './Rating'
 
 const meta = {
   title: 'Components/Controls/Rating',
+  tags: ['beta'],
   component: Rating,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
-  parameters: { a11y: { test: 'error' } },
   args: { label: 'Rate this template', defaultValue: 3, onValueChange: fn() },
   argTypes: { size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] } },
 } satisfies Meta<typeof Rating>

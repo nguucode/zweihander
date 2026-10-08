@@ -4,9 +4,8 @@ import { Divider } from './Divider'
 
 const meta = {
   title: 'Components/Atomic Elements/Divider',
+  tags: ['beta'],
   component: Divider,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
-  parameters: { a11y: { test: 'error' } },
   argTypes: {
     orientation: { control: 'inline-radio', options: ['horizontal', 'vertical'] },
     size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] },

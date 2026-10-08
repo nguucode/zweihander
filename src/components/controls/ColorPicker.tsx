@@ -1,3 +1,5 @@
+'use client'
+
 import { useId, useState, type CSSProperties, type KeyboardEvent, type PointerEvent, type ReactNode } from 'react'
 import { Field } from '@base-ui/react/field'
 import { Popover } from '@base-ui/react/popover'
@@ -298,7 +300,11 @@ export function ColorPanel({
         data-disabled={disabled || undefined}
         onPointerDown={(e) => {
           if (disabled || e.button !== 0) return
-          e.currentTarget.setPointerCapture(e.pointerId)
+          // Firefox throws on a pointer id it does not know (synthetic events);
+          // the click still sets the colour, only the drag needs the capture.
+          try {
+            e.currentTarget.setPointerCapture(e.pointerId)
+          } catch {}
           e.preventDefault()
           e.currentTarget.querySelector('input')?.focus({ preventScroll: true })
           fromPointer(e)

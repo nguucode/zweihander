@@ -36,9 +36,8 @@ const columns: TableColumn<Project>[] = [
 
 const meta = {
   title: 'Components/Data Display/Table',
+  tags: ['beta'],
   component: Table<Project>,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
-  parameters: { a11y: { test: 'error' } },
   args: { columns, rows: projects, getRowId: (p: Project) => p.id, caption: 'Projects', onSortChange: fn(), onSelectionChange: fn() },
   argTypes: {
     density: { control: 'inline-radio', options: ['sm', 'md'] },

@@ -1,3 +1,5 @@
+'use client'
+
 import { useRef, useState, type ReactNode, type Ref } from 'react'
 import { Combobox as BaseCombobox } from '@base-ui/react/combobox'
 import { Icon } from '@/lib/icon'

@@ -1,3 +1,5 @@
+'use client'
+
 import { useEffect, useState, type ComponentProps } from 'react'
 import { cn } from '@/lib/utils'
 import styles from './Spinner.module.css'

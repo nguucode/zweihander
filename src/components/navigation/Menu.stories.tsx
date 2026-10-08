@@ -9,9 +9,8 @@ const onDelete = fn()
 
 const meta = {
   title: 'Components/Navigation/Menu',
+  tags: ['beta'],
   component: Menu,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
-  parameters: { a11y: { test: 'error' } },
   args: {
     trigger: (
       <Button appearance="outlined" variant="accent" endIcon={<Icon name="chevron-down" />}>

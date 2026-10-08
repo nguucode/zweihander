@@ -1,3 +1,5 @@
+'use client'
+
 import type { ReactNode, Ref } from 'react'
 import { NumberField } from '@base-ui/react/number-field'
 import { Icon } from '@/lib/icon'

@@ -70,6 +70,8 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const Active: Story = {
+  // Token specimen, not UI: the active chip labels the breakpoint in a tint of --primary on purpose.
+  parameters: { a11y: { test: 'off' } },
   name: 'Active breakpoint',
   render: () => <ActiveBreakpoint />,
 }

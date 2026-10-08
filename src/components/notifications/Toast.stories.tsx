@@ -13,9 +13,8 @@ function Demo({ options, label = 'Show toast' }: { options: ToastOptions; label?
 
 const meta = {
   title: 'Components/Notifications/Toast',
+  tags: ['beta'],
   component: ToastProvider,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
-  parameters: { a11y: { test: 'error' } },
   args: { children: null, placement: 'bottom-right', timeout: 5000, limit: 3 },
   argTypes: {
     placement: {

@@ -1,3 +1,5 @@
+'use client'
+
 import { createContext, useContext, useId, useRef, useState, type ComponentProps, type MouseEvent, type ReactNode } from 'react'
 import { Dialog } from '@base-ui/react/dialog'
 import { Icon } from '@/lib/icon'

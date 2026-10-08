@@ -72,7 +72,7 @@
       "name": "button",
       "type": "registry:component",
       "title": "Button",
-      "description": "Button with four variants, three appearances and four sizes; renders a link with href, and any element with render.",
+      "description": "Button in semantic variants, appearances and sizes; renders a link with href, and any element with render.",
       "registryDependencies": [
         "https://ontheshore.biz/zweihander/r/utils.json",
         "https://ontheshore.biz/zweihander/r/tokens.json"
@@ -143,7 +143,7 @@
       "name": "divider",
       "type": "registry:component",
       "title": "Divider",
-      "description": "Horizontal or vertical separator line, solid or dashed, in three thicknesses.",
+      "description": "Horizontal or vertical separator line, solid or dashed, in several thicknesses.",
       "registryDependencies": [
         "https://ontheshore.biz/zweihander/r/utils.json",
         "https://ontheshore.biz/zweihander/r/tokens.json"
@@ -210,7 +210,7 @@
       "name": "tag",
       "type": "registry:component",
       "title": "Tag",
-      "description": "Short status or category label, status and hue variants, three appearances, with an optional remove button.",
+      "description": "Short status or category label, status and hue variants and appearances, with an optional remove button.",
       "registryDependencies": [
         "https://ontheshore.biz/zweihander/r/utils.json",
         "https://ontheshore.biz/zweihander/r/tokens.json",
@@ -661,7 +661,7 @@
       "name": "empty-state",
       "type": "registry:component",
       "title": "Empty State",
-      "description": "What an empty list, table or page shows: icon, title as a real heading, description and next action, in two sizes.",
+      "description": "What an empty list, table or page shows: icon, title as a real heading, description and next action, at a compact or roomy size.",
       "registryDependencies": [
         "https://ontheshore.biz/zweihander/r/utils.json",
         "https://ontheshore.biz/zweihander/r/tokens.json"
@@ -1058,7 +1058,7 @@
       "name": "rating",
       "type": "registry:component",
       "title": "Rating",
-      "description": "Star rating on native radios, interactive or read-only with fractional stars, three sizes and custom value text.",
+      "description": "Star rating on native radios, interactive or read-only with fractional stars, sizes and custom value text.",
       "registryDependencies": [
         "https://ontheshore.biz/zweihander/r/utils.json",
         "https://ontheshore.biz/zweihander/r/tokens.json",

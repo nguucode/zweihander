@@ -5,9 +5,8 @@ import { Switch } from './Switch'
 
 const meta = {
   title: 'Components/Controls/Switch',
+  tags: ['beta'],
   component: Switch,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
-  parameters: { a11y: { test: 'error' } },
   argTypes: {
     size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] },
     variant: { control: 'inline-radio', options: ['primary', 'accent', 'destructive'] },

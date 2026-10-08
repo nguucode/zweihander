@@ -42,13 +42,20 @@ export default defineConfig({
         // The drive is exFAT: macOS writes an AppleDouble `._<name>` beside
         // every file, which matches the stories glob and fails to import.
         exclude: ['**/node_modules/**', '**/._*'],
+        // One file at a time: only one iframe can hold focus, and WebKit
+        // stalls transitions in iframes it is not showing, so focus and
+        // open/close plays failed at random on the CI runner.
+        fileParallelism: false,
+        // The contrast stories measure every colour pair in both modes;
+        // WebKit on Linux needs more than the 15s default for them.
+        testTimeout: 30000,
         browser: {
           enabled: true,
           headless: true,
           provider: playwright({}),
-          instances: [{
-            browser: 'chromium'
-          }]
+          // All three engines: a story that passes only in Chromium has not
+          // been tested for Safari or Firefox users.
+          instances: [{ browser: 'chromium' }, { browser: 'firefox' }, { browser: 'webkit' }]
         }
       }
     }]

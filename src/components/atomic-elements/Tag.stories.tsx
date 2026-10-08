@@ -2,7 +2,9 @@ import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useState } from 'react'
 import { expect, fn } from 'storybook/test'
 import { Icon } from '@/lib/icon'
+import { Theme } from '@/theme/Theme'
 import { TAG_VARIANTS, Tag } from './Tag'
+import { contrast, mediaRules } from '@/test/story-helpers'
 
 const portrait =
   'data:image/svg+xml,' +
@@ -12,9 +14,8 @@ const portrait =
 
 const meta = {
   title: 'Components/Atomic Elements/Tag',
+  tags: ['beta'],
   component: Tag,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
-  parameters: { a11y: { test: 'error' } },
   args: { text: 'Account verified' },
   argTypes: {
     size: { control: 'inline-radio', options: ['sm', 'md'] },
@@ -83,16 +84,28 @@ export const Sizes: Story = {
 
 export const WithIcon: Story = {
   args: { startIcon: <Icon name="success" />, variant: 'success' },
+  play: async ({ canvas, canvasElement }) => {
+    // Decorative: hidden, so the tag reads as its text alone.
+    await expect(canvasElement.querySelector('svg')!.closest('[aria-hidden="true"]')).not.toBeNull()
+    await expect(canvas.queryByRole('img')).toBeNull()
+  },
 }
 
 export const WithAvatar: Story = {
   args: { text: 'Mary Thompson', startAvatar: portrait, hasRemoveButton: true },
+  play: async ({ canvas, canvasElement }) => {
+    // Decorative: alt="", so the name is said once, by the text.
+    await expect(canvasElement.querySelector('img')).toHaveAttribute('alt', '')
+    await expect(canvas.queryByRole('img')).toBeNull()
+  },
 }
 
 export const Removable: Story = {
   args: { hasRemoveButton: true, onRemove: fn() },
   play: async ({ canvas, args, userEvent }) => {
     const remove = canvas.getByRole('button', { name: 'Remove Account verified' })
+    // A native button, not a span with a role.
+    await expect(remove.tagName).toBe('BUTTON')
     await userEvent.click(remove)
     await expect(args.onRemove).toHaveBeenCalledTimes(1)
     // Reachable and operable by keyboard alone.
@@ -127,6 +140,71 @@ export const RemovableList: Story = {
     await userEvent.click(canvas.getByRole('button', { name: 'Remove Research' }))
     await expect(canvas.queryByText('Research')).toBeNull()
     await expect(canvas.getAllByRole('button')).toHaveLength(2)
+    // Removed by keyboard, focus has nowhere to stay: it drops to the page.
+    await userEvent.tab()
+    await expect(canvas.getByRole('button', { name: 'Remove Design' })).toHaveFocus()
+    await userEvent.keyboard('{Enter}')
+    await expect(canvas.queryByText('Design')).toBeNull()
+    await expect(document.body).toHaveFocus()
+  },
+}
+
+/**
+ * The remove button's touch target. A play cannot switch the pointer type, so
+ * this reads the `(pointer: coarse)` rule that reaches the button.
+ */
+export const TouchTarget: Story = {
+  args: { hasRemoveButton: true },
+  play: async ({ canvas }) => {
+    const remove = canvas.getByRole('button', { name: 'Remove Account verified' })
+    const [area] = mediaRules('pointer: coarse', remove, '::before')
+    await expect(area).toBeDefined()
+    await expect([area.style.inlineSize, area.style.blockSize]).toEqual(['44px', '44px'])
+    // Absolutely placed and unpainted: the tag looks and measures the same.
+    await expect(area.style.position).toBe('absolute')
+    await expect(area.style.background).toBe('')
+    // Centred on the button, so past a 24px tag it reaches (44 - 24) / 2 = 10px each side.
+    const tag = remove.parentElement!.getBoundingClientRect()
+    const button = remove.getBoundingClientRect()
+    await expect(tag.height).toBe(24)
+    await expect(button.top + button.height / 2).toBeCloseTo(tag.top + tag.height / 2, 0)
+  },
+}
+
+/**
+ * Every label on its fill, in both modes: every status in every appearance,
+ * every hue in subtle and outlined. Solid hues are the documented exception.
+ */
+export const Contrast: Story = {
+  render: (args) => (
+    <div>
+      {(['light', 'dark'] as const).map((mode) => (
+        <Theme key={mode} appearance={mode} style={{ ...row, background: 'var(--background)', padding: 4 }}>
+          {(['subtle', 'outlined', 'solid'] as const).flatMap((appearance) =>
+            (appearance === 'solid' ? statuses : TAG_VARIANTS).map((variant) => (
+              <Tag
+                key={appearance + variant}
+                {...args}
+                size="sm"
+                appearance={appearance}
+                variant={variant}
+                text="Aa"
+                data-audit={`${mode} ${appearance} ${variant}`}
+              />
+            )),
+          )}
+        </Theme>
+      ))}
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const failures: string[] = []
+    for (const tag of canvasElement.querySelectorAll<HTMLElement>('[data-audit]')) {
+      const { color, backgroundColor } = getComputedStyle(tag)
+      const ratio = contrast(color, getComputedStyle(tag.parentElement!).backgroundColor, backgroundColor)
+      if (ratio < 4.5) failures.push(`${tag.dataset.audit}: ${ratio.toFixed(2)}`)
+    }
+    await expect(failures).toEqual([])
   },
 }
 

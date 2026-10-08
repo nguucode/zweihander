@@ -8,13 +8,24 @@ const day = (year: number, month: number, date: number) =>
 
 const meta = {
   title: 'Components/Inputs/DateRangePicker',
+  tags: ['beta'],
   component: DateRangePicker,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
   // Days of the months either side are aria-hidden decoration, faded below
   // 4.5:1 on purpose (WCAG 1.4.3 exempts decoration); axe cannot tell, so
   // only color-contrast skips them.
   parameters: {
-    a11y: { test: 'error', config: { rules: [{ id: 'color-contrast', selector: '*:not([data-outside])' }] } },
+    // Replaces the global rules list, so it repeats the focus-guard rule.
+    a11y: {
+      config: {
+        rules: [
+          { id: 'color-contrast', selector: '*:not([data-outside])' },
+          { id: 'aria-command-name', selector: '[role="link"], [role="button"]:not([data-base-ui-focus-guard]), [role="menuitem"]' },
+          // Same guards: aria-hidden yet focusable by design, so Tab lands on them
+          // and is sent back into or out of the popup.
+          { id: 'aria-hidden-focus', selector: '[aria-hidden="true"]:not([data-base-ui-focus-guard])' },
+        ],
+      },
+    },
   },
   args: {
     label: 'Period',

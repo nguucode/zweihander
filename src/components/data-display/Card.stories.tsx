@@ -2,7 +2,9 @@ import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect, fn } from 'storybook/test'
 import { Button } from '@/components/buttons/Button'
 import { Avatar } from '@/components/atomic-elements/Avatar'
+import { Theme } from '@/theme/Theme'
 import { Card } from './Card'
+import { contrast, hoverRules } from '@/test/story-helpers'
 
 const title = { margin: 0, fontSize: 'var(--text-heading-xs)', lineHeight: 'var(--leading-heading-xs)', fontWeight: 600 }
 const muted = { margin: 0, color: 'var(--muted-foreground)' }
@@ -16,9 +18,8 @@ const Content = () => (
 
 const meta = {
   title: 'Components/Data Display/Card',
+  tags: ['beta'],
   component: Card,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
-  parameters: { a11y: { test: 'error' } },
   argTypes: {
     size: { control: 'inline-radio', options: ['xs', 'sm', 'md', 'lg'] },
     appearance: { control: 'inline-radio', options: ['elevated', 'outline', 'unstyled'] },
@@ -32,7 +33,17 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Default: Story = {}
+export const Default: Story = {
+  play: async ({ canvas, userEvent }) => {
+    // A plain <div>: no role, no tab stop, no heading of its own.
+    const card = canvas.getByRole('heading', { name: 'Payment method' }).parentElement!
+    await expect(card.tagName).toBe('DIV')
+    await expect(card).not.toHaveAttribute('role')
+    await expect(canvas.getAllByRole('heading')).toHaveLength(1)
+    await userEvent.tab()
+    await expect(document.body).toHaveFocus()
+  },
+}
 
 export const Appearances: Story = {
   render: (args) => (
@@ -100,7 +111,9 @@ export const Clickable: Story = {
     ),
   },
   play: async ({ canvas, userEvent, args }) => {
-    const card = canvas.getByRole('button', { name: /Payment method/ })
+    // One button, its whole content the label.
+    const card = canvas.getByRole('button', { name: /Payment method.*Change how you pay for your plan/ })
+    await expect(canvas.getAllByRole('button')).toHaveLength(1)
     await expect(card).toHaveAttribute('type', 'button')
     await userEvent.click(card)
     await userEvent.tab({ shift: true })
@@ -120,5 +133,46 @@ export const Link: Story = {
     await expect(link).not.toHaveAttribute('type')
     await userEvent.tab()
     await expect(link).toHaveFocus()
+  },
+}
+
+/**
+ * Muted text on every appearance of a clickable card, in both modes, at rest
+ * and on hover: hover may change the shadow or the edge, never the surface.
+ */
+export const Contrast: Story = {
+  render: () => (
+    <div>
+      {(['light', 'dark'] as const).map((mode) => (
+        <Theme
+          key={mode}
+          appearance={mode}
+          style={{ display: 'grid', gap: 'var(--space-2)', background: 'var(--background)', padding: 'var(--space-2)' }}
+        >
+          {(['elevated', 'outline', 'unstyled'] as const).map((appearance) => (
+            <Card key={appearance} appearance={appearance} onClick={() => {}} data-audit={`${mode} ${appearance}`}>
+              <span style={muted}>Change how you pay for your plan.</span>
+            </Card>
+          ))}
+        </Theme>
+      ))}
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const failures: string[] = []
+    for (const card of canvasElement.querySelectorAll<HTMLElement>('[data-audit]')) {
+      const audit = card.dataset.audit!
+      const text = getComputedStyle(card.firstElementChild!).color
+      const ratio = contrast(text, getComputedStyle(card.parentElement!).backgroundColor, getComputedStyle(card).backgroundColor)
+      if (ratio < 4.5) failures.push(`${audit}: ${ratio.toFixed(2)}`)
+      const hover = hoverRules(card)
+      // The surface under the text is the same on hover, so the rest ratio holds there too.
+      for (const r of hover)
+        if (r.style.background || r.style.backgroundColor || r.style.backgroundImage)
+          failures.push(`${audit}: ${r.selectorText} changes the surface`)
+      if (!audit.endsWith('unstyled') && !hover.some((r) => r.style.boxShadow || r.style.borderColor))
+        failures.push(`${audit}: hover changes neither shadow nor edge`)
+    }
+    await expect(failures).toEqual([])
   },
 }

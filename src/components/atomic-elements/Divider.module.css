@@ -22,6 +22,8 @@
   border-inline-start-width: var(--divider-width);
 }
 
+/* Line weights in px, not spacing tokens: a rule should stay a crisp
+   whole pixel at every --scaling. */
 .sm {
   --divider-width: 1px;
 }

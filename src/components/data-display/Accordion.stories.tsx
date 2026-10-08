@@ -23,9 +23,8 @@ const faq = [
 
 const meta = {
   title: 'Components/Data Display/Accordion',
+  tags: ['beta'],
   component: Accordion,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
-  parameters: { a11y: { test: 'error' } },
   argTypes: {
     appearance: { control: 'inline-radio', options: ['outlined', 'flush'] },
     size: { control: 'inline-radio', options: ['sm', 'md'] },

@@ -53,12 +53,17 @@ Every other `<div>` attribute passes through.
 
 <Canvas of={EmptyStateStories.TitleOnly} />
 
+The icon is `aria-hidden`; the title has to say it all.
+
+If the search updates as you type, announce the count elsewhere (a
+`role="status"` line such as "0 results"): the empty state is not
+announced by itself.
+
 ## Accessibility
 
 - The title is a heading, so a screen reader user jumping by headings
   finds out the area is empty. Set `headingLevel` to fit the outline:
   `3` inside a section headed by an `h2`.
-- The icon is `aria-hidden`; the title has to say it all.
+- The icon is `aria-hidden`.
 - An empty state that replaces results after a search is not announced by
-  itself. If the search updates as you type, announce the count
-  elsewhere (a `role="status"` line such as "0 results").
+  itself.

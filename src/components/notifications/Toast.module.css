@@ -59,10 +59,10 @@
   opacity: 0;
 }
 .top .toast[data-starting-style] {
-  translate: 0 -8px;
+  translate: 0 calc(var(--space-2) * -1);
 }
 .bottom .toast[data-starting-style] {
-  translate: 0 8px;
+  translate: 0 var(--space-2);
 }
 
 /* The variant colours only the icon: the message stays --popover-foreground. */

@@ -1,3 +1,5 @@
+'use client'
+
 import { useSyncExternalStore, type ReactNode } from 'react'
 import { Toast as BaseToast } from '@base-ui/react/toast'
 import { Icon, type IconName } from '@/lib/icon'

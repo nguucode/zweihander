@@ -60,6 +60,14 @@ a task belongs on the page: a tooltip cannot be reached by touch, and it
 disappears the moment you look away. For interactive content, use a
 Popover.
 
+- An icon-only button still needs its own `aria-label`; the tooltip then
+  shows that label to sighted users too.
+- The trigger must be focusable. A disabled button is not, so its
+  tooltip never opens by keyboard: put the reason it is disabled in text
+  next to it instead.
+- Hover and touch cannot reach the tooltip content, so it must never hold
+  a link or a button.
+
 ## Accessibility
 
 - It opens on hover after `delay` and on keyboard focus at once, and
@@ -67,11 +75,4 @@ Popover.
 - Base UI keeps tooltips out of the accessibility tree. This component
   gives the popup `role="tooltip"` and, while it is open, points the
   trigger's `aria-describedby` at it, so it is read as a description.
-- It is a **description, not a name.** An icon-only button still needs
-  its own `aria-label`; the tooltip then shows that label to sighted
-  users too.
-- The trigger must be focusable. A disabled button is not, so its
-  tooltip never opens by keyboard: put the reason it is disabled in text
-  next to it instead.
-- Hover and touch cannot reach the tooltip content, so it must never hold
-  a link or a button.
+- It is a **description, not a name.**

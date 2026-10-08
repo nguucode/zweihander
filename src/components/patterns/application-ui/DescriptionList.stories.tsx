@@ -39,9 +39,9 @@ const update = (field: string) => (
 
 const meta = {
   title: 'Patterns/Application UI/Description List',
+  tags: ['experimental'],
   component: DescriptionList,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
-  parameters: { a11y: { test: 'error' }, layout: 'padded' },
+  parameters: { layout: 'padded' },
   args: { title: 'Applicant information', description: 'Personal details and application.', items: applicant },
   argTypes: { items: { control: false }, actions: { control: false }, layout: { control: 'inline-radio', options: ['columns', 'grid', 'stacked'] } },
   decorators: [(Story) => <div style={{ maxInlineSize: '48rem' }}>{Story()}</div>],

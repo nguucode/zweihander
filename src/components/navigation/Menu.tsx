@@ -1,3 +1,5 @@
+'use client'
+
 import type { ReactElement, ReactNode } from 'react'
 import { Menu as BaseMenu } from '@base-ui/react/menu'
 import { Icon } from '@/lib/icon'

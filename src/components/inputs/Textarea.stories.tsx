@@ -5,9 +5,8 @@ import { Textarea } from './Textarea'
 
 const meta = {
   title: 'Components/Inputs/Textarea',
+  tags: ['beta'],
   component: Textarea,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
-  parameters: { a11y: { test: 'error' } },
   argTypes: {
     size: { control: 'inline-radio', options: ['sm', 'md'] },
     validationState: { control: 'inline-radio', options: ['default', 'success', 'error'] },

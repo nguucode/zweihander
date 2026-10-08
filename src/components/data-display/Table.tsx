@@ -1,3 +1,5 @@
+'use client'
+
 import { useMemo, useState, type ReactNode } from 'react'
 import { Icon } from '@/lib/icon'
 import { cn } from '@/lib/utils'
