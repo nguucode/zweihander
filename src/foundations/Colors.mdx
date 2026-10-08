@@ -26,7 +26,7 @@ too.
 
 `--background` is the page. `--card` and `--popover` are surfaces that sit
 a level above it — a card inset in the page, a menu floating over it. In
-light mode the page is gray-50, a warm off-white, and card/popover are
+light mode the page is gray-50, a cool off-white, and card/popover are
 white: a panel separates from the page by being lighter, so it needs a
 border at most, not a shadow. In dark mode `--background` sits at the
 darkest step and card/popover are lifted one step toward the viewer.
@@ -108,26 +108,26 @@ component boundaries such as a focus ring.
 
 | Pair | Light | Dark |
 | --- | --- | --- |
-| `background` / `foreground` | 18.97:1 | 18.97:1 |
-| `card` / `card-foreground` | 19.75:1 | 16.89:1 |
-| `popover` / `popover-foreground` | 19.75:1 | 16.89:1 |
+| `background` / `foreground` | 19.28:1 | 19.28:1 |
+| `card` / `card-foreground` | 20.13:1 | 17.00:1 |
+| `popover` / `popover-foreground` | 20.13:1 | 17.00:1 |
 | `primary` / `primary-foreground` | 5.03:1 | 6.79:1 |
-| `secondary` / `secondary-foreground` | 15.65:1 | 14.61:1 |
-| `accent` / `accent-foreground` | 15.65:1 | 14.61:1 |
+| `secondary` / `secondary-foreground` | 16.13:1 | 14.07:1 |
+| `accent` / `accent-foreground` | 16.13:1 | 14.07:1 |
 | `destructive` / `destructive-foreground` | 4.56:1 | 6.19:1 |
-| `muted` / `muted-foreground` | 4.61:1 | 5.97:1 |
-| `background` / `muted-foreground` | 4.98:1 | 7.75:1 |
-| `background` / `ring` | 6.55:1 | 7.49:1 |
+| `muted` / `muted-foreground` | 4.60:1 | 5.64:1 |
+| `background` / `muted-foreground` | 4.85:1 | 7.73:1 |
+| `background` / `ring` | 6.54:1 | 7.63:1 |
 
-Measured on the defaults: blue accent, taupe gray. The `primary` row is the default blue accent. Every one of the seventeen
+Measured on the defaults: blue accent, gray gray. The `primary` row is the default blue accent. Every one of the seventeen
 accents is measured the same way and clears 4.5:1 for its own label — see
 [Overview → Accent color](?path=/docs/foundations-overview--docs).
 
-**`--muted-foreground` on `--muted` is 4.61:1 in light mode**, the
+**`--muted-foreground` on `--muted` is 4.60:1 in light mode**, the
 tightest pair it forms. It used to be 4.34:1, under AA: gray-500 on every
 ramp has since been darkened to the lightest value that clears 4.6:1 on
 its own gray-100, so muted text can now sit on a muted fill. On the page background, where secondary
-text usually lives, the same token is 4.98:1.
+text usually lives, the same token is 4.85:1.
 
 **`--subtle-foreground` is a step between body text and muted text**
 (gray-600 light, gray-300 dark): navigation labels that should recede
@@ -136,7 +136,7 @@ until hovered or current, as in the Claude apps' sidebar. It reads about
 genuinely secondary text.
 
 **`--surface-subtle` is a filled panel that muted text can sit on.**
-Muted text reads 4.98:1 on it (gray-50, taupe) and 5.97:1 on gray-800 in dark — a step off `--card` so a filled panel still reads as filled. The build
+Muted text reads 4.85:1 on it (gray-50) and 5.64:1 on gray-800 in dark — a step off `--card` so a filled panel still reads as filled. The build
 measures `--muted-foreground` on `--background`, `--card`,
 `--surface-subtle` and `--muted` in both modes on all nine gray ramps, and
 stops if any pair drops under 4.5:1. The tightest is neutral on `--muted`,
@@ -209,7 +209,7 @@ meaning. The contrast numbers above are a floor, not a design review.
 **Every value is a step off a published ramp, digit for digit.** Nothing
 here was hand-picked or eyeballed. Two ramps feed the palette and each is
 swappable on its own: an **accent** (blue by default) for `--primary` and
-`--ring`, and a **gray** (taupe by default) for everything structural.
+`--ring`, and a **gray** (the `gray` ramp by default) for everything structural.
 
 | Token | Light | Dark | Driven by |
 | --- | --- | --- | --- |

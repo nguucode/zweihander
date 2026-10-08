@@ -1206,15 +1206,15 @@
     }
   },
   "semantic": {
-    "$description": "Resolved against the default palette (blue accent, taupe gray). The other 16 accents and 8 grays live under `primitive` and are selected at runtime by [data-accent] / [data-gray], which has no Figma equivalent.",
+    "$description": "Resolved against the default palette (blue accent, gray gray). The other 16 accents and 8 grays live under `primitive` and are selected at runtime by [data-accent] / [data-gray], which has no Figma equivalent.",
     "light": {
       "background": {
         "$type": "color",
-        "$value": "{primitive.gray.taupe.50}"
+        "$value": "{primitive.gray.gray.50}"
       },
       "foreground": {
         "$type": "color",
-        "$value": "{primitive.gray.taupe.950}"
+        "$value": "{primitive.gray.gray.950}"
       },
       "card": {
         "$type": "color",
@@ -1222,7 +1222,7 @@
       },
       "card-foreground": {
         "$type": "color",
-        "$value": "{primitive.gray.taupe.950}"
+        "$value": "{primitive.gray.gray.950}"
       },
       "popover": {
         "$type": "color",
@@ -1230,7 +1230,7 @@
       },
       "popover-foreground": {
         "$type": "color",
-        "$value": "{primitive.gray.taupe.950}"
+        "$value": "{primitive.gray.gray.950}"
       },
       "primary": {
         "$type": "color",
@@ -1242,39 +1242,39 @@
       },
       "secondary": {
         "$type": "color",
-        "$value": "{primitive.gray.taupe.100}"
+        "$value": "{primitive.gray.gray.100}"
       },
       "secondary-foreground": {
         "$type": "color",
-        "$value": "{primitive.gray.taupe.900}"
+        "$value": "{primitive.gray.gray.900}"
       },
       "muted": {
         "$type": "color",
-        "$value": "{primitive.gray.taupe.100}"
+        "$value": "{primitive.gray.gray.100}"
       },
       "muted-foreground": {
         "$type": "color",
-        "$value": "{primitive.gray.taupe.500}"
+        "$value": "{primitive.gray.gray.500}"
       },
       "subtle-foreground": {
         "$type": "color",
-        "$value": "{primitive.gray.taupe.600}"
+        "$value": "{primitive.gray.gray.600}"
       },
       "surface-subtle": {
         "$type": "color",
-        "$value": "{primitive.gray.taupe.50}"
+        "$value": "{primitive.gray.gray.50}"
       },
       "accent": {
         "$type": "color",
-        "$value": "{primitive.gray.taupe.100}"
+        "$value": "{primitive.gray.gray.100}"
       },
       "accent-foreground": {
         "$type": "color",
-        "$value": "{primitive.gray.taupe.900}"
+        "$value": "{primitive.gray.gray.900}"
       },
       "selected": {
         "$type": "color",
-        "$value": "{primitive.gray.taupe.200}"
+        "$value": "{primitive.gray.gray.200}"
       },
       "hover-overlay": {
         "$type": "color",
@@ -1290,19 +1290,19 @@
       },
       "border": {
         "$type": "color",
-        "$value": "{primitive.gray.taupe.200}"
+        "$value": "{primitive.gray.gray.200}"
       },
       "input": {
         "$type": "color",
-        "$value": "{primitive.gray.taupe.200}"
+        "$value": "{primitive.gray.gray.200}"
       },
       "field-border": {
         "$type": "color",
-        "$value": "{primitive.gray.taupe.300}"
+        "$value": "{primitive.gray.gray.300}"
       },
       "control-border": {
         "$type": "color",
-        "$value": "{primitive.gray.taupe.500}"
+        "$value": "{primitive.gray.gray.500}"
       },
       "ring": {
         "$type": "color",
@@ -1380,27 +1380,27 @@
     "dark": {
       "background": {
         "$type": "color",
-        "$value": "{primitive.gray.taupe.950}"
+        "$value": "{primitive.gray.gray.950}"
       },
       "foreground": {
         "$type": "color",
-        "$value": "{primitive.gray.taupe.50}"
+        "$value": "{primitive.gray.gray.50}"
       },
       "card": {
         "$type": "color",
-        "$value": "{primitive.gray.taupe.900}"
+        "$value": "{primitive.gray.gray.900}"
       },
       "card-foreground": {
         "$type": "color",
-        "$value": "{primitive.gray.taupe.50}"
+        "$value": "{primitive.gray.gray.50}"
       },
       "popover": {
         "$type": "color",
-        "$value": "{primitive.gray.taupe.900}"
+        "$value": "{primitive.gray.gray.900}"
       },
       "popover-foreground": {
         "$type": "color",
-        "$value": "{primitive.gray.taupe.50}"
+        "$value": "{primitive.gray.gray.50}"
       },
       "primary": {
         "$type": "color",
@@ -1412,35 +1412,35 @@
       },
       "secondary": {
         "$type": "color",
-        "$value": "{primitive.gray.taupe.800}"
+        "$value": "{primitive.gray.gray.800}"
       },
       "secondary-foreground": {
         "$type": "color",
-        "$value": "{primitive.gray.taupe.50}"
+        "$value": "{primitive.gray.gray.50}"
       },
       "muted": {
         "$type": "color",
-        "$value": "{primitive.gray.taupe.800}"
+        "$value": "{primitive.gray.gray.800}"
       },
       "muted-foreground": {
         "$type": "color",
-        "$value": "{primitive.gray.taupe.400}"
+        "$value": "{primitive.gray.gray.400}"
       },
       "subtle-foreground": {
         "$type": "color",
-        "$value": "{primitive.gray.taupe.300}"
+        "$value": "{primitive.gray.gray.300}"
       },
       "surface-subtle": {
         "$type": "color",
-        "$value": "{primitive.gray.taupe.800}"
+        "$value": "{primitive.gray.gray.800}"
       },
       "accent": {
         "$type": "color",
-        "$value": "{primitive.gray.taupe.800}"
+        "$value": "{primitive.gray.gray.800}"
       },
       "accent-foreground": {
         "$type": "color",
-        "$value": "{primitive.gray.taupe.50}"
+        "$value": "{primitive.gray.gray.50}"
       },
       "selected": {
         "$type": "color",
@@ -1472,7 +1472,7 @@
       },
       "control-border": {
         "$type": "color",
-        "$value": "{primitive.gray.taupe.400}"
+        "$value": "{primitive.gray.gray.400}"
       },
       "ring": {
         "$type": "color",

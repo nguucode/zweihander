@@ -24,7 +24,7 @@ const GRAYS = Object.keys(primitives.gray).filter((k) => !k.startsWith('$'))
 const ramp = (group, hue, step) => primitives[group][hue][step].$value
 
 const DEFAULT_ACCENT = 'blue'
-const DEFAULT_GRAY = 'taupe'
+const DEFAULT_GRAY = 'gray'
 
 const NEAR_WHITE = ramp('gray', 'neutral', '50')
 const NEAR_BLACK = ramp('gray', 'neutral', '900')
