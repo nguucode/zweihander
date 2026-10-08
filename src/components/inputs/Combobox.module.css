@@ -15,12 +15,6 @@
   text-underline-offset: 2px;
 }
 
-/* A pointer pick leaves focus in the input; the field drops its ring so it
-   reads as at rest, as a native select does after a click. */
-.group.group.group[data-picked] {
-  outline: none;
-}
-
 /* The check sits before the label, in the brand colour. Options keep a
    check column whether or not they are chosen, so labels never shift. */
 .option.option {

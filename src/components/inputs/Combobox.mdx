@@ -67,6 +67,6 @@ value.
   (the input already opens the list); the clear button is "Clear
   selection".
 - Loading and empty states are announced from the list.
-- After an option is picked with the pointer, focus stays in the input but
-  the ring is dropped, as for a native select; typing or clicking back in
-  brings it back. A keyboard pick keeps the ring.
+- After an option is picked with the pointer, the input loses focus and the
+  field returns to rest (no caret, no ring). A keyboard pick keeps focus in
+  the input, so keyboard and screen reader users are not dropped to the page.

@@ -1,4 +1,4 @@
-import { useState, type CSSProperties, type ReactNode, type Ref } from 'react'
+import { useRef, useState, type CSSProperties, type ReactNode, type Ref } from 'react'
 import { Combobox as BaseCombobox } from '@base-ui/react/combobox'
 import { Icon } from '@/lib/icon'
 import { cn } from '@/lib/utils'
@@ -89,10 +89,9 @@ export function Combobox({
   // Only for highlighting the typed text in each option; Base UI owns the
   // input's value and the filtering.
   const [query, setQuery] = useState('')
-  // Picked with the pointer: focus stays in the input, but the field drops
-  // its ring, as a native select does after a click. Typing, clicking back
-  // in or leaving brings normal focus behaviour back.
-  const [picked, setPicked] = useState(false)
+  // A pointer pick sends the field back to rest: no caret, no ring, as a
+  // native select after a click. A keyboard pick keeps focus where the user is.
+  const inputRef = useRef<HTMLInputElement | null>(null)
   // The field's text inset, so the list's content starts where its text does.
   const inset = appearance === 'outlined' ? (size === 'sm' ? 'var(--space-2)' : 'var(--space-3)') : '0px'
 
@@ -112,7 +111,8 @@ export function Combobox({
         value={find(value)}
         defaultValue={find(defaultValue)}
         onValueChange={(next, details) => {
-          setPicked(details.event instanceof MouseEvent)
+          // After Base UI's own refocus of the input, hence the timeout.
+          if (details.event instanceof MouseEvent) setTimeout(() => inputRef.current?.blur())
           onValueChange?.((next as Item | null)?.value ?? null)
         }}
         // Highlight only what was typed. When an option is chosen the input
@@ -127,19 +127,19 @@ export function Combobox({
       >
         <BaseCombobox.InputGroup
           className={cn(boxClass(size, appearance), styles.group)}
-          data-picked={picked || undefined}
         >
           <BaseCombobox.Input
-            ref={ref}
+            ref={(el) => {
+              inputRef.current = el
+              if (typeof ref === 'function') ref(el)
+              else if (ref) ref.current = el
+            }}
             id={id}
             placeholder={placeholder}
             autoFocus={autoFocus}
             aria-label={ariaLabel}
             aria-busy={isLoading || undefined}
             className={s.control}
-            onKeyDown={() => setPicked(false)}
-            onPointerDown={() => setPicked(false)}
-            onBlur={() => setPicked(false)}
           />
           {isLoading && <span className={cn(s.icon, s.spinner)} aria-hidden="true" />}
           {isClearable && !readOnly && (
