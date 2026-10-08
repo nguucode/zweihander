@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect, waitFor } from 'storybook/test'
+import { ACCENT_COLORS } from '@/theme/palettes'
 import { Avatar } from './Avatar'
 
 // A self-contained stand-in portrait, so stories never depend on the network.
@@ -18,6 +19,8 @@ const meta = {
   argTypes: {
     size: { control: 'inline-radio', options: ['xs', 'sm', 'md', 'lg'] },
     appearance: { control: 'inline-radio', options: ['circle', 'square'] },
+    variant: { control: 'inline-radio', options: ['subtle', 'solid'] },
+    color: { control: 'select', options: [undefined, ...ACCENT_COLORS] },
   },
 } satisfies Meta<typeof Avatar>
 
@@ -55,7 +58,6 @@ export const Fallbacks: Story = {
     <div style={row}>
       <Avatar {...args} />
       <Avatar {...args} imageSrc={undefined} initials="SR" imageAlt="Sam Rivera" />
-      <Avatar {...args} imageSrc={undefined} imageAlt="Unknown user" />
     </div>
   ),
 }
@@ -69,22 +71,40 @@ export const BrokenImage: Story = {
   },
 }
 
-export const Placeholder: Story = {
-  args: { imageSrc: undefined, imageAlt: undefined },
+export const Empty: Story = {
+  args: { imageSrc: undefined, imageAlt: undefined, color: 'violet' },
   play: async ({ canvasElement }) => {
     // No name means decorative: hidden, not announced as an empty image.
-    await expect(canvasElement.querySelector('span')).toHaveAttribute('aria-hidden', 'true')
-    await expect(canvasElement.querySelector('svg')).toBeVisible()
+    const avatar = canvasElement.querySelector('span')!
+    await expect(avatar).toHaveAttribute('aria-hidden', 'true')
+    // Neither image nor initials: just the coloured shape, no icon.
+    await expect(avatar).toBeEmptyDOMElement()
   },
 }
 
 export const EmptySource: Story = {
-  args: { imageSrc: '' },
-  play: async ({ canvasElement }) => {
-    // '' is no image: straight to the placeholder, no broken <img> first.
+  args: { imageSrc: '', initials: 'MT' },
+  play: async ({ canvas, canvasElement }) => {
+    // '' is no image: straight to the initials, no broken <img> first.
     await expect(canvasElement.querySelector('img')).toBeNull()
-    await expect(canvasElement.querySelector('svg')).toBeVisible()
+    await expect(canvas.getByText('MT')).toBeVisible()
   },
+}
+
+export const Colors: Story = {
+  args: { imageSrc: undefined, imageAlt: undefined, initials: 'SR' },
+  render: (args) => (
+    <div style={{ display: 'grid', gap: 'var(--space-3)' }}>
+      {(['subtle', 'solid'] as const).map((variant) => (
+        <div key={variant} style={{ ...row, flexWrap: 'wrap', gap: 'var(--space-2)' }}>
+          <Avatar {...args} variant={variant} />
+          {ACCENT_COLORS.map((color) => (
+            <Avatar key={color} {...args} variant={variant} color={color} />
+          ))}
+        </div>
+      ))}
+    </div>
+  ),
 }
 
 export const Square: Story = {

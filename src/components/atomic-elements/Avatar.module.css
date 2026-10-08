@@ -4,8 +4,6 @@
   justify-content: center;
   flex-shrink: 0;
   overflow: hidden;
-  background: var(--secondary);
-  color: var(--secondary-foreground);
   font-family: var(--font-sans);
   font-weight: 500;
   line-height: 1;
@@ -57,10 +55,27 @@
   text-transform: uppercase;
 }
 
-/* A fraction rather than a token so the icon scales with all four sizes:
-   60% leaves the same optical margin as initials at each one. */
-.placeholder {
-  inline-size: 60%;
-  block-size: 60%;
-  color: var(--muted-foreground);
+/* Neutral is the default: no [data-accent], so the gray surface tokens. */
+.subtle {
+  background: var(--secondary);
+  color: var(--secondary-foreground);
+}
+
+/* Gray 600 carries a near-white label at 6.5:1 or more on every gray ramp, in
+   both appearances, so neutral solid needs no measured token of its own. */
+.solid {
+  background: var(--gray-600);
+  color: var(--gray-50);
+}
+
+/* With a hue, the tint and its label are measured per accent by the token
+   build; solid is the accent's own fill (600 in light) and label. */
+[data-accent].subtle {
+  background: var(--primary-subtle);
+  color: var(--primary-subtle-text);
+}
+
+[data-accent].solid {
+  background: var(--primary);
+  color: var(--primary-foreground);
 }
