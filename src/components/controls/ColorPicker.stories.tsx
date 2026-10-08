@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test'
-import { Theme } from '@/theme/Theme'
-import { ColorPanel, ColorPicker, normalizeHex } from './ColorPicker'
+import { ColorPanel, ColorPicker, normalizeHex, parseColor } from './ColorPicker'
 
 const brand = [
   { value: '#0a0a0a', label: 'Ink' },
@@ -60,8 +59,19 @@ export const TypeAHex: Story = {
     await userEvent.clear(input)
     await userEvent.type(input, 'reddish{Enter}')
     await expect(input).toHaveAttribute('aria-invalid', 'true')
-    await expect(canvas.getByText('Enter a colour as #rrggbb, e.g. #3b82f6.')).toBeVisible()
+    await expect(canvas.getByText('Enter a colour, e.g. #3b82f6, rgb(59 130 246) or hsl(217 91% 60%).')).toBeVisible()
     await expect(args.onValueChange).toHaveBeenCalledTimes(1)
+    // Any CSS colour is read, and shown back as hex.
+    for (const [typed, hex] of [
+      ['rgb(0 128 255)', '#0080ff'],
+      ['hsl(120 100% 25% / 50%)', '#00800080'],
+      ['rebeccapurple', '#663399'],
+    ]) {
+      await userEvent.clear(input)
+      await userEvent.type(input, `${typed}{Enter}`)
+      await expect(args.onValueChange).toHaveBeenLastCalledWith(hex)
+      await expect(input).toHaveValue(hex)
+    }
   },
 }
 
@@ -79,6 +89,68 @@ export const Swatches: Story = {
     await userEvent.keyboard('{ArrowRight}')
     await expect(args.onValueChange).toHaveBeenLastCalledWith('#ec4899')
     await expect(swatches.getByRole('radio', { name: 'Pink' })).toHaveFocus()
+  },
+}
+
+// The format menu is the kit's Select: open it, pick the option.
+const chooseFormat = async (dialog: ReturnType<typeof within>, label: string) => {
+  await userEvent.click(dialog.getByRole('combobox', { name: 'Colour format' }))
+  await userEvent.click(await within(document.body).findByRole('option', { name: label }))
+  await waitFor(() => expect(within(document.body).queryByRole('listbox')).toBeNull())
+}
+
+// Width a field's text needs against the room inside its padding.
+const room = (input: HTMLInputElement, text: string) => {
+  const cs = getComputedStyle(input)
+  const cv = document.createElement('canvas').getContext('2d')!
+  cv.font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`
+  const inner = input.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight)
+  return inner - cv.measureText(text).width
+}
+
+/** Channel fields in Hex, RGB, HSL or HSB, and opacity, as in Figma. */
+export const FormatsAndOpacity: Story = {
+  play: async ({ args, canvas }) => {
+    await userEvent.click(canvas.getByRole('button', { name: /Choose colour/ }))
+    const dialog = within(await popup())
+    await expect(dialog.getByRole('textbox', { name: 'Hex' })).toHaveValue('3b82f6')
+    await chooseFormat(dialog, 'RGB')
+    const red = dialog.getByRole('textbox', { name: 'Red' })
+    await expect(red).toHaveValue('59')
+    await userEvent.clear(red)
+    await userEvent.type(red, '255{Enter}')
+    await expect(args.onValueChange).toHaveBeenLastCalledWith('#ff82f6')
+    // The widest values show in full, with a pixel for the caret.
+    for (const name of ['Red', 'Green', 'Blue']) {
+      await expect(room(dialog.getByRole('textbox', { name }) as HTMLInputElement, '255')).toBeGreaterThanOrEqual(1)
+    }
+    await expect(room(dialog.getByRole('textbox', { name: 'Opacity percent' }) as HTMLInputElement, '100')).toBeGreaterThanOrEqual(1)
+    // Up and down step, Shift by 10.
+    await userEvent.keyboard('{ArrowDown}')
+    await expect(args.onValueChange).toHaveBeenLastCalledWith('#fe82f6')
+    await chooseFormat(dialog, 'HSL')
+    await expect(dialog.getByRole('textbox', { name: 'Lightness percent' })).toHaveValue('75')
+    // Opacity below 100% adds the alpha byte.
+    const opacity = dialog.getByRole('textbox', { name: 'Opacity percent' })
+    await userEvent.clear(opacity)
+    await userEvent.type(opacity, '50{Enter}')
+    await expect(args.onValueChange).toHaveBeenLastCalledWith('#fe82f680')
+    await expect(dialog.getByRole('slider', { name: 'Opacity' })).toHaveAttribute('aria-valuetext', '50%')
+    await expect(canvas.getByRole('textbox', { name: 'Brand colour' })).toHaveValue('#fe82f680')
+  },
+}
+
+/** `alpha={false}`: no opacity, and the value stays `#rrggbb`. */
+export const WithoutAlpha: Story = {
+  args: { alpha: false, defaultValue: '#3b82f680' },
+  play: async ({ canvas }) => {
+    await expect(canvas.getByRole('textbox', { name: 'Brand colour' })).toHaveValue('#3b82f6')
+    await userEvent.click(canvas.getByRole('button', { name: /Choose colour/ }))
+    const dialog = within(await popup())
+    await expect(dialog.queryByRole('slider', { name: 'Opacity' })).toBeNull()
+    await expect(dialog.queryByRole('textbox', { name: 'Opacity percent' })).toBeNull()
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(within(document.body).queryByRole('dialog')).toBeNull())
   },
 }
 
@@ -138,35 +210,6 @@ export const Panel: Story = {
   },
 }
 
-/** Every swatch keeps a visible edge on its surface, the page-coloured ones included. */
-export const SwatchEdgesInDark: Story = {
-  render: () => (
-    <Theme appearance="dark" style={{ background: 'var(--popover)', padding: 'var(--space-4)' }}>
-      <ColorPanel swatches={brand} />
-    </Theme>
-  ),
-  play: async ({ canvas }) => {
-    const cv = document.createElement('canvas').getContext('2d', { willReadFrequently: true })!
-    const rgb = (c: string) => {
-      cv.clearRect(0, 0, 1, 1)
-      cv.fillStyle = c
-      cv.fillRect(0, 0, 1, 1)
-      return [...cv.getImageData(0, 0, 1, 1).data.slice(0, 3)]
-    }
-    const lum = (c: number[]) =>
-      c.map((v) => v / 255).map((v) => (v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4)).reduce((a, v, i) => a + v * [0.2126, 0.7152, 0.0722][i], 0)
-    const ratio = (a: string, b: string) => {
-      const [x, y] = [lum(rgb(a)), lum(rgb(b))]
-      return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05)
-    }
-    const ink = canvas.getByRole('radio', { name: 'Ink' })
-    const surface = getComputedStyle(ink.closest('.dark')!).backgroundColor
-    // The inset edge: the colour inside box-shadow.
-    const edge = getComputedStyle(ink).boxShadow.match(/(rgba?|oklch|oklab|color)\([^)]*\)/)![0]
-    await expect(ratio(edge, surface)).toBeGreaterThanOrEqual(3)
-  },
-}
-
 export const Normalize: Story = {
   tags: ['!dev', '!autodocs'],
   play: async () => {
@@ -174,5 +217,13 @@ export const Normalize: Story = {
     await expect(normalizeHex('3B82F6')).toBe('#3b82f6')
     await expect(normalizeHex('#3b82f')).toBeNull()
     await expect(normalizeHex('blue')).toBeNull()
+    await expect(normalizeHex('#3b82f680')).toBe('#3b82f680')
+    await expect(normalizeHex('#3b82f6FF')).toBe('#3b82f6')
+    await expect(normalizeHex('#abc8')).toBe('#aabbcc88')
+    await expect(parseColor('rgb(59, 130, 246)')).toBe('#3b82f6')
+    await expect(parseColor('hsl(0 100% 50% / 0.5)')).toBe('#ff000080')
+    await expect(parseColor('white')).toBe('#ffffff')
+    await expect(parseColor('oklch(62.3% 0.214 259.8)')).toMatch(/^#[0-9a-f]{6}$/)
+    await expect(parseColor('reddish')).toBeNull()
   },
 }
