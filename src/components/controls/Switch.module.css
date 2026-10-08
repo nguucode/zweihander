@@ -37,16 +37,6 @@
   --switch-on: var(--foreground);
   --switch-on-thumb: var(--background);
 }
-/* Secondary is the quiet one: a light track with a dark thumb, where
-   accent is a dark track. The light track is near the page colour, so it
-   takes a --control-border outline to stay visible at 3:1. */
-.secondary {
-  --switch-on: var(--secondary);
-  --switch-on-thumb: var(--secondary-foreground);
-}
-.secondary[data-checked]:not([data-invalid]) {
-  box-shadow: inset 0 0 0 1px var(--control-border);
-}
 .destructive {
   --switch-on: var(--destructive);
   --switch-on-thumb: var(--destructive-foreground);
