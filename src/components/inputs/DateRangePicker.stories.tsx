@@ -20,6 +20,9 @@ const meta = {
         rules: [
           { id: 'color-contrast', selector: '*:not([data-outside])' },
           { id: 'aria-command-name', selector: '[role="link"], [role="button"]:not([data-base-ui-focus-guard]), [role="menuitem"]' },
+          // Same guards: aria-hidden yet focusable by design, so Tab lands on them
+          // and is sent back into or out of the popup.
+          { id: 'aria-hidden-focus', selector: '[aria-hidden="true"]:not([data-base-ui-focus-guard])' },
         ],
       },
     },
