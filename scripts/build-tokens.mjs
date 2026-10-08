@@ -276,9 +276,9 @@ const grayScopeDecls = () => {
     .join('\n')
 }
 
-/* A root token that reads another one (--font-heading: var(--font-serif))
+/* A root token that reads another one (--font-heading: var(--font-sans))
    is derived, so it goes on \`*\` with the others below: on :root it would
-   freeze, and a Theme overriding --font-serif would never reach headings. */
+   freeze, and a Theme overriding --font-sans would never reach headings. */
 const isDerived = ([, v]) => String(v.$value).includes('var(')
 const rootLiterals = Object.fromEntries(entries(semantic.root).filter((e) => !isDerived(e)))
 const rootDerived = Object.fromEntries(entries(semantic.root).filter(isDerived))

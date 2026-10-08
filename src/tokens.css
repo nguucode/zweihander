@@ -18,8 +18,7 @@
   --cursor-button: default;
   --cursor-link: pointer;
   --cursor-disabled: not-allowed;
-  --font-sans: 'Inter Variable', Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
-  --font-serif: 'Newsreader Variable', Newsreader, Georgia, 'Times New Roman', serif;
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
   --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
 
   /* Defaults: blue accent, taupe gray. Overridden by
@@ -523,8 +522,8 @@
   );
 
   /* Font roles, read from whichever faces the scope sets. */
-  --font-heading: var(--font-serif);
-  --font-prose: var(--font-serif);
+  --font-heading: var(--font-sans);
+  --font-prose: var(--font-sans);
 
   /* Spacing — one multiplier over every gap and pad in the kit. */
   --space-1: calc(0.25rem * var(--scaling));
@@ -552,6 +551,7 @@
   --text-body-lg: calc(1rem * var(--scaling));
   --text-body: calc(0.875rem * var(--scaling));
   --text-body-sm: calc(0.8125rem * var(--scaling));
+  --text-body-xs: calc(0.625rem * var(--scaling));
 
   --leading-heading-2xl: calc(36 / 32);
   --leading-heading-xl: calc(32 / 28);
@@ -563,6 +563,7 @@
   --leading-body-lg: calc(24 / 16);
   --leading-body: calc(20 / 14);
   --leading-body-sm: calc(16 / 13);
+  --leading-body-xs: calc(14 / 10);
 
   /* Shadows read from the elevation tokens each appearance sets. */
   --shadow-none: var(--elevation-none);

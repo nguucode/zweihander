@@ -121,14 +121,10 @@
     "cursor-disabled": { "$type": "other", "$value": "not-allowed" },
     "font-sans": {
       "$type": "fontFamily",
-      "$value": "'Inter Variable', Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji'"
+      "$value": "system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji'"
     },
-    "font-serif": {
-      "$type": "fontFamily",
-      "$value": "'Newsreader Variable', Newsreader, Georgia, 'Times New Roman', serif"
-    },
-    "font-heading": { "$type": "fontFamily", "$value": "var(--font-serif)" },
-    "font-prose": { "$type": "fontFamily", "$value": "var(--font-serif)" },
+    "font-heading": { "$type": "fontFamily", "$value": "var(--font-sans)" },
+    "font-prose": { "$type": "fontFamily", "$value": "var(--font-sans)" },
     "font-mono": {
       "$type": "fontFamily",
       "$value": "ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace"
@@ -165,6 +161,7 @@
     "heading-2xs": { "$type": "dimension", "$value": "0.75rem", "$extensions": { "leading": "16 / 12" } },
     "body-lg": { "$type": "dimension", "$value": "1rem", "$extensions": { "leading": "24 / 16" } },
     "body": { "$type": "dimension", "$value": "0.875rem", "$extensions": { "leading": "20 / 14" } },
-    "body-sm": { "$type": "dimension", "$value": "0.8125rem", "$extensions": { "leading": "16 / 13" } }
+    "body-sm": { "$type": "dimension", "$value": "0.8125rem", "$extensions": { "leading": "16 / 13" } },
+    "body-xs": { "$type": "dimension", "$value": "0.625rem", "$extensions": { "leading": "14 / 10" } }
   }
 }

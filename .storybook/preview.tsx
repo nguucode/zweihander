@@ -1,8 +1,6 @@
 import type { Decorator, Preview } from '@storybook/react-vite'
 // Docs-only: the tokens name these faces, but the package never loads a
 // font for its consumers.
-import '@fontsource-variable/inter'
-import '@fontsource-variable/newsreader'
 import '../src/index.css'
 
 // Puts the toolbar's theme on <html>, where the dark token set is scoped.
