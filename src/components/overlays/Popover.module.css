@@ -54,35 +54,6 @@
   margin-block-start: var(--space-3);
 }
 
-/* A 10px square turned 45deg: half pokes out, the border on two edges
-   continues the popup's. */
-.arrow {
-  inline-size: 10px;
-  block-size: 10px;
-  background: var(--popover);
-  rotate: 45deg;
-}
-.arrow[data-side='bottom'] {
-  top: -6px;
-  border-block-start: 1px solid var(--border);
-  border-inline-start: 1px solid var(--border);
-}
-.arrow[data-side='top'] {
-  bottom: -6px;
-  border-block-end: 1px solid var(--border);
-  border-inline-end: 1px solid var(--border);
-}
-.arrow[data-side='right'] {
-  left: -6px;
-  border-block-end: 1px solid var(--border);
-  border-inline-start: 1px solid var(--border);
-}
-.arrow[data-side='left'] {
-  right: -6px;
-  border-block-start: 1px solid var(--border);
-  border-inline-end: 1px solid var(--border);
-}
-
 .close {
   position: relative;
   display: inline-flex;

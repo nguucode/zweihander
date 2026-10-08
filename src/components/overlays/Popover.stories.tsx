@@ -50,9 +50,9 @@ export const Default: Story = {
   },
 }
 
-/** Open from the start, with the close button and an arrow. */
+/** Open from the start, with the close button. */
 export const Open: Story = {
-  args: { defaultOpen: true, hasCloseButton: true, hasArrow: true },
+  args: { defaultOpen: true, hasCloseButton: true },
   play: async () => {
     const dialog = await body().findByRole('dialog')
     await userEvent.click(within(dialog).getByRole('button', { name: 'Close' }))
