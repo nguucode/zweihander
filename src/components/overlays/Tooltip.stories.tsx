@@ -36,7 +36,7 @@ export const Default: Story = {
     const trigger = canvas.getByRole('button', { name: 'Copy link' })
     await userEvent.tab()
     await expect(trigger).toHaveFocus()
-    // Focus opens it at once, without the 600ms hover delay.
+    // Focus opens it at once, without the 300ms hover delay.
     const tip = await body().findByRole('tooltip', {}, { timeout: 300 })
     await expect(tip).toHaveTextContent('Copy link')
     // Read as the trigger's description while it is open.
@@ -54,10 +54,6 @@ export const LongContent: Story = {
     defaultOpen: true,
     children: <Button appearance="outlined">Link sharing on</Button>,
   },
-}
-
-export const WithoutArrow: Story = {
-  args: { hasArrow: false },
 }
 
 /** Once one tooltip in a group is open, the next opens without the delay. */

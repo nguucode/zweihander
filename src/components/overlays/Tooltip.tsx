@@ -13,7 +13,6 @@ export interface TooltipProps {
   /** Milliseconds of hover before it opens. Focus opens it at once. */
   delay?: number
   closeDelay?: number
-  hasArrow?: boolean
   open?: boolean
   defaultOpen?: boolean
   onOpenChange?: (open: boolean) => void
@@ -27,9 +26,8 @@ export function Tooltip({
   children,
   side = 'top',
   align = 'center',
-  delay = 600,
+  delay = 300,
   closeDelay = 0,
-  hasArrow = true,
   open: openProp,
   defaultOpen = false,
   onOpenChange,
@@ -57,9 +55,8 @@ export function Tooltip({
         aria-describedby={open ? id : undefined}
       />
       <BaseTooltip.Portal>
-        <BaseTooltip.Positioner className={styles.positioner} side={side} align={align} sideOffset={hasArrow ? 8 : 6}>
+        <BaseTooltip.Positioner className={styles.positioner} side={side} align={align} sideOffset={6}>
           <BaseTooltip.Popup id={id} role="tooltip" className={cn(styles.popup, className)}>
-            {hasArrow && <BaseTooltip.Arrow className={styles.arrow} />}
             {content}
           </BaseTooltip.Popup>
         </BaseTooltip.Positioner>

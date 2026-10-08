@@ -29,26 +29,6 @@
   scale: 0.96;
 }
 
-/* A 10px square turned 45deg, half of it outside the popup. */
-.arrow {
-  inline-size: 10px;
-  block-size: 10px;
-  background: inherit;
-  rotate: 45deg;
-}
-.arrow[data-side='top'] {
-  bottom: -4px;
-}
-.arrow[data-side='bottom'] {
-  top: -4px;
-}
-.arrow[data-side='left'] {
-  right: -4px;
-}
-.arrow[data-side='right'] {
-  left: -4px;
-}
-
 @media (prefers-reduced-motion: reduce) {
   .popup {
     transition: none;

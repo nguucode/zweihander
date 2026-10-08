@@ -683,7 +683,7 @@
       "name": "tooltip",
       "type": "registry:component",
       "title": "Tooltip",
-      "description": "Short inverted label on hover or focus, with arrow, side and delay, on Base UI Tooltip; TooltipGroup shares the delay.",
+      "description": "Short inverted label on hover or focus, with side and delay, on Base UI Tooltip; TooltipGroup shares the delay.",
       "registryDependencies": [
         "https://ontheshore.biz/zweihander/r/utils.json",
         "https://ontheshore.biz/zweihander/r/tokens.json"

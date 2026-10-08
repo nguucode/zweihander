@@ -67,7 +67,7 @@ function ItemLink({ item, current, collapsed }: { item: SidebarItem; current: bo
     },
   })
   return collapsed ? (
-    <Tooltip content={name} side="right" delay={300}>
+    <Tooltip content={name} side="right">
       {link}
     </Tooltip>
   ) : (
