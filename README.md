@@ -119,7 +119,7 @@ independent settings to any subtree:
 | Prop | Values |
 | --- | --- |
 | `accentColor` | 17 hues — drives `--primary` and `--ring` (default: **blue**) |
-| `grayColor` | 9 neutral ramps — surfaces, text, borders (default: taupe) |
+| `grayColor` | 9 neutral ramps — surfaces, text, borders (default: gray) |
 | `appearance` | `light` / `dark` / `inherit` |
 | `radius` | `none` / `small` / `medium` / `large` / `full` |
 | `scaling` | `90%` … `110%` — spacing and type together |
