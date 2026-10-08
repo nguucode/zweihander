@@ -4,7 +4,7 @@ import styles from './Badge.module.css'
 
 export interface BadgeProps extends Omit<ComponentProps<'span'>, 'children'> {
   count?: number
-  variant?: 'primary' | 'accent' | 'secondary' | 'destructive'
+  variant?: 'primary' | 'accent' | 'secondary' | 'destructive' | 'success' | 'warning'
   size?: 'sm' | 'md'
   /** A dot with no number: "something new", not "how many". */
   isDot?: boolean

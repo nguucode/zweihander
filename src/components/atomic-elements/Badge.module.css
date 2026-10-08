@@ -15,27 +15,26 @@
   box-sizing: border-box;
   border-radius: 9999px;
   font-family: var(--font-sans);
-  font-size: var(--text-body-sm);
-  line-height: var(--leading-body-sm);
+  font-size: var(--text-body-xs);
+  line-height: var(--leading-body-xs);
   font-weight: 500;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 
-/* Height is line-height plus padding: 16px at sm, 20px at md. min-inline-size
-   equal to the height keeps a single digit a circle rather than an oval, so
-   the side padding has to leave a 13px digit inside it: 2px at sm, 4px at md
-   (a wider pad pushed a single digit past the circle). */
+/* 16px at sm, 20px at md, in em so the Theme's scaling carries them.
+   min-inline-size equal to the height keeps a single digit a circle
+   rather than an oval. */
 .sm {
-  min-inline-size: calc(1em * var(--leading-body-sm));
+  block-size: 1.6em;
+  min-inline-size: 1.6em;
   padding-inline: 0.125rem;
 }
 
 .md {
-  min-inline-size: calc(1em * var(--leading-body-sm) + var(--space-1));
-  /* 2px is below the spacing scale; it is what lifts 16px of line-height
-     to the 20px the md size is specified at. */
-  padding: 0.125rem var(--space-1);
+  block-size: 2em;
+  min-inline-size: 2em;
+  padding-inline: var(--space-1);
 }
 
 .dot {
@@ -76,6 +75,24 @@
 .destructive {
   background: var(--destructive);
   color: var(--destructive-foreground);
+}
+
+/* Status colours, for presence and state dots: success is Online, warning
+   Away or Pending. Offline is secondary; info would repeat primary's blue. */
+.success {
+  background: var(--success);
+  color: var(--success-foreground);
+}
+
+.warning {
+  background: var(--warning);
+  color: var(--warning-foreground);
+}
+
+/* Same 3:1 rule as the secondary dot: amber-500 reaches only 2:1 on the
+   light page, so the dot steps down to amber-600. */
+.dot.warning {
+  background: var(--warning-indicator);
 }
 
 /* The ring in the page background separates the badge from whatever it
