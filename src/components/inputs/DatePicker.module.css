@@ -5,7 +5,7 @@
 
 .popup {
   box-sizing: border-box;
-  padding: var(--space-3);
+  max-inline-size: calc(100vw - 2 * var(--space-4));
   border: 1px solid var(--border);
   border-radius: var(--radius-panel);
   background: var(--popover);
@@ -21,6 +21,72 @@
 .popup[data-ending-style] {
   opacity: 0;
   scale: 0.98;
+}
+
+/* ------------------------------------------------------------- parts */
+.body {
+  padding: var(--space-3);
+}
+
+/* ------------------------------------------------------------- range */
+.rangePopup {
+  display: flex;
+}
+.months {
+  display: flex;
+}
+.second {
+  border-inline-start: 1px solid var(--border);
+}
+.presets {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-2);
+  border-inline-end: 1px solid var(--border);
+}
+.preset {
+  min-inline-size: 7rem;
+  min-block-size: var(--space-8);
+  margin: 0;
+  padding: var(--space-1) var(--space-2);
+  border: 0;
+  border-radius: var(--radius-control);
+  background: transparent;
+  color: var(--foreground);
+  font: inherit;
+  font-size: var(--text-body-sm);
+  font-weight: 500;
+  text-align: start;
+  cursor: var(--cursor-button);
+}
+.preset:hover,
+.preset[aria-pressed='true'] {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+.preset:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: -2px;
+}
+
+/* Narrow screens: one month, and the presets as a row above it. */
+@media (width < 40rem) {
+  .rangePopup {
+    flex-direction: column;
+  }
+  .second {
+    display: none;
+  }
+  .presets {
+    flex-direction: row;
+    flex-wrap: wrap;
+    border-inline-end: 0;
+    border-block-end: 1px solid var(--border);
+  }
+  .preset {
+    min-inline-size: 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -14,7 +14,12 @@ const meta = {
   title: 'Components/Inputs/DatePicker',
   component: DatePicker,
   // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
-  parameters: { a11y: { test: 'error' } },
+  // Days of the months either side are aria-hidden decoration, faded below
+  // 4.5:1 on purpose (WCAG 1.4.3 exempts decoration); axe cannot tell, so
+  // only color-contrast skips them.
+  parameters: {
+    a11y: { test: 'error', config: { rules: [{ id: 'color-contrast', selector: '*:not([data-outside])' }] } },
+  },
   args: { label: 'Start date', locale: 'en-GB', weekStartsOn: 1, defaultValue: new Date(2026, 8, 18), onValueChange: fn() },
   argTypes: {
     size: { control: 'inline-radio', options: ['sm', 'md'] },
@@ -53,6 +58,24 @@ export const Default: Story = {
     await userEvent.keyboard('{ArrowRight}{Escape}')
     await waitFor(() => expect(body().queryByRole('dialog')).toBeNull())
     await expect(input).toHaveValue('24/09/2026')
+  },
+}
+
+/** A click in the input opens the calendar too, but leaves focus in the input so typing carries on. */
+export const ClickToOpen: Story = {
+  play: async ({ args, canvas }) => {
+    const input = canvas.getByRole('textbox', { name: 'Start date' })
+    await userEvent.click(input)
+    const dialog = await body().findByRole('dialog', { name: 'Choose date' })
+    await expect(input).toHaveFocus()
+    // Typed and committed with the calendar open; the calendar follows.
+    await userEvent.clear(input)
+    await userEvent.keyboard('20/09/2026{Enter}')
+    await expect(args.onValueChange).toHaveBeenLastCalledWith(new Date(2026, 8, 20))
+    await expect(within(dialog).getByRole('button', { name: day(2026, 9, 20) }).closest('td')).toHaveAttribute('aria-selected', 'true')
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(body().queryByRole('dialog')).toBeNull())
+    await expect(input).toHaveFocus()
   },
 }
 

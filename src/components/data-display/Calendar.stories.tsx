@@ -14,7 +14,12 @@ const meta = {
   title: 'Components/Data Display/Calendar',
   component: Calendar,
   // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
-  parameters: { a11y: { test: 'error' } },
+  // Days of the months either side are aria-hidden decoration, faded below
+  // 4.5:1 on purpose (WCAG 1.4.3 exempts decoration); axe cannot tell, so
+  // only color-contrast skips them.
+  parameters: {
+    a11y: { test: 'error', config: { rules: [{ id: 'color-contrast', selector: '*:not([data-outside])' }] } },
+  },
   args: { defaultValue: new Date(2026, 8, 18), locale: 'en-GB', weekStartsOn: 1, onValueChange: fn(), onMonthChange: fn() },
   argTypes: { value: { control: false }, defaultValue: { control: false }, month: { control: false }, min: { control: false }, max: { control: false } },
 } satisfies Meta<typeof Calendar>
@@ -28,7 +33,7 @@ export const Default: Story = {
   play: async ({ args, canvas }) => {
     const grid = canvas.getByRole('grid', { name: 'September 2026' })
     // Monday first, six weeks.
-    await expect(within(grid).getAllByRole('columnheader')[0]).toHaveTextContent('Mon')
+    await expect(within(grid).getAllByRole('columnheader')[0]).toHaveTextContent('Mo')
     await expect(within(grid).getAllByRole('row')).toHaveLength(7)
     const selected = canvas.getByRole('button', { name: day(2026, 9, 18) })
     await expect(selected.closest('td')).toHaveAttribute('aria-selected', 'true')
@@ -90,6 +95,20 @@ export const MinMax: Story = {
     canvas.getByRole('button', { name: day(2026, 9, 18) }).focus()
     await userEvent.keyboard('{PageDown}')
     await waitFor(() => expect(focused()).toBe(day(2026, 9, 25)))
+  },
+}
+
+/** A span: both ends selected, the days between banded. Clicks still report one day; Date Range Picker decides the span. */
+export const Range: Story = {
+  args: { range: { start: new Date(2026, 8, 10), end: new Date(2026, 8, 16) } },
+  play: async ({ canvas }) => {
+    const cell = (d: number) => canvas.getByRole('button', { name: day(2026, 9, d) }).closest('td')
+    await expect(cell(10)).toHaveAttribute('aria-selected', 'true')
+    await expect(cell(13)).toHaveAttribute('aria-selected', 'true')
+    await expect(cell(16)).toHaveAttribute('aria-selected', 'true')
+    await expect(cell(17)).not.toHaveAttribute('aria-selected')
+    // `range` wins over `value`.
+    await expect(cell(18)).not.toHaveAttribute('aria-selected')
   },
 }
 

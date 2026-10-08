@@ -17,11 +17,12 @@ date library.
 
 | Part | What it is |
 | --- | --- |
-| **Header** | Previous and next month buttons around the month and year. |
-| **Weekdays** | Short names, the locale's first day first. |
-| **Day** | A 40px button (44px on touch). Days of the months either side are shown muted, and still pickable. |
-| **Today** | A ring and bold figure. |
-| **Selected** | `--primary` behind `--primary-foreground`. |
+| **Header** | The short month and year ("Oct 2026") at the start, previous and next month buttons together at the end. |
+| **Weekdays** | Two letters ("Mo"), or the narrow names ("T2") where the short ones are long; the locale's first day first. |
+| **Day** | A 32px button (44px on touch), 4px apart. Days of the months either side are decoration: faded (`--muted-foreground` at 50%), hidden from assistive tech, not pickable, never selected or in a range. Arrow keys still cross into them by moving the month. |
+| **Today** | An `--orange` disc with an `--orange-foreground` (white) figure, round where a selected day is square. White on orange is 3.4:1, under WCAG's 4.5:1: a deliberate choice; `aria-current="date"` carries it for assistive tech. |
+| **Selected** | `--primary` (the brand) behind `--primary-foreground`. Wins over today when they are the same day. |
+| **Range** | With `range`: both ends selected, the days between on an `--accent` band as tall as a day, rounded where a week or the month starts or ends. Days of the months either side are not banded, so two months side by side never draw the same day twice. |
 | **Unavailable** | Muted and struck through; before `min`, after `max`, or ruled out by `isDateDisabled`. |
 
 ## Props
@@ -32,6 +33,7 @@ date library.
 | `month`, `defaultMonth`, `onMonthChange` | `Date` | value's or today's | The month shown. |
 | `min`, `max` | `Date` | – | |
 | `isDateDisabled` | `(date) => boolean` | – | Rule out single days. |
+| `range` | `{ start, end }` | – | Shows a span instead of `value`. Clicks still report one day; the owner decides the span, as Date Range Picker does. |
 | `locale` | BCP 47 tag | the browser's | Month and weekday names. |
 | `weekStartsOn` | 0–6 | the locale's | 0 is Sunday. |
 | `autoFocus` | boolean | `false` | Focus the selected day, e.g. inside a popover. |
@@ -56,6 +58,8 @@ are exported for working with the same plain dates.
 ## Usage
 
 <Canvas of={CalendarStories.MinMax} />
+
+<Canvas of={CalendarStories.Range} />
 
 <Canvas of={CalendarStories.NoWeekends} />
 

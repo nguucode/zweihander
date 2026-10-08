@@ -1,9 +1,17 @@
-import { useMemo, useState, type ReactNode } from 'react'
+import { useMemo, useRef, useState, type ReactNode } from 'react'
 import { Field } from '@base-ui/react/field'
 import { Popover } from '@base-ui/react/popover'
 import { Icon } from '@/lib/icon'
 import { cn } from '@/lib/utils'
-import { Calendar, isSameDay, startOfDay } from '../data-display/Calendar'
+import {
+  Calendar,
+  addDays,
+  addMonths,
+  firstDayOfWeek,
+  isSameDay,
+  startOfDay,
+  type DateRange,
+} from '../data-display/Calendar'
 import {
   InputField,
   boxClass,
@@ -81,6 +89,139 @@ function useDateFormat(locale?: string) {
   }, [locale])
 }
 
+interface PickerFieldProps {
+  text: string
+  onTextChange: (text: string) => void
+  /** Reads the typed text, on blur and Enter. */
+  onCommit: () => void
+  /** Before the popover opens: show the value's month, reset a half-picked range. */
+  onShow: () => void
+  triggerLabel: string
+  popupLabel: string
+  popupClassName?: string
+  /** The hidden input that submits the value. */
+  hidden?: ReactNode
+  children: (popup: { autoFocus: boolean; close: () => void }) => ReactNode
+  label?: ReactNode
+  helperText?: ReactNode
+  validationState?: ValidationState
+  size: InputSize
+  appearance: InputAppearance
+  placeholder: string
+  isFullWidth?: boolean
+  disabled?: boolean
+  required?: boolean
+  id?: string
+  className?: string
+  'aria-label'?: string
+}
+
+/**
+ * The typed field and its calendar popover, shared by both pickers. The
+ * calendar button and Alt+Down open it with focus on the calendar; a click
+ * in the input opens it too, but leaves focus there so typing carries on.
+ */
+function PickerField({
+  text,
+  onTextChange,
+  onCommit,
+  onShow,
+  triggerLabel,
+  popupLabel,
+  popupClassName,
+  hidden,
+  children,
+  label,
+  helperText,
+  validationState,
+  size,
+  appearance,
+  placeholder,
+  isFullWidth,
+  disabled,
+  required,
+  id,
+  className,
+  'aria-label': ariaLabel,
+}: PickerFieldProps) {
+  const [open, setOpen] = useState(false)
+  const [fromInput, setFromInput] = useState(false)
+  const boxRef = useRef<HTMLSpanElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
+  const show = (byInput: boolean) => {
+    onShow()
+    setFromInput(byInput)
+    setOpen(true)
+  }
+
+  return (
+    <InputField
+      label={label}
+      helperText={helperText}
+      validationState={validationState}
+      required={required}
+      disabled={disabled}
+      isFullWidth={isFullWidth}
+      className={className}
+    >
+      <span ref={boxRef} className={boxClass(size, appearance)} onMouseDown={focusControl}>
+        <Field.Control
+          ref={inputRef}
+          id={id}
+          value={text}
+          placeholder={placeholder}
+          inputMode="numeric"
+          autoComplete="off"
+          aria-label={ariaLabel}
+          required={required}
+          className={inputStyles.control}
+          onChange={(e) => onTextChange(e.target.value)}
+          onBlur={onCommit}
+          onClick={() => !open && show(true)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') onCommit()
+            if (e.key === 'ArrowDown' && e.altKey) show(false)
+          }}
+        />
+        {hidden}
+        <Popover.Root
+          open={open}
+          onOpenChange={(next, details) => {
+            if (next) return show(false)
+            // A press in the field is not outside: the calendar stays open while typing.
+            if (details.reason === 'outside-press' && boxRef.current?.contains(details.event.target as Node)) return
+            setOpen(false)
+          }}
+        >
+          <Popover.Trigger className={inputStyles.iconButton} disabled={disabled} aria-label={triggerLabel}>
+            <Icon name="calendar" />
+          </Popover.Trigger>
+          <Popover.Portal>
+            {/* Under the whole field, start-aligned and 4px clear of it; not the
+                calendar button, which sits inside the box. */}
+            <Popover.Positioner
+              className={styles.positioner}
+              anchor={boxRef}
+              side="bottom"
+              align="start"
+              sideOffset={4}
+            >
+              <Popover.Popup
+                aria-label={popupLabel}
+                className={cn(styles.popup, popupClassName)}
+                initialFocus={!fromInput}
+                finalFocus={fromInput ? inputRef : true}
+              >
+                {children({ autoFocus: !fromInput, close: () => setOpen(false) })}
+              </Popover.Popup>
+            </Popover.Positioner>
+          </Popover.Portal>
+        </Popover.Root>
+      </span>
+    </InputField>
+  )
+}
+
 export function DatePicker({
   value,
   defaultValue = null,
@@ -105,11 +246,12 @@ export function DatePicker({
   'aria-label': ariaLabel,
 }: DatePickerProps) {
   const { format, parse, pattern } = useDateFormat(locale)
+  const today = startOfDay(new Date())
   const [valueState, setValueState] = useState(defaultValue)
   const date = value !== undefined ? value : valueState
   const [text, setText] = useState(() => (date ? format(date) : ''))
   const [invalid, setInvalid] = useState(false)
-  const [open, setOpen] = useState(false)
+  const [month, setMonth] = useState(() => date ?? today)
   // Follow a controlled value that changes from outside.
   const [shown, setShown] = useState(date)
   if (!isSameDay(shown, date) && !(shown === null && date === null)) {
@@ -125,6 +267,7 @@ export function DatePicker({
     setShown(next)
     setText(next ? format(next) : '')
     setInvalid(false)
+    if (next) setMonth(next)
     onValueChange?.(next)
   }
   const commitText = () => {
@@ -135,65 +278,250 @@ export function DatePicker({
   }
 
   return (
-    <InputField
+    <PickerField
+      text={text}
+      onTextChange={(t) => {
+        setText(t)
+        setInvalid(false)
+      }}
+      onCommit={commitText}
+      onShow={() => setMonth(date ?? today)}
+      triggerLabel={date ? `Choose date, ${format(date)} selected` : 'Choose date'}
+      popupLabel="Choose date"
+      hidden={name && <input type="hidden" name={name} value={date ? iso(date) : ''} />}
       label={label}
       helperText={invalid ? `Enter a date as ${pattern}${min || max ? ', within the allowed range' : ''}.` : helperText}
       validationState={invalid ? 'error' : validationState}
-      required={required}
-      disabled={disabled}
+      size={size}
+      appearance={appearance}
+      placeholder={placeholder ?? pattern}
       isFullWidth={isFullWidth}
+      disabled={disabled}
+      required={required}
+      id={id}
       className={className}
+      aria-label={ariaLabel}
     >
-      <span className={boxClass(size, appearance)} onMouseDown={focusControl}>
-        <Field.Control
-          id={id}
-          value={text}
-          placeholder={placeholder ?? pattern}
-          inputMode="numeric"
-          autoComplete="off"
-          aria-label={ariaLabel}
-          required={required}
-          className={inputStyles.control}
-          onChange={(e) => {
-            setText(e.target.value)
-            setInvalid(false)
+      {({ autoFocus, close }) => (
+        <Calendar
+          value={date}
+          month={month}
+          onMonthChange={setMonth}
+          onValueChange={(d) => {
+            commit(d)
+            close()
           }}
-          onBlur={commitText}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') commitText()
-            if (e.key === 'ArrowDown' && e.altKey) setOpen(true)
-          }}
+          min={min}
+          max={max}
+          isDateDisabled={isDateDisabled}
+          locale={locale}
+          weekStartsOn={weekStartsOn}
+          autoFocus={autoFocus}
+          className={styles.body}
         />
-        {name && <input type="hidden" name={name} value={date ? iso(date) : ''} />}
-        <Popover.Root open={open} onOpenChange={setOpen}>
-          <Popover.Trigger
-            className={inputStyles.iconButton}
-            disabled={disabled}
-            aria-label={date ? `Choose date, ${format(date)} selected` : 'Choose date'}
-          >
-            <Icon name="calendar" />
-          </Popover.Trigger>
-          <Popover.Portal>
-            <Popover.Positioner className={styles.positioner} side="bottom" align="end" sideOffset={6}>
-              <Popover.Popup aria-label="Choose date" className={cn(styles.popup)}>
-                <Calendar
-                  value={date}
-                  onValueChange={(d) => {
-                    commit(d)
-                    setOpen(false)
-                  }}
-                  min={min}
-                  max={max}
-                  isDateDisabled={isDateDisabled}
-                  locale={locale}
-                  weekStartsOn={weekStartsOn}
-                  autoFocus
-                />
-              </Popover.Popup>
-            </Popover.Positioner>
-          </Popover.Portal>
-        </Popover.Root>
-      </span>
-    </InputField>
+      )}
+    </PickerField>
+  )
+}
+
+/* ------------------------------------------------------------ range */
+
+export interface DateRangePreset {
+  label: string
+  start: Date
+  end: Date
+}
+
+/** The built-in presets, whole periods around today: Today … Last year. */
+export function rangePresets(weekStartsOn: number, today = startOfDay(new Date())): DateRangePreset[] {
+  const week = addDays(today, -((today.getDay() - weekStartsOn + 7) % 7))
+  const y = today.getFullYear()
+  const m = today.getMonth()
+  return [
+    { label: 'Today', start: today, end: today },
+    { label: 'Yesterday', start: addDays(today, -1), end: addDays(today, -1) },
+    { label: 'This week', start: week, end: addDays(week, 6) },
+    { label: 'Last week', start: addDays(week, -7), end: addDays(week, -1) },
+    { label: 'This month', start: new Date(y, m, 1), end: new Date(y, m + 1, 0) },
+    { label: 'Last month', start: new Date(y, m - 1, 1), end: new Date(y, m, 0) },
+    { label: 'This year', start: new Date(y, 0, 1), end: new Date(y, 11, 31) },
+    { label: 'Last year', start: new Date(y - 1, 0, 1), end: new Date(y - 1, 11, 31) },
+  ]
+}
+
+export interface DateRangePickerProps extends Omit<DatePickerProps, 'value' | 'defaultValue' | 'onValueChange' | 'name'> {
+  /** Both ends set, or `null`. */
+  value?: DateRange | null
+  defaultValue?: DateRange | null
+  onValueChange?: (range: DateRange | null) => void
+  /** A list beside the calendars: `true` for the built-in one (Today … Last year), or your own. */
+  presets?: boolean | DateRangePreset[]
+  /** Submitted as `yyyy-mm-dd/yyyy-mm-dd`, an ISO 8601 interval. */
+  name?: string
+}
+
+const NO_RANGE: DateRange = { start: null, end: null }
+const monthIndex = (d: Date) => d.getFullYear() * 12 + d.getMonth()
+/** The range's first month on the left, its last on the right; the next month when it spans one. */
+const monthsFor = (r: DateRange | null, today: Date): [Date, Date] => {
+  const left = r?.start ?? today
+  const right = r?.end && monthIndex(r.end) > monthIndex(left) ? r.end : addMonths(left, 1)
+  return [left, right]
+}
+/** The two days as a range, earlier first. */
+const ordered = (a: Date | null, b: Date | null): DateRange => (a && b && b < a ? { start: b, end: a } : { start: a, end: b })
+const sameRange = (a: DateRange | null, b: DateRange | null) =>
+  a === b || (!!a && !!b && isSameDay(a.start, b.start) && isSameDay(a.end, b.end))
+
+export function DateRangePicker({
+  value,
+  defaultValue = null,
+  onValueChange,
+  label,
+  helperText,
+  validationState,
+  size = 'md',
+  appearance = 'outlined',
+  min,
+  max,
+  isDateDisabled,
+  locale,
+  weekStartsOn,
+  placeholder,
+  presets = false,
+  isFullWidth,
+  name,
+  disabled,
+  required,
+  id,
+  className,
+  'aria-label': ariaLabel,
+}: DateRangePickerProps) {
+  const { format, parse, pattern } = useDateFormat(locale)
+  const today = startOfDay(new Date())
+  const [valueState, setValueState] = useState(defaultValue)
+  const range = value !== undefined ? value : valueState
+  const show = (r: DateRange | null) => (r?.start && r.end ? `${format(r.start)} – ${format(r.end)}` : '')
+  const [text, setText] = useState(() => show(range))
+  const [invalid, setInvalid] = useState(false)
+  const [draft, setDraft] = useState<DateRange>(range ?? NO_RANGE)
+  // The two calendars page on their own; the left one always shows the
+  // earlier month. Moving one past the other pushes the other along.
+  const [months, setMonths] = useState(() => monthsFor(range, today))
+  const [shown, setShown] = useState(range)
+  if (!sameRange(shown, range)) {
+    setShown(range)
+    setText(show(range))
+    setInvalid(false)
+  }
+
+  const presetList = presets === true ? rangePresets(weekStartsOn ?? firstDayOfWeek(locale), today) : presets || []
+  const allowed = (d: Date) =>
+    !(min && d < startOfDay(min)) && !(max && d > startOfDay(max)) && !(isDateDisabled?.(d) ?? false)
+  const commit = (next: DateRange | null) => {
+    setValueState(next)
+    setShown(next)
+    setText(show(next))
+    setInvalid(false)
+    onValueChange?.(next)
+  }
+  /** Two dates, each in the locale's order: six numbers, any separators. */
+  const commitText = () => {
+    const nums = text.match(/\d+/g)
+    let parsed: DateRange | null | undefined = null
+    if (text.trim()) {
+      const a = nums?.length === 6 ? parse(nums.slice(0, 3).join(' ')) : undefined
+      const b = nums?.length === 6 ? parse(nums.slice(3).join(' ')) : undefined
+      parsed = a && b && allowed(a) && allowed(b) ? ordered(a, b) : undefined
+    }
+    if (parsed === undefined) setInvalid(true)
+    else if (!sameRange(parsed, range)) commit(parsed)
+    else setText(show(range))
+  }
+
+  return (
+    <PickerField
+      text={text}
+      onTextChange={(t) => {
+        setText(t)
+        setInvalid(false)
+      }}
+      onCommit={commitText}
+      onShow={() => {
+        setDraft(range ?? NO_RANGE)
+        setMonths(monthsFor(range, today))
+      }}
+      triggerLabel={range ? `Choose dates, ${show(range)} selected` : 'Choose dates'}
+      popupLabel="Choose dates"
+      popupClassName={styles.rangePopup}
+      hidden={
+        name && <input type="hidden" name={name} value={range?.start && range.end ? `${iso(range.start)}/${iso(range.end)}` : ''} />
+      }
+      label={label}
+      helperText={
+        invalid ? `Enter two dates as ${pattern} – ${pattern}${min || max ? ', within the allowed range' : ''}.` : helperText
+      }
+      validationState={invalid ? 'error' : validationState}
+      size={size}
+      appearance={appearance}
+      placeholder={placeholder ?? `${pattern} – ${pattern}`}
+      isFullWidth={isFullWidth}
+      disabled={disabled}
+      required={required}
+      id={id}
+      className={className}
+      aria-label={ariaLabel}
+    >
+      {({ autoFocus, close }) => {
+        // A range applies as soon as both ends are in.
+        const choose = (r: DateRange) => {
+          setDraft(r)
+          if (!r.start || !r.end) return
+          if (!sameRange(r, range)) commit(r)
+          close()
+        }
+        // The first click starts a range, the second ends it, either way round.
+        const pick = (d: Date) => choose(!draft.start || draft.end ? { start: d, end: null } : ordered(draft.start, d))
+        const calendar = { range: draft, onValueChange: pick, min, max, isDateDisabled, locale, weekStartsOn }
+        return (
+          <>
+            {presetList.length > 0 && (
+              <div role="group" aria-label="Presets" className={styles.presets}>
+                {presetList.map((p) => (
+                  <button
+                    key={p.label}
+                    type="button"
+                    aria-pressed={isSameDay(p.start, draft.start) && isSameDay(p.end, draft.end)}
+                    className={styles.preset}
+                    onClick={() => {
+                      setMonths(monthsFor(p, today))
+                      choose({ start: p.start, end: p.end })
+                    }}
+                  >
+                    {p.label}
+                  </button>
+                ))}
+              </div>
+            )}
+            <div className={styles.months}>
+              <Calendar
+                {...calendar}
+                month={months[0]}
+                onMonthChange={(m) => setMonths(([, right]) => [m, monthIndex(m) < monthIndex(right) ? right : addMonths(m, 1)])}
+                autoFocus={autoFocus}
+                className={styles.body}
+              />
+              {/* Hidden on a narrow screen, where one month fits. */}
+              <Calendar
+                {...calendar}
+                month={months[1]}
+                onMonthChange={(m) => setMonths(([left]) => [monthIndex(left) < monthIndex(m) ? left : addMonths(m, -1), m])}
+                className={cn(styles.body, styles.second)}
+              />
+            </div>
+          </>
+        )
+      }}
+    </PickerField>
   )
 }

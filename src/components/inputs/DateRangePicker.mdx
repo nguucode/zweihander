@@ -1,0 +1,64 @@
+import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import * as DateRangePickerStories from './DateRangePicker.stories'
+
+<Meta of={DateRangePickerStories} />
+
+# Date Range Picker
+
+A field for a span of days: a report period, a booking. Typed like
+[Date Picker](?path=/docs/components-inputs-datepicker--docs), or picked
+from two months side by side. Shipped in the same file as Date Picker,
+which it shares its field and popover with.
+
+<Canvas of={DateRangePickerStories.Default} />
+
+## Anatomy
+
+| Part | What it is |
+| --- | --- |
+| **Input** | Two dates in the locale's order, `dd/mm/yyyy – dd/mm/yyyy`. A click opens the calendars. |
+| **Presets** | With `presets`: whole periods beside the calendars, Today to Last year. Above them on a narrow screen. |
+| **Calendars** | Two months that page on their own, opening on the range's first and last months (this month and the next when empty). The left one always stays before the right: paging one past the other pushes the other along. One month on a screen narrower than 40rem. |
+
+## Props
+
+| Prop | Values | Default | |
+| --- | --- | --- | --- |
+| `value`, `defaultValue`, `onValueChange` | `{ start, end } \| null` | `null` | Both ends set, or `null`. |
+| `presets` | `boolean \| { label, start, end }[]` | `false` | `true` for the built-in list. `rangePresets(weekStartsOn)` returns it, to extend. |
+| `name` | string | – | Submitted as `yyyy-mm-dd/yyyy-mm-dd`, an ISO 8601 interval. |
+| Others | | | As on Date Picker: `label`, `helperText`, `size`, `min`, `max`, `isDateDisabled`, `locale`, `weekStartsOn`… |
+
+<Controls of={DateRangePickerStories.Default} />
+
+### Design notes
+
+- **Either way round.** The first click starts the range, the second
+  ends it; a second click before the first swaps them. So does typing
+  the later date first.
+- **Presets are whole periods.** "This month" is the 1st to the last
+  day, not the 1st to today, so a preset reads the same all month.
+- **No Cancel or Apply.** A range applies, and the popover closes, once
+  both ends are in; Escape before the second click leaves the value as
+  it was.
+- **No hover preview.** The band shows once both ends are in; add a
+  preview if testing shows people lose track of the first click.
+
+## Usage
+
+<Canvas of={DateRangePickerStories.Presets} />
+
+<Canvas of={DateRangePickerStories.PagingApart} />
+
+<Canvas of={DateRangePickerStories.Typing} />
+
+<Canvas of={DateRangePickerStories.Vietnamese} />
+
+## Accessibility
+
+- As Date Picker: a labelled text box, an error state with the expected
+  pattern, and the calendars in a dialog named "Choose dates".
+- Every day in the range has `aria-selected`, so the span is announced,
+  not only its ends.
+- Presets are toggle buttons in a group named "Presets"; the one that
+  matches the picked range is `aria-pressed`.
