@@ -215,11 +215,13 @@
 
 .option {
   display: grid;
-  grid-template-columns: 1fr var(--space-4);
+  grid-template-columns: var(--space-4) 1fr;
   align-items: center;
   gap: var(--space-2);
   min-block-size: var(--control-md);
-  padding: var(--space-1-5) var(--space-2);
+  /* --field-inset is the field's own padding (popupInset), so the option's
+     content starts where the field's text does. */
+  padding: var(--space-1-5) var(--field-inset, var(--space-2));
   cursor: default;
   user-select: none;
   outline: none;
@@ -237,9 +239,18 @@
   opacity: 0.6;
 }
 
+/* The check sits before the label, in the brand colour. The column is kept
+   whether or not the option is chosen, so labels never shift. */
 .check {
+  grid-column: 1;
+  grid-row: 1;
   display: inline-flex;
+  color: var(--primary-text);
   font-size: var(--space-4);
+}
+.option > :not(.check) {
+  grid-column: 2;
+  grid-row: 1;
 }
 
 .empty,

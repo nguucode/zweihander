@@ -1,10 +1,11 @@
-import { useRef, useState, type CSSProperties, type ReactNode, type Ref } from 'react'
+import { useRef, useState, type ReactNode, type Ref } from 'react'
 import { Combobox as BaseCombobox } from '@base-ui/react/combobox'
 import { Icon } from '@/lib/icon'
 import { cn } from '@/lib/utils'
 import {
   InputField,
   boxClass,
+  popupInset,
   inputStyles as s,
   type InputAppearance,
   type InputSize,
@@ -92,8 +93,6 @@ export function Combobox({
   // A pointer pick sends the field back to rest: no caret, no ring, as a
   // native select after a click. A keyboard pick keeps focus where the user is.
   const inputRef = useRef<HTMLInputElement | null>(null)
-  // The field's text inset, so the list's content starts where its text does.
-  const inset = appearance === 'outlined' ? (size === 'sm' ? 'var(--space-2)' : 'var(--space-3)') : '0px'
 
   return (
     <InputField
@@ -160,8 +159,8 @@ export function Combobox({
         <BaseCombobox.Portal>
           <BaseCombobox.Positioner className={s.positioner} sideOffset={4}>
             <BaseCombobox.Popup
-              className={cn(s.popup, styles.popup)}
-              style={{ '--field-inset': inset } as CSSProperties}
+              className={s.popup}
+              style={popupInset(size, appearance)}
             >
               {isLoading ? (
                 <BaseCombobox.Status className={s.status}>Loading…</BaseCombobox.Status>
@@ -170,11 +169,11 @@ export function Combobox({
               )}
               <BaseCombobox.List>
                 {(item: Item) => (
-                  <BaseCombobox.Item key={item.value} value={item} disabled={item.disabled} className={cn(s.option, styles.option)}>
-                    <BaseCombobox.ItemIndicator className={cn(s.check, styles.check)}>
+                  <BaseCombobox.Item key={item.value} value={item} disabled={item.disabled} className={s.option}>
+                    <BaseCombobox.ItemIndicator className={s.check}>
                       <Icon name="check" />
                     </BaseCombobox.ItemIndicator>
-                    <span className={styles.label}>
+                    <span>
                       <Highlight text={item.label} query={query} />
                     </span>
                   </BaseCombobox.Item>

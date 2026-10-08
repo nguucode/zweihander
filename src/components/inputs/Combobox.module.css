@@ -14,23 +14,3 @@
   text-decoration: underline;
   text-underline-offset: 2px;
 }
-
-/* The check sits before the label, in the brand colour. Options keep a
-   check column whether or not they are chosen, so labels never shift. */
-.option.option {
-  grid-template-columns: var(--space-4) 1fr;
-}
-.label {
-  grid-column: 2;
-}
-.check.check {
-  grid-column: 1;
-  color: var(--primary-text);
-}
-
-/* The list is as wide as the field and its options are inset by the
-   field's own padding (--field-inset, set per size and appearance from the
-   component), so each option's content starts where the input's text does. */
-.popup.popup .option {
-  padding-inline: var(--field-inset);
-}
