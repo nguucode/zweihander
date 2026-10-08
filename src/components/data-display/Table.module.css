@@ -1,8 +1,6 @@
 /* Scrolls sideways on a narrow screen rather than squeezing the columns. */
 .container {
   overflow-x: auto;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-panel);
   background: var(--card);
 }
 .sticky {
@@ -111,8 +109,8 @@ tbody tr:last-child > * {
 tbody tr:hover > * {
   background: var(--accent);
 }
-.selected > * {
-  background: var(--accent);
+tbody tr.selected > * {
+  background: var(--primary-subtle);
 }
 
 .select {
