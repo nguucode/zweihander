@@ -2,7 +2,7 @@ import { useEffect, useId, useRef, useState, type DragEvent, type ReactNode } fr
 import { Icon } from '@/lib/icon'
 import { cn } from '@/lib/utils'
 import { Button } from '../buttons/Button'
-import { ProgressBar } from '../loaders/ProgressBar'
+import { Spinner } from '../loaders/Spinner'
 import styles from './FileUploader.module.css'
 
 export interface FileRejection {
@@ -13,9 +13,9 @@ export interface FileRejection {
 }
 
 export interface FileStatus {
-  /** 0–100 while uploading. */
+  /** 0–100 while uploading: a ring beside the remove button, hidden at 100. */
   progress?: number
-  /** Shown under the file in the danger colour. */
+  /** Short, beside the remove button in the danger colour, e.g. "Upload failed". */
   error?: string
 }
 
@@ -33,7 +33,7 @@ export interface FileUploaderProps {
   maxSize?: number
   maxFiles?: number
   label?: ReactNode
-  /** Under the drop zone, e.g. "PNG or JPG, up to 5 MB." */
+  /** Inside the drop zone, under the button, e.g. "PNG or JPG, up to 5 MB." */
   helperText?: ReactNode
   /** Upload progress or a server error per file. The uploader does not upload: you do. */
   getFileStatus?: (file: File) => FileStatus | undefined
@@ -68,6 +68,52 @@ function syncInput(input: HTMLInputElement | null, files: File[]) {
   const transfer = new DataTransfer()
   files.forEach((f) => transfer.items.add(f))
   input.files = transfer.files
+}
+
+type FileKind = 'word' | 'excel' | 'powerpoint' | 'pdf' | 'image' | 'audio'
+
+function fileKind(file: File): FileKind | undefined {
+  const ext = file.name.split('.').pop()?.toLowerCase() ?? ''
+  const type = file.type.toLowerCase()
+  if (ext === 'pdf' || type === 'application/pdf') return 'pdf'
+  if (['doc', 'docx', 'odt', 'rtf'].includes(ext)) return 'word'
+  if (['xls', 'xlsx', 'csv', 'ods'].includes(ext)) return 'excel'
+  if (['ppt', 'pptx', 'odp'].includes(ext)) return 'powerpoint'
+  if (type.startsWith('image/')) return 'image'
+  if (type.startsWith('audio/') || ['mp3', 'wav', 'm4a', 'ogg', 'flac'].includes(ext)) return 'audio'
+}
+
+const badgeText: Partial<Record<FileKind, string>> = { word: 'W', excel: 'X', powerpoint: 'P', pdf: 'PDF' }
+
+/** A page with a coloured type badge, after Microsoft 365's file icons. Unknown types get the bare page. */
+function FileTypeIcon({ file }: { file: File }) {
+  const kind = fileKind(file)
+  return (
+    <svg className={styles.fileIcon} data-kind={kind} viewBox="0 0 32 32" aria-hidden="true">
+      <path className={styles.page} d="M9.5 2.5h11l7 7v18a2 2 0 0 1-2 2h-16a2 2 0 0 1-2-2v-23a2 2 0 0 1 2-2Z" />
+      <path className={styles.fold} d="M20.5 2.5v5a2 2 0 0 0 2 2h5Z" />
+      {kind && (
+        <g>
+          <rect className={styles.badge} x="2" y="13" width={kind === 'pdf' ? 20 : 15} height="14" rx="2" />
+          {badgeText[kind] ? (
+            <text className={styles.badgeText} x={kind === 'pdf' ? 12 : 9.5} y="23.5" textAnchor="middle">
+              {badgeText[kind]}
+            </text>
+          ) : kind === 'image' ? (
+            <g className={styles.glyph}>
+              <circle cx="12.5" cy="17.5" r="1.25" />
+              <path d="M5 24.5l3.5-4.5 2.5 3 1.5-1.5 2.5 3Z" />
+            </g>
+          ) : (
+            <g className={styles.glyph}>
+              <circle cx="7.5" cy="23" r="1.75" />
+              <path d="M9.25 23v-6.5l4 1.25v2" fill="none" strokeWidth="1.5" strokeLinejoin="round" />
+            </g>
+          )}
+        </g>
+      )}
+    </svg>
+  )
 }
 
 const sameFile = (a: File, b: File) => a.name === b.name && a.size === b.size && a.lastModified === b.lastModified
@@ -218,8 +264,7 @@ export function FileUploader({
         </p>
         <Button
           ref={chooseRef}
-          variant="secondary"
-          appearance="outlined"
+          variant="accent"
           size="sm"
           disabled={disabled}
           aria-describedby={[helperText ? helperId : '', rejections.length || missing ? errorId : ''].filter(Boolean).join(' ') || undefined}
@@ -227,6 +272,11 @@ export function FileUploader({
         >
           {multiple ? 'Choose files' : 'Choose a file'}
         </Button>
+        {helperText && (
+          <p id={helperId} className={styles.helper}>
+            {helperText}
+          </p>
+        )}
         <input
           ref={inputRef}
           type="file"
@@ -248,11 +298,6 @@ export function FileUploader({
           }}
         />
       </div>
-      {helperText && (
-        <p id={helperId} className={styles.helper}>
-          {helperText}
-        </p>
-      )}
       {(rejections.length > 0 || missing) && (
         <ul id={errorId} className={styles.errors}>
           {missing && <li>{multiple ? 'Choose at least one file.' : 'Choose a file.'}</li>}
@@ -265,22 +310,27 @@ export function FileUploader({
         <ul ref={listRef} className={styles.list} aria-label={multiple ? 'Chosen files' : 'Chosen file'}>
           {files.map((file, i) => {
             const status = getFileStatus?.(file)
+            const uploading = status?.progress !== undefined && status.progress < 100 && !status.error
             return (
-              <li key={`${file.name}-${file.size}-${file.lastModified}`} className={cn(styles.item, status?.error && styles.itemError)}>
-                <span className={styles.fileIcon} aria-hidden="true">
-                  <Icon name="file" />
-                </span>
-                <span className={styles.meta}>
+              <li key={`${file.name}-${file.size}-${file.lastModified}`} className={styles.item}>
+                <FileTypeIcon file={file} />
+                {/* The name truncates; the size always shows in full. */}
+                <span className={styles.nameRow}>
                   <span className={styles.name}>{file.name}</span>
                   <span className={styles.size}>{sizeFormat(file.size)}</span>
-                  {status?.progress !== undefined && status.progress < 100 && !status.error && (
-                    <ProgressBar value={status.progress} size="sm" aria-label={`Uploading ${file.name}`} className={styles.progress} />
-                  )}
-                  {status?.error && <span className={styles.fileError}>{status.error}</span>}
                 </span>
+                {uploading && (
+                  <Spinner value={status?.progress} variant="primary" size="sm" aria-label={`Uploading ${file.name}`} />
+                )}
+                {status?.error && (
+                  <span className={styles.fileError} title={status.error}>
+                    {status.error}
+                  </span>
+                )}
                 <Button
                   isIconOnly
                   data-remove=""
+                  className={styles.remove}
                   aria-label={`Remove ${file.name}`}
                   variant="secondary"
                   appearance="ghost"
