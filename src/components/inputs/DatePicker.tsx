@@ -144,10 +144,23 @@ function PickerField({
   const [fromInput, setFromInput] = useState(false)
   const boxRef = useRef<HTMLSpanElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+  // Whether the last press in the popup was the pointer's. A pointer pick
+  // sends the field back to rest (no caret, no ring); a keyboard pick or
+  // Escape returns focus to where it came from, so keyboard users stay put.
+  const [byPointer, setByPointer] = useState(false)
   const show = (byInput: boolean) => {
     onShow()
+    setByPointer(false)
     setFromInput(byInput)
     setOpen(true)
+  }
+  /** After a pick. */
+  const close = () => {
+    setOpen(false)
+    // Opened from the input, focus never left it (the only other holder is
+    // the picked day, on its way out). After the render, so the input's
+    // blur commit reads the picked text.
+    if (byPointer) setTimeout(() => (document.activeElement as HTMLElement | null)?.blur())
   }
 
   return (
@@ -206,9 +219,11 @@ function PickerField({
                 aria-label={popupLabel}
                 className={cn(styles.popup, popupClassName)}
                 initialFocus={!fromInput}
-                finalFocus={fromInput ? inputRef : true}
+                finalFocus={byPointer ? false : fromInput ? inputRef : true}
+                onPointerDownCapture={() => setByPointer(true)}
+                onKeyDownCapture={() => setByPointer(false)}
               >
-                {children({ autoFocus: !fromInput, close: () => setOpen(false) })}
+                {children({ autoFocus: !fromInput, close })}
               </Popover.Popup>
             </Popover.Positioner>
           </Popover.Portal>

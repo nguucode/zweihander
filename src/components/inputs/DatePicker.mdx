@@ -72,9 +72,13 @@ The field's parts (label, box, helper), plus:
   `aria-invalid` and the helper explains the format.
 - The calendar button is named "Choose date", with the current date when
   there is one. Alt+Down in the input opens it too.
-- The calendar opens as a dialog with focus on the selected day; picking
-  a day closes it and returns focus to the button, Escape closes it
-  without a change.
+- The calendar opens as a dialog with focus on the selected day; Escape
+  closes it without a change.
+- **After a pick the field goes back to rest.** Picked with the pointer,
+  focus leaves the field (no caret, no ring), as in Combobox. Picked with
+  the keyboard, focus returns to where it came from (the button, or the
+  input), so keyboard and screen reader users are not dropped to the page.
+  The Date Range Picker does the same once both ends are in.
 - The field and calendar's own labels ("Choose date", "Previous month")
   are in English, like the rest of the kit's built-in labels.
 

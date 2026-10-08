@@ -51,7 +51,10 @@ export function Search({
     // whether the field is controlled or not.
     Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')!.set!.call(el, '')
     el.dispatchEvent(new Event('input', { bubbles: true }))
-    el.focus()
+    // The button unmounts once the field is empty; hand keyboard focus back
+    // to the input rather than losing it. A pointer press never focuses the
+    // button (see onMouseDown), so an idle field stays idle.
+    if (document.activeElement?.tagName === 'BUTTON') el.focus()
   }
 
   return (
@@ -89,7 +92,14 @@ export function Search({
           className={cn(inputStyles.control, styles.input)}
         />
         {canClear && (
-          <button type="button" aria-label="Clear search" className={inputStyles.iconButton} onClick={clear}>
+          <button
+            type="button"
+            aria-label="Clear search"
+            className={inputStyles.iconButton}
+            // Keep focus where it is: a focused field stays focused, an idle one stays idle.
+            onMouseDown={(event) => event.preventDefault()}
+            onClick={clear}
+          >
             <Icon name="clear" />
           </button>
         )}
