@@ -1,4 +1,4 @@
-import { useRef, useState, type CSSProperties, type ReactNode, type Ref } from 'react'
+import { useState, type CSSProperties, type ReactNode, type Ref } from 'react'
 import { Combobox as BaseCombobox } from '@base-ui/react/combobox'
 import { Icon } from '@/lib/icon'
 import { cn } from '@/lib/utils'
@@ -93,8 +93,7 @@ export function Combobox({
   // its ring, as a native select does after a click. Typing, clicking back
   // in or leaving brings normal focus behaviour back.
   const [picked, setPicked] = useState(false)
-  // The field's text inset, so the list can line its labels up with it.
-  const popupRef = useRef<HTMLDivElement>(null)
+  // The field's text inset, so the list's content starts where its text does.
   const inset = appearance === 'outlined' ? (size === 'sm' ? 'var(--space-2)' : 'var(--space-3)') : '0px'
 
   return (
@@ -159,18 +158,8 @@ export function Combobox({
           </BaseCombobox.Trigger>
         </BaseCombobox.InputGroup>
         <BaseCombobox.Portal>
-          <BaseCombobox.Positioner
-            className={s.positioner}
-            sideOffset={4}
-            align="start"
-            // The list hangs left by --hang (see the CSS). As an offset, not a
-            // margin, so collision handling keeps it on screen.
-            alignOffset={() =>
-              popupRef.current ? -parseFloat(getComputedStyle(popupRef.current).getPropertyValue('--hang')) || 0 : 0
-            }
-          >
+          <BaseCombobox.Positioner className={s.positioner} sideOffset={4}>
             <BaseCombobox.Popup
-              ref={popupRef}
               className={cn(s.popup, styles.popup)}
               style={{ '--field-inset': inset } as CSSProperties}
             >

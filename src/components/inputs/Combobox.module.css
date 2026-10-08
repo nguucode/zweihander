@@ -34,18 +34,9 @@
   color: var(--primary-text);
 }
 
-/* The list hangs out to the left by the check column, so option labels
-   start exactly under the text typed in the field (macOS menus do the same).
-   Gutter = option padding + check + gap; --field-inset is the field's own
-   padding, set per size and appearance from the component. Registered as a
-   length so the component can read it back in px and pass it to the
-   positioner as an offset. */
-@property --hang {
-  syntax: '<length>';
-  inherits: false;
-  initial-value: 0px;
-}
-.popup.popup {
-  --hang: calc(var(--space-2) + var(--space-4) + var(--space-2) - var(--field-inset));
-  min-inline-size: calc(var(--anchor-width) + var(--hang));
+/* The list is as wide as the field and its options are inset by the
+   field's own padding (--field-inset, set per size and appearance from the
+   component), so each option's content starts where the input's text does. */
+.popup.popup .option {
+  padding-inline: var(--field-inset);
 }
