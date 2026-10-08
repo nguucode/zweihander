@@ -17,8 +17,8 @@ Behaviour from Base UI's [Tabs](https://base-ui.com/react/components/tabs).
 | Part | What it is |
 | --- | --- |
 | **Tab list** | The row (or column) of tabs. |
-| **Tab** | Optional icon and a label, medium weight. `--muted-foreground` until selected (`--foreground` on pills). |
-| **Indicator** | `underline`: a 2px `--foreground` bar that slides to the selected tab. `pills`: a `--background` segment with a `--control-border` edge. |
+| **Tab** | Optional icon and a label, medium weight. `--muted-foreground` until selected, then `--primary-text` (underline) or `--foreground` (pills; `--subtle-foreground` until selected). |
+| **Indicator** | `underline`: a 2px `--primary` bar that slides to the selected tab. `pills`: a `--card` chip with a `--border` hairline and `--shadow-xs` on a `--muted` track. |
 | **Panel** | The selected tab's `content`. |
 
 ## Props
