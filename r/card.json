@@ -1,0 +1,28 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "card",
+  "title": "Card",
+  "description": "Surface for related content: elevated, outline, filled or unstyled; a button with onClick or a link with render.",
+  "dependencies": [
+    "@base-ui/react"
+  ],
+  "registryDependencies": [
+    "https://ontheshore.biz/zweihander/r/utils.json",
+    "https://ontheshore.biz/zweihander/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/data-display/Card.tsx",
+      "content": "import type { ComponentProps, MouseEventHandler } from 'react'\nimport { mergeProps } from '@base-ui/react/merge-props'\nimport { useRender } from '@base-ui/react/use-render'\nimport { cn } from '@/lib/utils'\nimport styles from './Card.module.css'\n\nexport interface CardProps extends Omit<ComponentProps<'div'>, 'onClick'> {\n  /** Padding and the gap between children. */\n  size?: 'xs' | 'sm' | 'md' | 'lg'\n  appearance?: 'elevated' | 'outline' | 'unstyled'\n  /** How children flow: stacked, or side by side (e.g. media and text). */\n  orientation?: 'vertical' | 'horizontal'\n  isRounded?: boolean\n  hasBorder?: boolean\n  /** Makes the whole card a `<button>`. Its content must then be non-interactive. */\n  onClick?: MouseEventHandler<HTMLElement>\n  /** Replaces the element — `<a href>` or a router's Link for a card that navigates. */\n  render?: useRender.RenderProp\n}\n\nexport function Card({\n  size = 'sm',\n  appearance = 'elevated',\n  orientation = 'vertical',\n  isRounded = true,\n  hasBorder = true,\n  onClick,\n  render,\n  className,\n  ...props\n}: CardProps) {\n  // render is for link cards (see the MDX), so it counts as interactive.\n  const interactive = onClick !== undefined || render !== undefined\n  return useRender({\n    render,\n    defaultTagName: onClick ? 'button' : 'div',\n    props: mergeProps<'div'>(\n      {\n        className: cn(\n          styles.card,\n          styles[size],\n          styles[appearance],\n          styles[orientation],\n          isRounded && styles.rounded,\n          hasBorder && appearance !== 'unstyled' && styles.bordered,\n          interactive && styles.interactive,\n          className,\n        ),\n        // type only on the <button> this renders itself, never on a render element.\n        ...(onClick && { onClick, ...(!render && { type: 'button' }) }),\n      } as ComponentProps<'div'>,\n      props,\n    ),\n  })\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/data-display/Card.tsx"
+    },
+    {
+      "path": "src/components/data-display/Card.module.css",
+      "content": ".card {\n  display: flex;\n  box-sizing: border-box;\n  margin: 0;\n  border: 1px solid transparent;\n  background: transparent;\n  color: var(--card-foreground);\n  font-family: var(--font-sans);\n  font-size: var(--text-body);\n  line-height: var(--leading-body);\n  text-align: start;\n  text-decoration: none;\n}\n\n.vertical {\n  flex-direction: column;\n}\n\n.horizontal {\n  flex-direction: row;\n  align-items: flex-start;\n}\n\n.xs {\n  gap: var(--space-2);\n  padding: var(--space-3);\n}\n.sm {\n  gap: var(--space-3);\n  padding: var(--space-4);\n}\n.md {\n  gap: var(--space-4);\n  padding: var(--space-6);\n}\n.lg {\n  gap: var(--space-6);\n  padding: var(--space-8);\n}\n\n.rounded {\n  border-radius: var(--radius-panel);\n}\n\n/* The card's own border is the non-interactive one; a clickable card still\n   uses it, and shows its interactivity by hover and focus instead. */\n.bordered {\n  border-color: var(--border);\n}\n\n.elevated {\n  background: var(--card);\n  box-shadow: var(--shadow-sm);\n}\n\n.outline {\n  background: var(--card);\n}\n\n/* unstyled keeps its padding and layout, and drops everything you see. */\n.unstyled {\n  color: inherit;\n}\n\nbutton.interactive {\n  cursor: var(--cursor-button);\n}\n\n.interactive {\n  transition:\n    background-color 150ms,\n    box-shadow 150ms;\n}\n\na[href].interactive {\n  cursor: var(--cursor-link);\n}\n\n/* Hover never touches the surface: muted text sits on it at 4.5:1 with no\n   margin to spare (darkening it 6% took muted text to 3.9:1). Elevated\n   lifts to a larger shadow; the others strengthen their edge to the 3:1\n   control border. */\n.elevated.interactive:hover {\n  box-shadow: var(--shadow-md);\n}\n\n.outline.interactive:hover {\n  border-color: var(--control-border);\n}\n\n.interactive:focus-visible {\n  outline: 2px solid var(--ring);\n  outline-offset: 2px;\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/data-display/Card.module.css"
+    }
+  ],
+  "type": "registry:component"
+}

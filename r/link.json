@@ -1,0 +1,29 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "link",
+  "title": "Link",
+  "description": "Inline or standalone link with colour, size, underline, external and disabled states; render prop for router links.",
+  "dependencies": [
+    "@base-ui/react"
+  ],
+  "registryDependencies": [
+    "https://ontheshore.biz/zweihander/r/utils.json",
+    "https://ontheshore.biz/zweihander/r/tokens.json",
+    "https://ontheshore.biz/zweihander/r/icon.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/navigation/Link.tsx",
+      "content": "import type { ComponentProps, Ref } from 'react'\nimport { mergeProps } from '@base-ui/react/merge-props'\nimport { useRender } from '@base-ui/react/use-render'\nimport { Icon } from '@/lib/icon'\nimport { cn } from '@/lib/utils'\nimport styles from './Link.module.css'\n\nexport interface LinkProps extends Omit<ComponentProps<'a'>, 'ref'> {\n  ref?: Ref<HTMLAnchorElement>\n  /** Colour. `accent` is the foreground, as on Button; `secondary` is muted, for footers and meta text. */\n  variant?: 'primary' | 'accent' | 'secondary'\n  /** Omit to inherit the surrounding text size, which is what a link inside a sentence wants. */\n  size?: 'sm' | 'md' | 'lg'\n  /** `always` inside running text: colour alone does not mark a link. `hover` only where the context already says \"these are links\", like a nav list. */\n  underline?: 'always' | 'hover'\n  /** Opens in a new tab, with `rel=\"noopener noreferrer\"`, an external icon and \"(opens in a new tab)\" for screen readers. */\n  isExternal?: boolean\n  /** Rendered without `href`, so it cannot navigate; `aria-disabled` says why. */\n  isDisabled?: boolean\n  /** Replaces the rendered element, e.g. a router's `<Link />`. */\n  render?: useRender.RenderProp\n}\n\nexport function Link({\n  variant = 'primary',\n  size,\n  underline = 'always',\n  isExternal = false,\n  isDisabled = false,\n  href,\n  target,\n  rel,\n  render,\n  className,\n  children,\n  ...props\n}: LinkProps) {\n  const external = isExternal && !isDisabled\n  // A disabled link does nothing: its handlers are dropped along with href.\n  const own = isDisabled\n    ? Object.fromEntries(Object.entries(props).filter(([key]) => !/^on[A-Z]/.test(key)))\n    : props\n  return useRender({\n    // Disabled drops the render element as well: a router's Link keeps its\n    // own navigation, and only an <a> with no href is truly inert.\n    render: isDisabled ? undefined : render,\n    defaultTagName: 'a',\n    props: mergeProps<'a'>(\n      {\n        className: cn(\n          styles.link,\n          styles[variant],\n          size && styles[size],\n          underline === 'hover' && styles.underlineHover,\n          className,\n        ),\n        children: (\n          <>\n            {children}\n            {external && (\n              <>\n                <Icon name=\"external\" className={styles.icon} />\n                <span className={styles.srOnly}> (opens in a new tab)</span>\n              </>\n            )}\n          </>\n        ),\n      },\n      own as ComponentProps<'a'>,\n      {\n        ...(!isDisabled && href !== undefined && { href }),\n        target: external ? '_blank' : target,\n        rel: external ? cn('noopener noreferrer', rel) : rel,\n        'aria-disabled': isDisabled || undefined,\n      },\n    ),\n  })\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/navigation/Link.tsx"
+    },
+    {
+      "path": "src/components/navigation/Link.module.css",
+      "content": ".link {\n  --link-color: var(--primary-text);\n  color: var(--link-color);\n  /* Inherit the sentence around it unless a size is given. */\n  font: inherit;\n  font-weight: 500;\n  text-decoration-line: underline;\n  text-decoration-thickness: 1px;\n  text-underline-offset: 0.2em;\n  border-radius: var(--radius-sm);\n  cursor: var(--cursor-link);\n  transition: text-decoration-thickness 150ms;\n}\n\n/* Every colour here is a text colour at 4.5:1 on the page. */\n.primary {\n  --link-color: var(--primary-text);\n}\n.accent {\n  --link-color: var(--foreground);\n}\n.secondary {\n  --link-color: var(--muted-foreground);\n}\n\n.sm {\n  font-size: var(--text-body-sm);\n  line-height: var(--leading-body-sm);\n}\n.md {\n  font-size: var(--text-body);\n  line-height: var(--leading-body);\n}\n.lg {\n  font-size: var(--text-body-lg);\n  line-height: var(--leading-body-lg);\n}\n\n/* Hover thickens the line rather than changing colour, so the link keeps\n   the contrast it was measured at. */\n.link[href]:hover {\n  text-decoration-thickness: 2px;\n}\n\n.underlineHover {\n  text-decoration-line: none;\n}\n.underlineHover[href]:hover {\n  text-decoration-line: underline;\n}\n\n.link:focus-visible {\n  outline: 2px solid var(--ring);\n  outline-offset: 2px;\n}\n\n.link[aria-disabled='true'] {\n  opacity: 0.5;\n  cursor: var(--cursor-disabled);\n}\n\n.icon {\n  display: inline-block;\n  margin-inline-start: 0.2em;\n  inline-size: 0.9em;\n  block-size: 0.9em;\n  vertical-align: -0.1em;\n}\n\n.srOnly {\n  position: absolute;\n  inline-size: 1px;\n  block-size: 1px;\n  overflow: hidden;\n  clip-path: inset(50%);\n  white-space: nowrap;\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/navigation/Link.module.css"
+    }
+  ],
+  "type": "registry:component"
+}

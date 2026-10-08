@@ -1,0 +1,29 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "switch",
+  "title": "Switch",
+  "description": "On/off switch with label and helper text, on Base UI Switch and Field.",
+  "dependencies": [
+    "@base-ui/react"
+  ],
+  "registryDependencies": [
+    "https://ontheshore.biz/zweihander/r/utils.json",
+    "https://ontheshore.biz/zweihander/r/tokens.json",
+    "https://ontheshore.biz/zweihander/r/choice-field.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/controls/Switch.tsx",
+      "content": "import type { ReactNode, Ref } from 'react'\nimport { Switch as BaseSwitch } from '@base-ui/react/switch'\nimport { cn } from '@/lib/utils'\nimport { ChoiceField, choiceStyles, type ValidationState } from './ChoiceField'\nimport styles from './Switch.module.css'\n\nexport interface SwitchProps {\n  ref?: Ref<HTMLElement>\n  /** Controlled state. */\n  checked?: boolean\n  /** Uncontrolled starting state (the spec's `defaultValue`). */\n  defaultChecked?: boolean\n  /** The spec's `onChange`. Base UI's event details are dropped. */\n  onCheckedChange?: (checked: boolean) => void\n  label?: ReactNode\n  helperText?: ReactNode\n  name?: string\n  /** Submitted when on; \"on\" by default, like a checkbox. */\n  value?: string\n  size?: 'sm' | 'md' | 'lg'\n  /** Colour of the on state. */\n  variant?: 'primary' | 'accent' | 'destructive'\n  disabled?: boolean\n  required?: boolean\n  readOnly?: boolean\n  validationState?: ValidationState\n  id?: string\n  className?: string\n  'aria-label'?: string\n}\n\nexport function Switch({\n  label,\n  helperText,\n  name,\n  size = 'md',\n  variant = 'primary',\n  disabled,\n  required,\n  validationState,\n  className,\n  onCheckedChange,\n  ...props\n}: SwitchProps) {\n  return (\n    <ChoiceField\n      label={label}\n      helperText={helperText}\n      validationState={validationState}\n      required={required}\n      disabled={disabled}\n      name={name}\n      className={cn(styles[size], className)}\n    >\n      <BaseSwitch.Root\n        {...props}\n        required={required}\n        onCheckedChange={onCheckedChange && ((next) => onCheckedChange(next))}\n        className={cn(choiceStyles.control, styles.track, styles[variant])}\n      >\n        <BaseSwitch.Thumb className={styles.thumb} />\n      </BaseSwitch.Root>\n    </ChoiceField>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/controls/Switch.tsx"
+    },
+    {
+      "path": "src/components/controls/Switch.module.css",
+      "content": "/* Sizes are set on the field so the helper text can indent by the track's\n   width. Doubled classes outrank ChoiceField's default, whichever\n   stylesheet loads first. Track heights are 16/20/24px; widths are one\n   and three quarter heights, so the thumb travels most of a thumb-width. */\n.sm.sm {\n  --choice-control: calc(var(--space-6) + var(--space-1));\n  --choice-control-block: var(--space-4);\n}\n.md.md {\n  --choice-control: calc(var(--space-8) + var(--space-1));\n  --choice-control-block: calc(var(--space-4) + var(--space-1));\n}\n.lg.lg {\n  --choice-control: calc(var(--space-10) + var(--space-1));\n  --choice-control-block: var(--space-6);\n}\n\n/* Off: a --control-border track (3:1 on the page, so the control is\n   visible at all) with a page-coloured thumb. On: the variant's solid and\n   its label colour, which is measured at 4.5:1 against it. */\n.track {\n  --switch-on: var(--primary);\n  --switch-on-thumb: var(--primary-foreground);\n  display: inline-flex;\n  align-items: center;\n  inline-size: var(--choice-control);\n  block-size: var(--choice-control-block);\n  /* 2px between track edge and thumb at every size. */\n  padding: 2px;\n  border-radius: 9999px;\n  background: var(--control-border);\n  cursor: var(--cursor-button);\n  transition: background-color 150ms;\n}\n\n.accent {\n  --switch-on: var(--foreground);\n  --switch-on-thumb: var(--background);\n}\n.destructive {\n  --switch-on: var(--destructive);\n  --switch-on-thumb: var(--destructive-foreground);\n}\n\n.track[data-checked] {\n  background: var(--switch-on);\n}\n\n.track[data-readonly] {\n  cursor: default;\n}\n\n/* Invalid: a danger-coloured edge INSIDE the track, so it reads on and off\n   alike and leaves the band outside the track to the focus ring — an\n   outside ring here would sit exactly where focus draws and hide it. The\n   helper text says what is wrong. */\n.track[data-invalid] {\n  box-shadow: inset 0 0 0 2px var(--danger-text);\n}\n\n.thumb {\n  block-size: calc(var(--choice-control-block) - 4px);\n  aspect-ratio: 1;\n  border-radius: 9999px;\n  background: var(--background);\n  transition:\n    translate 150ms,\n    background-color 150ms;\n}\n\n.thumb[data-checked] {\n  /* The full travel: track width minus the thumb and both 2px gaps. */\n  translate: calc(var(--choice-control) - var(--choice-control-block)) 0;\n  background: var(--switch-on-thumb);\n}\n\n/* translate is physical; in a right-to-left page the thumb starts on the\n   right and travels left. Not :dir(rtl): the build lowers it to a list of\n   :lang()s, which misses a dir=\"rtl\" page in any other language. */\n:global([dir='rtl']) .thumb[data-checked] {\n  translate: calc(var(--choice-control-block) - var(--choice-control)) 0;\n}\n:global([dir='rtl'] [dir='ltr']) .thumb[data-checked] {\n  translate: calc(var(--choice-control) - var(--choice-control-block)) 0;\n}\n\n@media (prefers-reduced-motion: reduce) {\n  .track,\n  .thumb {\n    transition: none;\n  }\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/controls/Switch.module.css"
+    }
+  ],
+  "type": "registry:component"
+}

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "search",
+  "title": "Search",
+  "description": "Search field with icon and clear button; Escape clears in every browser.",
+  "dependencies": [
+    "@base-ui/react"
+  ],
+  "registryDependencies": [
+    "https://ontheshore.biz/zweihander/r/utils.json",
+    "https://ontheshore.biz/zweihander/r/tokens.json",
+    "https://ontheshore.biz/zweihander/r/input-field.json",
+    "https://ontheshore.biz/zweihander/r/icon.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/inputs/Search.tsx",
+      "content": "import { useRef, useState, type ChangeEvent, type ComponentProps, type KeyboardEvent, type ReactNode } from 'react'\nimport { Field } from '@base-ui/react/field'\nimport { Icon } from '@/lib/icon'\nimport { cn } from '@/lib/utils'\nimport {\n  assignRef,\n  InputField,\n  boxClass,\n  focusControl,\n  inputStyles,\n  type InputSize,\n} from './InputField'\nimport styles from './Search.module.css'\n\nexport interface SearchProps extends Omit<ComponentProps<'input'>, 'size' | 'type' | 'value' | 'defaultValue'> {\n  value?: string\n  defaultValue?: string\n  /** A visible label. Without one the field is named by `aria-label` (\"Search\" by default). */\n  label?: ReactNode\n  size?: InputSize\n  isFullWidth?: boolean\n}\n\nexport function Search({\n  value,\n  defaultValue = '',\n  label,\n  placeholder = 'Search',\n  size = 'md',\n  isFullWidth,\n  disabled,\n  readOnly,\n  onChange,\n  onKeyDown,\n  className,\n  ref,\n  'aria-label': ariaLabel,\n  ...props\n}: SearchProps) {\n  const input = useRef<HTMLInputElement | null>(null)\n  // Only to know whether to show the clear button; the input stays the\n  // source of truth for an uncontrolled field.\n  const [uncontrolled, setUncontrolled] = useState(defaultValue)\n  const current = value ?? uncontrolled\n  const canClear = current !== '' && !disabled && !readOnly\n\n  const clear = () => {\n    const el = input.current\n    if (!el) return\n    // Set the value the way typing would, so onChange receives a real event\n    // whether the field is controlled or not.\n    Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')!.set!.call(el, '')\n    el.dispatchEvent(new Event('input', { bubbles: true }))\n    // The button unmounts once the field is empty; hand keyboard focus back\n    // to the input rather than losing it. A pointer press never focuses the\n    // button (see onMouseDown), so an idle field stays idle.\n    if (document.activeElement?.tagName === 'BUTTON') el.focus()\n  }\n\n  return (\n    <InputField label={label} disabled={disabled} isFullWidth={isFullWidth} className={className}>\n      <span className={boxClass(size)} onMouseDown={focusControl}>\n        <span className={inputStyles.affix}>\n          <Icon name=\"search\" />\n        </span>\n        <Field.Control\n          {...props}\n          ref={(node: HTMLInputElement | null) => {\n            input.current = node\n            assignRef(ref, node)\n          }}\n          type=\"search\"\n          value={value}\n          defaultValue={value === undefined ? defaultValue : undefined}\n          placeholder={placeholder}\n          disabled={disabled}\n          readOnly={readOnly}\n          aria-label={label ? ariaLabel : (ariaLabel ?? 'Search')}\n          onChange={(event: ChangeEvent<HTMLInputElement>) => {\n            setUncontrolled(event.target.value)\n            onChange?.(event)\n          }}\n          onKeyDown={(event: KeyboardEvent<HTMLInputElement>) => {\n            onKeyDown?.(event)\n            // Firefox does not clear a search field on Escape; Chrome and\n            // Safari do. Doing it here makes them all agree.\n            if (event.key === 'Escape' && canClear && !event.defaultPrevented) {\n              event.preventDefault()\n              clear()\n            }\n          }}\n          className={cn(inputStyles.control, styles.input)}\n        />\n        {canClear && (\n          <button\n            type=\"button\"\n            aria-label=\"Clear search\"\n            className={inputStyles.iconButton}\n            // Keep focus where it is: a focused field stays focused, an idle one stays idle.\n            onMouseDown={(event) => event.preventDefault()}\n            onClick={clear}\n          >\n            <Icon name=\"clear\" />\n          </button>\n        )}\n      </span>\n    </InputField>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/inputs/Search.tsx"
+    },
+    {
+      "path": "src/components/inputs/Search.module.css",
+      "content": "/* The browser's own clear button would sit beside ours. */\n.input::-webkit-search-cancel-button,\n.input::-webkit-search-decoration {\n  appearance: none;\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/inputs/Search.module.css"
+    }
+  ],
+  "type": "registry:component"
+}

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "text-input",
+  "title": "Text Input",
+  "description": "Single-line text field with label, helper text, validation, prefix and suffix, on Base UI Field.",
+  "dependencies": [
+    "@base-ui/react"
+  ],
+  "registryDependencies": [
+    "https://ontheshore.biz/zweihander/r/utils.json",
+    "https://ontheshore.biz/zweihander/r/tokens.json",
+    "https://ontheshore.biz/zweihander/r/input-field.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/inputs/TextInput.tsx",
+      "content": "import type { ComponentProps, ReactNode } from 'react'\nimport { Field } from '@base-ui/react/field'\nimport { cn } from '@/lib/utils'\nimport {\n  InputField,\n  boxClass,\n  focusControl,\n  inputStyles,\n  type InputSize,\n  type ValidationState,\n} from './InputField'\n\nexport interface TextInputProps extends Omit<ComponentProps<'input'>, 'size' | 'prefix'> {\n  label?: ReactNode\n  /** Under the field; the error message when `validationState` is error. */\n  helperText?: ReactNode\n  validationState?: ValidationState\n  size?: InputSize\n  /** Text or an icon before the value, e.g. `<Icon name=\"search\" />` or \"https://\". */\n  prefix?: ReactNode\n  /** Text or an icon after the value, e.g. \"kg\". */\n  suffix?: ReactNode\n  isFullWidth?: boolean\n}\n\nexport function TextInput({\n  label,\n  helperText,\n  validationState,\n  size = 'md',\n  prefix,\n  suffix,\n  isFullWidth,\n  required,\n  disabled,\n  name,\n  className,\n  ...props\n}: TextInputProps) {\n  return (\n    <InputField\n      label={label}\n      helperText={helperText}\n      validationState={validationState}\n      required={required}\n      disabled={disabled}\n      name={name}\n      isFullWidth={isFullWidth}\n      className={className}\n    >\n      <span className={boxClass(size)} onMouseDown={focusControl}>\n        {prefix && <span className={inputStyles.affix}>{prefix}</span>}\n        <Field.Control {...props} required={required} className={cn(inputStyles.control)} />\n        {suffix && <span className={inputStyles.affix}>{suffix}</span>}\n      </span>\n    </InputField>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/inputs/TextInput.tsx"
+    }
+  ],
+  "type": "registry:component"
+}

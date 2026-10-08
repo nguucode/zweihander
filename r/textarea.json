@@ -1,0 +1,29 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "textarea",
+  "title": "Textarea",
+  "description": "Multi-line text field with auto-size, rows and resize, on the shared input field.",
+  "dependencies": [
+    "@base-ui/react"
+  ],
+  "registryDependencies": [
+    "https://ontheshore.biz/zweihander/r/utils.json",
+    "https://ontheshore.biz/zweihander/r/tokens.json",
+    "https://ontheshore.biz/zweihander/r/input-field.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/inputs/Textarea.tsx",
+      "content": "import {\n  useCallback,\n  useLayoutEffect,\n  useRef,\n  type ComponentProps,\n  type CSSProperties,\n  type ReactNode,\n} from 'react'\nimport { Field } from '@base-ui/react/field'\nimport { cn } from '@/lib/utils'\nimport {\n  assignRef,\n  InputField,\n  boxClass,\n  focusControl,\n  inputStyles,\n  type InputSize,\n  type ValidationState,\n} from './InputField'\nimport styles from './Textarea.module.css'\n\nexport interface TextareaProps extends Omit<ComponentProps<'textarea'>, 'size'> {\n  label?: ReactNode\n  helperText?: ReactNode\n  validationState?: ValidationState\n  size?: InputSize\n  isFullWidth?: boolean\n  /** Which way the user can drag to resize. Ignored with `hasAutoSize`. */\n  resize?: 'none' | 'both' | 'vertical' | 'horizontal'\n  /** Grow and shrink with the content, between `minRows` and `maxRows`. */\n  hasAutoSize?: boolean\n  /** The starting height, in lines. */\n  minRows?: number\n  /** The most it grows to before scrolling, in lines. */\n  maxRows?: number\n}\n\nexport function Textarea({\n  label,\n  helperText,\n  validationState,\n  size = 'md',\n  isFullWidth,\n  resize = 'vertical',\n  hasAutoSize = false,\n  minRows = 3,\n  maxRows,\n  required,\n  disabled,\n  name,\n  className,\n  onInput,\n  ref,\n  style,\n  ...props\n}: TextareaProps) {\n  const inner = useRef<HTMLTextAreaElement | null>(null)\n  const fit = useCallback(() => {\n    const el = inner.current\n    if (!el || !hasAutoSize) return\n    // Collapse first so a shrinking value can shrink the box; max-block-size\n    // (from maxRows) caps the result and the rest scrolls.\n    el.style.blockSize = 'auto'\n    el.style.blockSize = `${el.scrollHeight}px`\n  }, [hasAutoSize])\n  // Controlled values change without an input event; fit to those too.\n  useLayoutEffect(fit, [fit, props.value])\n\n  return (\n    <InputField\n      label={label}\n      helperText={helperText}\n      validationState={validationState}\n      required={required}\n      disabled={disabled}\n      name={name}\n      isFullWidth={isFullWidth}\n      className={className}\n    >\n      <span className={cn(boxClass(size), styles.multiline, styles[`pad-${size}`])} onMouseDown={focusControl}>\n        <Field.Control\n          render={\n            <textarea\n              rows={minRows}\n              ref={(node) => {\n                inner.current = node\n                assignRef(ref, node)\n              }}\n            />\n          }\n          {...(props as ComponentProps<typeof Field.Control>)}\n          required={required}\n          onInput={(event) => {\n            fit()\n            onInput?.(event as unknown as Parameters<NonNullable<TextareaProps[\"onInput\"]>>[0])\n          }}\n          className={cn(inputStyles.control, styles.textarea)}\n          style={\n            {\n              ...style,\n              resize: hasAutoSize ? 'none' : resize,\n              ...(maxRows && { maxBlockSize: `calc(${maxRows} * 1lh + 2 * var(--pad-block))` }),\n            } as CSSProperties\n          }\n        />\n      </span>\n    </InputField>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/inputs/Textarea.tsx"
+    },
+    {
+      "path": "src/components/inputs/Textarea.module.css",
+      "content": "/* A textarea's box grows with it, so it takes vertical padding instead of a\n   fixed height: 6px at sm, 8px at md, which puts the first line where a\n   single-line field of the same size puts its text. The padding sits on the\n   <textarea>, not the box, so the browser's resize handle lands in the\n   field's corner. Doubled classes outrank the shared size classes,\n   whichever stylesheet loads first. */\n.multiline.multiline {\n  align-items: stretch;\n  min-block-size: 0;\n  padding: 0;\n}\n.pad-sm {\n  --pad-block: var(--space-1-5);\n  --pad-inline: var(--space-2);\n}\n.pad-md {\n  --pad-block: var(--space-2);\n  --pad-inline: var(--space-2-5);\n}\n\n.textarea.textarea {\n  display: block;\n  box-sizing: border-box;\n  inline-size: 100%;\n  padding: var(--pad-block) var(--pad-inline);\n  overflow-y: auto;\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/inputs/Textarea.module.css"
+    }
+  ],
+  "type": "registry:component"
+}

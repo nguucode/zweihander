@@ -1,0 +1,25 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "skeleton",
+  "title": "Skeleton",
+  "description": "Decorative placeholder in the shape of loading content: circle, square or rounded, with rows.",
+  "registryDependencies": [
+    "https://ontheshore.biz/zweihander/r/utils.json",
+    "https://ontheshore.biz/zweihander/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/loaders/Skeleton.tsx",
+      "content": "import type { ComponentProps, CSSProperties } from 'react'\nimport { cn } from '@/lib/utils'\nimport styles from './Skeleton.module.css'\n\nexport interface SkeletonProps extends Omit<ComponentProps<'div'>, 'children'> {\n  /** A number is pixels; a string is any CSS length. */\n  width?: string | number\n  height?: string | number\n  appearance?: 'circle' | 'square' | 'rounded'\n  /** Several lines of text: stacked bars, the last one shorter. A circle's rows are rounded bars. */\n  rows?: number\n  isFullWidth?: boolean\n  /** A gentle pulse. Off by default: many pulsing shapes are noise. */\n  hasAnimation?: boolean\n}\n\nconst length = (v: string | number | undefined) => (typeof v === 'number' ? `${v}px` : v)\n\n/**\n * A placeholder in the shape of content that is still loading. Decorative:\n * put `aria-busy` on the region it stands in for, and announce the load\n * elsewhere if it matters.\n */\nexport function Skeleton({\n  width,\n  height,\n  appearance = 'square',\n  rows,\n  isFullWidth = false,\n  hasAnimation = false,\n  className,\n  style,\n  ...props\n}: SkeletonProps) {\n  const inlineSize = isFullWidth ? '100%' : length(width)\n\n  if (rows && rows > 1) {\n    // Lines of text are bars: a circle would stack into a column of dots.\n    const line = cn(styles.bone, styles[appearance === 'circle' ? 'rounded' : appearance], styles.line, hasAnimation && styles.animated)\n    return (\n      <div aria-hidden=\"true\" className={cn(styles.rows, className)} style={{ inlineSize, ...style } as CSSProperties} {...props}>\n        {Array.from({ length: rows }, (_, i) => (\n          <div key={i} className={line} style={{ blockSize: length(height) }} />\n        ))}\n      </div>\n    )\n  }\n  // A circle takes its height from its width, so `height` is ignored.\n  const blockSize = appearance === 'circle' ? undefined : length(height)\n  return (\n    <div\n      aria-hidden=\"true\"\n      className={cn(styles.bone, styles[appearance], hasAnimation && styles.animated, className)}\n      style={{ inlineSize, blockSize, ...style } as CSSProperties}\n      {...props}\n    />\n  )\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/loaders/Skeleton.tsx"
+    },
+    {
+      "path": "src/components/loaders/Skeleton.module.css",
+      "content": "/* --muted, the same subtle surface as a hover: a placeholder should read as\n   \"something goes here\", not compete with content that has arrived. It is\n   decoration and hidden from assistive tech, so no contrast floor applies. */\n.bone {\n  inline-size: 100%;\n  block-size: var(--space-4);\n  background: var(--muted);\n}\n\n.square {\n  border-radius: 0;\n}\n.rounded {\n  border-radius: var(--radius-md);\n}\n.circle {\n  border-radius: 9999px;\n  aspect-ratio: 1;\n  inline-size: var(--space-10);\n  block-size: auto;\n}\n\n.rows {\n  display: grid;\n  gap: var(--space-2);\n}\n\n/* A paragraph's last line is rarely full. */\n.line:last-child {\n  inline-size: 60%;\n}\n\n.animated {\n  animation: pulse 1.6s ease-in-out infinite;\n}\n\n@keyframes pulse {\n  50% {\n    opacity: 0.5;\n  }\n}\n\n@media (prefers-reduced-motion: reduce) {\n  .animated {\n    animation: none;\n  }\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/loaders/Skeleton.module.css"
+    }
+  ],
+  "type": "registry:component"
+}

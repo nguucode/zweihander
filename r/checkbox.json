@@ -1,0 +1,30 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "checkbox",
+  "title": "Checkbox",
+  "description": "Checkbox with label, helper text and indeterminate state, on Base UI Checkbox and Field.",
+  "dependencies": [
+    "@base-ui/react"
+  ],
+  "registryDependencies": [
+    "https://ontheshore.biz/zweihander/r/utils.json",
+    "https://ontheshore.biz/zweihander/r/tokens.json",
+    "https://ontheshore.biz/zweihander/r/choice-field.json",
+    "https://ontheshore.biz/zweihander/r/icon.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/controls/Checkbox.tsx",
+      "content": "import { useCallback, useRef, type ReactNode, type Ref } from 'react'\nimport { Checkbox as BaseCheckbox } from '@base-ui/react/checkbox'\nimport { Icon } from '@/lib/icon'\nimport { cn } from '@/lib/utils'\nimport { ChoiceField, choiceStyles, type ValidationState } from './ChoiceField'\nimport styles from './Checkbox.module.css'\n\nexport interface CheckboxProps {\n  ref?: Ref<HTMLElement>\n  checked?: boolean\n  defaultChecked?: boolean\n  /** The spec's `onChange`. Base UI's event details are dropped. */\n  onCheckedChange?: (checked: boolean) => void\n  /** Neither checked nor unchecked: a \"select all\" with some selected. */\n  isIndeterminate?: boolean\n  label?: ReactNode\n  helperText?: ReactNode\n  name?: string\n  /** Submitted when checked; \"on\" by default. */\n  value?: string\n  /** Colour of the checked box. */\n  variant?: 'primary' | 'neutral'\n  disabled?: boolean\n  required?: boolean\n  readOnly?: boolean\n  autoFocus?: boolean\n  validationState?: ValidationState\n  id?: string\n  className?: string\n  'aria-label'?: string\n}\n\nexport function Checkbox({\n  ref,\n  autoFocus,\n  label,\n  helperText,\n  name,\n  variant = 'neutral',\n  isIndeterminate,\n  disabled,\n  required,\n  validationState,\n  className,\n  onCheckedChange,\n  ...props\n}: CheckboxProps) {\n  // The root is a focusable <span>, and React only honours autoFocus on form\n  // elements, so it is done by hand — once, on mount, not on every render.\n  const focused = useRef(false)\n  const setRef = useCallback(\n    (node: HTMLElement | null) => {\n      if (node && autoFocus && !focused.current) {\n        focused.current = true\n        node.focus()\n      }\n      if (typeof ref === 'function') ref(node)\n      else if (ref) ref.current = node\n    },\n    [autoFocus, ref],\n  )\n  return (\n    <ChoiceField\n      label={label}\n      helperText={helperText}\n      validationState={validationState}\n      required={required}\n      disabled={disabled}\n      name={name}\n      className={cn(styles.field, className)}\n    >\n      <BaseCheckbox.Root\n        {...props}\n        ref={setRef}\n        indeterminate={isIndeterminate}\n        required={required}\n        onCheckedChange={onCheckedChange && ((next) => onCheckedChange(next))}\n        className={cn(choiceStyles.control, styles.box, styles[variant])}\n      >\n        <BaseCheckbox.Indicator\n          className={styles.indicator}\n          render={(indicatorProps, state) => (\n            <span {...indicatorProps}>\n              <Icon name={state.indeterminate ? 'minus' : 'check'} />\n            </span>\n          )}\n        />\n      </BaseCheckbox.Root>\n    </ChoiceField>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/controls/Checkbox.tsx"
+    },
+    {
+      "path": "src/components/controls/Checkbox.module.css",
+      "content": "/* Set on the field so the helper text indents by the box's width. */\n.field {\n  --choice-control: calc(var(--space-4) + var(--space-1));\n}\n\n/* 20px box, a --control-border outline (3:1 on the page). Checked and\n   indeterminate fill with the variant and show the mark in its label\n   colour. */\n.box {\n  --checkbox-fill: var(--foreground);\n  --checkbox-mark: var(--background);\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  inline-size: var(--choice-control);\n  block-size: var(--choice-control);\n  border: 1px solid var(--control-border);\n  border-radius: var(--radius-sm);\n  background: var(--background);\n  cursor: var(--cursor-button);\n}\n\n.primary {\n  --checkbox-fill: var(--primary);\n  --checkbox-mark: var(--primary-foreground);\n}\n\n.box:is([data-checked], [data-indeterminate]) {\n  /* Transparent so the fill shows through the border and hover only has to\n     change the background. */\n  border-color: transparent;\n  background: var(--checkbox-fill);\n  color: var(--checkbox-mark);\n}\n\n.box[data-invalid] {\n  border-color: var(--danger-text);\n}\n\n.box[data-readonly] {\n  cursor: default;\n}\n\n/* Hover anywhere on the label. Unchecked darkens the outline (an error\n   outline stays red); checked nudges the fill toward the mark, as Button\n   does. */\nlabel:hover > .box:not([data-checked], [data-indeterminate], [data-disabled], [data-readonly], [data-invalid]) {\n  border-color: var(--foreground);\n}\n\nlabel:hover > .box:is([data-checked], [data-indeterminate]):not([data-disabled], [data-readonly]) {\n  background: color-mix(in oklab, var(--checkbox-fill) 88%, var(--checkbox-mark));\n}\n\n/* The mark is 16px in a 20px box: it has to read at a glance. */\n.indicator {\n  display: inline-flex;\n  font-size: var(--space-4);\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/controls/Checkbox.module.css"
+    }
+  ],
+  "type": "registry:component"
+}

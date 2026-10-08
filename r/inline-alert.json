@@ -1,0 +1,26 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "inline-alert",
+  "title": "Inline Alert",
+  "description": "One-line message in the flow of a form or section: icon, text in the variant's colour, optional action and live announcement.",
+  "registryDependencies": [
+    "https://ontheshore.biz/zweihander/r/utils.json",
+    "https://ontheshore.biz/zweihander/r/tokens.json",
+    "https://ontheshore.biz/zweihander/r/icon.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/notifications/InlineAlert.tsx",
+      "content": "import type { ComponentProps, ReactNode } from 'react'\nimport { Icon, type IconName } from '@/lib/icon'\nimport { cn } from '@/lib/utils'\nimport styles from './InlineAlert.module.css'\n\nexport interface InlineAlertProps extends ComponentProps<'div'> {\n  variant?: 'info' | 'success' | 'warning' | 'danger'\n  size?: 'sm' | 'md'\n  /** Replaces the variant's icon; `false` shows none. */\n  icon?: ReactNode | false\n  /** A short link or button after the message, e.g. \"Retry\". */\n  action?: ReactNode\n  /**\n   * Announce it when it appears: `danger` and `warning` interrupt\n   * (`role=\"alert\"`), the others wait (`role=\"status\"`).\n   */\n  isLive?: boolean\n}\n\nconst icons: Record<NonNullable<InlineAlertProps['variant']>, IconName> = {\n  info: 'info-filled',\n  success: 'success-filled',\n  warning: 'warning-filled',\n  danger: 'danger-filled',\n}\n\n/**\n * A one-line message in the flow of a form or a section: no box, no title,\n * no close button. For a message about a whole page or region, use Alert.\n */\nexport function InlineAlert({\n  variant = 'info',\n  size = 'md',\n  icon,\n  action,\n  isLive = false,\n  className,\n  children,\n  ...props\n}: InlineAlertProps) {\n  const urgent = variant === 'danger' || variant === 'warning'\n  return (\n    <div\n      role={isLive ? (urgent ? 'alert' : 'status') : undefined}\n      className={cn(styles.inlineAlert, styles[variant], styles[size], className)}\n      {...props}\n    >\n      {icon !== false && (\n        <span className={styles.icon} aria-hidden=\"true\">\n          {icon ?? <Icon name={icons[variant]} />}\n        </span>\n      )}\n      <span className={styles.message}>{children}</span>\n      {action && <span className={styles.action}>{action}</span>}\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/notifications/InlineAlert.tsx"
+    },
+    {
+      "path": "src/components/notifications/InlineAlert.module.css",
+      "content": ".inlineAlert {\n  display: flex;\n  align-items: flex-start;\n  gap: var(--space-2);\n  font-family: var(--font-sans);\n  font-size: var(--text-body);\n  line-height: var(--leading-body);\n  /* The whole line takes the variant's text colour, measured at 4.5:1 on\n     the page: an inline alert has no box to carry the colour instead. */\n  color: var(--inline-alert-text);\n}\n\n.sm {\n  gap: var(--space-1-5);\n  font-size: var(--text-body-sm);\n  line-height: var(--leading-body-sm);\n}\n\n.info {\n  --inline-alert-text: var(--info-text);\n}\n.success {\n  --inline-alert-text: var(--success-text);\n}\n.warning {\n  --inline-alert-text: var(--warning-text);\n}\n.danger {\n  --inline-alert-text: var(--danger-text);\n}\n\n/* One line tall, so the icon sits on the first line of a wrapped message.\n   --leading-* is a ratio; times the text size it is a length. */\n.icon {\n  display: inline-flex;\n  flex-shrink: 0;\n  align-items: center;\n  block-size: calc(var(--leading-body) * var(--text-body));\n  font-size: var(--space-4);\n}\n.sm .icon {\n  block-size: calc(var(--leading-body-sm) * var(--text-body-sm));\n  font-size: var(--space-3);\n}\n\n.message {\n  min-inline-size: 0;\n}\n\n.action {\n  flex-shrink: 0;\n  margin-inline-start: var(--space-1);\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/notifications/InlineAlert.module.css"
+    }
+  ],
+  "type": "registry:component"
+}

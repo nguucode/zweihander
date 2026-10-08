@@ -1,0 +1,29 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "toggle-button",
+  "title": "Toggle Button",
+  "description": "Button that stays pressed, on Base UI Toggle; neutral when off, the variant when on.",
+  "dependencies": [
+    "@base-ui/react"
+  ],
+  "registryDependencies": [
+    "https://ontheshore.biz/zweihander/r/utils.json",
+    "https://ontheshore.biz/zweihander/r/tokens.json",
+    "https://ontheshore.biz/zweihander/r/button.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/buttons/ToggleButton.tsx",
+      "content": "import type { ComponentProps, ReactNode, Ref } from 'react'\nimport { Toggle } from '@base-ui/react/toggle'\nimport { cn } from '@/lib/utils'\nimport { Button, type ButtonProps } from './Button'\nimport styles from './ToggleButton.module.css'\n\ninterface ToggleButtonBaseProps\n  extends Omit<ComponentProps<'button'>, 'ref' | 'value' | 'defaultValue' | 'onChange'> {\n  // Always a <button> (Button itself may be an <a>, hence its wider type).\n  ref?: Ref<HTMLButtonElement>\n  /** Colour of the pressed state. Unpressed is always neutral. */\n  variant?: ButtonProps['variant']\n  /** Style of the pressed state. */\n  appearance?: ButtonProps['appearance']\n  size?: ButtonProps['size']\n  startIcon?: ReactNode\n  endIcon?: ReactNode\n  isLoading?: boolean\n  isFullWidth?: boolean\n  /** Controlled pressed state (the spec's `isSelected`). */\n  pressed?: boolean\n  defaultPressed?: boolean\n  /** Base UI's second argument (event details) is dropped: nothing here needs it. */\n  onPressedChange?: (pressed: boolean) => void\n  /** Identifies the toggle inside a group. */\n  value?: string\n}\n\n/** An icon-only toggle has no text to name it, so `aria-label` is required. */\nexport type ToggleButtonProps =\n  | (ToggleButtonBaseProps & { isIconOnly?: false })\n  | (ToggleButtonBaseProps & { isIconOnly: true; 'aria-label': string })\n\nexport function ToggleButton({\n  variant = 'primary',\n  appearance = 'contained',\n  size,\n  startIcon,\n  endIcon,\n  isLoading,\n  isFullWidth,\n  isIconOnly,\n  pressed,\n  defaultPressed,\n  onPressedChange,\n  disabled,\n  className,\n  children,\n  ...props\n}: ToggleButtonProps) {\n  return (\n    <Toggle\n      {...props}\n      pressed={pressed}\n      defaultPressed={defaultPressed}\n      onPressedChange={onPressedChange && ((next) => onPressedChange(next))}\n      disabled={disabled}\n      render={(toggleProps, state) => {\n        const buttonProps = {\n          ...toggleProps,\n          // Off is the same neutral button whatever the pressed style is, so\n          // \"on\" is always the one that stands out.\n          variant: state.pressed ? variant : 'secondary',\n          appearance: state.pressed ? appearance : appearance === 'ghost' ? 'ghost' : 'outlined',\n          size,\n          startIcon,\n          endIcon,\n          isLoading,\n          isFullWidth,\n          // Its aria-label reached Toggle with the other props and comes back\n          // in toggleProps, which is what Button's icon-only type asks for.\n          isIconOnly,\n          disabled,\n          className: cn(state.pressed && appearance !== 'contained' && styles.tinted, className),\n          children,\n        } as ButtonProps\n        return <Button {...buttonProps} />\n      }}\n    />\n  )\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/buttons/ToggleButton.tsx"
+    },
+    {
+      "path": "src/components/buttons/ToggleButton.module.css",
+      "content": "/* A pressed outlined or ghost toggle needs to differ from an unpressed one\n   by more than its border, and it sits in that state indefinitely — so its\n   text has to pass contrast on the pressed fill, not just on the page.\n   A tint of the variant colour does not (red-600 on a red tint is 3.7:1),\n   so pressed takes the neutral secondary fill and its measured label. The\n   outlined border keeps the variant colour. It sets Button's own state\n   properties rather than painting over them, so hover and press follow\n   the same measured rules; two classes to outrank Button's appearance\n   classes, whichever stylesheet loads first. */\n.tinted.tinted {\n  --button-bg: var(--secondary);\n  --button-fg: var(--secondary-foreground);\n  --button-bg-hover: color-mix(in oklab, var(--secondary) 90%, var(--secondary-foreground));\n  --button-bg-active: color-mix(in oklab, var(--secondary) 82%, var(--secondary-foreground));\n  --button-fg-hover: var(--secondary-foreground);\n  --button-fg-active: var(--secondary-foreground);\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/buttons/ToggleButton.module.css"
+    }
+  ],
+  "type": "registry:component"
+}

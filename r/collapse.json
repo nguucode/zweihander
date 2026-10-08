@@ -1,0 +1,29 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "collapse",
+  "title": "Collapse",
+  "description": "One show/hide section with a text-button trigger, changing label and find-in-page support, on Base UI Collapsible.",
+  "dependencies": [
+    "@base-ui/react"
+  ],
+  "registryDependencies": [
+    "https://ontheshore.biz/zweihander/r/utils.json",
+    "https://ontheshore.biz/zweihander/r/tokens.json",
+    "https://ontheshore.biz/zweihander/r/icon.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/data-display/Collapse.tsx",
+      "content": "import type { ReactNode } from 'react'\nimport { Collapsible } from '@base-ui/react/collapsible'\nimport { Icon } from '@/lib/icon'\nimport { cn } from '@/lib/utils'\nimport styles from './Collapse.module.css'\n\nexport interface CollapseProps {\n  /** The trigger's text, e.g. \"Show details\". */\n  label: ReactNode\n  /** The trigger's text while open, e.g. \"Hide details\". Defaults to `label`. */\n  openLabel?: ReactNode\n  children: ReactNode\n  open?: boolean\n  defaultOpen?: boolean\n  onOpenChange?: (open: boolean) => void\n  size?: 'sm' | 'md'\n  disabled?: boolean\n  /**\n   * Keep the closed content in the page as `hidden=\"until-found\"`, so the\n   * browser's find-in-page reaches it and opens it. On by default.\n   */\n  hiddenUntilFound?: boolean\n  className?: string\n}\n\n/**\n * One show/hide section: a text button with a chevron and the content it\n * reveals. For a list of sections, use Accordion.\n */\nexport function Collapse({\n  label,\n  openLabel,\n  children,\n  open,\n  defaultOpen,\n  onOpenChange,\n  size = 'md',\n  disabled = false,\n  hiddenUntilFound = true,\n  className,\n}: CollapseProps) {\n  return (\n    <Collapsible.Root\n      open={open}\n      defaultOpen={defaultOpen}\n      onOpenChange={onOpenChange && ((next) => onOpenChange(next))}\n      disabled={disabled}\n      className={cn(styles.collapse, styles[size], className)}\n    >\n      <Collapsible.Trigger className={styles.trigger}>\n        <span className={styles.chevron} aria-hidden=\"true\">\n          <Icon name=\"chevron-right\" />\n        </span>\n        {openLabel === undefined ? (\n          label\n        ) : (\n          <>\n            <span className={styles.closedLabel}>{label}</span>\n            <span className={styles.openLabel}>{openLabel}</span>\n          </>\n        )}\n      </Collapsible.Trigger>\n      <Collapsible.Panel className={styles.panel} hiddenUntilFound={hiddenUntilFound}>\n        <div className={styles.content}>{children}</div>\n      </Collapsible.Panel>\n    </Collapsible.Root>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/data-display/Collapse.tsx"
+    },
+    {
+      "path": "src/components/data-display/Collapse.module.css",
+      "content": ".collapse {\n  font-family: var(--font-sans);\n  font-size: var(--text-body);\n  line-height: var(--leading-body);\n  color: var(--foreground);\n}\n\n.sm {\n  font-size: var(--text-body-sm);\n  line-height: var(--leading-body-sm);\n}\n\n/* A text button: it belongs to the content around it, not to a toolbar. */\n.trigger {\n  position: relative;\n  display: inline-flex;\n  align-items: center;\n  gap: var(--space-1);\n  margin: 0;\n  padding: 0;\n  border: 0;\n  border-radius: var(--radius-sm);\n  background: transparent;\n  color: var(--foreground);\n  font: inherit;\n  font-weight: 500;\n  cursor: var(--cursor-button);\n}\n.trigger:hover {\n  text-decoration: underline;\n  text-underline-offset: 0.2em;\n}\n.trigger:focus-visible {\n  outline: 2px solid var(--ring);\n  outline-offset: 2px;\n}\n.trigger[data-disabled] {\n  opacity: 0.5;\n  cursor: var(--cursor-disabled);\n  text-decoration: none;\n}\n\n.chevron {\n  display: inline-flex;\n  font-size: var(--space-4);\n  color: var(--muted-foreground);\n  transition: rotate 150ms;\n}\n.trigger[data-panel-open] .chevron {\n  rotate: 90deg;\n}\n\n/* Both labels are rendered and one is hidden, so the button's name follows\n   its state without a re-render flicker. */\n.trigger[data-panel-open] .closedLabel,\n.trigger:not([data-panel-open]) .openLabel {\n  display: none;\n}\n\n/* Base UI measures the content into --collapsible-panel-height; animating\n   height to it and to 0 at the start and end states is its documented\n   pattern, as on Accordion. */\n.panel {\n  block-size: var(--collapsible-panel-height);\n  overflow: hidden;\n  transition: block-size 150ms ease-out;\n}\n.panel[data-starting-style],\n.panel[data-ending-style] {\n  block-size: 0;\n}\n.content {\n  padding-block-start: var(--space-2);\n}\n\n/* The 20px text button grows to a 44px target on coarse pointers. */\n@media (pointer: coarse) {\n  .trigger::before {\n    content: '';\n    position: absolute;\n    inset: 50% auto auto 0;\n    inline-size: 100%;\n    min-inline-size: 44px;\n    block-size: 44px;\n    translate: 0 -50%;\n  }\n}\n\n@media (prefers-reduced-motion: reduce) {\n  .panel,\n  .chevron {\n    transition: none;\n  }\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/data-display/Collapse.module.css"
+    }
+  ],
+  "type": "registry:component"
+}
