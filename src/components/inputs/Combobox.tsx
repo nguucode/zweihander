@@ -7,7 +7,6 @@ import {
   boxClass,
   popupInset,
   inputStyles as s,
-  type InputAppearance,
   type InputSize,
   type ValidationState,
 } from './InputField'
@@ -29,7 +28,6 @@ export interface ComboboxProps {
   helperText?: ReactNode
   validationState?: ValidationState
   size?: InputSize
-  appearance?: InputAppearance
   isFullWidth?: boolean
   /** Options are still arriving: a spinner, and "Loading…" in the list. */
   isLoading?: boolean
@@ -71,7 +69,6 @@ export function Combobox({
   helperText,
   validationState,
   size = 'md',
-  appearance = 'outlined',
   isFullWidth,
   isLoading,
   isClearable = true,
@@ -125,7 +122,7 @@ export function Combobox({
         autoHighlight
       >
         <BaseCombobox.InputGroup
-          className={cn(boxClass(size, appearance), styles.group)}
+          className={cn(boxClass(size), styles.group)}
         >
           <BaseCombobox.Input
             ref={(el) => {
@@ -160,7 +157,7 @@ export function Combobox({
           <BaseCombobox.Positioner className={s.positioner} sideOffset={4}>
             <BaseCombobox.Popup
               className={s.popup}
-              style={popupInset(size, appearance)}
+              style={popupInset(size)}
             >
               {isLoading ? (
                 <BaseCombobox.Status className={s.status}>Loading…</BaseCombobox.Status>

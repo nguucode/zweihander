@@ -9,7 +9,6 @@ import {
   boxClass,
   focusControl,
   inputStyles,
-  type InputAppearance,
   type InputSize,
   type ValidationState,
 } from '../inputs/InputField'
@@ -387,7 +386,7 @@ export function ColorPanel({
           disabled={disabled}
           onValueChange={(v) => v && setFormat(v as ColorFormat)}
         />
-        <span className={cn(boxClass('md', 'outlined'), styles.channels)} data-disabled={disabled || undefined}>
+        <span className={cn(boxClass('md'), styles.channels)} data-disabled={disabled || undefined}>
           {format === 'hex' ? (
             <ChannelInput
               label="Hex"
@@ -447,7 +446,6 @@ export interface ColorPickerProps extends Omit<ColorPanelProps, 'className'> {
   helperText?: ReactNode
   validationState?: ValidationState
   size?: InputSize
-  appearance?: InputAppearance
   isFullWidth?: boolean
   /** Submitted as the hex value. */
   name?: string
@@ -469,7 +467,6 @@ export function ColorPicker({
   helperText,
   validationState,
   size = 'md',
-  appearance = 'outlined',
   isFullWidth,
   name,
   disabled,
@@ -513,7 +510,7 @@ export function ColorPicker({
       isFullWidth={isFullWidth}
       className={className}
     >
-      <span className={boxClass(size, appearance)} onMouseDown={focusControl}>
+      <span className={boxClass(size)} onMouseDown={focusControl}>
         <Popover.Root>
           <Popover.Trigger
             className={cn(inputStyles.iconButton, styles.trigger)}

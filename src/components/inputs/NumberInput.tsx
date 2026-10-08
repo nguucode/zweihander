@@ -6,7 +6,6 @@ import {
   InputField,
   boxClass,
   inputStyles,
-  type InputAppearance,
   type InputSize,
   type ValidationState,
 } from './InputField'
@@ -27,7 +26,6 @@ export interface NumberInputProps {
   helperText?: ReactNode
   validationState?: ValidationState
   size?: InputSize
-  appearance?: InputAppearance
   isFullWidth?: boolean
   name?: string
   placeholder?: string
@@ -45,7 +43,6 @@ export function NumberInput({
   helperText,
   validationState,
   size = 'md',
-  appearance = 'outlined',
   isFullWidth,
   precision,
   name,
@@ -80,7 +77,7 @@ export function NumberInput({
         }
         onValueChange={onValueChange && ((next) => onValueChange(next))}
       >
-        <NumberField.Group className={cn(boxClass(size, appearance), styles.group, styles[size])}>
+        <NumberField.Group className={cn(boxClass(size), styles.group, styles[size])}>
           <NumberField.Input
             ref={ref}
             placeholder={placeholder}

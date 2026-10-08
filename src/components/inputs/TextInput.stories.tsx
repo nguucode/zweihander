@@ -11,7 +11,6 @@ const meta = {
   parameters: { a11y: { test: 'error' } },
   argTypes: {
     size: { control: 'inline-radio', options: ['sm', 'md'] },
-    appearance: { control: 'inline-radio', options: ['outlined', 'underlined', 'unstyled'] },
     validationState: { control: 'inline-radio', options: ['default', 'success', 'error'] },
     prefix: { control: false },
     suffix: { control: false },
@@ -40,16 +39,6 @@ export const LabelAssociation: Story = {
     await userEvent.click(canvas.getByText('Email'))
     await expect(canvas.getByLabelText('Email')).toHaveFocus()
   },
-}
-
-export const Appearances: Story = {
-  render: (args) => (
-    <div style={stack}>
-      {(['outlined', 'underlined', 'unstyled'] as const).map((appearance) => (
-        <TextInput key={appearance} {...args} appearance={appearance} label={appearance} />
-      ))}
-    </div>
-  ),
 }
 
 export const Sizes: Story = {

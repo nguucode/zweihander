@@ -5,7 +5,6 @@ import styles from './InputField.module.css'
 
 export type ValidationState = 'default' | 'success' | 'error'
 export type InputSize = 'sm' | 'md'
-export type InputAppearance = 'outlined' | 'underlined' | 'unstyled'
 
 /**
  * The shared classes. `box` goes on the element that draws the field (the
@@ -14,9 +13,9 @@ export type InputAppearance = 'outlined' | 'underlined' | 'unstyled'
  */
 export const inputStyles = styles
 
-/** The class list for a field box of this size and appearance. */
-export function boxClass(size: InputSize, appearance: InputAppearance) {
-  return cn(styles.box, styles[size], styles[appearance])
+/** The class list for a field box of this size. */
+export function boxClass(size: InputSize) {
+  return cn(styles.box, styles[size])
 }
 
 /**
@@ -24,8 +23,8 @@ export function boxClass(size: InputSize, appearance: InputAppearance) {
  * read the field's padding. Options are inset by it, so their content starts
  * where the field's text does.
  */
-export function popupInset(size: InputSize, appearance: InputAppearance) {
-  const inset = appearance === 'outlined' ? (size === 'sm' ? 'var(--space-2)' : 'var(--space-3)') : '0px'
+export function popupInset(size: InputSize) {
+  const inset = size === 'sm' ? 'var(--space-2)' : 'var(--space-3)'
   return { '--field-inset': inset } as CSSProperties
 }
 

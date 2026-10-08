@@ -92,7 +92,7 @@ export function Select({
           autoFocus={autoFocus}
           aria-label={ariaLabel}
           aria-busy={isLoading || undefined}
-          className={cn(boxClass(size, 'outlined'), s.trigger)}
+          className={cn(boxClass(size), s.trigger)}
         >
           <BaseSelect.Value className={s.value} placeholder={placeholder} />
           {isLoading ? (
@@ -107,7 +107,7 @@ export function Select({
           {/* Opens below the field like a list, rather than laid over it
               with the selected option aligned to the trigger. */}
           <BaseSelect.Positioner className={s.positioner} sideOffset={4} alignItemWithTrigger={false}>
-            <BaseSelect.Popup className={s.popup} style={popupInset(size, 'outlined')}>
+            <BaseSelect.Popup className={s.popup} style={popupInset(size)}>
               <BaseSelect.List>
                 {items.map((item) => (
                   <BaseSelect.Item key={item.value} value={item.value} disabled={item.disabled} className={s.option}>

@@ -77,7 +77,7 @@ export function Textarea({
       isFullWidth={isFullWidth}
       className={className}
     >
-      <span className={cn(boxClass(size, 'outlined'), styles.multiline, styles[`pad-${size}`])} onMouseDown={focusControl}>
+      <span className={cn(boxClass(size), styles.multiline, styles[`pad-${size}`])} onMouseDown={focusControl}>
         <Field.Control
           render={
             <textarea

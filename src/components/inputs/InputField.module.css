@@ -60,9 +60,10 @@
   gap: var(--space-2);
   box-sizing: border-box;
   inline-size: 100%;
-  border: 1px solid transparent;
+  border: 1px solid var(--field-edge);
   border-radius: var(--radius-field);
-  background: var(--background);
+  background: var(--card);
+  box-shadow: var(--shadow-2xs);
   color: var(--foreground);
   cursor: text;
   transition:
@@ -84,26 +85,6 @@
   padding-inline: var(--space-3);
   font-size: var(--text-body);
   line-height: var(--leading-body);
-}
-
-.outlined {
-  border-color: var(--field-edge);
-  background: var(--card);
-  box-shadow: var(--shadow-2xs);
-}
-
-/* Underlined and unstyled sit on the page: no fill, no side padding, so the
-   text lines up with the label above it. */
-.underlined {
-  border-radius: 0;
-  border-block-end-color: var(--field-edge);
-  padding-inline: 0;
-  background: transparent;
-}
-
-.unstyled {
-  padding-inline: 0;
-  background: transparent;
 }
 
 /* The ring is on the box, drawn when the control inside has keyboard or
@@ -133,12 +114,6 @@
 .box:has(.control[readonly]),
 .box[data-readonly] {
   background: var(--surface-subtle);
-}
-.underlined:has(.control[readonly]),
-.unstyled:has(.control[readonly]),
-.underlined[data-readonly],
-.unstyled[data-readonly] {
-  background: transparent;
 }
 
 /* ------------------------------------------------------------- control */
