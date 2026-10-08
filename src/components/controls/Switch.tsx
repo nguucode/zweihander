@@ -19,7 +19,7 @@ export interface SwitchProps {
   value?: string
   size?: 'sm' | 'md' | 'lg'
   /** Colour of the on state. */
-  variant?: 'primary' | 'accent' | 'secondary' | 'destructive'
+  variant?: 'primary' | 'accent' | 'destructive'
   disabled?: boolean
   required?: boolean
   readOnly?: boolean

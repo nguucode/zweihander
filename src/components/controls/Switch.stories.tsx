@@ -10,7 +10,7 @@ const meta = {
   parameters: { a11y: { test: 'error' } },
   argTypes: {
     size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] },
-    variant: { control: 'inline-radio', options: ['primary', 'accent', 'secondary', 'destructive'] },
+    variant: { control: 'inline-radio', options: ['primary', 'accent', 'destructive'] },
     validationState: { control: 'inline-radio', options: ['default', 'success', 'error'] },
   },
   args: { label: 'Email notifications', onCheckedChange: fn() },
@@ -40,7 +40,7 @@ export const Default: Story = {
 export const Variants: Story = {
   render: (args) => (
     <div style={stack}>
-      {(['primary', 'accent', 'secondary', 'destructive'] as const).map((variant) => (
+      {(['primary', 'accent', 'destructive'] as const).map((variant) => (
         <Switch key={variant} {...args} variant={variant} label={variant} defaultChecked />
       ))}
     </div>
