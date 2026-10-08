@@ -18,7 +18,7 @@ rail's labels use [Tooltip](?path=/docs/components-overlays-tooltip--docs).
 | --- | --- |
 | **Header** | Optional: the product name, a workspace switcher. The collapse button sits here. |
 | **Item** | Icon, label and optional badge, a 40px row (44px on touch). |
-| **Current item** | Lifted onto `--background` with a `--control-border` edge and medium weight, like a selected pill tab. |
+| **Current item** | A `--selected` fill and medium weight. No accent colour and no edge. |
 | **Group** | A small muted label over its items. In the rail, a rule. |
 | **Footer** | Optional, pinned to the bottom: the signed-in user, help. Hidden in the rail. |
 
@@ -40,10 +40,11 @@ other `<nav>` attribute passes through.
 
 ### Design notes
 
-- **The current page is lifted, not just tinted.** The sidebar sits on
-  `--surface-subtle`, one grey step from a hover fill, so the current
-  item gets the selected-pill treatment used by Tabs: background, edge
-  and weight.
+- **The current page is a fill, not a highlight.** `--selected` sits a
+  step past the hover fill (gray-200 against gray-100 in light, white 10%
+  in dark), so hover and current never read alike, and medium weight
+  carries the state for anyone who cannot tell the fills apart. It stays
+  off the accent: where you are is not a call to action.
 - **Group names are labels, not headings.** They name their list
   ("Projects, list, 3 items") without adding `<h2>`s that would compete
   with the page's own outline.

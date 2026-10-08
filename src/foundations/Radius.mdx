@@ -39,7 +39,7 @@ Two variables do the work, both on `:root`:
 
 | Variable | Default | Set by |
 | --- | --- | --- |
-| `--radius` | `0.625rem` | you, for the base step |
+| `--radius` | `0.75rem` | you, for the base step |
 | `--radius-factor` | `1` | the `radius` preset |
 | `--radius-full` | `0px` | the `radius` preset, only at `full` |
 
@@ -71,10 +71,10 @@ step up with the preset and stop there. Concretely, at the default base:
 | Preset | `control` | `field` | `panel` |
 | --- | --- | --- | --- |
 | `none` | 0 | 0 | 0 |
-| `small` | 4px | 4px | 5px |
-| `medium` | 8px | 8px | 10px |
-| `large` | 12px | 12px | 15px |
-| `full` | pill | 15px | 21px |
+| `small` | 5px | 5px | 6px |
+| `medium` | 10px | 10px | 12px |
+| `large` | 15px | 15px | 18px |
+| `full` | pill | 18px | 24px |
 
 The input is 40px tall, so a pill would be 20px — `field` at `full` lands
 under that on purpose, and a test asserts it.

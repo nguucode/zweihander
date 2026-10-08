@@ -2,7 +2,7 @@
   "$description": "What components read. Colour entries are aliases into primitives.json, so no semantic token carries a literal value — swapping a ramp swaps everything downstream. `accent.*` and `gray.*` are placeholders resolved per palette by the generator.",
   "color": {
     "light": {
-      "background": { "$type": "color", "$value": "oklch(100% 0 0)" },
+      "background": { "$type": "color", "$value": "{gray.50}" },
       "foreground": { "$type": "color", "$value": "{gray.950}" },
       "card": { "$type": "color", "$value": "oklch(100% 0 0)" },
       "card-foreground": { "$type": "color", "$value": "{gray.950}" },
@@ -17,6 +17,7 @@
       "surface-subtle": { "$type": "color", "$value": "{gray.50}" },
       "accent": { "$type": "color", "$value": "{gray.100}" },
       "accent-foreground": { "$type": "color", "$value": "{gray.900}" },
+      "selected": { "$type": "color", "$value": "{gray.200}" },
       "destructive": { "$type": "color", "$value": "{accent.red.600}" },
       "destructive-foreground": { "$type": "color", "$value": "{gray.neutral.50}" },
       "border": { "$type": "color", "$value": "{gray.200}" },
@@ -57,6 +58,7 @@
       "surface-subtle": { "$type": "color", "$value": "{gray.800}" },
       "accent": { "$type": "color", "$value": "{gray.800}" },
       "accent-foreground": { "$type": "color", "$value": "{gray.50}" },
+      "selected": { "$type": "color", "$value": "oklch(100% 0 0 / 10%)" },
       "destructive": { "$type": "color", "$value": "{accent.red.400}" },
       "destructive-foreground": { "$type": "color", "$value": "{gray.neutral.900}" },
       "border": { "$type": "color", "$value": "oklch(100% 0 0 / 10%)" },
@@ -93,18 +95,18 @@
       }
     },
     "elevation-none": { "$type": "shadow", "$value": "0 0 #0000" },
-    "elevation-2xs": { "$type": "shadow", "$value": "0 1px 2px 0 rgb(0 0 0 / 0.05)" },
-    "elevation-xs": { "$type": "shadow", "$value": "0 2px 4px -1px rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.04)" },
-    "elevation-sm": { "$type": "shadow", "$value": "0 4px 8px -2px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.05)" },
-    "elevation-md": { "$type": "shadow", "$value": "0 8px 16px -4px rgb(0 0 0 / 0.09), 0 4px 8px -4px rgb(0 0 0 / 0.06)" },
-    "elevation-lg": { "$type": "shadow", "$value": "0 12px 24px -6px rgb(0 0 0 / 0.1), 0 6px 12px -6px rgb(0 0 0 / 0.07)" },
-    "elevation-xl": { "$type": "shadow", "$value": "0 20px 40px -10px rgb(0 0 0 / 0.12), 0 10px 20px -10px rgb(0 0 0 / 0.08)" },
-    "elevation-2xl": { "$type": "shadow", "$value": "0 32px 64px -16px rgb(0 0 0 / 0.16), 0 16px 32px -16px rgb(0 0 0 / 0.1)" }
+    "elevation-2xs": { "$type": "shadow", "$value": "0 1px 2px 0 rgb(0 0 0 / 0.033)" },
+    "elevation-xs": { "$type": "shadow", "$value": "0 2px 4px -1px rgb(0 0 0 / 0.039), 0 1px 2px -1px rgb(0 0 0 / 0.026)" },
+    "elevation-sm": { "$type": "shadow", "$value": "0 4px 8px -2px rgb(0 0 0 / 0.052), 0 2px 4px -2px rgb(0 0 0 / 0.033)" },
+    "elevation-md": { "$type": "shadow", "$value": "0 8px 16px -4px rgb(0 0 0 / 0.058), 0 4px 8px -4px rgb(0 0 0 / 0.039)" },
+    "elevation-lg": { "$type": "shadow", "$value": "0 12px 24px -6px rgb(0 0 0 / 0.065), 0 6px 12px -6px rgb(0 0 0 / 0.046)" },
+    "elevation-xl": { "$type": "shadow", "$value": "0 20px 40px -10px rgb(0 0 0 / 0.078), 0 10px 20px -10px rgb(0 0 0 / 0.052)" },
+    "elevation-2xl": { "$type": "shadow", "$value": "0 32px 64px -16px rgb(0 0 0 / 0.104), 0 16px 32px -16px rgb(0 0 0 / 0.065)" }
   },
 
   "root": {
     "$description": "Appearance-independent. These live on :root alone — never on .light — so a nested light scope inherits them instead of resetting them.",
-    "radius": { "$type": "dimension", "$value": "0.625rem" },
+    "radius": { "$type": "dimension", "$value": "0.75rem" },
     "radius-factor": { "$type": "number", "$value": 1 },
     "radius-full": { "$type": "dimension", "$value": "0px" },
     "scaling": { "$type": "number", "$value": 1 },
@@ -113,8 +115,14 @@
     "cursor-disabled": { "$type": "other", "$value": "not-allowed" },
     "font-sans": {
       "$type": "fontFamily",
-      "$value": "system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji'"
+      "$value": "'Inter Variable', Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji'"
     },
+    "font-serif": {
+      "$type": "fontFamily",
+      "$value": "'Newsreader Variable', Newsreader, Georgia, 'Times New Roman', serif"
+    },
+    "font-heading": { "$type": "fontFamily", "$value": "var(--font-serif)" },
+    "font-prose": { "$type": "fontFamily", "$value": "var(--font-serif)" },
     "font-mono": {
       "$type": "fontFamily",
       "$value": "ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace"

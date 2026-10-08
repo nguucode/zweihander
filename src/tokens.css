@@ -11,34 +11,35 @@
    there would reset back to its default instead of inheriting the value an
    outer Theme set. */
 :root {
-  --radius: 0.625rem;
+  --radius: 0.75rem;
   --radius-factor: 1;
   --radius-full: 0px;
   --scaling: 1;
   --cursor-button: default;
   --cursor-link: pointer;
   --cursor-disabled: not-allowed;
-  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+  --font-sans: 'Inter Variable', Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+  --font-serif: 'Newsreader Variable', Newsreader, Georgia, 'Times New Roman', serif;
   --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
 
-  /* Defaults: indigo accent, neutral gray. Overridden by
+  /* Defaults: blue accent, taupe gray. Overridden by
      [data-accent] / [data-gray] below, which the Theme component sets. */
-  --accent-solid-light: oklch(51.1% 0.262 276.966);
+  --accent-solid-light: oklch(54.6% 0.245 262.881);
   --accent-contrast-light: oklch(98.5% 0 0);
-  --accent-ring-light: oklch(45.7% 0.24 277.023);
-  --accent-text-light: oklch(51.1% 0.262 276.966);
-  --accent-solid-dark: oklch(67.3% 0.182 276.935);
+  --accent-ring-light: oklch(48.8% 0.243 264.376);
+  --accent-text-light: oklch(54.6% 0.245 262.881);
+  --accent-solid-dark: oklch(70.7% 0.165 254.624);
   --accent-contrast-dark: oklch(20.5% 0 0);
-  --accent-ring-dark: oklch(67.3% 0.182 276.935);
-  --accent-text-dark: oklch(67.3% 0.182 276.935);
-  --gray-50: oklch(98.5% 0 0);
-  --gray-100: oklch(97.0% 0 0);
-  --gray-200: oklch(92.2% 0 0);
-  --gray-400: oklch(70.8% 0 0);
-  --gray-500: oklch(54.2% 0 0);
-  --gray-800: oklch(26.9% 0 0);
-  --gray-900: oklch(20.5% 0 0);
-  --gray-950: oklch(14.5% 0 0);
+  --accent-ring-dark: oklch(70.7% 0.165 254.624);
+  --accent-text-dark: oklch(70.7% 0.165 254.624);
+  --gray-50: oklch(98.6% 0.002 67.8);
+  --gray-100: oklch(96.0% 0.002 17.2);
+  --gray-200: oklch(92.2% 0.005 34.3);
+  --gray-400: oklch(71.4% 0.014 41.2);
+  --gray-500: oklch(53.6% 0.021 43.1);
+  --gray-800: oklch(26.8% 0.011 36.5);
+  --gray-900: oklch(21.4% 0.009 43.1);
+  --gray-950: oklch(14.7% 0.004 49.3);
 }
 
 /* Accent palettes. The solid step and label colour are measured per hue so
@@ -189,7 +190,7 @@
   --accent-solid-light: oklch(51.8% 0.253 323.949);
   --accent-contrast-light: oklch(98.5% 0 0);
   --accent-ring-light: oklch(51.8% 0.253 323.949);
-  --accent-text-light: oklch(59.1% 0.293 322.896);
+  --accent-text-light: oklch(51.8% 0.253 323.949);
   --accent-solid-dark: oklch(74.0% 0.238 322.16);
   --accent-contrast-dark: oklch(20.5% 0 0);
   --accent-ring-dark: oklch(74.0% 0.238 322.16);
@@ -199,7 +200,7 @@
   --accent-solid-light: oklch(52.5% 0.223 3.958);
   --accent-contrast-light: oklch(98.5% 0 0);
   --accent-ring-light: oklch(52.5% 0.223 3.958);
-  --accent-text-light: oklch(59.2% 0.249 0.584);
+  --accent-text-light: oklch(52.5% 0.223 3.958);
   --accent-solid-dark: oklch(71.8% 0.202 349.761);
   --accent-contrast-dark: oklch(20.5% 0 0);
   --accent-ring-dark: oklch(71.8% 0.202 349.761);
@@ -209,7 +210,7 @@
   --accent-solid-light: oklch(51.4% 0.222 16.935);
   --accent-contrast-light: oklch(98.5% 0 0);
   --accent-ring-light: oklch(51.4% 0.222 16.935);
-  --accent-text-light: oklch(58.6% 0.253 17.585);
+  --accent-text-light: oklch(51.4% 0.222 16.935);
   --accent-solid-dark: oklch(71.2% 0.194 13.428);
   --accent-contrast-dark: oklch(20.5% 0 0);
   --accent-ring-dark: oklch(71.2% 0.194 13.428);
@@ -321,7 +322,7 @@
    inherit, so the nearest scope wins at any depth. */
 :root,
 .light {
-  --background: oklch(100% 0 0);
+  --background: var(--gray-50);
   --foreground: var(--gray-950);
   --card: oklch(100% 0 0);
   --card-foreground: var(--gray-950);
@@ -336,6 +337,7 @@
   --surface-subtle: var(--gray-50);
   --accent: var(--gray-100);
   --accent-foreground: var(--gray-900);
+  --selected: var(--gray-200);
   --destructive: oklch(57.7% 0.245 27.325);
   --destructive-foreground: oklch(98.5% 0 0);
   --border: var(--gray-200);
@@ -361,13 +363,13 @@
   --danger-text: oklch(44.4% 0.177 26.899);
 
   --elevation-none: 0 0 #0000;
-  --elevation-2xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --elevation-xs: 0 2px 4px -1px rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.04);
-  --elevation-sm: 0 4px 8px -2px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.05);
-  --elevation-md: 0 8px 16px -4px rgb(0 0 0 / 0.09), 0 4px 8px -4px rgb(0 0 0 / 0.06);
-  --elevation-lg: 0 12px 24px -6px rgb(0 0 0 / 0.1), 0 6px 12px -6px rgb(0 0 0 / 0.07);
-  --elevation-xl: 0 20px 40px -10px rgb(0 0 0 / 0.12), 0 10px 20px -10px rgb(0 0 0 / 0.08);
-  --elevation-2xl: 0 32px 64px -16px rgb(0 0 0 / 0.16), 0 16px 32px -16px rgb(0 0 0 / 0.1);
+  --elevation-2xs: 0 1px 2px 0 rgb(0 0 0 / 0.033);
+  --elevation-xs: 0 2px 4px -1px rgb(0 0 0 / 0.039), 0 1px 2px -1px rgb(0 0 0 / 0.026);
+  --elevation-sm: 0 4px 8px -2px rgb(0 0 0 / 0.052), 0 2px 4px -2px rgb(0 0 0 / 0.033);
+  --elevation-md: 0 8px 16px -4px rgb(0 0 0 / 0.058), 0 4px 8px -4px rgb(0 0 0 / 0.039);
+  --elevation-lg: 0 12px 24px -6px rgb(0 0 0 / 0.065), 0 6px 12px -6px rgb(0 0 0 / 0.046);
+  --elevation-xl: 0 20px 40px -10px rgb(0 0 0 / 0.078), 0 10px 20px -10px rgb(0 0 0 / 0.052);
+  --elevation-2xl: 0 32px 64px -16px rgb(0 0 0 / 0.104), 0 16px 32px -16px rgb(0 0 0 / 0.065);
 
   --use-light: initial;
   --use-dark: ;
@@ -389,6 +391,7 @@
   --surface-subtle: var(--gray-800);
   --accent: var(--gray-800);
   --accent-foreground: var(--gray-50);
+  --selected: oklch(100% 0 0 / 10%);
   --destructive: oklch(70.4% 0.191 22.216);
   --destructive-foreground: oklch(20.5% 0 0);
   --border: oklch(100% 0 0 / 10%);
@@ -414,13 +417,13 @@
   --danger-text: oklch(80.8% 0.114 19.571);
 
   --elevation-none: 0 0 #0000;
-  --elevation-2xs: 0 1px 2px 0 rgb(0 0 0 / 0.2);
-  --elevation-xs: 0 2px 4px -1px rgb(0 0 0 / 0.24), 0 1px 2px -1px rgb(0 0 0 / 0.16);
-  --elevation-sm: 0 4px 8px -2px rgb(0 0 0 / 0.32), 0 2px 4px -2px rgb(0 0 0 / 0.2);
-  --elevation-md: 0 8px 16px -4px rgb(0 0 0 / 0.36), 0 4px 8px -4px rgb(0 0 0 / 0.24);
-  --elevation-lg: 0 12px 24px -6px rgb(0 0 0 / 0.4), 0 6px 12px -6px rgb(0 0 0 / 0.28);
-  --elevation-xl: 0 20px 40px -10px rgb(0 0 0 / 0.48), 0 10px 20px -10px rgb(0 0 0 / 0.32);
-  --elevation-2xl: 0 32px 64px -16px rgb(0 0 0 / 0.6), 0 16px 32px -16px rgb(0 0 0 / 0.4);
+  --elevation-2xs: 0 1px 2px 0 rgb(0 0 0 / 0.132);
+  --elevation-xs: 0 2px 4px -1px rgb(0 0 0 / 0.156), 0 1px 2px -1px rgb(0 0 0 / 0.104);
+  --elevation-sm: 0 4px 8px -2px rgb(0 0 0 / 0.208), 0 2px 4px -2px rgb(0 0 0 / 0.132);
+  --elevation-md: 0 8px 16px -4px rgb(0 0 0 / 0.232), 0 4px 8px -4px rgb(0 0 0 / 0.156);
+  --elevation-lg: 0 12px 24px -6px rgb(0 0 0 / 0.26), 0 6px 12px -6px rgb(0 0 0 / 0.184);
+  --elevation-xl: 0 20px 40px -10px rgb(0 0 0 / 0.312), 0 10px 20px -10px rgb(0 0 0 / 0.208);
+  --elevation-2xl: 0 32px 64px -16px rgb(0 0 0 / 0.416), 0 16px 32px -16px rgb(0 0 0 / 0.26);
 
   --use-light: ;
   --use-dark: initial;
@@ -439,7 +442,7 @@
 }
 
 [data-gray] {
-  --background: var(--use-light, oklch(100% 0 0)) var(--use-dark, var(--gray-950));
+  --background: var(--use-light, var(--gray-50)) var(--use-dark, var(--gray-950));
   --foreground: var(--use-light, var(--gray-950)) var(--use-dark, var(--gray-50));
   --card: var(--use-light, oklch(100% 0 0)) var(--use-dark, var(--gray-900));
   --card-foreground: var(--use-light, var(--gray-950)) var(--use-dark, var(--gray-50));
@@ -452,6 +455,7 @@
   --surface-subtle: var(--use-light, var(--gray-50)) var(--use-dark, var(--gray-800));
   --accent: var(--use-light, var(--gray-100)) var(--use-dark, var(--gray-800));
   --accent-foreground: var(--use-light, var(--gray-900)) var(--use-dark, var(--gray-50));
+  --selected: var(--use-light, var(--gray-200)) var(--use-dark, oklch(100% 0 0 / 10%));
   --border: var(--use-light, var(--gray-200)) var(--use-dark, oklch(100% 0 0 / 10%));
   --input: var(--use-light, var(--gray-200)) var(--use-dark, oklch(100% 0 0 / 15%));
   --control-border: var(--use-light, var(--gray-500)) var(--use-dark, var(--gray-400));
@@ -489,6 +493,10 @@
     calc(var(--radius) * var(--radius-factor)),
     min(calc((var(--radius) + 4px) * var(--radius-factor)), var(--radius-full))
   );
+
+  /* Font roles, read from whichever faces the scope sets. */
+  --font-heading: var(--font-serif);
+  --font-prose: var(--font-serif);
 
   /* Spacing — one multiplier over every gap and pad in the kit. */
   --space-1: calc(0.25rem * var(--scaling));

@@ -133,15 +133,12 @@
   outline-offset: -2px;
 }
 
-/* The current page, as a selected pill tab: lifted onto --background
-   with a --control-border edge, and medium weight. A fill alone would be
-   one grey step from the sidebar's own surface. */
+/* The current page: a --selected fill, a step past the hover fill so the
+   two never read alike, plus medium weight and aria-current. No accent and
+   no edge: selection is a place in the list, not a call to action. */
 .current,
 .current:hover {
-  box-shadow:
-    inset 0 0 0 1px var(--control-border),
-    var(--shadow-xs);
-  background: var(--background);
+  background: var(--selected);
   color: var(--foreground);
   font-weight: 500;
 }

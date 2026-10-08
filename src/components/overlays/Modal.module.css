@@ -73,7 +73,8 @@
   margin: 0;
   font-size: var(--text-heading-md);
   line-height: var(--leading-heading-md);
-  font-weight: 600;
+  font-family: var(--font-heading);
+  font-weight: 500;
 }
 
 .description {
