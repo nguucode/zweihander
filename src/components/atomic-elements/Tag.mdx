@@ -49,8 +49,12 @@ Every other `<span>` attribute passes through to the container.
   the Theme's radius preset with every other control, and turns into a
   pill under `radius="full"`.
 - **The 17 hue variants are additions.** Each hue has `--<hue>`,
-  `-foreground`, `-subtle` and `-text` tokens, picked per ramp and
-  measured at 4.5:1 in the token build.
+  `-foreground`, `-subtle` and `-text` tokens. Subtle and outlined text is
+  measured at 4.5:1 in the token build. Solid is step 600 with a white
+  label on every hue, in both appearances, so a row of solid tags reads as
+  one set; on the warm hues (orange, amber, yellow, lime and others) that
+  label falls below 4.5:1. That is accepted on purpose. Use subtle or
+  outlined where the tag has to pass AA.
 - **`startAvatar` wins over `startIcon`** if both are passed; the spec
   does not say.
 - **The tag does not remove itself.** `onRemove` reports the click and
@@ -78,5 +82,5 @@ Every other `<span>` attribute passes through to the container.
   in your `onRemove`.
 - Colour carries meaning here, so it must never be the only signal: the
   text says what the status is. The icon and the avatar are decorative.
-- All label and text pairs clear 4.5:1 in both themes; the build checks
-  them.
+- Every label and text pair clears 4.5:1 in both themes, and the build
+  checks them, except solid hue tags (see above).
