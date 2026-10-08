@@ -40,10 +40,9 @@ const preview: Preview = {
     },
 
     a11y: {
-      // 'todo' - show a11y violations in the test UI only
-      // 'error' - fail CI on a11y violations
-      // 'off' - skip a11y checks entirely
-      test: 'todo'
+      // Definition of done: an a11y violation fails the story test. A story
+      // that has to opt out sets test: 'off' with a comment saying why.
+      test: 'error'
     },
 
     options: {

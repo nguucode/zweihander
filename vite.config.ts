@@ -46,9 +46,9 @@ export default defineConfig({
           enabled: true,
           headless: true,
           provider: playwright({}),
-          instances: [{
-            browser: 'chromium'
-          }]
+          // All three engines: a story that passes only in Chromium has not
+          // been tested for Safari or Firefox users.
+          instances: [{ browser: 'chromium' }, { browser: 'firefox' }, { browser: 'webkit' }]
         }
       }
     }]
