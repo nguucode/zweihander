@@ -1,4 +1,4 @@
-import { useState, type ReactNode, type Ref } from 'react'
+import { useRef, useState, type CSSProperties, type ReactNode, type Ref } from 'react'
 import { Combobox as BaseCombobox } from '@base-ui/react/combobox'
 import { Icon } from '@/lib/icon'
 import { cn } from '@/lib/utils'
@@ -89,6 +89,13 @@ export function Combobox({
   // Only for highlighting the typed text in each option; Base UI owns the
   // input's value and the filtering.
   const [query, setQuery] = useState('')
+  // Picked with the pointer: focus stays in the input, but the field drops
+  // its ring, as a native select does after a click. Typing, clicking back
+  // in or leaving brings normal focus behaviour back.
+  const [picked, setPicked] = useState(false)
+  // The field's text inset, so the list can line its labels up with it.
+  const popupRef = useRef<HTMLDivElement>(null)
+  const inset = appearance === 'outlined' ? (size === 'sm' ? 'var(--space-2)' : 'var(--space-3)') : '0px'
 
   return (
     <InputField
@@ -105,7 +112,10 @@ export function Combobox({
         items={items}
         value={find(value)}
         defaultValue={find(defaultValue)}
-        onValueChange={onValueChange && ((next) => onValueChange((next as Item | null)?.value ?? null))}
+        onValueChange={(next, details) => {
+          setPicked(details.event instanceof MouseEvent)
+          onValueChange?.((next as Item | null)?.value ?? null)
+        }}
         // Highlight only what was typed. When an option is chosen the input
         // takes its label, which is not a query to mark in other options.
         onInputValueChange={(next, details) => setQuery(details.reason === 'input-change' ? next : '')}
@@ -116,7 +126,10 @@ export function Combobox({
         required={required}
         autoHighlight
       >
-        <BaseCombobox.InputGroup className={cn(boxClass(size, appearance), styles.group)}>
+        <BaseCombobox.InputGroup
+          className={cn(boxClass(size, appearance), styles.group)}
+          data-picked={picked || undefined}
+        >
           <BaseCombobox.Input
             ref={ref}
             id={id}
@@ -125,11 +138,14 @@ export function Combobox({
             aria-label={ariaLabel}
             aria-busy={isLoading || undefined}
             className={s.control}
+            onKeyDown={() => setPicked(false)}
+            onPointerDown={() => setPicked(false)}
+            onBlur={() => setPicked(false)}
           />
           {isLoading && <span className={cn(s.icon, s.spinner)} aria-hidden="true" />}
           {isClearable && !readOnly && (
             <BaseCombobox.Clear className={s.iconButton} aria-label="Clear selection">
-              <Icon name="close" />
+              <Icon name="clear" />
             </BaseCombobox.Clear>
           )}
           <BaseCombobox.Trigger
@@ -143,8 +159,21 @@ export function Combobox({
           </BaseCombobox.Trigger>
         </BaseCombobox.InputGroup>
         <BaseCombobox.Portal>
-          <BaseCombobox.Positioner className={s.positioner} sideOffset={4}>
-            <BaseCombobox.Popup className={s.popup}>
+          <BaseCombobox.Positioner
+            className={s.positioner}
+            sideOffset={4}
+            align="start"
+            // The list hangs left by --hang (see the CSS). As an offset, not a
+            // margin, so collision handling keeps it on screen.
+            alignOffset={() =>
+              popupRef.current ? -parseFloat(getComputedStyle(popupRef.current).getPropertyValue('--hang')) || 0 : 0
+            }
+          >
+            <BaseCombobox.Popup
+              ref={popupRef}
+              className={cn(s.popup, styles.popup)}
+              style={{ '--field-inset': inset } as CSSProperties}
+            >
               {isLoading ? (
                 <BaseCombobox.Status className={s.status}>Loading…</BaseCombobox.Status>
               ) : (
@@ -152,13 +181,13 @@ export function Combobox({
               )}
               <BaseCombobox.List>
                 {(item: Item) => (
-                  <BaseCombobox.Item key={item.value} value={item} disabled={item.disabled} className={s.option}>
-                    <span>
-                      <Highlight text={item.label} query={query} />
-                    </span>
-                    <BaseCombobox.ItemIndicator className={s.check}>
+                  <BaseCombobox.Item key={item.value} value={item} disabled={item.disabled} className={cn(s.option, styles.option)}>
+                    <BaseCombobox.ItemIndicator className={cn(s.check, styles.check)}>
                       <Icon name="check" />
                     </BaseCombobox.ItemIndicator>
+                    <span className={styles.label}>
+                      <Highlight text={item.label} query={query} />
+                    </span>
                   </BaseCombobox.Item>
                 )}
               </BaseCombobox.List>

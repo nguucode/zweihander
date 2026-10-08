@@ -14,3 +14,38 @@
   text-decoration: underline;
   text-underline-offset: 2px;
 }
+
+/* A pointer pick leaves focus in the input; the field drops its ring so it
+   reads as at rest, as a native select does after a click. */
+.group.group.group[data-picked] {
+  outline: none;
+}
+
+/* The check sits before the label, in the brand colour. Options keep a
+   check column whether or not they are chosen, so labels never shift. */
+.option.option {
+  grid-template-columns: var(--space-4) 1fr;
+}
+.label {
+  grid-column: 2;
+}
+.check.check {
+  grid-column: 1;
+  color: var(--primary-text);
+}
+
+/* The list hangs out to the left by the check column, so option labels
+   start exactly under the text typed in the field (macOS menus do the same).
+   Gutter = option padding + check + gap; --field-inset is the field's own
+   padding, set per size and appearance from the component. Registered as a
+   length so the component can read it back in px and pass it to the
+   positioner as an offset. */
+@property --hang {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
+}
+.popup.popup {
+  --hang: calc(var(--space-2) + var(--space-4) + var(--space-2) - var(--field-inset));
+  min-inline-size: calc(var(--anchor-width) + var(--hang));
+}
