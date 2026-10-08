@@ -149,7 +149,9 @@
   box-sizing: border-box;
   border: 1px solid var(--border);
   border-radius: var(--radius-control);
-  background: var(--card);
+  /* In dark, --card (gray-900) is darker than the gray-800 track, so the
+     chip would sink; it steps one gray lighter instead. */
+  background: var(--use-light, var(--card)) var(--use-dark, var(--gray-700));
   box-shadow: var(--shadow-xs);
   transition:
     inset-inline-start 200ms,
