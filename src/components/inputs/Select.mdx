@@ -10,7 +10,7 @@ Chooses one option from a list that opens below the field. Spec:
 Behaviour from Base UI's [Select](https://base-ui.com/react/components/select);
 the field is [Text Input](?path=/docs/components-inputs-textinput--docs)'s.
 
-<Canvas of={SelectStories.Appearances} />
+<Canvas of={SelectStories.Default} />
 
 ## Anatomy
 
@@ -31,7 +31,6 @@ the field is [Text Input](?path=/docs/components-inputs-textinput--docs)'s.
 | `placeholder` | string | – | Shown until something is chosen. |
 | `label`, `helperText`, `validationState` | | – | |
 | `size` | `sm`, `md` | `md` | 24, 32px. |
-| `appearance` | `outlined`, `underlined`, `unstyled` | `outlined` | |
 | `isLoading` | boolean | `false` | Spinner in place of the chevron; `aria-busy`. |
 | `isFullWidth` | boolean | `false` | |
 | `name` | string | – | Submitted with the form. |
@@ -41,7 +40,7 @@ the field is [Text Input](?path=/docs/components-inputs-textinput--docs)'s.
 
 ### Differences from the spec
 
-- **No `filled` appearance.** The spec's filled field (a tinted box with a bottom rule) was dropped to match the Claude apps, where every field is the white outlined box.
+- **Outlined only.** The spec's filled, underlined and unstyled appearances were dropped to match the Claude apps, where every select is the white outlined box.
 - **Two sizes, not three.** `sm` (24px) and `md` (32px) only, the compact control scale of the Claude apps. The spec's larger steps were dropped; a big call to action is `md` with more room around it, not a taller box.
 - **`onValueChange` with the value**, Base UI's name, instead of
   `onChange`.

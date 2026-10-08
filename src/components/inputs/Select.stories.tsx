@@ -18,7 +18,6 @@ const meta = {
   parameters: { a11y: { test: 'error' } },
   argTypes: {
     size: { control: 'inline-radio', options: ['sm', 'md'] },
-    appearance: { control: 'inline-radio', options: ['outlined', 'underlined', 'unstyled'] },
     validationState: { control: 'inline-radio', options: ['default', 'success', 'error'] },
   },
   args: { label: 'Team member', placeholder: 'Choose someone', options: members, onValueChange: fn() },
@@ -74,16 +73,6 @@ export const Sizes: Story = {
     const heights = ['sm', 'md'].map((n) => canvas.getByRole('combobox', { name: n }).getBoundingClientRect().height)
     await expect(heights).toEqual([24, 32])
   },
-}
-
-export const Appearances: Story = {
-  render: (args) => (
-    <div style={{ display: 'grid', gap: 'var(--space-4)', justifyItems: 'start' }}>
-      {(['outlined', 'underlined', 'unstyled'] as const).map((appearance) => (
-        <Select key={appearance} {...args} appearance={appearance} label={appearance} defaultValue="marlone" />
-      ))}
-    </div>
-  ),
 }
 
 export const Validation: Story = {
