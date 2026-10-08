@@ -19,6 +19,7 @@
       "accent": { "$type": "color", "$value": "{gray.100}" },
       "accent-foreground": { "$type": "color", "$value": "{gray.900}" },
       "selected": { "$type": "color", "$value": "{gray.200}" },
+      "hover-overlay": { "$type": "color", "$value": "oklch(0% 0 0 / 5%)" },
       "destructive": { "$type": "color", "$value": "{accent.red.600}" },
       "destructive-foreground": { "$type": "color", "$value": "{gray.neutral.50}" },
       "border": { "$type": "color", "$value": "{gray.200}" },
@@ -61,6 +62,7 @@
       "accent": { "$type": "color", "$value": "{gray.800}" },
       "accent-foreground": { "$type": "color", "$value": "{gray.50}" },
       "selected": { "$type": "color", "$value": "oklch(100% 0 0 / 10%)" },
+      "hover-overlay": { "$type": "color", "$value": "oklch(100% 0 0 / 6%)" },
       "destructive": { "$type": "color", "$value": "{accent.red.400}" },
       "destructive-foreground": { "$type": "color", "$value": "{gray.neutral.900}" },
       "border": { "$type": "color", "$value": "oklch(100% 0 0 / 10%)" },
@@ -145,11 +147,9 @@
   },
 
   "control": {
-    "$description": "Control heights: Button, fields, tabs, pagination, sidebar rows. The compact scale of the Claude apps: 32px is the default, 24px the small inline control. The generator multiplies each by --scaling. On touch screens components widen the hit area to 44px without growing the visible box.",
+    "$description": "Control heights: Button, fields, tabs, pagination, sidebar rows. Two steps, as in the Claude apps: 32px is the default, 24px the small inline control. The generator multiplies each by --scaling. On touch screens components widen the hit area to 44px without growing the visible box.",
     "sm": { "$type": "dimension", "$value": "1.5rem" },
-    "md": { "$type": "dimension", "$value": "2rem" },
-    "lg": { "$type": "dimension", "$value": "2.5rem" },
-    "xl": { "$type": "dimension", "$value": "3rem" }
+    "md": { "$type": "dimension", "$value": "2rem" }
   },
 
   "text": {

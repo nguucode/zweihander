@@ -216,6 +216,7 @@ swappable on its own: an **accent** (blue by default) for `--primary` and
 | `secondary`, `muted`, `accent` | gray-100 | gray-800 | gray |
 | `secondary-foreground`, `accent-foreground` | gray-900 | gray-50 | gray |
 | `selected` | gray-200 | white 10% | gray |
+| `hover-overlay` | black 5% | white 6% | fixed |
 | `muted-foreground` | gray-500 | gray-400 | gray |
 | `subtle-foreground` | gray-600 | gray-300 | gray |
 | `surface-subtle` | gray-50 | gray-800 | gray |
@@ -230,8 +231,9 @@ The light accent step is `-600` for most hues but `-700` for sky, fuchsia,
 pink and rose, and the label is white or near-black depending on which one
 clears 4.5:1 on that fill — the warm hues take dark labels. Exceptions to
 the ramp rule: light `--card`/`--popover` (pure white, so a panel reads
-lighter than the gray-50 page) and dark `--border`/`--input`/`--selected`
-(alpha, so they work over any surface).
+lighter than the gray-50 page) and dark `--border`/`--input`/`--selected`, and `--hover-overlay` in both
+(alpha, so they work over any surface — the sidebar's hover sits on
+`--surface-subtle`, which in dark equals the opaque `--accent` fill).
 
 `--destructive` deliberately does **not** follow the accent. A status
 colour that changes with the brand stops being a status.

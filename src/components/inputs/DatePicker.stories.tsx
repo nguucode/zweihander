@@ -17,7 +17,7 @@ const meta = {
   parameters: { a11y: { test: 'error' } },
   args: { label: 'Start date', locale: 'en-GB', weekStartsOn: 1, defaultValue: new Date(2026, 8, 18), onValueChange: fn() },
   argTypes: {
-    size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] },
+    size: { control: 'inline-radio', options: ['sm', 'md'] },
     appearance: { control: 'inline-radio', options: ['outlined', 'filled', 'underlined', 'unstyled'] },
     value: { control: false },
     defaultValue: { control: false },

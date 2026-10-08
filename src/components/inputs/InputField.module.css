@@ -82,13 +82,6 @@
   font-size: var(--text-body);
   line-height: var(--leading-body);
 }
-.lg {
-  --field-size: var(--control-lg);
-  min-block-size: var(--control-lg);
-  padding-inline: var(--space-3);
-  font-size: var(--text-body);
-  line-height: var(--leading-body);
-}
 
 .outlined {
   border-color: var(--field-edge);
@@ -175,12 +168,9 @@
   white-space: nowrap;
 }
 
-/* Icons in an affix are a step larger than the text: 16px at sm/md, 20px at lg. */
+/* Icons in an affix are a step larger than the text: 16px. */
 .affix > svg {
   font-size: var(--space-4);
-}
-.lg .affix > svg {
-  font-size: calc(var(--space-4) + var(--space-1));
 }
 
 /* ---------------------------------------------------------------- popup

@@ -38,11 +38,10 @@ Every component here stays on whole steps, and on a small set of them:
 | `2` (8px) | gap between a button's icon and its label |
 | `2` (8px) | horizontal padding, small button and small input |
 | `3` (12px) | horizontal padding, default button and input |
-| `4` (16px) | horizontal padding, large button |
 
 **Control heights are their own tokens**, not spacing steps:
-`--control-sm` / `-md` / `-lg` / `-xl` are 24 / 32 / 40 / 48px, the
-compact scale of the Claude apps. A 32px default is what makes a button,
+`--control-sm` and `--control-md` are 24 and 32px — two steps, as in
+the Claude apps. A 32px default is what makes a button,
 a text input, a tab and a sidebar row line up without either being
 nudged, and anything that should sit alongside them — a select, a date
 picker — has to land on the same heights rather than pick its own. They

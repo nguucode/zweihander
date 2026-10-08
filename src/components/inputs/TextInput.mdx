@@ -29,7 +29,7 @@ Label, description and invalid state are wired by Base UI's
 | `label` | node | – | |
 | `helperText` | node | – | |
 | `validationState` | `default`, `success`, `error` | `default` | |
-| `size` | `sm`, `md`, `lg` | `md` | 24, 32, 40px. |
+| `size` | `sm`, `md` | `md` | 24, 32px. |
 | `appearance` | `outlined`, `filled`, `underlined`, `unstyled` | `outlined` | |
 | `prefix`, `suffix` | node | – | |
 | `isFullWidth` | boolean | `false` | Otherwise 20rem, capped at its container. |
@@ -43,6 +43,7 @@ Every other `<input>` attribute passes through to the input, including `ref`.
 
 ### Differences from the spec
 
+- **Two sizes, not three.** `sm` (24px) and `md` (32px) only, the compact control scale of the Claude apps. The spec's larger steps were dropped; a big call to action is `md` with more room around it, not a taller box.
 - **Native names** for native attributes: `disabled`, `required`,
   `readOnly` rather than `isDisabled`, `isRequired`, `isReadOnly`.
 - **`onChange` is the native event**, not a value: the kit's rule for
@@ -77,4 +78,4 @@ inside something else that already draws the edge.
   goes.
 - Pressing the field's padding or a prefix focuses the input, like a
   native field.
-- Heights are 24–40px, 44px hit area on touch; the label is part of the target too.
+- Heights are 24 or 32px, 44px hit area on touch; the label is part of the target too.

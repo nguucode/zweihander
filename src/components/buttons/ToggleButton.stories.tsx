@@ -12,7 +12,7 @@ const meta = {
   argTypes: {
     variant: { control: 'inline-radio', options: ['primary', 'accent', 'secondary', 'destructive'] },
     appearance: { control: 'inline-radio', options: ['contained', 'outlined', 'ghost'] },
-    size: { control: 'inline-radio', options: ['sm', 'md', 'lg', 'xl'] },
+    size: { control: 'inline-radio', options: ['sm', 'md'] },
     startIcon: { control: false },
     endIcon: { control: false },
   },
@@ -65,7 +65,7 @@ export const Matrix: Story = {
 export const Sizes: Story = {
   render: (args) => (
     <div style={row}>
-      {(['sm', 'md', 'lg', 'xl'] as const).map((size) => (
+      {(['sm', 'md'] as const).map((size) => (
         <ToggleButton key={size} {...args} size={size} defaultPressed>
           {size}
         </ToggleButton>

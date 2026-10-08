@@ -7,10 +7,7 @@
   block-size: 100%;
   padding: var(--space-2);
   border-inline-end: 1px solid var(--border);
-  /* --card, not --surface-subtle: near-white over the off-white page, as in
-     the Claude apps, and in dark one step off the --accent hover fill, which
-     --surface-subtle (gray-800) equalled, hiding hover entirely. */
-  background: var(--card);
+  background: var(--surface-subtle);
   font-family: var(--font-sans);
   font-size: var(--text-body);
   line-height: var(--leading-body);
@@ -57,7 +54,9 @@
   cursor: var(--cursor-button);
 }
 .toggle:hover {
-  background: var(--accent);
+  /* An overlay, not --accent: in dark the sidebar's own --surface-subtle is
+     the same gray-800 as --accent, so an opaque hover fill vanished. */
+  background: var(--hover-overlay);
   color: var(--accent-foreground);
 }
 
@@ -128,7 +127,7 @@
   cursor: var(--cursor-link);
 }
 .item:hover {
-  background: var(--accent);
+  background: var(--hover-overlay);
   color: var(--accent-foreground);
 }
 .item:focus-visible,

@@ -144,9 +144,8 @@ a[href].button {
 
 /* ---------------------------------------------------------------- sizes */
 
-/* The compact control scale: 24 / 32 / 40 / 48. sm is the small inline
-   control (13px label, a step tighter radius); md, the default, is the
-   32px button of a dense product UI. */
+/* Two sizes, as in the Claude apps: sm is the 24px inline control (13px
+   label, a step tighter radius); md, the default, is the 32px button. */
 .sm {
   --button-icon: calc(var(--space-3) + 2px);
   block-size: var(--control-sm);
@@ -160,20 +159,6 @@ a[href].button {
   --button-icon: var(--space-4);
   block-size: var(--control-md);
   padding-inline: var(--space-3);
-}
-
-.lg {
-  --button-icon: var(--space-4);
-  block-size: var(--control-lg);
-  padding-inline: var(--space-4);
-}
-
-.xl {
-  --button-icon: calc(var(--space-4) + var(--space-1));
-  block-size: var(--control-xl);
-  padding-inline: var(--space-6);
-  font-size: var(--text-body-lg);
-  line-height: var(--leading-body-lg);
 }
 
 .iconOnly {
@@ -234,7 +219,7 @@ a[href].button {
   }
 }
 
-/* Every size but xl is under 44px. On touch screens the hit area grows to 44px
+/* Both sizes are under 44px. On touch screens the hit area grows to 44px
    without the button growing with it. */
 @media (pointer: coarse) {
   .button::after {

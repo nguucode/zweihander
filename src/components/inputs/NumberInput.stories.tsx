@@ -9,7 +9,7 @@ const meta = {
   // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
   parameters: { a11y: { test: 'error' } },
   argTypes: {
-    size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] },
+    size: { control: 'inline-radio', options: ['sm', 'md'] },
     appearance: { control: 'inline-radio', options: ['outlined', 'filled', 'underlined', 'unstyled'] },
     validationState: { control: 'inline-radio', options: ['default', 'success', 'error'] },
   },
@@ -83,7 +83,7 @@ export const Typing: Story = {
 export const Sizes: Story = {
   render: (args) => (
     <div style={{ display: 'grid', gap: 'var(--space-4)', justifyItems: 'start' }}>
-      {(['sm', 'md', 'lg'] as const).map((size) => (
+      {(['sm', 'md'] as const).map((size) => (
         <NumberInput key={size} {...args} size={size} label={size} />
       ))}
     </div>

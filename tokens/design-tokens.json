@@ -1276,6 +1276,10 @@
         "$type": "color",
         "$value": "{primitive.gray.taupe.200}"
       },
+      "hover-overlay": {
+        "$type": "color",
+        "$value": "oklch(0% 0 0 / 5%)"
+      },
       "destructive": {
         "$type": "color",
         "$value": "{primitive.accent.red.600}"
@@ -1437,6 +1441,10 @@
       "selected": {
         "$type": "color",
         "$value": "oklch(100% 0 0 / 10%)"
+      },
+      "hover-overlay": {
+        "$type": "color",
+        "$value": "oklch(100% 0 0 / 6%)"
       },
       "destructive": {
         "$type": "color",

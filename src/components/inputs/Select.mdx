@@ -30,7 +30,7 @@ the field is [Text Input](?path=/docs/components-inputs-textinput--docs)'s.
 | `onValueChange` | `(value) => void` | – | The spec's `onChange`. |
 | `placeholder` | string | – | Shown until something is chosen. |
 | `label`, `helperText`, `validationState` | | – | |
-| `size` | `sm`, `md`, `lg` | `md` | |
+| `size` | `sm`, `md` | `md` | 24, 32px. |
 | `appearance` | `outlined`, `filled`, `underlined`, `unstyled` | `outlined` | |
 | `isLoading` | boolean | `false` | Spinner in place of the chevron; `aria-busy`. |
 | `isFullWidth` | boolean | `false` | |
@@ -41,6 +41,7 @@ the field is [Text Input](?path=/docs/components-inputs-textinput--docs)'s.
 
 ### Differences from the spec
 
+- **Two sizes, not three.** `sm` (24px) and `md` (32px) only, the compact control scale of the Claude apps. The spec's larger steps were dropped; a big call to action is `md` with more room around it, not a taller box.
 - **`onValueChange` with the value**, Base UI's name, instead of
   `onChange`.
 - **Native names** for `disabled`, `readOnly`, `required`.
