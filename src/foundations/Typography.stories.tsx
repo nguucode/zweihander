@@ -23,7 +23,8 @@ const HEADINGS = [
 const BODY = [
   { token: 'body-lg', px: '16 / 24' },
   { token: 'body', px: '14 / 20' },
-  { token: 'body-sm', px: '12 / 16' },
+  { token: 'body-sm', px: '13 / 16' },
+  { token: 'body-xs', px: '10 / 14' },
 ] as const
 
 function Row({ token, px, weight }: { token: string; px: string; weight: number }) {
@@ -116,13 +117,7 @@ export const Families: Story = {
       <div className={docs.stack}>
         <span className={docs.caption}>--font-sans</span>
         <span style={{ ...role('heading-md', 700), fontFamily: 'var(--font-sans)' }}>
-          Zweihänder — Inter 0123
-        </span>
-      </div>
-      <div className={docs.stack}>
-        <span className={docs.caption}>--font-serif</span>
-        <span style={{ ...role('heading-md', 500), fontFamily: 'var(--font-serif)' }}>
-          Zweihänder — Newsreader 0123
+          Zweihänder — system-ui 0123
         </span>
       </div>
       <div className={docs.stack}>
@@ -134,9 +129,7 @@ export const Families: Story = {
     </div>
   ),
   play: async ({ canvas }) => {
-    const sans = canvas.getByText(/Inter 0123/)
-    await expect(getComputedStyle(sans).fontFamily).toContain('Inter')
-    const serif = canvas.getByText(/Newsreader 0123/)
-    await expect(getComputedStyle(serif).fontFamily).toContain('Newsreader')
+    const sans = canvas.getByText(/system-ui 0123/)
+    await expect(getComputedStyle(sans).fontFamily).toMatch(/^system-ui/)
   },
 }

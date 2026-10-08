@@ -23,35 +23,28 @@ that belong together:
 
 ## The typeface
 
-Two faces, split by job. **Sans for everything you operate** — buttons,
-fields, menus, labels, tables, figures. **Serif for what you read** — page,
-dialog and empty-state titles, and long-form prose.
+One face: the platform UI font. Nothing is downloaded, and text looks the
+way the rest of the operating system does — San Francisco on Apple, Segoe UI
+on Windows, Roboto on Android.
 
 ```css
---font-sans:  'Inter Variable', Inter, system-ui, -apple-system, 'Segoe UI', …
---font-serif: 'Newsreader Variable', Newsreader, Georgia, 'Times New Roman', serif
---font-mono:  ui-monospace, SFMono-Regular, 'SF Mono', Menlo, …
+--font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, …
+--font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, …
 ```
 
-Components read two role tokens rather than the faces directly:
+Components read two role tokens rather than the face directly, so a
+product can give headings or prose their own face without touching a
+component:
 
 | Role | Default | Read by |
 | --- | --- | --- |
-| `--font-heading` | `var(--font-serif)` | `PageHeading`, `Modal` and `EmptyState` titles |
-| `--font-prose` | `var(--font-serif)` | long-form reading text; no component reads it yet |
-
-Small headings stay sans on purpose: a form-section or stat label at 14–16px
-is UI, and a serif at that size in a dense ERP screen reads as decoration.
-Stat values stay sans too, for tabular figures.
+| `--font-heading` | `var(--font-sans)` | `PageHeading`, `Modal` and `EmptyState` titles |
+| `--font-prose` | `var(--font-sans)` | long-form reading text; no component reads it yet |
 
 <Canvas of={TypographyStories.Families} />
 
-**The kit names the faces but never loads them.** If Inter and Newsreader
-are not installed or loaded on the page, every stack falls back — to the
-platform UI face and to Georgia — and nothing breaks. This docs site loads
-both through `@fontsource-variable/inter` and
-`@fontsource-variable/newsreader`; do the same, or point the tokens at your
-own faces (see **Customization**).
+**There is nothing to load.** To use a brand face instead, load it yourself
+and point the tokens at it (see **Customization**).
 
 ## Headings
 
@@ -76,7 +69,7 @@ the semantic weight of the text, not about being large.
 
 ## Body
 
-Three steps. `--text-body` is the default at 14px — one step down from the
+Four steps. `--text-body` is the default at 14px — one step down from the
 16px a lot of interfaces start at, which is deliberate for dense product
 UI and worth knowing before you reach for it in long-form content.
 
@@ -87,10 +80,15 @@ UI and worth knowing before you reach for it in long-form content.
 | `--text-body-lg` | 1rem / 16px | 24px |
 | `--text-body` | 0.875rem / 14px | 20px |
 | `--text-body-sm` | 0.8125rem / 13px | 16px |
+| `--text-body-xs` | 0.625rem / 10px | 14px |
 
 **Every component uses these.** Button, the field label, the input itself,
 and the helper and error text are all `--text-body`; only the large Button
 steps up to `--text-body-lg`.
+
+`--text-body-xs` is for dense metadata only — timestamps, badge counts,
+table footnotes. No component reads it, and nothing a user has to read in
+full or act on belongs at 10px.
 
 ## Weights
 
@@ -141,7 +139,7 @@ The family is a token like any other:
 ```css
 :root {
   --font-sans: 'Geist Variable', system-ui, sans-serif;
-  --font-heading: var(--font-sans); /* all-sans headings */
+  --font-heading: 'Newsreader Variable', Georgia, serif; /* serif headings */
 }
 ```
 

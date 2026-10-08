@@ -1658,6 +1658,13 @@
       "$extensions": {
         "leading": "16 / 13"
       }
+    },
+    "body-xs": {
+      "$type": "dimension",
+      "$value": "0.625rem",
+      "$extensions": {
+        "leading": "14 / 10"
+      }
     }
   },
   "radius": {
