@@ -1215,7 +1215,8 @@
         "https://ontheshore.biz/zweihander/r/tokens.json",
         "https://ontheshore.biz/zweihander/r/icon.json",
         "https://ontheshore.biz/zweihander/r/button.json",
-        "https://ontheshore.biz/zweihander/r/progress-bar.json"
+        "https://ontheshore.biz/zweihander/r/progress-bar.json",
+        "https://ontheshore.biz/zweihander/r/spinner.json"
       ],
       "files": [
         {

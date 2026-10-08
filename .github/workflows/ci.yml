@@ -1,0 +1,31 @@
+name: CI
+
+# The same checks the deploy runs, on the PR, so a red build is caught before
+# it lands on main instead of after.
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run tokens:check
+      - run: npm run registry:check
+      - run: npx playwright install --with-deps chromium
+      - run: npx tsc -b
+      - run: npx vitest --project storybook run
+      - run: npm run build:lib
