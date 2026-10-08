@@ -24,10 +24,10 @@ export interface AlertProps extends Omit<ComponentProps<'div'>, 'title'> {
 }
 
 const icons: Record<NonNullable<AlertProps['variant']>, IconName> = {
-  info: 'info',
-  success: 'success',
-  warning: 'warning',
-  danger: 'danger',
+  info: 'info-filled',
+  success: 'success-filled',
+  warning: 'warning-filled',
+  danger: 'danger-filled',
 }
 
 export function Alert({

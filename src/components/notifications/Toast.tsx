@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import { useSyncExternalStore, type ReactNode } from 'react'
 import { Toast as BaseToast } from '@base-ui/react/toast'
 import { Icon, type IconName } from '@/lib/icon'
 import { cn } from '@/lib/utils'
@@ -33,11 +33,21 @@ const variantOf = (type: string | undefined): ToastVariant | 'loading' =>
   type === 'error' ? 'danger' : type === 'loading' ? 'loading' : ((type as ToastVariant) ?? 'default')
 
 const icons: Partial<Record<ToastVariant, IconName>> = {
-  info: 'info',
-  success: 'success',
-  warning: 'warning',
-  danger: 'danger',
+  info: 'info-filled',
+  success: 'success-filled',
+  warning: 'warning-filled',
+  danger: 'danger-filled',
 }
+
+// The toast takes the opposite appearance of the page (dark on a light page,
+// light on a dark one) so it stands out from what is under it. The page's
+// appearance is the `dark` class on <html>.
+const subscribeToPageTheme = (onChange: () => void) => {
+  const observer = new MutationObserver(onChange)
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
+  return () => observer.disconnect()
+}
+const pageIsDark = () => document.documentElement.classList.contains('dark')
 
 function ToastList({ swipe }: { swipe: 'left' | 'right' | 'up' | 'down' }) {
   const { toasts } = BaseToast.useToastManager()
@@ -78,11 +88,12 @@ function ToastList({ swipe }: { swipe: 'left' | 'right' | 'up' | 'down' }) {
 export function ToastProvider({ children, placement = 'bottom-right', timeout = 5000, limit = 3 }: ToastProviderProps) {
   const [vertical, horizontal] = placement.split('-') as ['top' | 'bottom', 'left' | 'center' | 'right']
   const swipe = horizontal === 'center' ? (vertical === 'top' ? 'up' : 'down') : horizontal
+  const dark = useSyncExternalStore(subscribeToPageTheme, pageIsDark, () => false)
   return (
     <BaseToast.Provider timeout={timeout} limit={limit}>
       {children}
       <BaseToast.Portal>
-        <BaseToast.Viewport className={cn(styles.viewport, styles[vertical], styles[horizontal])}>
+        <BaseToast.Viewport className={cn(styles.viewport, styles[vertical], styles[horizontal], dark ? 'light' : 'dark')}>
           <ToastList swipe={swipe} />
         </BaseToast.Viewport>
       </BaseToast.Portal>

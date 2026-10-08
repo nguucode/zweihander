@@ -113,7 +113,9 @@ function Entries({ items }: { items: MenuEntry[] }) {
                   className={styles.item}
                 >
                   <span className={styles.indicator}>
-                    <BaseMenu.RadioItemIndicator className={styles.dot} />
+                    <BaseMenu.RadioItemIndicator>
+                      <Icon name="check" />
+                    </BaseMenu.RadioItemIndicator>
                   </span>
                   <span className={styles.label}>{o.label}</span>
                 </BaseMenu.RadioItem>
@@ -147,7 +149,7 @@ function Entries({ items }: { items: MenuEntry[] }) {
                   <Icon name="chevron-right" />
                 </span>
               </BaseMenu.SubmenuTrigger>
-              <Surface side="right" align="start" sideOffset={-4}>
+              <Surface side="right" align="start" sideOffset={4}>
                 <Entries items={entry.items} />
               </Surface>
             </BaseMenu.SubmenuRoot>

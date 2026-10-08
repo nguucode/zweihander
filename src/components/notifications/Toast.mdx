@@ -17,13 +17,15 @@ Behaviour from Base UI's [Toast](https://base-ui.com/react/components/toast).
 
 | Part | What it is |
 | --- | --- |
-| **Icon** | The variant's icon in its text colour; none for `default`, a spinner while a promise is pending. |
+| **Icon** | The variant's filled icon in its text colour; none for `default`, a spinner while a promise is pending. |
 | **Title** | Semibold. What happened. |
 | **Description** | Optional, `--muted-foreground`. |
 | **Action** | Optional, one text button, e.g. "Undo". |
 | **Close button** | Always there. |
 
-The surface is `--popover` with `--shadow-lg`, at most 24rem wide.
+The surface is `--popover` with `--shadow-lg`, at most 24rem wide, in the
+opposite appearance to the page: dark toasts on a light page, light on a
+dark one.
 
 ## API
 
@@ -65,6 +67,12 @@ toast.add({ title: 'File moved to Trash', action: { label: 'Undo', onClick: rest
 
 ### Design notes
 
+- **Inverted appearance.** The viewport carries `.dark` when `<html>` is
+  light and `.light` when it is `.dark`, and follows the page if it
+  switches while a toast is open. The contrast with the page pulls the eye
+  to a message that is only there for a few seconds. A `Theme` with its own
+  `appearance` deeper in the tree does not reach the toast: it renders in a
+  portal on `<body>`.
 - **The variant colours only the icon.** The message stays in
   `--popover-foreground`, the same as Alert's subtle and outlined
   appearances: a toast is read in passing, and body text in an accent
