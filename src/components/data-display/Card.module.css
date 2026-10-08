@@ -57,12 +57,6 @@
   background: var(--card);
 }
 
-/* Not --muted: muted text reads 4.81:1 on the subtle surface against
-   4.60:1 on --muted, the tighter margin. */
-.filled {
-  background: var(--surface-subtle);
-}
-
 /* unstyled keeps its padding and layout, and drops everything you see. */
 .unstyled {
   color: inherit;
@@ -90,8 +84,7 @@ a[href].interactive {
   box-shadow: var(--shadow-md);
 }
 
-.outline.interactive:hover,
-.filled.interactive:hover {
+.outline.interactive:hover {
   border-color: var(--control-border);
 }
 

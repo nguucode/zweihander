@@ -7,7 +7,7 @@ import styles from './Card.module.css'
 export interface CardProps extends Omit<ComponentProps<'div'>, 'onClick'> {
   /** Padding and the gap between children. */
   size?: 'xs' | 'sm' | 'md' | 'lg'
-  appearance?: 'elevated' | 'outline' | 'filled' | 'unstyled'
+  appearance?: 'elevated' | 'outline' | 'unstyled'
   /** How children flow: stacked, or side by side (e.g. media and text). */
   orientation?: 'vertical' | 'horizontal'
   isRounded?: boolean
