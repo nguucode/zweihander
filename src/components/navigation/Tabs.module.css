@@ -90,13 +90,16 @@
 .underline .tab {
   border-radius: var(--radius-sm);
 }
+.underline .tab[data-active] {
+  color: var(--primary-text);
+}
 .underline .indicator {
   position: absolute;
   inset-inline-start: var(--active-tab-left);
   inset-block-end: 0;
   inline-size: var(--active-tab-width);
   block-size: 2px;
-  background: var(--foreground);
+  background: var(--primary);
   transition:
     inset-inline-start 200ms,
     inline-size 200ms;
@@ -113,9 +116,10 @@
     block-size 200ms;
 }
 
-/* pills: a track in --muted, the selected tab lifted onto --background. */
+/* pills: a segmented toggle. A --muted track, the selected tab a --card
+   chip with a hairline edge and a soft shadow. */
 .pills .list {
-  padding: var(--space-1);
+  padding: 2px;
   border-radius: var(--radius-field);
   background: var(--muted);
 }
@@ -126,8 +130,13 @@
   align-self: stretch;
 }
 .pills .tab {
-  min-block-size: calc(var(--tab-height) - 2 * var(--space-1));
-  /* --muted-foreground is 4.3:1 on the --muted track, under 4.5. */
+  min-block-size: calc(var(--tab-height) - 4px);
+  /* --subtle-foreground, not --muted-foreground: that is 4.3:1 on the
+     --muted track, under 4.5. */
+  color: var(--subtle-foreground);
+}
+.pills .tab:hover:not([data-disabled]),
+.pills .tab[data-active] {
   color: var(--foreground);
 }
 .pills .indicator {
@@ -138,11 +147,9 @@
   inline-size: var(--active-tab-width);
   block-size: var(--active-tab-height);
   box-sizing: border-box;
-  /* The border, not just the lighter fill, marks the selected tab: white
-     on --muted alone is barely 1.1:1. */
-  border: 1px solid var(--control-border);
+  border: 1px solid var(--border);
   border-radius: var(--radius-control);
-  background: var(--background);
+  background: var(--card);
   box-shadow: var(--shadow-xs);
   transition:
     inset-inline-start 200ms,
