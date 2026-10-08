@@ -30,14 +30,15 @@ label — gaps where a full 4px reads as a break rather than a pairing.
 
 ## What the kit uses
 
-Every component here stays on whole steps, and on a small set of them:
+Every component here stays on a small set of steps:
 
 | Step | Used for |
 | --- | --- |
 | `1.5` (6px) | gap between a field label, its input and its helper text |
 | `2` (8px) | gap between a button's icon and its label |
 | `2` (8px) | horizontal padding, small button and small input |
-| `3` (12px) | horizontal padding, default button and input |
+| `2.5` (10px) | horizontal padding, default input; its option list is inset to match |
+| `3` (12px) | horizontal padding, default button |
 
 **Control heights are their own tokens**, not spacing steps:
 `--control-sm` and `--control-md` are 24 and 32px — two steps, as in

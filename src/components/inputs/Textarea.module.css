@@ -15,7 +15,7 @@
 }
 .pad-md {
   --pad-block: var(--space-2);
-  --pad-inline: var(--space-3);
+  --pad-inline: var(--space-2-5);
 }
 
 .textarea.textarea {
