@@ -13,7 +13,6 @@ export interface PopoverProps {
   children?: ReactNode
   side?: 'top' | 'right' | 'bottom' | 'left'
   align?: 'start' | 'center' | 'end'
-  hasArrow?: boolean
   /** A close button in the corner. Escape and a click outside close it either way. */
   hasCloseButton?: boolean
   closeLabel?: string
@@ -35,7 +34,6 @@ export function Popover({
   children,
   side = 'bottom',
   align = 'center',
-  hasArrow = false,
   hasCloseButton = false,
   closeLabel = 'Close',
   openOnHover = false,
@@ -55,9 +53,8 @@ export function Popover({
     >
       <BasePopover.Trigger render={trigger} openOnHover={openOnHover} />
       <BasePopover.Portal>
-        <BasePopover.Positioner className={styles.positioner} side={side} align={align} sideOffset={hasArrow ? 10 : 6}>
+        <BasePopover.Positioner className={styles.positioner} side={side} align={align} sideOffset={6}>
           <BasePopover.Popup aria-label={title ? undefined : ariaLabel} className={cn(styles.popup, className)}>
-            {hasArrow && <BasePopover.Arrow className={styles.arrow} />}
             {(title || hasCloseButton) && (
               <div className={styles.header}>
                 {title && <BasePopover.Title className={styles.title}>{title}</BasePopover.Title>}

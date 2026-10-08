@@ -24,7 +24,6 @@ Behaviour from Base UI's [Popover](https://base-ui.com/react/components/popover)
 | **Description** | Optional, `--muted-foreground`. Describes the dialog. |
 | **Body** | `children`. |
 | **Close button** | Optional, in the corner. |
-| **Arrow** | Optional. |
 
 ## Props
 
@@ -36,7 +35,6 @@ Behaviour from Base UI's [Popover](https://base-ui.com/react/components/popover)
 | `children` | node | – | |
 | `side` | `top`, `right`, `bottom`, `left` | `bottom` | Flips if there is no room. |
 | `align` | `start`, `center`, `end` | `center` | |
-| `hasArrow` | boolean | `false` | |
 | `hasCloseButton` | boolean | `false` | |
 | `closeLabel` | string | `Close` | |
 | `openOnHover` | boolean | `false` | Also opens on hover, for previews. |
@@ -50,9 +48,8 @@ Behaviour from Base UI's [Popover](https://base-ui.com/react/components/popover)
 - **Same surface as the Select list.** Popover, Select and Combobox
   popups share the `--popover` colour, border and shadow, and the same
   z-index layer (50); tooltips sit above them at 60.
-- **No arrow by default.** The popup opens 6px from its trigger and
-  lines up with it; the arrow is there for when the popover could be
-  read as belonging to something else nearby.
+- **No arrow.** The popup opens 6px from its trigger and lines up with
+  it; the gap and alignment already tie it to the trigger.
 
 ## Usage
 
