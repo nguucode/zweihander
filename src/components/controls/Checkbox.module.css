@@ -1,13 +1,19 @@
-/* 16px box, a --control-border outline (3:1 on the page) and the page
+/* Set on the field so the helper text indents by the box's width. */
+.field {
+  --choice-control: calc(var(--space-4) + var(--space-1));
+}
+
+/* 20px box, a --control-border outline (3:1 on the page) and the page
    colour inside. Checked and indeterminate fill with the variant. */
 .box {
   --checkbox-fill: var(--foreground);
   --checkbox-mark: var(--background);
+  --checkbox-paint: var(--checkbox-fill);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  inline-size: var(--space-4);
-  block-size: var(--space-4);
+  inline-size: var(--choice-control);
+  block-size: var(--choice-control);
   border: 1px solid var(--control-border);
   border-radius: var(--radius-sm);
   background: var(--background);
@@ -19,23 +25,22 @@
   --checkbox-mark: var(--primary-foreground);
 }
 
-/* Secondary is the quiet one: a light fill with a dark mark, keeping the
-   outline so the box stays visible. */
-.secondary {
-  --checkbox-fill: var(--secondary);
-  --checkbox-mark: var(--secondary-foreground);
-}
-
 .box[data-checked],
 .box[data-indeterminate] {
-  border-color: var(--checkbox-fill);
-  background: var(--checkbox-fill);
+  border-color: var(--checkbox-paint);
+  background: var(--checkbox-paint);
   color: var(--checkbox-mark);
 }
 
-.secondary[data-checked],
-.secondary[data-indeterminate] {
-  border-color: var(--control-border);
+/* Hover. The label wraps the box, so hovering either counts. Unchecked
+   darkens the outline; checked shifts the fill toward the mark, as Button
+   does. Disabled and read-only don't react. */
+label:hover > .box:not([data-checked], [data-indeterminate], [data-invalid], [data-disabled], [data-readonly]) {
+  border-color: var(--foreground);
+}
+
+label:hover > .box:not([data-disabled], [data-readonly]) {
+  --checkbox-paint: color-mix(in oklab, var(--checkbox-fill) 88%, var(--checkbox-mark));
 }
 
 .box[data-invalid] {
@@ -46,8 +51,8 @@
   cursor: default;
 }
 
-/* The mark is 14px in a 16px box: it has to read at a glance. */
+/* The mark is 16px in a 20px box: it has to read at a glance. */
 .indicator {
   display: inline-flex;
-  font-size: calc(var(--space-4) - 2px);
+  font-size: var(--space-4);
 }

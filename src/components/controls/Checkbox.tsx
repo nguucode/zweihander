@@ -19,7 +19,7 @@ export interface CheckboxProps {
   /** Submitted when checked; "on" by default. */
   value?: string
   /** Colour of the checked box. */
-  variant?: 'primary' | 'secondary' | 'neutral'
+  variant?: 'primary' | 'neutral'
   disabled?: boolean
   required?: boolean
   readOnly?: boolean
@@ -67,7 +67,7 @@ export function Checkbox({
       required={required}
       disabled={disabled}
       name={name}
-      className={className}
+      className={cn(styles.field, className)}
     >
       <BaseCheckbox.Root
         {...props}

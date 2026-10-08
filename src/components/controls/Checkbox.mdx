@@ -17,7 +17,7 @@ and [Field](https://base-ui.com/react/components/field).
 
 | Part | What it is |
 | --- | --- |
-| **Container** | The 16px box: `--control-border` outline, filled with the variant when checked. |
+| **Container** | The 20px box: `--control-border` outline, filled with the variant when checked. Hovering the box or label darkens the outline, or the fill when checked. |
 | **Check icon** | `check` when checked, `minus` when indeterminate. |
 | **Label** | `label`. Clicking it toggles the box. |
 | **Helper text** | `helperText`, indented under the label. |
@@ -34,7 +34,7 @@ and [Field](https://base-ui.com/react/components/field).
 | `helperText` | node | – | |
 | `name` | string | – | |
 | `value` | string | `"on"` | Submitted under `name` when checked. The spec's `defaultValue`. |
-| `variant` | `primary`, `secondary`, `neutral` | `neutral` | Colour of the checked box. |
+| `variant` | `primary`, `neutral` | `neutral` | Colour of the checked box. |
 | `disabled`, `required`, `readOnly`, `autoFocus` | boolean | `false` | |
 | `validationState` | `default`, `success`, `error` | `default` | |
 
@@ -51,9 +51,8 @@ and [Field](https://base-ui.com/react/components/field).
   calls it `indeterminate`.
 - **`autoFocus` is applied on mount by the component.** The box is a
   focusable `<span>`, which React's own `autoFocus` ignores.
-- **`neutral` is the foreground colour**, `secondary` a light fill that
-  keeps its outline. The spec's variant set differs from Switch's; both
-  are kept as specified.
+- **No `secondary`.** A light fill barely reads as checked, so only
+  `neutral` (the foreground colour) and `primary` ship.
 
 ## Usage
 
