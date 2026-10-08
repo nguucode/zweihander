@@ -25,7 +25,6 @@ const meta = {
   },
   argTypes: {
     size: { control: 'inline-radio', options: ['sm', 'md'] },
-    appearance: { control: 'inline-radio', options: ['outlined', 'underlined', 'unstyled'] },
     value: { control: false },
     defaultValue: { control: false },
     min: { control: false },

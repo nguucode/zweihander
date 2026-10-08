@@ -10,7 +10,6 @@ const meta = {
   parameters: { a11y: { test: 'error' } },
   argTypes: {
     size: { control: 'inline-radio', options: ['sm', 'md'] },
-    appearance: { control: 'inline-radio', options: ['outlined', 'underlined', 'unstyled'] },
     validationState: { control: 'inline-radio', options: ['default', 'success', 'error'] },
     resize: { control: 'inline-radio', options: ['none', 'both', 'vertical', 'horizontal'] },
   },
@@ -30,16 +29,6 @@ export const Default: Story = {
     await expect(box).toHaveValue('Line one\nLine two')
     await expect(args.onChange).toHaveBeenCalled()
   },
-}
-
-export const Appearances: Story = {
-  render: (args) => (
-    <div style={stack}>
-      {(['outlined', 'underlined', 'unstyled'] as const).map((appearance) => (
-        <Textarea key={appearance} {...args} appearance={appearance} label={appearance} minRows={2} />
-      ))}
-    </div>
-  ),
 }
 
 export const Sizes: Story = {

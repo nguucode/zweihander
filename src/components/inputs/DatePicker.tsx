@@ -17,7 +17,6 @@ import {
   boxClass,
   focusControl,
   inputStyles,
-  type InputAppearance,
   type InputSize,
   type ValidationState,
 } from './InputField'
@@ -33,7 +32,6 @@ export interface DatePickerProps {
   helperText?: ReactNode
   validationState?: ValidationState
   size?: InputSize
-  appearance?: InputAppearance
   min?: Date | null
   max?: Date | null
   isDateDisabled?: (date: Date) => boolean
@@ -106,7 +104,6 @@ interface PickerFieldProps {
   helperText?: ReactNode
   validationState?: ValidationState
   size: InputSize
-  appearance: InputAppearance
   placeholder: string
   isFullWidth?: boolean
   disabled?: boolean
@@ -135,7 +132,6 @@ function PickerField({
   helperText,
   validationState,
   size,
-  appearance,
   placeholder,
   isFullWidth,
   disabled,
@@ -164,7 +160,7 @@ function PickerField({
       isFullWidth={isFullWidth}
       className={className}
     >
-      <span ref={boxRef} className={boxClass(size, appearance)} onMouseDown={focusControl}>
+      <span ref={boxRef} className={boxClass(size)} onMouseDown={focusControl}>
         <Field.Control
           ref={inputRef}
           id={id}
@@ -230,7 +226,6 @@ export function DatePicker({
   helperText,
   validationState,
   size = 'md',
-  appearance = 'outlined',
   min,
   max,
   isDateDisabled,
@@ -293,7 +288,6 @@ export function DatePicker({
       helperText={invalid ? `Enter a date as ${pattern}${min || max ? ', within the allowed range' : ''}.` : helperText}
       validationState={invalid ? 'error' : validationState}
       size={size}
-      appearance={appearance}
       placeholder={placeholder ?? pattern}
       isFullWidth={isFullWidth}
       disabled={disabled}
@@ -381,7 +375,6 @@ export function DateRangePicker({
   helperText,
   validationState,
   size = 'md',
-  appearance = 'outlined',
   min,
   max,
   isDateDisabled,
@@ -463,7 +456,6 @@ export function DateRangePicker({
       }
       validationState={invalid ? 'error' : validationState}
       size={size}
-      appearance={appearance}
       placeholder={placeholder ?? `${pattern} – ${pattern}`}
       isFullWidth={isFullWidth}
       disabled={disabled}

@@ -18,7 +18,6 @@ const meta = {
   parameters: { a11y: { test: 'error' } },
   argTypes: {
     size: { control: 'inline-radio', options: ['sm', 'md'] },
-    appearance: { control: 'inline-radio', options: ['outlined', 'underlined', 'unstyled'] },
     validationState: { control: 'inline-radio', options: ['default', 'success', 'error'] },
   },
   args: { label: 'Team member', placeholder: 'Type a name', options: members, onValueChange: fn() },
@@ -93,16 +92,6 @@ export const Sizes: Story = {
     <div style={{ display: 'grid', gap: 'var(--space-4)', justifyItems: 'start' }}>
       {(['sm', 'md'] as const).map((size) => (
         <Combobox key={size} {...args} size={size} label={size} defaultValue="marlone" />
-      ))}
-    </div>
-  ),
-}
-
-export const Appearances: Story = {
-  render: (args) => (
-    <div style={{ display: 'grid', gap: 'var(--space-4)', justifyItems: 'start' }}>
-      {(['outlined', 'underlined', 'unstyled'] as const).map((appearance) => (
-        <Combobox key={appearance} {...args} appearance={appearance} label={appearance} />
       ))}
     </div>
   ),

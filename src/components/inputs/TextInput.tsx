@@ -6,7 +6,6 @@ import {
   boxClass,
   focusControl,
   inputStyles,
-  type InputAppearance,
   type InputSize,
   type ValidationState,
 } from './InputField'
@@ -17,7 +16,6 @@ export interface TextInputProps extends Omit<ComponentProps<'input'>, 'size' | '
   helperText?: ReactNode
   validationState?: ValidationState
   size?: InputSize
-  appearance?: InputAppearance
   /** Text or an icon before the value, e.g. `<Icon name="search" />` or "https://". */
   prefix?: ReactNode
   /** Text or an icon after the value, e.g. "kg". */
@@ -30,7 +28,6 @@ export function TextInput({
   helperText,
   validationState,
   size = 'md',
-  appearance = 'outlined',
   prefix,
   suffix,
   isFullWidth,
@@ -51,7 +48,7 @@ export function TextInput({
       isFullWidth={isFullWidth}
       className={className}
     >
-      <span className={boxClass(size, appearance)} onMouseDown={focusControl}>
+      <span className={boxClass(size)} onMouseDown={focusControl}>
         {prefix && <span className={inputStyles.affix}>{prefix}</span>}
         <Field.Control {...props} required={required} className={cn(inputStyles.control)} />
         {suffix && <span className={inputStyles.affix}>{suffix}</span>}

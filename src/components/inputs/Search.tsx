@@ -8,7 +8,6 @@ import {
   boxClass,
   focusControl,
   inputStyles,
-  type InputAppearance,
   type InputSize,
 } from './InputField'
 import styles from './Search.module.css'
@@ -19,7 +18,6 @@ export interface SearchProps extends Omit<ComponentProps<'input'>, 'size' | 'typ
   /** A visible label. Without one the field is named by `aria-label` ("Search" by default). */
   label?: ReactNode
   size?: InputSize
-  appearance?: InputAppearance
   isFullWidth?: boolean
 }
 
@@ -29,7 +27,6 @@ export function Search({
   label,
   placeholder = 'Search',
   size = 'md',
-  appearance = 'outlined',
   isFullWidth,
   disabled,
   readOnly,
@@ -59,7 +56,7 @@ export function Search({
 
   return (
     <InputField label={label} disabled={disabled} isFullWidth={isFullWidth} className={className}>
-      <span className={boxClass(size, appearance)} onMouseDown={focusControl}>
+      <span className={boxClass(size)} onMouseDown={focusControl}>
         <span className={inputStyles.affix}>
           <Icon name="search" />
         </span>
