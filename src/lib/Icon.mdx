@@ -13,8 +13,8 @@ Every component in the kit imports its icons from here and nowhere else.
 ## Why names say what an icon is for
 
 `close`, `danger`, `success` — not `x`, `alert-circle`, `check-circle`.
-The set is temporary: it is Boxicons free for now, and will be replaced by
-the kit's own set. Named by purpose, that swap is an edit to this one file.
+The set is temporary: it is Google Material Symbols for now, and may be
+replaced by the kit's own set. Named by purpose, that swap is an edit to this one file.
 Named by shape, it would be a search through every component for which
 shape meant what. Navigation shapes (`chevron-down`, `search`, `plus`)
 keep their plain names because the shape *is* the purpose.
@@ -41,47 +41,50 @@ itself, to size it; never pass a colour.
 
 ## Source and licence
 
-Path data is copied from Boxicons free (`@boxicons/core` 1.0.6, basic and
-filled sets), MIT. The licence text is in the file header, so it travels
-with the file when the registry copies it into another project. There is
-no npm dependency on Boxicons.
+Path data is copied from Google Material Symbols (`@material-symbols/svg-400`
+0.47.6): Rounded, weight 400, grade 0, optical size 24, fill 0 unless the
+table says Fill 1. Apache 2.0. The licence notice is in the file header, so
+it travels with the file when the registry copies it into another project.
+There is no npm dependency on Material Symbols, and no icon font.
 
-## Names in Boxicons and in Figma
+The paths use Material's own `0 -960 960 960` viewBox; keep it when adding
+icons.
 
-The Figma library has the whole free set on its **Icons** page, named
-`Boxicons/<Pack>/<name>` with the Boxicons name unchanged (pack is
-`Basic`, `Filled` or `Brands`). Components in the library use those
-directly. Each purpose name in code is one of them:
+## Names in Material Symbols
 
-| Code (`name`) | Figma component |
+Each purpose name in code is one Material Symbol, so designers can find the
+same glyph at [fonts.google.com/icons](https://fonts.google.com/icons) or
+in the Material Symbols Figma community file:
+
+| Code (`name`) | Material Symbol |
 | --- | --- |
-| `calendar` | `Boxicons/Basic/calendar` |
-| `check` | `Boxicons/Basic/check` |
-| `chevron-down` | `Boxicons/Basic/chevron-down` |
-| `chevron-left` | `Boxicons/Basic/chevron-left` |
-| `chevron-right` | `Boxicons/Basic/chevron-right` |
-| `chevron-up` | `Boxicons/Basic/chevron-up` |
-| `chevrons-up-down` | `Boxicons/Basic/chevrons-up-down` |
-| `close` | `Boxicons/Basic/x` |
-| `danger` | `Boxicons/Basic/alert-circle` |
-| `external` | `Boxicons/Basic/arrow-out-up-right-square` |
-| `file` | `Boxicons/Basic/file` |
-| `info` | `Boxicons/Basic/info-circle` |
-| `menu` | `Boxicons/Basic/menu` |
-| `minus` | `Boxicons/Basic/minus` |
-| `more` | `Boxicons/Basic/dots-horizontal-rounded` |
-| `pause` | `Boxicons/Basic/pause` |
-| `play` | `Boxicons/Basic/play` |
-| `plus` | `Boxicons/Basic/plus` |
-| `search` | `Boxicons/Basic/search` |
-| `star` | `Boxicons/Basic/star` |
-| `star-filled` | `Boxicons/Filled/star` |
-| `success` | `Boxicons/Basic/check-circle` |
-| `upload` | `Boxicons/Basic/archive-arrow-up` |
-| `user` | `Boxicons/Basic/user` |
-| `warning` | `Boxicons/Basic/alert-triangle` |
+| `calendar` | `calendar_today` |
+| `check` | `check` |
+| `chevron-down` | `keyboard_arrow_down` |
+| `chevron-left` | `keyboard_arrow_left` |
+| `chevron-right` | `keyboard_arrow_right` |
+| `chevron-up` | `keyboard_arrow_up` |
+| `chevrons-up-down` | `unfold_more` |
+| `close` | `close` |
+| `danger` | `error` |
+| `external` | `open_in_new` |
+| `file` | `draft` |
+| `info` | `info` |
+| `menu` | `menu` |
+| `minus` | `remove` |
+| `more` | `more_horiz` |
+| `pause` | `pause` |
+| `play` | `play_arrow` |
+| `plus` | `add` |
+| `search` | `search` |
+| `star` | `star` |
+| `star-filled` | `star (Fill 1)` |
+| `success` | `check_circle` |
+| `upload` | `upload` |
+| `user` | `person` |
+| `warning` | `warning` |
 
-To add an icon: pick it in Figma, copy the `d` attribute(s) from
-`svg/<pack>/bx-<name>.svg` in `@boxicons/core` into the `paths` map under
-a purpose name, add a row to this table, and add the name to the catalog
-story.
+To add an icon: find it at fonts.google.com/icons, copy the `d`
+attribute(s) from `rounded/<name>.svg` (or `<name>-fill.svg`) in
+`@material-symbols/svg-400` into the `paths` map under a purpose name,
+add a row to this table, and add the name to the catalog story.
