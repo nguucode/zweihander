@@ -11,11 +11,13 @@ chip, a person picked in a field. Spec:
 
 <Canvas of={TagStories.Matrix} />
 
+<Canvas of={TagStories.Colors} />
+
 ## Anatomy
 
 | Part | What it is |
 | --- | --- |
-| **Container** | The box: fill, border and corner by `appearance` and `isRounded`. |
+| **Container** | The box: fill, border and corner by `appearance` and `variant`; the corner follows the Theme's radius. |
 | **Start icon** | `startIcon`, sized to the text. Decorative. |
 | **Start avatar** | `startAvatar`, a small round image. Decorative (`alt=""`). Replaces the icon when both are given. |
 | **Text** | `text`. Truncates with an ellipsis rather than wrapping. |
@@ -30,8 +32,7 @@ chip, a person picked in a field. Spec:
 | `startAvatar` | string (URL) | – | |
 | `size` | `sm`, `md` | `md` | 20px / 24px tall. |
 | `appearance` | `subtle`, `outlined`, `solid` | `subtle` | |
-| `variant` | `info`, `success`, `warning`, `danger` | `info` | The status tokens, see [Colors](?path=/docs/foundations-colors--docs). |
-| `isRounded` | boolean | `false` | Pill, whatever the radius preset. |
+| `variant` | `neutral`, `info`, `success`, `warning`, `danger`, or a hue: `red` … `rose` | `info` | Status tokens, or one of the 17 accent hues for categories. See [Colors](?path=/docs/foundations-colors--docs). |
 | `hasRemoveButton` | boolean | `false` | |
 | `onRemove` | `(event) => void` | – | |
 
@@ -44,6 +45,16 @@ Every other `<span>` attribute passes through to the container.
 - **The spec's four variants needed new tokens.** `info`, `success`,
   `warning` and `danger` were added to the token layer for Tag and are
   shared with Alert and Toast.
+- **No `isRounded`.** The corner reads `--radius-control`, so it follows
+  the Theme's radius preset with every other control, and turns into a
+  pill under `radius="full"`.
+- **The 17 hue variants are additions.** Each hue has `--<hue>`,
+  `-foreground`, `-subtle` and `-text` tokens. Subtle and outlined text is
+  measured at 4.5:1 in the token build. Solid is step 600 with a white
+  label on every hue, in both appearances, so a row of solid tags reads as
+  one set; on the warm hues (orange, amber, yellow, lime and others) that
+  label falls below 4.5:1. That is accepted on purpose. Use subtle or
+  outlined where the tag has to pass AA.
 - **`startAvatar` wins over `startIcon`** if both are passed; the spec
   does not say.
 - **The tag does not remove itself.** `onRemove` reports the click and
@@ -58,7 +69,7 @@ Every other `<span>` attribute passes through to the container.
 
 ## Accessibility
 
-- The remove button is named **"Remove {text}"**, so a list of tags does
+- The remove button is named **"Remove `text`"** (e.g. "Remove Design"), so a list of tags does
   not read as a row of identical "Remove" buttons.
 - It is a native `<button>`: Tab to reach, Enter or Space to press.
 - On touch screens (`pointer: coarse`) its hit area grows to 44×44px
@@ -71,5 +82,5 @@ Every other `<span>` attribute passes through to the container.
   in your `onRemove`.
 - Colour carries meaning here, so it must never be the only signal: the
   text says what the status is. The icon and the avatar are decorative.
-- All label and text pairs clear 4.5:1 in both themes; the build checks
-  them.
+- Every label and text pair clears 4.5:1 in both themes, and the build
+  checks them, except solid hue tags (see above).

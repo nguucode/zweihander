@@ -3,6 +3,33 @@ import { Icon } from '@/lib/icon'
 import { cn } from '@/lib/utils'
 import styles from './Tag.module.css'
 
+/** Status first, then every hue the accent ramps offer, for categories. */
+export const TAG_VARIANTS = [
+  'neutral',
+  'info',
+  'success',
+  'warning',
+  'danger',
+  'red',
+  'orange',
+  'amber',
+  'yellow',
+  'lime',
+  'green',
+  'emerald',
+  'teal',
+  'cyan',
+  'sky',
+  'blue',
+  'indigo',
+  'violet',
+  'purple',
+  'fuchsia',
+  'pink',
+  'rose',
+] as const
+export type TagVariant = (typeof TAG_VARIANTS)[number]
+
 export interface TagProps extends Omit<ComponentProps<'span'>, 'children'> {
   text: string
   startIcon?: ReactNode
@@ -10,8 +37,7 @@ export interface TagProps extends Omit<ComponentProps<'span'>, 'children'> {
   startAvatar?: string
   size?: 'sm' | 'md'
   appearance?: 'subtle' | 'outlined' | 'solid'
-  variant?: 'info' | 'success' | 'warning' | 'danger'
-  isRounded?: boolean
+  variant?: TagVariant
   hasRemoveButton?: boolean
   onRemove?: (event: MouseEvent<HTMLButtonElement>) => void
 }
@@ -23,7 +49,6 @@ export function Tag({
   size = 'md',
   appearance = 'subtle',
   variant = 'info',
-  isRounded = false,
   hasRemoveButton = false,
   onRemove,
   className,
@@ -36,7 +61,6 @@ export function Tag({
         styles[size],
         styles[appearance],
         styles[variant],
-        isRounded && styles.rounded,
         className,
       )}
       {...props}

@@ -27,7 +27,7 @@ export interface RadioGroupProps {
   onValueChange?: (value: string) => void
   name?: string
   /** Colour of the selected radio. */
-  variant?: 'primary' | 'secondary' | 'neutral'
+  variant?: 'primary' | 'neutral'
   orientation?: 'vertical' | 'horizontal'
   disabled?: boolean
   required?: boolean

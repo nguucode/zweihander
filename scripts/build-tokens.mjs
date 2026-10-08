@@ -80,6 +80,19 @@ function pickText(hue, page, candidates) {
   throw new Error(`accent "${hue}": no step clears ${AA_TEXT}:1 as text on the page.`)
 }
 
+/**
+ * A tinted fill (an Avatar's initials) is the status pattern applied to each
+ * accent: a 100 / 950 tint, and the nearest step that reads on it at 4.5:1.
+ */
+function pickSubtle(hue, tint, candidates) {
+  const bg = ramp('accent', hue, tint)
+  for (const step of candidates) {
+    const value = ramp('accent', hue, step)
+    if (contrast(value, bg) >= AA_TEXT) return { tint, bg, step, value }
+  }
+  throw new Error(`accent "${hue}": no step clears ${AA_TEXT}:1 on its ${tint} tint.`)
+}
+
 const palettes = ACCENTS.map((hue) => {
   const light = pickAccent(hue, ['600', '700', '800'])
   const dark = pickAccent(hue, ['400', '500', '300'])
@@ -87,7 +100,9 @@ const palettes = ACCENTS.map((hue) => {
   const ringDark = pickRing(hue, PAGE_DARK, [dark.step, '300', '500'])
   const textLight = pickText(hue, PAGE_LIGHT, ['600', '700', '800', '900'])
   const textDark = pickText(hue, PAGE_DARK, ['400', '300', '200'])
-  return { hue, light, dark, ringLight, ringDark, textLight, textDark }
+  const subtleLight = pickSubtle(hue, '100', ['800', '900', '950'])
+  const subtleDark = pickSubtle(hue, '950', ['300', '200', '100'])
+  return { hue, light, dark, ringLight, ringDark, textLight, textDark, subtleLight, subtleDark }
 })
 
 // ---------------------------------------------------------------- tokens.css
@@ -113,10 +128,15 @@ const decls = (obj, indent = '  ') =>
     .join('\n')
 
 /**
- * Status colours pin their ramp steps by hand, so measure them the way the
- * accents are measured: a label on its solid, and status text on both its
- * subtle tint and the page, all at 4.5:1. A ramp edit that breaks one stops
- * the build instead of shipping an unreadable Tag or Alert.
+ * Status and hue colours (--red, --red-subtle, …) pin their ramp steps by
+ * hand, so measure them the way the accents are measured: a label on its
+ * solid, and text on both its subtle tint and the page, all at 4.5:1. A ramp
+ * edit that breaks one stops the build instead of shipping an unreadable Tag
+ * or Alert.
+ *
+ * Exception, by design decision (2026-10-08): every hue's solid is step 600
+ * with a white label in both appearances, so a row of solid tags reads as
+ * one set. Warm hues fall below 4.5:1 there, so hue labels are not measured.
  */
 for (const [mode, page] of [
   ['light', PAGE_LIGHT],
@@ -124,9 +144,9 @@ for (const [mode, page] of [
 ]) {
   const c = semantic.color[mode]
   const val = (k) => alias(c[k].$value, { accent: {}, gray: {} })
-  for (const s of ['info', 'success', 'warning', 'danger']) {
+  for (const s of ['info', 'success', 'warning', 'danger', ...ACCENTS]) {
     for (const [fg, bg] of [
-      [`${s}-foreground`, s],
+      ...(ACCENTS.includes(s) ? [] : [[`${s}-foreground`, s]]),
       [`${s}-text`, `${s}-subtle`],
       [`${s}-text`, page],
     ]) {
@@ -241,7 +261,11 @@ const accentVars = (p) => `  --accent-solid-light: ${p.light.solid};
   --accent-solid-dark: ${p.dark.solid};
   --accent-contrast-dark: ${p.dark.contrast};
   --accent-ring-dark: ${p.ringDark.value};
-  --accent-text-dark: ${p.textDark.value};`
+  --accent-text-dark: ${p.textDark.value};
+  --accent-subtle-light: ${p.subtleLight.bg};
+  --accent-subtle-text-light: ${p.subtleLight.value};
+  --accent-subtle-dark: ${p.subtleDark.bg};
+  --accent-subtle-text-dark: ${p.subtleDark.value};`
 
 const GRAY_STEPS = ['50', '100', '200', '300', '400', '500', '600', '800', '900', '950']
 const grayVars = (hue) =>
@@ -254,6 +278,8 @@ const accentOf = (mode) => ({
   contrast: `var(--accent-contrast-${mode})`,
   ring: `var(--accent-ring-${mode})`,
   text: `var(--accent-text-${mode})`,
+  subtle: `var(--accent-subtle-${mode})`,
+  subtleText: `var(--accent-subtle-text-${mode})`,
 })
 
 const colorBlock = (mode) =>
@@ -367,6 +393,8 @@ ${[
   ['primary-foreground', 'contrast'],
   ['ring', 'ring'],
   ['primary-text', 'text'],
+  ['primary-subtle', 'subtle'],
+  ['primary-subtle-text', 'subtle-text'],
 ]
   .map(([k, v]) => `  --${k}: var(--use-light, var(--accent-${v}-light)) var(--use-dark, var(--accent-${v}-dark));`)
   .join('\n')}
@@ -479,6 +507,8 @@ const figmaAlias = (value, p) =>
     if (rest[0] === 'solid') return `{primitive.accent.${DEFAULT_ACCENT}.${p.step}}`
     if (rest[0] === 'ring') return `{primitive.accent.${DEFAULT_ACCENT}.${p.ringStep}}`
     if (rest[0] === 'text') return `{primitive.accent.${DEFAULT_ACCENT}.${p.textStep}}`
+    if (rest[0] === 'subtle') return `{primitive.accent.${DEFAULT_ACCENT}.${p.subtle.tint}}`
+    if (rest[0] === 'subtleText') return `{primitive.accent.${DEFAULT_ACCENT}.${p.subtle.step}}`
     // The label colour is whichever end of the neutral ramp the measurement chose.
     if (rest[0] === 'contrast')
       return `{primitive.gray.neutral.${p.label === 'white' ? '50' : '900'}}`
@@ -499,8 +529,18 @@ const dtcg = {
   primitive: primitives,
   semantic: {
     $description: `Resolved against the default palette (${DEFAULT_ACCENT} accent, ${DEFAULT_GRAY} gray). The other 16 accents and 8 grays live under \`primitive\` and are selected at runtime by [data-accent] / [data-gray], which has no Figma equivalent.`,
-    light: figmaMode('light', { ...defaults.light, ringStep: defaults.ringLight.step, textStep: defaults.textLight.step }),
-    dark: figmaMode('dark', { ...defaults.dark, ringStep: defaults.ringDark.step, textStep: defaults.textDark.step }),
+    light: figmaMode('light', {
+      ...defaults.light,
+      ringStep: defaults.ringLight.step,
+      textStep: defaults.textLight.step,
+      subtle: defaults.subtleLight,
+    }),
+    dark: figmaMode('dark', {
+      ...defaults.dark,
+      ringStep: defaults.ringDark.step,
+      textStep: defaults.textDark.step,
+      subtle: defaults.subtleDark,
+    }),
   },
   // Kept as separate groups: in Figma these are different variable types and
   // belong in different collections, which a flat `dimension` bag prevents.
@@ -558,6 +598,8 @@ for (const mode of ['light', 'dark']) {
       .replace('var(--accent-contrast-' + mode + ')', p.contrast)
       .replace('var(--accent-ring-' + mode + ')', (mode === 'light' ? defaults.ringLight : defaults.ringDark).value)
       .replace('var(--accent-text-' + mode + ')', (mode === 'light' ? defaults.textLight : defaults.textDark).value)
+      .replace('var(--accent-subtle-text-' + mode + ')', (mode === 'light' ? defaults.subtleLight : defaults.subtleDark).value)
+      .replace('var(--accent-subtle-' + mode + ')', (mode === 'light' ? defaults.subtleLight : defaults.subtleDark).bg)
       .replace(/var\(--gray-(\d+)\)/g, (_, s) => ramp('gray', DEFAULT_GRAY, s))
     if (followed !== fromCss)
       throw new Error(
