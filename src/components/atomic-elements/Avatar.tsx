@@ -10,7 +10,6 @@ export interface AvatarProps extends ComponentProps<'span'> {
   imageAlt?: string
   /** Shown when there is no image, or it fails to load. One or two letters. */
   initials?: string
-  appearance?: 'circle' | 'square'
   /** Any accent hue. Unset is the neutral gray. */
   color?: AccentColor
   /** `subtle` is a tint of the hue; `solid` is its 600 step (400 in dark). */
@@ -22,7 +21,6 @@ export function Avatar({
   imageSrc,
   imageAlt,
   initials,
-  appearance = 'circle',
   color,
   variant = 'subtle',
   className,
@@ -36,7 +34,7 @@ export function Avatar({
 
   return (
     <span
-      // The label lives on the container so the image, the initials and the empty shape
+      // The label lives on the container so the image, the initials and the silhouette
       // all announce the same thing: the person, not "S R" or nothing.
       role={imageAlt ? 'img' : undefined}
       aria-label={imageAlt}
@@ -44,7 +42,7 @@ export function Avatar({
       // The Theme's own palette switch: on the avatar it remaps --primary and
       // its tints to this hue, already measured for contrast.
       data-accent={color}
-      className={cn(styles.avatar, styles[size], styles[appearance], styles[variant], className)}
+      className={cn(styles.avatar, styles[size], styles[variant], className)}
       {...props}
     >
       {showImage ? (
@@ -54,10 +52,15 @@ export function Avatar({
           className={styles.image}
           onError={() => setFailedSrc(imageSrc)}
         />
+      ) : initials ? (
+        <span className={styles.initials}>{initials}</span>
       ) : (
-        // No initials leaves the coloured shape empty: a person-shaped icon
-        // says nothing the shape does not.
-        initials && <span className={styles.initials}>{initials}</span>
+        // Drawn to the container's edge, not an icon with a margin: the body
+        // runs off the bottom and the circle crops it.
+        <svg viewBox="0 0 64 64" className={styles.silhouette}>
+          <circle cx="32" cy="26" r="12" />
+          <rect x="12" y="42" width="40" height="30" rx="20" />
+        </svg>
       )}
     </span>
   )

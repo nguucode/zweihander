@@ -187,7 +187,7 @@
       "name": "avatar",
       "type": "registry:component",
       "title": "Avatar",
-      "description": "Picture of a person with an initials fallback, circle or square, neutral or any accent hue in subtle or solid.",
+      "description": "Round picture of a person with initials and silhouette fallbacks, neutral or any accent hue in subtle or solid.",
       "registryDependencies": [
         "https://ontheshore.biz/zweihander/r/utils.json",
         "https://ontheshore.biz/zweihander/r/tokens.json",

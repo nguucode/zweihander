@@ -4,6 +4,9 @@
   justify-content: center;
   flex-shrink: 0;
   overflow: hidden;
+  /* Always round, whatever the Theme's radius preset: a circle is the shape,
+     not a corner setting. */
+  border-radius: 9999px;
   font-family: var(--font-sans);
   font-weight: 500;
   line-height: 1;
@@ -33,16 +36,6 @@
   inline-size: var(--space-12);
   block-size: var(--space-12);
   font-size: var(--text-body-lg);
-}
-
-/* Always round, whatever the Theme's radius preset: a circle is the shape,
-   not a corner setting. */
-.circle {
-  border-radius: 9999px;
-}
-
-.square {
-  border-radius: var(--radius-md);
 }
 
 .image {
@@ -78,4 +71,27 @@
 [data-accent].solid {
   background: var(--primary);
   color: var(--primary-foreground);
+}
+
+/* On subtle the silhouette takes the initials' colour, measured on its fill.
+   The hue's 600 step would look closer to a portrait but misses 3:1 on the
+   warm tints. Neutral subtle is the exception: gray 900 is too heavy for a
+   shape this large, and --muted-foreground is measured on the same fill. */
+.silhouette {
+  inline-size: 100%;
+  block-size: 100%;
+  fill: currentColor;
+}
+
+.subtle:not([data-accent]) .silhouette {
+  color: var(--muted-foreground);
+}
+
+/* On solid the silhouette is always white, for one consistent look across
+   hues. A deliberate a11y trade-off: on the warm hues (orange to lime) it
+   falls under the 3:1 a graphic needs. Acceptable because the silhouette
+   carries no information: the name is in imageAlt or next to the avatar.
+   Initials keep the measured label. */
+.solid .silhouette {
+  color: var(--gray-50);
 }

@@ -5,8 +5,8 @@ import * as AvatarStories from './Avatar.stories'
 
 # Avatar
 
-A picture of a person or account, with initials when there is no
-picture. Neutral by default, or any accent hue as a tint or a solid fill. Spec:
+A picture of a person or account, with initials or a silhouette when
+there is no picture. Neutral by default, or any accent hue as a tint or a solid fill. Spec:
 [uiguideline.com/components/avatar](https://www.uiguideline.com/components/avatar).
 
 <Canvas of={AvatarStories.Fallbacks} />
@@ -15,9 +15,10 @@ picture. Neutral by default, or any accent hue as a tint or a solid fill. Spec:
 
 | Part | What it is |
 | --- | --- |
-| **Container** | The circle or square, in `color` and `variant`. Clips its content. |
+| **Container** | The circle, in `color` and `variant`. Clips its content. |
 | **Image** | `imageSrc`, cropped to fill (`object-fit: cover`). |
 | **Initials** | `initials`, shown when there is no image or it fails to load. |
+| **Silhouette** | A filled head and shoulders, when there is neither. |
 
 ## Props
 
@@ -27,7 +28,6 @@ picture. Neutral by default, or any accent hue as a tint or a solid fill. Spec:
 | `imageSrc` | string | – | |
 | `imageAlt` | string | – | Who this is. See Accessibility. |
 | `initials` | string | – | Not in the spec's prop list; see below. |
-| `appearance` | `circle`, `square` | `circle` | |
 | `color` | any accent hue | – | Unset is the neutral gray. |
 | `variant` | `subtle`, `solid` | `subtle` | Solid is the hue's 600 step (400 in dark). |
 
@@ -44,20 +44,20 @@ Every other `<span>` attribute passes through to the container.
 - **A broken image falls back** to initials or the placeholder instead
   of showing the browser's broken-image icon. A new `imageSrc` is tried
   again.
-- **No placeholder icon.** With neither image nor initials the avatar
-  is the empty coloured shape: a generic person icon says nothing the
-  shape does not.
+- **No square, no `appearance`.** Always a circle, so a person never
+  reads as a product or workspace logo.
+- **The placeholder is a silhouette**, not the outline `user` icon: it
+  fills the circle edge to edge and takes `color` and `variant` like
+  initials do.
 - **`color` and `variant` are added.** Colour tells people apart in a
   list; it carries no meaning, so pick it from the person (a hash of
   their id) rather than from a status.
-- **Circle ignores the radius preset**; square follows it
-  (`--radius-md`).
+- **The circle ignores the radius preset.**
 
 ## Usage
 
 <Canvas of={AvatarStories.Sizes} />
 
-<Canvas of={AvatarStories.Square} />
 
 ### Colour
 
@@ -72,7 +72,7 @@ loads or where the image is transparent.
 ## Accessibility
 
 - `imageAlt` names the **whole avatar**, not just the image, so the
-  image, the initials and the placeholder all announce the same person.
+  image, the initials and the silhouette all announce the same person.
   The inner `<img>` has `alt=""`.
 - Without `imageAlt` the avatar is **decorative** and hidden. That is
   right when the person's name is already printed next to it; announcing
@@ -83,3 +83,9 @@ loads or where the image is transparent.
   measured by the token build, which fails if a ramp edit breaks one;
   neutral solid is gray 600 under gray 50, 6.5:1 or more on every gray
   ramp.
+- On `subtle` the silhouette uses the initials colour (neutral uses
+  `--muted-foreground`), past the 3:1 a graphic needs.
+- On `solid` the silhouette is **always white**, by choice: one look
+  across hues. On the warm hues (orange to lime) that is under 3:1. It
+  is accepted because the silhouette carries no information; the name
+  is in `imageAlt` or printed beside the avatar.

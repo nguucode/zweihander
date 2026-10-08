@@ -18,7 +18,6 @@ const meta = {
   args: { imageSrc: portrait, imageAlt: 'Mary Thompson' },
   argTypes: {
     size: { control: 'inline-radio', options: ['xs', 'sm', 'md', 'lg'] },
-    appearance: { control: 'inline-radio', options: ['circle', 'square'] },
     variant: { control: 'inline-radio', options: ['subtle', 'solid'] },
     color: { control: 'select', options: [undefined, ...ACCENT_COLORS] },
   },
@@ -58,6 +57,7 @@ export const Fallbacks: Story = {
     <div style={row}>
       <Avatar {...args} />
       <Avatar {...args} imageSrc={undefined} initials="SR" imageAlt="Sam Rivera" />
+      <Avatar {...args} imageSrc={undefined} imageAlt="Unknown user" />
     </div>
   ),
 }
@@ -71,14 +71,13 @@ export const BrokenImage: Story = {
   },
 }
 
-export const Empty: Story = {
+export const Silhouette: Story = {
   args: { imageSrc: undefined, imageAlt: undefined, color: 'violet' },
   play: async ({ canvasElement }) => {
     // No name means decorative: hidden, not announced as an empty image.
-    const avatar = canvasElement.querySelector('span')!
-    await expect(avatar).toHaveAttribute('aria-hidden', 'true')
-    // Neither image nor initials: just the coloured shape, no icon.
-    await expect(avatar).toBeEmptyDOMElement()
+    await expect(canvasElement.querySelector('span')).toHaveAttribute('aria-hidden', 'true')
+    // Neither image nor initials: the silhouette.
+    await expect(canvasElement.querySelector('svg')).toBeVisible()
   },
 }
 
@@ -95,24 +94,16 @@ export const Colors: Story = {
   args: { imageSrc: undefined, imageAlt: undefined, initials: 'SR' },
   render: (args) => (
     <div style={{ display: 'grid', gap: 'var(--space-3)' }}>
-      {(['subtle', 'solid'] as const).map((variant) => (
-        <div key={variant} style={{ ...row, flexWrap: 'wrap', gap: 'var(--space-2)' }}>
-          <Avatar {...args} variant={variant} />
-          {ACCENT_COLORS.map((color) => (
-            <Avatar key={color} {...args} variant={variant} color={color} />
-          ))}
-        </div>
-      ))}
-    </div>
-  ),
-}
-
-export const Square: Story = {
-  args: { appearance: 'square', size: 'lg' },
-  render: (args) => (
-    <div style={row}>
-      <Avatar {...args} />
-      <Avatar {...args} imageSrc={undefined} initials="SR" imageAlt="Sam Rivera" />
+      {(['subtle', 'solid'] as const).flatMap((variant) =>
+        [args.initials, undefined].map((initials) => (
+          <div key={variant + initials} style={{ ...row, flexWrap: 'wrap', gap: 'var(--space-2)' }}>
+            <Avatar {...args} initials={initials} variant={variant} />
+            {ACCENT_COLORS.map((color) => (
+              <Avatar key={color} {...args} initials={initials} variant={variant} color={color} />
+            ))}
+          </div>
+        )),
+      )}
     </div>
   ),
 }
