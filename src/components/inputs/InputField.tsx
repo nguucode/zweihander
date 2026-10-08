@@ -24,7 +24,7 @@ export function boxClass(size: InputSize) {
  * where the field's text does.
  */
 export function popupInset(size: InputSize) {
-  const inset = size === 'sm' ? 'var(--space-2)' : 'var(--space-3)'
+  const inset = size === 'sm' ? 'var(--space-2)' : 'var(--space-2-5)'
   return { '--field-inset': inset } as CSSProperties
 }
 
