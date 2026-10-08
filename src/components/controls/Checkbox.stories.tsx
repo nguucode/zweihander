@@ -9,7 +9,7 @@ const meta = {
   // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
   parameters: { a11y: { test: 'error' } },
   argTypes: {
-    variant: { control: 'inline-radio', options: ['primary', 'secondary', 'neutral'] },
+    variant: { control: 'inline-radio', options: ['primary', 'neutral'] },
     validationState: { control: 'inline-radio', options: ['default', 'success', 'error'] },
   },
   args: { label: 'Remember me', onCheckedChange: fn() },
@@ -37,7 +37,7 @@ export const Default: Story = {
 export const Variants: Story = {
   render: (args) => (
     <div style={stack}>
-      {(['neutral', 'primary', 'secondary'] as const).map((variant) => (
+      {(['neutral', 'primary'] as const).map((variant) => (
         <div key={variant} style={{ display: 'flex', gap: 'var(--space-6)' }}>
           <Checkbox {...args} variant={variant} label={`${variant}, off`} />
           <Checkbox {...args} variant={variant} label={`${variant}, on`} defaultChecked />

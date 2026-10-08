@@ -1,13 +1,19 @@
-/* 16px box, a --control-border outline (3:1 on the page) and the page
-   colour inside. Checked and indeterminate fill with the variant. */
+/* Set on the field so the helper text indents by the box's width. */
+.field {
+  --choice-control: calc(var(--space-4) + var(--space-1));
+}
+
+/* 20px box, a --control-border outline (3:1 on the page). Checked and
+   indeterminate fill with the variant and show the mark in its label
+   colour. */
 .box {
   --checkbox-fill: var(--foreground);
   --checkbox-mark: var(--background);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  inline-size: var(--space-4);
-  block-size: var(--space-4);
+  inline-size: var(--choice-control);
+  block-size: var(--choice-control);
   border: 1px solid var(--control-border);
   border-radius: var(--radius-sm);
   background: var(--background);
@@ -19,23 +25,12 @@
   --checkbox-mark: var(--primary-foreground);
 }
 
-/* Secondary is the quiet one: a light fill with a dark mark, keeping the
-   outline so the box stays visible. */
-.secondary {
-  --checkbox-fill: var(--secondary);
-  --checkbox-mark: var(--secondary-foreground);
-}
-
-.box[data-checked],
-.box[data-indeterminate] {
-  border-color: var(--checkbox-fill);
+.box:is([data-checked], [data-indeterminate]) {
+  /* Transparent so the fill shows through the border and hover only has to
+     change the background. */
+  border-color: transparent;
   background: var(--checkbox-fill);
   color: var(--checkbox-mark);
-}
-
-.secondary[data-checked],
-.secondary[data-indeterminate] {
-  border-color: var(--control-border);
 }
 
 .box[data-invalid] {
@@ -46,8 +41,19 @@
   cursor: default;
 }
 
-/* The mark is 14px in a 16px box: it has to read at a glance. */
+/* Hover anywhere on the label. Unchecked darkens the outline (an error
+   outline stays red); checked nudges the fill toward the mark, as Button
+   does. */
+label:hover > .box:not([data-checked], [data-indeterminate], [data-disabled], [data-readonly], [data-invalid]) {
+  border-color: var(--foreground);
+}
+
+label:hover > .box:is([data-checked], [data-indeterminate]):not([data-disabled], [data-readonly]) {
+  background: color-mix(in oklab, var(--checkbox-fill) 88%, var(--checkbox-mark));
+}
+
+/* The mark is 16px in a 20px box: it has to read at a glance. */
 .indicator {
   display: inline-flex;
-  font-size: calc(var(--space-4) - 2px);
+  font-size: var(--space-4);
 }
