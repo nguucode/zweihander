@@ -23,17 +23,19 @@
 }
 
 /* Height is line-height plus padding: 16px at sm, 20px at md. min-inline-size
-   equal to the height keeps a single digit a circle rather than an oval. */
+   equal to the height keeps a single digit a circle rather than an oval, so
+   the side padding has to leave a 13px digit inside it: 2px at sm, 4px at md
+   (a wider pad pushed a single digit past the circle). */
 .sm {
   min-inline-size: calc(1em * var(--leading-body-sm));
-  padding-inline: var(--space-1);
+  padding-inline: 0.125rem;
 }
 
 .md {
   min-inline-size: calc(1em * var(--leading-body-sm) + var(--space-1));
   /* 2px is below the spacing scale; it is what lifts 16px of line-height
      to the 20px the md size is specified at. */
-  padding: 0.125rem var(--space-1-5);
+  padding: 0.125rem var(--space-1);
 }
 
 .dot {
