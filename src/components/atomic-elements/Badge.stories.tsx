@@ -10,7 +10,7 @@ const meta = {
   parameters: { a11y: { test: 'error' } },
   args: { count: 8 },
   argTypes: {
-    variant: { control: 'inline-radio', options: ['primary', 'accent', 'secondary', 'destructive'] },
+    variant: { control: 'inline-radio', options: ['primary', 'accent', 'secondary', 'destructive', 'success', 'warning'] },
     size: { control: 'inline-radio', options: ['sm', 'md'] },
     floatingPlacement: {
       control: 'inline-radio',
@@ -31,19 +31,35 @@ export const Default: Story = {
   },
 }
 
+const variants = ['primary', 'accent', 'secondary', 'destructive', 'success', 'warning'] as const
+
 export const Variants: Story = {
   render: (args) => (
-    <div style={row}>
-      <Badge {...args} variant="primary" />
-      <Badge {...args} variant="accent" />
-      <Badge {...args} variant="secondary" />
-      <Badge {...args} variant="destructive" />
-      <Badge {...args} isDot variant="primary" />
-      <Badge {...args} isDot variant="accent" />
-      <Badge {...args} isDot variant="secondary" />
-      <Badge {...args} isDot variant="destructive" />
+    <div style={{ display: 'grid', gap: 'var(--space-3)' }}>
+      <div style={row}>
+        {variants.map((v) => <Badge key={v} {...args} variant={v} />)}
+      </div>
+      <div style={row}>
+        {variants.map((v) => <Badge key={v} {...args} isDot variant={v} />)}
+      </div>
     </div>
   ),
+}
+
+/** Presence on an avatar: a labelled dot per state. */
+export const Status: Story = {
+  args: { isDot: true },
+  render: (args) => (
+    <div style={row}>
+      <Badge {...args} variant="success" aria-label="Online" />
+      <Badge {...args} variant="warning" aria-label="Away" />
+      <Badge {...args} variant="destructive" aria-label="Busy" />
+      <Badge {...args} variant="secondary" aria-label="Offline" />
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    await expect(canvas.getByRole('img', { name: 'Online' })).toBeVisible()
+  },
 }
 
 export const Sizes: Story = {
@@ -81,7 +97,7 @@ export const Dot: Story = {
 }
 
 export const LabelledDot: Story = {
-  args: { isDot: true, 'aria-label': 'Online', variant: 'accent' },
+  args: { isDot: true, 'aria-label': 'Online', variant: 'success' },
   play: async ({ canvas }) => {
     await expect(canvas.getByRole('img', { name: 'Online' })).toBeVisible()
   },

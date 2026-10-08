@@ -25,8 +25,8 @@ messages on an inbox, a status on an avatar. Spec:
 | Prop | Values | Default | |
 | --- | --- | --- | --- |
 | `count` | number | – | Nothing renders without `count` or `isDot`. |
-| `variant` | `primary`, `accent`, `secondary`, `destructive` | `primary` | |
-| `size` | `sm`, `md` | `md` | 16px / 20px tall; dots are 6px / 8px. |
+| `variant` | `primary`, `accent`, `secondary`, `destructive`, `success`, `warning` | `primary` | Status colours: `success` Online, `warning` Away, `destructive` Busy, `secondary` Offline. |
+| `size` | `sm`, `md` | `md` | 16px / 20px tall, 10px text; dots are 6px / 8px. |
 | `isDot` | boolean | `false` | |
 | `maxCount` | number | – | |
 | `isFloating` | boolean | `false` | Pins the badge to a corner of `children`. |
@@ -45,6 +45,12 @@ Every other `<span>` attribute passes through to the badge.
 - **`accent` is the inverted neutral.** The token set has one brand hue,
   which `primary` already uses, so `accent` is foreground-on-background:
   the strongest contrast available without inventing a colour.
+- **`success` and `warning` are added** from the status tokens,
+  for presence and state dots. A `warning` dot uses `--warning-indicator`
+  (amber-600 in light mode): amber-500 alone reaches only 2:1 on the page,
+  under the 3:1 a status graphic needs.
+
+<Canvas of={BadgeStories.Status} />
 - **`floatingPlacement` defaults to `top-end`**, the usual notification
   corner; the spec gives no default.
 - **Start and end are physical** (left and right). RTL pages would get
