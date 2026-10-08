@@ -91,15 +91,19 @@
    pointer focus — a text field shows focus on click too, since that is
    where typing will go. */
 /* Keyed to the control: a clear or open button inside the field draws its
-   own ring, and a second one round the whole field would double it. */
+   own ring, and a second one round the whole field would double it.
+   A Select keeps the ring while its list is open: focus has moved into
+   the list, but the field is still the one being chosen for. */
 .box:has(.control:focus),
-.box:focus-visible {
+.box:focus-visible,
+.box[data-popup-open] {
   outline: 2px solid var(--ring);
   outline-offset: 2px;
 }
 
 .state-error .box:has(.control:focus),
-.state-error .box:focus-visible {
+.state-error .box:focus-visible,
+.state-error .box[data-popup-open] {
   outline-color: var(--danger-text);
 }
 
