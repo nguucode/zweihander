@@ -4,8 +4,8 @@ import { cn } from '@/lib/utils'
 import styles from './InputField.module.css'
 
 export type ValidationState = 'default' | 'success' | 'error'
-export type InputSize = 'sm' | 'md' | 'lg'
-export type InputAppearance = 'outlined' | 'filled' | 'underlined' | 'unstyled'
+export type InputSize = 'sm' | 'md'
+export type InputAppearance = 'outlined' | 'underlined' | 'unstyled'
 
 /**
  * The shared classes. `box` goes on the element that draws the field (the

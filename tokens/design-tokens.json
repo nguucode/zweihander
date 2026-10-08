@@ -1206,15 +1206,15 @@
     }
   },
   "semantic": {
-    "$description": "Resolved against the default palette (indigo accent, neutral gray). The other 16 accents and 8 grays live under `primitive` and are selected at runtime by [data-accent] / [data-gray], which has no Figma equivalent.",
+    "$description": "Resolved against the default palette (blue accent, taupe gray). The other 16 accents and 8 grays live under `primitive` and are selected at runtime by [data-accent] / [data-gray], which has no Figma equivalent.",
     "light": {
       "background": {
         "$type": "color",
-        "$value": "oklch(100% 0 0)"
+        "$value": "{primitive.gray.taupe.50}"
       },
       "foreground": {
         "$type": "color",
-        "$value": "{primitive.gray.neutral.950}"
+        "$value": "{primitive.gray.taupe.950}"
       },
       "card": {
         "$type": "color",
@@ -1222,7 +1222,7 @@
       },
       "card-foreground": {
         "$type": "color",
-        "$value": "{primitive.gray.neutral.950}"
+        "$value": "{primitive.gray.taupe.950}"
       },
       "popover": {
         "$type": "color",
@@ -1230,11 +1230,11 @@
       },
       "popover-foreground": {
         "$type": "color",
-        "$value": "{primitive.gray.neutral.950}"
+        "$value": "{primitive.gray.taupe.950}"
       },
       "primary": {
         "$type": "color",
-        "$value": "{primitive.accent.indigo.600}"
+        "$value": "{primitive.accent.blue.600}"
       },
       "primary-foreground": {
         "$type": "color",
@@ -1242,31 +1242,43 @@
       },
       "secondary": {
         "$type": "color",
-        "$value": "{primitive.gray.neutral.100}"
+        "$value": "{primitive.gray.taupe.100}"
       },
       "secondary-foreground": {
         "$type": "color",
-        "$value": "{primitive.gray.neutral.900}"
+        "$value": "{primitive.gray.taupe.900}"
       },
       "muted": {
         "$type": "color",
-        "$value": "{primitive.gray.neutral.100}"
+        "$value": "{primitive.gray.taupe.100}"
       },
       "muted-foreground": {
         "$type": "color",
-        "$value": "{primitive.gray.neutral.500}"
+        "$value": "{primitive.gray.taupe.500}"
+      },
+      "subtle-foreground": {
+        "$type": "color",
+        "$value": "{primitive.gray.taupe.600}"
       },
       "surface-subtle": {
         "$type": "color",
-        "$value": "{primitive.gray.neutral.50}"
+        "$value": "{primitive.gray.taupe.50}"
       },
       "accent": {
         "$type": "color",
-        "$value": "{primitive.gray.neutral.100}"
+        "$value": "{primitive.gray.taupe.100}"
       },
       "accent-foreground": {
         "$type": "color",
-        "$value": "{primitive.gray.neutral.900}"
+        "$value": "{primitive.gray.taupe.900}"
+      },
+      "selected": {
+        "$type": "color",
+        "$value": "{primitive.gray.taupe.200}"
+      },
+      "hover-overlay": {
+        "$type": "color",
+        "$value": "oklch(0% 0 0 / 5%)"
       },
       "destructive": {
         "$type": "color",
@@ -1278,23 +1290,27 @@
       },
       "border": {
         "$type": "color",
-        "$value": "{primitive.gray.neutral.200}"
+        "$value": "{primitive.gray.taupe.200}"
       },
       "input": {
         "$type": "color",
-        "$value": "{primitive.gray.neutral.200}"
+        "$value": "{primitive.gray.taupe.200}"
+      },
+      "field-border": {
+        "$type": "color",
+        "$value": "{primitive.gray.taupe.300}"
       },
       "control-border": {
         "$type": "color",
-        "$value": "{primitive.gray.neutral.500}"
+        "$value": "{primitive.gray.taupe.500}"
       },
       "ring": {
         "$type": "color",
-        "$value": "{primitive.accent.indigo.700}"
+        "$value": "{primitive.accent.blue.700}"
       },
       "primary-text": {
         "$type": "color",
-        "$value": "{primitive.accent.indigo.600}"
+        "$value": "{primitive.accent.blue.600}"
       },
       "info": {
         "$type": "color",
@@ -1364,31 +1380,31 @@
     "dark": {
       "background": {
         "$type": "color",
-        "$value": "{primitive.gray.neutral.950}"
+        "$value": "{primitive.gray.taupe.950}"
       },
       "foreground": {
         "$type": "color",
-        "$value": "{primitive.gray.neutral.50}"
+        "$value": "{primitive.gray.taupe.50}"
       },
       "card": {
         "$type": "color",
-        "$value": "{primitive.gray.neutral.900}"
+        "$value": "{primitive.gray.taupe.900}"
       },
       "card-foreground": {
         "$type": "color",
-        "$value": "{primitive.gray.neutral.50}"
+        "$value": "{primitive.gray.taupe.50}"
       },
       "popover": {
         "$type": "color",
-        "$value": "{primitive.gray.neutral.900}"
+        "$value": "{primitive.gray.taupe.900}"
       },
       "popover-foreground": {
         "$type": "color",
-        "$value": "{primitive.gray.neutral.50}"
+        "$value": "{primitive.gray.taupe.50}"
       },
       "primary": {
         "$type": "color",
-        "$value": "{primitive.accent.indigo.400}"
+        "$value": "{primitive.accent.blue.400}"
       },
       "primary-foreground": {
         "$type": "color",
@@ -1396,31 +1412,43 @@
       },
       "secondary": {
         "$type": "color",
-        "$value": "{primitive.gray.neutral.800}"
+        "$value": "{primitive.gray.taupe.800}"
       },
       "secondary-foreground": {
         "$type": "color",
-        "$value": "{primitive.gray.neutral.50}"
+        "$value": "{primitive.gray.taupe.50}"
       },
       "muted": {
         "$type": "color",
-        "$value": "{primitive.gray.neutral.800}"
+        "$value": "{primitive.gray.taupe.800}"
       },
       "muted-foreground": {
         "$type": "color",
-        "$value": "{primitive.gray.neutral.400}"
+        "$value": "{primitive.gray.taupe.400}"
+      },
+      "subtle-foreground": {
+        "$type": "color",
+        "$value": "{primitive.gray.taupe.300}"
       },
       "surface-subtle": {
         "$type": "color",
-        "$value": "{primitive.gray.neutral.800}"
+        "$value": "{primitive.gray.taupe.800}"
       },
       "accent": {
         "$type": "color",
-        "$value": "{primitive.gray.neutral.800}"
+        "$value": "{primitive.gray.taupe.800}"
       },
       "accent-foreground": {
         "$type": "color",
-        "$value": "{primitive.gray.neutral.50}"
+        "$value": "{primitive.gray.taupe.50}"
+      },
+      "selected": {
+        "$type": "color",
+        "$value": "oklch(100% 0 0 / 10%)"
+      },
+      "hover-overlay": {
+        "$type": "color",
+        "$value": "oklch(100% 0 0 / 6%)"
       },
       "destructive": {
         "$type": "color",
@@ -1438,17 +1466,21 @@
         "$type": "color",
         "$value": "oklch(100% 0 0 / 15%)"
       },
+      "field-border": {
+        "$type": "color",
+        "$value": "oklch(100% 0 0 / 18%)"
+      },
       "control-border": {
         "$type": "color",
-        "$value": "{primitive.gray.neutral.400}"
+        "$value": "{primitive.gray.taupe.400}"
       },
       "ring": {
         "$type": "color",
-        "$value": "{primitive.accent.indigo.400}"
+        "$value": "{primitive.accent.blue.400}"
       },
       "primary-text": {
         "$type": "color",
-        "$value": "{primitive.accent.indigo.400}"
+        "$value": "{primitive.accent.blue.400}"
       },
       "info": {
         "$type": "color",
@@ -1622,9 +1654,9 @@
     },
     "body-sm": {
       "$type": "dimension",
-      "$value": "0.75rem",
+      "$value": "0.8125rem",
       "$extensions": {
-        "leading": "16 / 12"
+        "leading": "16 / 13"
       }
     }
   },
@@ -1641,7 +1673,7 @@
         "$type": "shadow",
         "$value": [
           {
-            "color": "rgb(0 0 0 / 0.05)",
+            "color": "rgb(0 0 0 / 0.033)",
             "offsetX": "0px",
             "offsetY": "1px",
             "blur": "2px",
@@ -1653,14 +1685,14 @@
         "$type": "shadow",
         "$value": [
           {
-            "color": "rgb(0 0 0 / 0.06)",
+            "color": "rgb(0 0 0 / 0.039)",
             "offsetX": "0px",
             "offsetY": "2px",
             "blur": "4px",
             "spread": "-1px"
           },
           {
-            "color": "rgb(0 0 0 / 0.04)",
+            "color": "rgb(0 0 0 / 0.026)",
             "offsetX": "0px",
             "offsetY": "1px",
             "blur": "2px",
@@ -1672,14 +1704,14 @@
         "$type": "shadow",
         "$value": [
           {
-            "color": "rgb(0 0 0 / 0.08)",
+            "color": "rgb(0 0 0 / 0.052)",
             "offsetX": "0px",
             "offsetY": "4px",
             "blur": "8px",
             "spread": "-2px"
           },
           {
-            "color": "rgb(0 0 0 / 0.05)",
+            "color": "rgb(0 0 0 / 0.033)",
             "offsetX": "0px",
             "offsetY": "2px",
             "blur": "4px",
@@ -1691,14 +1723,14 @@
         "$type": "shadow",
         "$value": [
           {
-            "color": "rgb(0 0 0 / 0.09)",
+            "color": "rgb(0 0 0 / 0.058)",
             "offsetX": "0px",
             "offsetY": "8px",
             "blur": "16px",
             "spread": "-4px"
           },
           {
-            "color": "rgb(0 0 0 / 0.06)",
+            "color": "rgb(0 0 0 / 0.039)",
             "offsetX": "0px",
             "offsetY": "4px",
             "blur": "8px",
@@ -1710,14 +1742,14 @@
         "$type": "shadow",
         "$value": [
           {
-            "color": "rgb(0 0 0 / 0.1)",
+            "color": "rgb(0 0 0 / 0.065)",
             "offsetX": "0px",
             "offsetY": "12px",
             "blur": "24px",
             "spread": "-6px"
           },
           {
-            "color": "rgb(0 0 0 / 0.07)",
+            "color": "rgb(0 0 0 / 0.046)",
             "offsetX": "0px",
             "offsetY": "6px",
             "blur": "12px",
@@ -1729,14 +1761,14 @@
         "$type": "shadow",
         "$value": [
           {
-            "color": "rgb(0 0 0 / 0.12)",
+            "color": "rgb(0 0 0 / 0.078)",
             "offsetX": "0px",
             "offsetY": "20px",
             "blur": "40px",
             "spread": "-10px"
           },
           {
-            "color": "rgb(0 0 0 / 0.08)",
+            "color": "rgb(0 0 0 / 0.052)",
             "offsetX": "0px",
             "offsetY": "10px",
             "blur": "20px",
@@ -1748,14 +1780,14 @@
         "$type": "shadow",
         "$value": [
           {
-            "color": "rgb(0 0 0 / 0.16)",
+            "color": "rgb(0 0 0 / 0.104)",
             "offsetX": "0px",
             "offsetY": "32px",
             "blur": "64px",
             "spread": "-16px"
           },
           {
-            "color": "rgb(0 0 0 / 0.1)",
+            "color": "rgb(0 0 0 / 0.065)",
             "offsetX": "0px",
             "offsetY": "16px",
             "blur": "32px",
@@ -1769,7 +1801,7 @@
         "$type": "shadow",
         "$value": [
           {
-            "color": "rgb(0 0 0 / 0.2)",
+            "color": "rgb(0 0 0 / 0.132)",
             "offsetX": "0px",
             "offsetY": "1px",
             "blur": "2px",
@@ -1781,14 +1813,14 @@
         "$type": "shadow",
         "$value": [
           {
-            "color": "rgb(0 0 0 / 0.24)",
+            "color": "rgb(0 0 0 / 0.156)",
             "offsetX": "0px",
             "offsetY": "2px",
             "blur": "4px",
             "spread": "-1px"
           },
           {
-            "color": "rgb(0 0 0 / 0.16)",
+            "color": "rgb(0 0 0 / 0.104)",
             "offsetX": "0px",
             "offsetY": "1px",
             "blur": "2px",
@@ -1800,14 +1832,14 @@
         "$type": "shadow",
         "$value": [
           {
-            "color": "rgb(0 0 0 / 0.32)",
+            "color": "rgb(0 0 0 / 0.208)",
             "offsetX": "0px",
             "offsetY": "4px",
             "blur": "8px",
             "spread": "-2px"
           },
           {
-            "color": "rgb(0 0 0 / 0.2)",
+            "color": "rgb(0 0 0 / 0.132)",
             "offsetX": "0px",
             "offsetY": "2px",
             "blur": "4px",
@@ -1819,14 +1851,14 @@
         "$type": "shadow",
         "$value": [
           {
-            "color": "rgb(0 0 0 / 0.36)",
+            "color": "rgb(0 0 0 / 0.232)",
             "offsetX": "0px",
             "offsetY": "8px",
             "blur": "16px",
             "spread": "-4px"
           },
           {
-            "color": "rgb(0 0 0 / 0.24)",
+            "color": "rgb(0 0 0 / 0.156)",
             "offsetX": "0px",
             "offsetY": "4px",
             "blur": "8px",
@@ -1838,14 +1870,14 @@
         "$type": "shadow",
         "$value": [
           {
-            "color": "rgb(0 0 0 / 0.4)",
+            "color": "rgb(0 0 0 / 0.26)",
             "offsetX": "0px",
             "offsetY": "12px",
             "blur": "24px",
             "spread": "-6px"
           },
           {
-            "color": "rgb(0 0 0 / 0.28)",
+            "color": "rgb(0 0 0 / 0.184)",
             "offsetX": "0px",
             "offsetY": "6px",
             "blur": "12px",
@@ -1857,14 +1889,14 @@
         "$type": "shadow",
         "$value": [
           {
-            "color": "rgb(0 0 0 / 0.48)",
+            "color": "rgb(0 0 0 / 0.312)",
             "offsetX": "0px",
             "offsetY": "20px",
             "blur": "40px",
             "spread": "-10px"
           },
           {
-            "color": "rgb(0 0 0 / 0.32)",
+            "color": "rgb(0 0 0 / 0.208)",
             "offsetX": "0px",
             "offsetY": "10px",
             "blur": "20px",
@@ -1876,14 +1908,14 @@
         "$type": "shadow",
         "$value": [
           {
-            "color": "rgb(0 0 0 / 0.6)",
+            "color": "rgb(0 0 0 / 0.416)",
             "offsetX": "0px",
             "offsetY": "32px",
             "blur": "64px",
             "spread": "-16px"
           },
           {
-            "color": "rgb(0 0 0 / 0.4)",
+            "color": "rgb(0 0 0 / 0.26)",
             "offsetX": "0px",
             "offsetY": "16px",
             "blur": "32px",

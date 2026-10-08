@@ -9,7 +9,7 @@ interface ButtonBaseProps extends Omit<ComponentProps<'button'>, 'ref'> {
   ref?: Ref<HTMLElement>
   variant?: 'primary' | 'accent' | 'secondary' | 'destructive'
   appearance?: 'contained' | 'outlined' | 'ghost'
-  size?: 'sm' | 'md' | 'lg' | 'xl'
+  size?: 'sm' | 'md'
   startIcon?: ReactNode
   endIcon?: ReactNode
   /** Shows a spinner, blocks clicks and keeps focus, so a keyboard user is not dropped. On a link it behaves as disabled. */

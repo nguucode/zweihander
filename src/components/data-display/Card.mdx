@@ -14,7 +14,7 @@ Spec: [uiguideline.com/components/card](https://www.uiguideline.com/components/c
 
 | Part | What it is |
 | --- | --- |
-| **Container** | The surface: `--card` (elevated, outline) or `--surface-subtle` (filled), padded by `size`. |
+| **Container** | The surface: `--card`, padded by `size`. |
 | **Border** | `--border`, the non-interactive one. `hasBorder` turns it off. |
 | **Content** | `children`, stacked or side by side (`orientation`). |
 
@@ -24,7 +24,7 @@ Spec: [uiguideline.com/components/card](https://www.uiguideline.com/components/c
 | --- | --- | --- | --- |
 | `children` | node | – | The spec's `content`. |
 | `size` | `xs`, `sm`, `md`, `lg` | `sm` | Padding 12, 16, 24, 32px; gap between children scales with it. |
-| `appearance` | `elevated`, `outline`, `filled`, `unstyled` | `elevated` | |
+| `appearance` | `elevated`, `outline`, `unstyled` | `elevated` | |
 | `orientation` | `vertical`, `horizontal` | `vertical` | |
 | `isRounded` | boolean | `true` | `--radius-panel`. |
 | `hasBorder` | boolean | `true` | |
@@ -41,9 +41,9 @@ Spec: [uiguideline.com/components/card](https://www.uiguideline.com/components/c
   which would lay a title and its description side by side.
 - **`render` is added** so a card can be a link, alongside `onClick` for
   a card that acts.
-- **`filled` uses `--surface-subtle`**, not `--muted`: muted text reads
-  4.81:1 on it against 4.60:1 on `--muted`, and it stays a step off
-  `--card` so the fill still reads.
+- **No `filled` appearance.** The spec's tinted card was dropped to match
+  the Claude apps, where a panel is a white `--card` on the off-white
+  page, with an edge or a faint shadow.
 - **`unstyled`** keeps the padding and layout and drops every visual.
 
 ## Usage

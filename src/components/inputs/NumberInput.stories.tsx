@@ -9,8 +9,8 @@ const meta = {
   // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
   parameters: { a11y: { test: 'error' } },
   argTypes: {
-    size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] },
-    appearance: { control: 'inline-radio', options: ['outlined', 'filled', 'underlined', 'unstyled'] },
+    size: { control: 'inline-radio', options: ['sm', 'md'] },
+    appearance: { control: 'inline-radio', options: ['outlined', 'underlined', 'unstyled'] },
     validationState: { control: 'inline-radio', options: ['default', 'success', 'error'] },
   },
   args: { label: 'Quantity', defaultValue: 6, min: 0, max: 100, onValueChange: fn() },
@@ -83,7 +83,7 @@ export const Typing: Story = {
 export const Sizes: Story = {
   render: (args) => (
     <div style={{ display: 'grid', gap: 'var(--space-4)', justifyItems: 'start' }}>
-      {(['sm', 'md', 'lg'] as const).map((size) => (
+      {(['sm', 'md'] as const).map((size) => (
         <NumberInput key={size} {...args} size={size} label={size} />
       ))}
     </div>
@@ -93,7 +93,7 @@ export const Sizes: Story = {
 export const Appearances: Story = {
   render: (args) => (
     <div style={{ display: 'grid', gap: 'var(--space-4)', justifyItems: 'start' }}>
-      {(['outlined', 'filled', 'underlined', 'unstyled'] as const).map((appearance) => (
+      {(['outlined', 'underlined', 'unstyled'] as const).map((appearance) => (
         <NumberInput key={appearance} {...args} appearance={appearance} label={appearance} />
       ))}
     </div>

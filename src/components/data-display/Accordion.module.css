@@ -1,6 +1,7 @@
 .accordion {
   --accordion-pad-inline: var(--space-4);
   --accordion-pad-block: var(--space-3);
+  --accordion-row: var(--control-md);
   display: flex;
   flex-direction: column;
   font-family: var(--font-sans);
@@ -10,6 +11,7 @@
 .sm {
   --accordion-pad-inline: var(--space-3);
   --accordion-pad-block: var(--space-2);
+  --accordion-row: var(--control-sm);
 }
 
 /* Items are separated by --border lines (non-interactive, so the lighter
@@ -43,8 +45,9 @@
   justify-content: space-between;
   gap: var(--space-3);
   inline-size: 100%;
+  min-block-size: var(--accordion-row);
   margin: 0;
-  padding: var(--accordion-pad-block) var(--accordion-pad-inline);
+  padding: var(--space-1) var(--accordion-pad-inline);
   border: 0;
   background: transparent;
   color: inherit;
@@ -133,9 +136,9 @@
   }
 }
 
-/* md triggers are 44px already. sm is 32px, and triggers are stacked edge to
-   edge, so an invisible 44px hit area would overlap the next trigger's and
-   a tap could open the wrong item. On touch, sm grows to 44px instead. */
+/* Triggers are 32px (sm 24px) and stacked edge to edge, so an invisible
+   44px hit area would overlap the next trigger's and a tap could open the
+   wrong item. On touch they grow to 44px instead. */
 @media (pointer: coarse) {
   .trigger {
     min-block-size: 44px;

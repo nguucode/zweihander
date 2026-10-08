@@ -23,33 +23,35 @@ that belong together:
 
 ## The typeface
 
-`--font-sans` leads with **`system-ui`**:
+Two faces, split by job. **Sans for everything you operate** — buttons,
+fields, menus, labels, tables, figures. **Serif for what you read** — page,
+dialog and empty-state titles, and long-form prose.
 
 ```css
-system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
-sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji'
+--font-sans:  'Inter Variable', Inter, system-ui, -apple-system, 'Segoe UI', …
+--font-serif: 'Newsreader Variable', Newsreader, Georgia, 'Times New Roman', serif
+--font-mono:  ui-monospace, SFMono-Regular, 'SF Mono', Menlo, …
 ```
 
-`system-ui` is the standards-track keyword, and it resolves to the
-platform's **UI** face — San Francisco on Apple platforms, Segoe UI
-Variable on Windows, Roboto on Android — which is the face those platforms
-use for their own controls. Everything after it is a fallback for browsers
-that do not support the keyword.
+Components read two role tokens rather than the faces directly:
+
+| Role | Default | Read by |
+| --- | --- | --- |
+| `--font-heading` | `var(--font-serif)` | `PageHeading`, `Modal` and `EmptyState` titles |
+| `--font-prose` | `var(--font-serif)` | long-form reading text; no component reads it yet |
+
+Small headings stay sans on purpose: a form-section or stat label at 14–16px
+is UI, and a serif at that size in a dense ERP screen reads as decoration.
+Stat values stay sans too, for tabular figures.
 
 <Canvas of={TypographyStories.Families} />
 
-**The known caveat.** On some Linux and older Android configurations
-`system-ui` resolves through fontconfig to whatever is aliased as the
-system font, which has historically produced a serif, or a
-missing-glyph fallback for non-Latin text. The rest of the stack does not
-rescue it, because the keyword *did* resolve — just badly. This is the
-reason some systems leave `system-ui` out of the stack entirely. If you
-ship to those platforms and see the wrong face, drop it from the front;
-nothing else in the kit depends on it.
-
-Nothing is downloaded, so the kit renders in a different face on every
-platform by design. That is the right default for product UI and the wrong
-one for a brand with its own type — see **Customization** below.
+**The kit names the faces but never loads them.** If Inter and Newsreader
+are not installed or loaded on the page, every stack falls back — to the
+platform UI face and to Georgia — and nothing breaks. This docs site loads
+both through `@fontsource-variable/inter` and
+`@fontsource-variable/newsreader`; do the same, or point the tokens at your
+own faces (see **Customization**).
 
 ## Headings
 
@@ -84,7 +86,7 @@ UI and worth knowing before you reach for it in long-form content.
 | --- | --- | --- |
 | `--text-body-lg` | 1rem / 16px | 24px |
 | `--text-body` | 0.875rem / 14px | 20px |
-| `--text-body-sm` | 0.75rem / 12px | 16px |
+| `--text-body-sm` | 0.8125rem / 13px | 16px |
 
 **Every component uses these.** Button, the field label, the input itself,
 and the helper and error text are all `--text-body`; only the large Button
@@ -138,7 +140,8 @@ The family is a token like any other:
 
 ```css
 :root {
-  --font-sans: 'Inter Variable', system-ui, sans-serif;
+  --font-sans: 'Geist Variable', system-ui, sans-serif;
+  --font-heading: var(--font-sans); /* all-sans headings */
 }
 ```
 

@@ -10,8 +10,8 @@ const meta = {
   // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
   parameters: { a11y: { test: 'error' } },
   argTypes: {
-    size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] },
-    appearance: { control: 'inline-radio', options: ['outlined', 'filled', 'underlined', 'unstyled'] },
+    size: { control: 'inline-radio', options: ['sm', 'md'] },
+    appearance: { control: 'inline-radio', options: ['outlined', 'underlined', 'unstyled'] },
     validationState: { control: 'inline-radio', options: ['default', 'success', 'error'] },
     prefix: { control: false },
     suffix: { control: false },
@@ -45,7 +45,7 @@ export const LabelAssociation: Story = {
 export const Appearances: Story = {
   render: (args) => (
     <div style={stack}>
-      {(['outlined', 'filled', 'underlined', 'unstyled'] as const).map((appearance) => (
+      {(['outlined', 'underlined', 'unstyled'] as const).map((appearance) => (
         <TextInput key={appearance} {...args} appearance={appearance} label={appearance} />
       ))}
     </div>
@@ -55,16 +55,16 @@ export const Appearances: Story = {
 export const Sizes: Story = {
   render: (args) => (
     <div style={stack}>
-      {(['sm', 'md', 'lg'] as const).map((size) => (
+      {(['sm', 'md'] as const).map((size) => (
         <TextInput key={size} {...args} size={size} label={size} />
       ))}
     </div>
   ),
   play: async ({ canvas }) => {
-    const heights = ['sm', 'md', 'lg'].map(
+    const heights = ['sm', 'md'].map(
       (n) => canvas.getByLabelText(n).parentElement!.getBoundingClientRect().height,
     )
-    await expect(heights).toEqual([32, 40, 48])
+    await expect(heights).toEqual([24, 32])
   },
 }
 

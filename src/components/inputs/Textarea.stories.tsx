@@ -9,8 +9,8 @@ const meta = {
   // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
   parameters: { a11y: { test: 'error' } },
   argTypes: {
-    size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] },
-    appearance: { control: 'inline-radio', options: ['outlined', 'filled', 'underlined', 'unstyled'] },
+    size: { control: 'inline-radio', options: ['sm', 'md'] },
+    appearance: { control: 'inline-radio', options: ['outlined', 'underlined', 'unstyled'] },
     validationState: { control: 'inline-radio', options: ['default', 'success', 'error'] },
     resize: { control: 'inline-radio', options: ['none', 'both', 'vertical', 'horizontal'] },
   },
@@ -35,7 +35,7 @@ export const Default: Story = {
 export const Appearances: Story = {
   render: (args) => (
     <div style={stack}>
-      {(['outlined', 'filled', 'underlined', 'unstyled'] as const).map((appearance) => (
+      {(['outlined', 'underlined', 'unstyled'] as const).map((appearance) => (
         <Textarea key={appearance} {...args} appearance={appearance} label={appearance} minRows={2} />
       ))}
     </div>
@@ -45,7 +45,7 @@ export const Appearances: Story = {
 export const Sizes: Story = {
   render: (args) => (
     <div style={stack}>
-      {(['sm', 'md', 'lg'] as const).map((size) => (
+      {(['sm', 'md'] as const).map((size) => (
         <Textarea key={size} {...args} size={size} label={size} minRows={2} />
       ))}
     </div>

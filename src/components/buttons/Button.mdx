@@ -25,7 +25,7 @@ Spec: [uiguideline.com/components/button](https://www.uiguideline.com/components
 | --- | --- | --- | --- |
 | `variant` | `primary`, `accent`, `secondary`, `destructive` | `primary` | Colour by meaning. |
 | `appearance` | `contained`, `outlined`, `ghost` | `contained` | |
-| `size` | `sm`, `md`, `lg`, `xl` | `md` | 32, 40, 48, 56px. |
+| `size` | `sm`, `md` | `md` | 24, 32px (`--control-*`). `sm` takes a 13px label and `--radius-sm`. |
 | `startIcon`, `endIcon` | node | – | Usually `<Icon name="…" />`. |
 | `isIconOnly` | boolean | `false` | Square. **Requires `aria-label`** (a type error without it). |
 | `isLoading` | boolean | `false` | |
@@ -42,6 +42,7 @@ Every other `<button>` attribute passes through, including `ref`.
 
 ### Differences from the spec
 
+- **Two sizes, not four.** `sm` (24px) and `md` (32px) only, the compact control scale of the Claude apps. The spec's larger steps were dropped; a big call to action is `md` with more room around it, not a taller box.
 - **`disabled`, not `isDisabled`** — the native attribute keeps its name.
 - **`isIconOnly` is added.** The spec has no icon-only button, and a
   square button that still requires a name is common enough to need one.

@@ -34,7 +34,7 @@ icon**, **spinner** — plus one state: **pressed**.
 | `onPressedChange` | `(pressed) => void` | – | |
 | `variant` | `primary`, `accent`, `secondary`, `destructive` | `primary` | Colour of the pressed state. |
 | `appearance` | `contained`, `outlined`, `ghost` | `contained` | Style of the pressed state. |
-| `size` | `sm`, `md`, `lg`, `xl` | `md` | |
+| `size` | `sm`, `md` | `md` | 24, 32px, as on Button. |
 | `startIcon`, `endIcon` | node | – | |
 | `isIconOnly` | boolean | `false` | Requires `aria-label`. |
 | `isLoading` | boolean | `false` | |
@@ -46,6 +46,7 @@ icon**, **spinner** — plus one state: **pressed**.
 
 ### Differences from the spec
 
+- **Two sizes, not four.** `sm` (24px) and `md` (32px) only, the compact control scale of the Claude apps. The spec's larger steps were dropped; a big call to action is `md` with more room around it, not a taller box.
 - **`pressed`, `defaultPressed`, `onPressedChange`** instead of
   `isSelected`: Base UI's names, per the kit's convention for components
   built on it. "Pressed" is also the ARIA word (`aria-pressed`).

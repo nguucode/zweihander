@@ -326,7 +326,7 @@ function ForgeGame({ onHiScore }: { onHiScore: (n: number) => void }) {
       </div>
 
       <div className={styles.forgeSide}>
-        <Button size="lg" onClick={strike} disabled={phase !== 'play'} className={styles.strike}>
+        <Button onClick={strike} disabled={phase !== 'play'} className={styles.strike}>
           Strike
         </Button>
         <p className={styles.note}>

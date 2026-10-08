@@ -12,7 +12,7 @@ const meta = {
   argTypes: {
     variant: { control: 'inline-radio', options: ['primary', 'accent', 'secondary', 'destructive'] },
     appearance: { control: 'inline-radio', options: ['contained', 'outlined', 'ghost'] },
-    size: { control: 'inline-radio', options: ['sm', 'md', 'lg', 'xl'] },
+    size: { control: 'inline-radio', options: ['sm', 'md'] },
     startIcon: { control: false },
     endIcon: { control: false },
     render: { control: false },
@@ -56,7 +56,7 @@ export const Matrix: Story = {
 export const Sizes: Story = {
   render: (args) => (
     <div style={row}>
-      {(['sm', 'md', 'lg', 'xl'] as const).map((size) => (
+      {(['sm', 'md'] as const).map((size) => (
         <Button key={size} {...args} size={size}>
           {size}
         </Button>
@@ -64,10 +64,10 @@ export const Sizes: Story = {
     </div>
   ),
   play: async ({ canvas }) => {
-    const heights = ['sm', 'md', 'lg', 'xl'].map(
+    const heights = ['sm', 'md'].map(
       (n) => canvas.getByRole('button', { name: n }).getBoundingClientRect().height,
     )
-    await expect(heights).toEqual([32, 40, 48, 56])
+    await expect(heights).toEqual([24, 32])
   },
 }
 
@@ -83,7 +83,7 @@ export const IconOnly: Story = {
   args: { isIconOnly: true, 'aria-label': 'Close', children: <Icon name="close" /> },
   render: (args) => (
     <div style={row}>
-      {(['sm', 'md', 'lg', 'xl'] as const).map((size) => (
+      {(['sm', 'md'] as const).map((size) => (
         <Button key={size} {...args} size={size} appearance="ghost" />
       ))}
     </div>

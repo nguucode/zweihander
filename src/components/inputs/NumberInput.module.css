@@ -48,11 +48,7 @@
   background: transparent;
 }
 
-.lg .step {
-  font-size: calc(var(--space-4) + var(--space-1));
-}
-
-/* sm and md buttons are 32 and 40px; on touch they widen to 44px, which is
+/* sm and md buttons are 24 and 32px; on touch they widen to 44px, which is
    the only direction they can grow without overlapping the input. */
 @media (pointer: coarse) {
   .step {

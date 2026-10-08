@@ -17,8 +17,8 @@ const meta = {
   // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
   parameters: { a11y: { test: 'error' } },
   argTypes: {
-    size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] },
-    appearance: { control: 'inline-radio', options: ['outlined', 'filled', 'underlined', 'unstyled'] },
+    size: { control: 'inline-radio', options: ['sm', 'md'] },
+    appearance: { control: 'inline-radio', options: ['outlined', 'underlined', 'unstyled'] },
     validationState: { control: 'inline-radio', options: ['default', 'success', 'error'] },
   },
   args: { label: 'Team member', placeholder: 'Type a name', options: members, onValueChange: fn() },
@@ -91,7 +91,7 @@ export const OpenButton: Story = {
 export const Sizes: Story = {
   render: (args) => (
     <div style={{ display: 'grid', gap: 'var(--space-4)', justifyItems: 'start' }}>
-      {(['sm', 'md', 'lg'] as const).map((size) => (
+      {(['sm', 'md'] as const).map((size) => (
         <Combobox key={size} {...args} size={size} label={size} defaultValue="marlone" />
       ))}
     </div>
@@ -101,7 +101,7 @@ export const Sizes: Story = {
 export const Appearances: Story = {
   render: (args) => (
     <div style={{ display: 'grid', gap: 'var(--space-4)', justifyItems: 'start' }}>
-      {(['outlined', 'filled', 'underlined', 'unstyled'] as const).map((appearance) => (
+      {(['outlined', 'underlined', 'unstyled'] as const).map((appearance) => (
         <Combobox key={appearance} {...args} appearance={appearance} label={appearance} />
       ))}
     </div>

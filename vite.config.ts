@@ -39,6 +39,9 @@ export default defineConfig({
       })],
       test: {
         name: 'storybook',
+        // The drive is exFAT: macOS writes an AppleDouble `._<name>` beside
+        // every file, which matches the stories glob and fails to import.
+        exclude: ['**/node_modules/**', '**/._*'],
         browser: {
           enabled: true,
           headless: true,

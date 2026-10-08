@@ -21,7 +21,7 @@ const meta = {
   parameters: { a11y: { test: 'error' } },
   argTypes: {
     size: { control: 'inline-radio', options: ['xs', 'sm', 'md', 'lg'] },
-    appearance: { control: 'inline-radio', options: ['elevated', 'outline', 'filled', 'unstyled'] },
+    appearance: { control: 'inline-radio', options: ['elevated', 'outline', 'unstyled'] },
     orientation: { control: 'inline-radio', options: ['vertical', 'horizontal'] },
     render: { control: false },
   },
@@ -37,7 +37,7 @@ export const Default: Story = {}
 export const Appearances: Story = {
   render: (args) => (
     <div style={{ display: 'grid', gap: 'var(--space-4)' }}>
-      {(['elevated', 'outline', 'filled', 'unstyled'] as const).map((appearance) => (
+      {(['elevated', 'outline', 'unstyled'] as const).map((appearance) => (
         <Card key={appearance} {...args} appearance={appearance}>
           <h3 style={title}>{appearance}</h3>
           <p style={muted}>Change how you pay for your plan.</p>

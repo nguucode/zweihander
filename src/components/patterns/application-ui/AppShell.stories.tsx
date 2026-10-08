@@ -106,7 +106,7 @@ type Story = StoryObj<typeof meta>
 export const WithSidebar: Story = {
   args: {
     sidebar: sidebar(),
-    header: <AppHeader start={<Search aria-label="Search" placeholder="Search" size="sm" />} end={headerEnd} />,
+    header: <AppHeader start={<Search aria-label="Search" placeholder="Search" />} end={headerEnd} />,
   },
   decorators: box(1100),
   play: async ({ canvas }) => {
@@ -127,7 +127,7 @@ export const WithSidebar: Story = {
 export const CollapsedRail: Story = {
   args: {
     sidebar: sidebar(true),
-    header: <AppHeader start={<Search aria-label="Search" placeholder="Search" size="sm" />} end={headerEnd} />,
+    header: <AppHeader start={<Search aria-label="Search" placeholder="Search" />} end={headerEnd} />,
   },
   decorators: box(1100),
   play: async ({ canvas }) => {

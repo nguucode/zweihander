@@ -29,7 +29,7 @@ A plain element.
 | `page`, `defaultPage`, `onPageChange` | number (1-based) | `1` | Controlled or uncontrolled. |
 | `siblingCount` | number | `1` | Pages shown either side of the current one. |
 | `boundaryCount` | number | `1` | Pages always shown at each end. |
-| `size` | `sm`, `md` | `md` | 32 or 40px controls. |
+| `size` | `sm`, `md` | `md` | 24 or 32px controls. |
 | `getHref` | `(page) => string` | – | Render links instead of buttons. |
 | `aria-label` | string | `Pagination` | The landmark's name. |
 
@@ -70,5 +70,5 @@ total, siblings, boundary)` is exported too, for building your own.
   ends.
 - The ellipsis is `aria-hidden`: the page names already say which
   numbers are there.
-- Controls are 32px (`sm`) or 40px (`md`), and grow to 44px on coarse
+- Controls are 24px (`sm`) or 32px (`md`), and grow to 44px on coarse
   pointers.

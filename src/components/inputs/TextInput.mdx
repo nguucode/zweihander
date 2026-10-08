@@ -29,8 +29,8 @@ Label, description and invalid state are wired by Base UI's
 | `label` | node | – | |
 | `helperText` | node | – | |
 | `validationState` | `default`, `success`, `error` | `default` | |
-| `size` | `sm`, `md`, `lg` | `md` | 32, 40, 48px. |
-| `appearance` | `outlined`, `filled`, `underlined`, `unstyled` | `outlined` | |
+| `size` | `sm`, `md` | `md` | 24, 32px. |
+| `appearance` | `outlined`, `underlined`, `unstyled` | `outlined` | |
 | `prefix`, `suffix` | node | – | |
 | `isFullWidth` | boolean | `false` | Otherwise 20rem, capped at its container. |
 | `value`, `defaultValue`, `onChange` | | – | As on `<input>`: `onChange` gets the event. |
@@ -43,6 +43,8 @@ Every other `<input>` attribute passes through to the input, including `ref`.
 
 ### Differences from the spec
 
+- **No `filled` appearance.** The spec's filled field (a tinted box with a bottom rule) was dropped to match the Claude apps, where every field is the white outlined box.
+- **Two sizes, not three.** `sm` (24px) and `md` (32px) only, the compact control scale of the Claude apps. The spec's larger steps were dropped; a big call to action is `md` with more room around it, not a taller box.
 - **Native names** for native attributes: `disabled`, `required`,
   `readOnly` rather than `isDisabled`, `isRequired`, `isReadOnly`.
 - **`onChange` is the native event**, not a value: the kit's rule for
@@ -59,9 +61,9 @@ Every other `<input>` attribute passes through to the input, including `ref`.
 
 <Canvas of={TextInputStories.Validation} />
 
-Pick one appearance per form. `outlined` is the default; `filled` suits
-dense settings pages; `underlined` and `unstyled` are for fields that sit
-inside something else that already draws the edge.
+Pick one appearance per form. `outlined` is the default and the one to
+reach for; `underlined` and `unstyled` are for fields that sit inside
+something else that already draws the edge.
 
 ## Accessibility
 
@@ -69,12 +71,15 @@ inside something else that already draws the edge.
   description (`aria-describedby`); the error state sets `aria-invalid`.
   Do not rely on the placeholder as a label: it disappears as soon as
   anyone types.
-- **The edge is `--control-border`, 3:1 on the page**, because WCAG
-  1.4.11 applies to a text field's boundary. The lighter `--input` token
-  is about 1.3:1.
+- **The edge is `--field-border`, about 1.5:1 — a deliberate exception
+  to WCAG 1.4.11** (approved 2026-10-08), for the light hairline of the
+  Claude apps. The outlined field is a white `--card` box with a faint
+  drop on the off-white page, and the label, placeholder and focus ring
+  mark it too. Low-vision users may still find the box hard to see; if
+  your audience needs 3:1, set `--field-border: var(--control-border)`.
 - Focus draws a 2px ring around the whole field (in the danger colour
   when invalid), on click as well as keyboard, since that is where typing
   goes.
 - Pressing the field's padding or a prefix focuses the input, like a
   native field.
-- Heights are 32–48px; the label is part of the target too.
+- Heights are 24 or 32px, 44px hit area on touch; the label is part of the target too.

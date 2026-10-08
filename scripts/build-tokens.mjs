@@ -23,10 +23,15 @@ const ACCENTS = Object.keys(primitives.accent).filter((k) => !k.startsWith('$'))
 const GRAYS = Object.keys(primitives.gray).filter((k) => !k.startsWith('$'))
 const ramp = (group, hue, step) => primitives[group][hue][step].$value
 
+const DEFAULT_ACCENT = 'blue'
+const DEFAULT_GRAY = 'taupe'
+
 const NEAR_WHITE = ramp('gray', 'neutral', '50')
 const NEAR_BLACK = ramp('gray', 'neutral', '900')
-const PAGE_LIGHT = 'oklch(100% 0 0)'
-const PAGE_DARK = ramp('gray', 'neutral', '950')
+// The page is the default gray's 50 / 950 (see --background), so every
+// "against the page" measurement below reads the surface actually shipped.
+const PAGE_LIGHT = ramp('gray', DEFAULT_GRAY, '50')
+const PAGE_DARK = ramp('gray', DEFAULT_GRAY, '950')
 
 /**
  * A solid fill has to carry its own label at 4.5:1. Prefer the canonical step
@@ -227,8 +232,6 @@ const shadowLayers = (mode) =>
     }),
   )
 
-const DEFAULT_ACCENT = 'indigo'
-const DEFAULT_GRAY = 'neutral'
 const defaults = palettes.find((p) => p.hue === DEFAULT_ACCENT)
 
 const accentVars = (p) => `  --accent-solid-light: ${p.light.solid};
@@ -240,7 +243,7 @@ const accentVars = (p) => `  --accent-solid-light: ${p.light.solid};
   --accent-ring-dark: ${p.ringDark.value};
   --accent-text-dark: ${p.textDark.value};`
 
-const GRAY_STEPS = ['50', '100', '200', '400', '500', '800', '900', '950']
+const GRAY_STEPS = ['50', '100', '200', '300', '400', '500', '600', '800', '900', '950']
 const grayVars = (hue) =>
   GRAY_STEPS.map((s) => `  --gray-${s}: ${ramp('gray', hue, s)};`).join('\n')
 
@@ -273,8 +276,18 @@ const grayScopeDecls = () => {
     .join('\n')
 }
 
+/* A root token that reads another one (--font-heading: var(--font-serif))
+   is derived, so it goes on \`*\` with the others below: on :root it would
+   freeze, and a Theme overriding --font-serif would never reach headings. */
+const isDerived = ([, v]) => String(v.$value).includes('var(')
+const rootLiterals = Object.fromEntries(entries(semantic.root).filter((e) => !isDerived(e)))
+const rootDerived = Object.fromEntries(entries(semantic.root).filter(isDerived))
+
 const spaceDecls = entries(semantic.space)
   .map(([k, v]) => `  --space-${k}: calc(${v.$value} * var(--scaling));`)
+  .join('\n')
+const controlDecls = entries(semantic.control)
+  .map(([k, v]) => `  --control-${k}: calc(${v.$value} * var(--scaling));`)
   .join('\n')
 const textDecls = entries(semantic.text)
   .map(([k, v]) => `  --text-${k}: calc(${v.$value} * var(--scaling));`)
@@ -296,7 +309,7 @@ const css = `/*
    there would reset back to its default instead of inheriting the value an
    outer Theme set. */
 :root {
-${decls(semantic.root)}
+${decls(rootLiterals)}
 
   /* Defaults: ${DEFAULT_ACCENT} accent, ${DEFAULT_GRAY} gray. Overridden by
      [data-accent] / [data-gray] below, which the Theme component sets. */
@@ -392,12 +405,18 @@ ${grayScopeDecls()}
     min(calc(var(--radius) * var(--radius-factor)), var(--radius-full))
   );
   --radius-panel: max(
-    calc(var(--radius) * var(--radius-factor)),
-    min(calc((var(--radius) + 4px) * var(--radius-factor)), var(--radius-full))
+    calc((var(--radius) + 4px) * var(--radius-factor)),
+    min(calc((var(--radius) + 8px) * var(--radius-factor)), var(--radius-full))
   );
+
+  /* Font roles, read from whichever faces the scope sets. */
+${decls(rootDerived)}
 
   /* Spacing — one multiplier over every gap and pad in the kit. */
 ${spaceDecls}
+
+  /* Control heights — one scale for every button, field, tab and row. */
+${controlDecls}
 
   /* Type roles. Leading is a ratio, so it follows the size under --scaling. */
 ${textDecls}

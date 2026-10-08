@@ -17,8 +17,8 @@ const meta = {
   // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
   parameters: { a11y: { test: 'error' } },
   argTypes: {
-    size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] },
-    appearance: { control: 'inline-radio', options: ['outlined', 'filled', 'underlined', 'unstyled'] },
+    size: { control: 'inline-radio', options: ['sm', 'md'] },
+    appearance: { control: 'inline-radio', options: ['outlined', 'underlined', 'unstyled'] },
     validationState: { control: 'inline-radio', options: ['default', 'success', 'error'] },
   },
   args: { label: 'Team member', placeholder: 'Choose someone', options: members, onValueChange: fn() },
@@ -65,21 +65,21 @@ export const Strings: Story = {
 export const Sizes: Story = {
   render: (args) => (
     <div style={{ display: 'grid', gap: 'var(--space-4)', justifyItems: 'start' }}>
-      {(['sm', 'md', 'lg'] as const).map((size) => (
+      {(['sm', 'md'] as const).map((size) => (
         <Select key={size} {...args} size={size} label={size} />
       ))}
     </div>
   ),
   play: async ({ canvas }) => {
-    const heights = ['sm', 'md', 'lg'].map((n) => canvas.getByRole('combobox', { name: n }).getBoundingClientRect().height)
-    await expect(heights).toEqual([32, 40, 48])
+    const heights = ['sm', 'md'].map((n) => canvas.getByRole('combobox', { name: n }).getBoundingClientRect().height)
+    await expect(heights).toEqual([24, 32])
   },
 }
 
 export const Appearances: Story = {
   render: (args) => (
     <div style={{ display: 'grid', gap: 'var(--space-4)', justifyItems: 'start' }}>
-      {(['outlined', 'filled', 'underlined', 'unstyled'] as const).map((appearance) => (
+      {(['outlined', 'underlined', 'unstyled'] as const).map((appearance) => (
         <Select key={appearance} {...args} appearance={appearance} label={appearance} defaultValue="marlone" />
       ))}
     </div>

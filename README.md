@@ -81,7 +81,7 @@ carry a readable label and the build throws rather than shipping it.
 ### Exporting to Figma
 
 `tokens/design-tokens.json` keeps `semantic` as **aliases** into `primitive`
-(`"primary": "{primitive.accent.indigo.600}"`) rather than flattening them,
+(`"primary": "{primitive.accent.blue.600}"`) rather than flattening them,
 because a Figma variable is supposed to point at another variable — a
 flattened export imports as a pile of disconnected colours. `light` and
 `dark` are the two modes of one collection; `space`, `text` and `radius`
@@ -118,8 +118,8 @@ independent settings to any subtree:
 
 | Prop | Values |
 | --- | --- |
-| `accentColor` | 17 hues — drives `--primary` and `--ring` (default: **indigo**) |
-| `grayColor` | 9 neutral ramps — surfaces, text, borders (default: neutral) |
+| `accentColor` | 17 hues — drives `--primary` and `--ring` (default: **blue**) |
+| `grayColor` | 9 neutral ramps — surfaces, text, borders (default: taupe) |
 | `appearance` | `light` / `dark` / `inherit` |
 | `radius` | `none` / `small` / `medium` / `large` / `full` |
 | `scaling` | `90%` … `110%` — spacing and type together |

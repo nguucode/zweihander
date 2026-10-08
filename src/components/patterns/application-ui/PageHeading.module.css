@@ -39,7 +39,8 @@
   margin: 0;
   font-size: var(--text-heading-xl);
   line-height: var(--leading-heading-xl);
-  font-weight: 600;
+  font-family: var(--font-heading);
+  font-weight: 500;
   overflow-wrap: anywhere;
 }
 

@@ -63,8 +63,8 @@ export const Modes: Story = {
           appearance={appearance}
           style={{
             background: 'var(--background)',
-            // The light panel is white on a white page, so without this its
-            // edge is invisible and the comparison looks one-sided.
+            // The light panel is the near-white page, so without this its
+            // edge barely shows and the comparison looks one-sided.
             border: '1px solid var(--border)',
             borderRadius: 'var(--radius-panel)',
             padding: 'var(--space-6)',

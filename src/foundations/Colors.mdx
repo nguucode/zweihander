@@ -26,9 +26,10 @@ too.
 
 `--background` is the page. `--card` and `--popover` are surfaces that sit
 a level above it — a card inset in the page, a menu floating over it. In
-light mode all three are pure white and only their foregrounds carry
-meaning; in dark mode they separate, with `--background` at the darkest
-step and card/popover lifted one step toward the viewer.
+light mode the page is gray-50, a warm off-white, and card/popover are
+white: a panel separates from the page by being lighter, so it needs a
+border at most, not a shadow. In dark mode `--background` sits at the
+darkest step and card/popover are lifted one step toward the viewer.
 
 Each surface has a `-foreground` partner, and the pair is the contract:
 put `--card-foreground` on `--card`, never `--foreground`, even where the
@@ -55,7 +56,7 @@ intent that should change will change.
 ## Solid actions
 
 Filled controls. `--primary` is the default button and **the brand hue** —
-indigo out of the box, and the one token the
+blue out of the box, and the one token the
 [`accentColor`](?path=/docs/foundations-overview--docs) setting moves. It
 lightens in dark mode rather than darkening, so `--primary-foreground`
 inverts with it.
@@ -107,29 +108,35 @@ component boundaries such as a focus ring.
 
 | Pair | Light | Dark |
 | --- | --- | --- |
-| `background` / `foreground` | 19.79:1 | 18.96:1 |
-| `card` / `card-foreground` | 19.79:1 | 17.16:1 |
-| `popover` / `popover-foreground` | 19.79:1 | 17.16:1 |
-| `primary` / `primary-foreground` | 6.17:1 | 5.74:1 |
-| `secondary` / `secondary-foreground` | 16.42:1 | 14.48:1 |
-| `accent` / `accent-foreground` | 16.42:1 | 14.48:1 |
+| `background` / `foreground` | 18.97:1 | 18.97:1 |
+| `card` / `card-foreground` | 19.75:1 | 16.89:1 |
+| `popover` / `popover-foreground` | 19.75:1 | 16.89:1 |
+| `primary` / `primary-foreground` | 5.03:1 | 6.79:1 |
+| `secondary` / `secondary-foreground` | 15.65:1 | 14.61:1 |
+| `accent` / `accent-foreground` | 15.65:1 | 14.61:1 |
 | `destructive` / `destructive-foreground` | 4.56:1 | 6.19:1 |
-| `muted` / `muted-foreground` | 4.60:1 | 5.83:1 |
-| `background` / `muted-foreground` | 5.02:1 | 7.63:1 |
-| `background` / `ring` | 8.07:1 | 6.34:1 |
+| `muted` / `muted-foreground` | 4.61:1 | 5.97:1 |
+| `background` / `muted-foreground` | 4.98:1 | 7.75:1 |
+| `background` / `ring` | 6.55:1 | 7.49:1 |
 
-The `primary` row is the default indigo accent. Every one of the seventeen
+Measured on the defaults: blue accent, taupe gray. The `primary` row is the default blue accent. Every one of the seventeen
 accents is measured the same way and clears 4.5:1 for its own label — see
 [Overview → Accent color](?path=/docs/foundations-overview--docs).
 
-**`--muted-foreground` on `--muted` is 4.60:1 in light mode**, the
+**`--muted-foreground` on `--muted` is 4.61:1 in light mode**, the
 tightest pair it forms. It used to be 4.34:1, under AA: gray-500 on every
 ramp has since been darkened to the lightest value that clears 4.6:1 on
 its own gray-100, so muted text can now sit on a muted fill. On the page background, where secondary
-text usually lives, the same token is 5.02:1.
+text usually lives, the same token is 4.98:1.
+
+**`--subtle-foreground` is a step between body text and muted text**
+(gray-600 light, gray-300 dark): navigation labels that should recede
+until hovered or current, as in the Claude apps' sidebar. It reads about
+7.5:1 on the light page, so it is body-safe; use `--muted-foreground` for
+genuinely secondary text.
 
 **`--surface-subtle` is a filled panel that muted text can sit on.**
-Muted text reads 4.81:1 on it (gray-50, neutral) and 5.83:1 on gray-800 in dark — a step off `--card` so a filled panel still reads as filled. The build
+Muted text reads 4.98:1 on it (gray-50, taupe) and 5.97:1 on gray-800 in dark — a step off `--card` so a filled panel still reads as filled. The build
 measures `--muted-foreground` on `--background`, `--card`,
 `--surface-subtle` and `--muted` in both modes on all nine gray ramps, and
 stops if any pair drops under 4.5:1. The tightest is neutral on `--muted`,
@@ -139,6 +146,12 @@ at 4.60:1.
 controls have nothing else that shows they are there, so WCAG 1.4.11 wants
 3:1 against the page — and `--input` (gray-200) is about 1.3:1. The build
 measures it on all nine gray ramps.
+
+**`--field-border` is the text-field edge** (gray-300 light, white 18%
+dark), about 1.5:1: the light hairline of the Claude apps, and a
+deliberate exception to 3:1 for fields only. Fields lean on a white
+`--card` fill, a faint drop, the label and the focus ring instead. A
+product that needs 3:1 sets `--field-border: var(--control-border)`.
 
 **`--primary-text` is the brand hue as text** — an outlined or ghost
 primary button. The solid is picked for its label, not for being read on
@@ -195,12 +208,12 @@ meaning. The contrast numbers above are a floor, not a design review.
 
 **Every value is a step off a published ramp, digit for digit.** Nothing
 here was hand-picked or eyeballed. Two ramps feed the palette and each is
-swappable on its own: an **accent** (indigo by default) for `--primary` and
-`--ring`, and a **gray** (neutral by default) for everything structural.
+swappable on its own: an **accent** (blue by default) for `--primary` and
+`--ring`, and a **gray** (taupe by default) for everything structural.
 
 | Token | Light | Dark | Driven by |
 | --- | --- | --- | --- |
-| `background` | white | gray-950 | gray |
+| `background` | gray-50 | gray-950 | gray |
 | `foreground` | gray-950 | gray-50 | gray |
 | `card`, `popover` | white | gray-900 | gray |
 | `card-foreground`, `popover-foreground` | gray-950 | gray-50 | gray |
@@ -208,20 +221,26 @@ swappable on its own: an **accent** (indigo by default) for `--primary` and
 | `primary-foreground` | white or near-black | near-black | **accent** |
 | `secondary`, `muted`, `accent` | gray-100 | gray-800 | gray |
 | `secondary-foreground`, `accent-foreground` | gray-900 | gray-50 | gray |
+| `selected` | gray-200 | white 10% | gray |
+| `hover-overlay` | black 5% | white 6% | fixed |
 | `muted-foreground` | gray-500 | gray-400 | gray |
+| `subtle-foreground` | gray-600 | gray-300 | gray |
 | `surface-subtle` | gray-50 | gray-800 | gray |
 | `destructive` | red-600 | red-400 | fixed |
 | `destructive-foreground` | neutral-50 | neutral-900 | fixed |
 | `border`, `input` | gray-200 | white 10% / 15% | gray |
+| `field-border` | gray-300 | white 18% | gray |
 | `control-border` | gray-500 | gray-400 | gray |
 | `ring` | accent-700 | accent-400 | **accent** |
-| `primary-text` | first of accent-600…900 at 4.5:1 on white | first of accent-400…200 at 4.5:1 on the dark page | **accent** |
+| `primary-text` | first of accent-600…900 at 4.5:1 on the light page | first of accent-400…200 at 4.5:1 on the dark page | **accent** |
 
 The light accent step is `-600` for most hues but `-700` for sky, fuchsia,
 pink and rose, and the label is white or near-black depending on which one
 clears 4.5:1 on that fill — the warm hues take dark labels. Exceptions to
-the ramp rule: light `--background` (pure white, not gray-50) and dark
-`--border`/`--input` (alpha, so edges work over any surface).
+the ramp rule: light `--card`/`--popover` (pure white, so a panel reads
+lighter than the gray-50 page) and dark `--border`/`--input`/`--selected`, and `--hover-overlay` in both
+(alpha, so they work over any surface — the sidebar's hover sits on
+`--surface-subtle`, which in dark equals the opaque `--accent` fill).
 
 `--destructive` deliberately does **not** follow the accent. A status
 colour that changes with the brand stops being a status.

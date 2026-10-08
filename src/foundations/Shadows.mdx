@@ -29,13 +29,17 @@ from bleeding sideways into whatever sits next to it.
 | Token | h | Light |
 | --- | --- | --- |
 | `--shadow-none` | — | `0 0 #0000` |
-| `--shadow-2xs` | 1 | 1px drop, 5% |
-| `--shadow-xs` | 2 | 2px + 1px, 6% / 4% |
-| `--shadow-sm` | 4 | 4px + 2px, 8% / 5% |
-| `--shadow-md` | 8 | 8px + 4px, 9% / 6% |
-| `--shadow-lg` | 12 | 12px + 6px, 10% / 7% |
-| `--shadow-xl` | 20 | 20px + 10px, 12% / 8% |
-| `--shadow-2xl` | 32 | 32px + 16px, 16% / 10% |
+| `--shadow-2xs` | 1 | 1px drop, 3.3% |
+| `--shadow-xs` | 2 | 2px + 1px, 3.9% / 2.6% |
+| `--shadow-sm` | 4 | 4px + 2px, 5.2% / 3.3% |
+| `--shadow-md` | 8 | 8px + 4px, 5.8% / 3.9% |
+| `--shadow-lg` | 12 | 12px + 6px, 6.5% / 4.6% |
+| `--shadow-xl` | 20 | 20px + 10px, 7.8% / 5.2% |
+| `--shadow-2xl` | 32 | 32px + 16px, 10.4% / 6.5% |
+
+The alphas are deliberately faint: a panel separates from the page by
+being lighter (white on the gray-50 page) and by its border, so a shadow
+is reserved for things that genuinely float — menus, popovers, dialogs.
 
 `h` doubles through the lower steps and eases off at the top, because the
 difference between 1px and 2px of lift is legible and the difference

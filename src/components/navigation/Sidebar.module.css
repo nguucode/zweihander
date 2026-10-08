@@ -5,7 +5,7 @@
   box-sizing: border-box;
   inline-size: var(--sidebar-width);
   block-size: 100%;
-  padding: var(--space-3);
+  padding: var(--space-2);
   border-inline-end: 1px solid var(--border);
   background: var(--surface-subtle);
   font-family: var(--font-sans);
@@ -15,17 +15,17 @@
   transition: inline-size 150ms;
 }
 
-/* The rail: 40px items plus the 12px padding either side. */
+/* The rail: one square row plus the padding either side. */
 .collapsed {
-  --sidebar-width: calc(var(--space-10) + 2 * var(--space-3));
+  --sidebar-width: calc(var(--control-md) + 2 * var(--space-2));
 }
 
 .header {
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  min-block-size: var(--space-10);
-  margin-block-end: var(--space-3);
+  min-block-size: var(--control-md);
+  margin-block-end: var(--space-2);
 }
 .headerContent {
   flex: 1;
@@ -42,8 +42,8 @@
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  inline-size: var(--space-10);
-  block-size: var(--space-10);
+  inline-size: var(--control-md);
+  block-size: var(--control-md);
   margin: 0;
   padding: 0;
   border: 0;
@@ -54,7 +54,9 @@
   cursor: var(--cursor-button);
 }
 .toggle:hover {
-  background: var(--accent);
+  /* An overlay, not --accent: in dark the sidebar's own --surface-subtle is
+     the same gray-800 as --accent, so an opaque hover fill vanished. */
+  background: var(--hover-overlay);
   color: var(--accent-foreground);
 }
 
@@ -75,10 +77,9 @@
 
 .groupLabel {
   margin: 0;
-  padding: 0 var(--space-3);
+  padding: 0 var(--space-2);
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
-  font-weight: 500;
   color: var(--muted-foreground);
   white-space: nowrap;
 }
@@ -103,8 +104,8 @@
 .list {
   display: flex;
   flex-direction: column;
-  /* 2px between rows: below the spacing scale on purpose, as on Tag. */
-  gap: 2px;
+  /* Rows sit flush, as in the Claude apps: a fill marks a row, not a gap. */
+  gap: 0;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -113,18 +114,20 @@
 .item {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-2);
   box-sizing: border-box;
-  min-block-size: var(--space-10);
-  padding: 0 var(--space-3);
+  min-block-size: var(--control-md);
+  padding: 0 var(--space-2);
   border-radius: var(--radius-control);
-  color: var(--foreground);
+  /* A step quieter than body text, as in the Claude apps; hover and the
+     current item come up to --foreground. */
+  color: var(--subtle-foreground);
   text-decoration: none;
   white-space: nowrap;
   cursor: var(--cursor-link);
 }
 .item:hover {
-  background: var(--accent);
+  background: var(--hover-overlay);
   color: var(--accent-foreground);
 }
 .item:focus-visible,
@@ -133,15 +136,12 @@
   outline-offset: -2px;
 }
 
-/* The current page, as a selected pill tab: lifted onto --background
-   with a --control-border edge, and medium weight. A fill alone would be
-   one grey step from the sidebar's own surface. */
+/* The current page: a --selected fill, a step past the hover fill so the
+   two never read alike, plus medium weight and aria-current. No accent and
+   no edge: selection is a place in the list, not a call to action. */
 .current,
 .current:hover {
-  box-shadow:
-    inset 0 0 0 1px var(--control-border),
-    var(--shadow-xs);
-  background: var(--background);
+  background: var(--selected);
   color: var(--foreground);
   font-weight: 500;
 }
@@ -149,7 +149,7 @@
 .icon {
   display: inline-flex;
   flex-shrink: 0;
-  font-size: calc(var(--space-4) + var(--space-1));
+  font-size: var(--space-4);
   color: var(--muted-foreground);
 }
 .current .icon,
