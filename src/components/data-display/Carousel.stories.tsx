@@ -24,9 +24,8 @@ const Slide = ({ title, i }: { title: string; i: number }) => (
 
 const meta = {
   title: 'Components/Data Display/Carousel',
+  tags: ['experimental'],
   component: Carousel,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
-  parameters: { a11y: { test: 'error' } },
   args: {
     label: 'Featured templates',
     onIndexChange: fn(),

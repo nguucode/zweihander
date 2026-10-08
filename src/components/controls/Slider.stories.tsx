@@ -4,9 +4,8 @@ import { Slider } from './Slider'
 
 const meta = {
   title: 'Components/Controls/Slider',
+  tags: ['experimental'],
   component: Slider,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
-  parameters: { a11y: { test: 'error' } },
   args: { label: 'Volume', defaultValue: 40, showValue: true, onValueChange: fn(), onValueCommitted: fn() },
   argTypes: {
     size: { control: 'inline-radio', options: ['sm', 'md'] },

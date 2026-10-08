@@ -88,8 +88,9 @@
 }
 
 /* On solid the silhouette is always white, for one consistent look across
-   hues. A deliberate a11y trade-off: on the warm hues (orange to lime) it
-   falls under the 3:1 a graphic needs. Acceptable because the silhouette
+   hues. A deliberate a11y trade-off: it falls under the 3:1 a graphic needs
+   on the warm hues (orange to lime) in light mode, and on most hues in dark
+   mode, where the fill is the 400 step. Acceptable because the silhouette
    carries no information: the name is in imageAlt or next to the avatar.
    Initials keep the measured label. */
 .solid .silhouette {

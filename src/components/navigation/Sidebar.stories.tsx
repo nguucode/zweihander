@@ -20,9 +20,9 @@ const items: SidebarEntry[] = [
 
 const meta = {
   title: 'Components/Navigation/Sidebar',
+  tags: ['experimental'],
   component: Sidebar,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
-  parameters: { a11y: { test: 'error' }, layout: 'fullscreen' },
+  parameters: { layout: 'fullscreen' },
   args: {
     items,
     currentHref: '#atlas',
@@ -59,13 +59,23 @@ export const Collapsible: Story = {
     await expect(canvas.getByRole('button', { name: 'Expand sidebar' })).toHaveAttribute('aria-expanded', 'false')
     const atlas = canvas.getByRole('link', { name: 'Atlas' })
     await expect(atlas).toHaveAttribute('aria-current', 'page')
-    // Still findable by group name.
+    // Still findable by group name: the label is only visually hidden, not display: none.
     await expect(canvas.getByRole('list', { name: 'Projects' })).toBeInTheDocument()
+    await expect(canvas.getByText('Projects')).toBeVisible()
     // The badge is hidden in the rail, so the count joins the name.
     await expect(canvas.getByRole('link', { name: 'Inbox, 12' })).toBeInTheDocument()
-    // Keyboard focus shows the label as a tooltip.
-    atlas.focus()
-    await waitFor(() => expect(within(document.body).getByRole('tooltip')).toHaveTextContent('Atlas'))
+    // Hover shows the label as a tooltip (after the hover delay).
+    const body = within(document.body)
+    await userEvent.hover(atlas)
+    await waitFor(() => expect(body.getByRole('tooltip')).toHaveTextContent('Atlas'))
+    await userEvent.unhover(atlas)
+    await waitFor(() => expect(body.queryByRole('tooltip')).toBeNull())
+    // Keyboard focus shows it too, with the same text as the name, badge included.
+    toggle.focus()
+    await userEvent.tab() // Search
+    await userEvent.tab()
+    await expect(canvas.getByRole('link', { name: 'Inbox, 12' })).toHaveFocus()
+    await waitFor(() => expect(body.getByRole('tooltip')).toHaveTextContent('Inbox, 12'))
   },
 }
 

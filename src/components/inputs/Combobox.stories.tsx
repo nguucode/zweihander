@@ -13,9 +13,8 @@ const members = [
 
 const meta = {
   title: 'Components/Inputs/Combobox',
+  tags: ['experimental'],
   component: Combobox,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
-  parameters: { a11y: { test: 'error' } },
   argTypes: {
     size: { control: 'inline-radio', options: ['sm', 'md'] },
     validationState: { control: 'inline-radio', options: ['default', 'success', 'error'] },

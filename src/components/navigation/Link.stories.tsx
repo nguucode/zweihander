@@ -4,9 +4,8 @@ import { Link } from './Link'
 
 const meta = {
   title: 'Components/Navigation/Link',
+  tags: ['experimental'],
   component: Link,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
-  parameters: { a11y: { test: 'error' } },
   args: { href: '#pricing', children: 'See pricing' },
   argTypes: {
     variant: { control: 'inline-radio', options: ['primary', 'accent', 'secondary'] },

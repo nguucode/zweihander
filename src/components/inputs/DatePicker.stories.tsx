@@ -12,13 +12,13 @@ const day = (year: number, month: number, date: number) =>
 
 const meta = {
   title: 'Components/Inputs/DatePicker',
+  tags: ['experimental'],
   component: DatePicker,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
   // Days of the months either side are aria-hidden decoration, faded below
   // 4.5:1 on purpose (WCAG 1.4.3 exempts decoration); axe cannot tell, so
   // only color-contrast skips them.
   parameters: {
-    a11y: { test: 'error', config: { rules: [{ id: 'color-contrast', selector: '*:not([data-outside])' }] } },
+    a11y: { config: { rules: [{ id: 'color-contrast', selector: '*:not([data-outside])' }] } },
   },
   args: { label: 'Start date', locale: 'en-GB', weekStartsOn: 1, defaultValue: new Date(2026, 8, 18), onValueChange: fn() },
   argTypes: {

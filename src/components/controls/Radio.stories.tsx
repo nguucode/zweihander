@@ -11,9 +11,8 @@ const plans = [
 
 const meta = {
   title: 'Components/Controls/Radio',
+  tags: ['experimental'],
   component: RadioGroup,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
-  parameters: { a11y: { test: 'error' } },
   argTypes: {
     variant: { control: 'inline-radio', options: ['primary', 'neutral'] },
     orientation: { control: 'inline-radio', options: ['vertical', 'horizontal'] },

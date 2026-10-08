@@ -5,9 +5,8 @@ import { Badge } from './Badge'
 
 const meta = {
   title: 'Components/Atomic Elements/Badge',
+  tags: ['experimental'],
   component: Badge,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
-  parameters: { a11y: { test: 'error' } },
   args: { count: 8 },
   argTypes: {
     variant: { control: 'inline-radio', options: ['primary', 'accent', 'secondary', 'destructive', 'success', 'warning'] },

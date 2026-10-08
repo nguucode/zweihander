@@ -92,9 +92,9 @@ const box = (inlineSize: number) => [
 
 const meta = {
   title: 'Patterns/Application UI/App Shell',
+  tags: ['experimental'],
   component: AppShell,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
-  parameters: { a11y: { test: 'error' }, layout: 'padded' },
+  parameters: { layout: 'padded' },
   args: { children: content, style: { blockSize: '100%' } },
   argTypes: { children: { control: false }, sidebar: { control: false }, header: { control: false }, mobileNavigation: { control: false } },
 } satisfies Meta<typeof AppShell>

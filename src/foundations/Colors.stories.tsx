@@ -89,6 +89,8 @@ export const Surfaces: Story = {
 }
 
 export const SubtleSurfaces: Story = {
+  // Token specimen, not UI: the second label shows the token name in the swatch's own muted tone on purpose.
+  parameters: { a11y: { test: 'off' } },
   name: 'Subtle surfaces',
   render: () => (
     <BandSwatches
@@ -101,6 +103,8 @@ export const SubtleSurfaces: Story = {
 }
 
 export const SolidActions: Story = {
+  // Token specimen, not UI: the second label shows the token name in the swatch's own muted tone on purpose.
+  parameters: { a11y: { test: 'off' } },
   name: 'Solid actions',
   render: () => (
     <BandSwatches

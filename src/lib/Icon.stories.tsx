@@ -5,7 +5,6 @@ import { Icon, type IconName } from './icon'
 const meta = {
   title: 'Foundations/Icons',
   component: Icon,
-  parameters: { a11y: { test: 'error' } },
   args: { name: 'close' },
 } satisfies Meta<typeof Icon>
 

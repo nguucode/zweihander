@@ -52,6 +52,8 @@ Behaviour from Base UI's [Tabs](https://base-ui.com/react/components/tabs).
 
 ## Usage
 
+Name the list with `aria-label` when no heading does.
+
 <Canvas of={TabsStories.Pills} />
 
 <Canvas of={TabsStories.FullWidth} />
@@ -66,7 +68,6 @@ Behaviour from Base UI's [Tabs](https://base-ui.com/react/components/tabs).
 
 - `role="tablist"` of `role="tab"` buttons with `aria-selected` and
   `aria-controls`; each panel is a `role="tabpanel"` labelled by its tab.
-  Name the list with `aria-label` when no heading does.
 - One tab stop: Tab moves into the list and out to the panel; arrows
   move between tabs (Up and Down when vertical), Home and End jump to
   the ends.

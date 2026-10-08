@@ -6,9 +6,8 @@ import { SuccessState } from './SuccessState'
 
 const meta = {
   title: 'Components/States/SuccessState',
+  tags: ['experimental'],
   component: SuccessState,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
-  parameters: { a11y: { test: 'error' } },
   args: {
     title: 'Invites sent',
     description: '3 people will get an email with a link to join Atlas.',

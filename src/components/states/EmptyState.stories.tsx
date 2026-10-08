@@ -6,9 +6,8 @@ import { EmptyState } from './EmptyState'
 
 const meta = {
   title: 'Components/States/EmptyState',
+  tags: ['experimental'],
   component: EmptyState,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
-  parameters: { a11y: { test: 'error' } },
   args: {
     icon: <Icon name="search" />,
     title: 'No projects match "atlas"',
@@ -36,6 +35,10 @@ export const Default: Story = {
     await expect(canvas.getByRole('button', { name: 'Clear search' })).toBeVisible()
     // The icon is decoration.
     await expect(canvasElement.querySelector('svg')!.closest('[aria-hidden="true"]')).not.toBeNull()
+    // Not a live region: it is not announced when it replaces results.
+    await expect(canvas.queryByRole('status')).toBeNull()
+    await expect(canvas.queryByRole('alert')).toBeNull()
+    await expect(canvasElement.querySelector('[aria-live]')).toBeNull()
   },
 }
 

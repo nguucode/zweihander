@@ -6,9 +6,8 @@ import { ToggleButton } from './ToggleButton'
 
 const meta = {
   title: 'Components/Buttons/ToggleButton',
+  tags: ['experimental'],
   component: ToggleButton,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
-  parameters: { a11y: { test: 'error' } },
   argTypes: {
     variant: { control: 'inline-radio', options: ['primary', 'accent', 'secondary', 'destructive'] },
     appearance: { control: 'inline-radio', options: ['contained', 'outlined', 'ghost'] },

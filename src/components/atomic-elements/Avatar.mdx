@@ -58,6 +58,9 @@ Every other `<span>` attribute passes through to the container.
 
 <Canvas of={AvatarStories.Sizes} />
 
+Without `imageAlt` the avatar is decorative (see Accessibility). That is
+right when the person's name is already printed next to it; announcing it
+twice is noise.
 
 ### Colour
 
@@ -74,11 +77,10 @@ loads or where the image is transparent.
 - `imageAlt` names the **whole avatar**, not just the image, so the
   image, the initials and the silhouette all announce the same person.
   The inner `<img>` has `alt=""`.
-- Without `imageAlt` the avatar is **decorative** and hidden. That is
-  right when the person's name is already printed next to it; announcing
-  it twice is noise.
-- Initials are uppercased with CSS, so screen readers get the letters as
-  passed.
+- Without `imageAlt` the avatar is **decorative** and hidden.
+- Initials are never read out: with `imageAlt` the avatar's name replaces
+  them, without it the avatar is hidden. They are uppercased with CSS, so
+  the text keeps the letters as passed.
 - Initials meet 4.5:1 in every colour and variant. The hue pairs are
   measured by the token build, which fails if a ramp edit breaks one;
   neutral solid is gray 600 under gray 50, 6.5:1 or more on every gray
@@ -86,6 +88,7 @@ loads or where the image is transparent.
 - On `subtle` the silhouette uses the initials colour (neutral uses
   `--muted-foreground`), past the 3:1 a graphic needs.
 - On `solid` the silhouette is **always white**, by choice: one look
-  across hues. On the warm hues (orange to lime) that is under 3:1. It
-  is accepted because the silhouette carries no information; the name
+  across hues. In light mode that is under 3:1 on the warm hues (orange
+  to lime); in dark mode, where the fill is the lighter 400 step, it is
+  under 3:1 on most hues. It is accepted because the silhouette carries no information; the name
   is in `imageAlt` or printed beside the avatar.

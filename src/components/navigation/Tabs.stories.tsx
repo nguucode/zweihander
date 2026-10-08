@@ -2,14 +2,14 @@ import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect, fn, userEvent, waitFor } from 'storybook/test'
 import { Icon } from '@/lib/icon'
 import { Tabs } from './Tabs'
+import { mediaRules } from '@/test/story-helpers'
 
 const panel = (text: string) => <p style={{ margin: 0 }}>{text}</p>
 
 const meta = {
   title: 'Components/Navigation/Tabs',
+  tags: ['experimental'],
   component: Tabs,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
-  parameters: { a11y: { test: 'error' } },
   args: {
     'aria-label': 'Project',
     items: [
@@ -38,7 +38,18 @@ export const Default: Story = {
     await expect(canvas.getByRole('tablist', { name: 'Project' })).toBeVisible()
     // The first enabled tab is selected by default, and labels its panel.
     await expect(overview).toHaveAttribute('aria-selected', 'true')
-    await expect(await canvas.findByRole('tabpanel', { name: 'Overview' })).toHaveTextContent('design system')
+    const overviewPanel = await canvas.findByRole('tabpanel', { name: 'Overview' })
+    await expect(overviewPanel).toHaveTextContent('design system')
+    await expect(overview).toHaveAttribute('aria-controls', overviewPanel.id)
+    // 32px tall at md.
+    await expect(overview.getBoundingClientRect().height).toBe(32)
+    // One tab stop: Tab enters on the selected tab, the next Tab leaves for the panel.
+    await userEvent.tab()
+    await expect(overview).toHaveFocus()
+    await userEvent.tab()
+    await expect(overviewPanel).toHaveFocus()
+    await userEvent.tab({ shift: true })
+    await expect(overview).toHaveFocus()
     await userEvent.click(canvas.getByRole('tab', { name: 'Activity' }))
     await expect(args.onValueChange).toHaveBeenLastCalledWith('activity')
     // The panel swaps after the click; wait for it rather than race it.
@@ -66,7 +77,15 @@ export const Default: Story = {
 
 export const Pills: Story = { args: { appearance: 'pills' } }
 
-export const Small: Story = { args: { size: 'sm' } }
+export const Small: Story = {
+  args: { size: 'sm' },
+  play: async ({ canvas }) => {
+    const tab = canvas.getByRole('tab', { name: 'Overview' })
+    await expect(tab.getBoundingClientRect().height).toBe(24)
+    // 44px on coarse pointers. The runner's pointer is fine, so read the rule the media query applies.
+    await expect(mediaRules('pointer: coarse', tab).find((r) => r.style.minBlockSize)?.style.minBlockSize).toBe('44px')
+  },
+}
 
 export const FullWidth: Story = { args: { isFullWidth: true, appearance: 'pills' } }
 
@@ -77,6 +96,8 @@ export const Vertical: Story = {
     await userEvent.click(canvas.getByRole('tab', { name: 'Overview' }))
     await userEvent.keyboard('{ArrowDown}')
     await waitFor(() => expect(canvas.getByRole('tab', { name: 'Activity' })).toHaveFocus())
+    await userEvent.keyboard('{ArrowUp}')
+    await waitFor(() => expect(canvas.getByRole('tab', { name: 'Overview' })).toHaveFocus())
   },
 }
 

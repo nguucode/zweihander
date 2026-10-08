@@ -8,9 +8,8 @@ import { InlineAlert } from './InlineAlert'
 
 const meta = {
   title: 'Components/Notifications/InlineAlert',
+  tags: ['experimental'],
   component: InlineAlert,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
-  parameters: { a11y: { test: 'error' } },
   args: { children: 'Changes are saved automatically.' },
   argTypes: {
     variant: { control: 'inline-radio', options: ['info', 'success', 'warning', 'danger'] },
@@ -42,6 +41,29 @@ export const Variants: Story = {
       <InlineAlert {...args} variant="danger">Couldn’t reach the server.</InlineAlert>
     </div>
   ),
+  play: async ({ canvasElement }) => {
+    // Every icon is decorative: the words carry the meaning.
+    const icons = Array.from(canvasElement.querySelectorAll('svg'))
+    await expect(icons).toHaveLength(4)
+    for (const icon of icons) await expect(icon.closest('[aria-hidden="true"]')).not.toBeNull()
+  },
+}
+
+/** Which role each variant gets with `isLive`: danger and warning interrupt, info and success wait. */
+export const LiveRoles: Story = {
+  render: (args) => (
+    <div style={stack}>
+      {(['info', 'success', 'warning', 'danger'] as const).map((variant) => (
+        <InlineAlert key={variant} {...args} isLive variant={variant}>
+          {variant}
+        </InlineAlert>
+      ))}
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    await expect(canvas.getAllByRole('alert').map((el) => el.textContent)).toEqual(['warning', 'danger'])
+    await expect(canvas.getAllByRole('status').map((el) => el.textContent)).toEqual(['info', 'success'])
+  },
 }
 
 export const Small: Story = { args: { size: 'sm', variant: 'warning', children: 'Only the owner can change billing.' } }

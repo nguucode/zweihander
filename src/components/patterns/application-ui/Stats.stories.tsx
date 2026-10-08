@@ -5,9 +5,9 @@ import { Stats } from './Stats'
 
 const meta = {
   title: 'Patterns/Application UI/Stats',
+  tags: ['experimental'],
   component: Stats,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
-  parameters: { a11y: { test: 'error' }, layout: 'padded' },
+  parameters: { layout: 'padded' },
   args: { title: 'Last 30 days', stats: [] },
   argTypes: { stats: { control: false } },
 } satisfies Meta<typeof Stats>

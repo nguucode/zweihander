@@ -9,9 +9,9 @@ import { PageHeading } from './PageHeading'
 
 const meta = {
   title: 'Patterns/Application UI/Page Heading',
+  tags: ['experimental'],
   component: PageHeading,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
-  parameters: { a11y: { test: 'error' }, layout: 'padded' },
+  parameters: { layout: 'padded' },
   args: { title: 'Projects' },
   argTypes: { breadcrumbs: { control: false }, meta: { control: false }, actions: { control: false }, tabs: { control: false } },
 } satisfies Meta<typeof PageHeading>

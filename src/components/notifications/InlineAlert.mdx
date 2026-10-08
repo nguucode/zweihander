@@ -60,10 +60,12 @@ For an error on a single field, use the field's own `validationState`
 and `helperText`: it is tied to the field with `aria-describedby`. Inline
 Alert is for messages about a group of fields or a whole form.
 
+The icon is `aria-hidden`: the words have to carry the meaning.
+
 ## Accessibility
 
 - A plain `<div>` by default, read in order with the page.
 - `isLive` for a message that appears in response to something (a failed
   submit): `danger` and `warning` become `role="alert"` and are read at
   once, `info` and `success` become `role="status"` and wait.
-- The icon is `aria-hidden`: the words have to carry the meaning.
+- The icon is `aria-hidden`.

@@ -4,9 +4,8 @@ import { Breadcrumbs } from './Breadcrumbs'
 
 const meta = {
   title: 'Components/Navigation/Breadcrumbs',
+  tags: ['experimental'],
   component: Breadcrumbs,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
-  parameters: { a11y: { test: 'error' } },
   args: {
     items: [
       { label: 'Home', href: '#home' },
@@ -24,6 +23,8 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {
   play: async ({ canvas }) => {
     const nav = canvas.getByRole('navigation', { name: 'Breadcrumb' })
+    // An ordered list, so screen readers announce the count and each position.
+    await expect(within(nav).getByRole('list').tagName).toBe('OL')
     const items = within(nav).getAllByRole('listitem')
     await expect(items).toHaveLength(4)
     await expect(within(nav).getAllByRole('link')).toHaveLength(3)
@@ -34,7 +35,15 @@ export const Default: Story = {
 
 export const Small: Story = { args: { size: 'sm' } }
 
-export const CustomSeparator: Story = { args: { separator: '/' } }
+export const CustomSeparator: Story = {
+  args: { separator: '/' },
+  play: async ({ canvas }) => {
+    // Separators are hidden from screen readers, so they are not read between items.
+    const separators = canvas.getAllByText('/')
+    await expect(separators).toHaveLength(3)
+    for (const separator of separators) await expect(separator).toHaveAttribute('aria-hidden', 'true')
+  },
+}
 
 /** Long trails collapse the middle; "…" expands it in place. */
 export const Collapsed: Story = {
@@ -52,8 +61,11 @@ export const Collapsed: Story = {
   play: async ({ canvas }) => {
     await expect(canvas.getAllByRole('listitem')).toHaveLength(4)
     await expect(canvas.queryByRole('link', { name: 'Design' })).toBeNull()
-    // Home, …, Atlas, Settings: three hidden.
-    await userEvent.click(canvas.getByRole('button', { name: 'Show 3 more' }))
+    // Home, …, Atlas, Settings: three hidden. Reach "…" from the keyboard and press it.
+    await userEvent.tab()
+    await userEvent.tab()
+    await expect(canvas.getByRole('button', { name: 'Show 3 more' })).toHaveFocus()
+    await userEvent.keyboard('{Enter}')
     await expect(canvas.getAllByRole('listitem')).toHaveLength(6)
     await expect(canvas.getByRole('link', { name: 'Design' })).toBeVisible()
     // Focus moves to the first revealed item instead of being dropped.

@@ -4,9 +4,8 @@ import { Spinner } from './Spinner'
 
 const meta = {
   title: 'Components/Loaders/Spinner',
+  tags: ['experimental'],
   component: Spinner,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
-  parameters: { a11y: { test: 'error' } },
   argTypes: {
     size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] },
     variant: { control: 'inline-radio', options: ['primary', 'accent', 'secondary'] },

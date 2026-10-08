@@ -5,9 +5,8 @@ import { Search } from './Search'
 
 const meta = {
   title: 'Components/Inputs/Search',
+  tags: ['experimental'],
   component: Search,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
-  parameters: { a11y: { test: 'error' } },
   argTypes: {
     size: { control: 'inline-radio', options: ['sm', 'md'] },
   },

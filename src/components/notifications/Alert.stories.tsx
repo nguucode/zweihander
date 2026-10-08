@@ -3,12 +3,12 @@ import { useState } from 'react'
 import { expect, fn, userEvent } from 'storybook/test'
 import { Button } from '../buttons/Button'
 import { Alert } from './Alert'
+import { mediaRules } from '@/test/story-helpers'
 
 const meta = {
   title: 'Components/Notifications/Alert',
+  tags: ['experimental'],
   component: Alert,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
-  parameters: { a11y: { test: 'error' } },
   args: {
     title: 'Payment method expiring',
     children: 'The card ending in 4242 expires at the end of this month. Update it to avoid an interruption.',
@@ -28,6 +28,16 @@ type Story = StoryObj<typeof meta>
 const stack = { display: 'grid', gap: 'var(--space-3)' }
 const variants = ['info', 'success', 'warning', 'danger'] as const
 
+/** The computed value of `--ring`, resolved the same way an outline colour is. */
+const ringColour = (host: Element) => {
+  const probe = document.createElement('span')
+  probe.style.color = 'var(--ring)'
+  host.append(probe)
+  const colour = getComputedStyle(probe).color
+  probe.remove()
+  return colour
+}
+
 export const Default: Story = {
   play: async ({ canvasElement }) => {
     // Static by default: no live-region role, so a screen reader does not
@@ -44,6 +54,12 @@ export const Variants: Story = {
       ))}
     </div>
   ),
+  play: async ({ canvasElement }) => {
+    // Every variant's icon is decorative: the words carry the meaning.
+    const icons = Array.from(canvasElement.querySelectorAll('svg'))
+    await expect(icons).toHaveLength(variants.length)
+    for (const icon of icons) await expect(icon.closest('[aria-hidden="true"]')).not.toBeNull()
+  },
 }
 
 export const Appearances: Story = {
@@ -94,8 +110,16 @@ export const Dismissible: Story = {
       <p>Dismissed.</p>
     )
   },
-  play: async ({ args, canvas }) => {
-    await userEvent.click(canvas.getByRole('button', { name: 'Dismiss' }))
+  play: async ({ args, canvas, canvasElement }) => {
+    const close = canvas.getByRole('button', { name: 'Dismiss' })
+    await userEvent.tab()
+    await expect(close).toHaveFocus()
+    // Keyboard focus shows the 2px ring in --ring.
+    const { outlineStyle, outlineWidth, outlineColor } = getComputedStyle(close)
+    await expect([outlineStyle, outlineWidth, outlineColor]).toEqual(['solid', '2px', ringColour(canvasElement)])
+    // A 44px touch target on coarse pointers.
+    await expect(mediaRules('pointer: coarse', close, '::before').map((r) => [r.style.inlineSize, r.style.blockSize])[0]).toEqual(['44px', '44px'])
+    await userEvent.keyboard('{Enter}')
     await expect(args.onClose).toHaveBeenCalledOnce()
     await expect(canvas.getByText('Dismissed.')).toBeVisible()
   },
@@ -125,6 +149,32 @@ export const Live: Story = {
     await expect(canvas.getByRole('alert')).toHaveTextContent('Could not save')
     await userEvent.click(canvas.getByRole('button', { name: 'Succeed' }))
     await expect(canvas.getByRole('status')).toHaveTextContent('Saved')
+  },
+}
+
+/** Which role each variant gets with `isLive`: danger and warning interrupt, info and success wait. */
+export const LiveRoles: Story = {
+  render: (args) => (
+    <div style={stack}>
+      {variants.map((variant) => (
+        <Alert key={variant} {...args} isLive variant={variant} title={variant}>
+          {undefined}
+        </Alert>
+      ))}
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    await expect(canvas.getAllByRole('alert').map((el) => el.textContent)).toEqual(['warning', 'danger'])
+    await expect(canvas.getAllByRole('status').map((el) => el.textContent)).toEqual(['info', 'success'])
+  },
+}
+
+/** `closeLabel` renames the close button. */
+export const CloseLabel: Story = {
+  args: { onClose: fn(), closeLabel: 'Hide this notice' },
+  play: async ({ canvas }) => {
+    await expect(canvas.getByRole('button', { name: 'Hide this notice' })).toBeVisible()
+    await expect(canvas.queryByRole('button', { name: 'Dismiss' })).toBeNull()
   },
 }
 

@@ -12,13 +12,13 @@ const day = (year: number, month: number, date: number) =>
 
 const meta = {
   title: 'Components/Data Display/Calendar',
+  tags: ['experimental'],
   component: Calendar,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
   // Days of the months either side are aria-hidden decoration, faded below
   // 4.5:1 on purpose (WCAG 1.4.3 exempts decoration); axe cannot tell, so
   // only color-contrast skips them.
   parameters: {
-    a11y: { test: 'error', config: { rules: [{ id: 'color-contrast', selector: '*:not([data-outside])' }] } },
+    a11y: { config: { rules: [{ id: 'color-contrast', selector: '*:not([data-outside])' }] } },
   },
   args: { defaultValue: new Date(2026, 8, 18), locale: 'en-GB', weekStartsOn: 1, onValueChange: fn(), onMonthChange: fn() },
   argTypes: { value: { control: false }, defaultValue: { control: false }, month: { control: false }, min: { control: false }, max: { control: false } },

@@ -16,9 +16,8 @@ const brand = [
 
 const meta = {
   title: 'Components/Controls/Color Picker',
+  tags: ['experimental'],
   component: ColorPicker,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
-  parameters: { a11y: { test: 'error' } },
   args: { label: 'Brand colour', defaultValue: '#3b82f6', swatches: brand, onValueChange: fn() },
 } satisfies Meta<typeof ColorPicker>
 

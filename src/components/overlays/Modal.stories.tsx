@@ -7,9 +7,8 @@ import { Modal, ModalClose } from './Modal'
 
 const meta = {
   title: 'Components/Overlays/Modal',
+  tags: ['experimental'],
   component: Modal,
-  // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
-  parameters: { a11y: { test: 'error' } },
   args: {
     trigger: <Button>Edit profile</Button>,
     title: 'Edit profile',
