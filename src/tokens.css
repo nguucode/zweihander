@@ -364,6 +364,7 @@
   --destructive-foreground: oklch(98.5% 0 0);
   --border: var(--gray-200);
   --input: var(--gray-200);
+  --field-border: var(--gray-300);
   --control-border: var(--gray-500);
   --ring: var(--accent-ring-light);
   --primary-text: var(--accent-text-light);
@@ -420,6 +421,7 @@
   --destructive-foreground: oklch(20.5% 0 0);
   --border: oklch(100% 0 0 / 10%);
   --input: oklch(100% 0 0 / 15%);
+  --field-border: oklch(100% 0 0 / 18%);
   --control-border: var(--gray-400);
   --ring: var(--accent-ring-dark);
   --primary-text: var(--accent-text-dark);
@@ -483,6 +485,7 @@
   --selected: var(--use-light, var(--gray-200)) var(--use-dark, oklch(100% 0 0 / 10%));
   --border: var(--use-light, var(--gray-200)) var(--use-dark, oklch(100% 0 0 / 10%));
   --input: var(--use-light, var(--gray-200)) var(--use-dark, oklch(100% 0 0 / 15%));
+  --field-border: var(--use-light, var(--gray-300)) var(--use-dark, oklch(100% 0 0 / 18%));
   --control-border: var(--use-light, var(--gray-500)) var(--use-dark, var(--gray-400));
 }
 

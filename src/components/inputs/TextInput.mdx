@@ -70,9 +70,12 @@ inside something else that already draws the edge.
   description (`aria-describedby`); the error state sets `aria-invalid`.
   Do not rely on the placeholder as a label: it disappears as soon as
   anyone types.
-- **The edge is `--control-border`, 3:1 on the page**, because WCAG
-  1.4.11 applies to a text field's boundary. The lighter `--input` token
-  is about 1.3:1.
+- **The edge is `--field-border`, about 1.5:1 — a deliberate exception
+  to WCAG 1.4.11** (approved 2026-10-08), for the light hairline of the
+  Claude apps. The outlined field is a white `--card` box with a faint
+  drop on the off-white page, and the label, placeholder and focus ring
+  mark it too. Low-vision users may still find the box hard to see; if
+  your audience needs 3:1, set `--field-border: var(--control-border)`.
 - Focus draws a 2px ring around the whole field (in the danger colour
   when invalid), on click as well as keyboard, since that is where typing
   goes.

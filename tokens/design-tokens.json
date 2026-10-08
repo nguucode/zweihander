@@ -1296,6 +1296,10 @@
         "$type": "color",
         "$value": "{primitive.gray.taupe.200}"
       },
+      "field-border": {
+        "$type": "color",
+        "$value": "{primitive.gray.taupe.300}"
+      },
       "control-border": {
         "$type": "color",
         "$value": "{primitive.gray.taupe.500}"
@@ -1461,6 +1465,10 @@
       "input": {
         "$type": "color",
         "$value": "oklch(100% 0 0 / 15%)"
+      },
+      "field-border": {
+        "$type": "color",
+        "$value": "oklch(100% 0 0 / 18%)"
       },
       "control-border": {
         "$type": "color",
