@@ -14,7 +14,6 @@ import {
   boxClass,
   focusControl,
   inputStyles,
-  type InputAppearance,
   type InputSize,
   type ValidationState,
 } from './InputField'
@@ -25,7 +24,6 @@ export interface TextareaProps extends Omit<ComponentProps<'textarea'>, 'size'> 
   helperText?: ReactNode
   validationState?: ValidationState
   size?: InputSize
-  appearance?: InputAppearance
   isFullWidth?: boolean
   /** Which way the user can drag to resize. Ignored with `hasAutoSize`. */
   resize?: 'none' | 'both' | 'vertical' | 'horizontal'
@@ -42,7 +40,6 @@ export function Textarea({
   helperText,
   validationState,
   size = 'md',
-  appearance = 'outlined',
   isFullWidth,
   resize = 'vertical',
   hasAutoSize = false,
@@ -80,7 +77,7 @@ export function Textarea({
       isFullWidth={isFullWidth}
       className={className}
     >
-      <span className={cn(boxClass(size, appearance), styles.multiline, styles[`pad-${size}`])} onMouseDown={focusControl}>
+      <span className={cn(boxClass(size, 'outlined'), styles.multiline, styles[`pad-${size}`])} onMouseDown={focusControl}>
         <Field.Control
           render={
             <textarea
@@ -102,7 +99,7 @@ export function Textarea({
             {
               ...style,
               resize: hasAutoSize ? 'none' : resize,
-              ...(maxRows && { maxBlockSize: `calc(${maxRows} * 1lh)` }),
+              ...(maxRows && { maxBlockSize: `calc(${maxRows} * 1lh + 2 * var(--pad-block))` }),
             } as CSSProperties
           }
         />
