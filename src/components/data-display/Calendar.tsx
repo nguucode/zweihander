@@ -1,4 +1,4 @@
-import { useEffect, useId, useMemo, useRef, useState, type KeyboardEvent } from 'react'
+import { useEffect, useMemo, useRef, useState, type KeyboardEvent } from 'react'
 import { Icon } from '@/lib/icon'
 import { cn } from '@/lib/utils'
 import styles from './Calendar.module.css'
@@ -35,6 +35,12 @@ export function firstDayOfWeek(locale?: string) {
   return 1
 }
 
+/** A span of days; `end` is null while only the first end is picked. */
+export interface DateRange {
+  start: Date | null
+  end: Date | null
+}
+
 export interface CalendarProps {
   value?: Date | null
   defaultValue?: Date | null
@@ -47,6 +53,8 @@ export interface CalendarProps {
   max?: Date | null
   /** Rules out single dates, e.g. weekends or booked days. */
   isDateDisabled?: (date: Date) => boolean
+  /** Shows a span instead of `value`: both ends selected, the days between banded. Clicks still report one day; the owner decides the span. */
+  range?: DateRange | null
   /** BCP 47 tag, e.g. `vi-VN`. Defaults to the browser's. */
   locale?: string
   /** 0 = Sunday … 6 = Saturday. Defaults to the locale's. */
@@ -66,15 +74,16 @@ export function Calendar({
   min,
   max,
   isDateDisabled,
+  range,
   locale,
   weekStartsOn,
   autoFocus = false,
   className,
 }: CalendarProps) {
-  const id = useId()
   const today = startOfDay(new Date())
   const [valueState, setValueState] = useState(defaultValue)
-  const selected = value !== undefined ? value : valueState
+  const selected = range ? range.start : value !== undefined ? value : valueState
+  const rangeEnd = range?.end ?? null
   const [monthState, setMonthState] = useState(() => startOfMonth(defaultMonth ?? selected ?? today))
   const month = monthProp ? startOfMonth(monthProp) : monthState
   // The day with the roving tab stop, and where the keyboard moves from.
@@ -86,7 +95,9 @@ export function Calendar({
   const fmt = useMemo(() => {
     return {
       title: new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric', calendar: 'gregory' }),
+      titleShort: new Intl.DateTimeFormat(locale, { month: 'short', year: 'numeric', calendar: 'gregory' }),
       weekday: new Intl.DateTimeFormat(locale, { weekday: 'short', calendar: 'gregory' }),
+      weekdayNarrow: new Intl.DateTimeFormat(locale, { weekday: 'narrow', calendar: 'gregory' }),
       weekdayLong: new Intl.DateTimeFormat(locale, { weekday: 'long', calendar: 'gregory' }),
       day: new Intl.DateTimeFormat(locale, { day: 'numeric', calendar: 'gregory' }),
       full: new Intl.DateTimeFormat(locale, { dateStyle: 'full', calendar: 'gregory' }),
@@ -152,12 +163,23 @@ export function Calendar({
   const start = addDays(month, -lead)
   const weeks = Array.from({ length: 6 }, (_, w) => Array.from({ length: 7 }, (_, d) => addDays(start, w * 7 + d)))
   const weekdays = weeks[0]
+  // Two letters where the short names are short ("Mon" → "Mo", "lun." →
+  // "lu"); the narrow ones where they are not ("Thứ 2" → "T2").
+  const weekdayName = (d: Date) => {
+    const short = fmt.weekday.format(d)
+    return weekdays.every((w) => fmt.weekday.format(w).length <= 4) ? short.slice(0, 2) : fmt.weekdayNarrow.format(d)
+  }
   const prevDisabled = !!min && startOfMonth(min) >= month
   const nextDisabled = !!max && startOfMonth(max) <= month
 
   return (
     <div className={cn(styles.calendar, className)}>
       <div className={styles.header}>
+        {/* Not a heading: a calendar can sit anywhere in a page's outline.
+            It announces the month as it changes. */}
+        <div className={styles.title} aria-live="polite">
+          {fmt.titleShort.format(month)}
+        </div>
         <button
           type="button"
           className={styles.nav}
@@ -167,11 +189,6 @@ export function Calendar({
         >
           <Icon name="chevron-left" className={styles.dirIcon} />
         </button>
-        {/* Not a heading: a calendar can sit anywhere in a page's outline. It
-            names the grid, and announces the month as it changes. */}
-        <div id={`${id}-title`} className={styles.title} aria-live="polite">
-          {fmt.title.format(month)}
-        </div>
         <button
           type="button"
           className={styles.nav}
@@ -182,12 +199,12 @@ export function Calendar({
           <Icon name="chevron-right" className={styles.dirIcon} />
         </button>
       </div>
-      <table ref={gridRef} role="grid" aria-labelledby={`${id}-title`} className={styles.grid} onKeyDown={onKeyDown}>
+      <table ref={gridRef} role="grid" aria-label={fmt.title.format(month)} className={styles.grid} onKeyDown={onKeyDown}>
         <thead>
           <tr>
             {weekdays.map((d) => (
               <th key={d.getDay()} scope="col" abbr={fmt.weekdayLong.format(d)} className={styles.weekday}>
-                {fmt.weekday.format(d)}
+                {weekdayName(d)}
               </th>
             ))}
           </tr>
@@ -195,32 +212,56 @@ export function Calendar({
         <tbody>
           {weeks.map((week, w) => (
             <tr key={w}>
-              {week.map((d) => {
+              {week.map((d, col) => {
                 const outside = !isSameMonth(d, month)
-                const isSelected = isSameDay(d, selected)
+                // Selection and the band stay inside the month: a day of the month
+                // either side is only there for shape, and two months side by
+                // side would otherwise both draw the days where they overlap.
+                const isSelected = !outside && (isSameDay(d, selected) || isSameDay(d, rangeEnd))
+                const between = !outside && !!selected && !!rangeEnd && d > selected && d < rangeEnd
+                const banded = !!rangeEnd && !isSameDay(selected, rangeEnd) && (isSelected || between)
                 const isDisabled = disabled(d)
                 return (
-                  <td key={d.getTime()} role="gridcell" aria-selected={isSelected || undefined} className={styles.cell}>
-                    <button
-                      type="button"
-                      tabIndex={isSameDay(d, focused) ? 0 : -1}
-                      aria-label={fmt.full.format(d)}
-                      aria-current={isSameDay(d, today) ? 'date' : undefined}
-                      aria-disabled={isDisabled || undefined}
-                      className={cn(
-                        styles.day,
-                        outside && styles.outside,
-                        isSelected && styles.selected,
-                        isSameDay(d, today) && styles.today,
-                      )}
-                      onClick={() => {
-                        if (outside && !isDisabled) setMonth(d)
-                        select(d)
-                      }}
-                      onFocus={() => setFocused(d)}
-                    >
-                      {fmt.day.format(d)}
-                    </button>
+                  <td
+                    key={d.getTime()}
+                    role="gridcell"
+                    aria-selected={isSelected || between || undefined}
+                    className={cn(
+                      styles.cell,
+                      banded && styles.inRange,
+                      banded && isSameDay(d, selected) && styles.rangeStart,
+                      banded && isSameDay(d, rangeEnd) && styles.rangeEnd,
+                      // Rounded off where a week or the month starts or ends.
+                      banded && (col === 0 || d.getDate() === 1) && styles.bandStart,
+                      banded && (col === 6 || addDays(d, 1).getDate() === 1) && styles.bandEnd,
+                    )}
+                  >
+                    {outside ? (
+                      // The months either side are shape, not content: hidden from
+                      // assistive tech, not pickable, and faded past muted. Arrow
+                      // keys still cross into them, by moving the month.
+                      <span aria-hidden="true" data-outside="" className={cn(styles.day, styles.outside)}>
+                        {fmt.day.format(d)}
+                      </span>
+                    ) : (
+                      <button
+                        type="button"
+                        tabIndex={isSameDay(d, focused) ? 0 : -1}
+                        aria-label={fmt.full.format(d)}
+                        aria-current={isSameDay(d, today) ? 'date' : undefined}
+                        aria-disabled={isDisabled || undefined}
+                        className={cn(
+                          styles.day,
+                          isSelected && styles.selected,
+                          between && styles.between,
+                          isSameDay(d, today) && styles.today,
+                        )}
+                        onClick={() => select(d)}
+                        onFocus={() => setFocused(d)}
+                      >
+                        {fmt.day.format(d)}
+                      </button>
+                    )}
                   </td>
                 )
               })}

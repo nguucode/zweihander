@@ -1131,7 +1131,7 @@
       "name": "date-picker",
       "type": "registry:component",
       "title": "Date Picker",
-      "description": "Date field that takes typed dates in the locale's order and opens a Calendar in a popover; submits yyyy-mm-dd.",
+      "description": "Date and date range fields that take typed dates in the locale's order and open a Calendar in a popover, with optional range presets; submit ISO dates.",
       "registryDependencies": [
         "https://ontheshore.biz/zweihander/r/utils.json",
         "https://ontheshore.biz/zweihander/r/tokens.json",

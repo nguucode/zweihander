@@ -20,7 +20,7 @@ The field's parts (label, box, helper), plus:
 | Part | What it is |
 | --- | --- |
 | **Input** | Typed date in the locale's numeric order: `dd/mm/yyyy` in `en-GB` and `vi-VN`, `mm/dd/yyyy` in `en-US`. |
-| **Calendar button** | Opens the calendar in a popover, aligned to the field's end. |
+| **Calendar button** | Opens the calendar in a popover, 4px under the field and aligned to its start. A click in the input opens it too. |
 
 ## Props
 
@@ -45,10 +45,15 @@ The field's parts (label, box, helper), plus:
 - **An impossible date is kept, not guessed.** `31/02/2026` stays as
   typed, the field turns to its error state and the helper shows the
   expected pattern; nothing is reported until it is a real date.
+- **A click in the input opens the calendar, and keeps focus there.**
+  Typing carries on with the month in view; the calendar button and
+  Alt+Down move focus into the calendar instead.
 - **The form gets ISO.** Whatever the display order, `name` submits
   `yyyy-mm-dd`, so the server never has to guess the locale.
 
 ## Usage
+
+<Canvas of={DatePickerStories.ClickToOpen} />
 
 <Canvas of={DatePickerStories.Typing} />
 
@@ -72,3 +77,6 @@ The field's parts (label, box, helper), plus:
   without a change.
 - The field and calendar's own labels ("Choose date", "Previous month")
   are in English, like the rest of the kit's built-in labels.
+
+For a span of days, see
+[Date Range Picker](?path=/docs/components-inputs-daterangepicker--docs).

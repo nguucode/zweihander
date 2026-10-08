@@ -1,5 +1,8 @@
 .calendar {
-  --calendar-day: var(--space-10);
+  --calendar-day: var(--space-8);
+  /* Half the gap between days. Padding on the cell, not border-spacing, so
+     a range's band runs unbroken under the gap. */
+  --calendar-gap: calc(var(--space-1) / 2);
   display: inline-flex;
   flex-direction: column;
   gap: var(--space-2);
@@ -13,11 +16,13 @@
 .header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: var(--space-2);
+  gap: var(--space-1);
 }
 
+/* The month at the start, both arrows together at the end. */
 .title {
+  flex: 1;
+  padding-inline-start: var(--space-2);
   font-weight: 600;
 }
 
@@ -53,7 +58,7 @@
 .weekday {
   inline-size: var(--calendar-day);
   block-size: var(--space-8);
-  padding: 0;
+  padding: 0 var(--calendar-gap);
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
   font-weight: 500;
@@ -62,7 +67,7 @@
 }
 
 .cell {
-  padding: 0;
+  padding: var(--calendar-gap);
   text-align: center;
 }
 
@@ -81,24 +86,38 @@
   font: inherit;
   cursor: var(--cursor-button);
 }
-.day:hover:not([aria-disabled='true'], .selected) {
+.day:hover:not([aria-disabled='true'], .selected, .outside) {
   background: var(--accent);
   color: var(--accent-foreground);
 }
 
-/* Days of the next and previous month: shown for shape, still pickable. */
+/* Days of the next and previous month: shape, not content. Faded past
+   --muted-foreground so the month reads first; no token is lighter. About
+   2:1, which WCAG allows for decoration: they are aria-hidden and not
+   pickable. */
 .outside {
-  color: var(--muted-foreground);
+  color: color-mix(in oklch, var(--muted-foreground) 50%, transparent);
+  cursor: default;
 }
 
-/* Today: a ring, so it reads without colour and never clashes with the fill
-   of a selected day. */
+/* Today: an orange disc, round where the selected day is the control's
+   shape, so the two differ by shape as well as colour. White on --orange is
+   3.4:1, under the 4.5:1 a 14px figure needs: a deliberate design choice,
+   with aria-current carrying today for assistive tech. */
 .today {
-  box-shadow: inset 0 0 0 1px var(--control-border);
+  border-radius: 50%;
+  background: var(--orange);
+  color: var(--orange-foreground);
   font-weight: 600;
 }
+.today:hover:not([aria-disabled='true'], .selected) {
+  background: var(--orange);
+  color: var(--orange-foreground);
+}
 
+/* After .today: a selected today shows as selected. */
 .selected {
+  border-radius: var(--radius-control);
   background: var(--primary);
   color: var(--primary-foreground);
   font-weight: 600;
@@ -117,7 +136,49 @@
   outline-offset: 2px;
 }
 
-/* 40px days are close to the 44px touch target; they grow on coarse pointers. */
+/* A range: the days between sit on a band as tall as a day, drawn behind
+   the buttons and across the gap between them, from the middle of the
+   first end to the middle of the last. It rounds off where a week or the
+   month starts or ends. Logical insets, so right to left needs nothing. */
+.inRange {
+  position: relative;
+}
+.inRange::before {
+  content: '';
+  position: absolute;
+  inset-block: var(--calendar-gap);
+  inset-inline: 0;
+  background: var(--accent);
+}
+.rangeStart::before {
+  inset-inline-start: 50%;
+}
+.rangeEnd::before {
+  inset-inline-end: 50%;
+}
+.bandStart:not(.rangeStart)::before {
+  inset-inline-start: var(--calendar-gap);
+  border-start-start-radius: var(--radius-control);
+  border-end-start-radius: var(--radius-control);
+}
+.bandEnd:not(.rangeEnd)::before {
+  inset-inline-end: var(--calendar-gap);
+  border-start-end-radius: var(--radius-control);
+  border-end-end-radius: var(--radius-control);
+}
+.inRange .day {
+  position: relative;
+}
+.between {
+  color: var(--accent-foreground);
+  font-weight: 500;
+}
+/* Today keeps its white figure inside a range too. */
+.between.today {
+  color: var(--orange-foreground);
+}
+
+/* 32px days are below the 44px touch target; they grow on coarse pointers. */
 @media (pointer: coarse) {
   .calendar {
     --calendar-day: 44px;
