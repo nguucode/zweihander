@@ -3,12 +3,12 @@
   --choice-control: calc(var(--space-4) + var(--space-1));
 }
 
-/* 20px box, a --control-border outline (3:1 on the page) and the page
-   colour inside. Checked and indeterminate fill with the variant. */
+/* 20px box, a --control-border outline (3:1 on the page). Checked and
+   indeterminate fill with the variant and show the mark in its label
+   colour. */
 .box {
   --checkbox-fill: var(--foreground);
   --checkbox-mark: var(--background);
-  --checkbox-paint: var(--checkbox-fill);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -25,22 +25,12 @@
   --checkbox-mark: var(--primary-foreground);
 }
 
-.box[data-checked],
-.box[data-indeterminate] {
-  border-color: var(--checkbox-paint);
-  background: var(--checkbox-paint);
+.box:is([data-checked], [data-indeterminate]) {
+  /* Transparent so the fill shows through the border and hover only has to
+     change the background. */
+  border-color: transparent;
+  background: var(--checkbox-fill);
   color: var(--checkbox-mark);
-}
-
-/* Hover. The label wraps the box, so hovering either counts. Unchecked
-   darkens the outline; checked shifts the fill toward the mark, as Button
-   does. Disabled and read-only don't react. */
-label:hover > .box:not([data-checked], [data-indeterminate], [data-invalid], [data-disabled], [data-readonly]) {
-  border-color: var(--foreground);
-}
-
-label:hover > .box:not([data-disabled], [data-readonly]) {
-  --checkbox-paint: color-mix(in oklab, var(--checkbox-fill) 88%, var(--checkbox-mark));
 }
 
 .box[data-invalid] {
@@ -49,6 +39,17 @@ label:hover > .box:not([data-disabled], [data-readonly]) {
 
 .box[data-readonly] {
   cursor: default;
+}
+
+/* Hover anywhere on the label. Unchecked darkens the outline (an error
+   outline stays red); checked nudges the fill toward the mark, as Button
+   does. */
+label:hover > .box:not([data-checked], [data-indeterminate], [data-disabled], [data-readonly], [data-invalid]) {
+  border-color: var(--foreground);
+}
+
+label:hover > .box:is([data-checked], [data-indeterminate]):not([data-disabled], [data-readonly]) {
+  background: color-mix(in oklab, var(--checkbox-fill) 88%, var(--checkbox-mark));
 }
 
 /* The mark is 16px in a 20px box: it has to read at a glance. */
