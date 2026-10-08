@@ -5,8 +5,9 @@ import * as ColorPickerStories from './ColorPicker.stories'
 
 # Color Picker
 
-Choose a colour: type its hex, pick from a set of swatches, or find it on
-a saturation/brightness area and a hue strip. Spec:
+Choose a colour: type it in any CSS format, pick from a set of swatches, find it on
+a saturation/brightness area and hue strip, or type its channels in Hex, RGB, HSL or HSB. The panel is laid out like
+Figma's colour picker. Spec:
 [uiguideline.com/components/color-picker](https://www.uiguideline.com/components/color-picker).
 Two exports: `ColorPicker`, a text field with a swatch button that opens
 the picker in a Base UI Popover, and `ColorPanel`, the picker on its own.
@@ -17,11 +18,14 @@ the picker in a Base UI Popover, and `ColorPanel`, the picker on its own.
 
 | Part | What it is |
 | --- | --- |
-| **Field** | A text field holding the hex, with the label, helper and validation of every Zweihänder field. |
+| **Field** | A text field holding the hex, with the label, helper and validation of every Zweihänder field. Reads any CSS colour. |
 | **Swatch button** | At the start of the field, filled with the current colour. Opens the panel. |
 | **Area** | Saturation left to right, brightness bottom to top, in the current hue. |
 | **Hue strip** | A slider round the colour wheel, 0 to 359 degrees. |
-| **Swatches** | Optional presets. The chosen one has a ring. |
+| **Opacity strip** | 0 to 100%, over a checkerboard. Hidden with `alpha={false}`. |
+| **Format menu** | The kit's Select (md, 32px): Hex, RGB, HSL or HSB, which channel fields follow it. |
+| **Channel fields** | One kit field box (md, 32px): the hex, or three numbers, then opacity in %. |
+| **Swatches** | Optional presets under a divider, with a black 10% inner edge (white 10% in dark). The chosen one has a ring in the brand colour (`--primary`). |
 
 ## Props
 
@@ -29,38 +33,54 @@ the picker in a Base UI Popover, and `ColorPanel`, the picker on its own.
 
 | Prop | Values | Default | |
 | --- | --- | --- | --- |
-| `value` | `#rrggbb` | – | Controlled. |
+| `value` | `#rrggbb` \| `#rrggbbaa` | – | Controlled. |
 | `defaultValue` | `#rrggbb` | `#3b82f6` | |
 | `onValueChange` | `(hex) => void` | – | On every change: typing (once committed), dragging, keys, swatches. |
+| `alpha` | boolean | `true` | Show opacity. Off, any alpha in the value is dropped and the value is always `#rrggbb`. |
+| `defaultFormat` | `'hex' \| 'rgb' \| 'hsl' \| 'hsb'` | `'hex'` | The channel fields' format on first open. |
 | `swatches` | `(string \| { value, label })[]` | – | A plain string is named by its hex; give brand colours a `label`. |
 | `label`, `helperText`, `validationState`, `size`, `appearance`, `isFullWidth`, `required`, `disabled` | | | As Text Input. `required` is set on the hex input. |
 | `name` | string | – | Submits the hex. |
 
-`ColorPanel` takes `value`, `defaultValue`, `onValueChange`, `swatches`,
-`disabled` and `className`.
+`ColorPanel` takes `value`, `defaultValue`, `onValueChange`, `alpha`,
+`defaultFormat`, `swatches`, `disabled` and `className`.
 
-`normalizeHex(text)` is exported too: it turns `#abc`, `ABC` or `#AABBCC`
-into `#aabbcc`, and anything else into `null`.
+`parseColor(text)` reads any CSS colour (`rgb(59 130 246)`, `hsl(217 91% 60% / 50%)`,
+`oklch(...)`, `rebeccapurple`) to the same hex, or `null`; the browser
+parses it, so outside one only hex is read. `normalizeHex(text)` is exported too: it turns `#abc`, `ABC` or `#AABBCC`
+into `#aabbcc`, keeps an alpha byte (`#3b82f680`, or `#abc8` as
+`#aabbcc88`) unless it is `ff`, and turns anything else into `null`.
 
 <Controls of={ColorPickerStories.Default} />
 
 ### Design notes
 
-- **Hex in, hex out.** The value is always lowercase `#rrggbb`. Typed
-  text is read on Enter or blur and accepts three or six digits, with or
-  without `#`; anything else shows "Enter a colour as #rrggbb" and keeps
-  the last good value.
+- **Hex in, hex out.** The value is lowercase `#rrggbb`, with an alpha
+  byte (`#rrggbbaa`) only while opacity is under 100%, so opaque colours
+  read as before. Typed text is read on Enter or blur: hex of 3, 4, 6 or 8
+  digits with or without `#`, or any CSS colour, `rgb()`, `hsl()`,
+  `oklch()` or a name. It is shown back as hex. Anything else shows a
+  hint and keeps the last good value. The Hex channel in the panel reads
+  the same.
+- **Formats are a view, not a value.** RGB, HSL and HSB only change the
+  fields; the value stays hex. Channel fields commit on Enter or blur, and
+  up/down step by 1 (Shift by 10), as in a design tool.
 - **The hue is remembered.** Internally the picker keeps hue, saturation
   and brightness. Drag to black and back and the hue strip stays where it
   was, instead of jumping to red as a hex round trip would.
-- **No alpha, no other formats.** Opacity and RGB/HSL input are not in
-  this version.
+- **Swatch edges are faint by choice.** Black 10%, as Figma: below the
+  3:1 of WCAG 1.4.11 round a white swatch on white, accepted because the
+  hex in the field, not the edge, tells the colour.
+- **Not in this version:** Figma's library picker ("On this page"),
+  gradients and an eyedropper.
 - **Thumbs read on any colour.** A white ring with a dark edge: one of
   the two is at least 3:1 against whatever is under it.
 
 ## Usage
 
 <Canvas of={ColorPickerStories.Default} />
+
+<Canvas of={ColorPickerStories.FormatsAndOpacity} />
 
 <Canvas of={ColorPickerStories.Panel} />
 
@@ -76,7 +96,12 @@ into `#aabbcc`, and anything else into `null`.
   change saturation, up and down brightness, Shift moves 10%, Page Up/Down
   change brightness by 10%, Home and End set saturation to 0 or 100%.
   A second "Brightness" slider is there for a screen reader's browse mode.
-- The hue strip is a Base UI slider named "Hue", read as "217 degrees".
+- The hue strip is a Base UI slider named "Hue", read as "217 degrees";
+  the opacity strip, "Opacity", read as "50%".
+- The format menu is the kit's Select, named "Colour format". Channel
+  fields are text inputs named for what they hold ("Red", "Hue degrees",
+  "Lightness percent", "Opacity percent", "Hex"), so they do not share a
+  name with the sliders.
 - Swatches are native radios in a radio group named "Swatches": one tab
   stop, arrows move and choose, and the chosen one is checked. None is
   checked while the colour is not one of them. They are 24px with 8px
