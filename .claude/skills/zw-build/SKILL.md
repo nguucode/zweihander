@@ -37,20 +37,20 @@ Trả lời ba câu trước khi mở editor:
 
 Spec chính là file `<Name>.mdx` cạnh component. Không viết spec ở chỗ khác.
 
-MDX của component bắt buộc có bốn mục:
+MDX của component bắt buộc có ba mục, cộng một mục khi component lệch spec:
 
 | Mục | Nội dung |
 |---|---|
 | `## Anatomy` | Bảng tên từng part và vai trò |
 | `## Props` | Bảng prop: values, default, ghi chú. Thêm `<Controls>` |
-| `## Differences from the spec` | Mọi chỗ lệch uiguideline kèm lý do |
+| `## Differences from the spec` | **Chỉ khi lệch** uiguideline: mọi chỗ lệch kèm lý do. Không lệch thì bỏ hẳn mục này, không ghi "Không lệch" |
 | `## Accessibility` | Hành vi bàn phím, role và state theo APG |
 
 Pattern dùng bộ mục riêng: mỗi biến thể một mục kèm `<Canvas>`, rồi `## Props`, `## Layout` và `## Accessibility`. Xem file tham chiếu pattern.
 
 Breaking change: sửa `## Props` (và `## Differences` nếu có) **trước**, rồi mới sửa code.
 
-**Gate:** đủ các mục bắt buộc. Mỗi câu trong `## Accessibility` đủ cụ thể để viết được một `play` kiểm nó.
+**Gate:** đủ các mục bắt buộc; có lệch spec thì có `## Differences from the spec`. Mỗi câu trong `## Accessibility` đủ cụ thể để viết được một `play` kiểm nó.
 
 ## 2. Code
 
@@ -120,7 +120,7 @@ Checklist dán vào mô tả PR:
 
 ```
 - [ ] Phân loại: <Tên> — <mới|enhance> — <breaking|không> — <status>
-- [ ] MDX: đủ mục bắt buộc (component: Anatomy / Props / Differences / Accessibility; pattern: biến thể / Props / Layout / Accessibility)
+- [ ] MDX: đủ mục bắt buộc (component: Anatomy / Props / Accessibility, thêm Differences nếu lệch spec; pattern: biến thể / Props / Layout / Accessibility)
 - [ ] Code: token only, 'use client', registry (không số lượng), exports
 - [ ] Story + play cho mỗi câu Accessibility; a11y error
 - [ ] tsc, lint, tokens:check, registry:check, vitest storybook (3 trình duyệt)
