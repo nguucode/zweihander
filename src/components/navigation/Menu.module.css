@@ -98,14 +98,6 @@
   color: var(--muted-foreground);
 }
 
-/* A 6px dot for the chosen radio item. */
-.dot {
-  inline-size: 6px;
-  block-size: 6px;
-  border-radius: 9999px;
-  background: currentColor;
-}
-
 .shortcut {
   margin-inline-start: var(--space-4);
   font-family: inherit;
@@ -115,9 +107,10 @@
   letter-spacing: 0.05em;
 }
 
+/* Inset 8px from the popup edge (4px popup padding + 4px). */
 .separator {
   block-size: 1px;
-  margin: var(--space-1) calc(var(--space-1) * -1);
+  margin: var(--space-1);
   background: var(--border);
 }
 
