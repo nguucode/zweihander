@@ -83,7 +83,7 @@ Test nằm trong `<Name>.stories.tsx`, chạy qua addon-vitest. Test hành vi, k
 npx vitest --project storybook run
 ```
 
-Lệnh này xanh trên cả ba trình duyệt. Trên PR, nó là required check `check`.
+Lệnh này xanh trên cả ba trình duyệt. Trên PR, nó là required check `check`. Máy mới cần `npx playwright install chromium firefox webkit` một lần; chạy nhanh một engine thì thêm `--browser=chromium`.
 
 ## 4. Release
 
@@ -96,7 +96,7 @@ Lệnh này xanh trên cả ba trình duyệt. Trên PR, nó là required check 
 
 ## 5. Status
 
-Mỗi story file mang đúng một tag status trong `meta.tags`, cạnh `'autodocs'` nếu có. Status hiện trên sidebar và trang docs.
+Mỗi story file mang đúng một tag status trong `meta.tags`, cạnh `'autodocs'` nếu có. Lọc theo status bằng bộ lọc tag trên sidebar.
 
 | Status | Component | Pattern |
 |---|---|---|
@@ -132,12 +132,6 @@ Checklist dán vào mô tả PR:
 
 ## Chưa áp dụng được
 
-Các luật dưới đây đã được sếp chốt ngày 2026-10-08, nhưng repo chưa có công cụ để thực thi. Khi làm component mà gặp chúng thì ghi chú trong PR, đừng chặn PR. Hạ tầng xong thì xoá mục tương ứng khỏi danh sách này.
+Luật dưới đây đã được sếp chốt ngày 2026-10-08, nhưng repo chưa có công cụ để thực thi. Khi làm component mà gặp nó thì ghi chú trong PR, đừng chặn PR. Hạ tầng xong thì xoá mục khỏi danh sách này.
 
-- [ ] a11y `error` toàn cục trong `.storybook/preview.tsx` (12/62 story file chưa đặt `error` riêng; chưa chạy thử nên chưa biết bao nhiêu sẽ fail). Đã quyết từ 2026-09-25 trong DoD.
-- [ ] Firefox và WebKit trong `vite.config.ts` `instances` và CI.
-- [ ] Visual regression bằng `toMatchScreenshot`, baseline sinh trên CI Linux.
-- [ ] `'use client'` cho các component hiện có.
-- [ ] Changesets: cài, `.changeset/config.json`, bước CI.
-- [ ] Status tag cho 47 component hiện có.
-- [ ] Registry description bỏ số lượng (Button đang ghi "four sizes").
+- [ ] Visual regression bằng `toMatchScreenshot`, baseline sinh trên CI Linux. Chưa có thì chưa component nào lên `stable`, và pattern dừng ở `experimental`.
