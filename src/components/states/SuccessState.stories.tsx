@@ -6,7 +6,7 @@ import { SuccessState } from './SuccessState'
 
 const meta = {
   title: 'Components/States/SuccessState',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: SuccessState,
   args: {
     title: 'Invites sent',

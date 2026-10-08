@@ -11,7 +11,7 @@ const plans = [
 
 const meta = {
   title: 'Components/Controls/Radio',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: RadioGroup,
   argTypes: {
     variant: { control: 'inline-radio', options: ['primary', 'neutral'] },

@@ -7,7 +7,7 @@ import { mediaRules } from '@/test/story-helpers'
 
 const meta = {
   title: 'Components/Notifications/Alert',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: Alert,
   args: {
     title: 'Payment method expiring',

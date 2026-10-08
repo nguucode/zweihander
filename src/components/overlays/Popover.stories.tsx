@@ -6,7 +6,7 @@ import { Popover } from './Popover'
 
 const meta = {
   title: 'Components/Overlays/Popover',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: Popover,
   args: {
     trigger: <Button appearance="outlined" variant="accent">Share</Button>,

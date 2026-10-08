@@ -18,7 +18,7 @@ const Content = () => (
 
 const meta = {
   title: 'Components/Data Display/Card',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: Card,
   argTypes: {
     size: { control: 'inline-radio', options: ['xs', 'sm', 'md', 'lg'] },

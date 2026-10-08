@@ -36,7 +36,7 @@ const columns: TableColumn<Project>[] = [
 
 const meta = {
   title: 'Components/Data Display/Table',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: Table<Project>,
   args: { columns, rows: projects, getRowId: (p: Project) => p.id, caption: 'Projects', onSortChange: fn(), onSelectionChange: fn() },
   argTypes: {

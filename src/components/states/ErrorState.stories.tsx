@@ -6,7 +6,7 @@ import { ErrorState } from './ErrorState'
 
 const meta = {
   title: 'Components/States/ErrorState',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: ErrorState,
   args: {
     title: 'Couldn’t load projects',

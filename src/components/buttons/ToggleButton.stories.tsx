@@ -6,7 +6,7 @@ import { ToggleButton } from './ToggleButton'
 
 const meta = {
   title: 'Components/Buttons/ToggleButton',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: ToggleButton,
   argTypes: {
     variant: { control: 'inline-radio', options: ['primary', 'accent', 'secondary', 'destructive'] },

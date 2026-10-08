@@ -4,7 +4,7 @@ import { ProgressBar } from './ProgressBar'
 
 const meta = {
   title: 'Components/Loaders/ProgressBar',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: ProgressBar,
   argTypes: {
     size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] },

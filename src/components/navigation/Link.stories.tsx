@@ -4,7 +4,7 @@ import { Link } from './Link'
 
 const meta = {
   title: 'Components/Navigation/Link',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: Link,
   args: { href: '#pricing', children: 'See pricing' },
   argTypes: {

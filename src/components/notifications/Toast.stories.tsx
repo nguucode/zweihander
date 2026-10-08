@@ -13,7 +13,7 @@ function Demo({ options, label = 'Show toast' }: { options: ToastOptions; label?
 
 const meta = {
   title: 'Components/Notifications/Toast',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: ToastProvider,
   args: { children: null, placement: 'bottom-right', timeout: 5000, limit: 3 },
   argTypes: {

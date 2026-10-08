@@ -6,7 +6,7 @@ import { Button } from './Button'
 
 const meta = {
   title: 'Components/Buttons/Button',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: Button,
   argTypes: {
     variant: { control: 'inline-radio', options: ['primary', 'accent', 'secondary', 'destructive'] },

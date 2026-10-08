@@ -6,7 +6,7 @@ import { EmptyState } from './EmptyState'
 
 const meta = {
   title: 'Components/States/EmptyState',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: EmptyState,
   args: {
     icon: <Icon name="search" />,

@@ -4,7 +4,7 @@ import { Divider } from './Divider'
 
 const meta = {
   title: 'Components/Atomic Elements/Divider',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: Divider,
   argTypes: {
     orientation: { control: 'inline-radio', options: ['horizontal', 'vertical'] },

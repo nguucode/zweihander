@@ -5,7 +5,7 @@ import { Switch } from './Switch'
 
 const meta = {
   title: 'Components/Controls/Switch',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: Switch,
   argTypes: {
     size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] },

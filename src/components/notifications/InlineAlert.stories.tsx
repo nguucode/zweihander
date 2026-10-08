@@ -8,7 +8,7 @@ import { InlineAlert } from './InlineAlert'
 
 const meta = {
   title: 'Components/Notifications/InlineAlert',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: InlineAlert,
   args: { children: 'Changes are saved automatically.' },
   argTypes: {

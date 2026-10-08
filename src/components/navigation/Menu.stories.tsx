@@ -9,7 +9,7 @@ const onDelete = fn()
 
 const meta = {
   title: 'Components/Navigation/Menu',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: Menu,
   args: {
     trigger: (

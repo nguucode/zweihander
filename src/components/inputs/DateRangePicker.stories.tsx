@@ -8,7 +8,7 @@ const day = (year: number, month: number, date: number) =>
 
 const meta = {
   title: 'Components/Inputs/DateRangePicker',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: DateRangePicker,
   // Days of the months either side are aria-hidden decoration, faded below
   // 4.5:1 on purpose (WCAG 1.4.3 exempts decoration); axe cannot tell, so

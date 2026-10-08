@@ -7,7 +7,7 @@ import { Modal, ModalClose } from './Modal'
 
 const meta = {
   title: 'Components/Overlays/Modal',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: Modal,
   args: {
     trigger: <Button>Edit profile</Button>,

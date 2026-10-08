@@ -24,7 +24,7 @@ const Slide = ({ title, i }: { title: string; i: number }) => (
 
 const meta = {
   title: 'Components/Data Display/Carousel',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: Carousel,
   args: {
     label: 'Featured templates',

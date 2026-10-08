@@ -23,7 +23,7 @@ const faq = [
 
 const meta = {
   title: 'Components/Data Display/Accordion',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: Accordion,
   argTypes: {
     appearance: { control: 'inline-radio', options: ['outlined', 'flush'] },

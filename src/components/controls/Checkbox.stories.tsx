@@ -5,7 +5,7 @@ import { Checkbox } from './Checkbox'
 
 const meta = {
   title: 'Components/Controls/Checkbox',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: Checkbox,
   argTypes: {
     variant: { control: 'inline-radio', options: ['primary', 'neutral'] },

@@ -20,7 +20,7 @@ const items: SidebarEntry[] = [
 
 const meta = {
   title: 'Components/Navigation/Sidebar',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: Sidebar,
   parameters: { layout: 'fullscreen' },
   args: {

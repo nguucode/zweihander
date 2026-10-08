@@ -5,7 +5,7 @@ import { Search } from './Search'
 
 const meta = {
   title: 'Components/Inputs/Search',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: Search,
   argTypes: {
     size: { control: 'inline-radio', options: ['sm', 'md'] },

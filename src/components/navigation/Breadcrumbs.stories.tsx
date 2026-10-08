@@ -4,7 +4,7 @@ import { Breadcrumbs } from './Breadcrumbs'
 
 const meta = {
   title: 'Components/Navigation/Breadcrumbs',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: Breadcrumbs,
   args: {
     items: [

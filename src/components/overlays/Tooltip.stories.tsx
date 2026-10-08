@@ -6,7 +6,7 @@ import { Tooltip, TooltipGroup } from './Tooltip'
 
 const meta = {
   title: 'Components/Overlays/Tooltip',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: Tooltip,
   args: {
     content: 'Copy link',

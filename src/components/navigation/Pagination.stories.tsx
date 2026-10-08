@@ -4,7 +4,7 @@ import { Pagination, paginationItems } from './Pagination'
 
 const meta = {
   title: 'Components/Navigation/Pagination',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: Pagination,
   args: { totalPages: 10, defaultPage: 1, onPageChange: fn() },
   argTypes: { size: { control: 'inline-radio', options: ['sm', 'md'] }, getHref: { control: false } },

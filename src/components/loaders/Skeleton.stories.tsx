@@ -6,7 +6,7 @@ import { lum, paint } from '@/test/story-helpers'
 
 const meta = {
   title: 'Components/Loaders/Skeleton',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: Skeleton,
   argTypes: { appearance: { control: 'inline-radio', options: ['circle', 'square', 'rounded'] } },
   args: { width: 240, height: 16 },

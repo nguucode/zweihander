@@ -14,7 +14,7 @@ const portrait =
 
 const meta = {
   title: 'Components/Atomic Elements/Avatar',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: Avatar,
   args: { imageSrc: portrait, imageAlt: 'Mary Thompson' },
   argTypes: {

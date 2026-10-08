@@ -16,7 +16,7 @@ const brand = [
 
 const meta = {
   title: 'Components/Controls/Color Picker',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: ColorPicker,
   args: { label: 'Brand colour', defaultValue: '#3b82f6', swatches: brand, onValueChange: fn() },
 } satisfies Meta<typeof ColorPicker>

@@ -14,7 +14,7 @@ const steps = [
 
 const meta = {
   title: 'Components/Navigation/Stepper',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: Stepper,
   args: { steps, current: 1 },
   argTypes: {

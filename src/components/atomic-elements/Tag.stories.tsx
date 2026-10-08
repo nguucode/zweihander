@@ -14,7 +14,7 @@ const portrait =
 
 const meta = {
   title: 'Components/Atomic Elements/Tag',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: Tag,
   args: { text: 'Account verified' },
   argTypes: {

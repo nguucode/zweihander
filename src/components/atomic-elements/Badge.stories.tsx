@@ -5,7 +5,7 @@ import { Badge } from './Badge'
 
 const meta = {
   title: 'Components/Atomic Elements/Badge',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: Badge,
   args: { count: 8 },
   argTypes: {

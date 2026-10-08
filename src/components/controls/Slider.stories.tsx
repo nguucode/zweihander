@@ -4,7 +4,7 @@ import { Slider } from './Slider'
 
 const meta = {
   title: 'Components/Controls/Slider',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: Slider,
   args: { label: 'Volume', defaultValue: 40, showValue: true, onValueChange: fn(), onValueCommitted: fn() },
   argTypes: {

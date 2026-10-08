@@ -13,7 +13,7 @@ const members = [
 
 const meta = {
   title: 'Components/Inputs/Combobox',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: Combobox,
   argTypes: {
     size: { control: 'inline-radio', options: ['sm', 'md'] },

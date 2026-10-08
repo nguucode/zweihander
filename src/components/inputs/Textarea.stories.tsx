@@ -5,7 +5,7 @@ import { Textarea } from './Textarea'
 
 const meta = {
   title: 'Components/Inputs/Textarea',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: Textarea,
   argTypes: {
     size: { control: 'inline-radio', options: ['sm', 'md'] },

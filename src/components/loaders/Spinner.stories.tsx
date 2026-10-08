@@ -4,7 +4,7 @@ import { Spinner } from './Spinner'
 
 const meta = {
   title: 'Components/Loaders/Spinner',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: Spinner,
   argTypes: {
     size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] },

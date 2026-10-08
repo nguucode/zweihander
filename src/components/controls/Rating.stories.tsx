@@ -4,7 +4,7 @@ import { Rating } from './Rating'
 
 const meta = {
   title: 'Components/Controls/Rating',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: Rating,
   args: { label: 'Rate this template', defaultValue: 3, onValueChange: fn() },
   argTypes: { size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] } },

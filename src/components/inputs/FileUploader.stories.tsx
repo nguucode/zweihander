@@ -14,7 +14,7 @@ const gif = file('party.gif', 90_000, 'image/gif')
 
 const meta = {
   title: 'Components/Inputs/File Uploader',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: FileUploader,
   args: {
     label: 'Attachments',

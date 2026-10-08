@@ -8,7 +8,7 @@ const panel = (text: string) => <p style={{ margin: 0 }}>{text}</p>
 
 const meta = {
   title: 'Components/Navigation/Tabs',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: Tabs,
   args: {
     'aria-label': 'Project',

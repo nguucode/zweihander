@@ -5,7 +5,7 @@ import { mediaRules } from '@/test/story-helpers'
 
 const meta = {
   title: 'Components/Data Display/Collapse',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: Collapse,
   args: {
     label: 'Show details',

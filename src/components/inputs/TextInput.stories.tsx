@@ -6,7 +6,7 @@ import { TextInput } from './TextInput'
 
 const meta = {
   title: 'Components/Inputs/TextInput',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: TextInput,
   argTypes: {
     size: { control: 'inline-radio', options: ['sm', 'md'] },

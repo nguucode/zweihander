@@ -5,7 +5,7 @@ import { NumberInput } from './NumberInput'
 
 const meta = {
   title: 'Components/Inputs/NumberInput',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: NumberInput,
   argTypes: {
     size: { control: 'inline-radio', options: ['sm', 'md'] },

@@ -13,7 +13,7 @@ const members = [
 
 const meta = {
   title: 'Components/Inputs/Select',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: Select,
   argTypes: {
     size: { control: 'inline-radio', options: ['sm', 'md'] },
