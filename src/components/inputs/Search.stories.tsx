@@ -34,10 +34,17 @@ export const Clear: Story = {
     const field = canvas.getByRole('searchbox')
     await userEvent.click(canvas.getByRole('button', { name: 'Clear search' }))
     await expect(field).toHaveValue('')
-    // Focus returns to the field, and onChange hears about it.
-    await expect(field).toHaveFocus()
+    // A pointer press keeps an idle field idle, and onChange hears about it.
+    await expect(field).not.toHaveFocus()
     await expect(args.onChange).toHaveBeenCalled()
     await expect(canvas.queryByRole('button', { name: 'Clear search' })).toBeNull()
+    // From the keyboard, focus goes back to the field rather than being lost.
+    await userEvent.type(field, 'modal')
+    await userEvent.tab()
+    await expect(canvas.getByRole('button', { name: 'Clear search' })).toHaveFocus()
+    await userEvent.keyboard('{Enter}')
+    await expect(field).toHaveValue('')
+    await expect(field).toHaveFocus()
   },
 }
 
