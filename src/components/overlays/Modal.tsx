@@ -1,3 +1,5 @@
+'use client'
+
 import type { ReactElement, ReactNode, RefObject } from 'react'
 import { AlertDialog } from '@base-ui/react/alert-dialog'
 import { Dialog } from '@base-ui/react/dialog'

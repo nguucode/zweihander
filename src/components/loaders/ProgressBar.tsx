@@ -1,3 +1,5 @@
+'use client'
+
 import type { ReactNode } from 'react'
 import { Progress } from '@base-ui/react/progress'
 import { cn } from '@/lib/utils'

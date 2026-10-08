@@ -1,3 +1,5 @@
+'use client'
+
 import type { ReactNode, Ref } from 'react'
 import { Accordion as BaseAccordion } from '@base-ui/react/accordion'
 import { Icon } from '@/lib/icon'

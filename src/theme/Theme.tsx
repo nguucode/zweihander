@@ -1,3 +1,5 @@
+'use client'
+
 import type { ComponentProps, CSSProperties } from 'react'
 import { mergeProps } from '@base-ui/react/merge-props'
 import { useRender } from '@base-ui/react/use-render'

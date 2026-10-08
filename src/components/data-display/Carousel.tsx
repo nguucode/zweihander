@@ -1,3 +1,5 @@
+'use client'
+
 import { Children, useCallback, useEffect, useId, useRef, useState, useSyncExternalStore, type CSSProperties, type ReactNode } from 'react'
 import { Icon } from '@/lib/icon'
 import { cn } from '@/lib/utils'

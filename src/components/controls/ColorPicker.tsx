@@ -1,3 +1,5 @@
+'use client'
+
 import { useId, useState, type CSSProperties, type KeyboardEvent, type PointerEvent, type ReactNode } from 'react'
 import { Field } from '@base-ui/react/field'
 import { Popover } from '@base-ui/react/popover'

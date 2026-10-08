@@ -1,3 +1,5 @@
+'use client'
+
 import type { ReactElement, ReactNode } from 'react'
 import { Popover as BasePopover } from '@base-ui/react/popover'
 import { Icon } from '@/lib/icon'

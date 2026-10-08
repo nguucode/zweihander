@@ -1,3 +1,5 @@
+'use client'
+
 import { useState, type ComponentProps, type ReactNode } from 'react'
 import { Icon } from '@/lib/icon'
 import { cn } from '@/lib/utils'

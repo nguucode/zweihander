@@ -90,6 +90,9 @@ for (const item of registry.items) {
   }
 
   if (!item.description) errors.push(`${item.name}: no description (it is shown before anyone installs it)`)
+  // A count ("four sizes") goes stale the moment the code adds or drops one.
+  const count = item.description?.match(/\b(two|three|four|five|six|seven|eight|nine|ten|\d+) (variants|appearances|sizes|thicknesses|states|tones|levels|colou?rs)\b/i)
+  if (count) errors.push(`${item.name}: description says "${count[0]}"; describe the options without counting them`)
 }
 
 if (errors.length) {

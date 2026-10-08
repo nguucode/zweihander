@@ -1,3 +1,5 @@
+'use client'
+
 import type { ReactNode, Ref } from 'react'
 import { Select as BaseSelect } from '@base-ui/react/select'
 import { Icon } from '@/lib/icon'

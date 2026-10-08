@@ -1,3 +1,5 @@
+'use client'
+
 import { useRef, useState, type ChangeEvent, type ComponentProps, type KeyboardEvent, type ReactNode } from 'react'
 import { Field } from '@base-ui/react/field'
 import { Icon } from '@/lib/icon'

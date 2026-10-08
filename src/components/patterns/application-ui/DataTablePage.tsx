@@ -1,3 +1,5 @@
+'use client'
+
 import { useLayoutEffect, useRef, type ComponentProps, type ReactNode } from 'react'
 import { cn } from '@/lib/utils'
 import { Button } from '../../buttons/Button'

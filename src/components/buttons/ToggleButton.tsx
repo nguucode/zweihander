@@ -1,3 +1,5 @@
+'use client'
+
 import type { ComponentProps, ReactNode, Ref } from 'react'
 import { Toggle } from '@base-ui/react/toggle'
 import { cn } from '@/lib/utils'

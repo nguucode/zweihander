@@ -1,3 +1,5 @@
+'use client'
+
 import { useId, useState, type ComponentProps, type ReactElement, type ReactNode } from 'react'
 import { useRender } from '@base-ui/react/use-render'
 import { Icon } from '@/lib/icon'

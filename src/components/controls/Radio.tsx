@@ -1,3 +1,5 @@
+'use client'
+
 import { useId, type ReactNode, type Ref } from 'react'
 import { Field } from '@base-ui/react/field'
 import { Fieldset } from '@base-ui/react/fieldset'

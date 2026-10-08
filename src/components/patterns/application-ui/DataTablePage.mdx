@@ -59,8 +59,18 @@ usually a Pagination.
   show an empty page, or a page the reader never asked for.
 - **Selection is by id**, so it survives sorting and paging (Table's
   `getRowId`), and an action clears it once it has been applied.
-- Both bars wrap: on a phone the search takes its own line and the
-  filters and action flow under it.
+
+## Layout
+
+- No breakpoints: both bars are flex rows that wrap, so they adapt to the
+  width of their container, not the viewport.
+- `TableToolbarGroup` grows from 16rem and wraps first. On a phone the
+  search takes its own line and the filters and the primary action flow
+  under it, instead of anything shrinking below use.
+- In selection mode the actions are pushed to the end of the bar and drop
+  under the count when they no longer fit.
+- The footer puts the summary at the start and the pagination at the end;
+  when both do not fit, the pagination wraps under the summary.
 
 ## Accessibility
 

@@ -1,3 +1,5 @@
+'use client'
+
 import type { ReactNode } from 'react'
 import { Slider as BaseSlider } from '@base-ui/react/slider'
 import { cn } from '@/lib/utils'
