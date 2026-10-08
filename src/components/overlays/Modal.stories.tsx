@@ -95,7 +95,7 @@ export const Alert: Story = {
     await expect(within(dialog).queryByRole('button', { name: 'Close' })).toBeNull()
     await userEvent.click(dialog.parentElement!, { clientX: 2, clientY: 2 } as never)
     await new Promise((r) => setTimeout(r, 200))
-    await expect(body().getByRole('alertdialog')).toBeVisible()
+    await waitFor(() => expect(body().getByRole('alertdialog')).toBeVisible())
     await userEvent.click(within(dialog).getByRole('button', { name: 'Keep project' }))
     await waitFor(() => expect(body().queryByRole('alertdialog')).toBeNull())
     // Escape still closes it.

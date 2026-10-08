@@ -1,4 +1,5 @@
 import type { Decorator, Preview } from '@storybook/react-vite'
+import { configure } from 'storybook/test'
 // Docs-only: the tokens name these faces, but the package never loads a
 // font for its consumers.
 import '../src/index.css'
@@ -7,6 +8,10 @@ import '../src/index.css'
 // Set while rendering rather than in an effect: a decorator is a plain
 // function, not a component, so it cannot call hooks, and toggling a class
 // to the same value twice is harmless.
+// findBy/waitFor wait up to 3s, not 1s: WebKit on the CI's Linux runner plays
+// popup open and close transitions well past a second.
+configure({ asyncUtilTimeout: 3000 })
+
 const withTheme: Decorator = (Story, context) => {
   document.documentElement.classList.toggle('dark', (context.globals.theme ?? 'light') === 'dark')
   return <Story />
