@@ -45,9 +45,8 @@ export const Limits: Story = {
     // At the limit, the button is disabled rather than silently doing nothing,
     // and it looks it.
     await expect(increase).toBeDisabled()
-    await expect(getComputedStyle(increase).color).not.toBe(
-      getComputedStyle(canvas.getByRole('button', { name: /decrease/i })).color,
-    )
+    // Dimmed by opacity; colour matches the idle button, so it can't tell.
+    await expect(getComputedStyle(increase).opacity).toBe('0.5')
   },
 }
 
