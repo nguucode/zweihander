@@ -124,14 +124,15 @@ export const Href: Story = {
     await expect(link).not.toHaveAttribute('type')
     await expect(canvas.queryByRole('button')).not.toBeInTheDocument()
 
-    // Styling a link as a Button must not take away the hand the browser
-    // gives every other link. Compared against a bare <a href> rather than
-    // the literal 'pointer', so overriding --cursor-link keeps this honest.
-    const bare = document.createElement('a')
-    bare.href = '#'
-    document.body.append(bare)
-    await expect(getComputedStyle(link).cursor).toBe(getComputedStyle(bare).cursor)
-    bare.remove()
+    // Styling a link as a Button must keep the link's hand. Compared against
+    // --cursor-link rather than a bare <a href>: WebKit computes a bare link's
+    // cursor as 'auto' and only shows the hand on hover.
+    const probe = document.createElement('span')
+    probe.style.cursor = 'var(--cursor-link)'
+    link.append(probe)
+    const expected = getComputedStyle(probe).cursor
+    probe.remove()
+    await expect(getComputedStyle(link).cursor).toBe(expected)
   },
 }
 

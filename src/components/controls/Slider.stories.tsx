@@ -23,7 +23,9 @@ export const Default: Story = {
     await expect(thumb).toHaveAttribute('aria-valuenow', '40')
     await expect(canvas.getByText('40')).toBeVisible()
     // Keyboard: arrows step by `step`, Page Up by `largeStep`, End to max.
-    await userEvent.click(thumb)
+    // Tab, not a click: WebKit maps a click on the hidden input to the track's start.
+    await userEvent.tab()
+    await expect(thumb).toHaveFocus()
     await userEvent.keyboard('{ArrowRight}')
     await waitFor(() => expect(thumb).toHaveAttribute('aria-valuenow', '41'))
     await expect(args.onValueChange).toHaveBeenLastCalledWith(41)
@@ -44,7 +46,10 @@ export const Range: Story = {
   play: async ({ canvas }) => {
     await expect(canvas.getByRole('slider', { name: 'Minimum price' })).toHaveAttribute('aria-valuenow', '20')
     await expect(canvas.getByRole('slider', { name: 'Maximum price' })).toHaveAttribute('aria-valuenow', '80')
-    await expect(canvas.getByText('$20 – $80')).toBeVisible()
+    // Formatted in the browser's locale, as the component does: WebKit's default
+    // locale writes US$.
+    const usd = new Intl.NumberFormat(undefined, { style: 'currency', currency: 'USD', maximumFractionDigits: 0 })
+    await expect(canvas.getByText(`${usd.format(20)} – ${usd.format(80)}`)).toBeVisible()
   },
 }
 

@@ -42,7 +42,15 @@ const preview: Preview = {
     a11y: {
       // Definition of done: an a11y violation fails the story test. A story
       // that has to opt out sets test: 'off' with a comment saying why.
-      test: 'error'
+      test: 'error',
+      config: {
+        rules: [
+          // Base UI's focus guards round an open popup: invisible spans that
+          // hand focus back to the trigger. In WebKit they carry role="button"
+          // for VoiceOver's sake, which axe flags as a nameless command.
+          { id: 'aria-command-name', selector: '[role="link"], [role="button"]:not([data-base-ui-focus-guard]), [role="menuitem"]' },
+        ],
+      },
     },
 
     options: {

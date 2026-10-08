@@ -300,7 +300,11 @@ export function ColorPanel({
         data-disabled={disabled || undefined}
         onPointerDown={(e) => {
           if (disabled || e.button !== 0) return
-          e.currentTarget.setPointerCapture(e.pointerId)
+          // Firefox throws on a pointer id it does not know (synthetic events);
+          // the click still sets the colour, only the drag needs the capture.
+          try {
+            e.currentTarget.setPointerCapture(e.pointerId)
+          } catch {}
           e.preventDefault()
           e.currentTarget.querySelector('input')?.focus({ preventScroll: true })
           fromPointer(e)

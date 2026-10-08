@@ -18,7 +18,15 @@ const meta = {
   // 4.5:1 on purpose (WCAG 1.4.3 exempts decoration); axe cannot tell, so
   // only color-contrast skips them.
   parameters: {
-    a11y: { config: { rules: [{ id: 'color-contrast', selector: '*:not([data-outside])' }] } },
+    // Replaces the global rules list, so it repeats the focus-guard rule.
+    a11y: {
+      config: {
+        rules: [
+          { id: 'color-contrast', selector: '*:not([data-outside])' },
+          { id: 'aria-command-name', selector: '[role="link"], [role="button"]:not([data-base-ui-focus-guard]), [role="menuitem"]' },
+        ],
+      },
+    },
   },
   args: { label: 'Start date', locale: 'en-GB', weekStartsOn: 1, defaultValue: new Date(2026, 8, 18), onValueChange: fn() },
   argTypes: {

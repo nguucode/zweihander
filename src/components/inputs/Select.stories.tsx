@@ -44,7 +44,9 @@ export const Keyboard: Story = {
     await userEvent.tab()
     await expect(trigger).toHaveFocus()
     await userEvent.keyboard('{ArrowDown}')
-    await screen.findByRole('listbox')
+    const listbox = await screen.findByRole('listbox')
+    // Keys go to the list only once focus has moved into it; WebKit is slower to get there.
+    await waitFor(() => expect(listbox.contains(document.activeElement)).toBe(true))
     // Arrow down past the first option, skip the disabled one, Enter selects.
     await userEvent.keyboard('{ArrowDown}{Enter}')
     await waitFor(() => expect(args.onValueChange).toHaveBeenCalled())
