@@ -1,6 +1,6 @@
 .rating {
   --rating-star: var(--space-6);
-  --rating-on: var(--warning-text);
+  --rating-on: var(--warning);
   --rating-off: var(--control-border);
   display: inline-flex;
   flex-direction: column;
@@ -32,9 +32,10 @@
   gap: 2px;
 }
 
-/* Filled stars in --warning-text (the amber of a star, at 4.5:1 on the
-   page), empty ones outlined in --control-border (3:1): both clear the
-   3:1 a graphic that carries meaning needs. */
+/* Filled stars in the bright --warning amber (2.1:1 on white, below the
+   3:1 for meaningful graphics: the filled vs outlined shape and the
+   accessible name carry the score, not the fill colour). Empty stars
+   are outlined in --control-border (3:1). */
 .star {
   position: relative;
   display: inline-flex;

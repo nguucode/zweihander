@@ -41,10 +41,12 @@ Built on native radio buttons; no Base UI part covers it.
   which is what a radio group is: arrows, Tab, focus and form
   submission come from the browser, and a screen reader already knows
   how to read it. Each radio sits invisibly over its star.
-- **Stars in `--warning-text`, not the amber solid.** A star that carries
-  the score needs 3:1 against the page; the bright amber solid is 2.1:1 on
-  white, the warning text colour 7.1:1. Empty stars use
-  `--control-border`, also 3:1.
+- **Stars in the bright `--warning` amber.** A rating reads as a
+  rating when it looks like one, so the fill is the amber solid, not the
+  darker warning text colour. It is 2.1:1 on white, below the 3:1 a
+  meaningful graphic needs, so colour is not what carries the score: a
+  filled star differs from the outlined empty one (`--control-border`,
+  3:1) by shape, and the group or image is named "3 out of 5 stars".
 - **Read-only is one image.** "4.5 out of 5 stars" is one fact, so it is
   read once, and a fraction draws as a star filled part-way.
 
