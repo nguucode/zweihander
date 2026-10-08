@@ -15,7 +15,7 @@ const meta = {
   // Definition of done: a11y must pass as an error, ahead of the global switch in preview.tsx.
   parameters: { a11y: { test: 'error' } },
   argTypes: {
-    variant: { control: 'inline-radio', options: ['primary', 'secondary', 'neutral'] },
+    variant: { control: 'inline-radio', options: ['primary', 'neutral'] },
     orientation: { control: 'inline-radio', options: ['vertical', 'horizontal'] },
     validationState: { control: 'inline-radio', options: ['default', 'success', 'error'] },
   },
@@ -77,7 +77,7 @@ export const Disabled: Story = {
 export const Variants: Story = {
   render: (args) => (
     <div style={{ display: 'flex', gap: 'var(--space-12)' }}>
-      {(['neutral', 'primary', 'secondary'] as const).map((variant) => (
+      {(['neutral', 'primary'] as const).map((variant) => (
         <RadioGroup key={variant} {...args} label={variant} variant={variant} defaultValue="pro" />
       ))}
     </div>
