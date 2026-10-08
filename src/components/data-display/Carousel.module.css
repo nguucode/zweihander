@@ -67,16 +67,17 @@
   gap: var(--space-2);
 }
 
-/* 8px dots on a 24px target; the current one is a longer pill. */
+/* 6px dots on a 24px target in a light gray; the current one is a longer
+   pill in --foreground. */
 .dot {
   position: relative;
-  inline-size: var(--space-2);
-  block-size: var(--space-2);
+  inline-size: calc(var(--space-1) * 1.5);
+  block-size: calc(var(--space-1) * 1.5);
   margin: 0;
   padding: 0;
   border: 0;
   border-radius: 9999px;
-  background: var(--control-border);
+  background: var(--border);
   cursor: var(--cursor-button);
   transition: inline-size 150ms;
 }
