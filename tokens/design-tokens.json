@@ -1630,16 +1630,16 @@
     },
     "body-sm": {
       "$type": "dimension",
-      "$value": "0.75rem",
+      "$value": "0.8125rem",
       "$extensions": {
-        "leading": "16 / 12"
+        "leading": "18 / 13"
       }
     }
   },
   "radius": {
     "radius": {
       "$type": "dimension",
-      "$value": "0.75rem"
+      "$value": "0.625rem"
     }
   },
   "shadow": {

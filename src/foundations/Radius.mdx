@@ -39,7 +39,7 @@ Two variables do the work, both on `:root`:
 
 | Variable | Default | Set by |
 | --- | --- | --- |
-| `--radius` | `0.75rem` | you, for the base step |
+| `--radius` | `0.625rem` | you, for the base step |
 | `--radius-factor` | `1` | the `radius` preset |
 | `--radius-full` | `0px` | the `radius` preset, only at `full` |
 
@@ -71,13 +71,16 @@ step up with the preset and stop there. Concretely, at the default base:
 | Preset | `control` | `field` | `panel` |
 | --- | --- | --- | --- |
 | `none` | 0 | 0 | 0 |
-| `small` | 5px | 5px | 6px |
-| `medium` | 10px | 10px | 12px |
-| `large` | 15px | 15px | 18px |
-| `full` | pill | 18px | 24px |
+| `small` | 4px | 4px | 7px |
+| `medium` | 8px | 8px | 14px |
+| `large` | 12px | 12px | 21px |
+| `full` | pill | 15px | 27px |
 
-The input is 40px tall, so a pill would be 20px — `field` at `full` lands
-under that on purpose, and a test asserts it.
+Small (24px) buttons and fields take `--radius-sm` (6px at the default)
+instead: the same corner on a box two thirds the height reads as a pill.
+
+The default input is 32px tall, so a pill would be 16px — `field` at
+`full` lands under that on purpose, and a test asserts it.
 
 ## Intent tokens
 

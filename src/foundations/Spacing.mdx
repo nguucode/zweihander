@@ -36,16 +36,17 @@ Every component here stays on whole steps, and on a small set of them:
 | --- | --- |
 | `1.5` (6px) | gap between a field label, its input and its helper text |
 | `2` (8px) | gap between a button's icon and its label |
-| `3` (12px) | horizontal padding, small button and all inputs |
-| `4` (16px) | horizontal padding, default button |
-| `6` (24px) | horizontal padding, large button |
-| `8` / `10` / `12` (32 / 40 / 48px) | the three control heights |
+| `2` (8px) | horizontal padding, small button and small input |
+| `3` (12px) | horizontal padding, default button and input |
+| `4` (16px) | horizontal padding, large button |
 
-The control heights are the load-bearing ones. A 40px default (`h-10`) is
-what makes a button and a text input line up in a row without either
-being nudged, and anything that should sit alongside them — a select, a
-date picker — has to land on the same three heights rather than pick its
-own.
+**Control heights are their own tokens**, not spacing steps:
+`--control-sm` / `-md` / `-lg` / `-xl` are 24 / 32 / 40 / 48px, the
+compact scale of the Claude apps. A 32px default is what makes a button,
+a text input, a tab and a sidebar row line up without either being
+nudged, and anything that should sit alongside them — a select, a date
+picker — has to land on the same heights rather than pick its own. They
+scale with `--scaling` like everything else.
 
 ## Customization
 
@@ -53,10 +54,9 @@ Change `--spacing` in `src/tokens.css` and the whole system rescales at
 once. Setting it to `0.2rem` makes every gap, pad and control height in
 the kit 20% tighter with no other edit.
 
-Two cautions. Control heights rescale with everything else, so a tighter
-`--spacing` shrinks the tap targets too — 40px is already close to the
-44px minimum recommended for touch, and much below it becomes an
-accessibility problem rather than a density preference. And because the
-base is in `rem`, every value inherits the user's root font size; that is
-the behaviour you want, but it means "40px" is only 40px at the default
-16px root.
+Two cautions. The visible controls are below the 44px touch minimum on
+purpose; on coarse pointers every control widens its hit area to 44px
+without growing the box, so density does not cost touch users. And
+because the base is in `rem`, every value inherits the user's root font
+size; that is the behaviour you want, but it means "32px" is only 32px at
+the default 16px root.

@@ -11,7 +11,7 @@
    there would reset back to its default instead of inheriting the value an
    outer Theme set. */
 :root {
-  --radius: 0.75rem;
+  --radius: 0.625rem;
   --radius-factor: 1;
   --radius-full: 0px;
   --scaling: 1;
@@ -490,8 +490,8 @@
     min(calc(var(--radius) * var(--radius-factor)), var(--radius-full))
   );
   --radius-panel: max(
-    calc(var(--radius) * var(--radius-factor)),
-    min(calc((var(--radius) + 4px) * var(--radius-factor)), var(--radius-full))
+    calc((var(--radius) + 4px) * var(--radius-factor)),
+    min(calc((var(--radius) + 8px) * var(--radius-factor)), var(--radius-full))
   );
 
   /* Font roles, read from whichever faces the scope sets. */
@@ -509,6 +509,12 @@
   --space-12: calc(3rem * var(--scaling));
   --space-1-5: calc(0.375rem * var(--scaling));
 
+  /* Control heights — one scale for every button, field, tab and row. */
+  --control-sm: calc(1.5rem * var(--scaling));
+  --control-md: calc(2rem * var(--scaling));
+  --control-lg: calc(2.5rem * var(--scaling));
+  --control-xl: calc(3rem * var(--scaling));
+
   /* Type roles. Leading is a ratio, so it follows the size under --scaling. */
   --text-heading-2xl: calc(2rem * var(--scaling));
   --text-heading-xl: calc(1.75rem * var(--scaling));
@@ -519,7 +525,7 @@
   --text-heading-2xs: calc(0.75rem * var(--scaling));
   --text-body-lg: calc(1rem * var(--scaling));
   --text-body: calc(0.875rem * var(--scaling));
-  --text-body-sm: calc(0.75rem * var(--scaling));
+  --text-body-sm: calc(0.8125rem * var(--scaling));
 
   --leading-heading-2xl: calc(36 / 32);
   --leading-heading-xl: calc(32 / 28);
@@ -530,7 +536,7 @@
   --leading-heading-2xs: calc(16 / 12);
   --leading-body-lg: calc(24 / 16);
   --leading-body: calc(20 / 14);
-  --leading-body-sm: calc(16 / 12);
+  --leading-body-sm: calc(18 / 13);
 
   /* Shadows read from the elevation tokens each appearance sets. */
   --shadow-none: var(--elevation-none);

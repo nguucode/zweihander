@@ -68,25 +68,26 @@
 }
 
 .sm {
-  --field-size: var(--space-8);
-  min-block-size: var(--space-8);
+  --field-size: var(--control-sm);
+  min-block-size: var(--control-sm);
   padding-inline: var(--space-2);
+  border-radius: max(var(--radius-sm), min(var(--radius-md), var(--radius-full)));
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
 }
 .md {
-  --field-size: var(--space-10);
-  min-block-size: var(--space-10);
+  --field-size: var(--control-md);
+  min-block-size: var(--control-md);
   padding-inline: var(--space-3);
   font-size: var(--text-body);
   line-height: var(--leading-body);
 }
 .lg {
-  --field-size: var(--space-12);
-  min-block-size: var(--space-12);
-  padding-inline: var(--space-4);
-  font-size: var(--text-body-lg);
-  line-height: var(--leading-body-lg);
+  --field-size: var(--control-lg);
+  min-block-size: var(--control-lg);
+  padding-inline: var(--space-3);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
 }
 
 .outlined {
@@ -227,8 +228,8 @@
   grid-template-columns: 1fr var(--space-4);
   align-items: center;
   gap: var(--space-2);
-  min-block-size: var(--space-8);
-  padding: var(--space-1-5) var(--space-3);
+  min-block-size: var(--control-md);
+  padding: var(--space-1-5) var(--space-2);
   cursor: default;
   user-select: none;
   outline: none;

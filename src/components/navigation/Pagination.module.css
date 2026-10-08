@@ -1,12 +1,12 @@
 .pagination {
-  --pagination-size: var(--space-10);
+  --pagination-size: var(--control-md);
   font-family: var(--font-sans);
   font-size: var(--text-body);
   line-height: var(--leading-body);
 }
 
 .sm {
-  --pagination-size: var(--space-8);
+  --pagination-size: var(--control-sm);
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
 }

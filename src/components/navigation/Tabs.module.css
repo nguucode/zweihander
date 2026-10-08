@@ -1,5 +1,5 @@
 .tabs {
-  --tab-height: var(--space-10);
+  --tab-height: var(--control-md);
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
@@ -10,7 +10,7 @@
 }
 
 .sm {
-  --tab-height: var(--space-8);
+  --tab-height: var(--control-sm);
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
 }

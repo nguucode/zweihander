@@ -64,7 +64,7 @@ export const Sizes: Story = {
     const heights = ['sm', 'md', 'lg'].map(
       (n) => canvas.getByLabelText(n).parentElement!.getBoundingClientRect().height,
     )
-    await expect(heights).toEqual([32, 40, 48])
+    await expect(heights).toEqual([24, 32, 40])
   },
 }
 

@@ -67,7 +67,7 @@ export const Sizes: Story = {
     const heights = ['sm', 'md', 'lg', 'xl'].map(
       (n) => canvas.getByRole('button', { name: n }).getBoundingClientRect().height,
     )
-    await expect(heights).toEqual([32, 40, 48, 56])
+    await expect(heights).toEqual([24, 32, 40, 48])
   },
 }
 

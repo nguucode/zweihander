@@ -13,7 +13,7 @@
 }
 
 .toolbar {
-  min-block-size: var(--space-10);
+  min-block-size: var(--control-md);
   margin-block-end: var(--space-4);
 }
 

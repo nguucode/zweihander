@@ -72,7 +72,7 @@ export const Sizes: Story = {
   ),
   play: async ({ canvas }) => {
     const heights = ['sm', 'md', 'lg'].map((n) => canvas.getByRole('combobox', { name: n }).getBoundingClientRect().height)
-    await expect(heights).toEqual([32, 40, 48])
+    await expect(heights).toEqual([24, 32, 40])
   },
 }
 

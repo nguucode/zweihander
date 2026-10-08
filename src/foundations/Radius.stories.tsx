@@ -139,9 +139,9 @@ export const Presets: Story = {
 
     // full pills the control...
     await expect(full.control).toBeGreaterThan(1000)
-    // ...but a field must never reach a pill. The input is 40px tall, so
-    // anything at or above 20px is one.
-    await expect(full.field).toBeLessThan(20)
+    // ...but a field must never reach a pill. The input is 32px tall, so
+    // anything at or above 16px is one.
+    await expect(full.field).toBeLessThan(16)
     await expect(full.panel).toBeLessThan(1000)
     // ...and it still has to be a step up from large, or "full" would just
     // be "large with a pill button".

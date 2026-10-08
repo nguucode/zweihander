@@ -286,6 +286,9 @@ const rootDerived = Object.fromEntries(entries(semantic.root).filter(isDerived))
 const spaceDecls = entries(semantic.space)
   .map(([k, v]) => `  --space-${k}: calc(${v.$value} * var(--scaling));`)
   .join('\n')
+const controlDecls = entries(semantic.control)
+  .map(([k, v]) => `  --control-${k}: calc(${v.$value} * var(--scaling));`)
+  .join('\n')
 const textDecls = entries(semantic.text)
   .map(([k, v]) => `  --text-${k}: calc(${v.$value} * var(--scaling));`)
   .join('\n')
@@ -402,8 +405,8 @@ ${grayScopeDecls()}
     min(calc(var(--radius) * var(--radius-factor)), var(--radius-full))
   );
   --radius-panel: max(
-    calc(var(--radius) * var(--radius-factor)),
-    min(calc((var(--radius) + 4px) * var(--radius-factor)), var(--radius-full))
+    calc((var(--radius) + 4px) * var(--radius-factor)),
+    min(calc((var(--radius) + 8px) * var(--radius-factor)), var(--radius-full))
   );
 
   /* Font roles, read from whichever faces the scope sets. */
@@ -411,6 +414,9 @@ ${decls(rootDerived)}
 
   /* Spacing — one multiplier over every gap and pad in the kit. */
 ${spaceDecls}
+
+  /* Control heights — one scale for every button, field, tab and row. */
+${controlDecls}
 
   /* Type roles. Leading is a ratio, so it follows the size under --scaling. */
 ${textDecls}
