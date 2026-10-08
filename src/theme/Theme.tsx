@@ -5,9 +5,9 @@ import { cn } from '@/lib/utils'
 /* The palette names come out of the same build as the [data-accent] /
    [data-gray] blocks they have to match, so a hue cannot exist in one and
    not the other. Re-exported here because this is where consumers look. */
-import type { AccentColor, GrayColor } from './palettes'
+import type { AccentColor, GrayColor } from '@/theme/palettes'
 
-export { ACCENT_COLORS, GRAY_COLORS } from './palettes'
+export { ACCENT_COLORS, GRAY_COLORS } from '@/theme/palettes'
 export type { AccentColor, GrayColor }
 
 export type Appearance = 'light' | 'dark' | 'inherit'

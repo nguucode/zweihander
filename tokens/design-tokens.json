@@ -1312,6 +1312,14 @@
         "$type": "color",
         "$value": "{primitive.accent.blue.600}"
       },
+      "primary-subtle": {
+        "$type": "color",
+        "$value": "{primitive.accent.blue.100}"
+      },
+      "primary-subtle-text": {
+        "$type": "color",
+        "$value": "{primitive.accent.blue.800}"
+      },
       "info": {
         "$type": "color",
         "$value": "{primitive.accent.blue.600}"
@@ -1485,6 +1493,14 @@
       "primary-text": {
         "$type": "color",
         "$value": "{primitive.accent.blue.400}"
+      },
+      "primary-subtle": {
+        "$type": "color",
+        "$value": "{primitive.accent.blue.950}"
+      },
+      "primary-subtle-text": {
+        "$type": "color",
+        "$value": "{primitive.accent.blue.300}"
       },
       "info": {
         "$type": "color",
