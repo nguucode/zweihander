@@ -6,7 +6,9 @@
   max-inline-size: 100%;
   box-sizing: border-box;
   border: 1px solid transparent;
-  border-radius: var(--radius-sm);
+  /* Follows the Theme's radius preset like every control: a pill under
+     radius="full", square under "none". */
+  border-radius: var(--radius-control);
   font-family: var(--font-sans);
   font-weight: 500;
   white-space: nowrap;
@@ -30,11 +32,6 @@
   line-height: var(--leading-body-sm);
 }
 
-/* Always a pill, whatever the radius preset — that is what the prop asks for. */
-.rounded {
-  border-radius: 9999px;
-}
-
 .text {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -54,7 +51,16 @@
   object-fit: cover;
 }
 
-/* One rule per variant: the appearance rules below read these. */
+/* One rule per variant: the appearance rules below read these. Neutral
+   reuses the secondary surface; the rest read --<name>, -foreground,
+   -subtle and -text, which the token build measures at 4.5:1. */
+.neutral {
+  --tag-solid: var(--foreground);
+  --tag-on-solid: var(--background);
+  --tag-subtle: var(--secondary);
+  --tag-text: var(--secondary-foreground);
+}
+
 .info {
   --tag-solid: var(--info);
   --tag-on-solid: var(--info-foreground);
@@ -83,6 +89,125 @@
   --tag-text: var(--danger-text);
 }
 
+.red {
+  --tag-solid: var(--red);
+  --tag-on-solid: var(--red-foreground);
+  --tag-subtle: var(--red-subtle);
+  --tag-text: var(--red-text);
+}
+
+.orange {
+  --tag-solid: var(--orange);
+  --tag-on-solid: var(--orange-foreground);
+  --tag-subtle: var(--orange-subtle);
+  --tag-text: var(--orange-text);
+}
+
+.amber {
+  --tag-solid: var(--amber);
+  --tag-on-solid: var(--amber-foreground);
+  --tag-subtle: var(--amber-subtle);
+  --tag-text: var(--amber-text);
+}
+
+.yellow {
+  --tag-solid: var(--yellow);
+  --tag-on-solid: var(--yellow-foreground);
+  --tag-subtle: var(--yellow-subtle);
+  --tag-text: var(--yellow-text);
+}
+
+.lime {
+  --tag-solid: var(--lime);
+  --tag-on-solid: var(--lime-foreground);
+  --tag-subtle: var(--lime-subtle);
+  --tag-text: var(--lime-text);
+}
+
+.green {
+  --tag-solid: var(--green);
+  --tag-on-solid: var(--green-foreground);
+  --tag-subtle: var(--green-subtle);
+  --tag-text: var(--green-text);
+}
+
+.emerald {
+  --tag-solid: var(--emerald);
+  --tag-on-solid: var(--emerald-foreground);
+  --tag-subtle: var(--emerald-subtle);
+  --tag-text: var(--emerald-text);
+}
+
+.teal {
+  --tag-solid: var(--teal);
+  --tag-on-solid: var(--teal-foreground);
+  --tag-subtle: var(--teal-subtle);
+  --tag-text: var(--teal-text);
+}
+
+.cyan {
+  --tag-solid: var(--cyan);
+  --tag-on-solid: var(--cyan-foreground);
+  --tag-subtle: var(--cyan-subtle);
+  --tag-text: var(--cyan-text);
+}
+
+.sky {
+  --tag-solid: var(--sky);
+  --tag-on-solid: var(--sky-foreground);
+  --tag-subtle: var(--sky-subtle);
+  --tag-text: var(--sky-text);
+}
+
+.blue {
+  --tag-solid: var(--blue);
+  --tag-on-solid: var(--blue-foreground);
+  --tag-subtle: var(--blue-subtle);
+  --tag-text: var(--blue-text);
+}
+
+.indigo {
+  --tag-solid: var(--indigo);
+  --tag-on-solid: var(--indigo-foreground);
+  --tag-subtle: var(--indigo-subtle);
+  --tag-text: var(--indigo-text);
+}
+
+.violet {
+  --tag-solid: var(--violet);
+  --tag-on-solid: var(--violet-foreground);
+  --tag-subtle: var(--violet-subtle);
+  --tag-text: var(--violet-text);
+}
+
+.purple {
+  --tag-solid: var(--purple);
+  --tag-on-solid: var(--purple-foreground);
+  --tag-subtle: var(--purple-subtle);
+  --tag-text: var(--purple-text);
+}
+
+.fuchsia {
+  --tag-solid: var(--fuchsia);
+  --tag-on-solid: var(--fuchsia-foreground);
+  --tag-subtle: var(--fuchsia-subtle);
+  --tag-text: var(--fuchsia-text);
+}
+
+.pink {
+  --tag-solid: var(--pink);
+  --tag-on-solid: var(--pink-foreground);
+  --tag-subtle: var(--pink-subtle);
+  --tag-text: var(--pink-text);
+}
+
+.rose {
+  --tag-solid: var(--rose);
+  --tag-on-solid: var(--rose-foreground);
+  --tag-subtle: var(--rose-subtle);
+  --tag-text: var(--rose-text);
+}
+
 .subtle {
   background: var(--tag-subtle);
   color: var(--tag-text);
@@ -106,7 +231,7 @@
   margin-inline-end: calc(var(--space-1) * -1);
   padding: 0;
   border: 0;
-  border-radius: var(--radius-sm);
+  border-radius: max(var(--radius-sm), var(--radius-full));
   background: transparent;
   color: inherit;
   font-size: var(--tag-icon);

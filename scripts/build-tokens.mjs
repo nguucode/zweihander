@@ -113,10 +113,11 @@ const decls = (obj, indent = '  ') =>
     .join('\n')
 
 /**
- * Status colours pin their ramp steps by hand, so measure them the way the
- * accents are measured: a label on its solid, and status text on both its
- * subtle tint and the page, all at 4.5:1. A ramp edit that breaks one stops
- * the build instead of shipping an unreadable Tag or Alert.
+ * Status and hue colours (--red, --red-subtle, …) pin their ramp steps by
+ * hand, so measure them the way the accents are measured: a label on its
+ * solid, and text on both its subtle tint and the page, all at 4.5:1. A ramp
+ * edit that breaks one stops the build instead of shipping an unreadable Tag
+ * or Alert.
  */
 for (const [mode, page] of [
   ['light', PAGE_LIGHT],
@@ -124,7 +125,7 @@ for (const [mode, page] of [
 ]) {
   const c = semantic.color[mode]
   const val = (k) => alias(c[k].$value, { accent: {}, gray: {} })
-  for (const s of ['info', 'success', 'warning', 'danger']) {
+  for (const s of ['info', 'success', 'warning', 'danger', ...ACCENTS]) {
     for (const [fg, bg] of [
       [`${s}-foreground`, s],
       [`${s}-text`, `${s}-subtle`],

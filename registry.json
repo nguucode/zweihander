@@ -210,7 +210,7 @@
       "name": "tag",
       "type": "registry:component",
       "title": "Tag",
-      "description": "Short status or category label, four variants and three appearances, with an optional remove button.",
+      "description": "Short status or category label, status and hue variants, three appearances, with an optional remove button.",
       "registryDependencies": [
         "https://ontheshore.biz/zweihander/r/utils.json",
         "https://ontheshore.biz/zweihander/r/tokens.json",

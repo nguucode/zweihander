@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useState } from 'react'
 import { expect, fn } from 'storybook/test'
 import { Icon } from '@/lib/icon'
-import { Tag } from './Tag'
+import { TAG_VARIANTS, Tag } from './Tag'
 
 const portrait =
   'data:image/svg+xml,' +
@@ -19,7 +19,7 @@ const meta = {
   argTypes: {
     size: { control: 'inline-radio', options: ['sm', 'md'] },
     appearance: { control: 'inline-radio', options: ['subtle', 'outlined', 'solid'] },
-    variant: { control: 'inline-radio', options: ['info', 'success', 'warning', 'danger'] },
+    variant: { control: 'select', options: TAG_VARIANTS },
     startIcon: { control: false },
   },
 } satisfies Meta<typeof Tag>
@@ -29,7 +29,8 @@ type Story = StoryObj<typeof meta>
 
 const grid = { display: 'grid', gap: 'var(--space-3)', justifyItems: 'start' }
 const row = { display: 'flex', flexWrap: 'wrap' as const, gap: 'var(--space-2)', alignItems: 'center' }
-const variants = ['info', 'success', 'warning', 'danger'] as const
+const statuses = ['neutral', 'info', 'success', 'warning', 'danger'] as const
+const hues = TAG_VARIANTS.filter((v) => !(statuses as readonly string[]).includes(v))
 
 export const Default: Story = {}
 
@@ -38,7 +39,22 @@ export const Matrix: Story = {
     <div style={grid}>
       {(['subtle', 'outlined', 'solid'] as const).map((appearance) => (
         <div key={appearance} style={row}>
-          {variants.map((variant) => (
+          {statuses.map((variant) => (
+            <Tag key={variant} {...args} appearance={appearance} variant={variant} text={variant} />
+          ))}
+        </div>
+      ))}
+    </div>
+  ),
+}
+
+/** Every hue, for categories rather than status: labels, projects, owners. */
+export const Colors: Story = {
+  render: (args) => (
+    <div style={grid}>
+      {(['subtle', 'outlined', 'solid'] as const).map((appearance) => (
+        <div key={appearance} style={row}>
+          {hues.map((variant) => (
             <Tag key={variant} {...args} appearance={appearance} variant={variant} text={variant} />
           ))}
         </div>
@@ -68,10 +84,6 @@ export const WithIcon: Story = {
 
 export const WithAvatar: Story = {
   args: { text: 'Mary Thompson', startAvatar: portrait, hasRemoveButton: true },
-}
-
-export const Rounded: Story = {
-  args: { isRounded: true, appearance: 'outlined' },
 }
 
 export const Removable: Story = {
