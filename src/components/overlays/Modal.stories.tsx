@@ -22,7 +22,7 @@ const meta = {
     ),
     footer: (
       <>
-        <ModalClose render={<Button appearance="outlined" variant="accent" />}>Cancel</ModalClose>
+        <ModalClose render={<Button variant="secondary" />}>Cancel</ModalClose>
         <Button>Save</Button>
       </>
     ),
@@ -85,7 +85,7 @@ export const Alert: Story = {
     size: 'sm',
     footer: (
       <>
-        <ModalClose render={<Button appearance="outlined" variant="accent" />}>Keep project</ModalClose>
+        <ModalClose render={<Button variant="secondary" />}>Keep project</ModalClose>
         <Button variant="destructive">Delete</Button>
       </>
     ),
