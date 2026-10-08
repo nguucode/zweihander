@@ -50,14 +50,16 @@ export const Default: Story = {
     await expect(args.onValueChange).toHaveBeenLastCalledWith(new Date(2026, 8, 24))
     await waitFor(() => expect(body().queryByRole('dialog')).toBeNull())
     await expect(input).toHaveValue('24/09/2026')
-    // Focus returns to the button; Escape closes without a change.
+    // A pointer pick sends the field back to rest: nothing in it keeps focus.
     const button = canvas.getByRole('button', { name: 'Choose date, 24/09/2026 selected' })
-    await waitFor(() => expect(button).toHaveFocus())
+    await waitFor(() => expect(document.activeElement).toBe(document.body))
+    // Escape closes without a change, and focus returns to the button.
     await userEvent.click(button)
     await body().findByRole('dialog')
     await userEvent.keyboard('{ArrowRight}{Escape}')
     await waitFor(() => expect(body().queryByRole('dialog')).toBeNull())
     await expect(input).toHaveValue('24/09/2026')
+    await waitFor(() => expect(button).toHaveFocus())
   },
 }
 
@@ -76,6 +78,14 @@ export const ClickToOpen: Story = {
     await userEvent.keyboard('{Escape}')
     await waitFor(() => expect(body().queryByRole('dialog')).toBeNull())
     await expect(input).toHaveFocus()
+    // A pointer pick sends the field back to rest: no caret, no ring.
+    await userEvent.click(input)
+    const again = await body().findByRole('dialog', { name: 'Choose date' })
+    await userEvent.click(within(again).getByRole('button', { name: day(2026, 9, 22) }))
+    await waitFor(() => expect(body().queryByRole('dialog')).toBeNull())
+    await expect(args.onValueChange).toHaveBeenLastCalledWith(new Date(2026, 8, 22))
+    await waitFor(() => expect(input).not.toHaveFocus())
+    await expect(input).toHaveValue('22/09/2026')
   },
 }
 
