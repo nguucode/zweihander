@@ -1,4 +1,6 @@
 .panel {
+  /* Transparency shows as a grey-and-white check, as in Figma. */
+  --checker: repeating-conic-gradient(#d4d4d4 0 25%, #fff 0 50%) 0 0 / 8px 8px;
   display: grid;
   gap: var(--space-3);
   /* Eight 24px swatches and their gaps fit in one row. */
@@ -30,7 +32,7 @@
 /* The thumbs are white rings with a dark edge: one of the two is at least
    3:1 against any colour under them. */
 .areaThumb,
-.hueThumb {
+.stripThumb {
   box-sizing: border-box;
   inline-size: var(--space-4);
   block-size: var(--space-4);
@@ -49,28 +51,36 @@
 }
 
 .areaThumb:has(:focus-visible),
-.hueThumb:has(:focus-visible) {
+.stripThumb:has(:focus-visible) {
   outline: 2px solid var(--ring);
   outline-offset: 2px;
 }
 
-/* ------------------------------------------------------------------- hue */
-.hue {
+/* ---------------------------------------------------------------- strips
+   Hue and opacity, stacked. */
+.strips {
+  display: grid;
+  row-gap: var(--space-1);
+}
+.strip {
   inline-size: 100%;
 }
 
-.hueControl {
+.stripControl {
   display: flex;
   align-items: center;
   block-size: var(--space-4);
   touch-action: none;
 }
 
-.hueTrack {
+.stripTrack {
   position: relative;
   inline-size: 100%;
   block-size: var(--space-3);
   border-radius: 9999px;
+}
+
+.hueTrack {
   background: linear-gradient(
     to right,
     hsl(0 100% 50%),
@@ -83,17 +93,83 @@
   );
 }
 
-.hueThumb {
-  background: hsl(var(--picker-hue) 100% 50%);
+.alphaTrack {
+  background:
+    linear-gradient(to right, transparent, var(--picker-rgb)),
+    var(--checker);
+}
+
+.stripThumb {
   cursor: grab;
 }
-.hueThumb:active {
+.stripThumb:active {
   cursor: grabbing;
+}
+.hueThumb {
+  background: hsl(var(--picker-hue) 100% 50%);
+}
+.alphaThumb {
+  background:
+    linear-gradient(var(--picker-color), var(--picker-color)),
+    var(--checker);
+}
+
+/* ---------------------------------------------------------------- fields
+   Format Select, then the channels in one md (32px) field box, both the
+   kit's own inputs. */
+.fields {
+  display: flex;
+  gap: var(--space-2);
+}
+
+/* Two classes: beats the 20rem width InputField gives every field. */
+.fields .format {
+  flex: none;
+  inline-size: 4.75rem;
+}
+
+.channels {
+  flex: 1;
+  min-inline-size: 0;
+  gap: 0;
+  padding-inline: 0;
+}
+
+.channel {
+  /* Not the input's default ~20ch: the fields share the box, but each keeps
+     room for three digits ("255", "360", "100") and the caret, always. */
+  inline-size: 0;
+  min-inline-size: calc(3ch + 2 * var(--space-1) + 2px);
+  align-self: stretch;
+  padding-inline: var(--space-1);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+.channel + .channel {
+  border-inline-start: 1px solid var(--border);
+}
+.hexChannel {
+  flex: 3;
+  font-family: var(--font-mono);
+  text-align: start;
+  text-transform: lowercase;
+}
+/* Just wide enough for "100"; the unit sits after it, as in Figma. */
+.alphaChannel {
+  flex: none;
+  inline-size: calc(3ch + var(--space-1) + 4px);
+  padding-inline-end: 2px;
+  text-align: end;
+}
+.unit {
+  padding-inline-end: var(--space-2);
 }
 
 /* -------------------------------------------------------------- swatches */
 .swatches {
   display: grid;
+  padding-block-start: var(--space-3);
+  border-block-start: 1px solid var(--border);
   grid-template-columns: repeat(auto-fill, minmax(var(--space-6), 1fr));
   gap: var(--space-2);
 }
@@ -108,21 +184,24 @@
   padding: 0;
   border: 0;
   border-radius: var(--radius-sm);
-  background: var(--swatch);
-  /* An inner edge so a swatch the colour of the page still shows its shape:
-     --control-border, 3:1 on the page in either appearance. A fixed black
-     edge disappeared round a black swatch in dark mode. */
-  box-shadow: inset 0 0 0 1px var(--control-border);
+  background:
+    linear-gradient(var(--swatch), var(--swatch)),
+    var(--checker);
+  /* A faint inner edge, as Figma's: black 10% darkens whatever colour is
+     under it, so a white swatch still shows its shape. White 10% in dark,
+     where black would vanish round a dark swatch. Below 3:1 by choice: the
+     hex in the field, not the edge, tells the colour. */
+  box-shadow: inset 0 0 0 1px var(--use-light, rgb(0 0 0 / 0.1)) var(--use-dark, rgb(255 255 255 / 0.1));
   cursor: var(--cursor-button);
 }
 .swatch:focus-visible {
   outline: 2px solid var(--ring);
   outline-offset: 2px;
 }
-/* The chosen one gets a ring in --foreground, not a tick that would need a
-   contrasting colour per swatch. */
+/* The chosen one gets a ring in the brand colour, as every selected control
+   in the kit, not a tick that would need a contrasting colour per swatch. */
 .swatch:checked {
-  outline: 2px solid var(--foreground);
+  outline: 2px solid var(--primary);
   outline-offset: 2px;
 }
 /* Focus on the chosen swatch: the ring colour, a step further out. */
@@ -139,7 +218,9 @@
   inline-size: calc(var(--space-4) + var(--space-1));
   block-size: calc(var(--space-4) + var(--space-1));
   border-radius: var(--radius-sm);
-  background: var(--swatch);
+  background:
+    linear-gradient(var(--swatch), var(--swatch)),
+    repeating-conic-gradient(#d4d4d4 0 25%, #fff 0 50%) 0 0 / 8px 8px;
   box-shadow: inset 0 0 0 1px var(--control-border);
 }
 
@@ -183,9 +264,9 @@
 }
 
 /* Swatches are at least 24px apart edge to edge (WCAG 2.5.8); a 44px area
-   round each would overlap its neighbours, so only the hue thumb grows one. */
+   round each would overlap its neighbours, so only the strip thumbs grow one. */
 @media (pointer: coarse) {
-  .hueThumb::before {
+  .stripThumb::before {
     content: '';
     position: absolute;
     inset: 50% auto auto 50%;
