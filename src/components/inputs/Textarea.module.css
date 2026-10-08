@@ -1,23 +1,27 @@
 /* A textarea's box grows with it, so it takes vertical padding instead of a
-   fixed height: 6px at sm, 8px at md, 12px at lg, which puts the first line
-   where a single-line field of the same size puts its text. Doubled classes
-   outrank the shared size classes, whichever stylesheet loads first. */
+   fixed height: 6px at sm, 8px at md, which puts the first line where a
+   single-line field of the same size puts its text. The padding sits on the
+   <textarea>, not the box, so the browser's resize handle lands in the
+   field's corner. Doubled classes outrank the shared size classes,
+   whichever stylesheet loads first. */
 .multiline.multiline {
   align-items: stretch;
   min-block-size: 0;
+  padding: 0;
 }
-.pad-sm.pad-sm {
-  padding-block: var(--space-1-5);
+.pad-sm {
+  --pad-block: var(--space-1-5);
+  --pad-inline: var(--space-2);
 }
-.pad-md.pad-md {
-  padding-block: var(--space-2);
-}
-.pad-lg.pad-lg {
-  padding-block: var(--space-3);
+.pad-md {
+  --pad-block: var(--space-2);
+  --pad-inline: var(--space-3);
 }
 
-.textarea {
+.textarea.textarea {
   display: block;
+  box-sizing: border-box;
   inline-size: 100%;
+  padding: var(--pad-block) var(--pad-inline);
   overflow-y: auto;
 }
