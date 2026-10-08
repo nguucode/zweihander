@@ -18,10 +18,10 @@ export interface InlineAlertProps extends ComponentProps<'div'> {
 }
 
 const icons: Record<NonNullable<InlineAlertProps['variant']>, IconName> = {
-  info: 'info',
-  success: 'success',
-  warning: 'warning',
-  danger: 'danger',
+  info: 'info-filled',
+  success: 'success-filled',
+  warning: 'warning-filled',
+  danger: 'danger-filled',
 }
 
 /**
