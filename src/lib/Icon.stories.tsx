@@ -14,8 +14,9 @@ type Story = StoryObj<typeof meta>
 
 const names = [
   'calendar', 'check', 'chevron-down', 'chevron-left', 'chevron-right', 'chevron-up',
-  'chevrons-up-down', 'clear', 'close', 'danger', 'external', 'file', 'info', 'menu', 'minus', 'more', 'pause', 'play', 'plus',
-  'search', 'star', 'star-filled', 'success', 'upload', 'user', 'warning',
+  'chevrons-up-down', 'clear', 'close', 'danger', 'danger-filled', 'external', 'file', 'info', 'info-filled', 'menu', 'minus',
+  'more', 'pause', 'play', 'plus', 'search', 'star', 'star-filled', 'success', 'success-filled', 'upload', 'user', 'warning',
+  'warning-filled',
 ] satisfies IconName[]
 
 /** Every icon the kit ships, by the name components use. Google Material Symbols, Apache 2.0. */
