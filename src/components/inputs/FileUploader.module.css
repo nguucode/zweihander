@@ -24,14 +24,15 @@
 }
 
 /* ------------------------------------------------------------- dropzone
-   The dashed edge is --control-border, 3:1 on the page like a field's. */
+   The dashed edge is --field-border, as a text field's. The Choose button
+   inside is an accent contained button. */
 .dropzone {
   position: relative;
   display: grid;
   justify-items: center;
   gap: var(--space-2);
   padding: var(--space-6) var(--space-4);
-  border: 1px dashed var(--control-border);
+  border: 1px dashed var(--field-border);
   border-radius: var(--radius-panel);
   background: var(--surface-subtle);
   text-align: center;
@@ -81,6 +82,8 @@
 
 .helper {
   margin: 0;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
   color: var(--muted-foreground);
 }
 
@@ -92,43 +95,77 @@
 }
 
 /* ------------------------------------------------------------------ list */
+/* Compact: plain rows, no card per file. A row tints on hover. */
 .list {
   display: grid;
-  gap: var(--space-2);
   margin: 0;
-  margin-block-start: var(--space-1-5);
+  margin-block-start: var(--space-1);
   padding: 0;
   list-style: none;
 }
 
 .item {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
   align-items: center;
-  gap: var(--space-3);
-  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-3);
-  border: 1px solid var(--border);
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-1) var(--space-1) var(--space-2);
   border-radius: var(--radius-field);
-  background: var(--background);
+}
+.item:hover {
+  background: var(--hover-overlay);
 }
 
-.itemError {
-  border-color: var(--danger-text);
-}
-
+/* File-type icon, after Microsoft 365's: a page with a coloured badge.
+   The badge colours are file-type identity, not theme, so they stay fixed
+   in dark mode; white on each is above 4.5:1. */
 .fileIcon {
-  display: inline-flex;
-  color: var(--muted-foreground);
-  font-size: calc(var(--space-4) + var(--space-1));
+  flex: none;
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+  --kind: var(--muted-foreground);
+}
+.fileIcon[data-kind='word'] { --kind: #185abd; }
+.fileIcon[data-kind='excel'] { --kind: #107c41; }
+.fileIcon[data-kind='powerpoint'] { --kind: #c43e1c; }
+.fileIcon[data-kind='pdf'] { --kind: #c4262e; }
+.fileIcon[data-kind='image'] { --kind: #7247b8; }
+.fileIcon[data-kind='audio'] { --kind: #0f6cbd; }
+
+/* Filled: the page is a tint of the type colour, the folded corner a
+   deeper one, the badge solid. */
+.page {
+  fill: color-mix(in oklab, var(--kind) 18%, var(--background));
+}
+.fold {
+  fill: color-mix(in oklab, var(--kind) 40%, var(--background));
 }
 
-.meta {
-  display: grid;
-  gap: 0.125rem;
+.badge {
+  fill: var(--kind);
+}
+
+.badgeText {
+  fill: #fff;
+  font-family: var(--font-sans);
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.glyph {
+  fill: #fff;
+  stroke: #fff;
+}
+
+.nameRow {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
   min-inline-size: 0;
 }
 
 .name {
+  min-inline-size: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -136,16 +173,25 @@
 }
 
 .size {
+  flex: none;
+  white-space: nowrap;
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
   color: var(--muted-foreground);
+  font-variant-numeric: tabular-nums;
 }
 
-.progress {
-  margin-block-start: var(--space-1);
+/* Last column whether or not there is a ring or an error beside it, so
+   every row lines up. */
+.remove {
+  grid-column: -2;
 }
 
 .fileError {
+  max-inline-size: 12rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
   color: var(--danger-text);

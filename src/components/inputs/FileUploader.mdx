@@ -19,11 +19,14 @@ A native `<input type="file">` behind a kit Button.
 | Part | What it is |
 | --- | --- |
 | **Label** | Names the whole uploader (a group). |
-| **Drop zone** | A dashed area with an icon, "Drag files here or", and the Choose button. Solid-edged while a file is over it. |
-| **Choose button** | Opens the system picker. The way in for keyboard, screen reader and touch. |
-| **Helper text** | What is allowed, e.g. "PDF, PNG or JPG, up to 5 MB each." |
+| **Drop zone** | A dashed area with an icon, "Drag files here or", the Choose button and the helper text. Solid-edged while a file is over it. |
+| **Choose button** | An `accent contained` button. Opens the system picker. The way in for keyboard, screen reader and touch. |
+| **Helper text** | Inside the drop zone, under the button: what is allowed, e.g. "PDF, PNG or JPG, up to 5 MB each." |
 | **Errors** | One line per file that was not added, in `--danger-text`. |
-| **File list** | Name, size, optional progress bar or error, and a remove button. |
+| **File list** | Compact rows, no card per file: type icon, name and size on one line, and the remove button; beside it, a progress ring while uploading or a short error. |
+| **Type icon** | A page with a coloured badge, after Microsoft 365: Word, Excel, PowerPoint, PDF, image, audio, from the extension or MIME type. Anything else is the bare page. |
+
+<Canvas of={FileUploaderStories.FileTypes} />
 
 ## Props
 
@@ -37,7 +40,7 @@ A native `<input type="file">` behind a kit Button.
 | `multiple` | boolean | `false` | One file is replaced by the next; many are appended. |
 | `maxSize` | bytes | – | |
 | `maxFiles` | number | – | With `multiple`. |
-| `getFileStatus` | `(file) => { progress?, error? }` | – | Progress 0–100, or an error message. |
+| `getFileStatus` | `(file) => { progress?, error? }` | – | Progress 0–100, or a short error, e.g. "Upload failed". |
 | `label`, `helperText`, `required`, `disabled`, `isFullWidth` | | | |
 | `name` | string | – | The native input carries the whole list, so a plain form post sends it. It follows a controlled `files` too. |
 
@@ -53,8 +56,8 @@ A native `<input type="file">` behind a kit Button.
 - **The same file twice is one file.** Name, size and modified time
   match, so it is skipped rather than listed again.
 - **Uploading is yours.** Start it in `onFilesChange` and report through
-  `getFileStatus`. A bar shows while `progress` is under 100; an `error`
-  replaces it and outlines the row.
+  `getFileStatus`. A ring beside the remove button shows while `progress`
+  is under 100 and goes at 100. An `error` takes its place, so keep it short ("Upload failed"); a long one truncates.
 
 ## Usage
 
@@ -84,6 +87,7 @@ A native `<input type="file">` behind a kit Button.
 - Remove buttons are named "Remove report.pdf". After a remove, focus
   moves to the next file's button, or back to Choose when the list is
   empty, so it is never lost.
-- The drop zone's edge is `--control-border` (3:1); while dragging it
-  turns solid as well as changing colour. Disabled fades the icon and the
+- The drop zone's edge is `--field-border`, as a text field's. The Choose
+  button inside is an `accent contained` button. While dragging the
+  edge turns solid as well as changing colour. Disabled fades the icon and the
   buttons, not the text.

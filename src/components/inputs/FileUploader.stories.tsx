@@ -126,11 +126,29 @@ export const WithStatus: Story = {
   args: {
     defaultFiles: [report, photo, file('contract.pdf', 1_200_000, 'application/pdf')],
     getFileStatus: (f) =>
-      f.name === 'team-photo.jpg' ? { progress: 45 } : f.name === 'contract.pdf' ? { error: 'Upload failed. Try again.' } : undefined,
+      f.name === 'team-photo.jpg' ? { progress: 45 } : f.name === 'contract.pdf' ? { error: 'Upload failed' } : undefined,
   },
   play: async ({ canvas }) => {
     await expect(canvas.getByRole('progressbar', { name: 'Uploading team-photo.jpg' })).toHaveAttribute('aria-valuenow', '45')
-    await expect(canvas.getByText('Upload failed. Try again.')).toBeVisible()
+    await expect(canvas.getByText('Upload failed')).toBeVisible()
+  },
+}
+
+/** Word, Excel, PowerPoint, PDF, image and audio get a coloured badge; anything else the bare page. */
+export const FileTypes: Story = {
+  args: {
+    accept: undefined,
+    helperText: undefined,
+    defaultFiles: [
+      file('Proposal.docx', 84_000, 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'),
+      file('Budget.xlsx', 52_000, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'),
+      file('Kick-off.pptx', 3_400_000, 'application/vnd.openxmlformats-officedocument.presentationml.presentation'),
+      report,
+      photo,
+      file('Interview.mp3', 4_100_000, 'audio/mpeg'),
+      file('notes.txt', 900, 'text/plain'),
+      file('Minutes of the quarterly steering committee meeting, final version.docx', 128_000, 'application/msword'),
+    ],
   },
 }
 
