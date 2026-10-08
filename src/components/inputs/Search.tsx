@@ -93,7 +93,7 @@ export function Search({
         />
         {canClear && (
           <button type="button" aria-label="Clear search" className={inputStyles.iconButton} onClick={clear}>
-            <Icon name="close" />
+            <Icon name="clear" />
           </button>
         )}
       </span>

@@ -1,10 +1,11 @@
-import { useState, type ReactNode, type Ref } from 'react'
+import { useRef, useState, type ReactNode, type Ref } from 'react'
 import { Combobox as BaseCombobox } from '@base-ui/react/combobox'
 import { Icon } from '@/lib/icon'
 import { cn } from '@/lib/utils'
 import {
   InputField,
   boxClass,
+  popupInset,
   inputStyles as s,
   type InputAppearance,
   type InputSize,
@@ -89,6 +90,9 @@ export function Combobox({
   // Only for highlighting the typed text in each option; Base UI owns the
   // input's value and the filtering.
   const [query, setQuery] = useState('')
+  // A pointer pick sends the field back to rest: no caret, no ring, as a
+  // native select after a click. A keyboard pick keeps focus where the user is.
+  const inputRef = useRef<HTMLInputElement | null>(null)
 
   return (
     <InputField
@@ -105,7 +109,11 @@ export function Combobox({
         items={items}
         value={find(value)}
         defaultValue={find(defaultValue)}
-        onValueChange={onValueChange && ((next) => onValueChange((next as Item | null)?.value ?? null))}
+        onValueChange={(next, details) => {
+          // After Base UI's own refocus of the input, hence the timeout.
+          if (details.event instanceof MouseEvent) setTimeout(() => inputRef.current?.blur())
+          onValueChange?.((next as Item | null)?.value ?? null)
+        }}
         // Highlight only what was typed. When an option is chosen the input
         // takes its label, which is not a query to mark in other options.
         onInputValueChange={(next, details) => setQuery(details.reason === 'input-change' ? next : '')}
@@ -116,9 +124,15 @@ export function Combobox({
         required={required}
         autoHighlight
       >
-        <BaseCombobox.InputGroup className={cn(boxClass(size, appearance), styles.group)}>
+        <BaseCombobox.InputGroup
+          className={cn(boxClass(size, appearance), styles.group)}
+        >
           <BaseCombobox.Input
-            ref={ref}
+            ref={(el) => {
+              inputRef.current = el
+              if (typeof ref === 'function') ref(el)
+              else if (ref) ref.current = el
+            }}
             id={id}
             placeholder={placeholder}
             autoFocus={autoFocus}
@@ -129,7 +143,7 @@ export function Combobox({
           {isLoading && <span className={cn(s.icon, s.spinner)} aria-hidden="true" />}
           {isClearable && !readOnly && (
             <BaseCombobox.Clear className={s.iconButton} aria-label="Clear selection">
-              <Icon name="close" />
+              <Icon name="clear" />
             </BaseCombobox.Clear>
           )}
           <BaseCombobox.Trigger
@@ -144,7 +158,10 @@ export function Combobox({
         </BaseCombobox.InputGroup>
         <BaseCombobox.Portal>
           <BaseCombobox.Positioner className={s.positioner} sideOffset={4}>
-            <BaseCombobox.Popup className={s.popup}>
+            <BaseCombobox.Popup
+              className={s.popup}
+              style={popupInset(size, appearance)}
+            >
               {isLoading ? (
                 <BaseCombobox.Status className={s.status}>Loading…</BaseCombobox.Status>
               ) : (
@@ -153,12 +170,12 @@ export function Combobox({
               <BaseCombobox.List>
                 {(item: Item) => (
                   <BaseCombobox.Item key={item.value} value={item} disabled={item.disabled} className={s.option}>
-                    <span>
-                      <Highlight text={item.label} query={query} />
-                    </span>
                     <BaseCombobox.ItemIndicator className={s.check}>
                       <Icon name="check" />
                     </BaseCombobox.ItemIndicator>
+                    <span>
+                      <Highlight text={item.label} query={query} />
+                    </span>
                   </BaseCombobox.Item>
                 )}
               </BaseCombobox.List>

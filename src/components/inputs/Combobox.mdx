@@ -17,9 +17,10 @@ Behaviour from Base UI's [Combobox](https://base-ui.com/react/components/combobo
 | --- | --- |
 | **Label** | `label`. |
 | **Combobox input** | A text input; typing filters the list. |
-| **Clean button** | "Clear selection", when `isClearable`. |
+| **Clear button** | "Clear selection", a filled circle-x, when `isClearable`. |
 | **Open button** | "Show options": the chevron. Opens the full list. |
-| **Options list** | Filtered as you type; "No matches" when empty, "Loading…" while loading. |
+| **Options list** | Filtered as you type; "No matches" when empty, "Loading…" while loading. Options are inset by the field's padding, so their content starts where the input text does. |
+| **Check** | Before the chosen option's label, in the brand colour. |
 | **Option (matched)** | The typed text is marked in each option. |
 
 ## Props
@@ -66,3 +67,6 @@ value.
   (the input already opens the list); the clear button is "Clear
   selection".
 - Loading and empty states are announced from the list.
+- After an option is picked with the pointer, the input loses focus and the
+  field returns to rest (no caret, no ring). A keyboard pick keeps focus in
+  the input, so keyboard and screen reader users are not dropped to the page.
