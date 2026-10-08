@@ -33,7 +33,7 @@ Plus the shared **label** and **helper text**.
 | `step` | number | `1` | Buttons and arrow keys. Shift steps by 10, Alt by 0.1. |
 | `precision` | number | – | Decimal places shown and accepted. |
 | `size` | `sm`, `md` | `md` | 24, 32px. |
-| `appearance` | `outlined`, `filled`, `underlined`, `unstyled` | `outlined` | |
+| `appearance` | `outlined`, `underlined`, `unstyled` | `outlined` | |
 | `label`, `helperText`, `validationState` | | – | From the shared field. |
 | `isFullWidth` | boolean | `false` | |
 | `name`, `placeholder` | string | – | |
@@ -43,6 +43,7 @@ Plus the shared **label** and **helper text**.
 
 ### Differences from the spec
 
+- **No `filled` appearance.** The spec's filled field (a tinted box with a bottom rule) was dropped to match the Claude apps, where every field is the white outlined box.
 - **Two sizes, not three.** `sm` (24px) and `md` (32px) only, the compact control scale of the Claude apps. The spec's larger steps were dropped; a big call to action is `md` with more room around it, not a taller box.
 - **`onValueChange` with a number**, not `onChange`: built on Base UI, it
   takes Base UI's name, and the value arrives parsed rather than as text.

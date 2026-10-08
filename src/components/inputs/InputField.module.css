@@ -92,11 +92,6 @@
   box-shadow: var(--shadow-2xs);
 }
 
-.filled {
-  border-block-end-color: var(--field-edge);
-  background: var(--surface-subtle);
-}
-
 /* Underlined and unstyled sit on the page: no fill, no side padding, so the
    text lines up with the label above it. */
 .underlined {

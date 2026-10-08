@@ -30,7 +30,7 @@ Label, description and invalid state are wired by Base UI's
 | `helperText` | node | – | |
 | `validationState` | `default`, `success`, `error` | `default` | |
 | `size` | `sm`, `md` | `md` | 24, 32px. |
-| `appearance` | `outlined`, `filled`, `underlined`, `unstyled` | `outlined` | |
+| `appearance` | `outlined`, `underlined`, `unstyled` | `outlined` | |
 | `prefix`, `suffix` | node | – | |
 | `isFullWidth` | boolean | `false` | Otherwise 20rem, capped at its container. |
 | `value`, `defaultValue`, `onChange` | | – | As on `<input>`: `onChange` gets the event. |
@@ -43,6 +43,7 @@ Every other `<input>` attribute passes through to the input, including `ref`.
 
 ### Differences from the spec
 
+- **No `filled` appearance.** The spec's filled field (a tinted box with a bottom rule) was dropped to match the Claude apps, where every field is the white outlined box.
 - **Two sizes, not three.** `sm` (24px) and `md` (32px) only, the compact control scale of the Claude apps. The spec's larger steps were dropped; a big call to action is `md` with more room around it, not a taller box.
 - **Native names** for native attributes: `disabled`, `required`,
   `readOnly` rather than `isDisabled`, `isRequired`, `isReadOnly`.
@@ -60,9 +61,9 @@ Every other `<input>` attribute passes through to the input, including `ref`.
 
 <Canvas of={TextInputStories.Validation} />
 
-Pick one appearance per form. `outlined` is the default; `filled` suits
-dense settings pages; `underlined` and `unstyled` are for fields that sit
-inside something else that already draws the edge.
+Pick one appearance per form. `outlined` is the default and the one to
+reach for; `underlined` and `unstyled` are for fields that sit inside
+something else that already draws the edge.
 
 ## Accessibility
 

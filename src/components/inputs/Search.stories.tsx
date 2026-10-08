@@ -10,7 +10,7 @@ const meta = {
   parameters: { a11y: { test: 'error' } },
   argTypes: {
     size: { control: 'inline-radio', options: ['sm', 'md'] },
-    appearance: { control: 'inline-radio', options: ['outlined', 'filled', 'underlined', 'unstyled'] },
+    appearance: { control: 'inline-radio', options: ['outlined', 'underlined', 'unstyled'] },
   },
   args: { onChange: fn() },
 } satisfies Meta<typeof Search>

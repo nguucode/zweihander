@@ -10,7 +10,7 @@ const meta = {
   parameters: { a11y: { test: 'error' } },
   argTypes: {
     size: { control: 'inline-radio', options: ['sm', 'md'] },
-    appearance: { control: 'inline-radio', options: ['outlined', 'filled', 'underlined', 'unstyled'] },
+    appearance: { control: 'inline-radio', options: ['outlined', 'underlined', 'unstyled'] },
     validationState: { control: 'inline-radio', options: ['default', 'success', 'error'] },
   },
   args: { label: 'Quantity', defaultValue: 6, min: 0, max: 100, onValueChange: fn() },
@@ -93,7 +93,7 @@ export const Sizes: Story = {
 export const Appearances: Story = {
   render: (args) => (
     <div style={{ display: 'grid', gap: 'var(--space-4)', justifyItems: 'start' }}>
-      {(['outlined', 'filled', 'underlined', 'unstyled'] as const).map((appearance) => (
+      {(['outlined', 'underlined', 'unstyled'] as const).map((appearance) => (
         <NumberInput key={appearance} {...args} appearance={appearance} label={appearance} />
       ))}
     </div>

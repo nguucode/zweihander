@@ -30,7 +30,7 @@ The field is [Text Input](?path=/docs/components-inputs-textinput--docs)'s.
 | `label` | node | – | Optional visible label. |
 | `aria-label` | string | `"Search"` | Used when there is no `label`. |
 | `size` | `sm`, `md` | `md` | 24, 32px. |
-| `appearance` | `outlined`, `filled`, `underlined`, `unstyled` | `outlined` | |
+| `appearance` | `outlined`, `underlined`, `unstyled` | `outlined` | |
 | `isFullWidth` | boolean | `false` | |
 | `disabled`, `readOnly`, `autoFocus` | boolean | `false` | Native. |
 
@@ -38,6 +38,7 @@ The field is [Text Input](?path=/docs/components-inputs-textinput--docs)'s.
 
 ### Differences from the spec
 
+- **No `filled` appearance.** The spec's filled field (a tinted box with a bottom rule) was dropped to match the Claude apps, where every field is the white outlined box.
 - **Two sizes, not three.** `sm` (24px) and `md` (32px) only, the compact control scale of the Claude apps. The spec's larger steps were dropped; a big call to action is `md` with more room around it, not a taller box.
 - **`label`, `size` and `appearance` are added**, from the shared field,
   so a search box can match the form or toolbar it sits in.

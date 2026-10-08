@@ -10,7 +10,7 @@ const meta = {
   parameters: { a11y: { test: 'error' } },
   argTypes: {
     size: { control: 'inline-radio', options: ['sm', 'md'] },
-    appearance: { control: 'inline-radio', options: ['outlined', 'filled', 'underlined', 'unstyled'] },
+    appearance: { control: 'inline-radio', options: ['outlined', 'underlined', 'unstyled'] },
     validationState: { control: 'inline-radio', options: ['default', 'success', 'error'] },
     resize: { control: 'inline-radio', options: ['none', 'both', 'vertical', 'horizontal'] },
   },
@@ -35,7 +35,7 @@ export const Default: Story = {
 export const Appearances: Story = {
   render: (args) => (
     <div style={stack}>
-      {(['outlined', 'filled', 'underlined', 'unstyled'] as const).map((appearance) => (
+      {(['outlined', 'underlined', 'unstyled'] as const).map((appearance) => (
         <Textarea key={appearance} {...args} appearance={appearance} label={appearance} minRows={2} />
       ))}
     </div>
