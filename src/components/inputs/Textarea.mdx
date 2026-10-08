@@ -8,9 +8,9 @@ import * as TextareaStories from './Textarea.stories'
 Several lines of text: a message, a description, a note. Spec:
 [uiguideline.com/components/textarea](https://www.uiguideline.com/components/textarea).
 The same field as [Text Input](?path=/docs/components-inputs-textinput--docs):
-label, helper, validation, and sizes are shared.
+label, helper, validation and sizes are shared. Outlined only.
 
-<Canvas of={TextareaStories.Default} />
+<Canvas of={TextareaStories.Sizes} />
 
 ## Anatomy
 
@@ -19,12 +19,12 @@ label, helper, validation, and sizes are shared.
 | **Label** | `label`, above the field. |
 | **Field** | The box: edge, fill and focus ring, padded top and bottom so it grows with the text. |
 | **Placeholder** | `placeholder`. |
-| **Resize handle** | The browser's own, on the axes `resize` allows. Hidden with `hasAutoSize`. |
+| **Resize handle** | The browser's own, in the field's bottom corner, on the axes `resize` allows. Hidden with `hasAutoSize`. |
 | **Helper text** | `helperText`; the error message when `validationState` is error. |
 
 ## Props
 
-Everything Text Input takes except `prefix` and `suffix`, plus:
+Everything Text Input takes except `prefix`, `suffix` and `appearance`, plus:
 
 | Prop | Values | Default | |
 | --- | --- | --- | --- |

@@ -99,7 +99,7 @@ export function Textarea({
             {
               ...style,
               resize: hasAutoSize ? 'none' : resize,
-              ...(maxRows && { maxBlockSize: `calc(${maxRows} * 1lh)` }),
+              ...(maxRows && { maxBlockSize: `calc(${maxRows} * 1lh + 2 * var(--pad-block))` }),
             } as CSSProperties
           }
         />
