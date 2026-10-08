@@ -562,7 +562,7 @@
   --leading-heading-2xs: calc(16 / 12);
   --leading-body-lg: calc(24 / 16);
   --leading-body: calc(20 / 14);
-  --leading-body-sm: calc(18 / 13);
+  --leading-body-sm: calc(16 / 13);
 
   /* Shadows read from the elevation tokens each appearance sets. */
   --shadow-none: var(--elevation-none);

@@ -1656,7 +1656,7 @@
       "$type": "dimension",
       "$value": "0.8125rem",
       "$extensions": {
-        "leading": "18 / 13"
+        "leading": "16 / 13"
       }
     }
   },
