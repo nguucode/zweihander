@@ -1256,6 +1256,10 @@
         "$type": "color",
         "$value": "{primitive.gray.taupe.500}"
       },
+      "subtle-foreground": {
+        "$type": "color",
+        "$value": "{primitive.gray.taupe.600}"
+      },
       "surface-subtle": {
         "$type": "color",
         "$value": "{primitive.gray.taupe.50}"
@@ -1413,6 +1417,10 @@
       "muted-foreground": {
         "$type": "color",
         "$value": "{primitive.gray.taupe.400}"
+      },
+      "subtle-foreground": {
+        "$type": "color",
+        "$value": "{primitive.gray.taupe.300}"
       },
       "surface-subtle": {
         "$type": "color",

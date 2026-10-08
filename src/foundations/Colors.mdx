@@ -129,6 +129,12 @@ ramp has since been darkened to the lightest value that clears 4.6:1 on
 its own gray-100, so muted text can now sit on a muted fill. On the page background, where secondary
 text usually lives, the same token is 4.98:1.
 
+**`--subtle-foreground` is a step between body text and muted text**
+(gray-600 light, gray-300 dark): navigation labels that should recede
+until hovered or current, as in the Claude apps' sidebar. It reads about
+7.5:1 on the light page, so it is body-safe; use `--muted-foreground` for
+genuinely secondary text.
+
 **`--surface-subtle` is a filled panel that muted text can sit on.**
 Muted text reads 4.98:1 on it (gray-50, taupe) and 5.97:1 on gray-800 in dark — a step off `--card` so a filled panel still reads as filled. The build
 measures `--muted-foreground` on `--background`, `--card`,
@@ -211,6 +217,7 @@ swappable on its own: an **accent** (blue by default) for `--primary` and
 | `secondary-foreground`, `accent-foreground` | gray-900 | gray-50 | gray |
 | `selected` | gray-200 | white 10% | gray |
 | `muted-foreground` | gray-500 | gray-400 | gray |
+| `subtle-foreground` | gray-600 | gray-300 | gray |
 | `surface-subtle` | gray-50 | gray-800 | gray |
 | `destructive` | red-600 | red-400 | fixed |
 | `destructive-foreground` | neutral-50 | neutral-900 | fixed |

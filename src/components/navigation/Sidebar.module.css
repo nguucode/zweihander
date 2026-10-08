@@ -120,7 +120,9 @@
   min-block-size: var(--control-md);
   padding: 0 var(--space-2);
   border-radius: var(--radius-control);
-  color: var(--foreground);
+  /* A step quieter than body text, as in the Claude apps; hover and the
+     current item come up to --foreground. */
+  color: var(--subtle-foreground);
   text-decoration: none;
   white-space: nowrap;
   cursor: var(--cursor-link);

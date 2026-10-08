@@ -243,7 +243,7 @@ const accentVars = (p) => `  --accent-solid-light: ${p.light.solid};
   --accent-ring-dark: ${p.ringDark.value};
   --accent-text-dark: ${p.textDark.value};`
 
-const GRAY_STEPS = ['50', '100', '200', '400', '500', '800', '900', '950']
+const GRAY_STEPS = ['50', '100', '200', '300', '400', '500', '600', '800', '900', '950']
 const grayVars = (hue) =>
   GRAY_STEPS.map((s) => `  --gray-${s}: ${ramp('gray', hue, s)};`).join('\n')
 
