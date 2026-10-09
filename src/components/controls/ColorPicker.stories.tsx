@@ -44,6 +44,9 @@ export const Default: Story = {
     const last = (args.onValueChange as ReturnType<typeof fn>).mock.lastCall![0] as string
     await expect(canvas.getByRole('textbox')).toHaveValue(last)
     await userEvent.keyboard('{Escape}')
+    // Focus goes back once the exit transition ends and the popup unmounts,
+    // which WebKit on the CI runner can hold past one 3s wait.
+    await waitFor(() => expect(within(document.body).queryByRole('dialog')).toBeNull())
     await waitFor(() => expect(canvas.getByRole('button', { name: `Choose colour, ${last} selected` })).toHaveFocus())
   },
 }
