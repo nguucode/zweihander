@@ -66,8 +66,8 @@
   color: var(--accent-foreground);
 }
 .preset:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: -2px;
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: var(--focus-offset-inset);
 }
 
 /* Narrow screens: one month, and the presets as a row above it. */

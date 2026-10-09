@@ -72,8 +72,8 @@
 }
 .skip:focus-visible {
   translate: 0;
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: var(--focus-offset);
 }
 
 /* -------------------------------------------------------------- header */
@@ -154,8 +154,8 @@
   color: var(--accent-foreground);
 }
 .navLink:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: var(--focus-offset);
 }
 /* The current page: foreground text on the subtle surface, not colour alone. */
 .navLink[aria-current='page'] {
@@ -229,8 +229,8 @@
   color: var(--accent-foreground);
 }
 .drawerClose:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: var(--focus-offset);
 }
 
 @media (prefers-reduced-motion: reduce) {

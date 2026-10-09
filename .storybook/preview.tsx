@@ -79,6 +79,7 @@ const preview: Preview = {
             'Breakpoints',
             'Radius',
             'Shadows',
+            'Focus',
             'Motion',
             'Cursors',
             'Icons',

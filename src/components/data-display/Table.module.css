@@ -92,8 +92,8 @@ tbody tr:last-child > * {
   color: var(--accent-foreground);
 }
 .sortButton:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: -2px;
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: var(--focus-offset-inset);
 }
 
 /* The sort button is one text line tall. On touch screens its hit area

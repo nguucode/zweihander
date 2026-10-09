@@ -244,11 +244,10 @@
   background: color-mix(in oklch, currentColor 15%, transparent);
 }
 
-/* Same 2px ring as every control; the offset is 1px rather than 2px so the
-   ring stays inside a 20px tag. */
+/* Same ring as every control, drawn inset so it stays inside a 20px tag. */
 .remove:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 1px;
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: var(--focus-offset-inset);
 }
 
 /* The visible button is 16px; on touch screens the hit area grows to 44px

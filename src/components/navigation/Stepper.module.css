@@ -51,8 +51,8 @@ button.target:hover .label {
   text-underline-offset: 0.2em;
 }
 button.target:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: var(--focus-offset);
 }
 
 .marker {

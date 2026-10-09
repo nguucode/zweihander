@@ -40,8 +40,8 @@
 }
 
 .step:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 0;
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: var(--focus-offset-inset);
 }
 
 .step:disabled,

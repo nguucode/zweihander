@@ -97,8 +97,8 @@
 .box:has(.control:focus),
 .box:focus-visible,
 .box[data-popup-open] {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: var(--focus-offset);
 }
 
 .state-error .box:has(.control:focus),
@@ -304,8 +304,8 @@
   color: var(--foreground);
 }
 .iconButton:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: var(--focus-offset);
 }
 @media (pointer: coarse) {
   .iconButton::after {

@@ -58,8 +58,8 @@
 
 .areaThumb:has(:focus-visible),
 .stripThumb:has(:focus-visible) {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: var(--focus-offset);
 }
 
 /* ---------------------------------------------------------------- strips
@@ -203,19 +203,19 @@
   cursor: var(--cursor-button);
 }
 .swatch:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: var(--focus-offset);
 }
 /* The chosen one gets a ring in the brand colour, as every selected control
    in the kit, not a tick that would need a contrasting colour per swatch. */
 .swatch:checked {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
+  outline: var(--focus-width) solid var(--primary);
+  outline-offset: var(--focus-offset);
 }
 /* Focus on the chosen swatch: the ring colour, a step further out. */
 .swatch:checked:focus-visible {
   outline-color: var(--ring);
-  outline-offset: 3px;
+  outline-offset: calc(var(--focus-offset) + 1px);
 }
 .swatch:disabled {
   cursor: var(--cursor-disabled);
