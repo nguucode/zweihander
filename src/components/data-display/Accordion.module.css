@@ -129,13 +129,6 @@
   line-height: var(--leading-body-sm);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .panel,
-  .chevron {
-    transition: none;
-  }
-}
-
 /* Triggers are 32px (sm 24px) and stacked edge to edge, so an invisible
    44px hit area would overlap the next trigger's and a tap could open the
    wrong item. On touch they grow to 44px instead. */

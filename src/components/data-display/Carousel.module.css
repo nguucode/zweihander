@@ -113,12 +113,6 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .dot {
-    transition: none;
-  }
-}
-
 /* Previous and next point the way the content moves: mirrored right to
    left. Not :dir(rtl): the build lowers it to a list of :lang()s, which
    misses a dir="rtl" page in any other language. */

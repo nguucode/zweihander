@@ -19,8 +19,10 @@ tab indicator, a toast, a drawer) is `slow`, because the eye has to follow
 it. If a new transition does not fit one of the three, that is a reason to
 question the transition before adding a fourth step.
 
-Easing is the browser default (`ease`) everywhere. There is no easing
-token because no component needs a second curve yet.
+Easing is the browser default (`ease`) except where something grows or
+shrinks: Accordion and Collapse open with `ease-out`, so the panel arrives
+fast and settles. There is no easing token: two curves, each with an
+obvious owner, do not need a name yet.
 
 ## Reduced motion
 
@@ -28,9 +30,11 @@ Under `prefers-reduced-motion: reduce` the three transition steps resolve to
 `0ms` in `tokens.css`, so every transition in the kit stops in one place
 without each component repeating a media query.
 
-Spinners are the exception. A stopped spinner says nothing is happening,
-so instead of stopping they slow from `--duration-spin` to
-`--duration-spin-reduced`. Each spinner opts into that itself.
+Two things are exempt. Toast swaps its slide for a 200ms fade, written as
+a number on purpose, since the tokens would turn the fade into a jump.
+And spinners: a stopped spinner says nothing is happening, so instead of
+stopping they slow from `--duration-spin` to `--duration-spin-reduced`.
+Each spinner opts into that itself.
 
 Loop animations with their own rhythm (the skeleton pulse, the
 indeterminate progress bar) keep their own timing: they are a single

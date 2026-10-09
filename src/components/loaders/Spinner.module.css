@@ -78,9 +78,6 @@
   .spinning {
     animation-duration: var(--duration-spin-reduced);
   }
-  .indicator {
-    transition: none;
-  }
 }
 
 .label {

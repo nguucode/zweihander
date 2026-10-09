@@ -207,9 +207,3 @@
   clip-path: inset(50%);
   white-space: nowrap;
 }
-
-@media (prefers-reduced-motion: reduce) {
-  .dropzone {
-    transition: none;
-  }
-}

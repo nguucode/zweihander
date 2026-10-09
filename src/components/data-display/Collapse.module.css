@@ -85,10 +85,3 @@
     translate: 0 -50%;
   }
 }
-
-@media (prefers-reduced-motion: reduce) {
-  .panel,
-  .chevron {
-    transition: none;
-  }
-}

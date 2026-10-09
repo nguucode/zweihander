@@ -89,7 +89,7 @@ export const TouchTarget: Story = {
   },
 }
 
-/** A play cannot set prefers-reduced-motion, so this reads the rule that reaches the panel and the chevron. */
+/** A play cannot set prefers-reduced-motion. The panel and the chevron time their transitions with --duration-base, and the reduced-motion rule in tokens.css sets that to 0ms. */
 export const ReducedMotion: Story = {
   // Open, so the panel is mounted.
   args: { defaultOpen: true },
@@ -97,9 +97,11 @@ export const ReducedMotion: Story = {
     const trigger = canvas.getByRole('button')
     const panel = document.getElementById(trigger.getAttribute('aria-controls')!)!
     const chevron = trigger.querySelector('[aria-hidden="true"]')!
+    const base = getComputedStyle(panel).getPropertyValue('--duration-base').trim()
     for (const el of [panel, chevron]) {
-      const rules = mediaRules('prefers-reduced-motion: reduce', el)
-      await expect(rules.map((r) => r.style.transitionProperty)).toContain('none')
+      await expect(Number.parseFloat(getComputedStyle(el).transitionDuration) * 1000).toBe(Number.parseFloat(base))
     }
+    const reduced = mediaRules('prefers-reduced-motion: reduce', document.documentElement)
+    await expect(reduced.map((r) => r.style.getPropertyValue('--duration-base').trim())).toContain('0ms')
   },
 }

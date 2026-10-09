@@ -235,13 +235,6 @@
   outline-offset: var(--focus-offset);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .backdrop,
-  .drawer {
-    transition: none;
-  }
-}
-
 .srOnly {
   position: absolute;
   inline-size: 1px;

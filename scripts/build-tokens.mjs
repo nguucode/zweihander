@@ -575,8 +575,14 @@ const dtcg = {
   // Kept as separate groups: in Figma these are different variable types and
   // belong in different collections, which a flat `dimension` bag prevents.
   space: semantic.space,
+  control: semantic.control,
+  icon: semantic.icon,
   text: semantic.text,
-  radius: { radius: semantic.root.radius },
+  radius: { radius: semantic.root.radius, pill: semantic.root['radius-pill'] },
+  duration: semantic.duration,
+  focus: semantic.focus,
+  layer: semantic.layer,
+  target: semantic.target,
   shadow: {
     $description:
       'Elevation as structured layers rather than CSS strings, which is the shape the token spec defines and the shape an effect-style importer can read. Figma maps these to effect styles, not to variables, so they import separately from everything above.',

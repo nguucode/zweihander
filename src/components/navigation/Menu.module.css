@@ -128,9 +128,3 @@
     min-block-size: var(--target-coarse);
   }
 }
-
-@media (prefers-reduced-motion: reduce) {
-  .popup {
-    transition: none;
-  }
-}

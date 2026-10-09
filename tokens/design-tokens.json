@@ -2159,6 +2159,32 @@
       "$value": "0.625rem"
     }
   },
+  "control": {
+    "$description": "Control heights: Button, fields, tabs, pagination, sidebar rows. Two steps, as in the Claude apps: 32px is the default, 24px the small inline control. The generator multiplies each by --scaling. On touch screens components widen the hit area to 44px without growing the visible box.",
+    "sm": {
+      "$type": "dimension",
+      "$value": "1.5rem"
+    },
+    "md": {
+      "$type": "dimension",
+      "$value": "2rem"
+    }
+  },
+  "icon": {
+    "$description": "Icon sizes, one per control tier. The generator multiplies each by --scaling, so an icon keeps its place beside the label at every scaling.",
+    "xs": {
+      "$type": "dimension",
+      "$value": "0.75rem"
+    },
+    "sm": {
+      "$type": "dimension",
+      "$value": "0.875rem"
+    },
+    "md": {
+      "$type": "dimension",
+      "$value": "1rem"
+    }
+  },
   "text": {
     "$description": "Type roles. Each size pairs with a leading ratio of the same name, so the line height follows the size under --scaling.",
     "heading-2xl": {
@@ -2243,6 +2269,74 @@
     "radius": {
       "$type": "dimension",
       "$value": "0.625rem"
+    },
+    "pill": {
+      "$type": "dimension",
+      "$value": "9999px"
+    }
+  },
+  "duration": {
+    "$description": "Transition and spinner timing. fast/base/slow are the only transition durations; under prefers-reduced-motion the generator sets them to 0 in one place. A spinner never stops (it is the only sign of work), so reduced motion slows it to spin-reduced instead. Loop animations with their own rhythm (skeleton pulse, progress slide) keep their own timing.",
+    "fast": {
+      "$type": "duration",
+      "$value": "100ms"
+    },
+    "base": {
+      "$type": "duration",
+      "$value": "150ms"
+    },
+    "slow": {
+      "$type": "duration",
+      "$value": "200ms"
+    },
+    "spin": {
+      "$type": "duration",
+      "$value": "800ms"
+    },
+    "spin-reduced": {
+      "$type": "duration",
+      "$value": "2.5s"
+    }
+  },
+  "focus": {
+    "$description": "The focus ring: outline: var(--focus-width) solid var(--ring). offset draws it outside a free-standing element; offset-inset draws it inside, for elements flush with the edge of a container that clips (tabs, rows, accordion headers, close buttons in a panel). Not scaled: a ring is a stroke, not a size.",
+    "width": {
+      "$type": "dimension",
+      "$value": "2px"
+    },
+    "offset": {
+      "$type": "dimension",
+      "$value": "2px"
+    },
+    "offset-inset": {
+      "$type": "dimension",
+      "$value": "-2px"
+    }
+  },
+  "layer": {
+    "$description": "Stacking order for everything that leaves the flow. Popovers, menus, listboxes and modals share overlay: they are portalled, so a later one (a menu opened inside a modal) paints above an earlier one. Values inside a single component (-1, 1, 2) are local and stay literal.",
+    "sticky": {
+      "$type": "number",
+      "$value": 10
+    },
+    "overlay": {
+      "$type": "number",
+      "$value": 50
+    },
+    "tooltip": {
+      "$type": "number",
+      "$value": 60
+    },
+    "toast": {
+      "$type": "number",
+      "$value": 70
+    }
+  },
+  "target": {
+    "$description": "Minimum hit area on touch screens, for use inside @media (pointer: coarse). Components grow the hit area, never the visible box. Not scaled: it is a finger, not a design size.",
+    "coarse": {
+      "$type": "dimension",
+      "$value": "44px"
     }
   },
   "shadow": {

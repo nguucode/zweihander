@@ -9,10 +9,20 @@ export function TokenTable({ tokens }: { tokens: { name: string; use: string }[]
   const ref = useRef<HTMLTableElement>(null)
   const [values, setValues] = useState<Record<string, string>>({})
 
+  // Keyed on the names, not the array, so an inline `tokens` prop does not
+  // re-run this on every render.
+  const names = tokens.map((t) => t.name).join(' ')
   useLayoutEffect(() => {
-    const style = getComputedStyle(ref.current!)
-    setValues(Object.fromEntries(tokens.map((t) => [t.name, style.getPropertyValue(t.name).trim()])))
-  }, [tokens])
+    const read = () => {
+      const style = getComputedStyle(ref.current!)
+      setValues(Object.fromEntries(names.split(' ').map((n) => [n, style.getPropertyValue(n).trim()])))
+    }
+    read()
+    // The durations change with this setting, so follow it live.
+    const motion = matchMedia('(prefers-reduced-motion: reduce)')
+    motion.addEventListener('change', read)
+    return () => motion.removeEventListener('change', read)
+  }, [names])
 
   return (
     <table ref={ref} className={docs.tokenTable}>

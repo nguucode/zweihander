@@ -85,9 +85,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .indicator {
-    transition: none;
-  }
   .indicator[data-indeterminate] {
     animation-duration: 4s;
   }

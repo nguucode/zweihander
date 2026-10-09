@@ -83,10 +83,3 @@
 :global([dir='rtl'] [dir='ltr']) .thumb[data-checked] {
   translate: calc(var(--choice-control) - var(--choice-control-block)) 0;
 }
-
-@media (prefers-reduced-motion: reduce) {
-  .track,
-  .thumb {
-    transition: none;
-  }
-}

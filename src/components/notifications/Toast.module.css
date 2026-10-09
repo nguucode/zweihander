@@ -174,7 +174,9 @@
 
 @media (prefers-reduced-motion: reduce) {
   .toast {
-    transition: opacity var(--duration-slow);
+    /* A fade replaces the slide, so this one stays timed: the duration
+       tokens are 0ms under reduced motion and would make it a jump. */
+    transition: opacity 200ms;
   }
   .top .toast[data-starting-style],
   .bottom .toast[data-starting-style] {
