@@ -70,8 +70,8 @@ fieldset:enabled .stars:has(label.star:hover) label.star:hover {
 }
 
 .star:has(.input:focus-visible) {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: var(--focus-offset);
   border-radius: var(--radius-sm);
 }
 
@@ -104,8 +104,8 @@ fieldset:disabled .star {
     content: '';
     position: absolute;
     inset: 50% auto auto 50%;
-    inline-size: 44px;
-    block-size: 44px;
+    inline-size: var(--target-coarse);
+    block-size: var(--target-coarse);
     translate: -50% -50%;
   }
 }

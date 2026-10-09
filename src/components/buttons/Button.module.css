@@ -18,9 +18,9 @@
   white-space: nowrap;
   cursor: var(--cursor-button);
   transition:
-    background-color 150ms,
-    color 150ms,
-    border-color 150ms;
+    background-color var(--duration-base),
+    color var(--duration-base),
+    border-color var(--duration-base);
 }
 
 /* An <a> navigates, so it takes the link cursor rather than the button one.
@@ -31,8 +31,8 @@ a[href].button {
 }
 
 .button:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: var(--focus-offset);
 }
 
 /* pointer-events is what actually disables an <a>, which ignores the
@@ -147,7 +147,7 @@ a[href].button {
 /* Two sizes, as in the Claude apps: sm is the 24px inline control (13px
    label, a step tighter radius); md, the default, is the 32px button. */
 .sm {
-  --button-icon: calc(var(--space-3) + 2px);
+  --button-icon: var(--icon-sm);
   block-size: var(--control-sm);
   padding-inline: var(--space-2);
   border-radius: max(var(--radius-sm), var(--radius-full));
@@ -156,7 +156,7 @@ a[href].button {
 }
 
 .md {
-  --button-icon: var(--space-4);
+  --button-icon: var(--icon-md);
   block-size: var(--control-md);
   padding-inline: var(--space-3);
 }
@@ -178,8 +178,8 @@ a[href].button {
 
 /* A ring of currentColor with one clear side. The label stays in place but
    invisible, so the button keeps its width and its accessible name. The
-   2px wall matches the focus ring; 700ms is one turn, quick enough to read
-   as busy without flicker, slowed to 2s for reduced motion rather than
+   2px wall matches the focus ring; one turn per --duration-spin, the same
+   as every spinner in the kit, slowed for reduced motion rather than
    stopped, so "still working" still shows. */
 .spinner {
   position: absolute;
@@ -188,8 +188,8 @@ a[href].button {
   box-sizing: border-box;
   border: 2px solid currentColor;
   border-block-start-color: transparent;
-  border-radius: 9999px;
-  animation: spin 700ms linear infinite;
+  border-radius: var(--radius-pill);
+  animation: spin var(--duration-spin) linear infinite;
 }
 
 .loading > :not(.spinner) {
@@ -215,7 +215,7 @@ a[href].button {
 
 @media (prefers-reduced-motion: reduce) {
   .spinner {
-    animation-duration: 2s;
+    animation-duration: var(--duration-spin-reduced);
   }
 }
 
@@ -226,8 +226,8 @@ a[href].button {
     content: '';
     position: absolute;
     inset: 50% auto auto 50%;
-    inline-size: max(100%, 44px);
-    block-size: max(100%, 44px);
+    inline-size: max(100%, var(--target-coarse));
+    block-size: max(100%, var(--target-coarse));
     translate: -50% -50%;
   }
 }

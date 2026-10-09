@@ -134,6 +134,9 @@ export const Controlled: Story = {
     await userEvent.type(canvas.getByRole('combobox'), 'candi')
     await userEvent.keyboard('{Enter}')
     await expect(canvas.getByText('Assigned: candice')).toBeVisible()
+    // The a11y check runs after the play: let the closing list unmount first,
+    // or axe can catch it mid-exit without its name.
+    await waitFor(() => expect(screen.queryByRole('listbox')).toBeNull())
   },
 }
 

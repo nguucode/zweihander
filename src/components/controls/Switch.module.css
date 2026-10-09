@@ -27,10 +27,10 @@
   block-size: var(--choice-control-block);
   /* 2px between track edge and thumb at every size. */
   padding: 2px;
-  border-radius: 9999px;
+  border-radius: var(--radius-pill);
   background: var(--control-border);
   cursor: var(--cursor-button);
-  transition: background-color 150ms;
+  transition: background-color var(--duration-base);
 }
 
 .accent {
@@ -61,11 +61,11 @@
 .thumb {
   block-size: calc(var(--choice-control-block) - 4px);
   aspect-ratio: 1;
-  border-radius: 9999px;
+  border-radius: var(--radius-pill);
   background: var(--background);
   transition:
-    translate 150ms,
-    background-color 150ms;
+    translate var(--duration-base),
+    background-color var(--duration-base);
 }
 
 .thumb[data-checked] {
@@ -82,11 +82,4 @@
 }
 :global([dir='rtl'] [dir='ltr']) .thumb[data-checked] {
   translate: calc(var(--choice-control) - var(--choice-control-block)) 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .track,
-  .thumb {
-    transition: none;
-  }
 }

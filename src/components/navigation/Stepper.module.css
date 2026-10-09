@@ -51,8 +51,8 @@ button.target:hover .label {
   text-underline-offset: 0.2em;
 }
 button.target:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: var(--focus-offset);
 }
 
 .marker {
@@ -64,7 +64,7 @@ button.target:focus-visible {
   inline-size: var(--step-marker);
   block-size: var(--step-marker);
   border: 2px solid var(--control-border);
-  border-radius: 9999px;
+  border-radius: var(--radius-pill);
   background: var(--background);
   color: var(--muted-foreground);
   font-size: var(--text-body-sm);
@@ -122,7 +122,7 @@ button.target:focus-visible {
    markers' centre line, with the text below, so every step gets the same
    width whatever its label. Vertical, it runs down beside the text. */
 .connector {
-  border-radius: 9999px;
+  border-radius: var(--radius-pill);
   background: var(--border);
 }
 .complete .connector {
@@ -167,6 +167,6 @@ button.target:focus-visible {
 
 @media (pointer: coarse) {
   button.target {
-    min-block-size: 44px;
+    min-block-size: var(--target-coarse);
   }
 }

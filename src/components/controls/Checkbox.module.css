@@ -55,5 +55,5 @@ label:hover > .box:is([data-checked], [data-indeterminate]):not([data-disabled],
 /* The mark is 16px in a 20px box: it has to read at a glance. */
 .indicator {
   display: inline-flex;
-  font-size: var(--space-4);
+  font-size: var(--icon-md);
 }

@@ -24,7 +24,7 @@
   inline-size: var(--empty-icon);
   block-size: var(--empty-icon);
   margin-block-end: var(--space-4);
-  border-radius: 9999px;
+  border-radius: var(--radius-pill);
   /* Error State and Success State set these to their own tone. */
   background: var(--empty-icon-bg, var(--muted));
   color: var(--empty-icon-fg, var(--muted-foreground));

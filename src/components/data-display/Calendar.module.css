@@ -39,7 +39,7 @@
   border-radius: var(--radius-control);
   background: transparent;
   color: var(--foreground);
-  font-size: var(--space-4);
+  font-size: var(--icon-md);
   cursor: var(--cursor-button);
 }
 .nav:hover:not(:disabled) {
@@ -132,8 +132,8 @@
 
 .day:focus-visible,
 .nav:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: var(--focus-offset);
 }
 
 /* A range: the days between sit on a band as tall as a day, drawn behind
@@ -181,7 +181,7 @@
 /* 32px days are below the 44px touch target; they grow on coarse pointers. */
 @media (pointer: coarse) {
   .calendar {
-    --calendar-day: 44px;
+    --calendar-day: var(--target-coarse);
   }
 }
 

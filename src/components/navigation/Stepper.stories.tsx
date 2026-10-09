@@ -89,7 +89,7 @@ export const Navigable: Story = {
     await expect(account).toHaveFocus()
     await expect(getComputedStyle(account).outlineStyle).toBe('solid')
     // 44px on coarse pointers. The runner's pointer is fine, so read the rule the media query applies.
-    await expect(mediaRules('pointer: coarse', account).find((r) => r.style.minBlockSize)?.style.minBlockSize).toBe('44px')
+    await expect(mediaRules('pointer: coarse', account).find((r) => r.style.minBlockSize)?.style.minBlockSize).toBe('var(--target-coarse)')
     await userEvent.keyboard('{Enter}')
     await expect(within(nav).getAllByRole('listitem')[0]).toHaveAttribute('aria-current', 'step')
   },

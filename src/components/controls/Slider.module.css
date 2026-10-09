@@ -58,7 +58,7 @@
   position: relative;
   inline-size: 100%;
   block-size: var(--slider-track);
-  border-radius: 9999px;
+  border-radius: var(--radius-pill);
   background: var(--secondary);
 }
 .vertical .track {
@@ -78,18 +78,18 @@
   inline-size: var(--slider-thumb);
   block-size: var(--slider-thumb);
   border: 2px solid var(--primary-text);
-  border-radius: 9999px;
+  border-radius: var(--radius-pill);
   background: var(--background);
   box-shadow: var(--shadow-xs);
   cursor: grab;
-  transition: scale 100ms;
+  transition: scale var(--duration-fast);
 }
 .thumb:active {
   cursor: grabbing;
 }
 .thumb:has(:focus-visible) {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: var(--focus-offset);
 }
 
 /* Disabled dims the control only. The label and value stay readable in
@@ -111,14 +111,8 @@
     content: '';
     position: absolute;
     inset: 50% auto auto 50%;
-    inline-size: 44px;
-    block-size: 44px;
+    inline-size: var(--target-coarse);
+    block-size: var(--target-coarse);
     translate: -50% -50%;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .thumb {
-    transition: none;
   }
 }

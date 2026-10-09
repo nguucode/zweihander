@@ -1,6 +1,6 @@
 /* 50: the popup layer, with Select, Popover and Modal. */
 .positioner {
-  z-index: 50;
+  z-index: var(--layer-overlay);
   outline: none;
 }
 
@@ -22,8 +22,8 @@
   outline: none;
   transform-origin: var(--transform-origin);
   transition:
-    opacity 100ms,
-    scale 100ms;
+    opacity var(--duration-fast),
+    scale var(--duration-fast);
 }
 .popup[data-starting-style],
 .popup[data-ending-style] {
@@ -80,7 +80,7 @@
   align-items: center;
   justify-content: center;
   inline-size: var(--space-4);
-  font-size: var(--space-4);
+  font-size: var(--icon-md);
 }
 
 .icon {
@@ -125,12 +125,6 @@
 /* Items are 32px; on touch they grow to 44px. */
 @media (pointer: coarse) {
   .item {
-    min-block-size: 44px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .popup {
-    transition: none;
+    min-block-size: var(--target-coarse);
   }
 }

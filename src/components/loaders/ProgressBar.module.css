@@ -57,14 +57,14 @@
 
 .rounded .track,
 .rounded .indicator {
-  border-radius: 9999px;
+  border-radius: var(--radius-pill);
 }
 
 .indicator {
   display: block;
   block-size: 100%;
   background: var(--progress-fill);
-  transition: inline-size 200ms;
+  transition: inline-size var(--duration-slow);
 }
 
 /* Indeterminate: a third-width bar sliding across. */
@@ -85,9 +85,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .indicator {
-    transition: none;
-  }
   .indicator[data-indeterminate] {
     animation-duration: 4s;
   }

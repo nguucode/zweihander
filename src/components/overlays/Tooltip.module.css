@@ -1,7 +1,7 @@
 /* 60: above popups (50), so a tooltip on a control inside a popover or a
    modal still shows. */
 .positioner {
-  z-index: 60;
+  z-index: var(--layer-tooltip);
 }
 
 /* Inverted: --foreground on --background reads as "not part of the page"
@@ -19,18 +19,12 @@
   overflow-wrap: break-word;
   transform-origin: var(--transform-origin);
   transition:
-    opacity 100ms,
-    scale 100ms;
+    opacity var(--duration-fast),
+    scale var(--duration-fast);
 }
 
 .popup[data-starting-style],
 .popup[data-ending-style] {
   opacity: 0;
   scale: 0.96;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .popup {
-    transition: none;
-  }
 }

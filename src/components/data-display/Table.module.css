@@ -92,8 +92,8 @@ tbody tr:last-child > * {
   color: var(--accent-foreground);
 }
 .sortButton:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: -2px;
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: var(--focus-offset-inset);
 }
 
 /* The sort button is one text line tall. On touch screens its hit area
@@ -106,15 +106,15 @@ tbody tr:last-child > * {
     content: '';
     position: absolute;
     inset: 50% auto auto 50%;
-    inline-size: max(100%, 44px);
-    block-size: max(100%, 44px);
+    inline-size: max(100%, var(--target-coarse));
+    block-size: max(100%, var(--target-coarse));
     translate: -50% -50%;
   }
 }
 
 .sortIcon {
   display: inline-flex;
-  font-size: var(--space-4);
+  font-size: var(--icon-md);
   opacity: 0.6;
 }
 .sortActive {

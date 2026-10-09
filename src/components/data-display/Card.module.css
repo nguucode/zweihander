@@ -68,8 +68,8 @@ button.interactive {
 
 .interactive {
   transition:
-    background-color 150ms,
-    box-shadow 150ms;
+    background-color var(--duration-base),
+    box-shadow var(--duration-base);
 }
 
 a[href].interactive {
@@ -89,6 +89,6 @@ a[href].interactive {
 }
 
 .interactive:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: var(--focus-offset);
 }

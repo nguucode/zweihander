@@ -14,7 +14,7 @@
   border-radius: var(--radius-md);
 }
 .circle {
-  border-radius: 9999px;
+  border-radius: var(--radius-pill);
   aspect-ratio: 1;
   inline-size: var(--space-10);
   block-size: auto;

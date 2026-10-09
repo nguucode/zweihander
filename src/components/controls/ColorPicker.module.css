@@ -43,7 +43,7 @@
   inline-size: var(--space-4);
   block-size: var(--space-4);
   border: 2px solid #fff;
-  border-radius: 9999px;
+  border-radius: var(--radius-pill);
   background: var(--picker-color);
   box-shadow:
     0 0 0 1px rgb(0 0 0 / 0.6),
@@ -58,8 +58,8 @@
 
 .areaThumb:has(:focus-visible),
 .stripThumb:has(:focus-visible) {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: var(--focus-offset);
 }
 
 /* ---------------------------------------------------------------- strips
@@ -83,7 +83,7 @@
   position: relative;
   inline-size: 100%;
   block-size: var(--space-3);
-  border-radius: 9999px;
+  border-radius: var(--radius-pill);
 }
 
 /* The full hue circle at full saturation: the strip is the colour model
@@ -203,19 +203,19 @@
   cursor: var(--cursor-button);
 }
 .swatch:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: var(--focus-offset);
 }
 /* The chosen one gets a ring in the brand colour, as every selected control
    in the kit, not a tick that would need a contrasting colour per swatch. */
 .swatch:checked {
-  outline: 2px solid var(--primary);
-  outline-offset: 2px;
+  outline: var(--focus-width) solid var(--primary);
+  outline-offset: var(--focus-offset);
 }
 /* Focus on the chosen swatch: the ring colour, a step further out. */
 .swatch:checked:focus-visible {
   outline-color: var(--ring);
-  outline-offset: 3px;
+  outline-offset: calc(var(--focus-offset) + 1px);
 }
 .swatch:disabled {
   cursor: var(--cursor-disabled);
@@ -239,7 +239,7 @@
 
 /* The popup layer, with Select, Popover and Date Picker. */
 .positioner {
-  z-index: 50;
+  z-index: var(--layer-overlay);
 }
 
 .popup {
@@ -253,8 +253,8 @@
   outline: none;
   transform-origin: var(--transform-origin);
   transition:
-    opacity 100ms,
-    scale 100ms;
+    opacity var(--duration-fast),
+    scale var(--duration-fast);
 }
 .popup[data-starting-style],
 .popup[data-ending-style] {
@@ -278,14 +278,8 @@
     content: '';
     position: absolute;
     inset: 50% auto auto 50%;
-    inline-size: 44px;
-    block-size: 44px;
+    inline-size: var(--target-coarse);
+    block-size: var(--target-coarse);
     translate: -50% -50%;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .popup {
-    transition: none;
   }
 }

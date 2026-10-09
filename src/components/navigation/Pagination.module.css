@@ -40,8 +40,8 @@
   text-decoration: none;
   cursor: var(--cursor-button);
   transition:
-    background-color 150ms,
-    color 150ms;
+    background-color var(--duration-base),
+    color var(--duration-base);
 }
 a.control[href] {
   cursor: var(--cursor-link);
@@ -53,8 +53,8 @@ a.control[href] {
 }
 
 .control:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: var(--focus-offset);
 }
 
 .current {
@@ -84,7 +84,7 @@ a.control[href] {
 /* 40px at md is below the 44px touch target; grow it on coarse pointers. */
 @media (pointer: coarse) {
   .control {
-    min-inline-size: 44px;
-    block-size: 44px;
+    min-inline-size: var(--target-coarse);
+    block-size: var(--target-coarse);
   }
 }

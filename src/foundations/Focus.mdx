@@ -1,0 +1,35 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks'
+import * as FocusStories from './Focus.stories'
+
+<Meta of={FocusStories} />
+
+# Focus
+
+One ring for the whole kit: `outline: var(--focus-width) solid var(--ring)`,
+shown on `:focus-visible` only. Its colour is `--ring`, measured at 3:1
+against the page (see [Colors](?path=/docs/foundations-colors--docs)).
+
+<Canvas of={FocusStories.Rings} />
+
+## Outside or inside
+
+There are two offsets and the choice is mechanical.
+
+**`--focus-offset`** draws the ring outside the element. It is the default
+for anything that stands on its own: buttons, fields, links, checkboxes.
+
+**`--focus-offset-inset`** draws it inside. Use it when the element sits
+flush against the edge of a container that clips its overflow, or when an
+outside ring would run into a neighbour: tabs, table rows and sortable
+headers, accordion triggers, the close button in a modal, popover, alert
+or toast, the remove button in a tag, the steppers in a number input.
+
+A third value is a smell. The one exception is a selected colour swatch,
+which already carries a selection ring at `--focus-offset`, so its focus
+ring sits one pixel further out to stay visible.
+
+## Why the ring is not scaled
+
+`--focus-width` and both offsets are plain pixels, not multiplied by
+`--scaling`. A ring is a stroke: at 90% scaling it should not thin to
+1.8px, and WCAG 2.4.13 measures it in CSS pixels.

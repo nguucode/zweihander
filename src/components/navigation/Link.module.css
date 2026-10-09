@@ -9,7 +9,7 @@
   text-underline-offset: 0.2em;
   border-radius: var(--radius-sm);
   cursor: var(--cursor-link);
-  transition: text-decoration-thickness 150ms;
+  transition: text-decoration-thickness var(--duration-base);
 }
 
 /* Every colour here is a text colour at 4.5:1 on the page. */
@@ -50,8 +50,8 @@
 }
 
 .link:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: var(--focus-offset);
 }
 
 .link[aria-disabled='true'] {

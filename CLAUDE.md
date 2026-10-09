@@ -8,3 +8,17 @@ Project info (decisions, tickets, roadmap, research, Figma links) lives in the O
 - Code is the token source: edit `tokens/*.json`, run `npm run tokens`, then sync to Figma. `npm run tokens:check` and `npm run registry:check` must pass.
 - Dev: `npm run storybook` (6006), `npm run dev` (5173), `npm run lint`.
 - Drive is exFAT: use `npm`, not `pnpm` (no hardlinks).
+
+## Agent skills
+
+### Issue tracker
+
+Markdown files in the vault, `10-projects/zweihander/<feature>/issues/`. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+Default five roles, written as the issue's `Status:` line. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context; `CONTEXT.md` and ADRs live in the vault. See `docs/agents/domain.md`.

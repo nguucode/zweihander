@@ -67,8 +67,8 @@
   color: var(--foreground);
   cursor: text;
   transition:
-    border-color 150ms,
-    box-shadow 150ms;
+    border-color var(--duration-base),
+    box-shadow var(--duration-base);
 }
 
 .sm {
@@ -97,8 +97,8 @@
 .box:has(.control:focus),
 .box:focus-visible,
 .box[data-popup-open] {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: var(--focus-offset);
 }
 
 .state-error .box:has(.control:focus),
@@ -149,7 +149,7 @@
 
 /* Icons in an affix are a step larger than the text: 16px. */
 .affix > svg {
-  font-size: var(--space-4);
+  font-size: var(--icon-md);
 }
 
 /* ---------------------------------------------------------------- popup
@@ -160,7 +160,7 @@
    layer: overlays portal to the end of <body>, so the one opened last is
    on top, and a list opened inside a modal shows above it. */
 .positioner {
-  z-index: 50;
+  z-index: var(--layer-overlay);
   outline: none;
 }
 
@@ -182,8 +182,8 @@
   line-height: var(--leading-body);
   transform-origin: var(--transform-origin);
   transition:
-    opacity 100ms,
-    scale 100ms;
+    opacity var(--duration-fast),
+    scale var(--duration-fast);
 }
 
 .popup[data-starting-style],
@@ -225,7 +225,7 @@
   grid-row: 1;
   display: inline-flex;
   color: var(--primary-text);
-  font-size: var(--space-4);
+  font-size: var(--icon-md);
 }
 .option > :not(.check) {
   grid-column: 2;
@@ -247,13 +247,7 @@
    so an invisible larger area would overlap the next one. */
 @media (pointer: coarse) {
   .option {
-    min-block-size: 44px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .popup {
-    transition: none;
+    min-block-size: var(--target-coarse);
   }
 }
 
@@ -284,7 +278,7 @@
   display: inline-flex;
   flex-shrink: 0;
   color: var(--muted-foreground);
-  font-size: var(--space-4);
+  font-size: var(--icon-md);
 }
 
 .iconButton {
@@ -297,23 +291,23 @@
   border-radius: var(--radius-sm);
   background: transparent;
   color: var(--muted-foreground);
-  font-size: var(--space-4);
+  font-size: var(--icon-md);
   cursor: var(--cursor-button);
 }
 .iconButton:hover {
   color: var(--foreground);
 }
 .iconButton:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: var(--focus-offset);
 }
 @media (pointer: coarse) {
   .iconButton::after {
     content: '';
     position: absolute;
     inset: 50% auto auto 50%;
-    inline-size: 44px;
-    block-size: 44px;
+    inline-size: var(--target-coarse);
+    block-size: var(--target-coarse);
     translate: -50% -50%;
   }
 }
@@ -325,8 +319,8 @@
   box-sizing: border-box;
   border: 2px solid currentColor;
   border-block-start-color: transparent;
-  border-radius: 9999px;
-  animation: field-spin 700ms linear infinite;
+  border-radius: var(--radius-pill);
+  animation: field-spin var(--duration-spin) linear infinite;
 }
 @keyframes field-spin {
   to {
@@ -335,6 +329,6 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .spinner {
-    animation-duration: 2s;
+    animation-duration: var(--duration-spin-reduced);
   }
 }

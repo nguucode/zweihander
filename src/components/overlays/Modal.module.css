@@ -5,11 +5,11 @@
 .backdrop {
   position: fixed;
   inset: 0;
-  z-index: 50;
+  z-index: var(--layer-overlay);
   /* A scrim, not a colour of the kit: black at half strength dims either
      mode's page by the same amount. */
   background: oklch(0% 0 0 / 50%);
-  transition: opacity 150ms;
+  transition: opacity var(--duration-base);
 }
 .backdrop[data-starting-style],
 .backdrop[data-ending-style] {
@@ -19,7 +19,7 @@
 .viewport {
   position: fixed;
   inset: 0;
-  z-index: 50;
+  z-index: var(--layer-overlay);
   display: grid;
   place-items: center;
   padding: var(--space-4);
@@ -43,8 +43,8 @@
   line-height: var(--leading-body);
   outline: none;
   transition:
-    opacity 150ms,
-    scale 150ms;
+    opacity var(--duration-base),
+    scale var(--duration-base);
 }
 .popup[data-starting-style],
 .popup[data-ending-style] {
@@ -110,7 +110,7 @@
   border-radius: var(--radius-sm);
   background: transparent;
   color: var(--muted-foreground);
-  font-size: var(--space-4);
+  font-size: var(--icon-md);
   cursor: var(--cursor-button);
 }
 .close:hover {
@@ -118,23 +118,16 @@
   color: var(--accent-foreground);
 }
 .close:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 1px;
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: var(--focus-offset-inset);
 }
 @media (pointer: coarse) {
   .close::before {
     content: '';
     position: absolute;
     inset: 50% auto auto 50%;
-    inline-size: 44px;
-    block-size: 44px;
+    inline-size: var(--target-coarse);
+    block-size: var(--target-coarse);
     translate: -50% -50%;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .backdrop,
-  .popup {
-    transition: none;
   }
 }

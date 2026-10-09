@@ -31,8 +31,8 @@
   text-underline-offset: 0.2em;
 }
 .trigger:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 2px;
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: var(--focus-offset);
 }
 .trigger[data-disabled] {
   opacity: 0.5;
@@ -42,9 +42,9 @@
 
 .chevron {
   display: inline-flex;
-  font-size: var(--space-4);
+  font-size: var(--icon-md);
   color: var(--muted-foreground);
-  transition: rotate 150ms;
+  transition: rotate var(--duration-base);
 }
 .trigger[data-panel-open] .chevron {
   rotate: 90deg;
@@ -63,7 +63,7 @@
 .panel {
   block-size: var(--collapsible-panel-height);
   overflow: hidden;
-  transition: block-size 150ms ease-out;
+  transition: block-size var(--duration-base) ease-out;
 }
 .panel[data-starting-style],
 .panel[data-ending-style] {
@@ -80,15 +80,8 @@
     position: absolute;
     inset: 50% auto auto 0;
     inline-size: 100%;
-    min-inline-size: 44px;
-    block-size: 44px;
+    min-inline-size: var(--target-coarse);
+    block-size: var(--target-coarse);
     translate: 0 -50%;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .panel,
-  .chevron {
-    transition: none;
   }
 }

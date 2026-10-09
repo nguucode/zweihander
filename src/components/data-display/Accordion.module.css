@@ -72,11 +72,11 @@
    ring off. Flush has no clipping and no side padding, so an inset ring
    would touch the title; it goes outside instead. */
 .trigger:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: -2px;
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: var(--focus-offset-inset);
 }
 .flush .trigger:focus-visible {
-  outline-offset: 2px;
+  outline-offset: var(--focus-offset);
 }
 
 .trigger[data-disabled] {
@@ -94,9 +94,9 @@
 
 .chevron {
   flex-shrink: 0;
-  font-size: var(--space-4);
+  font-size: var(--icon-md);
   color: var(--muted-foreground);
-  transition: rotate 150ms;
+  transition: rotate var(--duration-base);
 }
 
 .trigger[data-panel-open] .chevron {
@@ -109,7 +109,7 @@
 .panel {
   block-size: var(--accordion-panel-height);
   overflow: hidden;
-  transition: block-size 150ms ease-out;
+  transition: block-size var(--duration-base) ease-out;
 }
 
 .panel[data-starting-style],
@@ -129,18 +129,11 @@
   line-height: var(--leading-body-sm);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .panel,
-  .chevron {
-    transition: none;
-  }
-}
-
 /* Triggers are 32px (sm 24px) and stacked edge to edge, so an invisible
    44px hit area would overlap the next trigger's and a tap could open the
    wrong item. On touch they grow to 44px instead. */
 @media (pointer: coarse) {
   .trigger {
-    min-block-size: 44px;
+    min-block-size: var(--target-coarse);
   }
 }

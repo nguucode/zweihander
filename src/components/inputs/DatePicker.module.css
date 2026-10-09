@@ -1,6 +1,6 @@
 /* The popup layer, with Select and Popover. */
 .positioner {
-  z-index: 50;
+  z-index: var(--layer-overlay);
 }
 
 .popup {
@@ -14,8 +14,8 @@
   outline: none;
   transform-origin: var(--transform-origin);
   transition:
-    opacity 100ms,
-    scale 100ms;
+    opacity var(--duration-fast),
+    scale var(--duration-fast);
 }
 .popup[data-starting-style],
 .popup[data-ending-style] {
@@ -66,8 +66,8 @@
   color: var(--accent-foreground);
 }
 .preset:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: -2px;
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: var(--focus-offset-inset);
 }
 
 /* Narrow screens: one month, and the presets as a row above it. */
@@ -86,11 +86,5 @@
   }
   .preset {
     min-inline-size: 0;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .popup {
-    transition: none;
   }
 }

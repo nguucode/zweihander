@@ -1,5 +1,5 @@
 .tag {
-  --tag-icon: var(--space-4);
+  --tag-icon: var(--icon-md);
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);
@@ -26,7 +26,7 @@
 }
 
 .sm {
-  --tag-icon: var(--space-3);
+  --tag-icon: var(--icon-xs);
   padding: 1px var(--space-1-5);
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
@@ -47,7 +47,7 @@
   flex-shrink: 0;
   inline-size: var(--tag-icon);
   block-size: var(--tag-icon);
-  border-radius: 9999px;
+  border-radius: var(--radius-pill);
   object-fit: cover;
 }
 
@@ -244,11 +244,10 @@
   background: color-mix(in oklch, currentColor 15%, transparent);
 }
 
-/* Same 2px ring as every control; the offset is 1px rather than 2px so the
-   ring stays inside a 20px tag. */
+/* Same ring as every control, drawn inset so it stays inside a 20px tag. */
 .remove:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 1px;
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: var(--focus-offset-inset);
 }
 
 /* The visible button is 16px; on touch screens the hit area grows to 44px
@@ -258,8 +257,8 @@
     content: '';
     position: absolute;
     inset: 50% auto auto 50%;
-    inline-size: 44px;
-    block-size: 44px;
+    inline-size: var(--target-coarse);
+    block-size: var(--target-coarse);
     translate: -50% -50%;
   }
 }
