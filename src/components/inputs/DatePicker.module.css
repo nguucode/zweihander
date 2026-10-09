@@ -1,6 +1,6 @@
 /* The popup layer, with Select and Popover. */
 .positioner {
-  z-index: 50;
+  z-index: var(--layer-overlay);
 }
 
 .popup {

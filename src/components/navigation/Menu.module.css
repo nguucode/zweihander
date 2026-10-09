@@ -1,6 +1,6 @@
 /* 50: the popup layer, with Select, Popover and Modal. */
 .positioner {
-  z-index: 50;
+  z-index: var(--layer-overlay);
   outline: none;
 }
 

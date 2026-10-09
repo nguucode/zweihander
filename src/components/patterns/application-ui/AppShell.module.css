@@ -60,7 +60,9 @@
   position: absolute;
   inset-block-start: var(--space-2);
   inset-inline-start: var(--space-2);
-  z-index: 60;
+  /* Above the sticky header and an open drawer: it is the first thing a
+     keyboard user lands on. */
+  z-index: var(--layer-tooltip);
   padding: var(--space-2) var(--space-3);
   border-radius: var(--radius-field);
   background: var(--primary);
@@ -80,7 +82,7 @@
 .header {
   position: sticky;
   inset-block-start: 0;
-  z-index: 10;
+  z-index: var(--layer-sticky);
   display: flex;
   align-items: center;
   gap: var(--space-4);
@@ -167,7 +169,7 @@
 .backdrop {
   position: fixed;
   inset: 0;
-  z-index: 50;
+  z-index: var(--layer-overlay);
   background: oklch(0% 0 0 / 50%);
   transition: opacity var(--duration-base);
 }
@@ -180,7 +182,7 @@
   position: fixed;
   inset-block: 0;
   inset-inline-start: 0;
-  z-index: 50;
+  z-index: var(--layer-overlay);
   display: flex;
   flex-direction: column;
   inline-size: min(20rem, 85vw);

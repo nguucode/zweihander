@@ -1,7 +1,7 @@
 /* 60: above popups (50), so a tooltip on a control inside a popover or a
    modal still shows. */
 .positioner {
-  z-index: 60;
+  z-index: var(--layer-tooltip);
 }
 
 /* Inverted: --foreground on --background reads as "not part of the page"

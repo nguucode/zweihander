@@ -2,7 +2,7 @@
    modal is open and must not be hidden behind it. */
 .viewport {
   position: fixed;
-  z-index: 70;
+  z-index: var(--layer-toast);
   display: flex;
   flex-direction: column;
   gap: var(--space-2);

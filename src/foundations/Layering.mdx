@@ -1,0 +1,30 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks'
+import * as LayeringStories from './Layering.stories'
+
+<Meta of={LayeringStories} />
+
+# Layering
+
+Four layers for everything that leaves the page flow. A component picks
+the layer by what it is, never by trying a bigger number.
+
+<Canvas of={LayeringStories.Layers} />
+
+## One layer for every overlay
+
+Popovers, menus, listboxes, date pickers, modals and drawers all share
+`--layer-overlay`. They are portalled to the end of `<body>`, so at an equal
+z-index the one opened last paints on top: a Select opened inside a Modal
+lands above the Modal without either knowing about the other. Giving the
+Modal a higher layer would break exactly that case.
+
+Tooltips sit one layer up because they can belong to anything, including a
+trigger inside an open overlay. Toasts sit above everything: a toast raised
+while a modal is open still has to be read.
+
+## Local z-index
+
+A value used only to order parts inside one component (a table's sticky
+header at `1`, the tab indicator at `-1`) is local and stays a plain number.
+It never competes with the layers above, because the component does not
+create a stacking context that leaves its own box.

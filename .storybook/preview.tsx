@@ -81,6 +81,7 @@ const preview: Preview = {
             'Shadows',
             'Focus',
             'Motion',
+            'Layering',
             'Cursors',
             'Icons',
           ],

@@ -1,7 +1,7 @@
 /* 50: the popup layer, shared with Select and Combobox. Tooltips sit
    above at 60. */
 .positioner {
-  z-index: 50;
+  z-index: var(--layer-overlay);
 }
 
 .popup {
