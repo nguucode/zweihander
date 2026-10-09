@@ -36,11 +36,11 @@
   flex-shrink: 0;
   align-items: center;
   block-size: calc(var(--leading-body) * var(--text-body));
-  font-size: var(--space-4);
+  font-size: var(--icon-md);
 }
 .sm .icon {
   block-size: calc(var(--leading-body-sm) * var(--text-body-sm));
-  font-size: var(--space-3);
+  font-size: var(--icon-xs);
 }
 
 .message {

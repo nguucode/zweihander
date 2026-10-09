@@ -6,7 +6,7 @@
   overflow: hidden;
   /* Always round, whatever the Theme's radius preset: a circle is the shape,
      not a corner setting. */
-  border-radius: 9999px;
+  border-radius: var(--radius-pill);
   font-family: var(--font-sans);
   font-weight: 500;
   line-height: 1;

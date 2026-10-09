@@ -57,7 +57,7 @@
 
 .rounded .track,
 .rounded .indicator {
-  border-radius: 9999px;
+  border-radius: var(--radius-pill);
 }
 
 .indicator {

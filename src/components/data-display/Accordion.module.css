@@ -94,7 +94,7 @@
 
 .chevron {
   flex-shrink: 0;
-  font-size: var(--space-4);
+  font-size: var(--icon-md);
   color: var(--muted-foreground);
   transition: rotate var(--duration-base);
 }
@@ -141,6 +141,6 @@
    wrong item. On touch they grow to 44px instead. */
 @media (pointer: coarse) {
   .trigger {
-    min-block-size: 44px;
+    min-block-size: var(--target-coarse);
   }
 }

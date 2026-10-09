@@ -42,7 +42,7 @@
 
 .chevron {
   display: inline-flex;
-  font-size: var(--space-4);
+  font-size: var(--icon-md);
   color: var(--muted-foreground);
   transition: rotate var(--duration-base);
 }
@@ -80,8 +80,8 @@
     position: absolute;
     inset: 50% auto auto 0;
     inline-size: 100%;
-    min-inline-size: 44px;
-    block-size: 44px;
+    min-inline-size: var(--target-coarse);
+    block-size: var(--target-coarse);
     translate: 0 -50%;
   }
 }

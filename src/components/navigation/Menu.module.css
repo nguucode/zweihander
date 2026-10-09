@@ -80,7 +80,7 @@
   align-items: center;
   justify-content: center;
   inline-size: var(--space-4);
-  font-size: var(--space-4);
+  font-size: var(--icon-md);
 }
 
 .icon {
@@ -125,7 +125,7 @@
 /* Items are 32px; on touch they grow to 44px. */
 @media (pointer: coarse) {
   .item {
-    min-block-size: 44px;
+    min-block-size: var(--target-coarse);
   }
 }
 

@@ -76,7 +76,7 @@
 
 .icon {
   display: inline-flex;
-  font-size: var(--space-4);
+  font-size: var(--icon-md);
 }
 
 /* underline: a rule under the whole list, and a 2px bar under the
@@ -169,7 +169,7 @@
 
 @media (pointer: coarse) {
   .tab {
-    min-block-size: 44px;
+    min-block-size: var(--target-coarse);
   }
 }
 

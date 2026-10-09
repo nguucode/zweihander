@@ -43,7 +43,7 @@
   inline-size: var(--space-4);
   block-size: var(--space-4);
   border: 2px solid #fff;
-  border-radius: 9999px;
+  border-radius: var(--radius-pill);
   background: var(--picker-color);
   box-shadow:
     0 0 0 1px rgb(0 0 0 / 0.6),
@@ -83,7 +83,7 @@
   position: relative;
   inline-size: 100%;
   block-size: var(--space-3);
-  border-radius: 9999px;
+  border-radius: var(--radius-pill);
 }
 
 /* The full hue circle at full saturation: the strip is the colour model
@@ -278,8 +278,8 @@
     content: '';
     position: absolute;
     inset: 50% auto auto 50%;
-    inline-size: 44px;
-    block-size: 44px;
+    inline-size: var(--target-coarse);
+    block-size: var(--target-coarse);
     translate: -50% -50%;
   }
 }

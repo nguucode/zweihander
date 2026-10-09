@@ -23,7 +23,7 @@
   border-radius: var(--radius-sm);
   background: transparent;
   color: var(--muted-foreground);
-  font-size: var(--space-4);
+  font-size: var(--icon-md);
   cursor: var(--cursor-button);
   transition:
     background-color var(--duration-base),
@@ -31,7 +31,7 @@
 }
 
 .sm .step {
-  font-size: var(--space-3);
+  font-size: var(--icon-xs);
 }
 
 .step:hover {
@@ -60,6 +60,6 @@
    overlapping the input or each other. */
 @media (pointer: coarse) {
   .step {
-    min-inline-size: 44px;
+    min-inline-size: var(--target-coarse);
   }
 }

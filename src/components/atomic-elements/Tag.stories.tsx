@@ -159,7 +159,9 @@ export const TouchTarget: Story = {
     const remove = canvas.getByRole('button', { name: 'Remove Account verified' })
     const [area] = mediaRules('pointer: coarse', remove, '::before')
     await expect(area).toBeDefined()
-    await expect([area.style.inlineSize, area.style.blockSize]).toEqual(['44px', '44px'])
+    await expect([area.style.inlineSize, area.style.blockSize]).toEqual(['var(--target-coarse)', 'var(--target-coarse)'])
+    // …and the token is the 44px WCAG 2.5.5 asks for.
+    await expect(getComputedStyle(remove).getPropertyValue('--target-coarse').trim()).toBe('44px')
     // Absolutely placed and unpainted: the tag looks and measures the same.
     await expect(area.style.position).toBe('absolute')
     await expect(area.style.background).toBe('')

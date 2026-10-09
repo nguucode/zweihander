@@ -84,7 +84,7 @@ a.control[href] {
 /* 40px at md is below the 44px touch target; grow it on coarse pointers. */
 @media (pointer: coarse) {
   .control {
-    min-inline-size: 44px;
-    block-size: 44px;
+    min-inline-size: var(--target-coarse);
+    block-size: var(--target-coarse);
   }
 }

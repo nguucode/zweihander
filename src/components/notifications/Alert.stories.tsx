@@ -118,7 +118,7 @@ export const Dismissible: Story = {
     const { outlineStyle, outlineWidth, outlineColor } = getComputedStyle(close)
     await expect([outlineStyle, outlineWidth, outlineColor]).toEqual(['solid', '2px', ringColour(canvasElement)])
     // A 44px touch target on coarse pointers.
-    await expect(mediaRules('pointer: coarse', close, '::before').map((r) => [r.style.inlineSize, r.style.blockSize])[0]).toEqual(['44px', '44px'])
+    await expect(mediaRules('pointer: coarse', close, '::before').map((r) => [r.style.inlineSize, r.style.blockSize])[0]).toEqual(['var(--target-coarse)', 'var(--target-coarse)'])
     await userEvent.keyboard('{Enter}')
     await expect(args.onClose).toHaveBeenCalledOnce()
     await expect(canvas.getByText('Dismissed.')).toBeVisible()

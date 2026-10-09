@@ -64,8 +64,8 @@
     content: '';
     position: absolute;
     inset: 50% auto auto 50%;
-    inline-size: max(100%, 44px);
-    block-size: max(100%, 44px);
+    inline-size: max(100%, var(--target-coarse));
+    block-size: max(100%, var(--target-coarse));
     translate: -50% -50%;
   }
 }

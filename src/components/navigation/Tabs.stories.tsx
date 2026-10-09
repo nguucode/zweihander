@@ -83,7 +83,7 @@ export const Small: Story = {
     const tab = canvas.getByRole('tab', { name: 'Overview' })
     await expect(tab.getBoundingClientRect().height).toBe(24)
     // 44px on coarse pointers. The runner's pointer is fine, so read the rule the media query applies.
-    await expect(mediaRules('pointer: coarse', tab).find((r) => r.style.minBlockSize)?.style.minBlockSize).toBe('44px')
+    await expect(mediaRules('pointer: coarse', tab).find((r) => r.style.minBlockSize)?.style.minBlockSize).toBe('var(--target-coarse)')
   },
 }
 

@@ -147,7 +147,7 @@ a[href].button {
 /* Two sizes, as in the Claude apps: sm is the 24px inline control (13px
    label, a step tighter radius); md, the default, is the 32px button. */
 .sm {
-  --button-icon: calc(var(--space-3) + 2px);
+  --button-icon: var(--icon-sm);
   block-size: var(--control-sm);
   padding-inline: var(--space-2);
   border-radius: max(var(--radius-sm), var(--radius-full));
@@ -156,7 +156,7 @@ a[href].button {
 }
 
 .md {
-  --button-icon: var(--space-4);
+  --button-icon: var(--icon-md);
   block-size: var(--control-md);
   padding-inline: var(--space-3);
 }
@@ -188,7 +188,7 @@ a[href].button {
   box-sizing: border-box;
   border: 2px solid currentColor;
   border-block-start-color: transparent;
-  border-radius: 9999px;
+  border-radius: var(--radius-pill);
   animation: spin var(--duration-spin) linear infinite;
 }
 
@@ -226,8 +226,8 @@ a[href].button {
     content: '';
     position: absolute;
     inset: 50% auto auto 50%;
-    inline-size: max(100%, 44px);
-    block-size: max(100%, 44px);
+    inline-size: max(100%, var(--target-coarse));
+    block-size: max(100%, var(--target-coarse));
     translate: -50% -50%;
   }
 }

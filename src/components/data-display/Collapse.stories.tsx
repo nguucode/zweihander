@@ -85,7 +85,7 @@ export const TouchTarget: Story = {
   play: async ({ canvas }) => {
     const [area] = mediaRules('pointer: coarse', canvas.getByRole('button'), '::before')
     await expect(area).toBeDefined()
-    await expect([area.style.minInlineSize, area.style.blockSize]).toEqual(['44px', '44px'])
+    await expect([area.style.minInlineSize, area.style.blockSize]).toEqual(['var(--target-coarse)', 'var(--target-coarse)'])
   },
 }
 

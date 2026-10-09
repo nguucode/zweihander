@@ -27,7 +27,7 @@
   block-size: var(--choice-control-block);
   /* 2px between track edge and thumb at every size. */
   padding: 2px;
-  border-radius: 9999px;
+  border-radius: var(--radius-pill);
   background: var(--control-border);
   cursor: var(--cursor-button);
   transition: background-color var(--duration-base);
@@ -61,7 +61,7 @@
 .thumb {
   block-size: calc(var(--choice-control-block) - 4px);
   aspect-ratio: 1;
-  border-radius: 9999px;
+  border-radius: var(--radius-pill);
   background: var(--background);
   transition:
     translate var(--duration-base),
