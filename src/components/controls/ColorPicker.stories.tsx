@@ -27,6 +27,12 @@ type Story = StoryObj<typeof meta>
 
 const popup = () => within(document.body).findByRole('dialog', { name: 'Choose colour' })
 
+export const DiagLiteral: Story = {
+  decorators: [(S) => (<><style>{`.${diag.popup}{transition:opacity 100ms,scale 100ms}`}</style><S /></>)],
+  // Runs before Default: the first story on a cold WebKit.
+  play: (ctx) => Default.play!(ctx),
+}
+
 export const Default: Story = {
   play: async ({ args, canvas }) => {
     await expect(canvas.getByRole('textbox', { name: 'Brand colour' })).toHaveValue('#3b82f6')
@@ -51,10 +57,6 @@ export const Default: Story = {
 
 // DIAG (not for merge): same play, WebKit warm, three transition variants.
 export const DiagAgain: Story = { play: Default.play }
-export const DiagLiteral: Story = {
-  decorators: [(S) => (<><style>{`.${diag.popup}{transition:opacity 100ms,scale 100ms}`}</style><S /></>)],
-  play: Default.play,
-}
 export const DiagNone: Story = {
   decorators: [(S) => (<><style>{`.${diag.popup}{transition:none}`}</style><S /></>)],
   play: Default.play,
