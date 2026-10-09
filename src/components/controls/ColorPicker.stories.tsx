@@ -2,6 +2,7 @@ import { useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test'
 import { ColorPanel, ColorPicker, normalizeHex, parseColor } from './ColorPicker'
+import diag from './ColorPicker.module.css'
 
 const brand = [
   { value: '#0a0a0a', label: 'Ink' },
@@ -46,6 +47,17 @@ export const Default: Story = {
     await userEvent.keyboard('{Escape}')
     await waitFor(() => expect(canvas.getByRole('button', { name: `Choose colour, ${last} selected` })).toHaveFocus())
   },
+}
+
+// DIAG (not for merge): same play, WebKit warm, three transition variants.
+export const DiagAgain: Story = { play: Default.play }
+export const DiagLiteral: Story = {
+  decorators: [(S) => (<><style>{`.${diag.popup}{transition:opacity 100ms,scale 100ms}`}</style><S /></>)],
+  play: Default.play,
+}
+export const DiagNone: Story = {
+  decorators: [(S) => (<><style>{`.${diag.popup}{transition:none}`}</style><S /></>)],
+  play: Default.play,
 }
 
 export const TypeAHex: Story = {
