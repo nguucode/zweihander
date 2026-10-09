@@ -19,8 +19,8 @@
   overflow-wrap: break-word;
   transform-origin: var(--transform-origin);
   transition:
-    opacity 100ms,
-    scale 100ms;
+    opacity var(--duration-fast),
+    scale var(--duration-fast);
 }
 
 .popup[data-starting-style],

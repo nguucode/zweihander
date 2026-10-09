@@ -14,12 +14,27 @@
   --radius: 0.625rem;
   --radius-factor: 1;
   --radius-full: 0px;
+  --radius-pill: 9999px;
   --scaling: 1;
   --cursor-button: default;
   --cursor-link: pointer;
   --cursor-disabled: not-allowed;
   --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
   --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+
+  --duration-fast: 100ms;
+  --duration-base: 150ms;
+  --duration-slow: 200ms;
+  --duration-spin: 800ms;
+  --duration-spin-reduced: 2.5s;
+  --focus-width: 2px;
+  --focus-offset: 2px;
+  --focus-offset-inset: -2px;
+  --layer-sticky: 10;
+  --layer-overlay: 50;
+  --layer-tooltip: 60;
+  --layer-toast: 70;
+  --target-coarse: 44px;
 
   /* Defaults: blue accent, gray gray. Overridden by
      [data-accent] / [data-gray] below, which the Theme component sets. */
@@ -45,6 +60,18 @@
   --gray-800: oklch(27.8% 0.033 256.848);
   --gray-900: oklch(21.0% 0.034 264.665);
   --gray-950: oklch(13.0% 0.028 261.692);
+}
+
+/* Reduced motion zeroes every transition in one place, since transitions
+   read these and nothing else. The spinner is left alone: components slow
+   it to --duration-spin-reduced themselves, because a stopped spinner says
+   nothing is happening. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-base: 0ms;
+    --duration-slow: 0ms;
+  }
 }
 
 /* Accent palettes. The solid step and label colour are measured per hue so
@@ -756,6 +783,11 @@
   /* Control heights — one scale for every button, field, tab and row. */
   --control-sm: calc(1.5rem * var(--scaling));
   --control-md: calc(2rem * var(--scaling));
+
+  /* Icon sizes — one per control tier. */
+  --icon-xs: calc(0.75rem * var(--scaling));
+  --icon-sm: calc(0.875rem * var(--scaling));
+  --icon-md: calc(1rem * var(--scaling));
 
   /* Type roles. Leading is a ratio, so it follows the size under --scaling. */
   --text-heading-2xl: calc(2rem * var(--scaling));

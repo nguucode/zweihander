@@ -82,7 +82,7 @@
   background: var(--background);
   box-shadow: var(--shadow-xs);
   cursor: grab;
-  transition: scale 100ms;
+  transition: scale var(--duration-fast);
 }
 .thumb:active {
   cursor: grabbing;

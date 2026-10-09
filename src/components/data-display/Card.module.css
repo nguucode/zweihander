@@ -68,8 +68,8 @@ button.interactive {
 
 .interactive {
   transition:
-    background-color 150ms,
-    box-shadow 150ms;
+    background-color var(--duration-base),
+    box-shadow var(--duration-base);
 }
 
 a[href].interactive {

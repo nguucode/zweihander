@@ -12,7 +12,7 @@
   font-size: var(--text-body);
   line-height: var(--leading-body);
   color: var(--foreground);
-  transition: inline-size 150ms;
+  transition: inline-size var(--duration-base);
 }
 
 /* The rail: one square row plus the padding either side. */

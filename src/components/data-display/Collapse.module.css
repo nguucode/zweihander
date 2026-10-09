@@ -44,7 +44,7 @@
   display: inline-flex;
   font-size: var(--space-4);
   color: var(--muted-foreground);
-  transition: rotate 150ms;
+  transition: rotate var(--duration-base);
 }
 .trigger[data-panel-open] .chevron {
   rotate: 90deg;
@@ -63,7 +63,7 @@
 .panel {
   block-size: var(--collapsible-panel-height);
   overflow: hidden;
-  transition: block-size 150ms ease-out;
+  transition: block-size var(--duration-base) ease-out;
 }
 .panel[data-starting-style],
 .panel[data-ending-style] {

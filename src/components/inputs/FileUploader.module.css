@@ -37,8 +37,8 @@
   background: var(--surface-subtle);
   text-align: center;
   transition:
-    border-color 150ms,
-    background-color 150ms;
+    border-color var(--duration-base),
+    background-color var(--duration-base);
 }
 
 /* While a file is dragged over it: a solid edge in the ring colour, so

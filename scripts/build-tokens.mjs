@@ -309,11 +309,24 @@ const isDerived = ([, v]) => String(v.$value).includes('var(')
 const rootLiterals = Object.fromEntries(entries(semantic.root).filter((e) => !isDerived(e)))
 const rootDerived = Object.fromEntries(entries(semantic.root).filter(isDerived))
 
+/* Unscaled groups go on :root next to the root literals, named group-key
+   (--duration-fast, --layer-overlay). They read nothing, so they never need
+   recomputing per element. */
+const ROOT_GROUPS = ['duration', 'focus', 'layer', 'target']
+const groupDecls = ROOT_GROUPS.map((g) =>
+  entries(semantic[g])
+    .map(([k, v]) => `  --${g}-${k}: ${v.$value};`)
+    .join('\n'),
+).join('\n')
+
 const spaceDecls = entries(semantic.space)
   .map(([k, v]) => `  --space-${k}: calc(${v.$value} * var(--scaling));`)
   .join('\n')
 const controlDecls = entries(semantic.control)
   .map(([k, v]) => `  --control-${k}: calc(${v.$value} * var(--scaling));`)
+  .join('\n')
+const iconDecls = entries(semantic.icon)
+  .map(([k, v]) => `  --icon-${k}: calc(${v.$value} * var(--scaling));`)
   .join('\n')
 const textDecls = entries(semantic.text)
   .map(([k, v]) => `  --text-${k}: calc(${v.$value} * var(--scaling));`)
@@ -337,10 +350,24 @@ const css = `/*
 :root {
 ${decls(rootLiterals)}
 
+${groupDecls}
+
   /* Defaults: ${DEFAULT_ACCENT} accent, ${DEFAULT_GRAY} gray. Overridden by
      [data-accent] / [data-gray] below, which the Theme component sets. */
 ${accentVars(defaults)}
 ${grayVars(DEFAULT_GRAY)}
+}
+
+/* Reduced motion zeroes every transition in one place, since transitions
+   read these and nothing else. The spinner is left alone: components slow
+   it to --duration-spin-reduced themselves, because a stopped spinner says
+   nothing is happening. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-base: 0ms;
+    --duration-slow: 0ms;
+  }
 }
 
 /* Accent palettes. The solid step and label colour are measured per hue so
@@ -445,6 +472,9 @@ ${spaceDecls}
 
   /* Control heights — one scale for every button, field, tab and row. */
 ${controlDecls}
+
+  /* Icon sizes — one per control tier. */
+${iconDecls}
 
   /* Type roles. Leading is a ratio, so it follows the size under --scaling. */
 ${textDecls}

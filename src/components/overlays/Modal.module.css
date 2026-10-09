@@ -9,7 +9,7 @@
   /* A scrim, not a colour of the kit: black at half strength dims either
      mode's page by the same amount. */
   background: oklch(0% 0 0 / 50%);
-  transition: opacity 150ms;
+  transition: opacity var(--duration-base);
 }
 .backdrop[data-starting-style],
 .backdrop[data-ending-style] {
@@ -43,8 +43,8 @@
   line-height: var(--leading-body);
   outline: none;
   transition:
-    opacity 150ms,
-    scale 150ms;
+    opacity var(--duration-base),
+    scale var(--duration-base);
 }
 .popup[data-starting-style],
 .popup[data-ending-style] {

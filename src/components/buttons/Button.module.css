@@ -18,9 +18,9 @@
   white-space: nowrap;
   cursor: var(--cursor-button);
   transition:
-    background-color 150ms,
-    color 150ms,
-    border-color 150ms;
+    background-color var(--duration-base),
+    color var(--duration-base),
+    border-color var(--duration-base);
 }
 
 /* An <a> navigates, so it takes the link cursor rather than the button one.
@@ -178,8 +178,8 @@ a[href].button {
 
 /* A ring of currentColor with one clear side. The label stays in place but
    invisible, so the button keeps its width and its accessible name. The
-   2px wall matches the focus ring; 700ms is one turn, quick enough to read
-   as busy without flicker, slowed to 2s for reduced motion rather than
+   2px wall matches the focus ring; one turn per --duration-spin, the same
+   as every spinner in the kit, slowed for reduced motion rather than
    stopped, so "still working" still shows. */
 .spinner {
   position: absolute;
@@ -189,7 +189,7 @@ a[href].button {
   border: 2px solid currentColor;
   border-block-start-color: transparent;
   border-radius: 9999px;
-  animation: spin 700ms linear infinite;
+  animation: spin var(--duration-spin) linear infinite;
 }
 
 .loading > :not(.spinner) {
@@ -215,7 +215,7 @@ a[href].button {
 
 @media (prefers-reduced-motion: reduce) {
   .spinner {
-    animation-duration: 2s;
+    animation-duration: var(--duration-spin-reduced);
   }
 }
 

@@ -40,8 +40,8 @@
   text-decoration: none;
   cursor: var(--cursor-button);
   transition:
-    background-color 150ms,
-    color 150ms;
+    background-color var(--duration-base),
+    color var(--duration-base);
 }
 a.control[href] {
   cursor: var(--cursor-link);

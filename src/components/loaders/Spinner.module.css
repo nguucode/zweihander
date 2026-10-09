@@ -57,11 +57,11 @@
 .indicator {
   stroke: var(--spinner-color);
   stroke-linecap: round;
-  transition: stroke-dashoffset 200ms;
+  transition: stroke-dashoffset var(--duration-slow);
 }
 
 .spinning {
-  animation: spin 800ms linear infinite;
+  animation: spin var(--duration-spin) linear infinite;
 }
 
 @keyframes spin {
@@ -76,7 +76,7 @@
 /* Slowed, not stopped: a frozen arc reads as "stuck". */
 @media (prefers-reduced-motion: reduce) {
   .spinning {
-    animation-duration: 2.5s;
+    animation-duration: var(--duration-spin-reduced);
   }
   .indicator {
     transition: none;

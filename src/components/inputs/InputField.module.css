@@ -67,8 +67,8 @@
   color: var(--foreground);
   cursor: text;
   transition:
-    border-color 150ms,
-    box-shadow 150ms;
+    border-color var(--duration-base),
+    box-shadow var(--duration-base);
 }
 
 .sm {
@@ -182,8 +182,8 @@
   line-height: var(--leading-body);
   transform-origin: var(--transform-origin);
   transition:
-    opacity 100ms,
-    scale 100ms;
+    opacity var(--duration-fast),
+    scale var(--duration-fast);
 }
 
 .popup[data-starting-style],
@@ -326,7 +326,7 @@
   border: 2px solid currentColor;
   border-block-start-color: transparent;
   border-radius: 9999px;
-  animation: field-spin 700ms linear infinite;
+  animation: field-spin var(--duration-spin) linear infinite;
 }
 @keyframes field-spin {
   to {
@@ -335,6 +335,6 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .spinner {
-    animation-duration: 2s;
+    animation-duration: var(--duration-spin-reduced);
   }
 }

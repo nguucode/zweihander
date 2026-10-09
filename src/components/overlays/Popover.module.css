@@ -20,8 +20,8 @@
   outline: none;
   transform-origin: var(--transform-origin);
   transition:
-    opacity 120ms,
-    scale 120ms;
+    opacity var(--duration-fast),
+    scale var(--duration-fast);
 }
 
 .popup[data-starting-style],

@@ -30,7 +30,7 @@
   border-radius: 9999px;
   background: var(--control-border);
   cursor: var(--cursor-button);
-  transition: background-color 150ms;
+  transition: background-color var(--duration-base);
 }
 
 .accent {
@@ -64,8 +64,8 @@
   border-radius: 9999px;
   background: var(--background);
   transition:
-    translate 150ms,
-    background-color 150ms;
+    translate var(--duration-base),
+    background-color var(--duration-base);
 }
 
 .thumb[data-checked] {

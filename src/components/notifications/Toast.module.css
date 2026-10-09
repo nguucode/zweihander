@@ -48,8 +48,8 @@
   /* Follows the finger while it is swiped away. */
   translate: var(--toast-swipe-movement-x) var(--toast-swipe-movement-y);
   transition:
-    opacity 200ms,
-    translate 200ms;
+    opacity var(--duration-slow),
+    translate var(--duration-slow);
 }
 .toast[data-swiping] {
   transition: none;
@@ -97,7 +97,7 @@
   border: 2px solid var(--border);
   border-block-start-color: var(--foreground);
   border-radius: 9999px;
-  animation: spin 800ms linear infinite;
+  animation: spin var(--duration-spin) linear infinite;
 }
 @keyframes spin {
   to {
@@ -174,13 +174,13 @@
 
 @media (prefers-reduced-motion: reduce) {
   .toast {
-    transition: opacity 200ms;
+    transition: opacity var(--duration-slow);
   }
   .top .toast[data-starting-style],
   .bottom .toast[data-starting-style] {
     translate: none;
   }
   .spinner {
-    animation-duration: 2.5s;
+    animation-duration: var(--duration-spin-reduced);
   }
 }

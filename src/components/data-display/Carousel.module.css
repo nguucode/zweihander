@@ -79,7 +79,7 @@
   border-radius: 9999px;
   background: var(--border);
   cursor: var(--cursor-button);
-  transition: inline-size 150ms;
+  transition: inline-size var(--duration-base);
 }
 .dot::before {
   content: '';

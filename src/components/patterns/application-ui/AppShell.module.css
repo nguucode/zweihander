@@ -169,7 +169,7 @@
   inset: 0;
   z-index: 50;
   background: oklch(0% 0 0 / 50%);
-  transition: opacity 150ms;
+  transition: opacity var(--duration-base);
 }
 .backdrop[data-starting-style],
 .backdrop[data-ending-style] {
@@ -188,7 +188,7 @@
   color: var(--foreground);
   box-shadow: var(--shadow-lg);
   outline: none;
-  transition: translate 200ms;
+  transition: translate var(--duration-slow);
 }
 /* The navigation inside (a Sidebar) takes the drawer's width, not its own. */
 .drawer > :not(.drawerClose) {

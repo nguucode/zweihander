@@ -26,8 +26,8 @@
   font-size: var(--space-4);
   cursor: var(--cursor-button);
   transition:
-    background-color 150ms,
-    color 150ms;
+    background-color var(--duration-base),
+    color var(--duration-base);
 }
 
 .sm .step {
