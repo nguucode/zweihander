@@ -55,7 +55,23 @@ export default defineConfig({
           provider: playwright({}),
           // All three engines: a story that passes only in Chromium has not
           // been tested for Safari or Firefox users.
-          instances: [{ browser: 'chromium' }, { browser: 'firefox' }, { browser: 'webkit' }]
+          instances: [
+            { browser: 'chromium' },
+            { browser: 'firefox' },
+            {
+              browser: 'webkit',
+              // Linux WebKit paints through Skia on GL, which on a runner
+              // without a GPU is Mesa's software rasteriser. Its shader cache
+              // starts empty on every fresh runner, so each new kind of paint
+              // compiles shaders first and stalls frames for up to seconds:
+              // popup transitions never end, Base UI never unmounts the popup,
+              // and focus never returns to the trigger. Skia's CPU path skips
+              // GL. Only WebKitGTK/WPE read this; macOS WebKit ignores it.
+              provider: playwright({
+                launchOptions: { env: { ...process.env, WEBKIT_SKIA_ENABLE_CPU_RENDERING: '1' } },
+              }),
+            },
+          ],
         }
       }
     }]

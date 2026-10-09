@@ -58,7 +58,8 @@ value.
 ## Accessibility
 
 - The input has `role="combobox"`, `aria-autocomplete="list"` and
-  `aria-expanded`; the list is a `listbox`.
+  `aria-expanded`; the list is a `listbox` named by the field's label (or
+  `aria-label` when there is no visible label), as the input is.
 - **Keyboard:** typing opens and filters; the first match is highlighted
   so Enter picks it; Up and Down move; Escape closes, then clears.
 - The match is marked by weight and underline, not colour, so it keeps
