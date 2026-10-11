@@ -8,8 +8,9 @@ import '../src/index.css'
 // Set while rendering rather than in an effect: a decorator is a plain
 // function, not a component, so it cannot call hooks, and toggling a class
 // to the same value twice is harmless.
-// findBy/waitFor wait up to 3s, not 1s: WebKit on the CI's Linux runner plays
-// popup open and close transitions well past a second.
+// findBy/waitFor wait up to 3s, not 1s: headroom for the CI runner, which runs
+// all three browsers at once. WebKit's multi-second popup transitions on Linux
+// came from GL shader compiles and are fixed in vite.config.ts, not here.
 configure({ asyncUtilTimeout: 3000 })
 
 const withTheme: Decorator = (Story, context) => {

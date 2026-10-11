@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState, type ReactNode, type Ref } from 'react'
+import { useId, useRef, useState, type ReactNode, type Ref } from 'react'
 import { Combobox as BaseCombobox } from '@base-ui/react/combobox'
 import { Icon } from '@/lib/icon'
 import { cn } from '@/lib/utils'
@@ -92,10 +92,12 @@ export function Combobox({
   // A pointer pick sends the field back to rest: no caret, no ring, as a
   // native select after a click. A keyboard pick keeps focus where the user is.
   const inputRef = useRef<HTMLInputElement | null>(null)
+  const labelId = useId()
 
   return (
     <InputField
       label={label}
+      labelId={labelId}
       helperText={helperText}
       validationState={validationState}
       required={required}
@@ -166,7 +168,8 @@ export function Combobox({
               ) : (
                 <BaseCombobox.Empty className={s.empty}>{emptyText}</BaseCombobox.Empty>
               )}
-              <BaseCombobox.List>
+              {/* A listbox needs a name of its own: the field's. */}
+              <BaseCombobox.List aria-labelledby={label ? labelId : undefined} aria-label={label ? undefined : ariaLabel}>
                 {(item: Item) => (
                   <BaseCombobox.Item key={item.value} value={item} disabled={item.disabled} className={s.option}>
                     <BaseCombobox.ItemIndicator className={s.check}>

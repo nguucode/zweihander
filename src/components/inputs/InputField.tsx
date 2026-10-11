@@ -65,6 +65,8 @@ export interface InputFieldProps {
    * <div> so clicking it focuses the control without also clicking it.
    */
   hasButtonControl?: boolean
+  /** An id for the label, for a part beyond the control that it also names. */
+  labelId?: string
   className?: string
 }
 
@@ -84,6 +86,7 @@ export function InputField({
   name,
   isFullWidth,
   hasButtonControl,
+  labelId,
   className,
 }: InputFieldProps) {
   return (
@@ -95,6 +98,7 @@ export function InputField({
     >
       {label && (
         <Field.Label
+          id={labelId}
           className={styles.label}
           {...(hasButtonControl && { nativeLabel: false, render: <div /> })}
         >

@@ -31,6 +31,8 @@ export const Default: Story = {
     await userEvent.type(input, 'thom')
     // Only matching options remain; the match is marked.
     const option = await screen.findByRole('option', { name: 'Marlone Thompson' })
+    // The list carries the field's name, as the input does.
+    await expect(screen.getByRole('listbox', { name: 'Team member' })).toBeVisible()
     await expect(screen.queryByRole('option', { name: 'Miya Burns' })).toBeNull()
     await expect(option.querySelector('mark')).toHaveTextContent('Thom')
     // The first match is highlighted, so Enter picks it.
