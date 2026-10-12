@@ -493,6 +493,7 @@
   --orange-foreground: oklch(98.5% 0 0);
   --orange-subtle: oklch(95.4% 0.038 75.164);
   --orange-text: oklch(47.0% 0.157 37.304);
+  --orange-contrast: oklch(20.5% 0 0);
   --amber: oklch(66.6% 0.179 58.318);
   --amber-foreground: oklch(98.5% 0 0);
   --amber-subtle: oklch(96.2% 0.059 95.617);
@@ -621,6 +622,7 @@
   --orange-foreground: oklch(98.5% 0 0);
   --orange-subtle: oklch(26.6% 0.079 36.259);
   --orange-text: oklch(83.7% 0.128 66.29);
+  --orange-contrast: oklch(20.5% 0 0);
   --amber: oklch(66.6% 0.179 58.318);
   --amber-foreground: oklch(98.5% 0 0);
   --amber-subtle: oklch(27.9% 0.077 45.635);
