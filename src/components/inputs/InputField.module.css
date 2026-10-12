@@ -118,7 +118,7 @@
 
 .box:has(.control[readonly]),
 .box[data-readonly] {
-  background: var(--surface-subtle);
+  background: var(--surface-filled);
 }
 
 /* ------------------------------------------------------------- control */

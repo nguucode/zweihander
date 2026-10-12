@@ -7,7 +7,7 @@
   block-size: 100%;
   padding: var(--space-2);
   border-inline-end: 1px solid var(--border);
-  background: var(--surface-subtle);
+  background: var(--surface-filled);
   font-family: var(--font-sans);
   font-size: var(--text-body);
   line-height: var(--leading-body);
@@ -54,7 +54,7 @@
   cursor: var(--cursor-button);
 }
 .toggle:hover {
-  /* An overlay, not --accent: in dark the sidebar's own --surface-subtle is
+  /* An overlay, not --accent: in dark the sidebar's own --surface-filled is
      the same gray-800 as --accent, so an opaque hover fill vanished. */
   background: var(--hover-overlay);
   color: var(--accent-foreground);
