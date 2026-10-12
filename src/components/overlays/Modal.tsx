@@ -28,6 +28,14 @@ export interface ModalProps {
   isAlert?: boolean
   /** Close on a click on the backdrop. Ignored when `isAlert`. */
   closeOnBackdropClick?: boolean
+  /**
+   * While open, trap focus, lock page scroll and make the rest of the page
+   * inert. `false` leaves the page as is. Ignored when `isAlert`: an alert
+   * is always modal.
+   */
+  isModal?: boolean
+  /** Where the modal renders instead of `<body>`, e.g. an element in fullscreen. */
+  container?: HTMLElement | null
   open?: boolean
   defaultOpen?: boolean
   onOpenChange?: (open: boolean) => void
@@ -49,6 +57,8 @@ export function Modal({
   closeLabel = 'Close',
   isAlert = false,
   closeOnBackdropClick = true,
+  isModal = true,
+  container,
   open,
   defaultOpen,
   onOpenChange,
@@ -59,7 +69,7 @@ export function Modal({
   const content = (
     <>
       {trigger && (isAlert ? <AlertDialog.Trigger render={trigger} /> : <Dialog.Trigger render={trigger} />)}
-      <Dialog.Portal>
+      <Dialog.Portal container={container}>
         <Dialog.Backdrop className={styles.backdrop} />
         <Dialog.Viewport className={styles.viewport}>
           <Dialog.Popup initialFocus={initialFocus} className={cn(styles.popup, widths[size], className)}>
@@ -90,6 +100,7 @@ export function Modal({
       defaultOpen={defaultOpen}
       onOpenChange={change}
       disablePointerDismissal={!closeOnBackdropClick}
+      modal={isModal}
     >
       {content}
     </Dialog.Root>

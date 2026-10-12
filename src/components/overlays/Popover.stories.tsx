@@ -1,8 +1,10 @@
+import { useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test'
 import { Button } from '../buttons/Button'
 import { TextInput } from '../inputs/TextInput'
-import { Popover } from './Popover'
+import { Popover, type PopoverProps } from './Popover'
+import styles from './Popover.module.css'
 
 const meta = {
   title: 'Components/Overlays/Popover',
@@ -21,12 +23,99 @@ const meta = {
     onOpenChange: fn(),
   },
   argTypes: {
-    side: { control: 'inline-radio', options: ['top', 'right', 'bottom', 'left'] },
-    align: { control: 'inline-radio', options: ['start', 'center', 'end'] },
-    trigger: { control: false },
-    children: { control: false },
+    trigger: {
+      description: 'The element that opens it: one button. Popover merges its props onto it rather than wrapping it.',
+      control: false,
+      table: { type: { summary: 'ReactElement' } },
+    },
+    title: {
+      description: 'Names the popover, which is a dialog. Without one, pass `aria-label`.',
+      control: 'text',
+      table: { type: { summary: 'ReactNode' } },
+    },
+    description: {
+      description: 'Optional, under the title in `--muted-foreground`. Read as the dialog\'s description.',
+      control: 'text',
+      table: { type: { summary: 'ReactNode' } },
+    },
+    children: {
+      description: 'The content: a short form, a filter, a list of options.',
+      control: false,
+      table: { type: { summary: 'ReactNode' } },
+    },
+    side: {
+      description: 'Which side of the trigger it opens on. Flips when there is no room.',
+      control: 'inline-radio',
+      options: ['top', 'right', 'bottom', 'left'],
+      table: { type: { summary: "'top' | 'right' | 'bottom' | 'left'" }, defaultValue: { summary: "'bottom'" } },
+    },
+    align: {
+      description: 'How it lines up with the trigger along that side.',
+      control: 'inline-radio',
+      options: ['start', 'center', 'end'],
+      table: { type: { summary: "'start' | 'center' | 'end'" }, defaultValue: { summary: "'center'" } },
+    },
+    hasCloseButton: {
+      description: 'A close button in the corner. Escape and a press outside close it either way.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    closeLabel: {
+      description: 'Accessible name of the close button.',
+      control: 'text',
+      table: { type: { summary: 'string' }, defaultValue: { summary: "'Close'" } },
+    },
+    openOnHover: {
+      description: 'Open on hover as well as on click, for previews. Click, keyboard and touch still open it.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    isModal: {
+      description: 'Trap focus inside while open, lock page scroll and block presses outside (Base UI\'s modal mode).',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    open: {
+      description: 'Controlled open state. Pair with `onOpenChange`.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' } },
+    },
+    defaultOpen: {
+      description: 'Open on first render, uncontrolled.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    onOpenChange: {
+      description: 'Called with the next open state.',
+      control: false,
+      table: { type: { summary: '(open: boolean) => void' } },
+    },
+    container: {
+      description: 'Where the popup renders instead of `<body>`, e.g. an element in fullscreen, where a popup in `<body>` would not show.',
+      control: false,
+      table: { type: { summary: 'HTMLElement | null' } },
+    },
+    'aria-label': {
+      description: 'Names the popover when it has no `title`.',
+      control: 'text',
+      table: { type: { summary: 'string' } },
+    },
+    className: {
+      description: 'Added to the popup.',
+      control: 'text',
+      table: { type: { summary: 'string' } },
+    },
   },
-  decorators: [(Story) => <div style={{ minBlockSize: '16rem', display: 'flex', justifyContent: 'center', alignItems: 'start', paddingBlock: 'var(--space-6)' }}>{Story()}</div>],
+  excludeStories: ['anatomyParts'],
+  // Room for the popup to open into. A picture lays its popup out itself.
+  decorators: [
+    (Story, { parameters }) =>
+      parameters.picture ? (
+        Story()
+      ) : (
+        <div style={{ minBlockSize: '16rem', display: 'flex', justifyContent: 'center', alignItems: 'start', paddingBlock: 'var(--space-6)' }}>{Story()}</div>
+      ),
+  ],
 } satisfies Meta<typeof Popover>
 
 export default meta
@@ -195,4 +284,86 @@ export const Modal: Story = {
     await expect(close).toHaveFocus()
     await expect(close.getBoundingClientRect().width).toBeGreaterThan(1)
   },
+}
+
+/**
+ * The popover open in place, as a picture: rendered inside the story instead
+ * of `<body>`, and inert, so a docs page can show it beside other examples
+ * without it taking focus. The popup sits in the flow 6px under the trigger,
+ * as it opens: positioned, it would flip above the trigger whenever the
+ * picture is low in the window, out of its frame.
+ */
+function Pictured(props: PopoverProps) {
+  const [container, setContainer] = useState<HTMLDivElement | null>(null)
+  return (
+    <div ref={setContainer} inert data-popover-picture style={{ display: 'grid', justifyItems: 'center', gap: 6 }}>
+      <style>{`[data-popover-picture] .${styles.positioner} { position: static !important; transform: none !important; }`}</style>
+      {container && <Popover {...props} open isModal={false} container={container} />}
+    </div>
+  )
+}
+
+/** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
+export const anatomyParts = [
+  { name: 'Trigger', selector: 'button[aria-haspopup="dialog"]', description: 'One button. Popover adds aria-expanded and aria-haspopup to it.' },
+  { name: 'Container', selector: '[role="dialog"]', description: 'The surface, 6px from the trigger. At most 22rem wide.' },
+  { name: 'Title', selector: '[role="dialog"] h2', description: 'Optional: names the popover. Without one, pass aria-label.' },
+  { name: 'Close button', selector: 'button[aria-label="Close"]', description: 'Optional, in the corner.' },
+  { name: 'Description', selector: `.${styles.description}`, description: 'Optional. What the popover is for.' },
+  { name: 'Body', selector: `.${styles.body}`, description: 'children: the content.' },
+]
+
+/** Every part present, the popover open in place. */
+export const Anatomy: Story = {
+  tags: ['!dev'],
+  parameters: { picture: true },
+  args: { hasCloseButton: true },
+  render: (args) => <Pictured {...args} />,
+  play: async ({ canvas, canvasElement }) => {
+    // Rendered inside the story, not <body>.
+    const dialog = await canvas.findByRole('dialog', { hidden: true })
+    // The docs markers follow these selectors: a DOM change must not leave
+    // a marker pointing at nothing, or at the wrong part.
+    const found = anatomyParts.map(({ selector }) => canvasElement.querySelector(selector))
+    await expect(found.every(Boolean)).toBe(true)
+    await expect(new Set(found).size).toBe(anatomyParts.length)
+    await expect(found[1]).toBe(dialog)
+    await expect(found[2]).toHaveTextContent('Share this file')
+  },
+}
+
+/** Specs, States: the close button. */
+export const CloseButton: Story = {
+  tags: ['!dev'],
+  parameters: { picture: true },
+  args: { description: undefined, children: undefined, hasCloseButton: true },
+  render: (args) => <Pictured {...args} />,
+}
+
+/** Guidelines, Do: a short task tied to the button that opens it. */
+export const DoShortTask: Story = {
+  tags: ['!dev'],
+  parameters: { picture: true },
+  render: (args) => <Pictured {...args} />,
+}
+
+/** Guidelines, Don't: a long form crammed into a popover. */
+export const DontLongForm: Story = {
+  tags: ['!dev'],
+  parameters: { picture: true },
+  args: {
+    trigger: <Button appearance="outlined" variant="accent">New project</Button>,
+    title: 'New project',
+    description: undefined,
+    children: (
+      <div style={{ display: 'grid', gap: 'var(--space-3)' }}>
+        <TextInput label="Name" isFullWidth />
+        <TextInput label="Client" isFullWidth />
+        <TextInput label="Budget" isFullWidth />
+        <TextInput label="Start date" isFullWidth />
+        <Button>Create project</Button>
+      </div>
+    ),
+  },
+  render: (args) => <Pictured {...args} />,
 }

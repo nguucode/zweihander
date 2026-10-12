@@ -1930,6 +1930,18 @@
       "storyId": "components-overlays-modal--default",
       "props": [
         {
+          "name": "title",
+          "control": "text",
+          "default": "Edit profile",
+          "description": "Required: it names the dialog. Say what the modal is for: \"Edit profile\", \"Delete “Atlas”?\"."
+        },
+        {
+          "name": "description",
+          "control": "text",
+          "default": "Changes show on your public page straight away.",
+          "description": "Optional, under the title in `--muted-foreground`. Read as the dialog's description."
+        },
+        {
           "name": "size",
           "control": "inline-radio",
           "options": [
@@ -1938,33 +1950,42 @@
             "lg"
           ],
           "default": "md",
-          "description": "Max width: 24rem, 32rem, 48rem. Never wider than the screen."
+          "description": "Max width: 24rem (`sm`), 32rem (`md`) or 48rem (`lg`). Never wider than the screen."
         },
         {
           "name": "hasCloseButton",
           "control": "boolean",
-          "description": "Defaults to `true`, or `false` when `isAlert`."
+          "description": "The close button in the corner."
         },
         {
           "name": "closeLabel",
           "control": "text",
-          "default": "Close"
+          "default": "Close",
+          "description": "Accessible name of the close button."
         },
         {
           "name": "isAlert",
           "control": "boolean",
           "default": false,
-          "description": "A decision that must be made: `role=\"alertdialog\"`, and a click on the\nbackdrop does not close it. Pair it with explicit buttons in `footer`."
+          "description": "A decision that must be made: `role=\"alertdialog\"`, no close button by default, and a press on the backdrop does not close it."
         },
         {
           "name": "closeOnBackdropClick",
           "control": "boolean",
           "default": true,
-          "description": "Close on a click on the backdrop. Ignored when `isAlert`."
+          "description": "Close on a press on the backdrop. Ignored when `isAlert`."
+        },
+        {
+          "name": "isModal",
+          "control": "boolean",
+          "default": true,
+          "description": "While open, traps focus, locks page scroll and makes the rest of the page inert. `false` leaves the page usable. Ignored when `isAlert`: an alert is always modal."
         },
         {
           "name": "defaultOpen",
-          "control": "boolean"
+          "control": "boolean",
+          "default": false,
+          "description": "Open on first render, uncontrolled."
         }
       ]
     },
@@ -1977,6 +1998,18 @@
       "storyId": "components-overlays-popover--default",
       "props": [
         {
+          "name": "title",
+          "control": "text",
+          "default": "Share this file",
+          "description": "Names the popover, which is a dialog. Without one, pass `aria-label`."
+        },
+        {
+          "name": "description",
+          "control": "text",
+          "default": "Anyone you invite can view and comment.",
+          "description": "Optional, under the title in `--muted-foreground`. Read as the dialog's description."
+        },
+        {
           "name": "side",
           "control": "inline-radio",
           "options": [
@@ -1985,7 +2018,8 @@
             "bottom",
             "left"
           ],
-          "default": "bottom"
+          "default": "bottom",
+          "description": "Which side of the trigger it opens on. Flips when there is no room."
         },
         {
           "name": "align",
@@ -1995,34 +2029,38 @@
             "center",
             "end"
           ],
-          "default": "center"
+          "default": "center",
+          "description": "How it lines up with the trigger along that side."
         },
         {
           "name": "hasCloseButton",
           "control": "boolean",
           "default": false,
-          "description": "A close button in the corner. Escape and a click outside close it either way."
+          "description": "A close button in the corner. Escape and a press outside close it either way."
         },
         {
           "name": "closeLabel",
           "control": "text",
-          "default": "Close"
+          "default": "Close",
+          "description": "Accessible name of the close button."
         },
         {
           "name": "openOnHover",
           "control": "boolean",
           "default": false,
-          "description": "Open on hover as well as click, for previews. Content must still be reachable by click and keyboard."
+          "description": "Open on hover as well as on click, for previews. Click, keyboard and touch still open it."
         },
         {
           "name": "defaultOpen",
-          "control": "boolean"
+          "control": "boolean",
+          "default": false,
+          "description": "Open on first render, uncontrolled."
         },
         {
           "name": "isModal",
           "control": "boolean",
           "default": false,
-          "description": "Trap focus inside while open, lock page scroll and block clicks outside (Base UI's modal mode)."
+          "description": "Trap focus inside while open, lock page scroll and block presses outside (Base UI's modal mode)."
         }
       ]
     },
@@ -2035,6 +2073,12 @@
       "storyId": "components-overlays-tooltip--default",
       "props": [
         {
+          "name": "content",
+          "control": "text",
+          "default": "Copy link",
+          "description": "What the tooltip says. Short: a label or a hint, never the only way to learn something essential."
+        },
+        {
           "name": "side",
           "control": "inline-radio",
           "options": [
@@ -2043,7 +2087,8 @@
             "bottom",
             "left"
           ],
-          "default": "top"
+          "default": "top",
+          "description": "Which side of the trigger it opens on. Flips when there is no room."
         },
         {
           "name": "align",
@@ -2053,7 +2098,8 @@
             "center",
             "end"
           ],
-          "default": "center"
+          "default": "center",
+          "description": "How it lines up with the trigger along that side."
         },
         {
           "name": "delay",
@@ -2064,12 +2110,14 @@
         {
           "name": "closeDelay",
           "control": "number",
-          "default": 0
+          "default": 0,
+          "description": "Milliseconds before it closes once the pointer leaves."
         },
         {
           "name": "defaultOpen",
           "control": "boolean",
-          "default": false
+          "default": false,
+          "description": "Open on first render, uncontrolled."
         },
         {
           "name": "disabled",
