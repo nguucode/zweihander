@@ -1,63 +1,179 @@
-import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
+import { Link } from './Link'
 import * as LinkStories from './Link.stories'
 
 <Meta of={LinkStories} />
 
 # Link
 
+<DocTabs>
+<DocTab value="overview">
+
 Text that takes you somewhere: another page, a section of this one, an
-outside site. It navigates; it does not act. For an action, use a
-[Button](?path=/docs/components-buttons-button--docs). Spec:
-[uiguideline.com/components/link](https://www.uiguideline.com/components/link).
+outside site. It navigates; it does not act.
+
+<Status of={LinkStories} />
 
 <Canvas of={LinkStories.InText} />
 
-## Anatomy
+## Variants
 
-| Part | What it is |
-| --- | --- |
-| **Text** | The link's name. Say where it goes ("See pricing"), not "click here". |
-| **Underline** | 1px, thickening to 2px on hover. |
-| **External icon** | With `isExternal`: an arrow out of a box, plus "(opens in a new tab)" for screen readers. |
-
-## Props
-
-| Prop | Values | Default | |
-| --- | --- | --- | --- |
-| `href` | string | – | |
-| `variant` | `primary`, `accent`, `secondary` | `primary` | Colour. `accent` is the foreground. |
-| `size` | `sm`, `md`, `lg` | – | Omitted, it inherits the size of the text around it. |
-| `underline` | `always`, `hover` | `always` | See below. |
-| `isExternal` | boolean | `false` | New tab, `rel="noopener noreferrer"`, icon and announcement. |
-| `isDisabled` | boolean | `false` | Drops `href`, sets `aria-disabled`. |
-| `render` | element or function | – | Replaces the `<a>`, e.g. a router's `<Link />`. |
-
-Every other `<a>` attribute passes through, including `ref`.
-
-<Controls of={LinkStories.Default} />
-
-### Design notes
-
-- **Underlined by default.** Colour alone does not mark a link for
-  someone who cannot tell the colours apart (WCAG 1.4.1), so a link in
-  running text keeps its line. `underline="hover"` is for places where
-  the context already says "these are links": a nav list, a footer
-  column.
-- **Hover thickens the line, it does not change the colour.** Every
-  variant is a text colour measured at 4.5:1; a hover colour would need
-  measuring again for every accent and mode.
-- **No `visited` style.** Most links in an app lead to screens, not
-  documents, and a purple "seen it" marker there is noise.
-
-## Usage
+`variant` is the colour; `underline` says whether the line shows at rest.
+Any variant takes either underline.
 
 <Canvas of={LinkStories.Variants} />
 
+| Variant | Use for |
+| --- | --- |
+| <Link href="#link">Primary</Link> | Links in running text and on their own. The default. |
+| <Link href="#link" variant="accent">Accent</Link> | Links in the foreground colour, where the brand colour would compete: dense lists, navigation. |
+| <Link href="#link" variant="secondary">Secondary</Link> | Footers, captions and meta text, where the link is not the point. |
+
+| Underline | Use for |
+| --- | --- |
+| <Link href="#link">Always</Link> | Inside running text, where only the line tells a link from the words around it. The default. |
+| <Link href="#link" underline="hover">Hover</Link> | Places that are obviously lists of links: a nav list, a footer column. |
+
+Without a `size`, a link takes the size of the sentence around it, which
+is what a link in text wants. `sm`, `md` and `lg` are for links that stand
+alone.
+
 <Canvas of={LinkStories.Sizes} />
 
-<Canvas of={LinkStories.UnderlineOnHover} />
-
 <Canvas of={LinkStories.External} />
+
+## Resources
+
+From npm, or copied into your project through the registry:
+
+```js
+import { Link } from 'zweihander/link'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/link.json
+```
+
+- Source: [src/components/navigation/Link.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/navigation/Link.tsx)
+- Spec: [uiguideline.com/components/link](https://www.uiguideline.com/components/link)
+- Behaviour: a native `<a>`; `render` from [Base UI useRender](https://base-ui.com/react/utils/use-render)
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
+## Anatomy
+
+<Anatomy parts={LinkStories.anatomyParts}>
+  <Story of={LinkStories.Anatomy} />
+</Anatomy>
+
+The underline is a text decoration on the link itself, 1px thick and
+offset 0.2em below the text.
+
+## Measurements
+
+Each size sets only the text; without one, the link inherits it.
+
+<SpecTable
+  caption="sm"
+  rows={[
+    { part: 'Text', property: 'Font size', token: '--text-body-sm' },
+    { part: 'Text', property: 'Line height', token: '--leading-body-sm' },
+  ]}
+/>
+
+<SpecTable
+  caption="md"
+  rows={[
+    { part: 'Text', property: 'Font size', token: '--text-body' },
+    { part: 'Text', property: 'Line height', token: '--leading-body' },
+  ]}
+/>
+
+<SpecTable
+  caption="lg"
+  rows={[
+    { part: 'Text', property: 'Font size', token: '--text-body-lg' },
+    { part: 'Text', property: 'Line height', token: '--leading-body-lg' },
+  ]}
+/>
+
+<SpecTable
+  caption="Every size"
+  rows={[
+    { part: 'Container', property: 'Corner radius (the focus ring follows it)', token: '--radius-sm' },
+    { part: 'Focus ring', property: 'Width', token: '--focus-width' },
+    { part: 'Focus ring', property: 'Offset', token: '--focus-offset' },
+  ]}
+/>
+
+The text is medium weight. The external icon is 0.9em, so it scales with
+the text, with 0.2em before it.
+
+## Color
+
+The text and its underline share one colour. Switch the theme and the
+accent in the toolbar: the values follow.
+
+<SpecTable caption="primary" rows={[{ part: 'Text and underline', property: 'Colour', token: '--primary-text' }]} />
+
+<SpecTable caption="accent" rows={[{ part: 'Text and underline', property: 'Colour', token: '--foreground' }]} />
+
+<SpecTable caption="secondary" rows={[{ part: 'Text and underline', property: 'Colour', token: '--muted-foreground' }]} />
+
+<SpecTable caption="Every variant" rows={[{ part: 'Focus ring', property: 'Colour', token: '--ring' }]} />
+
+## States
+
+<States
+  states={[
+    { label: 'Enabled' },
+    { label: 'Hover', pseudo: 'hover' },
+    { label: 'Focus', pseudo: 'focus-visible' },
+    { label: 'Disabled', content: <Story of={LinkStories.Disabled} /> },
+  ]}
+>
+  <Story of={LinkStories.Default} />
+</States>
+
+- **Hover** thickens the underline from 1px to 2px and keeps the colour,
+  so the link keeps the contrast it was measured at. With
+  `underline="hover"`, hover is when the line appears.
+- **Focus** is a 2px `--ring` outline, 2px outside the text.
+- **Disabled** is the enabled look at 50% opacity, with no `href`.
+- There is no visited style: most links in an app lead to screens, not
+  documents, and a "seen it" colour there is noise.
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={LinkStories} />
+</div>
+
+Every other `<a>` attribute passes through, including `ref`, `target` and
+`rel`.
+
+</DocTab>
+<DocTab value="guidelines">
+
+## When to use
+
+Use a Link to go somewhere: another page, a section of this one, a file,
+an outside site. Inside a sentence, keep the underline; let the link
+text say where it goes, so it still makes sense read on its own.
+
+<DoDont
+  do={<Story of={LinkStories.DoSayWhere} />}
+  doCaption="The link text names the destination: it reads on its own, in a screen reader's list of links too."
+  dont={<Story of={LinkStories.DontClickHere} />}
+  dontCaption={'"Click here" says nothing out of context, and hides where the link goes.'}
+/>
+
+Mark links that leave for another site with `isExternal` only when they
+open a new tab, and keep that rare: a new tab breaks the Back button.
 
 With a router, pass its link as `render`. Link merges its class and props
 onto it, and the router keeps control of navigation:
@@ -66,14 +182,32 @@ onto it, and the router keeps control of navigation:
 <Link render={<RouterLink to="/settings" />}>Settings</Link>
 ```
 
+## When not to use
+
+- **For an action.** Saving, deleting or opening a dialog is a
+  [Button](?path=/docs/components-buttons-button--docs). A link-styled
+  action looks like it will take you away, and does not respond to Space.
+- **For a prominent call to action that navigates.** Use a Button with
+  `href`: it renders an `<a>` with the weight of a button.
+- **For a trail of parent pages.** Use Breadcrumbs.
+- **For moving through pages of a list.** Use Pagination.
+
 ## Accessibility
 
 - A real `<a href>`, so it is in the tab order, opens with Enter, and
   shows up in a screen reader's list of links.
-- `isExternal` adds "(opens in a new tab)" to the accessible name: a new
-  tab that opens without warning strands people who cannot see it happen.
+- Underlined by default: colour alone does not mark a link for someone who
+  cannot tell the colours apart (WCAG 1.4.1).
+- `isExternal` adds "(opens in a new tab)" to the accessible name, and
+  sets `rel="noopener noreferrer"`: a new tab that opens without warning
+  strands people who cannot see it happen.
 - `isDisabled` removes `href`, the only thing that stops an `<a>`
-  navigating, and marks it `aria-disabled`. Without an `href` it leaves
-  the tab order. Prefer hiding a link that cannot be followed, or saying
-  in text why it is unavailable.
-- Focus shows a 2px `--ring` outline, offset 2px.
+  navigating, drops the click handlers and sets `aria-disabled`. Without
+  an `href` it leaves the tab order. Prefer hiding a link that cannot be
+  followed, or saying in text why it is unavailable.
+- Every variant is a text colour measured at 4.5:1 on the page, and hover
+  does not change it.
+- Focus ring: 2px `--ring`, 2px offset.
+
+</DocTab>
+</DocTabs>

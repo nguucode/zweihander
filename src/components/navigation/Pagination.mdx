@@ -1,59 +1,32 @@
-import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
 import * as PaginationStories from './Pagination.stories'
 
 <Meta of={PaginationStories} />
 
 # Pagination
 
-Moves through a long list one page at a time: previous, next, and the
-page numbers around the current one. Spec:
-[uiguideline.com/components/pagination](https://www.uiguideline.com/components/pagination).
-A plain element.
+<DocTabs>
+<DocTab value="overview">
+
+Moves through a long list one page at a time: previous, next, and the page
+numbers around the current one.
+
+<Status of={PaginationStories} />
 
 <Canvas of={PaginationStories.Middle} />
 
-## Anatomy
+## Variants
 
-| Part | What it is |
+Pagination has one look. What changes is the size, how many numbers show,
+and whether the pages are buttons or links.
+
+| Form | Use for |
 | --- | --- |
-| **Previous / Next** | Chevron buttons, disabled at either end. |
-| **Page** | A square ghost button with the number, tabular figures. |
-| **Current page** | The only solid: `--primary` behind `--primary-foreground`. |
-| **Ellipsis** | "…" where two or more pages are skipped. Decorative. |
-
-## Props
-
-| Prop | Values | Default | |
-| --- | --- | --- | --- |
-| `totalPages` | number | – | Required. |
-| `page`, `defaultPage`, `onPageChange` | number (1-based) | `1` | Controlled or uncontrolled. |
-| `siblingCount` | number | `1` | Pages shown either side of the current one. |
-| `boundaryCount` | number | `1` | Pages always shown at each end. |
-| `size` | `sm`, `md` | `md` | 24 or 32px controls. |
-| `getHref` | `(page) => string` | – | Render links instead of buttons. |
-| `aria-label` | string | `Pagination` | The landmark's name. |
-
-Every other `<nav>` attribute passes through. `paginationItems(page,
-total, siblings, boundary)` is exported too, for building your own.
-
-<Controls of={PaginationStories.Default} />
-
-### Design notes
-
-- **The width stays put.** First and last page are always shown, the
-  current page keeps a sibling each side, and a "…" appears only where
-  it hides two or more pages: a single hidden page is shown instead,
-  since "…" would take the same room. The number of controls stays the
-  same as you move through the middle, so the Next button does not jump.
-
-  <Canvas of={PaginationStories.Ranges} />
-
-- **Links when pages have URLs.** With `getHref` each page is an `<a>`,
-  so it can be opened in a new tab and shared; without it, buttons.
-
-## Usage
-
-<Canvas of={PaginationStories.Default} />
+| `md` | Under a table or a list of results. The default. |
+| `sm` | Dense places: a card, a side panel, a compact table footer. |
+| `getHref` | Pages with their own URL: each page is a link that can be opened in a new tab and shared. |
+| Buttons | Pages that only exist in this view's state, such as a filtered list in a dialog. The default. |
 
 <Canvas of={PaginationStories.Small} />
 
@@ -61,14 +34,179 @@ total, siblings, boundary)` is exported too, for building your own.
 
 <Canvas of={PaginationStories.Links} />
 
+## Resources
+
+From npm, or copied into your project through the registry:
+
+```js
+import { Pagination } from 'zweihander/pagination'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/pagination.json
+```
+
+- Source: [src/components/navigation/Pagination.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/navigation/Pagination.tsx)
+- Spec: [uiguideline.com/components/pagination](https://www.uiguideline.com/components/pagination)
+- Behaviour: a plain `<nav>` around a list of buttons or links
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
+## Anatomy
+
+<Anatomy parts={PaginationStories.anatomyParts}>
+  <Story of={PaginationStories.Anatomy} />
+</Anatomy>
+
+The first and last page always show, the current page keeps a sibling
+each side, and "…" appears only where it hides two or more pages. A single
+hidden page is shown instead, since "…" would take the same room. So the
+number of controls stays the same as you move through the middle, and
+Next does not jump.
+
+## Measurements
+
+Each size is a control tier (Foundations / Sizing). A control is square
+at its minimum; the inline padding only shows on a page number of three
+digits or more. Previous and next have no padding, so they stay square.
+
+<SpecTable
+  caption="sm"
+  rows={[
+    { part: 'Control', property: 'Height and minimum width', token: '--control-sm' },
+    { part: 'Control', property: 'Inline padding', token: '--control-sm-pad' },
+    { part: 'Control', property: 'Corner radius', token: '--control-sm-radius' },
+    { part: 'Previous, Next', property: 'Icon size', token: '--icon-sm' },
+    { part: 'Label', property: 'Font size', token: '--text-body-sm' },
+    { part: 'Label', property: 'Line height', token: '--leading-body-sm' },
+  ]}
+/>
+
+<SpecTable
+  caption="md"
+  rows={[
+    { part: 'Control', property: 'Height and minimum width', token: '--control-md' },
+    { part: 'Control', property: 'Inline padding', token: '--control-md-pad' },
+    { part: 'Control', property: 'Corner radius', token: '--control-md-radius' },
+    { part: 'Previous, Next', property: 'Icon size', token: '--icon-md' },
+    { part: 'Label', property: 'Font size', token: '--text-body' },
+    { part: 'Label', property: 'Line height', token: '--leading-body' },
+  ]}
+/>
+
+<SpecTable
+  caption="Every size"
+  rows={[
+    { part: 'List', property: 'Gap between controls', token: '--space-1' },
+    { part: 'Ellipsis', property: 'Minimum width', token: '--space-6' },
+    { part: 'Focus ring', property: 'Width', token: '--focus-width' },
+    { part: 'Focus ring', property: 'Offset', token: '--focus-offset' },
+    { part: 'Control', property: 'Height and minimum width on touch screens', token: '--target-coarse' },
+  ]}
+/>
+
+## Color
+
+One colour set: the current page is the only fill. Switch the theme and
+the accent in the toolbar: the values follow.
+
+<SpecTable
+  caption="Every size"
+  rows={[
+    { part: 'Page, Previous, Next', property: 'Colour', token: '--foreground' },
+    { part: 'Page, Previous, Next, hover', property: 'Background', token: '--accent' },
+    { part: 'Page, Previous, Next, hover', property: 'Colour', token: '--accent-foreground' },
+    { part: 'Current page', property: 'Background', token: '--primary' },
+    { part: 'Current page', property: 'Colour', token: '--primary-foreground' },
+    { part: 'Ellipsis', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+  ]}
+/>
+
+At rest a control has no fill.
+
+## States
+
+<States
+  states={[
+    { label: 'Enabled' },
+    { label: 'Hover', pseudo: 'hover' },
+    { label: 'Focus', pseudo: 'focus-visible' },
+  ]}
+>
+  <Story of={PaginationStories.StatesExample} />
+</States>
+
+- **Selected**: the current page is filled with `--primary`, medium
+  weight. It does not change on hover, and pressing it does nothing.
+- **Hover** fills a page, Previous or Next with an `--accent` chip.
+- **Focus** is a 2px `--ring` outline, 2px outside the control.
+- **Disabled**: Previous on the first page (above) and Next on the last, at 50%
+  opacity. As buttons they are `disabled`; as links they lose their
+  `href`.
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={PaginationStories} />
+</div>
+
+Every other `<nav>` attribute passes through. `paginationItems(page,
+total, siblings, boundary)` is exported too, for building your own.
+
+</DocTab>
+<DocTab value="guidelines">
+
+## When to use
+
+Use Pagination under a long list or table when the reader needs to know
+where they are in it and jump to a page: search results, an audit log, an
+order history. Put it below the content it pages, and keep the list's
+position stable as pages change.
+
+Leave `siblingCount` and `boundaryCount` at 1. The control stays short and
+keeps the same width as the reader moves, so Next stays under the pointer.
+
+<DoDont
+  do={<Story of={PaginationStories.DoKeepItShort} />}
+  doCaption="The default range: first, last, and the current page with a neighbour each side, on one line."
+  dont={<Story of={PaginationStories.DontShowEveryPage} />}
+  dontCaption="Every page number at once wraps over several lines and buries the current page."
+/>
+
+When the pages have URLs, pass `getHref`, so a page can be opened in a new
+tab, bookmarked and shared.
+
+## When not to use
+
+- **For a feed read top to bottom.** Load more as the reader scrolls, or
+  with a "Load more" [Button](?path=/docs/components-buttons-button--docs):
+  page numbers mean nothing in a stream.
+- **For a few items.** If everything fits on one page, show it all.
+- **For the steps of a task.** Use a Stepper.
+- **For switching between views of one thing.** Use Tabs.
+
 ## Accessibility
 
 - A `<nav>` landmark named "Pagination", around a list.
 - Each page control is named "Page 3"; the current one has
   `aria-current="page"`. Previous and next are named "Previous page" and
-  "Next page", and are disabled (or, as links, lose their `href`) at the
-  ends.
-- The ellipsis is `aria-hidden`: the page names already say which
-  numbers are there.
-- Controls are 24px (`sm`) or 32px (`md`), and grow to 44px on coarse
-  pointers.
+  "Next page".
+- At either end, Previous or Next is disabled. As links they lose their
+  `href` (the only thing that stops an `<a>` navigating) and keep
+  `role="link"` with `aria-disabled`, so they are still announced as a
+  disabled link.
+- With `getHref`, each control is a real `<a href>`; without it, a native
+  `<button>`. Both are in the tab order and activate with Enter (buttons
+  with Space too).
+- The ellipsis is `aria-hidden`: the page names already say which numbers
+  are there.
+- Controls are 24px (`sm`) or 32px (`md`) and grow to 44px on touch
+  screens (`pointer: coarse`).
+- Focus ring: 2px `--ring`, 2px offset.
+
+</DocTab>
+</DocTabs>
