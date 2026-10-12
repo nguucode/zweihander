@@ -49,7 +49,7 @@ whole scale rather than replacing it:
 | Preset | Factor | `--radius-full` |
 | --- | --- | --- |
 | `none` | `0` | `0px` |
-| `small` | `0.5` | `0px` |
+| `small` | `0.75` | `0px` |
 | `medium` | `1` | `0px` |
 | `large` | `1.5` | `0px` |
 | `full` | `1.5` | `9999px` |
@@ -71,16 +71,74 @@ step up with the preset and stop there. Concretely, at the default base:
 | Preset | `control` | `field` | `panel` |
 | --- | --- | --- | --- |
 | `none` | 0 | 0 | 0 |
-| `small` | 4px | 4px | 7px |
+| `small` | 6px | 6px | 10.5px |
 | `medium` | 8px | 8px | 14px |
 | `large` | 12px | 12px | 21px |
 | `full` | pill | 15px | 27px |
 
-Small (24px) buttons and fields take `--radius-sm` (6px at the default)
-instead: the same corner on a box two thirds the height reads as a pill.
-
-The default input is 32px tall, so a pill would be 16px — `field` at
+The default input is 32px tall, so a pill would be 16px. `field` at
 `full` lands under that on purpose, and a test asserts it.
+
+## Three rules
+
+### 1. Radius is tier × intent
+
+A control's corner is not picked per component. Its **size tier** picks
+the step, and its **intent** picks what happens at `full`:
+
+| Tier | Step | Control (pill at `full`) | Field (stops one step up) |
+| --- | --- | --- | --- |
+| `xs` (20px) | `--radius-sm` | `--control-xs-radius` | `--control-xs-radius-field` |
+| `sm` (24px) | `--radius-sm` | `--control-sm-radius` | `--control-sm-radius-field` |
+| `md` (32px) | `--radius-md` | `--control-md-radius` = `--radius-control` | `--control-md-radius-field` = `--radius-field` |
+
+The small tiers take the smaller step because the same corner on a box
+two thirds the height reads as a pill. There is no `--radius-xs`: `xs`
+parts are small enough that `--radius-sm` already reads as soft. See
+[Sizing](?path=/docs/foundations-sizing--docs) for which component reads
+which tier.
+
+### 2. Nested corners are the outer corner minus the inset
+
+When a rounded thing sits inside another, with an even inset, its corner
+is the container's minus that inset, never its own token:
+
+```css
+.menu {
+  --menu-inset: var(--space-1);
+  padding: var(--menu-inset);
+  border-radius: var(--radius-field);
+}
+.menu-item {
+  border-radius: calc(var(--radius-field) - var(--menu-inset));
+}
+```
+
+At the default that is 8 − 4 = 4px for a menu item, and the pills Tabs
+chips are their track's corner minus the 2px track inset. A negative
+result clamps to 0, so a square container gets square children. Both
+corners then stay concentric at every preset; two independent tokens only
+line up at one.
+
+The rule is for concentric shapes. A close button 12px inside a popover's
+corner is a free-standing control, not a nested shape, and keeps its own
+step.
+
+### 3. Radius scales with `--scaling`
+
+Every step is multiplied by `--scaling`, as padding is. At 110% a 32px
+button is 35.2px tall with 13.2px padding, and its 8px corner becomes
+8.8px. Without this, the nesting rule above would hold at 100% only:
+padding would shrink at 90% while the corners stayed put.
+
+<Canvas of={RadiusStories.Scaling} />
+
+## Always round: `--radius-pill`
+
+`--radius-pill` is `9999px` at every preset. It is for things that are
+round by nature, not by preset: a badge count, an avatar, a switch track,
+a slider thumb, a spinner. `--radius-full` is the preset's pill switch:
+read directly it is `0` everywhere except `radius="full"`.
 
 ## Intent tokens
 
@@ -90,9 +148,9 @@ What components actually use.
 
 | Token | Used by | Pills at `full` |
 | --- | --- | --- |
-| `--radius-control` | Button, and future badges/chips | yes |
-| `--radius-field` | TextInput, and future textareas/selects | no |
-| `--radius-panel` | future cards, dialogs, popovers | no |
+| `--radius-control` | the md tier of Button, ToggleButton, Tabs, Pagination | yes |
+| `--radius-field` | the md tier of every field, Select and Combobox lists, menus | no |
+| `--radius-panel` | Card, Modal, Popover, the date picker | no |
 
 A new component should pick the intent that matches its shape, not a step.
 Getting this wrong is invisible at the default preset and only shows up
@@ -109,10 +167,8 @@ genuinely decorative rather than a control, field or panel.
 These follow the preset like everything else, so a decorative corner in
 application code stays in step with the controls beside it.
 
-A genuinely circular element — an avatar, a status dot — should use
-`border-radius: 50%` rather than a token. `--radius-full` is the pill
-switch, not a "make this round" value: read directly it is `0` at every
-preset except `full`.
+A genuinely circular element uses `--radius-pill` (see above), not
+`--radius-full`.
 
 ## Scoping and overriding
 

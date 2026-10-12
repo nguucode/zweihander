@@ -157,3 +157,46 @@ export const Steps: Story = {
 export const Intent: Story = {
   render: () => <Intents />,
 }
+
+const SCALES = ['90%', '100%', '110%'] as const
+
+/* A corner that stayed put while the padding shrank would break the nesting
+   rule at every scaling but 100%, so the two have to move together. */
+export const Scaling: Story = {
+  render: () => (
+    <div className={docs.row}>
+      {SCALES.map((scaling) => (
+        <Theme key={scaling} scaling={scaling} className={docs.stack}>
+          <Button>{scaling}</Button>
+        </Theme>
+      ))}
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    const measure = (scaling: string) => {
+      const style = getComputedStyle(canvas.getByRole('button', { name: scaling }))
+      return { radius: Number.parseFloat(style.borderTopLeftRadius), pad: Number.parseFloat(style.paddingLeft) }
+    }
+    const base = measure('100%')
+    for (const scaling of ['90%', '110%']) {
+      const { radius, pad } = measure(scaling)
+      await expect(radius / base.radius).toBeCloseTo(pad / base.pad, 2)
+      await expect(radius).not.toBe(base.radius)
+    }
+  },
+}
+
+/* The small preset is three quarters of the default, not half: at half the
+   24px controls' corner fell to 3px, which reads as a mistake rather than
+   a choice. */
+export const SmallPreset: Story = {
+  render: () => (
+    <Theme radius="small">
+      <Button size="sm">Small preset</Button>
+    </Theme>
+  ),
+  play: async ({ canvas }) => {
+    const radius = getComputedStyle(canvas.getByRole('button')).borderTopLeftRadius
+    await expect(Number.parseFloat(radius)).toBeCloseTo(4.5, 1)
+  },
+}
