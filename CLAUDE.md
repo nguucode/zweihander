@@ -8,7 +8,7 @@ Project info (decisions, tickets, roadmap, Figma links) lives in the Obsidian va
 - Code is the token source: edit `tokens/*.json`, run `npm run tokens`, then sync to Figma. `npm run tokens:check` and `npm run registry:check` must pass.
 - Dev: `npm run storybook` (6006), `npm run dev` (5173), `npm run lint`.
 - Drive is exFAT: use `npm`, not `pnpm` (no hardlinks).
-- Research (`/research`): save to `docs/research/YYYY-MM-DD-<topic>.md` in this repo, then copy a version into the vault at `10-projects/zweihander/research/` (vault rules apply: frontmatter, a line in `_context.md`).
+- Research (`/research`): save to `docs/research/YYYY-MM-DD-<topic>.md` in this repo, then copy it to the vault mirror `10-projects/zweihander/repo/docs/research/` (same place the `flow` mod copies repo Markdown; on the Mac `/flow:vault` does it) and add a line to `_context.md`.
 - Skills: when a skill in `.claude/skills/` overlaps a built-in or plugin skill, use the one in `.claude/skills/`. Review a diff with `/matt-code-review`, not the built-in `/code-review` or `/ponytail-review`.
 
 ## Agent skills
