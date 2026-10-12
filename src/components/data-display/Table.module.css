@@ -128,8 +128,12 @@ tbody tr:last-child > * {
 tbody tr:hover > * {
   background: var(--accent);
 }
+/* --border is as light as --primary-subtle in light mode, so between two
+   selected rows it vanishes. The divider takes the tint's own text colour,
+   mixed down, to stay visible on it in both modes. */
 tbody tr.selected > * {
   background: var(--primary-subtle);
+  border-block-end-color: color-mix(in oklab, var(--primary-subtle) 75%, var(--primary-subtle-text));
 }
 
 .select {
@@ -188,6 +192,7 @@ tbody tr.expanded:hover + tr.expandedRow > * {
 }
 tbody tr.selected.expanded + tr.expandedRow > * {
   background: var(--primary-subtle);
+  border-block-end-color: color-mix(in oklab, var(--primary-subtle) 75%, var(--primary-subtle-text));
 }
 
 .empty {
