@@ -1,74 +1,186 @@
-import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
+import { Rating } from './Rating'
 import * as RatingStories from './Rating.stories'
 
 <Meta of={RatingStories} />
 
 # Rating
 
+<DocTabs>
+<DocTab value="overview">
+
 Asks for, or shows, a score out of a few stars: a review, a template's
-rating, a difficulty. Spec:
-[uiguideline.com/components/rating](https://www.uiguideline.com/components/rating).
-Built on native radio buttons; no Base UI part covers it.
+rating, a difficulty.
+
+<Status of={RatingStories} />
 
 <Canvas of={RatingStories.Default} />
 
-## Anatomy
+## Variants
 
-| Part | What it is |
+A rating either asks for a score or shows one.
+
+| Mode | Use for |
 | --- | --- |
-| **Label** | Optional legend over the stars; names the group. |
-| **Star** | Filled in `--warning-text` up to the value, outlined in `--control-border` after it. 24px (16px at `sm`, 32px at `lg`). |
-
-## Props
-
-| Prop | Values | Default | |
-| --- | --- | --- | --- |
-| `value`, `defaultValue`, `onValueChange` | number | `0` | 0 is unrated. |
-| `max` | number | `5` | |
-| `size` | `sm`, `md`, `lg` | `md` | |
-| `readOnly` | boolean | `false` | Shows a rating; fractions allowed. |
-| `disabled` | boolean | `false` | |
-| `label` | node | – | |
-| `aria-label` | string | – | The name when there is no visible `label`. |
-| `name` | string | – | Submitted with a form. |
-| `getValueText` | `(value, max) => string` | "3 out of 5 stars" | How each value is spoken. |
-
-<Controls of={RatingStories.Default} />
-
-### Design notes
-
-- **Native radios, not a custom widget.** A rating is "pick one of five",
-  which is what a radio group is: arrows, Tab, focus and form
-  submission come from the browser, and a screen reader already knows
-  how to read it. Each radio sits invisibly over its star.
-- **Stars in the bright `--warning` amber.** A rating reads as a
-  rating when it looks like one, so the fill is the amber solid, not the
-  darker warning text colour. It is 2.1:1 on white, below the 3:1 a
-  meaningful graphic needs, so colour is not what carries the score: a
-  filled star differs from the outlined empty one (`--control-border`,
-  3:1) by shape, and the group or image is named "3 out of 5 stars".
-- **Read-only is one image.** "4.5 out of 5 stars" is one fact, so it is
-  read once, and a fraction draws as a star filled part-way.
-
-## Usage
+| <Rating label="Interactive" defaultValue={3} /> | Asking: a review form, rating a template. Whole stars only. |
+| <Rating readOnly value={4.5} aria-label="Read-only" /> | Showing: an average beside a product. Fractions draw as a star filled part-way. |
 
 <Canvas of={RatingStories.ReadOnly} />
 
 <Canvas of={RatingStories.Sizes} />
 
+`getValueText` changes what each score is called, for a scale that is not
+stars:
+
 <Canvas of={RatingStories.CustomText} />
 
-<Canvas of={RatingStories.Unrated} />
+## Resources
 
-<Canvas of={RatingStories.Disabled} />
+From npm, or copied into your project through the registry:
+
+```js
+import { Rating } from 'zweihander/rating'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/rating.json
+```
+
+- Source: [src/components/controls/Rating.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/controls/Rating.tsx)
+- Spec: [uiguideline.com/components/rating](https://www.uiguideline.com/components/rating)
+- Behaviour: native radio buttons; no Base UI part covers it
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
+## Anatomy
+
+<Anatomy parts={RatingStories.anatomyParts}>
+  <Story of={RatingStories.Anatomy} />
+</Anatomy>
+
+Each star is a label over an invisible native radio, so arrows, Tab and
+form submission are the browser's own. Read-only drops the radios: the
+stars are one image.
+
+## Measurements
+
+<SpecTable
+  caption="sm"
+  rows={[{ part: 'Star', property: 'Size', token: '--space-4' }]}
+/>
+
+<SpecTable
+  caption="md"
+  rows={[{ part: 'Star', property: 'Size', token: '--space-6' }]}
+/>
+
+<SpecTable
+  caption="lg"
+  rows={[{ part: 'Star', property: 'Size', token: '--space-8' }]}
+/>
+
+<SpecTable
+  caption="Every size"
+  rows={[
+    { part: 'Label', property: 'Gap above the stars', token: '--space-1-5' },
+    { part: 'Label', property: 'Font size', token: '--text-body' },
+    { part: 'Label', property: 'Line height', token: '--leading-body' },
+    { part: 'Focus ring', property: 'Width', token: '--focus-width' },
+    { part: 'Focus ring', property: 'Offset', token: '--focus-offset' },
+    { part: 'Focus ring', property: 'Corner radius', token: '--radius-sm' },
+    { part: 'Hit area', property: 'Minimum on touch screens', token: '--target-coarse' },
+  ]}
+/>
+
+Stars sit 2px apart, below the spacing scale on purpose, as on Tag. The
+label is medium weight.
+
+## Color
+
+<SpecTable
+  rows={[
+    { part: 'Filled star', property: 'Colour', token: '--warning' },
+    { part: 'Empty star', property: 'Colour', token: '--control-border' },
+    { part: 'Label', property: 'Colour', token: '--foreground' },
+    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+  ]}
+/>
+
+The fill is the bright `--warning` amber, not the darker warning text
+colour: a rating reads as a rating when it looks like one. It is 2.1:1 on
+white, below the 3:1 a meaningful graphic needs, so colour is not what
+carries the score. A filled star differs from the outlined empty one by
+shape, and the group or image is named "3 out of 5 stars".
+
+## States
+
+<States
+  states={[
+    { label: 'Enabled' },
+    { label: 'Hover', pseudo: 'hover' },
+    { label: 'Focus', pseudo: 'focus-visible' },
+    { label: 'Disabled', content: <Story of={RatingStories.Disabled} /> },
+    { label: 'Unrated', content: <Story of={RatingStories.Unrated} /> },
+    { label: 'Read-only', content: <Rating readOnly value={3.5} aria-label="Rating" /> },
+  ]}
+>
+  <Rating aria-label="Rating" defaultValue={3} />
+</States>
+
+- **Hover** previews the score up to the star under the pointer, and only
+  while the rating can be changed.
+- **Focus** is a 2px `--ring` outline round the focused star.
+- **Disabled** dims the stars to 50%.
+- **Read-only** is one image; fractions fill a star part-way, cut rather
+  than shrunk.
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={RatingStories} />
+</div>
+
+`className` passes through to the group.
+
+</DocTab>
+<DocTab value="guidelines">
+
+## When to use
+
+Use a rating to ask for, or show, a quick score on a short scale: a
+review, a difficulty, how useful something was. Keep the scale short:
+five stars is the convention readers already know.
+
+<DoDont
+  do={<Story of={RatingStories.DoFiveStars} />}
+  doCaption="Five stars: few enough to hit and to tell apart at a glance."
+  dont={<Story of={RatingStories.DontTenStars} />}
+  dontCaption="Ten stars are small targets, and 7 looks much like 8. Use a Slider or a Number Input for a fine scale."
+/>
+
+## When not to use
+
+- **For a precise number.** Use a
+  [Slider](?path=/docs/components-controls-slider--docs) or a Number Input.
+- **For a choice between named options.** Use a
+  [Radio](?path=/docs/components-controls-radio--docs) group, so the
+  options say what they mean.
+- **To show progress.** Use a Progress Bar.
 
 ## Accessibility
 
-- Interactive: a `<fieldset>` named by its legend, with one radio per
-  star named "1 out of 5 stars" and so on (change the words with
-  `getValueText`). Arrows move the choice; Tab moves into and out of
+- Interactive: a `<fieldset>` named by its legend (or `aria-label`), with
+  one radio per star named "1 out of 5 stars" and so on (change the words
+  with `getValueText`). Arrows move the choice; Tab moves into and out of
   the group.
-- Hover previews the score up to the star under the pointer; focus shows
-  the 2px ring around the star.
 - Read-only: `role="img"` named with the value, "4.5 out of 5 stars".
-- Stars are 16px at `sm` and grow a 44px target on coarse pointers.
+- Hover previews the score; focus shows the 2px ring round the star.
+- A filled star differs from an empty one by shape as well as colour.
+- Stars grow a 44px target on coarse pointers.
+
+</DocTab>
+</DocTabs>

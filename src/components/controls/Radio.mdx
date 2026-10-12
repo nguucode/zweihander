@@ -1,47 +1,170 @@
-import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
+import { RadioGroup } from './Radio'
 import * as RadioStories from './Radio.stories'
 
 <Meta of={RadioStories} />
 
 # Radio
 
-Chooses exactly one option from a short list, all visible at once. Spec:
-[uiguideline.com/components/radio](https://www.uiguideline.com/components/radio).
-Behaviour from Base UI's [Radio Group](https://base-ui.com/react/components/radio),
-[Field](https://base-ui.com/react/components/field) and
-[Fieldset](https://base-ui.com/react/components/fieldset).
+<DocTabs>
+<DocTab value="overview">
+
+Chooses exactly one option from a short list, all visible at once. The
+component is `RadioGroup`.
+
+<Status of={RadioStories} />
 
 <Canvas of={RadioStories.Default} />
 
+## Variants
+
+`variant` is the colour of the selected radio; `orientation` lays the
+options out in a column or a row.
+
+<Canvas of={RadioStories.Variants} />
+
+| Variant | Use for |
+| --- | --- |
+| `neutral` | The default: forms and settings. The selected radio is the foreground colour. |
+| `primary` | A choice that carries the brand: a plan picker beside a primary button. |
+
+| Orientation | Use for |
+| --- | --- |
+| `vertical` | The default. Options with helper text, or labels longer than a word or two. |
+| `horizontal` | Two to four short labels: sizes, yes or no. The row wraps when narrow. |
+
+<Canvas of={RadioStories.Horizontal} />
+
+<Canvas of={RadioStories.Validation} />
+
+## Resources
+
+From npm, or copied into your project through the registry:
+
+```js
+import { RadioGroup } from 'zweihander/radio'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/radio.json
+```
+
+- Source: [src/components/controls/Radio.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/controls/Radio.tsx)
+- Spec: [uiguideline.com/components/radio](https://www.uiguideline.com/components/radio)
+- Behaviour: [Base UI Radio Group](https://base-ui.com/react/components/radio), [Field](https://base-ui.com/react/components/field) and [Fieldset](https://base-ui.com/react/components/fieldset)
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
 ## Anatomy
 
-| Part | What it is |
-| --- | --- |
-| **Legend** | `label`: names the group. |
-| **Radio** | The 20px circle: `--control-border` outline (darkens on hover), filled with the variant and a dot when selected. |
-| **Option label** | Each option's `label`. Clicking it selects the option. |
-| **Option helper** | Each option's `helperText`, indented under its label. |
-| **Group helper** | `helperText` under the group: the error message when `validationState` is error. |
+<Anatomy parts={RadioStories.anatomyParts}>
+  <Story of={RadioStories.Anatomy} />
+</Anatomy>
 
-## Props
+Each option's label wraps its radio, so the whole label is part of the
+click target.
 
-The component is `RadioGroup`.
+## Measurements
 
-| Prop | Values | Default | |
-| --- | --- | --- | --- |
-| `options` | `{ value, label, helperText?, disabled? }[]` | – | Required. |
-| `label` | node | – | The legend. |
-| `helperText` | node | – | |
-| `value` | string | – | Controlled. |
-| `defaultValue` | string | – | |
-| `onValueChange` | `(value) => void` | – | The spec's `onChange`. |
-| `name` | string | – | |
-| `variant` | `primary`, `neutral` | `neutral` | |
-| `orientation` | `vertical`, `horizontal` | `vertical` | Layout only; arrow keys work either way. |
-| `disabled`, `required`, `readOnly` | boolean | `false` | |
-| `validationState` | `default`, `success`, `error` | `default` | |
+One size. The circle is control tier xs (Foundations / Sizing) and sits
+centred on the first line of its label.
 
-<Controls of={RadioStories.Default} />
+<SpecTable
+  caption="Every radio group"
+  rows={[
+    { part: 'Radio', property: 'Size', token: '--control-xs' },
+    { part: 'Radio', property: 'Corner radius', token: '--radius-pill' },
+    { part: 'Dot', property: 'Size', token: '--space-2' },
+    { part: 'Option label', property: 'Gap from the radio', token: '--space-2' },
+    { part: 'Option label', property: 'Font size', token: '--text-body' },
+    { part: 'Option label', property: 'Line height', token: '--leading-body' },
+    { part: 'Options', property: 'Gap, vertical', token: '--space-2' },
+    { part: 'Options', property: 'Gap, horizontal', token: '--space-6' },
+    { part: 'Option helper', property: 'Gap from the label', token: '--space-1' },
+    { part: 'Focus ring', property: 'Width', token: '--focus-width' },
+    { part: 'Focus ring', property: 'Offset', token: '--focus-offset' },
+    { part: 'Hit area', property: 'Minimum on touch screens', token: '--target-coarse' },
+  ]}
+/>
+
+The legend is the body size at medium weight.
+
+## Color
+
+<SpecTable
+  caption="Unselected, every variant"
+  rows={[
+    { part: 'Radio', property: 'Background', token: '--background' },
+    { part: 'Radio', property: 'Border', token: '--control-border' },
+    { part: 'Radio, hover', property: 'Border', token: '--foreground' },
+  ]}
+/>
+
+<SpecTable
+  caption="neutral, selected"
+  rows={[
+    { part: 'Radio', property: 'Background', token: '--foreground' },
+    { part: 'Dot', property: 'Colour', token: '--background' },
+  ]}
+/>
+
+<SpecTable
+  caption="primary, selected"
+  rows={[
+    { part: 'Radio', property: 'Background', token: '--primary' },
+    { part: 'Dot', property: 'Colour', token: '--primary-foreground' },
+  ]}
+/>
+
+<SpecTable
+  caption="Every variant"
+  rows={[
+    { part: 'Legend and option label', property: 'Colour', token: '--foreground' },
+    { part: 'Option and group helper', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Radio, error', property: 'Border', token: '--danger-text' },
+    { part: 'Group helper, error', property: 'Colour', token: '--danger-text' },
+    { part: 'Group helper, success', property: 'Colour', token: '--success-text' },
+    { part: 'Required asterisk', property: 'Colour', token: '--danger-text' },
+    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+  ]}
+/>
+
+An option's own helper describes the option, so it stays muted when the
+group is in error or success; only the group message takes that colour.
+
+## States
+
+<States
+  states={[
+    { label: 'Enabled' },
+    { label: 'Hover', pseudo: 'hover' },
+    { label: 'Focus', pseudo: 'focus-visible' },
+    { label: 'Disabled', content: <Story of={RadioStories.Disabled} /> },
+    { label: 'Error', content: <RadioGroup label="Plan" options={[{ value: 'free', label: 'Free' }, { value: 'pro', label: 'Pro' }]} validationState="error" helperText="Choose a plan." /> },
+  ]}
+>
+  <RadioGroup label="Plan" options={[{ value: 'free', label: 'Free' }, { value: 'pro', label: 'Pro' }]} defaultValue="pro" />
+</States>
+
+- **Hover** anywhere on an option's label darkens an unselected ring to
+  `--foreground`. The selected radio mixes 12% of the dot's colour into
+  its fill, as Button does. An error ring stays red.
+- **Focus** is a 2px `--ring` outline, 2px outside the circle.
+- **Disabled** dims the radio and its label to 50%, for the whole group
+  or one option.
+- **Read-only** looks enabled but has no hover and an arrow cursor.
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={RadioStories} />
+</div>
+
+`className`, `aria-label` and `ref` pass through to the group.
 
 ### Differences from the spec
 
@@ -56,14 +179,34 @@ The component is `RadioGroup`.
 - **No `secondary`.** A light fill barely reads as selected, so only
   `neutral` (the foreground colour) and `primary` ship, as on Checkbox.
 
-## Usage
+</DocTab>
+<DocTab value="guidelines">
 
-Up to about six options. More than that, or options that do not fit on
-screen, is a Select.
+## When to use
 
-<Canvas of={RadioStories.Horizontal} />
+Use radios to choose one option from a short list, when seeing every
+option at once helps the choice: a plan, a delivery method, a size. Up to
+about six options. Select the usual choice by default when there is one.
 
-<Canvas of={RadioStories.Validation} />
+<DoDont
+  do={<Story of={RadioStories.DoFewOptions} />}
+  doCaption="A few options, all in view, the usual one already selected."
+  dont={<Story of={RadioStories.DontTooMany} />}
+  dontCaption="Ten radios are a wall to scan. A long list belongs in a Select or a Combobox."
+/>
+
+<Canvas of={RadioStories.Controlled} />
+
+## When not to use
+
+- **For more than about six options, or options that do not fit on
+  screen.** Use a Select, or a Combobox when the reader knows what to type.
+- **For several choices at once.** Use
+  [Checkboxes](?path=/docs/components-controls-checkbox--docs).
+- **For a single on or off.** Use a
+  [Checkbox](?path=/docs/components-controls-checkbox--docs) in a form, or a
+  [Switch](?path=/docs/components-controls-switch--docs) for a setting
+  that applies at once.
 
 ## Accessibility
 
@@ -72,9 +215,13 @@ screen, is a Select.
 - **One tab stop for the group.** Tab enters at the selected radio (or
   the first), arrow keys move and select, Tab leaves. Disabled options
   are skipped.
-- Each option's helper text is its own description; the group message
-  follows the group.
+- Each option's helper text is its own description. Plain group help
+  describes the group once; an error message reaches every radio, so
+  whichever has focus says what is wrong.
 - The unselected outline is `--control-border`, 3:1 on the page.
 - A hidden native input carries `name` and `required` into form
   submission and validation.
 - 44×44px touch target on each radio on coarse pointers.
+
+</DocTab>
+</DocTabs>

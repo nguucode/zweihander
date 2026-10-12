@@ -393,17 +393,32 @@
       "props": [
         {
           "name": "defaultChecked",
-          "control": "boolean"
+          "control": "boolean",
+          "default": false,
+          "description": "Starting state when uncontrolled."
         },
         {
           "name": "isIndeterminate",
           "control": "boolean",
-          "description": "Neither checked nor unchecked: a \"select all\" with some selected."
+          "default": false,
+          "description": "Neither checked nor unchecked: a \"select all\" whose children are partly selected. Display only; a click still sets all or none."
+        },
+        {
+          "name": "label",
+          "control": "text",
+          "default": "Remember me",
+          "description": "Names the checkbox. Clicking it toggles the box."
+        },
+        {
+          "name": "helperText",
+          "control": "text",
+          "description": "Under the label: the description, or the error message when `validationState` is `error`."
         },
         {
           "name": "value",
           "control": "text",
-          "description": "Submitted when checked; \"on\" by default."
+          "default": "on",
+          "description": "Submitted under `name` when checked."
         },
         {
           "name": "variant",
@@ -413,19 +428,25 @@
             "neutral"
           ],
           "default": "neutral",
-          "description": "Colour of the checked box."
+          "description": "Colour of the checked box: `neutral` (the foreground) or `primary` (the accent)."
         },
         {
           "name": "disabled",
-          "control": "boolean"
+          "control": "boolean",
+          "default": false,
+          "description": "Dimmed, and cannot be changed."
         },
         {
           "name": "required",
-          "control": "boolean"
+          "control": "boolean",
+          "default": false,
+          "description": "Must be checked to submit. Adds an asterisk to the label."
         },
         {
           "name": "readOnly",
-          "control": "boolean"
+          "control": "boolean",
+          "default": false,
+          "description": "Focusable and submitted, but cannot be changed."
         },
         {
           "name": "validationState",
@@ -434,7 +455,9 @@
             "default",
             "success",
             "error"
-          ]
+          ],
+          "default": "default",
+          "description": "`error` sets `aria-invalid` and turns the outline and helper red; `success` turns the helper green."
         }
       ]
     },
@@ -447,30 +470,78 @@
       "storyId": "components-controls-color-picker--default",
       "props": [
         {
+          "name": "label",
+          "control": "text",
+          "default": "Brand colour",
+          "description": "Names the hex field."
+        },
+        {
+          "name": "helperText",
+          "control": "text",
+          "description": "Under the field. Replaced by a format hint while the typed text is not a colour."
+        },
+        {
           "name": "validationState",
-          "control": "radio",
+          "control": "inline-radio",
           "options": [
             "default",
             "success",
             "error"
-          ]
+          ],
+          "default": "default",
+          "description": "As on Text Input: `error` sets `aria-invalid` and a red edge; `success` a green one."
         },
         {
           "name": "size",
-          "control": "radio",
+          "control": "inline-radio",
           "options": [
             "sm",
             "md"
           ],
-          "default": "md"
+          "default": "md",
+          "description": "The field: 24px (`sm`) or 32px (`md`), as on Text Input. The panel is the same at both."
         },
         {
           "name": "isFullWidth",
-          "control": "boolean"
+          "control": "boolean",
+          "default": false,
+          "description": "Fills the width of its container."
         },
         {
           "name": "required",
-          "control": "boolean"
+          "control": "boolean",
+          "default": false,
+          "description": "Set on the hex input. Adds an asterisk to the label."
+        },
+        {
+          "name": "defaultValue",
+          "control": "text",
+          "default": "#3b82f6",
+          "description": "Starting colour when uncontrolled. Any CSS colour; shown and returned as hex."
+        },
+        {
+          "name": "alpha",
+          "control": "boolean",
+          "default": true,
+          "description": "Shows opacity. Off, any alpha in the value is dropped and the value is always `#rrggbb`."
+        },
+        {
+          "name": "defaultFormat",
+          "control": "inline-radio",
+          "options": [
+            "hex",
+            "rgb",
+            "hsl",
+            "hsb"
+          ],
+          "default": "hex",
+          "description": "The channel fields’ format when the panel first opens. A view only: the value stays hex."
+        },
+        {
+          "name": "disabled",
+          "control": "boolean",
+          "default": false,
+          "description": "Dims the field and disables the swatch button."
         }
       ]
     },
@@ -483,8 +554,20 @@
       "storyId": "components-controls-radio--default",
       "props": [
         {
+          "name": "label",
+          "control": "text",
+          "default": "Plan",
+          "description": "The group's legend: names the radiogroup."
+        },
+        {
+          "name": "helperText",
+          "control": "text",
+          "description": "Under the whole group. The error message when `validationState` is `error`, and then on every radio."
+        },
+        {
           "name": "defaultValue",
-          "control": "text"
+          "control": "text",
+          "description": "Starting selection when uncontrolled. None selected when left out."
         },
         {
           "name": "variant",
@@ -494,7 +577,7 @@
             "neutral"
           ],
           "default": "neutral",
-          "description": "Colour of the selected radio."
+          "description": "Colour of the selected radio: `neutral` (the foreground) or `primary` (the accent)."
         },
         {
           "name": "orientation",
@@ -503,19 +586,26 @@
             "vertical",
             "horizontal"
           ],
-          "default": "vertical"
+          "default": "vertical",
+          "description": "Stacked or in a row that wraps. Layout only: arrow keys work either way."
         },
         {
           "name": "disabled",
-          "control": "boolean"
+          "control": "boolean",
+          "default": false,
+          "description": "Every radio dimmed, and the selection cannot change."
         },
         {
           "name": "required",
-          "control": "boolean"
+          "control": "boolean",
+          "default": false,
+          "description": "One must be selected to submit. Adds an asterisk to the legend."
         },
         {
           "name": "readOnly",
-          "control": "boolean"
+          "control": "boolean",
+          "default": false,
+          "description": "Focusable and submitted, but the selection cannot change."
         },
         {
           "name": "validationState",
@@ -525,7 +615,8 @@
             "success",
             "error"
           ],
-          "default": "default"
+          "default": "default",
+          "description": "`error` sets `aria-invalid` on every radio, turns the outlines and the group message red; `success` turns the message green."
         }
       ]
     },
@@ -540,12 +631,14 @@
         {
           "name": "defaultValue",
           "control": "number",
-          "default": 3
+          "default": 3,
+          "description": "Starting score when uncontrolled."
         },
         {
           "name": "max",
           "control": "number",
-          "default": 5
+          "default": 5,
+          "description": "How many stars."
         },
         {
           "name": "size",
@@ -555,18 +648,26 @@
             "md",
             "lg"
           ],
-          "default": "md"
+          "default": "md",
+          "description": "Stars of 16px (`sm`), 24px (`md`) or 32px (`lg`)."
         },
         {
           "name": "readOnly",
           "control": "boolean",
           "default": false,
-          "description": "Shows a rating rather than asking for one."
+          "description": "Shows a rating rather than asking for one: one image, read once, fractions drawn part-filled."
         },
         {
           "name": "disabled",
           "control": "boolean",
-          "default": false
+          "default": false,
+          "description": "Dimmed, and cannot be changed."
+        },
+        {
+          "name": "label",
+          "control": "text",
+          "default": "Rate this template",
+          "description": "Visible label over the stars; names the group."
         }
       ]
     },
@@ -581,28 +682,38 @@
         {
           "name": "min",
           "control": "number",
-          "default": 0
+          "default": 0,
+          "description": "The lowest value."
         },
         {
           "name": "max",
           "control": "number",
-          "default": 100
+          "default": 100,
+          "description": "The highest value."
         },
         {
           "name": "step",
           "control": "number",
-          "default": 1
+          "default": 1,
+          "description": "What an arrow key moves by, and the values a drag snaps to."
         },
         {
           "name": "largeStep",
           "control": "number",
-          "description": "Page Up / Page Down and Shift+arrow step."
+          "default": 10,
+          "description": "What Page Up, Page Down and Shift with an arrow move by."
+        },
+        {
+          "name": "label",
+          "control": "text",
+          "default": "Volume",
+          "description": "Visible label over the track; also the name of a single thumb."
         },
         {
           "name": "showValue",
           "control": "boolean",
           "default": true,
-          "description": "Show the current value (or range) after the label."
+          "description": "Shows the value, or the range, after the label."
         },
         {
           "name": "size",
@@ -611,7 +722,8 @@
             "sm",
             "md"
           ],
-          "default": "md"
+          "default": "md",
+          "description": "A 20px thumb on a 6px track (`md`), or 16px on 4px with a 12px label (`sm`)."
         },
         {
           "name": "orientation",
@@ -620,12 +732,14 @@
             "horizontal",
             "vertical"
           ],
-          "default": "horizontal"
+          "default": "horizontal",
+          "description": "A vertical slider is 12rem tall; arrow keys follow the axis."
         },
         {
           "name": "disabled",
           "control": "boolean",
-          "default": false
+          "default": false,
+          "description": "Dims the control and stops it moving. The label and value stay readable."
         }
       ]
     },
@@ -640,12 +754,25 @@
         {
           "name": "defaultChecked",
           "control": "boolean",
-          "description": "Uncontrolled starting state (the spec's `defaultValue`)."
+          "default": false,
+          "description": "Starting state when uncontrolled."
+        },
+        {
+          "name": "label",
+          "control": "text",
+          "default": "Email notifications",
+          "description": "Names the setting. Clicking it toggles the switch."
+        },
+        {
+          "name": "helperText",
+          "control": "text",
+          "description": "Under the label: the description, or the error message when `validationState` is `error`."
         },
         {
           "name": "value",
           "control": "text",
-          "description": "Submitted when on; \"on\" by default, like a checkbox."
+          "default": "on",
+          "description": "Submitted under `name` when on, like a checkbox."
         },
         {
           "name": "size",
@@ -655,7 +782,8 @@
             "md",
             "lg"
           ],
-          "default": "md"
+          "default": "md",
+          "description": "Track 28×16 (`sm`), 36×20 (`md`) or 44×24px (`lg`)."
         },
         {
           "name": "variant",
@@ -666,19 +794,25 @@
             "destructive"
           ],
           "default": "primary",
-          "description": "Colour of the on state."
+          "description": "Colour of the on state. `accent` is the inverted neutral; `destructive` for a setting that is risky to turn on."
         },
         {
           "name": "disabled",
-          "control": "boolean"
+          "control": "boolean",
+          "default": false,
+          "description": "Dimmed, and cannot be changed."
         },
         {
           "name": "required",
-          "control": "boolean"
+          "control": "boolean",
+          "default": false,
+          "description": "Must be on to submit. Adds an asterisk to the label."
         },
         {
           "name": "readOnly",
-          "control": "boolean"
+          "control": "boolean",
+          "default": false,
+          "description": "Focusable and submitted, but cannot be changed."
         },
         {
           "name": "validationState",
@@ -687,7 +821,9 @@
             "default",
             "success",
             "error"
-          ]
+          ],
+          "default": "default",
+          "description": "`error` sets `aria-invalid`, draws a red edge inside the track and turns the helper red; `success` turns the helper green."
         }
       ]
     },

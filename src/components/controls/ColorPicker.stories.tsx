@@ -19,6 +19,88 @@ const meta = {
   tags: ['beta'],
   component: ColorPicker,
   args: { label: 'Brand colour', defaultValue: '#3b82f6', swatches: brand, onValueChange: fn() },
+  // These descriptions are the docs' API table and the Playground's props panel.
+  argTypes: {
+    value: {
+      description: 'Controlled colour, as hex. Pair with `onValueChange`.',
+      control: 'text',
+      table: { type: { summary: 'string' } },
+    },
+    defaultValue: {
+      description: 'Starting colour when uncontrolled. Any CSS colour; shown and returned as hex.',
+      control: 'text',
+      table: { type: { summary: 'string' }, defaultValue: { summary: "'#3b82f6'" } },
+    },
+    onValueChange: {
+      description: 'Called with lowercase `#rrggbb`, or `#rrggbbaa` below full opacity, on every change: typing (once committed), dragging, keys, swatches.',
+      control: false,
+      table: { type: { summary: '(hex: string) => void' } },
+    },
+    alpha: {
+      description: 'Shows opacity. Off, any alpha in the value is dropped and the value is always `#rrggbb`.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'true' } },
+    },
+    defaultFormat: {
+      description: 'The channel fields’ format when the panel first opens. A view only: the value stays hex.',
+      control: 'inline-radio',
+      options: ['hex', 'rgb', 'hsl', 'hsb'],
+      table: { type: { summary: "'hex' | 'rgb' | 'hsl' | 'hsb'" }, defaultValue: { summary: "'hex'" } },
+    },
+    swatches: {
+      description: 'Presets under the channels. A plain string is named by its hex; give brand colours a `label`.',
+      control: false,
+      table: { type: { summary: '(string | { value: string; label: string })[]' } },
+    },
+    label: {
+      description: 'Names the hex field.',
+      control: 'text',
+      table: { type: { summary: 'ReactNode' } },
+    },
+    helperText: {
+      description: 'Under the field. Replaced by a format hint while the typed text is not a colour.',
+      control: 'text',
+      table: { type: { summary: 'ReactNode' } },
+    },
+    validationState: {
+      description: 'As on Text Input: `error` sets `aria-invalid` and a red edge; `success` a green one.',
+      control: 'inline-radio',
+      options: ['default', 'success', 'error'],
+      table: { type: { summary: "'default' | 'success' | 'error'" }, defaultValue: { summary: "'default'" } },
+    },
+    size: {
+      description: 'The field: 24px (`sm`) or 32px (`md`), as on Text Input. The panel is the same at both.',
+      control: 'inline-radio',
+      options: ['sm', 'md'],
+      table: { type: { summary: "'sm' | 'md'" }, defaultValue: { summary: "'md'" } },
+    },
+    isFullWidth: {
+      description: 'Fills the width of its container.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    name: {
+      description: 'Submitted with a form, as the hex value.',
+      control: 'text',
+      table: { type: { summary: 'string' } },
+    },
+    required: {
+      description: 'Set on the hex input. Adds an asterisk to the label.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    disabled: {
+      description: 'Dims the field and disables the swatch button.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    'aria-label': {
+      description: 'The name when there is no visible `label`.',
+      control: 'text',
+      table: { type: { summary: 'string' } },
+    },
+  },
+  excludeStories: ['anatomyParts'],
 } satisfies Meta<typeof ColorPicker>
 
 export default meta
@@ -233,4 +315,45 @@ export const Normalize: Story = {
     await expect(parseColor('oklch(62.3% 0.214 259.8)')).toMatch(/^#[0-9a-f]{6}$/)
     await expect(parseColor('reddish')).toBeNull()
   },
+}
+
+/** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
+export const anatomyParts = [
+  { name: 'Field', selector: 'input[aria-labelledby]', description: 'A text field holding the hex, with the label, helper and validation of every Zweihänder field. Reads any CSS colour.' },
+  { name: 'Swatch button', selector: 'button[aria-haspopup="dialog"]', description: 'At the start of the field, filled with the current colour. Opens the panel.' },
+  { name: 'Area', selector: 'div:has(> div > input[aria-label="Saturation"])', description: 'Saturation left to right, brightness bottom to top, in the current hue.' },
+  { name: 'Hue strip', selector: '[role="group"]:has(input[aria-label="Hue"])', description: 'A slider round the colour wheel, 0 to 359 degrees.' },
+  { name: 'Opacity strip', selector: '[role="group"]:has(input[aria-label="Opacity"])', description: '0 to 100%, over a checkerboard. Hidden with `alpha={false}`.' },
+  { name: 'Format menu', selector: '[aria-label="Colour format"]', description: 'The kit’s Select: Hex, RGB, HSL or HSB, which the channel fields follow.' },
+  { name: 'Channel fields', selector: 'span:has(> input[aria-label="Hex"])', description: 'One field box: the hex, or three numbers, then opacity in %.' },
+  { name: 'Swatches', selector: '[role="radiogroup"]', description: 'Optional presets under a divider. The chosen one has a ring.' },
+]
+
+/** The field and, under it, the panel it opens, so every part is in view at once. */
+export const Anatomy: Story = {
+  tags: ['!dev'],
+  render: (args) => (
+    <div style={{ display: 'grid', gap: 'var(--space-6)', justifyItems: 'start' }}>
+      <ColorPicker {...args} />
+      <ColorPanel defaultValue="#3b82f6" swatches={brand} />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    // The docs markers follow these selectors.
+    const found = anatomyParts.map(({ selector }) => canvasElement.querySelector(selector))
+    await expect(found.every(Boolean)).toBe(true)
+    await expect(new Set(found).size).toBe(anatomyParts.length)
+    await expect(found[0]).toHaveValue('#3b82f6')
+  },
+}
+
+/** Guidelines, Do: the colours people should use, offered as named swatches. */
+export const DoBrandSwatches: Story = {
+  render: () => <ColorPanel defaultValue="#3b82f6" swatches={brand} />,
+}
+
+/** Guidelines, Don't: a palette to follow, but no swatches, so it is matched by eye. */
+export const DontNoSwatches: Story = {
+  tags: ['!dev'],
+  render: () => <ColorPanel defaultValue="#3d84f2" />,
 }

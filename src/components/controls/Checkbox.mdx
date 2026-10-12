@@ -1,50 +1,172 @@
-import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
+import { Checkbox } from './Checkbox'
 import * as CheckboxStories from './Checkbox.stories'
 
 <Meta of={CheckboxStories} />
 
 # Checkbox
 
+<DocTabs>
+<DocTab value="overview">
+
 Selects an option, or several from a list, to apply when a form is
-submitted. Spec:
-[uiguideline.com/components/checkbox](https://www.uiguideline.com/components/checkbox).
-Behaviour from Base UI's [Checkbox](https://base-ui.com/react/components/checkbox)
-and [Field](https://base-ui.com/react/components/field).
+submitted.
+
+<Status of={CheckboxStories} />
+
+<Canvas of={CheckboxStories.Default} />
+
+## Variants
+
+`variant` is the colour of the checked box. Each row: unchecked, checked,
+indeterminate.
 
 <Canvas of={CheckboxStories.Variants} />
 
+| Variant | Use for |
+| --- | --- |
+| <Checkbox defaultChecked label="Neutral" /> | The default: lists, forms, tables. The checked box is the foreground colour, so a column of them stays calm. |
+| <Checkbox variant="primary" defaultChecked label="Primary" /> | One checkbox that carries the brand: an opt-in, a terms box beside a primary button. |
+
+**Indeterminate** is for a parent whose children are partly selected. It
+is a display state: clicking the parent chooses all or none, never
+"mixed".
+
+<Canvas of={CheckboxStories.SelectAll} />
+
+<Canvas of={CheckboxStories.Validation} />
+
+## Resources
+
+From npm, or copied into your project through the registry:
+
+```js
+import { Checkbox } from 'zweihander/checkbox'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/checkbox.json
+```
+
+- Source: [src/components/controls/Checkbox.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/controls/Checkbox.tsx)
+- Spec: [uiguideline.com/components/checkbox](https://www.uiguideline.com/components/checkbox)
+- Behaviour: [Base UI Checkbox](https://base-ui.com/react/components/checkbox) and [Field](https://base-ui.com/react/components/field)
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
 ## Anatomy
 
-| Part | What it is |
-| --- | --- |
-| **Container** | The 20px box: `--control-border` outline (darkens on hover), filled with the variant when checked. |
-| **Check icon** | `check` when checked, `minus` when indeterminate. |
-| **Label** | `label`. Clicking it toggles the box. |
-| **Helper text** | `helperText`, indented under the label. |
+<Anatomy parts={CheckboxStories.anatomyParts}>
+  <Story of={CheckboxStories.Anatomy} />
+</Anatomy>
 
-## Props
+The label wraps the box, so the whole label is part of the click target.
 
-| Prop | Values | Default | |
-| --- | --- | --- | --- |
-| `checked` | boolean | – | Controlled. |
-| `defaultChecked` | boolean | `false` | Uncontrolled. |
-| `onCheckedChange` | `(checked) => void` | – | The spec's `onChange`. |
-| `isIndeterminate` | boolean | `false` | |
-| `label` | node | – | |
-| `helperText` | node | – | |
-| `name` | string | – | |
-| `value` | string | `"on"` | Submitted under `name` when checked. The spec's `defaultValue`. |
-| `variant` | `primary`, `neutral` | `neutral` | Colour of the checked box. |
-| `disabled`, `required`, `readOnly`, `autoFocus` | boolean | `false` | |
-| `validationState` | `default`, `success`, `error` | `default` | |
+## Measurements
 
-<Controls of={CheckboxStories.Default} />
+One size. The box is control tier xs (Foundations / Sizing) and sits
+centred on the first line of its label, however many lines the label
+wraps to.
+
+<SpecTable
+  caption="Every checkbox"
+  rows={[
+    { part: 'Container', property: 'Size', token: '--control-xs' },
+    { part: 'Container', property: 'Corner radius', token: '--radius-sm' },
+    { part: 'Check mark', property: 'Size', token: '--icon-md' },
+    { part: 'Label', property: 'Gap from the box', token: '--space-2' },
+    { part: 'Label', property: 'Font size', token: '--text-body' },
+    { part: 'Label', property: 'Line height', token: '--leading-body' },
+    { part: 'Helper text', property: 'Gap from the label', token: '--space-1' },
+    { part: 'Focus ring', property: 'Width', token: '--focus-width' },
+    { part: 'Focus ring', property: 'Offset', token: '--focus-offset' },
+    { part: 'Hit area', property: 'Minimum on touch screens', token: '--target-coarse' },
+  ]}
+/>
+
+The box's corner is the radius step, not the control tier's radius: a box
+that turned round under `radius="full"` would read as a radio.
+
+## Color
+
+<SpecTable
+  caption="Unchecked, every variant"
+  rows={[
+    { part: 'Container', property: 'Background', token: '--background' },
+    { part: 'Container', property: 'Border', token: '--control-border' },
+    { part: 'Container, hover', property: 'Border', token: '--foreground' },
+  ]}
+/>
+
+<SpecTable
+  caption="neutral, checked or indeterminate"
+  rows={[
+    { part: 'Container', property: 'Background', token: '--foreground' },
+    { part: 'Check mark', property: 'Colour', token: '--background' },
+  ]}
+/>
+
+<SpecTable
+  caption="primary, checked or indeterminate"
+  rows={[
+    { part: 'Container', property: 'Background', token: '--primary' },
+    { part: 'Check mark', property: 'Colour', token: '--primary-foreground' },
+  ]}
+/>
+
+<SpecTable
+  caption="Every variant"
+  rows={[
+    { part: 'Label', property: 'Colour', token: '--foreground' },
+    { part: 'Helper text', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Container, error', property: 'Border', token: '--danger-text' },
+    { part: 'Helper text, error', property: 'Colour', token: '--danger-text' },
+    { part: 'Helper text, success', property: 'Colour', token: '--success-text' },
+    { part: 'Required asterisk', property: 'Colour', token: '--danger-text' },
+    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+  ]}
+/>
+
+## States
+
+<States
+  states={[
+    { label: 'Unchecked' },
+    { label: 'Hover', pseudo: 'hover' },
+    { label: 'Focus', pseudo: 'focus-visible' },
+    { label: 'Checked', content: <Checkbox defaultChecked label="Remember me" /> },
+    { label: 'Indeterminate', content: <Story of={CheckboxStories.Indeterminate} /> },
+    { label: 'Disabled', content: <Checkbox disabled defaultChecked label="Remember me" /> },
+    { label: 'Error', content: <Checkbox validationState="error" label="Remember me" /> },
+  ]}
+>
+  <Story of={CheckboxStories.Default} />
+</States>
+
+- **Hover** anywhere on the label darkens an unchecked outline to
+  `--foreground`. A checked box mixes 12% of the mark's colour into its
+  fill, as Button does. An error outline stays red.
+- **Focus** is a 2px `--ring` outline, 2px outside the box.
+- **Disabled** dims the box and the label to 50%.
+- **Read-only** looks enabled but has no hover and an arrow cursor.
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={CheckboxStories} />
+</div>
+
+`id`, `className`, `aria-label` and `ref` pass through to the box.
 
 ### Differences from the spec
 
 - **Base UI's and HTML's names:** `defaultChecked` and `onCheckedChange`
   for the spec's `defaultValue` (a string there, which reads as the
-  submitted value — that is `value`) and `onChange`; native `disabled`,
+  submitted value: that is `value`) and `onChange`; native `disabled`,
   `required`, `readOnly` for the `is…` forms.
 - **`isIndeterminate` keeps its prefix.** Indeterminate is a DOM property,
   not an HTML attribute, so by the kit's naming rule it takes `is`; Base UI
@@ -54,24 +176,47 @@ and [Field](https://base-ui.com/react/components/field).
 - **No `secondary`.** A light fill barely reads as checked, so only
   `neutral` (the foreground colour) and `primary` ship.
 
-## Usage
+</DocTab>
+<DocTab value="guidelines">
 
-<Canvas of={CheckboxStories.SelectAll} />
+## When to use
 
-**Indeterminate** is for a parent whose children are partly selected. It
-is a display state: clicking the parent chooses all or none, never
-"mixed".
+Use a checkbox for a choice that is submitted with a form: accepting
+terms, opting in, picking several items from a list. Nothing happens
+until the form is sent.
 
-<Canvas of={CheckboxStories.Validation} />
+Write the label so that checked means yes.
+
+<DoDont
+  do={<Story of={CheckboxStories.DoPositiveLabel} />}
+  doCaption="The label says what checking does: checked means yes."
+  dont={<Story of={CheckboxStories.DontNegativeLabel} />}
+  dontCaption="A negative label makes unchecked a double negative, and readers stop to work it out."
+/>
+
+## When not to use
+
+- **For a setting that applies at once.** Use a
+  [Switch](?path=/docs/components-controls-switch--docs): it acts like a
+  light switch, a checkbox waits for Submit.
+- **For one choice out of several.** Use a
+  [Radio](?path=/docs/components-controls-radio--docs) group; checkboxes
+  are independent.
+- **For a toggle in a toolbar.** Use a
+  [Toggle Button](?path=/docs/components-buttons-togglebutton--docs).
 
 ## Accessibility
 
-- `role="checkbox"` with `aria-checked` (`mixed` when indeterminate);
-  Space toggles it. The label wraps the box, so it names it and is part
-  of the click target.
+- `role="checkbox"` with `aria-checked`, `mixed` when indeterminate.
+  Space toggles it.
+- The label wraps the box, so it names it and clicking it toggles the box.
+- `helperText` is the box's description; the error state sets
+  `aria-invalid`.
 - The unchecked outline is `--control-border`, 3:1 on the page on every
   gray ramp.
-- `helperText` is the description; the error state sets `aria-invalid`.
 - A hidden native input carries `name`, `value` and `required` into form
   submission and validation.
-- 44×44px touch target on coarse pointers.
+- 44×44px touch target on coarse pointers, without the box growing.
+
+</DocTab>
+</DocTabs>

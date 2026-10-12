@@ -7,11 +7,98 @@ const meta = {
   tags: ['beta'],
   component: Slider,
   args: { label: 'Volume', defaultValue: 40, showValue: true, onValueChange: fn(), onValueCommitted: fn() },
+  // These descriptions are the docs' API table and the Playground's props panel.
   argTypes: {
-    size: { control: 'inline-radio', options: ['sm', 'md'] },
-    orientation: { control: 'inline-radio', options: ['horizontal', 'vertical'] },
+    value: {
+      description: 'Controlled value: a number for one thumb, an array of two for a range.',
+      control: false,
+      table: { type: { summary: 'number | number[]' } },
+    },
+    defaultValue: {
+      description: 'Starting value when uncontrolled. An array makes it a range.',
+      control: false,
+      table: { type: { summary: 'number | number[]' }, defaultValue: { summary: 'min' } },
+    },
+    onValueChange: {
+      description: 'Called on every step while dragging or pressing keys.',
+      control: false,
+      table: { type: { summary: '(value: number | number[]) => void' } },
+    },
+    onValueCommitted: {
+      description: 'Called once, when the pointer or key is released. Use it for anything expensive.',
+      control: false,
+      table: { type: { summary: '(value: number | number[]) => void' } },
+    },
+    min: {
+      description: 'The lowest value.',
+      control: 'number',
+      table: { type: { summary: 'number' }, defaultValue: { summary: '0' } },
+    },
+    max: {
+      description: 'The highest value.',
+      control: 'number',
+      table: { type: { summary: 'number' }, defaultValue: { summary: '100' } },
+    },
+    step: {
+      description: 'What an arrow key moves by, and the values a drag snaps to.',
+      control: 'number',
+      table: { type: { summary: 'number' }, defaultValue: { summary: '1' } },
+    },
+    largeStep: {
+      description: 'What Page Up, Page Down and Shift with an arrow move by.',
+      control: 'number',
+      table: { type: { summary: 'number' }, defaultValue: { summary: '10' } },
+    },
+    label: {
+      description: 'Visible label over the track; also the name of a single thumb.',
+      control: 'text',
+      table: { type: { summary: 'ReactNode' } },
+    },
+    showValue: {
+      description: 'Shows the value, or the range, after the label.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    format: {
+      description: 'How the value is written and spoken, e.g. `{ style: "currency", currency: "USD" }`.',
+      control: false,
+      table: { type: { summary: 'Intl.NumberFormatOptions' } },
+    },
+    thumbLabels: {
+      description: 'One name per thumb for a range, e.g. `["Minimum price", "Maximum price"]`.',
+      control: false,
+      table: { type: { summary: 'string[]' } },
+    },
+    size: {
+      description: 'A 20px thumb on a 6px track (`md`), or 16px on 4px with a 12px label (`sm`).',
+      control: 'inline-radio',
+      options: ['sm', 'md'],
+      table: { type: { summary: "'sm' | 'md'" }, defaultValue: { summary: "'md'" } },
+    },
+    orientation: {
+      description: 'A vertical slider is 12rem tall; arrow keys follow the axis.',
+      control: 'inline-radio',
+      options: ['horizontal', 'vertical'],
+      table: { type: { summary: "'horizontal' | 'vertical'" }, defaultValue: { summary: "'horizontal'" } },
+    },
+    disabled: {
+      description: 'Dims the control and stops it moving. The label and value stay readable.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    name: {
+      description: 'Submitted with a form.',
+      control: 'text',
+      table: { type: { summary: 'string' } },
+    },
+    'aria-label': {
+      description: 'The name when there is no visible `label`.',
+      control: 'text',
+      table: { type: { summary: 'string' } },
+    },
   },
   decorators: [(Story) => <div style={{ maxInlineSize: '24rem' }}>{Story()}</div>],
+  excludeStories: ['anatomyParts'],
 } satisfies Meta<typeof Slider>
 
 export default meta
@@ -76,4 +163,36 @@ export const Disabled: Story = {
   play: async ({ canvas }) => {
     await expect(canvas.getByRole('slider')).toBeDisabled()
   },
+}
+
+/** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
+export const anatomyParts = [
+  { name: 'Label', selector: '[id$="-label"]', description: 'Optional. Names a single thumb.' },
+  { name: 'Value', selector: 'output', description: 'Optional, with `showValue`: the value or range, formatted, in tabular figures.' },
+  { name: 'Track', selector: '[data-base-ui-slider-control] > div', description: 'The full range.' },
+  { name: 'Indicator', selector: '[data-base-ui-slider-indicator]', description: 'The filled part: from the start to the thumb, or between two thumbs.' },
+  { name: 'Thumb', selector: '[data-index="0"]', description: 'One per value. Drag it, or focus it and use the keys.' },
+]
+
+/** Every part present. */
+export const Anatomy: Story = {
+  tags: ['!dev'],
+  play: async ({ canvasElement }) => {
+    // The docs markers follow these selectors.
+    const found = anatomyParts.map(({ selector }) => canvasElement.querySelector(selector))
+    await expect(found.every(Boolean)).toBe(true)
+    await expect(new Set(found).size).toBe(anatomyParts.length)
+    await expect(found[0]).toHaveTextContent('Volume')
+  },
+}
+
+/** Guidelines, Do: an approximate value, with the number shown as it moves. */
+export const DoApproximate: Story = {
+  args: { label: 'Brightness', defaultValue: 0.7, format: { style: 'percent' }, min: 0, max: 1, step: 0.01, largeStep: 0.1 },
+}
+
+/** Guidelines, Don't: an exact figure picked by dragging. */
+export const DontExactNumber: Story = {
+  tags: ['!dev'],
+  args: { label: 'Quantity', defaultValue: 137, min: 1, max: 500 },
 }
