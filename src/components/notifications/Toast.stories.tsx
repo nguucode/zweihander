@@ -45,7 +45,7 @@ const meta = {
       table: { type: { summary: 'number' }, defaultValue: { summary: '3' } },
     },
     container: {
-      description: "Where the toasts render. In an element with a `transform` they sit in its corner instead of the viewport's.",
+      description: "Where the toasts render. In an element with a `transform` they sit in its corner instead of the window's; in a size container (`container-type: inline-size`) they fit its width.",
       control: false,
       table: { type: { summary: 'HTMLElement | RefObject<HTMLElement | null> | null' }, defaultValue: { summary: 'document.body' } },
     },
@@ -229,20 +229,26 @@ function Shown({ toasts, pending }: { toasts: ToastOptions[]; pending?: string }
 }
 
 /**
- * Toasts drawn in place, for the docs: the `transform` makes this box the
- * containing block of the fixed viewport, so the toasts sit in its corner
- * rather than the window's.
+ * Toasts drawn in place, for the docs. The inner layer's `transform` makes it
+ * the containing block of the fixed viewport, so the toasts sit in its corner
+ * rather than the window's; as a size container, they fit its width.
  */
 function Preview({ toasts, pending, height = '7rem' }: { toasts: ToastOptions[]; pending?: string; height?: string }) {
-  // The box must exist before the portal mounts into it.
-  const [box, setBox] = useState<HTMLDivElement | null>(null)
+  // The layer must exist before the portal mounts into it.
+  const [layer, setLayer] = useState<HTMLDivElement | null>(null)
   return (
-    <div ref={setBox} style={{ position: 'relative', transform: 'translateZ(0)', blockSize: height }}>
-      {box && (
-        <ToastProvider container={box} placement="top-left" limit={toasts.length + (pending ? 1 : 0)}>
-          <Shown toasts={toasts} pending={pending} />
-        </ToastProvider>
-      )}
+    <div style={{ position: 'relative', blockSize: height }}>
+      {/* Sets the width: a toast's, or less when there is less room. The
+          fixed toasts give the box no width of their own, and a replaced
+          element with a percentage max-width can shrink to fit. */}
+      <svg aria-hidden="true" style={{ display: 'block', inlineSize: '26rem', maxInlineSize: '100%', blockSize: 0 }} />
+      <div ref={setLayer} style={{ position: 'absolute', inset: 0, containerType: 'inline-size', transform: 'translateZ(0)' }}>
+        {layer && (
+          <ToastProvider container={layer} placement="top-left" limit={toasts.length + (pending ? 1 : 0)}>
+            <Shown toasts={toasts} pending={pending} />
+          </ToastProvider>
+        )}
+      </div>
     </div>
   )
 }
@@ -280,10 +286,16 @@ export const VariantsStatic: Story = {
   },
 }
 
+/** The States block's example: four side by side are narrow, so the title wraps. */
+export const StateExample: Story = {
+  tags: ['!dev'],
+  render: () => <Preview toasts={[moved]} height="8.5rem" />,
+}
+
 /** While a `promise()` is pending: a spinner in place of the icon. */
 export const Pending: Story = {
   tags: ['!dev'],
-  render: () => <Preview toasts={[]} pending="Uploading 3 files…" height="4.5rem" />,
+  render: () => <Preview toasts={[]} pending="Uploading 3 files…" height="5.5rem" />,
 }
 
 /** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */

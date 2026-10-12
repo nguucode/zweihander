@@ -146,7 +146,7 @@ opposite appearance.
     { label: 'Pending', content: <Story of={ToastStories.Pending} /> },
   ]}
 >
-  <Story of={ToastStories.Static} />
+  <Story of={ToastStories.StateExample} />
 </States>
 
 - **Hover** fills the close button with `--accent`. Hovering the stack
@@ -174,6 +174,9 @@ const toast = useToast()
 toast.add({ title: 'File moved to Trash', action: { label: 'Undo', onClick: restore } })
 ```
 
+{/* Markdown tables do not scroll by themselves on a phone either. */}
+<div style={{ overflowX: 'auto' }}>
+
 | `useToast()` | |
 | --- | --- |
 | `add(options)` | Shows a toast, returns its id. |
@@ -189,6 +192,8 @@ toast.add({ title: 'File moved to Trash', action: { label: 'Undo', onClick: rest
 | `timeout` | number (ms) | The provider's by default. `0` keeps it until dismissed. |
 | `priority` | `low`, `high` | `high` by default for `danger`. |
 | `onClose` | function | |
+
+</div>
 
 ### Differences from the spec
 

@@ -29,10 +29,10 @@ export interface ToastProviderProps {
   /** Toasts shown at once; older ones wait. */
   limit?: number
   /**
-   * Where the toasts render, `document.body` by default. In an element that
-   * is a containing block for fixed elements (one with a `transform`), they
-   * sit in that element's corner instead of the viewport's: a preview, or a
-   * frame inside the page.
+   * Where the toasts render, `document.body` by default. In an element with
+   * a `transform` they sit in its corner instead of the window's, and in a
+   * size container (`container-type: inline-size`) they fit its width: a
+   * preview, or a frame in the page.
    */
   container?: HTMLElement | RefObject<HTMLElement | null> | null
 }
