@@ -168,6 +168,9 @@ export const Required: Story = {
   args: { required: true },
   play: async ({ canvas }) => {
     await expect(canvas.getByLabelText(/Email/)).toBeRequired()
+    // The asterisk is decoration: the name stays "Email", not "Email *".
+    await expect(canvas.getByText('*')).toHaveAttribute('aria-hidden', 'true')
+    await expect(canvas.getByRole('textbox', { name: 'Email' })).toBeVisible()
   },
 }
 

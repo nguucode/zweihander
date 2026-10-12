@@ -139,6 +139,11 @@ export const Default: Story = {
     await expect(args.onValueChange).toHaveBeenLastCalledWith('phoenix')
     await waitFor(() => expect(trigger).toHaveTextContent('Phoenix Hickman'))
     await waitFor(() => expect(screen.queryByRole('listbox')).toBeNull())
+    // Reopened, the chosen option is the selected one.
+    await userEvent.click(trigger)
+    await expect(await screen.findByRole('option', { name: 'Phoenix Hickman' })).toHaveAttribute('aria-selected', 'true')
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(screen.queryByRole('listbox')).toBeNull())
   },
 }
 
@@ -186,6 +191,9 @@ export const Validation: Story = {
     const trigger = canvas.getByRole('combobox', { name: /Team member/ })
     await expect(trigger).toHaveAttribute('aria-invalid', 'true')
     await expect(trigger).toHaveAccessibleDescription('Choose someone to assign.')
+    await expect(trigger).toHaveAttribute('aria-required', 'true')
+    // The label is a <div>, so clicking it cannot also click the button.
+    await expect(canvas.getByText('Team member').tagName).toBe('DIV')
   },
 }
 

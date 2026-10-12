@@ -141,6 +141,10 @@ export const Default: Story = {
     await expect(input).toHaveValue('8')
     await userEvent.keyboard('{ArrowDown}')
     await expect(input).toHaveValue('7')
+    // Shift steps by 10. The steppers stay out of the tab order: the keys do their job.
+    await userEvent.keyboard('{Shift>}{ArrowUp}{/Shift}')
+    await expect(input).toHaveValue('17')
+    await expect(canvas.getByRole('button', { name: /increase/i })).toHaveAttribute('tabindex', '-1')
   },
 }
 
