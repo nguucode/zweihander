@@ -1,72 +1,255 @@
-import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
 import * as AccordionStories from './Accordion.stories'
 
 <Meta of={AccordionStories} />
 
 # Accordion
 
+<DocTabs>
+<DocTab value="overview">
+
 A stack of headings that each show or hide a section of content: FAQs,
-settings groups, long forms split into parts. uiguideline has no spec for
-it yet, so the kit writes its own (below). Behaviour from Base UI's
-[Accordion](https://base-ui.com/react/components/accordion).
+settings groups, long forms split into parts.
+
+<Status of={AccordionStories} />
 
 <Canvas of={AccordionStories.Default} />
 
-## Anatomy
+## Variants
 
-| Part | What it is |
+`appearance` chooses the frame, `size` the scale. By default one item is
+open at a time; `multiple` lets several stay open.
+
+| Appearance | Use for |
 | --- | --- |
-| **Container** | Frames the items (`outlined`) or leaves them edge to edge (`flush`). |
-| **Item** | One heading and its panel, separated from the next by a `--border` line. |
-| **Header** | A real heading element, `h3` by default (`headingLevel`). |
-| **Trigger** | A button filling the header: **title** and a **chevron** that turns when open. |
-| **Panel** | The content. Collapsed panels stay in the DOM for find-in-page. |
+| `outlined` | A self-contained block on the page: an FAQ, a settings group. The items sit in a bordered panel. |
+| `flush` | Sections inside something that already has a frame, such as a card or a sidebar. Edge to edge, no side padding. |
 
-## Props
-
-| Prop | Values | Default | |
-| --- | --- | --- | --- |
-| `items` | `{ value, title, content, disabled? }[]` | – | Required. |
-| `value` | `string[]` | – | Controlled: the open items. |
-| `defaultValue` | `string[]` | – | |
-| `onValueChange` | `(value) => void` | – | |
-| `multiple` | boolean | `false` | Allow several open at once. |
-| `appearance` | `outlined`, `flush` | `outlined` | |
-| `size` | `sm`, `md` | `md` | |
-| `headingLevel` | `2`–`6` | `3` | |
-| `disabled` | boolean | `false` | |
-
-<Controls of={AccordionStories.Default} />
-
-### Why these props
-
-The spec is the kit's own, recorded with uiguideline's other specs:
-`items` is flat, per the kit's "flat props" convention; `value` is an
-array in single mode too, because that is Base UI's model and it keeps
-the type the same when `multiple` is switched on; `headingLevel` exists
-because a heading level must follow the page's outline, which the
-component cannot know.
-
-## Usage
-
-<Canvas of={AccordionStories.Multiple} />
+<Canvas of={AccordionStories.Open} />
 
 <Canvas of={AccordionStories.Flush} />
 
-Do not hide content that most readers need; an accordion trades a
-shorter page for an extra click on everything inside it.
+| Size | Use for |
+| --- | --- |
+| `md` | The default: 32px triggers, 14px text. |
+| `sm` | Dense panels and side columns: 24px triggers, 12px text. |
+
+<Canvas of={AccordionStories.Small} />
+
+| Mode | Use for |
+| --- | --- |
+| Single (default) | Sections a reader compares one at a time. Opening one closes the other. |
+| `multiple` | Sections a reader may want side by side, such as settings groups. |
+
+<Canvas of={AccordionStories.Multiple} />
+
+## Resources
+
+From npm, or copied into your project through the registry:
+
+```js
+import { Accordion } from 'zweihander/accordion'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/accordion.json
+```
+
+- Source: [src/components/data-display/Accordion.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/data-display/Accordion.tsx)
+- Spec: the kit's own. uiguideline.com has no page for it yet.
+- Behaviour: [Base UI Accordion](https://base-ui.com/react/components/accordion)
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
+## Anatomy
+
+<Anatomy parts={AccordionStories.anatomyParts}>
+  <Story of={AccordionStories.Anatomy} />
+</Anatomy>
+
+## Measurements
+
+Each size takes its trigger height from a control tier (Foundations /
+Sizing). `flush` drops the inline padding to 0 at both sizes, so the
+title lines up with the text around it.
+
+<SpecTable
+  caption="sm"
+  rows={[
+    { part: 'Trigger', property: 'Minimum height', token: '--control-sm' },
+    { part: 'Trigger', property: 'Inline padding (outlined)', token: '--space-3' },
+    { part: 'Trigger', property: 'Block padding', token: '--space-1' },
+    { part: 'Trigger', property: 'Gap', token: '--space-3' },
+    { part: 'Title', property: 'Font size', token: '--text-body-sm' },
+    { part: 'Title', property: 'Line height', token: '--leading-body-sm' },
+    { part: 'Chevron', property: 'Size', token: '--icon-md' },
+    { part: 'Panel', property: 'Inline padding (outlined)', token: '--space-3' },
+    { part: 'Panel', property: 'Bottom padding', token: '--space-2' },
+    { part: 'Panel', property: 'Font size', token: '--text-body-sm' },
+    { part: 'Panel', property: 'Line height', token: '--leading-body-sm' },
+  ]}
+/>
+
+<SpecTable
+  caption="md"
+  rows={[
+    { part: 'Trigger', property: 'Minimum height', token: '--control-md' },
+    { part: 'Trigger', property: 'Inline padding (outlined)', token: '--space-4' },
+    { part: 'Trigger', property: 'Block padding', token: '--space-1' },
+    { part: 'Trigger', property: 'Gap', token: '--space-3' },
+    { part: 'Title', property: 'Font size', token: '--text-body' },
+    { part: 'Title', property: 'Line height', token: '--leading-body' },
+    { part: 'Chevron', property: 'Size', token: '--icon-md' },
+    { part: 'Panel', property: 'Inline padding (outlined)', token: '--space-4' },
+    { part: 'Panel', property: 'Bottom padding', token: '--space-3' },
+    { part: 'Panel', property: 'Font size', token: '--text-body' },
+    { part: 'Panel', property: 'Line height', token: '--leading-body' },
+  ]}
+/>
+
+<SpecTable
+  caption="Every size"
+  rows={[
+    { part: 'Container, outlined', property: 'Corner radius', token: '--radius-panel' },
+    { part: 'Focus ring', property: 'Width', token: '--focus-width' },
+    { part: 'Focus ring, outlined', property: 'Offset (inset)', token: '--focus-offset-inset' },
+    { part: 'Focus ring, flush', property: 'Offset', token: '--focus-offset' },
+    { part: 'Trigger', property: 'Minimum height on touch screens', token: '--target-coarse' },
+    { part: 'Panel and chevron', property: 'Open and close duration', token: '--duration-base' },
+  ]}
+/>
+
+Dividers and the outlined frame are 1px. The title is medium weight (500)
+and wraps; the chevron keeps its size.
+
+## Color
+
+The two appearances share their colours; they differ only in where the
+lines go. Switch the theme in the toolbar: the values follow.
+
+<SpecTable
+  caption="outlined"
+  rows={[
+    { part: 'Container', property: 'Border', token: '--border' },
+    { part: 'Item', property: 'Divider', token: '--border' },
+    { part: 'Title', property: 'Colour', token: '--foreground' },
+    { part: 'Chevron', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Panel', property: 'Text colour', token: '--muted-foreground' },
+    { part: 'Trigger, hover', property: 'Background', token: '--accent' },
+  ]}
+/>
+
+<SpecTable
+  caption="flush"
+  rows={[
+    { part: 'Item', property: 'Divider, and a line under the last item', token: '--border' },
+    { part: 'Title', property: 'Colour', token: '--foreground' },
+    { part: 'Chevron', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Panel', property: 'Text colour', token: '--muted-foreground' },
+    { part: 'Trigger, hover', property: 'Background', token: '--accent' },
+  ]}
+/>
+
+<SpecTable caption="Every appearance" rows={[{ part: 'Focus ring', property: 'Colour', token: '--ring' }]} />
+
+The lines are `--border`, the lighter border for things that are not
+controls. The trigger has no fill at rest.
+
+## States
+
+<States
+  states={[
+    { label: 'Enabled' },
+    { label: 'Hover', pseudo: 'hover' },
+    { label: 'Focus', pseudo: 'focus-visible' },
+    { label: 'Pressed', pseudo: 'active' },
+    { label: 'Open', content: <Story of={AccordionStories.Open} /> },
+    { label: 'Disabled', content: <Story of={AccordionStories.Disabled} /> },
+  ]}
+>
+  <Story of={AccordionStories.Default} />
+</States>
+
+- **Hover** fills the trigger with `--accent`. A disabled trigger does not
+  change on hover.
+- **Focus** is a 2px `--ring` outline. In `outlined` it sits 2px inside
+  the trigger, because the frame clips anything outside; in `flush` there
+  is no clipping and no side padding, so it sits 2px outside instead.
+- **Pressed** has no look of its own: the trigger keeps its hover fill
+  while the pointer is down.
+- **Open** turns the chevron to point up, and the panel's height animates
+  from 0 to its content's height over `--duration-base`.
+- **Disabled** dims the trigger to 50% opacity, on one item
+  (`disabled` in `items`) or on all of them (`disabled` on the accordion).
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={AccordionStories} />
+</div>
+
+`ref` reaches the container.
+
+The props are the kit's own, since there is no spec to follow. `items` is
+flat, per the kit's "flat props" convention. `value` is an array in single
+mode too, because that is Base UI's model and it keeps the type the same
+when `multiple` is switched on. `headingLevel` exists because a heading
+level must follow the page's outline, which the component cannot know.
+
+<Canvas of={AccordionStories.Controlled} />
+
+</DocTab>
+<DocTab value="guidelines">
+
+## When to use
+
+Use an Accordion for several related sections that most readers only
+need some of: an FAQ, groups of settings, the parts of a long form. Each
+title should say what is inside, so a reader can pick without opening
+every item.
+
+<DoDont
+  do={<Story of={AccordionStories.DoRelatedSections} />}
+  doCaption="Several related sections, each title naming what is inside."
+  dont={<Story of={AccordionStories.DontSingleItem} />}
+  dontCaption="One item is not a list of sections. Use a Collapse."
+/>
+
+Set `headingLevel` to fit the page: under an `h2`, the items are `h3`, the
+default.
+
+<Canvas of={AccordionStories.Headings} />
+
+## When not to use
+
+- **For one section.** Use a
+  [Collapse](?path=/docs/components-data-display-collapse--docs): a text
+  button that belongs to the content around it.
+- **For views of the same thing, one at a time.** Use
+  [Tabs](?path=/docs/components-navigation-tabs--docs).
+- **For content most readers need.** An accordion trades a shorter page for
+  an extra click on everything inside it. Show that content.
 
 ## Accessibility
 
 - Each trigger is a `<button>` inside a real heading, with
   `aria-expanded` and `aria-controls`; each panel is a region labelled by
   its trigger.
+- `headingLevel` sets the heading element, `h3` by default.
 - **Every trigger is a tab stop.** Enter and Space toggle. There is no
   arrow-key movement between triggers, following the current APG
   guidance (Base UI dropped it too).
+- A disabled item's trigger has `aria-disabled` and does not open.
 - Collapsed panels are `hidden="until-found"`: the browser's find-in-page
   reaches their text and opens the item.
 - Triggers are 32px (`sm` 24px), the compact control scale. On touch
-  they grow to 44px rather than overlapping each other with invisible hit
-  areas.
+  (`pointer: coarse`) they grow to 44px rather than overlapping each
+  other with invisible hit areas.
 - The open/close animation stops under `prefers-reduced-motion`.
+
+</DocTab>
+</DocTabs>

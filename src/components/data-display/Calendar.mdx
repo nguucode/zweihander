@@ -1,83 +1,311 @@
-import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
+import { Calendar } from './Calendar'
 import * as CalendarStories from './Calendar.stories'
 
 <Meta of={CalendarStories} />
 
 # Calendar
 
+<DocTabs>
+<DocTab value="overview">
+
 A month grid to pick one day from, or to show one: a booking page, the
-inside of a Date Picker. Spec:
-[uiguideline.com/components/calendar](https://www.uiguideline.com/components/calendar).
-A plain element, using `Intl` for names and the week's first day: no
-date library.
+inside of a [Date Picker](?path=/docs/components-inputs-datepicker--docs).
+
+<Status of={CalendarStories} />
 
 <Canvas of={CalendarStories.Default} />
 
-## Anatomy
+## Variants
 
-| Part | What it is |
+Calendar has one look and one size. What changes is what it shows.
+
+| Variant | Use for |
 | --- | --- |
-| **Header** | The short month and year ("Oct 2026") at the start, previous and next month buttons together at the end. |
-| **Weekdays** | Two letters ("Mo"), or the narrow names ("T2") where the short ones are long; the locale's first day first. |
-| **Day** | A 32px button (44px on touch), 4px apart. Days of the months either side are decoration: faded (`--muted-foreground` at 50%), hidden from assistive tech, not pickable, never selected or in a range. Arrow keys still cross into them by moving the month. |
-| **Today** | An `--orange` disc with a dark `--orange-contrast` figure, round where a selected day is square. Dark rather than white because white on orange is 3.4:1, under WCAG's 4.5:1; the dark figure clears 4.9:1 in both modes. `aria-current="date"` carries it for assistive tech. |
-| **Selected** | `--primary` (the brand) behind `--primary-foreground`. Wins over today when they are the same day. |
-| **Range** | With `range`: both ends selected, the days between on an `--accent` band as tall as a day, rounded where a week or the month starts or ends. Days of the months either side are not banded, so two months side by side never draw the same day twice. |
-| **Unavailable** | Muted and struck through; before `min`, after `max`, or ruled out by `isDateDisabled`. |
-
-## Props
-
-| Prop | Values | Default | |
-| --- | --- | --- | --- |
-| `value`, `defaultValue`, `onValueChange` | `Date` | `null` | Local midnight; times are ignored. |
-| `month`, `defaultMonth`, `onMonthChange` | `Date` | value's or today's | The month shown. |
-| `min`, `max` | `Date` | – | |
-| `isDateDisabled` | `(date) => boolean` | – | Rule out single days. |
-| `range` | `{ start, end }` | – | Shows a span instead of `value`. Clicks still report one day; the owner decides the span, as Date Range Picker does. |
-| `locale` | BCP 47 tag | the browser's | Month and weekday names. |
-| `weekStartsOn` | 0–6 | the locale's | 0 is Sunday. |
-| `autoFocus` | boolean | `false` | Focus the selected day, e.g. inside a popover. |
-
-`isSameDay`, `addDays`, `addMonths`, `startOfDay` and `firstDayOfWeek`
-are exported for working with the same plain dates.
-
-<Controls of={CalendarStories.Default} />
-
-### Design notes
-
-- **Six rows always.** Months span four to six weeks; a fixed height
-  keeps a popover or a page from jumping as you page through them.
-- **The locale decides the week.** `vi-VN` and `en-GB` start on Monday,
-  `en-US` on Sunday, read from `Intl.Locale` where the browser knows it
-  (Monday otherwise).
-- **Month steps keep the day where they can.** 31 January plus a month
-  is 28 February, not 3 March.
-
-  <Canvas of={CalendarStories.MonthEnds} />
-
-## Usage
-
-<Canvas of={CalendarStories.MinMax} />
+| One day (`value`) | Picking or showing a single day: a delivery date, a booking. |
+| A span (`range`) | Showing a stay or a report period. Clicks still report one day; Date Range Picker decides the span. |
+| Limits (`min`, `max`) | Booking windows: nothing before tomorrow, nothing after the season ends. |
+| Ruled-out days (`isDateDisabled`) | Weekends, holidays, days already booked. |
+| Locale (`locale`, `weekStartsOn`) | Month and weekday names in the reader's language, and their first day of the week. |
 
 <Canvas of={CalendarStories.Range} />
 
+<Canvas of={CalendarStories.MinMax} />
+
 <Canvas of={CalendarStories.NoWeekends} />
+
+The locale decides the week: `vi-VN` and `en-GB` start on Monday, `en-US`
+on Sunday, read from `Intl.Locale` where the browser knows it (Monday
+otherwise). The grid is always Gregorian, so a locale whose own calendar is
+not (Persian) still gets Gregorian days, in its own digits.
 
 <Canvas of={CalendarStories.Vietnamese} />
 
+## Resources
+
+From npm, or copied into your project through the registry:
+
+```js
+import { Calendar } from 'zweihander/calendar'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/calendar.json
+```
+
+- Source: [src/components/data-display/Calendar.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/data-display/Calendar.tsx)
+- Spec: [uiguideline.com/components/calendar](https://www.uiguideline.com/components/calendar)
+- Behaviour: a plain element, using `Intl` for names and the week's first day: no date library
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
+## Anatomy
+
+<Anatomy parts={CalendarStories.anatomyParts}>
+  <Story of={CalendarStories.Anatomy} />
+</Anatomy>
+
+The grid always has six rows. Months span four to six weeks; a fixed height
+keeps a popover or a page from jumping as you page through them.
+
+Two more looks sit on the days: **today**, an orange disc, round where a
+selected day takes the control's corners; and with `range`, the **band**, as tall as a day,
+behind the days between the two ends. The band rounds off where a week or
+the month starts or ends. Days of the months either side are never banded,
+so two months side by side never draw the same day twice.
+
+## Measurements
+
+Calendar has one size. Days are 32px, 4px apart: each cell pads by half
+of `--space-1` on every side, so a range's band runs unbroken under the
+gap.
+
+<SpecTable
+  caption="Header"
+  rows={[
+    { part: 'Header', property: 'Gap', token: '--space-1' },
+    { part: 'Month', property: 'Inline start padding', token: '--space-2' },
+    { part: 'Month', property: 'Font size', token: '--text-body' },
+    { part: 'Previous and next', property: 'Size', token: '--space-8' },
+    { part: 'Previous and next', property: 'Corner radius', token: '--radius-control' },
+    { part: 'Previous and next', property: 'Icon size', token: '--icon-md' },
+    { part: 'Header to grid', property: 'Gap', token: '--space-2' },
+  ]}
+/>
+
+<SpecTable
+  caption="Grid"
+  rows={[
+    { part: 'Weekdays', property: 'Height', token: '--space-8' },
+    { part: 'Weekdays', property: 'Font size', token: '--text-body-sm' },
+    { part: 'Weekdays', property: 'Line height', token: '--leading-body-sm' },
+    { part: 'Day', property: 'Size', token: '--space-8' },
+    { part: 'Day', property: 'Size on touch screens', token: '--target-coarse' },
+    { part: 'Day', property: 'Corner radius', token: '--radius-control' },
+    { part: 'Day', property: 'Font size', token: '--text-body' },
+    { part: 'Day', property: 'Line height', token: '--leading-body' },
+    { part: 'Today', property: 'Corner radius', token: '--radius-pill' },
+    { part: 'Range band', property: 'End corner radius', token: '--radius-control' },
+  ]}
+/>
+
+<SpecTable
+  caption="Every part"
+  rows={[
+    { part: 'Focus ring', property: 'Width', token: '--focus-width' },
+    { part: 'Focus ring', property: 'Offset', token: '--focus-offset' },
+  ]}
+/>
+
+Figures are tabular, so the columns of dates line up. On touch screens
+(`pointer: coarse`) days grow to 44px, the touch target; the previous and
+next buttons stay 32px.
+
+## Color
+
+One table per kind of day. Switch the theme and the accent in the toolbar:
+the values follow.
+
+<SpecTable
+  caption="Header and weekdays"
+  rows={[
+    { part: 'Month', property: 'Colour', token: '--foreground' },
+    { part: 'Previous and next', property: 'Colour', token: '--foreground' },
+    { part: 'Weekdays', property: 'Colour', token: '--muted-foreground' },
+  ]}
+/>
+
+<SpecTable
+  caption="Day"
+  rows={[
+    { part: 'Day', property: 'Colour', token: '--foreground' },
+  ]}
+/>
+
+<SpecTable
+  caption="Selected"
+  rows={[
+    { part: 'Day', property: 'Background', token: '--primary' },
+    { part: 'Day', property: 'Colour', token: '--primary-foreground' },
+  ]}
+/>
+
+<SpecTable
+  caption="Today"
+  rows={[
+    { part: 'Day', property: 'Background', token: '--orange' },
+    { part: 'Day', property: 'Colour', token: '--orange-contrast' },
+  ]}
+/>
+
+<SpecTable
+  caption="Range"
+  rows={[
+    { part: 'Band', property: 'Background', token: '--accent' },
+    { part: 'Days between', property: 'Colour', token: '--accent-foreground' },
+    { part: 'Today, between', property: 'Colour', token: '--orange-contrast' },
+  ]}
+/>
+
+<SpecTable
+  caption="Outside the month and unavailable"
+  rows={[
+    { part: 'Outside day', property: 'Colour, at 50%', token: '--muted-foreground' },
+    { part: 'Unavailable day', property: 'Colour, at 60% opacity', token: '--muted-foreground' },
+  ]}
+/>
+
+<SpecTable caption="Every part" rows={[{ part: 'Focus ring', property: 'Colour', token: '--ring' }]} />
+
+- **Day** has no fill at rest.
+- **Today's figure is dark**, not white: white on `--orange` is 3.4:1,
+  under the 4.5:1 a 14px figure needs, while `--orange-contrast` clears
+  4.9:1 in both modes. A selected today shows as selected.
+- **Outside days** are `--muted-foreground` mixed 50% with transparent,
+  about 2:1. No token is lighter, and WCAG allows it for decoration: they
+  are hidden from assistive tech and cannot be picked.
+- **Unavailable days** are struck through as well as faded, so they do not
+  rely on colour.
+
+## States
+
+<States
+  states={[
+    { label: 'Enabled' },
+    { label: 'Hover', pseudo: 'hover' },
+  ]}
+>
+  <Story of={CalendarStories.Default} />
+</States>
+
+<States
+  states={[
+    { label: 'Focus', pseudo: 'focus-visible' },
+    { label: 'Pressed', pseudo: 'active' },
+  ]}
+>
+  <Story of={CalendarStories.Default} />
+</States>
+
+<States
+  states={[
+    { label: 'Disabled', content: <Story of={CalendarStories.MinMax} /> },
+    { label: 'Today', content: <Calendar locale="en-GB" weekStartsOn={1} /> },
+  ]}
+/>
+
+<States states={[{ label: 'Selected range', content: <Story of={CalendarStories.Range} /> }]} />
+
+Each example forces the state on every day at once; on screen it is the
+one under the pointer or the keyboard.
+
+- **Hover** fills a day, or the previous and next buttons, with `--accent`
+  behind `--accent-foreground`. The selected day and today keep their own
+  colours; unavailable and outside days do not react.
+- **Focus** is a 2px `--ring` outline, 2px outside the day.
+- **Pressed** has no look of its own: the click selects the day, and the
+  selected look follows.
+- **Disabled** is per day: before `min`, after `max`, or ruled out by
+  `isDateDisabled`. The previous and next buttons disable at the limits,
+  at 50% opacity.
+- **Selected** is the brand fill, with the control's corners; **today** is the orange disc,
+  round. With `range`, both ends are selected and the days between are
+  banded.
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={CalendarStories} />
+</div>
+
+Also exported, for working with the same plain dates: `isSameDay`,
+`addDays`, `addMonths`, `startOfDay`, `firstDayOfWeek` and the `DateRange`
+type. Every date is local midnight; times are ignored.
+
+</DocTab>
+<DocTab value="guidelines">
+
+## When to use
+
+Use a Calendar where the day is picked by looking at the month: a booking
+page, a delivery slot, a few weeks either side of today. Rule out the days
+that cannot be picked with `min`, `max` and `isDateDisabled`, rather than
+refusing the choice after it is made.
+
+<DoDont
+  do={<Story of={CalendarStories.DoNearDate} />}
+  doCaption="A date close to now, where seeing the week matters: unavailable days are struck through before anyone picks them."
+  dont={<Story of={CalendarStories.DontFarDate} />}
+  dontCaption="A date of birth is decades away: paging back a month, or even a year, at a time is slow. Type it in a Date Picker."
+/>
+
+Month steps keep the day where they can: 31 January plus a month is 28
+February, not 3 March.
+
+<Canvas of={CalendarStories.MonthEnds} />
+
+## When not to use
+
+- **For a date far from today**, or one people know by heart, like a date
+  of birth. Use a [Date Picker](?path=/docs/components-inputs-datepicker--docs):
+  it takes the date typed, and opens this calendar when wanted.
+- **For a span inside a form.** Use a
+  [Date Range Picker](?path=/docs/components-inputs-daterangepicker--docs):
+  it owns the two clicks that make a span and shows it here.
+- **For a schedule of events.** A day here holds a number, not content.
+  List the events in a [Table](?path=/docs/components-data-display-table--docs).
+
 ## Accessibility
 
-- A `role="grid"` named by the month and year, with column headers
-  carrying the full weekday name. The selected cell has
-  `aria-selected`, today's day `aria-current="date"`, and each day
-  button the full date as its name ("Friday 18 September 2026").
-- One tab stop: the selected day (or today). Arrows move a day or a
-  week, Home and End go to the week's ends, Page Up and Page Down move a
-  month and Shift+Page Up/Down a year, Enter or Space selects. Moving
-  past the month shows the next one.
+- A `role="grid"` named by the month and year ("September 2026"), with
+  column headers that carry the full weekday name in `abbr`.
+- Each day is a button named by its full date ("Friday 18 September
+  2026"). The selected cell has `aria-selected`, and with `range` every
+  cell from one end to the other does. Today has `aria-current="date"`.
+- One tab stop: the selected day, or today when nothing is selected.
+- Arrow keys move a day or a week, Home and End go to the week's ends,
+  Page Up and Page Down move a month, and Shift+Page Up and Shift+Page
+  Down a year. Enter or Space selects. Moving past the month shows the
+  next one.
+- Right to left, the arrows follow the screen (ArrowLeft is the next day)
+  and the previous and next chevrons are mirrored.
 
   <Canvas of={CalendarStories.Keyboard} />
 
 - The month and year are a polite live region, so paging is announced.
-- Unavailable days stay focusable with `aria-disabled`, so they are
-  found and announced as unavailable rather than skipped silently.
+- The previous and next buttons are named "Previous month" and "Next
+  month", and are disabled at `min` and `max`.
+- Unavailable days stay focusable with `aria-disabled`, so they are found
+  and announced as unavailable rather than skipped. Enter on one does
+  nothing.
+- Days of the months either side are not buttons and are hidden from
+  assistive tech.
+- Today's figure measures at least 4.5:1 on its disc, in both modes, on
+  its own and inside a range.
+
+</DocTab>
+</DocTabs>

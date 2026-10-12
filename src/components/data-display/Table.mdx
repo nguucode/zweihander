@@ -1,101 +1,334 @@
-import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
 import * as TableStories from './Table.stories'
 
 <Meta of={TableStories} />
 
 # Table
 
+<DocTabs>
+<DocTab value="overview">
+
 Rows of records with the same fields, to scan and compare: projects,
-invoices, members. Columns can sort, rows can be selected and expanded. Spec:
-[uiguideline.com/components/table](https://www.uiguideline.com/components/table).
-A native `<table>`; selection uses the kit's Checkbox, expansion its Button.
+invoices, members. Columns can sort, rows can be selected and expanded.
+
+<Status of={TableStories} />
 
 <Canvas of={TableStories.Selectable} />
 
-## Anatomy
+## Variants
 
-| Part | What it is |
+Any table takes any of these together: a selectable table can also expand
+its rows and keep its header in view.
+
+| Variant | Use for |
 | --- | --- |
-| **Caption** | Names the table. Visually hidden unless `showCaption`. |
-| **Header row** | `--surface-filled`, small muted labels. Sortable headers are buttons with a sort icon. |
-| **Row** | 48px (40px at `sm`), divided by `--border`. |
-| **Row header** | The column marked `isRowHeader`, medium weight: the name a row is known by. |
-| **Selection column** | Optional checkboxes; the header one selects all and shows "mixed". |
-| **Expand column** | With `expandedContent`: a ghost icon button per row, after the checkbox. The chevron turns down when open. Rows with no content leave the cell empty. |
-| **Expanded row** | One cell spanning every column, under its row, with no rule between them. Holds any layout, e.g. a timeline. |
-
-## Props
-
-| Prop | Values | Default | |
-| --- | --- | --- | --- |
-| `columns` | `TableColumn[]` | – | Required. `{ key, header, cell?, sortable?, sortValue?, align?, width?, isRowHeader? }` |
-| `rows` | array | – | Required. |
-| `caption` | node | – | Required. |
-| `showCaption` | boolean | `false` | |
-| `getRowId` | `(row, index) => string` | index | Needed for selection that survives re-sorting and paging. |
-| `sort`, `defaultSort`, `onSortChange` | `{ key, direction } \| null` | `null` | Controlled sort leaves the sorting to you. |
-| `isSelectable` | boolean | `false` | |
-| `selectedIds`, `defaultSelectedIds`, `onSelectionChange` | string[] | `[]` | |
-| `expandedContent` | `(row) => node` | – | Adds the expand column. Return `null`, `undefined` or `false` for a row with nothing to show: it gets no button. |
-| `expandedIds`, `defaultExpandedIds`, `onExpandedChange` | string[] | `[]` | Ids from `getRowId`, so sorting keeps the right rows open. |
-| `density` | `sm`, `md` | `md` | |
-| `hasStickyHeader` | boolean | `false` | Header stays in view while the container scrolls. |
-| `emptyState` | node | – | Shown when there are no rows. |
-
-<Controls of={TableStories.Default} />
-
-### Design notes
-
-- **Numbers align to the end, in tabular figures,** so digits line up
-  column-wide. Set `align: 'end'` on every numeric or date column.
-- **Sort cycles ascending, descending, off.** The third click returns to
-  the original order, which is often the one that meant something.
-  Uncontrolled, the table sorts a copy: dates as dates, numbers as
-  numbers, text by locale with "file 2" before "file 10".
-- **Paging is not built in.** Put a Pagination under the table and pass
-  it one page of `rows`; with `getRowId`, selection keeps working across
-  pages.
-
-## Usage
+| `density="md"` | The default, 48px rows: most tables, and rows that hold a Tag or a button. |
+| `density="sm"` | 40px rows, for long lists of plain text where seeing more rows at once matters. |
+| `isSelectable` | Acting on several rows at once: archive, export, assign. |
+| `expandedContent` | Details that belong to one row but do not fit in a column: a description, a timeline, line items. |
+| `hasStickyHeader` | Long tables that scroll inside a fixed height, so the column names stay in view. |
+| `emptyState` | Saying why there are no rows, and what to do: clear a search, add the first one. |
 
 <Canvas of={TableStories.Default} />
 
 <Canvas of={TableStories.Compact} />
-
-<Canvas of={TableStories.Empty} />
-
-<Canvas of={TableStories.StickyHeader} />
-
-With server-side sorting, pass `sort` and `onSortChange` and hand back
-the rows already sorted:
-
-<Canvas of={TableStories.ControlledSort} />
 
 Rows with details open under themselves. Expansion is independent of
 selection and survives sorting:
 
 <Canvas of={TableStories.ExpandableRows} />
 
+<Canvas of={TableStories.StickyHeader} />
+
+<Canvas of={TableStories.Empty} />
+
+## Resources
+
+From npm, or copied into your project through the registry:
+
+```js
+import { Table, type TableColumn } from 'zweihander/table'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/table.json
+```
+
+- Source: [src/components/data-display/Table.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/data-display/Table.tsx)
+- Spec: [uiguideline.com/components/table](https://www.uiguideline.com/components/table)
+- Behaviour: a native `<table>`; selection uses the kit's [Checkbox](?path=/docs/components-controls-checkbox--docs), expansion its [Button](?path=/docs/components-buttons-button--docs)
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
+## Anatomy
+
+<Anatomy parts={TableStories.anatomyParts}>
+  <Story of={TableStories.Anatomy} />
+</Anatomy>
+
+The table sits in a container that scrolls sideways on a narrow screen
+rather than squeezing the columns. The selection column comes first, then
+the expand column; a row whose `expandedContent` returns nothing leaves its
+expand cell empty.
+
+## Measurements
+
+Each density is a row height. Everything else is the same in both.
+
+<SpecTable
+  caption="md"
+  rows={[
+    { part: 'Row', property: 'Height', token: '--space-12' },
+    { part: 'Header row', property: 'Height', token: '--space-12' },
+  ]}
+/>
+
+<SpecTable
+  caption="sm"
+  rows={[
+    { part: 'Row', property: 'Height', token: '--space-10' },
+    { part: 'Header row', property: 'Height', token: '--space-10' },
+  ]}
+/>
+
+<SpecTable
+  caption="Every density"
+  rows={[
+    { part: 'Cell', property: 'Inline padding', token: '--space-4' },
+    { part: 'Cell', property: 'Font size', token: '--text-body' },
+    { part: 'Cell', property: 'Line height', token: '--leading-body' },
+    { part: 'Header cell', property: 'Font size', token: '--text-body-sm' },
+    { part: 'Header cell', property: 'Line height', token: '--leading-body-sm' },
+    { part: 'Sort button', property: 'Block padding', token: '--space-1' },
+    { part: 'Sort button', property: 'Inline padding', token: '--space-2' },
+    { part: 'Sort button', property: 'Gap', token: '--space-1' },
+    { part: 'Sort button', property: 'Corner radius', token: '--radius-sm' },
+    { part: 'Sort icon', property: 'Size', token: '--icon-md' },
+    { part: 'Selection and expand columns', property: 'Width', token: '--space-10' },
+    { part: 'Expand column', property: 'Inline start padding', token: '--space-2' },
+    { part: 'Expand icon', property: 'Size', token: '--icon-md' },
+    { part: 'Expanded row', property: 'Block start padding', token: '--space-2' },
+    { part: 'Expanded row', property: 'Inline and block end padding', token: '--space-4' },
+    { part: 'Caption', property: 'Block padding', token: '--space-3' },
+    { part: 'Caption', property: 'Inline padding', token: '--space-4' },
+    { part: 'Focus ring', property: 'Width', token: '--focus-width' },
+    { part: 'Focus ring', property: 'Offset, inside the button', token: '--focus-offset-inset' },
+    { part: 'Sort button', property: 'Hit area on touch screens', token: '--target-coarse' },
+  ]}
+/>
+
+Rows are divided by a 1px rule; the last row has none. The sort button
+pulls itself out by its own inline padding, so its label lines up with the
+cells below. Figures are tabular, so numbers line up column-wide.
+
+## Color
+
+Switch the theme and the accent in the toolbar: the values follow.
+
+<SpecTable
+  caption="Header"
+  rows={[
+    { part: 'Header row', property: 'Background', token: '--surface-filled' },
+    { part: 'Header label', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Sort icon, sorted column', property: 'Colour', token: '--foreground' },
+  ]}
+/>
+
+<SpecTable
+  caption="Row"
+  rows={[
+    { part: 'Container', property: 'Background', token: '--card' },
+    { part: 'Cell', property: 'Colour', token: '--card-foreground' },
+    { part: 'Divider', property: 'Colour', token: '--border' },
+  ]}
+/>
+
+<SpecTable
+  caption="Hover"
+  rows={[
+    { part: 'Row', property: 'Background', token: '--accent' },
+    { part: 'Sort button', property: 'Background', token: '--accent' },
+    { part: 'Sort button', property: 'Colour', token: '--accent-foreground' },
+  ]}
+/>
+
+<SpecTable
+  caption="Selected"
+  rows={[
+    { part: 'Row', property: 'Background', token: '--primary-subtle' },
+  ]}
+/>
+
+<SpecTable
+  caption="Expanded"
+  rows={[
+    { part: 'Expanded row', property: 'Divider under it', token: '--border' },
+  ]}
+/>
+
+<SpecTable caption="Every part" rows={[{ part: 'Focus ring', property: 'Colour', token: '--ring' }]} />
+
+- Rows are not striped: the dividers separate them.
+- The sort icon of a column that is not sorted is the label's colour at 60%
+  opacity.
+- **Between two selected rows** the divider is mixed from the tint:
+  `--primary-subtle` with a quarter of `--primary-subtle-text`. `--border`
+  is as light as the tint in light mode and would vanish.
+- **An open row and its content read as one block**: no divider between
+  them, and the content row shares its row's hover and selected tint.
+
+## States
+
+<States
+  states={[
+    { label: 'Enabled' },
+    { label: 'Hover', pseudo: 'hover' },
+  ]}
+>
+  <Story of={TableStories.StateEnabled} />
+</States>
+
+<States
+  states={[
+    { label: 'Focus', pseudo: 'focus-visible' },
+    { label: 'Pressed', pseudo: 'active' },
+  ]}
+>
+  <Story of={TableStories.StateEnabled} />
+</States>
+
+<States
+  states={[
+    { label: 'Sorted', content: <Story of={TableStories.StateSorted} /> },
+    { label: 'Selected', content: <Story of={TableStories.StateSelected} /> },
+  ]}
+/>
+
+<States states={[{ label: 'Expanded', content: <Story of={TableStories.StateExpanded} /> }]} />
+
+Each example forces the state on every row and button at once; on screen
+it is the one under the pointer or the keyboard.
+
+- **Hover** tints the row with `--accent`, and the sort button too. The
+  content row of an open row takes no hover of its own, only its row's.
+- **Focus** is a 2px `--ring` outline, drawn 2px inside the sort button.
+  The checkboxes and the expand button keep
+  their own focus rings.
+- **Pressed** has no look of its own: the click sorts, selects or opens,
+  and that state's look follows.
+- **Disabled**: Table has none. A row that cannot be acted on is a row
+  without the control.
+- **Sorted** shows the column's icon at full colour, pointing up or down.
+- **Selected** tints the row with `--primary-subtle`.
+- **Expanded** turns the chevron to point down and opens the content row
+  under it.
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={TableStories} />
+</div>
+
+`TableColumn<Row>` describes one column:
+
+- `key`: unique; also the row field shown when there is no `cell`.
+- `header`: the column's label.
+- `cell`: renders the cell; defaults to `row[key]`.
+- `sortable`: adds a sort button to the header. It sorts by `sortValue`,
+  or by `row[key]`.
+- `align`: `start`, `center` or `end`. `end` for numbers and dates, so the
+  digits line up.
+- `width`: any CSS width, e.g. `8rem` or `20%`.
+- `isRowHeader`: makes the column's cells `<th scope="row">`, the name a
+  row is known by. Usually the first column.
+
+`TableSort` is `{ key, direction }`, with direction `ascending` or
+`descending`.
+
+</DocTab>
+<DocTab value="guidelines">
+
+## When to use
+
+Use a Table for records that share their fields, when people compare them
+or look one up: projects, invoices, members. Align numbers and dates to the
+end, and mark the column a row is known by with `isRowHeader`.
+
+<DoDont
+  do={<Story of={TableStories.Default} />}
+  doCaption="Numbers and dates aligned to the end, in tabular figures: the digits line up column-wide."
+  dont={<Story of={TableStories.DontNumbersAtStart} />}
+  dontCaption="Aligned to the start, 9 sits under the 1 of 1,203, and the column cannot be compared at a glance."
+/>
+
+<DoDont
+  do={<Story of={TableStories.Selectable} />}
+  doCaption="A row header names each row, so its checkbox reads “Select Atlas”."
+  dont={<Story of={TableStories.DontNoRowHeader} />}
+  dontCaption="Without one, every checkbox is “Select row 1”, “Select row 2”: a screen reader user cannot tell what they select."
+/>
+
+**Sort cycles ascending, descending, off.** The third click returns to the
+original order, which is often the one that meant something. Uncontrolled,
+the table sorts a copy: dates as dates, numbers as numbers, text by locale
+with "file 2" before "file 10". Empty values sort last both ways.
+
+<Canvas of={TableStories.EmptyValuesSortLast} />
+
+With server-side sorting, pass `sort` and `onSortChange` and hand back the
+rows already sorted:
+
+<Canvas of={TableStories.ControlledSort} />
+
+**Paging is not built in.** Put a
+[Pagination](?path=/docs/components-navigation-pagination--docs) under the
+table and pass it one page of `rows`. With `getRowId`, selection keeps
+working across pages: "Select all" adds or removes this page's rows only.
+
+<Canvas of={TableStories.Paged} />
+
 Pass `expandedIds` to open rows from outside the table:
 
 <Canvas of={TableStories.ControlledExpansion} />
 
+## When not to use
+
+- **For a whole list page** with search, filters, bulk actions and paging.
+  Start from the
+  [Data Table Page](?path=/docs/patterns-application-ui-data-table-page--docs)
+  pattern, which puts a Table together with them.
+- **For records that do not share fields**, or that are read one at a
+  time, like products in a shop. Use [Cards](?path=/docs/components-data-display-card--docs).
+- **For layout.** A table announces rows and columns to a screen reader;
+  use CSS grid to place things side by side.
+- **For a spreadsheet**, where arrow keys move between cells and cells
+  are edited in place. Table is a plain table, not an ARIA grid; the kit
+  has no data grid yet.
+
 ## Accessibility
 
-- A real `<table>` with a `<caption>`, `<th scope="col">` headers and a
-  `<th scope="row">` for the row header column: screen readers announce
-  the column and row for every cell.
+- A real `<table>` named by its `<caption>`, with `<th scope="col">`
+  headers and a `<th scope="row">` for the row header column: screen
+  readers announce the column and the row for every cell.
 - Sortable headers carry `aria-sort` (`ascending`, `descending` or
   `none`); the sort control is a button inside the header.
-- Row checkboxes are named after the row header ("Select Atlas"); the
-  header checkbox is "Select all rows" and reports `mixed` when some are
-  selected.
+- Row checkboxes are named after the row header ("Select Atlas"), or
+  "Select row 1" without one, counted from `rows` so a sort does not
+  rename them. The header checkbox is "Select all rows" and reports
+  `mixed` when some are selected. A selected row has `aria-selected`.
 - Each expand button is named after the row header ("Expand Atlas"),
-  reports `aria-expanded`, and while open points at the content cell
-  with `aria-controls`. Enter and Space toggle it; it is in the Tab order
-  like any button. The name stays the same open or closed; the state is
-  carried by `aria-expanded`.
+  reports `aria-expanded`, and while open points at the content cell with
+  `aria-controls`. Enter and Space toggle it. The name stays the same open
+  or closed; `aria-expanded` carries the state.
+- A row with nothing to expand has no button.
 - The expand column's header is "Details", visually hidden, so the column
   is announced like the others.
-- The table scrolls sideways inside its container on narrow screens
-  instead of squeezing columns.
+- The content cell spans every column, so it is read as one cell under its
+  row.
+
+</DocTab>
+</DocTabs>

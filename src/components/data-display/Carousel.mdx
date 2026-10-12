@@ -1,82 +1,211 @@
-import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
 import * as CarouselStories from './Carousel.stories'
 
 <Meta of={CarouselStories} />
 
 # Carousel
 
+<DocTabs>
+<DocTab value="overview">
+
 A row of slides seen one (or a few) at a time: featured items, a gallery,
-onboarding cards. Everything in it is hidden until the reader goes
-looking, so use it for content that is fine to miss; a list or a grid
-shows more at once. Spec:
-[uiguideline.com/components/carousel](https://www.uiguideline.com/components/carousel).
-A native scrolling track with snap points, following the
-[WAI-ARIA carousel pattern](https://www.w3.org/WAI/ARIA/apg/patterns/carousel/).
+onboarding cards.
+
+<Status of={CarouselStories} />
 
 <Canvas of={CarouselStories.Default} />
 
-## Anatomy
+## Variants
 
-| Part | What it is |
+The carousel has no `variant` prop. These are its configurations:
+
+| Configuration | Use for |
 | --- | --- |
-| **Controls** | Previous and next, plus stop/start when it rotates. Above the track, at its end, so they never cover a slide. |
-| **Track** | A horizontal scroller with snap points. Swipe, trackpad and arrow keys scroll it natively. |
-| **Slide** | One child. Labelled "2 of 5". |
-| **Dots** | One per stop. The current one is a wider bar. |
-
-## Props
-
-| Prop | Values | Default | |
-| --- | --- | --- | --- |
-| `children` | nodes | – | One per slide. |
-| `label` | string | – | Required. Names the carousel. |
-| `slidesPerView` | number | `1` | Slides in view at once. |
-| `showDots` | boolean | `true` | |
-| `loop` | boolean | `false` | Previous and next wrap at the ends. |
-| `autoPlay` | number (ms) | – | Advance on a timer. See Accessibility. |
-| `index` | number | – | Controlled: the first slide in view. |
-| `defaultIndex` | number | `0` | |
-| `onIndexChange` | `(index) => void` | – | Called for buttons, dots, swipes and the timer. |
-
-<Controls of={CarouselStories.Default} />
-
-### Design notes
-
-- **Native scrolling.** No transform maths and no gesture library: the
-  track is `overflow-x: auto` with `scroll-snap-type`, so touch, trackpad
-  and momentum behave as the platform does. The index is read back once
-  the track comes to rest.
-- **Stops, not slides.** With three in view, five slides have three stops
-  (1-3, 2-4, 3-5), and the dots count stops.
-- **Right to left works.** Offsets are measured from the first slide, so
-  the negative `scrollLeft` of an RTL track reads correctly, and the
-  previous/next chevrons are mirrored.
-- **`defaultIndex` starts there.** The track jumps to it on mount, without
-  a scroll animation.
-
-## Usage
+| One in view (default) | Large slides that each need the full width: a feature, a photo. |
+| `slidesPerView={3}` | Smaller items browsed in a row: templates, products. |
+| `loop` | A short set with no natural first or last, where next from the end should wrap. |
+| `autoPlay` | Rarely. A showcase where motion is the point; it adds a stop/start button. |
 
 <Canvas of={CarouselStories.ThreeInView} />
+
+With three in view, five slides have three stops (1-3, 2-4, 3-5), and the
+dots count stops, not slides.
 
 <Canvas of={CarouselStories.Loop} />
 
 <Canvas of={CarouselStories.AutoPlay} />
 
+## Resources
+
+From npm, or copied into your project through the registry:
+
+```js
+import { Carousel } from 'zweihander/carousel'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/carousel.json
+```
+
+- Source: [src/components/data-display/Carousel.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/data-display/Carousel.tsx)
+- Spec: [uiguideline.com/components/carousel](https://www.uiguideline.com/components/carousel)
+- Behaviour: [WAI-ARIA carousel pattern](https://www.w3.org/WAI/ARIA/apg/patterns/carousel/)
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
+## Anatomy
+
+<Anatomy parts={CarouselStories.anatomyParts}>
+  <Story of={CarouselStories.Anatomy} />
+</Anatomy>
+
+The controls sit above the track, at its end, so they never cover a slide.
+A visually hidden line after the track says where the reader is (see
+Accessibility).
+
+- **Native scrolling.** No transform maths and no gesture library: the
+  track is `overflow-x: auto` with `scroll-snap-type`, so touch, trackpad
+  and momentum behave as the platform does. The index is read back once
+  the track comes to rest.
+- **Right to left works.** Offsets are measured from the first slide, so
+  the negative `scrollLeft` of a right-to-left track reads correctly, and
+  the previous and next chevrons are mirrored.
+- **`defaultIndex` starts there.** The track jumps to it on mount, without
+  a scroll animation.
+
+## Measurements
+
+There is one size. Slide width follows from the carousel's width,
+`slidesPerView` and the gap between slides.
+
+<SpecTable
+  caption="Every carousel"
+  rows={[
+    { part: 'Carousel', property: 'Gap between controls, track and dots', token: '--space-3' },
+    { part: 'Track', property: 'Gap between slides', token: '--space-4' },
+    { part: 'Controls', property: 'Gap', token: '--space-1' },
+    { part: 'Button', property: 'Width and height', token: '--space-8' },
+    { part: 'Button', property: 'Corner radius', token: '--radius-pill' },
+    { part: 'Button', property: 'Icon size', token: '--icon-md' },
+    { part: 'Dots', property: 'Gap', token: '--space-2' },
+    { part: 'Current dot', property: 'Width', token: '--space-6' },
+    { part: 'Dot', property: 'Hit area', token: '--space-6' },
+    { part: 'Button and dot', property: 'Hit area on touch screens', token: '--target-coarse' },
+    { part: 'Focus ring', property: 'Width', token: '--focus-width' },
+    { part: 'Focus ring', property: 'Offset', token: '--focus-offset' },
+  ]}
+/>
+
+A dot is 6px round (1.5 × `--space-1`); the current one stretches to a
+24px pill. Buttons have a 1px border.
+
+## Color
+
+The carousel has no variants: one table. Slides bring their own colours.
+
+<SpecTable
+  caption="Every carousel"
+  rows={[
+    { part: 'Button', property: 'Background', token: '--background' },
+    { part: 'Button', property: 'Icon colour', token: '--foreground' },
+    { part: 'Button', property: 'Border', token: '--control-border' },
+    { part: 'Button, hover', property: 'Background', token: '--accent' },
+    { part: 'Button, hover', property: 'Icon colour', token: '--accent-foreground' },
+    { part: 'Dot', property: 'Background', token: '--border' },
+    { part: 'Current dot', property: 'Background', token: '--foreground' },
+    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+  ]}
+/>
+
+## States
+
+<States
+  states={[
+    { label: 'Enabled, first stop' },
+    { label: 'Hover', pseudo: 'hover' },
+    { label: 'Focus', pseudo: 'focus-visible' },
+    { label: 'Current slide 3', content: <Story of={CarouselStories.StartAtThird} /> },
+    { label: 'Last stop', content: <Story of={CarouselStories.AtEnd} /> },
+  ]}
+>
+  <Story of={CarouselStories.Default} />
+</States>
+
+- **Hover** fills an enabled button with `--accent` and its icon with
+  `--accent-foreground`. Dots have no hover look.
+- **Focus** is a 2px `--ring` outline, 2px outside the track, a button or a
+  dot.
+- **Pressed** has no look of its own.
+- **Disabled**: previous at the first stop and next at the last, unless
+  `loop`. A disabled button is the enabled look at 50% opacity, with the
+  disabled cursor and no hover.
+- **Current slide**: the current stop's dot is the longer `--foreground`
+  pill.
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={CarouselStories} />
+</div>
+
+</DocTab>
+<DocTab value="guidelines">
+
+## When to use
+
+Everything in a carousel past the first slide is hidden until the reader
+goes looking. Use one for content that is fine to miss: featured items,
+examples, a gallery. Give it a `label` that names what is in it.
+
+<DoDont
+  do={<Story of={CarouselStories.Default} />}
+  doCaption="Featured templates: browsing is optional, and missing one costs nothing."
+  dont={<Story of={CarouselStories.DontHideImportant} />}
+  dontCaption="Account notices the reader must act on, four of them hidden in slides most readers never reach."
+/>
+
+Prefer no `autoPlay`. Motion pulls the eye away from the rest of the page,
+and a slide can move on before it has been read.
+
+## When not to use
+
+- **For content everyone must see.** Show it at once: a list, or
+  [Cards](?path=/docs/components-data-display-card--docs) in a grid, show
+  more and hide nothing.
+- **For items to compare.** Use a
+  [Table](?path=/docs/components-data-display-table--docs): side by side
+  beats one at a time.
+- **For steps in a flow.** Use a
+  [Stepper](?path=/docs/components-navigation-stepper--docs): it shows how
+  many steps there are and where you are.
+
 ## Accessibility
+
+Follows the [WAI-ARIA carousel pattern](https://www.w3.org/WAI/ARIA/apg/patterns/carousel/).
 
 - A `<section>` with `aria-roledescription="carousel"` and your `label`;
   each slide is a group with `aria-roledescription="slide"` and a name
   like "2 of 5".
+- Previous, next, stop/start and the dots are native buttons: Tab reaches
+  them, Enter and Space press them.
+- Previous and next are disabled at the ends unless `loop`. Dots are
+  buttons named "Slide 3", with `aria-current` on the current stop.
 - **Autoplay** (WCAG 2.2.2) pauses while the pointer is over the carousel
   or focus is inside it, has a stop/start button as its first control, and
   never runs under `prefers-reduced-motion`.
 - A visually hidden line says where you are ("Slide 3 of 5", or "Slides
-  2 to 4 of 5"). It is `aria-live="polite"` when the reader moves the
+  3 to 5 of 5"). It is `aria-live="polite"` when the reader moves the
   carousel, so a screen reader hears the change, and `off` while it
-  rotates on its own. The slides themselves never change in the DOM, so a
-  live region round them would stay silent.
-- Previous and next are disabled at the ends unless `loop`. Dots are
-  buttons named "Slide 3" with `aria-current` on the current stop.
-- The track is focusable (`tabindex="0"`) so a keyboard can scroll it,
-  and shows the 2px `--ring`. Buttons and dots have 44px touch targets on
-  coarse pointers.
+  rotates on its own. Every slide is in the DOM from the start, so a live
+  region round the track would stay silent.
+- The track is in the tab order (`tabindex="0"`), like any scrolling
+  region.
+- In right to left, the previous and next chevrons are mirrored.
+- Buttons and dots have 44px touch targets on coarse pointers.
+
+</DocTab>
+</DocTabs>

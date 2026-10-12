@@ -20,14 +20,56 @@ const meta = {
   title: 'Components/Data Display/Card',
   tags: ['beta'],
   component: Card,
+  // These descriptions are the docs' API table and the Playground's props
+  // panel. Unions and the render prop get their type and default by hand.
   argTypes: {
-    size: { control: 'inline-radio', options: ['xs', 'sm', 'md', 'lg'] },
-    appearance: { control: 'inline-radio', options: ['elevated', 'outline', 'unstyled'] },
-    orientation: { control: 'inline-radio', options: ['vertical', 'horizontal'] },
-    render: { control: false },
+    children: {
+      description: "The content (the spec's `content`). Stacked or side by side, by `orientation`. A clickable card takes phrasing content only: spans, no headings, no links or buttons.",
+      control: false,
+      table: { type: { summary: 'ReactNode' } },
+    },
+    size: {
+      description: 'Padding 12, 16, 24 or 32px; the gap between children scales with it.',
+      control: 'inline-radio',
+      options: ['xs', 'sm', 'md', 'lg'],
+      table: { type: { summary: "'xs' | 'sm' | 'md' | 'lg'" }, defaultValue: { summary: "'sm'" } },
+    },
+    appearance: {
+      description: '`elevated`: the card surface with a faint shadow. `outline`: the surface and its edge, no shadow. `unstyled`: keeps the padding and layout, drops every visual.',
+      control: 'inline-radio',
+      options: ['elevated', 'outline', 'unstyled'],
+      table: { type: { summary: "'elevated' | 'outline' | 'unstyled'" }, defaultValue: { summary: "'elevated'" } },
+    },
+    orientation: {
+      description: 'How children flow: `vertical` stacks them, `horizontal` sets them side by side (media and text).',
+      control: 'inline-radio',
+      options: ['vertical', 'horizontal'],
+      table: { type: { summary: "'vertical' | 'horizontal'" }, defaultValue: { summary: "'vertical'" } },
+    },
+    isRounded: {
+      description: 'Rounds the corners with `--radius-panel`. Off: square corners.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'true' } },
+    },
+    hasBorder: {
+      description: 'The 1px `--border` edge. Off: no visible edge. `unstyled` never has one.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'true' } },
+    },
+    onClick: {
+      description: 'Makes the whole card one `<button type="button">`. Called on click, Enter and Space.',
+      control: false,
+      table: { type: { summary: '(event: MouseEvent) => void' } },
+    },
+    render: {
+      description: "Replaces the element, e.g. `<a href>` or a router's Link for a card that navigates. Props and styles merge onto it, and it gets the hover and focus of a clickable card.",
+      control: false,
+      table: { type: { summary: 'ReactElement | (props, state) => ReactElement' } },
+    },
   },
   args: { children: <Content /> },
   decorators: [(Story) => <div style={{ maxInlineSize: '24rem' }}>{Story()}</div>],
+  excludeStories: ['anatomyParts'],
 } satisfies Meta<typeof Card>
 
 export default meta
@@ -120,7 +162,8 @@ export const Clickable: Story = {
     await userEvent.tab()
     await expect(card).toHaveFocus()
     await userEvent.keyboard('{Enter}')
-    await expect(args.onClick).toHaveBeenCalledTimes(2)
+    await userEvent.keyboard(' ')
+    await expect(args.onClick).toHaveBeenCalledTimes(3)
   },
 }
 
@@ -174,5 +217,59 @@ export const Contrast: Story = {
         failures.push(`${audit}: hover changes neither shadow nor edge`)
     }
     await expect(failures).toEqual([])
+  },
+}
+
+/** A clickable `outline` card: on hover its edge strengthens instead of the shadow. */
+export const ClickableOutline: Story = {
+  args: { ...Clickable.args, appearance: 'outline' },
+  play: async ({ canvas }) => {
+    const card = canvas.getByRole('button')
+    // Hover strengthens the edge to the 3:1 control border.
+    await expect(hoverRules(card).some((r) => r.style.borderColor === 'var(--control-border)')).toBe(true)
+  },
+}
+
+/** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
+export const anatomyParts = [
+  { name: 'Container', selector: 'div:has(> h3)', description: 'The surface: --card, its --border edge and the padding from size. Content stacks or sits side by side, by orientation.' },
+  { name: 'Title', selector: 'div:has(> h3) > h3', description: 'Your content: a heading at the level the page needs. The card has none of its own.' },
+  { name: 'Body', selector: 'div:has(> h3) > p', description: 'Your content: anything, here a line of muted text.' },
+]
+
+/** A plain card with a heading and a line of text, so the docs can point at each. */
+export const Anatomy: Story = {
+  tags: ['!dev'],
+  play: async ({ canvasElement }) => {
+    // The docs markers follow these selectors: a DOM change must not leave
+    // a marker pointing at nothing, or at the wrong part.
+    const found = anatomyParts.map(({ selector }) => canvasElement.querySelector(selector))
+    await expect(found.every(Boolean)).toBe(true)
+    await expect(new Set(found).size).toBe(anatomyParts.length)
+    await expect(found[1]).toHaveTextContent('Payment method')
+  },
+}
+
+/** Guidelines, Don't: a button inside a clickable card. */
+export const DontNestButtons: Story = {
+  tags: ['!dev'],
+  // The Don't is the a11y failure itself: a button inside a button is
+  // invalid HTML and axe's nested-interactive rule fails it.
+  parameters: { a11y: { test: 'off' } },
+  args: {
+    onClick: fn(),
+    orientation: 'horizontal',
+    children: (
+      <>
+        <Avatar initials="MT" size="md" />
+        <span style={{ display: 'grid', gap: 'var(--space-1)', flex: 1 }}>
+          <span style={title}>Mary Thompson</span>
+          <span style={muted}>Product designer</span>
+        </span>
+        <Button size="sm" appearance="outlined" variant="secondary">
+          Follow
+        </Button>
+      </>
+    ),
   },
 }
