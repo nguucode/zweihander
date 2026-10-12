@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { useState } from 'react'
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test'
+import { expectAnatomy, Pictured } from '../../../.storybook/blocks'
 import { Icon } from '@/lib/icon'
 import { Button } from '../buttons/Button'
 import { Menu, type MenuProps } from './Menu'
@@ -244,27 +244,17 @@ export const Links: Story = {
   },
 }
 
-/**
- * The menu open in place, as a picture: rendered inside the story instead of
- * `<body>`, not modal and inert, so a docs page can show it beside other
- * examples without the menu taking focus or locking the page. The popup sits
- * in the flow under the trigger: positioned, it would flip above the trigger
- * whenever the picture is low in the window, out of its frame.
- */
-function Pictured(props: MenuProps) {
-  const [container, setContainer] = useState<HTMLDivElement | null>(null)
-  return (
-    <div ref={setContainer} inert data-menu-picture style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'flex-start', gap: 'var(--space-1)' }}>
-      <style>{`[data-menu-picture] .${styles.positioner} { position: static !important; transform: none !important; }`}</style>
-      {container && <Menu {...props} open isModal={false} container={container} />}
-    </div>
-  )
-}
+/** The menu open in place, as a picture, and not modal: it must not lock the docs page. */
+const picture = (args: MenuProps) => (
+  <Pictured positioner={styles.positioner} style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'flex-start', gap: 'var(--space-1)' }}>
+    {(container) => <Menu {...args} open isModal={false} container={container} />}
+  </Pictured>
+)
 
 /** The menu open, for the docs. */
 export const Open: Story = {
   tags: ['!dev'],
-  render: (args) => <Pictured {...args} />,
+  render: picture,
   play: async ({ canvas }) => {
     // Rendered inside the story, not <body>.
     const menu = await canvas.findByRole('menu', { hidden: true })
@@ -304,14 +294,9 @@ export const Anatomy: Story = {
       { label: 'Delete', icon: <Icon name="close" />, isDestructive: true },
     ],
   },
-  render: (args) => <Pictured {...args} />,
+  render: picture,
   play: async ({ canvasElement }) => {
-    // The docs markers follow these selectors: a DOM change must not leave
-    // a marker pointing at nothing, or at the wrong part.
-    await waitFor(() => expect(canvasElement.querySelector('[role="menu"]')).not.toBeNull())
-    const found = anatomyParts.map(({ selector }) => canvasElement.querySelector(selector))
-    await expect(found.every(Boolean)).toBe(true)
-    await expect(new Set(found).size).toBe(anatomyParts.length)
+    const found = await expectAnatomy(canvasElement, anatomyParts)
     await expect(found[2]).toHaveTextContent('Page')
     await expect(found[3]).toHaveTextContent('Duplicate')
   },
@@ -328,7 +313,7 @@ export const DoDestructiveLast: Story = {
       { label: 'Delete', isDestructive: true },
     ],
   },
-  render: (args) => <Pictured {...args} />,
+  render: picture,
 }
 
 /** Guidelines, Don't: the destructive action among the others, where a slip of the arrow key lands on it. */
@@ -337,7 +322,7 @@ export const DontDestructiveAmongOthers: Story = {
   args: {
     items: [{ label: 'Rename' }, { label: 'Delete', isDestructive: true }, { label: 'Duplicate' }],
   },
-  render: (args) => <Pictured {...args} />,
+  render: picture,
 }
 
 /** Guidelines, Do: a menu acts. Picking a value for a form is a Select. */
@@ -347,7 +332,7 @@ export const DoActions: Story = {
     trigger: <Button appearance="outlined" variant="accent">Export</Button>,
     items: [{ label: 'Download as CSV' }, { label: 'Download as PDF' }, { label: 'Copy link' }],
   },
-  render: (args) => <Pictured {...args} />,
+  render: picture,
 }
 
 /** Guidelines, Don't: a menu standing in for a form field, with the choice written into the trigger. */
@@ -361,5 +346,5 @@ export const DontMenuAsField: Story = {
     ),
     items: [{ label: 'Vietnam' }, { label: 'Thailand' }, { label: 'Japan' }],
   },
-  render: (args) => <Pictured {...args} />,
+  render: picture,
 }

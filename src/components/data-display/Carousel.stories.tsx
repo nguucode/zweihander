@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect, fn, userEvent, waitFor } from 'storybook/test'
+import { expectAnatomy } from '../../../.storybook/blocks'
 import { mediaRules } from '@/test/story-helpers'
 import { Carousel } from './Carousel'
 
@@ -301,11 +302,7 @@ export const Anatomy: Story = {
   // An hour: autoPlay adds the stop/start button, but the picture should hold still.
   args: { autoPlay: 3_600_000 },
   play: async ({ canvasElement }) => {
-    // The docs markers follow these selectors: a DOM change must not leave
-    // a marker pointing at nothing, or at the wrong part.
-    const found = anatomyParts.map(({ selector }) => canvasElement.querySelector(selector))
-    await expect(found.every(Boolean)).toBe(true)
-    await expect(new Set(found).size).toBe(anatomyParts.length)
+    const found = await expectAnatomy(canvasElement, anatomyParts)
     await expect(found[4]).toHaveAccessibleName('1 of 5')
   },
 }

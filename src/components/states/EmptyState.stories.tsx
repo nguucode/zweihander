@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect } from 'storybook/test'
+import { expectAnatomy } from '../../../.storybook/blocks'
 import { Icon } from '@/lib/icon'
 import { Button } from '../buttons/Button'
 import { EmptyState } from './EmptyState'
@@ -117,11 +118,7 @@ export const anatomyParts = [
 export const Anatomy: Story = {
   tags: ['!dev'],
   play: async ({ canvasElement }) => {
-    // The docs markers follow these selectors: a DOM change must not leave
-    // a marker pointing at nothing, or at the wrong part.
-    const found = anatomyParts.map(({ selector }) => canvasElement.querySelector(selector))
-    await expect(found.every(Boolean)).toBe(true)
-    await expect(new Set(found).size).toBe(anatomyParts.length)
+    const found = await expectAnatomy(canvasElement, anatomyParts)
     await expect(found[4]).toContainElement(canvasElement.querySelector('button'))
   },
 }

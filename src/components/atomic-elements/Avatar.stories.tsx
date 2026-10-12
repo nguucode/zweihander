@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect, waitFor } from 'storybook/test'
+import { expectAnatomy } from '../../../.storybook/blocks'
 import { ACCENT_COLORS, GRAY_COLORS } from '@/theme/palettes'
 import { Theme } from '@/theme/Theme'
 import { Avatar } from './Avatar'
@@ -249,11 +250,7 @@ export const Anatomy: Story = {
     </div>
   ),
   play: async ({ canvasElement }) => {
-    // The docs markers follow these selectors: a DOM change must not leave
-    // a marker pointing at nothing, or at the wrong part.
-    const found = anatomyParts.map(({ selector }) => canvasElement.querySelector(selector))
-    await expect(found.every(Boolean)).toBe(true)
-    await expect(new Set(found).size).toBe(anatomyParts.length)
+    const found = await expectAnatomy(canvasElement, anatomyParts)
     await expect(found[2]).toHaveTextContent('SR')
   },
 }

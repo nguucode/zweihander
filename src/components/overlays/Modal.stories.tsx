@@ -1,6 +1,6 @@
-import { useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test'
+import { expectAnatomy, Pictured } from '../../../.storybook/blocks'
 import { Button } from '../buttons/Button'
 import { Select } from '../inputs/Select'
 import { TextInput } from '../inputs/TextInput'
@@ -240,27 +240,24 @@ export const Long: Story = {
 }
 
 /**
- * The modal open in place, as a picture: rendered inside the story instead
- * of `<body>`, not modal and inert, so a docs page can show it beside other
- * examples without it taking focus or locking the page. The frame contains
- * layout, so the fixed backdrop and viewport fill the frame, not the window.
- * On a phone the full-size picture is drawn at 75%: a form modal is wider
- * than a docs example has room for.
+ * The modal open in place, as a picture, and not modal: it must not lock the
+ * docs page. The frame contains layout, so the fixed backdrop and viewport
+ * fill the frame, not the window. On a phone the full-size picture is drawn
+ * at 75%: a form modal is wider than a docs example has room for.
  */
-function Pictured({ width, height = '20rem', ...props }: ModalProps & { width?: string; height?: string }) {
-  const [container, setContainer] = useState<HTMLDivElement | null>(null)
-  return (
-    <div
-      ref={setContainer}
-      inert
-      data-modal-picture={width ? undefined : ''}
-      style={{ position: 'relative', contain: 'layout paint', inlineSize: width ?? 'min(34rem, 100vw - 10rem)', blockSize: height, borderRadius: 'var(--radius-panel)' }}
-    >
-      {!width && <style>{'@media (max-width: 30rem) { [data-modal-picture] { zoom: 0.75; inline-size: calc((100vw - 10rem) / 0.75) !important; } }'}</style>}
-      {container && <Modal {...props} trigger={undefined} open isModal={false} container={container} />}
-    </div>
-  )
-}
+const picture = ({ width, height = '20rem', ...args }: ModalProps & { width?: string; height?: string }) => (
+  <Pictured
+    data-modal-picture={width ? undefined : ''}
+    style={{ position: 'relative', contain: 'layout paint', inlineSize: width ?? 'min(34rem, 100vw - 10rem)', blockSize: height, borderRadius: 'var(--radius-panel)' }}
+  >
+    {(container) => (
+      <>
+        {!width && <style>{'@media (max-width: 30rem) { [data-modal-picture] { zoom: 0.75; inline-size: calc((100vw - 10rem) / 0.75) !important; } }'}</style>}
+        <Modal {...args} trigger={undefined} open isModal={false} container={container} />
+      </>
+    )}
+  </Pictured>
+)
 
 const editFooter = (
   <>
@@ -284,15 +281,11 @@ export const anatomyParts = [
 export const Anatomy: Story = {
   tags: ['!dev'],
   args: { footer: editFooter },
-  render: (args) => <Pictured {...args} />,
+  render: picture,
   play: async ({ canvas, canvasElement }) => {
     // Rendered inside the story, not <body>.
     const dialog = await canvas.findByRole('dialog', { hidden: true })
-    // The docs markers follow these selectors: a DOM change must not leave
-    // a marker pointing at nothing, or at the wrong part.
-    const found = anatomyParts.map(({ selector }) => canvasElement.querySelector(selector))
-    await expect(found.every(Boolean)).toBe(true)
-    await expect(new Set(found).size).toBe(anatomyParts.length)
+    const found = await expectAnatomy(canvasElement, anatomyParts)
     await expect(found[1]).toBe(dialog)
     await expect(found[2]).toHaveTextContent('Edit profile')
     // Not modal: the page around the picture keeps its scroll (Default
@@ -305,7 +298,7 @@ export const Anatomy: Story = {
 export const CloseButton: Story = {
   tags: ['!dev'],
   args: { size: 'sm', description: undefined, children: undefined, footer: undefined },
-  render: (args) => <Pictured {...args} width="15rem" height="7rem" />,
+  render: (args) => picture({ ...args, width: '15rem', height: '7rem' }),
 }
 
 /** Looks like an alert: no close button, a small modal. A picture cannot be an alert dialog, which is always modal. */
@@ -329,7 +322,7 @@ export const DoNameTheActions: Story = {
       </>
     ),
   },
-  render: (args) => <Pictured {...args} width="min(22rem, 100vw - 10rem)" height="15rem" />,
+  render: (args) => picture({ ...args, width: 'min(22rem, 100vw - 10rem)', height: '15rem' }),
 }
 
 /** Guidelines, Don't: OK and Cancel make the reader go back to the question. */
@@ -344,5 +337,5 @@ export const DontOkCancel: Story = {
       </>
     ),
   },
-  render: (args) => <Pictured {...args} width="min(22rem, 100vw - 10rem)" height="15rem" />,
+  render: (args) => picture({ ...args, width: 'min(22rem, 100vw - 10rem)', height: '15rem' }),
 }

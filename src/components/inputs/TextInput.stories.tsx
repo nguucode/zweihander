@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useState } from 'react'
 import { expect, fn } from 'storybook/test'
+import { expectAnatomy } from '../../../.storybook/blocks'
 import { Icon } from '@/lib/icon'
 import { TextInput } from './TextInput'
 
@@ -245,11 +246,7 @@ export const Anatomy: Story = {
   tags: ['!dev'],
   args: { label: 'Website', placeholder: 'example', prefix: 'https://', suffix: '.com', helperText: 'Where people can find you.' },
   play: async ({ canvasElement }) => {
-    // The docs markers follow these selectors: a DOM change must not leave
-    // a marker pointing at nothing, or at the wrong part.
-    const found = anatomyParts.map(({ selector }) => canvasElement.querySelector(selector))
-    await expect(found.every(Boolean)).toBe(true)
-    await expect(new Set(found).size).toBe(anatomyParts.length)
+    const found = await expectAnatomy(canvasElement, anatomyParts)
     await expect(found[2]).toHaveTextContent('https://')
     await expect(found[4]).toHaveTextContent('.com')
   },

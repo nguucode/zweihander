@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test'
+import { expectAnatomy } from '../../../.storybook/blocks'
 import { DatePicker, DateRangePicker, rangePresets } from './DatePicker'
 
 /** A day's accessible name, from the same formatter the calendar uses. */
@@ -183,11 +184,7 @@ export const Anatomy: Story = {
   args: { helperText: 'Up to one quarter.' },
   parameters: { popupRoom: false },
   play: async ({ canvasElement }) => {
-    // The docs markers follow these selectors: a DOM change must not leave
-    // a marker pointing at nothing, or at the wrong part.
-    const found = anatomyParts.map(({ selector }) => canvasElement.querySelector(selector))
-    await expect(found.every(Boolean)).toBe(true)
-    await expect(new Set(found).size).toBe(anatomyParts.length)
+    const found = await expectAnatomy(canvasElement, anatomyParts)
     await expect(found[1]).toContainElement(found[3] as HTMLElement)
     await expect(found[4]).toHaveTextContent('Up to one quarter.')
   },

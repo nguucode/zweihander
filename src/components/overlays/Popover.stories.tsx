@@ -1,6 +1,6 @@
-import { useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test'
+import { expectAnatomy, Pictured } from '../../../.storybook/blocks'
 import { Button } from '../buttons/Button'
 import { TextInput } from '../inputs/TextInput'
 import { Popover, type PopoverProps } from './Popover'
@@ -286,22 +286,12 @@ export const Modal: Story = {
   },
 }
 
-/**
- * The popover open in place, as a picture: rendered inside the story instead
- * of `<body>`, and inert, so a docs page can show it beside other examples
- * without it taking focus. The popup sits in the flow 6px under the trigger,
- * as it opens: positioned, it would flip above the trigger whenever the
- * picture is low in the window, out of its frame.
- */
-function Pictured(props: PopoverProps) {
-  const [container, setContainer] = useState<HTMLDivElement | null>(null)
-  return (
-    <div ref={setContainer} inert data-popover-picture style={{ display: 'grid', justifyItems: 'center', gap: 6 }}>
-      <style>{`[data-popover-picture] .${styles.positioner} { position: static !important; transform: none !important; }`}</style>
-      {container && <Popover {...props} open container={container} />}
-    </div>
-  )
-}
+/** The popover open in place, as a picture, 6px under the trigger. */
+const picture = (args: PopoverProps) => (
+  <Pictured positioner={styles.positioner} style={{ display: 'grid', justifyItems: 'center', gap: 6 }}>
+    {(container) => <Popover {...args} open container={container} />}
+  </Pictured>
+)
 
 /** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
 export const anatomyParts = [
@@ -318,15 +308,11 @@ export const Anatomy: Story = {
   tags: ['!dev'],
   parameters: { picture: true },
   args: { hasCloseButton: true },
-  render: (args) => <Pictured {...args} />,
+  render: picture,
   play: async ({ canvas, canvasElement }) => {
     // Rendered inside the story, not <body>.
     const dialog = await canvas.findByRole('dialog', { hidden: true })
-    // The docs markers follow these selectors: a DOM change must not leave
-    // a marker pointing at nothing, or at the wrong part.
-    const found = anatomyParts.map(({ selector }) => canvasElement.querySelector(selector))
-    await expect(found.every(Boolean)).toBe(true)
-    await expect(new Set(found).size).toBe(anatomyParts.length)
+    const found = await expectAnatomy(canvasElement, anatomyParts)
     await expect(found[1]).toBe(dialog)
     await expect(found[2]).toHaveTextContent('Share this file')
   },
@@ -337,14 +323,14 @@ export const CloseButton: Story = {
   tags: ['!dev'],
   parameters: { picture: true },
   args: { description: undefined, children: undefined, hasCloseButton: true },
-  render: (args) => <Pictured {...args} />,
+  render: picture,
 }
 
 /** Guidelines, Do: a short task tied to the button that opens it. */
 export const DoShortTask: Story = {
   tags: ['!dev'],
   parameters: { picture: true },
-  render: (args) => <Pictured {...args} />,
+  render: picture,
 }
 
 /** Guidelines, Don't: a long form crammed into a popover. */
@@ -365,5 +351,5 @@ export const DontLongForm: Story = {
       </div>
     ),
   },
-  render: (args) => <Pictured {...args} />,
+  render: picture,
 }

@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect } from 'storybook/test'
+import { expectAnatomy } from '../../../.storybook/blocks'
 import { Divider } from './Divider'
 
 const menu = { display: 'grid', gap: 'var(--space-2)', inlineSize: '12rem' }
@@ -161,9 +162,7 @@ export const Anatomy: Story = {
     </div>
   ),
   play: async ({ canvasElement }) => {
-    // The docs marker follows this selector.
-    const found = anatomyParts.map(({ selector }) => canvasElement.querySelector(selector))
-    await expect(found.every(Boolean)).toBe(true)
+    await expectAnatomy(canvasElement, anatomyParts)
   },
 }
 

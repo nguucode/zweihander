@@ -6,8 +6,17 @@ export interface AnatomyPart {
   name: string
   /** CSS selector for the part, matched inside the example; the first match is marked. */
   selector: string
+  /** In a string, `backticks` mark inline code, as in Markdown. */
   description?: ReactNode
 }
+
+/* Story files write descriptions as plain strings, so `--muted` or
+   `aria-label` would show its backticks: render those spans as code. An odd
+   count is a typo, left as written rather than turning the rest into code. */
+const withCode = (text: ReactNode) =>
+  typeof text === 'string' && text.split('`').length % 2 === 1
+    ? text.split('`').map((span, i) => (i % 2 ? <code key={i}>{span}</code> : span))
+    : text
 
 interface Marker {
   /** Marker centre, relative to the stage. */
@@ -123,7 +132,7 @@ export function Anatomy({ parts, children }: { parts: AnatomyPart[]; children: R
                 <td className={styles.numeral}>{i + 1}</td>
                 <th scope="row">{part.name}</th>
                 <td>
-                  {part.description}
+                  {withCode(part.description)}
                   {markers.length > 0 && !markers[i] && (
                     <span className={styles.missing}>
                       {' '}
