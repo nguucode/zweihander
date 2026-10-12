@@ -62,3 +62,18 @@ test('a heading only counts as a whole line', () => {
   const errors = checkFile(file, page({ ...complete, guidelines: complete.guidelines.replace('## When to use', '## When to use it sparingly') }))
   assert.match(errors[0], /missing "## When to use"/)
 })
+
+test("DocTabs keeps its tab in a URL parameter Storybook's manager does not read", async () => {
+  // Storybook reads ?tab= as an addon tab id and hides the canvas when no
+  // addon has it: a link to ?tab=specs opened on a blank page.
+  const { readFile } = await import('node:fs/promises')
+  const read = (path) => readFile(new URL(path, import.meta.url), 'utf8')
+  const param = (await read('../.storybook/blocks/DocTabs.tsx')).match(/const PARAM = '([^']+)'/)?.[1]
+  assert.ok(param, 'DocTabs.tsx declares const PARAM')
+  const manager = (await read('../node_modules/storybook/dist/manager/runtime.js')) + (await read('../node_modules/storybook/dist/manager-api/index.js'))
+  const reserved = new Set([...manager.matchAll(/getQueryParam\("(\w+)"\)/g)].map((m) => m[1]))
+  for (const key of manager.match(/LAYOUT_QUERY_PARAM_KEYS = \[([^\]]*)\]/)?.[1].match(/\w+/g) ?? []) reserved.add(key)
+  for (const key of ['path', 'viewMode', 'id', 'args', 'globals']) reserved.add(key)
+  assert.ok(reserved.has('tab'), 'the scan still finds what Storybook reads')
+  assert.ok(!reserved.has(param), `?${param}= is Storybook's own parameter`)
+})

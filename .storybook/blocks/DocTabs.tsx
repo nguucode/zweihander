@@ -4,7 +4,8 @@ import { Tabs } from '@/components/navigation/Tabs'
 export type DocTabValue = 'overview' | 'specs' | 'guidelines'
 
 const LABELS: Record<DocTabValue, string> = { overview: 'Overview', specs: 'Specs', guidelines: 'Guidelines' }
-const PARAM = 'tab'
+// Not ?tab=: Storybook reads that as an addon tab and hides the canvas.
+const PARAM = 'docTab'
 
 export interface DocTabProps {
   value: DocTabValue
@@ -16,7 +17,7 @@ export function DocTab(_: DocTabProps) {
   return null
 }
 
-/* The selected tab lives in the URL (?tab=specs) so a link can open on it.
+/* The selected tab lives in the URL (?docTab=specs) so a link can open on it.
    The docs page renders in Storybook's preview iframe; the address bar is the
    manager's, one frame up and same-origin. Only in docs view mode: anywhere
    else (a story test) the top window is not Storybook's. Best effort: a
