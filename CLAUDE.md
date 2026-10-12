@@ -10,7 +10,7 @@ Project info (decisions, tickets, roadmap, Figma links) lives in the Obsidian va
 - Drive is exFAT: use `npm`, not `pnpm` (no hardlinks).
 - Research (`/research`): save to `docs/research/YYYY-MM-DD-<topic>.md` in this repo, then copy it to the vault mirror `10-projects/zweihander/repo/docs/research/` (same place the `flow` mod copies repo Markdown; on the Mac `/flow:vault` does it) and add a line to `_context.md`.
 - Skills: when a skill in `.claude/skills/` overlaps a built-in or plugin skill, use the one in `.claude/skills/` (`matt-code-review` for standards + spec review). The flow's bug-hunt step still uses the built-in `/code-review` on purpose.
-- Workflow from idea to merged PR in a Claude Code Project: `.claude/skills/project-flow/` (each ticket runs in its own thread).
+- Workflow: every implementation (new work, fix, behaviour change) follows `.claude/skills/project-flow/` by default: `flow idea`, `flow fix` or `flow change`, with `zw-build` on top for components. After `to-tickets`, each ticket runs in its own thread. Skip it only when the user says so.
 
 ## Agent skills
 
