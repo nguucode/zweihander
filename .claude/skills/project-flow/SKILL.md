@@ -5,7 +5,7 @@ description: Idea-to-ship workflow for Zweihänder in a Claude Code Project (thr
 
 # Project flow
 
-The `flow` mod (`/Volumes/KAFKA/Vault/10-projects/claude-mods/flow.md`) carried into a Claude Code Project. Same four flows and steps; the differences are **who drives** (a thread, not the mod) and **tickets**: after `to-tickets`, every ticket runs in its own thread and ships as its own PR.
+Matt Pocock's loop (grill, spec with seams, small tickets each in a fresh context, two-axis review, retro) as the `flow` mod runs it (`/Volumes/KAFKA/Vault/10-projects/claude-mods/flow.md`), carried into a Claude Code Project. The agent is the sergeant, the user the general: every decision is the user's, made before code. Same four flows and steps; the differences are **who drives** (a thread, not the mod) and **tickets**: after `to-tickets`, every ticket runs in its own thread and ships as its own PR.
 
 A thread started for one ticket skips this file and follows [TICKET-THREAD.md](TICKET-THREAD.md).
 
@@ -16,6 +16,8 @@ A thread started for one ticket skips this file and follows [TICKET-THREAD.md](T
 - **Built-ins** (`code-review`, `security-review`, `run`) and `a11y-enforcer:a11y-check`: call the Skill tool.
 - Repo conventions sit on top of every step: `docs/agents/*.md` (tracker in the vault, `CONTEXT.md`, ADRs), and `zw-build` for anything under `src/components/`.
 - The tracker lives in the vault on the user's Mac. Reach it with the device folder tools (`/Volumes/KAFKA/Vault`); if none are connected, call `connect_device` and wait. Write vault files in Vietnamese, following `/Volumes/KAFKA/Vault/CLAUDE.md`.
+
+Steps 3 to 6 stay in one unbroken thread (no compaction before the tickets exist), so grill, spec and tickets share the same reasoning.
 
 ## Two halves
 
@@ -35,7 +37,7 @@ Starting mid-way: if the user says early steps are done ("spec at …, tickets a
 | 3 | grill | grill-with-docs | yes | Interview until clear, writing `CONTEXT.md` and ADRs as terms and decisions land. |
 | 4 | prototype | prototype | optional | Throwaway code for a question that needs something runnable. |
 | 5 | spec | to-spec | yes | Spec into the tracker. Ask: **spec + tickets** (one thread and PR per ticket) or **implement here** (one PR, skip tickets). |
-| 6 | tickets | to-tickets | when tickets chosen | One file per ticket under `10-projects/zweihander/<feature>/issues/`, each with `Blocked by:`. Then hand off, see [Tickets become threads](#tickets-become-threads). |
+| 6 | tickets | to-tickets | when tickets chosen | One file per ticket under `10-projects/zweihander/<feature>/issues/`, each with `Blocked by:`, each small enough for one fresh session (well under ~150k tokens). Then hand off, see [Tickets become threads](#tickets-become-threads). |
 | 7 | **implement** | implement | yes | **Build step** ("implement here" only). Then [AFTER-BUILD.md](AFTER-BUILD.md). |
 
 ## `flow fix`
@@ -81,7 +83,7 @@ After `to-tickets`, this thread becomes the **map thread**. It does not implemen
 
 3. The coordinator posts one project-chat line per ticket and starts a thread on it with that brief (its rules are in project memory, `project-flow-tickets`). Frontier tickets run in parallel.
 4. Each ticket thread messages the coordinator when its PR merges; the coordinator then starts every ticket that merge unblocked. The map thread keeps the checklist (one line per ticket: waiting, running, merged) from what it reads with `list_thread_sessions` / `fetch_thread`.
-5. When every ticket is merged: update the vault (`_context.md` line, `_system/agent-log.md`), reply once with the PR list, resolve the thread.
+5. When every ticket is merged: update the vault (`_context.md` line, `_system/agent-log.md`), then reply once with the PR list and the retro suggestions the ticket threads sent, merged and deduplicated, asking which to apply. Each one the user picks becomes a `flow change` thread. Resolve the thread once that is answered.
 
 ## Vault
 

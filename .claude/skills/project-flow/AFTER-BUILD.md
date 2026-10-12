@@ -14,6 +14,7 @@ Review and QA cover every commit since the flow (or ticket branch) started, not 
 | qa-a11y | `a11y-enforcer:a11y-check` | optional | WCAG check when there is UI. |
 | debt | ponytail-debt | yes | Ledger of `shortcut:` comments in the change. |
 | ship | none | yes | See below. |
+| retro | retro | yes | After merge, run on this thread's own session (it is the primary source). Suggestions only: lint rules, checks, CLAUDE.md, coding standards. Apply nothing; list them in the closing reply. |
 
 ## Loops
 
@@ -24,8 +25,8 @@ A review, QA or CI finding sends the work back to the build step to fix, then do
 1. Work on the thread's branch, never the default branch; never force-push.
 2. Before pushing, run what CI runs (`npm run tokens:check`, `npm run registry:check`, `npm run lint`, `npx tsc -b`, Storybook tests for touched components) and add a changeset in `.changeset/` (an empty one when nothing ships).
 3. Open a draft PR and watch it. Fix small CI failures in place; larger ones go back to the build step.
-4. When CI is green, mark the PR ready and ask the user to merge it (`ask_decision`: merge now, or wait). Also ask when a conflict cannot be resolved cleanly.
-5. After merge: mirror repo Markdown to the vault (see [SKILL.md](SKILL.md#vault)), then the thread's closing step (ticket threads: [TICKET-THREAD.md](TICKET-THREAD.md)).
+4. When CI is green, mark the PR ready and tell the user in one line it is ready to merge. The user merges it themselves; wait for the merge event. Ask when a conflict cannot be resolved cleanly.
+5. After merge: mirror repo Markdown to the vault (see [SKILL.md](SKILL.md#vault)), run retro, then the thread's closing step (ticket threads: [TICKET-THREAD.md](TICKET-THREAD.md)).
 
 ## A bug from an earlier PR
 
