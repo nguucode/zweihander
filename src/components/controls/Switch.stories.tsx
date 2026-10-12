@@ -1,18 +1,86 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useState } from 'react'
 import { expect, fn } from 'storybook/test'
+import { Button } from '@/components/buttons/Button'
 import { Switch } from './Switch'
 
 const meta = {
   title: 'Components/Controls/Switch',
   tags: ['beta'],
   component: Switch,
+  // These descriptions are the docs' API table and the Playground's props panel.
   argTypes: {
-    size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] },
-    variant: { control: 'inline-radio', options: ['primary', 'accent', 'destructive'] },
-    validationState: { control: 'inline-radio', options: ['default', 'success', 'error'] },
+    checked: {
+      description: 'Controlled state. Pair with `onCheckedChange`.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' } },
+    },
+    defaultChecked: {
+      description: 'Starting state when uncontrolled.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    onCheckedChange: {
+      description: 'Called with the new state on click and Space. The setting should take effect here, not on Submit.',
+      control: false,
+      table: { type: { summary: '(checked: boolean) => void' } },
+    },
+    label: {
+      description: 'Names the setting. Clicking it toggles the switch.',
+      control: 'text',
+      table: { type: { summary: 'ReactNode' } },
+    },
+    helperText: {
+      description: 'Under the label: the description, or the error message when `validationState` is `error`.',
+      control: 'text',
+      table: { type: { summary: 'ReactNode' } },
+    },
+    size: {
+      description: 'Track 28×16 (`sm`), 36×20 (`md`) or 44×24px (`lg`).',
+      control: 'inline-radio',
+      options: ['sm', 'md', 'lg'],
+      table: { type: { summary: "'sm' | 'md' | 'lg'" }, defaultValue: { summary: "'md'" } },
+    },
+    variant: {
+      description: 'Colour of the on state. `accent` is the inverted neutral; `destructive` for a setting that is risky to turn on.',
+      control: 'inline-radio',
+      options: ['primary', 'accent', 'destructive'],
+      table: { type: { summary: "'primary' | 'accent' | 'destructive'" }, defaultValue: { summary: "'primary'" } },
+    },
+    validationState: {
+      description: '`error` sets `aria-invalid`, draws a red edge inside the track and turns the helper red; `success` turns the helper green.',
+      control: 'inline-radio',
+      options: ['default', 'success', 'error'],
+      table: { type: { summary: "'default' | 'success' | 'error'" }, defaultValue: { summary: "'default'" } },
+    },
+    name: {
+      description: 'Submitted with a form, when on.',
+      control: 'text',
+      table: { type: { summary: 'string' } },
+    },
+    value: {
+      description: 'Submitted under `name` when on, like a checkbox.',
+      control: 'text',
+      table: { type: { summary: 'string' }, defaultValue: { summary: "'on'" } },
+    },
+    disabled: {
+      description: 'Dimmed, and cannot be changed.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    required: {
+      description: 'Must be on to submit. Adds an asterisk to the label.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    readOnly: {
+      description: 'Focusable and submitted, but cannot be changed.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
   },
   args: { label: 'Email notifications', onCheckedChange: fn() },
+  excludeStories: ['anatomyParts'],
 } satisfies Meta<typeof Switch>
 
 export default meta
@@ -161,4 +229,43 @@ export const InAForm: Story = {
     const data = new FormData(canvasElement.querySelector('form')!)
     await expect(data.get('notify')).toBe('on')
   },
+}
+
+/** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
+export const anatomyParts = [
+  { name: 'Track', selector: '[role="switch"]', description: 'The pill: `--control-border` when off, the variant’s solid when on.' },
+  { name: 'Thumb', selector: '[role="switch"] > span', description: 'Slides to the end when on.' },
+  { name: 'Label', selector: 'label > span:last-child', description: 'Names the setting. Part of the click target.' },
+  { name: 'Helper text', selector: 'p', description: 'Optional. Indented under the label; the error message in the error state.' },
+]
+
+/** Every part present. */
+export const Anatomy: Story = {
+  tags: ['!dev'],
+  args: { defaultChecked: true, helperText: 'A summary once a day, never more.' },
+  play: async ({ canvasElement }) => {
+    // The docs markers follow these selectors.
+    const found = anatomyParts.map(({ selector }) => canvasElement.querySelector(selector))
+    await expect(found.every(Boolean)).toBe(true)
+    await expect(new Set(found).size).toBe(anatomyParts.length)
+    await expect(found[2]).toHaveTextContent('Email notifications')
+  },
+}
+
+/** Guidelines, Do: a switch applies the setting the moment it is flipped. */
+export const DoApplyAtOnce: Story = {
+  args: { label: 'Dark mode', defaultChecked: true },
+}
+
+/** Guidelines, Don't: a switch that waits for a Save button. */
+export const DontWaitForSave: Story = {
+  tags: ['!dev'],
+  render: (args) => (
+    <form aria-label="Preferences" style={stack} onSubmit={(e) => e.preventDefault()}>
+      <Switch {...args} label="Dark mode" defaultChecked />
+      <Button type="submit" size="sm">
+        Save
+      </Button>
+    </form>
+  ),
 }

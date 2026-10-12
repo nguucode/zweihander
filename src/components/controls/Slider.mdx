@@ -1,72 +1,179 @@
-import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
+import { Slider } from './Slider'
 import * as SliderStories from './Slider.stories'
 
 <Meta of={SliderStories} />
 
 # Slider
 
+<DocTabs>
+<DocTab value="overview">
+
 Picks a number, or a range, by dragging along a track: volume, a price
-range, a brush size. Spec:
-[uiguideline.com/components/slider](https://www.uiguideline.com/components/slider).
-Behaviour from Base UI's [Slider](https://base-ui.com/react/components/slider).
+range, a brush size.
 
-<Canvas of={SliderStories.Range} />
-
-## Anatomy
-
-| Part | What it is |
-| --- | --- |
-| **Label** | Optional, medium weight. Names a single thumb. |
-| **Value** | Optional, after the label: the value or range, formatted, in tabular figures. |
-| **Track** | `--secondary`, 6px (4px at `sm`), pill-ended. |
-| **Indicator** | The filled part, `--primary-text`. |
-| **Thumb** | 20px (16px at `sm`): `--background` with a 2px `--primary-text` ring. One per value. |
-
-## Props
-
-| Prop | Values | Default | |
-| --- | --- | --- | --- |
-| `value`, `defaultValue` | number, or `[number, number]` | `min` | An array makes it a range. |
-| `onValueChange` | function | – | While dragging. |
-| `onValueCommitted` | function | – | Once, on release. Use it for anything expensive. |
-| `min`, `max`, `step` | number | `0`, `100`, `1` | |
-| `largeStep` | number | `10` | Page Up / Page Down, Shift+arrows. |
-| `label` | node | – | |
-| `showValue` | boolean | `false` | |
-| `format` | `Intl.NumberFormatOptions` | – | E.g. currency, percent. |
-| `thumbLabels` | string[] | – | A name per thumb, for a range. |
-| `size` | `sm`, `md` | `md` | |
-| `orientation` | `horizontal`, `vertical` | `horizontal` | |
-| `disabled` | boolean | `false` | |
-| `name` | string | – | Submitted with a form. |
-| `aria-label` | string | – | The name when there is no visible `label`. |
-
-<Controls of={SliderStories.Default} />
-
-### Design notes
-
-- **The fill is a text colour**, as on Progress Bar: `--primary-text`
-  clears 3:1 on the `--secondary` track for every accent, where the
-  solid `--primary` does not.
-- **The whole 20px strip is the target**, not just the 6px track: a
-  press anywhere along it moves the nearest thumb there.
-- **Disabled dims the control, not the words.** The label turns
-  `--muted-foreground` and the value stays readable.
-
-## Usage
+<Status of={SliderStories} />
 
 <Canvas of={SliderStories.Default} />
 
-<Canvas of={SliderStories.Steps} />
+## Variants
+
+One value or two: a `defaultValue` (or `value`) that is an array of two
+makes a range, with a thumb at each end.
+
+<Canvas of={SliderStories.Range} />
+
+| Size | Use for |
+| --- | --- |
+| `md` | The default: a 20px thumb on a 6px track. |
+| `sm` | Dense panels and toolbars: a 16px thumb on a 4px track, 12px label. |
 
 <Canvas of={SliderStories.Small} />
 
+<Canvas of={SliderStories.Steps} />
+
 <Canvas of={SliderStories.Vertical} />
 
-<Canvas of={SliderStories.Disabled} />
+## Resources
 
-A slider is quick but imprecise. When the exact number matters (a price,
-a quantity), pair it with a Number Input or use one instead.
+From npm, or copied into your project through the registry:
+
+```js
+import { Slider } from 'zweihander/slider'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/slider.json
+```
+
+- Source: [src/components/controls/Slider.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/controls/Slider.tsx)
+- Spec: [uiguideline.com/components/slider](https://www.uiguideline.com/components/slider)
+- Behaviour: [Base UI Slider](https://base-ui.com/react/components/slider)
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
+## Anatomy
+
+<Anatomy parts={SliderStories.anatomyParts}>
+  <Story of={SliderStories.Anatomy} />
+</Anatomy>
+
+The control strip is as tall as the thumb, so the whole strip is the
+target, not just the track: a press anywhere along it moves the nearest
+thumb there.
+
+## Measurements
+
+<SpecTable
+  caption="sm"
+  rows={[
+    { part: 'Track', property: 'Thickness', token: '--space-1' },
+    { part: 'Thumb', property: 'Size', token: '--space-4' },
+    { part: 'Label and value', property: 'Font size', token: '--text-body-sm' },
+    { part: 'Label and value', property: 'Line height', token: '--leading-body-sm' },
+  ]}
+/>
+
+<SpecTable
+  caption="md"
+  rows={[
+    { part: 'Track', property: 'Thickness', token: '--space-1-5' },
+    { part: 'Thumb', property: 'Size', token: '--control-xs' },
+    { part: 'Label and value', property: 'Font size', token: '--text-body' },
+    { part: 'Label and value', property: 'Line height', token: '--leading-body' },
+  ]}
+/>
+
+<SpecTable
+  caption="Every size"
+  rows={[
+    { part: 'Track and thumb', property: 'Corner radius', token: '--radius-pill' },
+    { part: 'Thumb', property: 'Shadow', token: '--shadow-xs' },
+    { part: 'Label', property: 'Gap above the track', token: '--space-2' },
+    { part: 'Label', property: 'Gap to the value', token: '--space-3' },
+    { part: 'Focus ring', property: 'Width', token: '--focus-width' },
+    { part: 'Focus ring', property: 'Offset', token: '--focus-offset' },
+    { part: 'Hit area', property: 'Minimum on touch screens', token: '--target-coarse' },
+  ]}
+/>
+
+The thumb has a 2px ring. A vertical slider is 12rem tall.
+
+## Color
+
+<SpecTable
+  rows={[
+    { part: 'Track', property: 'Background', token: '--secondary' },
+    { part: 'Indicator', property: 'Background', token: '--primary-text' },
+    { part: 'Thumb', property: 'Background', token: '--background' },
+    { part: 'Thumb', property: 'Ring', token: '--primary-text' },
+    { part: 'Label', property: 'Colour', token: '--foreground' },
+    { part: 'Value', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Label, disabled', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+  ]}
+/>
+
+The fill is a text colour, as on Progress Bar: `--primary-text` clears
+3:1 on the `--secondary` track for every accent, where the solid
+`--primary` does not.
+
+## States
+
+<States
+  states={[
+    { label: 'Enabled' },
+    { label: 'Focus', pseudo: 'focus-visible' },
+    { label: 'Disabled', content: <Story of={SliderStories.Disabled} /> },
+  ]}
+>
+  <Slider label="Volume" defaultValue={40} showValue />
+</States>
+
+- **Focus** is a 2px `--ring` outline, 2px outside the thumb.
+- **Dragging** changes the cursor to a closed hand.
+- **Disabled** dims the track and thumbs to 50%. The label turns
+  `--muted-foreground` and the value stays as it was, so both still read
+  at 4.5:1: they are not a native `<label>`, so faded text would fail
+  contrast rather than be exempt as part of a disabled control.
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={SliderStories} />
+</div>
+
+`className` passes through to the root.
+
+</DocTab>
+<DocTab value="guidelines">
+
+## When to use
+
+Use a slider when an approximate value is fine and seeing it change helps:
+volume, brightness, a price range to filter by. Show the value with
+`showValue` so the reader knows where they landed.
+
+<DoDont
+  do={<Story of={SliderStories.DoApproximate} />}
+  doCaption="An approximate value, with the number shown as it moves."
+  dont={<Story of={SliderStories.DontExactNumber} />}
+  dontCaption="An exact figure on a long scale: 137 out of 500 is fiddly to hit by dragging. Use a Number Input."
+/>
+
+## When not to use
+
+- **For an exact number** (a price, a quantity). Use a Number Input, or
+  pair one with the slider.
+- **For a few named options.** Use a
+  [Radio](?path=/docs/components-controls-radio--docs) group, so each
+  option says what it means.
+- **For a score out of five.** Use a
+  [Rating](?path=/docs/components-controls-rating--docs).
 
 ## Accessibility
 
@@ -77,7 +184,10 @@ a quantity), pair it with a Number Input or use one instead.
   `thumbLabels` so each thumb says which end it is.
 - Keyboard: arrows move by `step`, Page Up / Page Down and Shift+arrows
   by `largeStep`, Home and End jump to `min` and `max`.
-- Thumbs keep their 20px size and grow a 44px hit area on coarse
-  pointers.
+- The fill clears 3:1 on the track for every accent.
+- Thumbs keep their size and grow a 44px hit area on coarse pointers.
 
 <Canvas of={SliderStories.WithoutVisibleLabel} />
+
+</DocTab>
+</DocTabs>

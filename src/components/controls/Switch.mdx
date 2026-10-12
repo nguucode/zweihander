@@ -1,43 +1,193 @@
-import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
+import { Switch } from './Switch'
 import * as SwitchStories from './Switch.stories'
 
 <Meta of={SwitchStories} />
 
 # Switch
 
-Turns a setting on or off, taking effect immediately. Spec:
-[uiguideline.com/components/switch](https://www.uiguideline.com/components/switch).
-Behaviour from Base UI's [Switch](https://base-ui.com/react/components/switch)
-and [Field](https://base-ui.com/react/components/field).
+<DocTabs>
+<DocTab value="overview">
+
+Turns a setting on or off, taking effect immediately.
+
+<Status of={SwitchStories} />
+
+<Canvas of={SwitchStories.Default} />
+
+## Variants
+
+`variant` is the colour of the on state. Off is the same in every variant.
 
 <Canvas of={SwitchStories.Variants} />
 
+| Variant | Use for |
+| --- | --- |
+| <Switch defaultChecked label="Primary" /> | The default: most settings. |
+| <Switch variant="accent" defaultChecked label="Accent" /> | Neutral black or white, where the brand colour would clash or already means something else. |
+| <Switch variant="destructive" defaultChecked label="Destructive" /> | A setting that is risky to leave on: public sharing, deleting old data automatically. |
+
+<Canvas of={SwitchStories.Sizes} />
+
+<Canvas of={SwitchStories.Validation} />
+
+## Resources
+
+From npm, or copied into your project through the registry:
+
+```js
+import { Switch } from 'zweihander/switch'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/switch.json
+```
+
+- Source: [src/components/controls/Switch.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/controls/Switch.tsx)
+- Spec: [uiguideline.com/components/switch](https://www.uiguideline.com/components/switch)
+- Behaviour: [Base UI Switch](https://base-ui.com/react/components/switch) and [Field](https://base-ui.com/react/components/field)
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
 ## Anatomy
 
-| Part | What it is |
-| --- | --- |
-| **Track** | The pill. `--control-border` when off, the variant's solid when on. |
-| **Thumb** | Slides to the end when on. The page colour off, the variant's label colour on. |
-| **Label** | `label`. Clicking it toggles the switch. |
-| **Helper text** | `helperText`, indented under the label. The error message when `validationState` is error. |
+<Anatomy parts={SwitchStories.anatomyParts}>
+  <Story of={SwitchStories.Anatomy} />
+</Anatomy>
 
-## Props
+The label wraps the track, so the whole label is part of the click target.
 
-| Prop | Values | Default | |
-| --- | --- | --- | --- |
-| `checked` | boolean | – | Controlled. |
-| `defaultChecked` | boolean | `false` | The spec's `defaultValue`. |
-| `onCheckedChange` | `(checked) => void` | – | The spec's `onChange`. |
-| `label` | node | – | |
-| `helperText` | node | – | Not in the spec's list; see below. |
-| `name` | string | – | |
-| `value` | string | `"on"` | Submitted under `name` when on. |
-| `size` | `sm`, `md`, `lg` | `md` | Track 28×16, 36×20, 44×24px. |
-| `variant` | `primary`, `accent`, `destructive` | `primary` | Colour of the on state. |
-| `disabled`, `required`, `readOnly` | boolean | `false` | |
-| `validationState` | `default`, `success`, `error` | `default` | |
+## Measurements
 
-<Controls of={SwitchStories.Default} />
+Track heights are 16, 20 and 24px; `md` and `lg` are control tiers xs and
+sm (Foundations / Sizing). Each track is about one and three quarter
+heights wide, so the thumb travels most of a thumb-width. The thumb sits
+2px inside the track at every size.
+
+<SpecTable
+  caption="sm, 28×16px"
+  rows={[
+    { part: 'Track', property: 'Height', token: '--space-4' },
+    { part: 'Track', property: 'Width, plus 4px', token: '--space-6' },
+  ]}
+/>
+
+<SpecTable
+  caption="md, 36×20px"
+  rows={[
+    { part: 'Track', property: 'Height', token: '--control-xs' },
+    { part: 'Track', property: 'Width, plus 4px', token: '--space-8' },
+  ]}
+/>
+
+<SpecTable
+  caption="lg, 44×24px"
+  rows={[
+    { part: 'Track', property: 'Height', token: '--control-sm' },
+    { part: 'Track', property: 'Width, plus 4px', token: '--space-10' },
+  ]}
+/>
+
+<SpecTable
+  caption="Every size"
+  rows={[
+    { part: 'Track and thumb', property: 'Corner radius', token: '--radius-pill' },
+    { part: 'Label', property: 'Gap from the track', token: '--space-2' },
+    { part: 'Label', property: 'Font size', token: '--text-body' },
+    { part: 'Label', property: 'Line height', token: '--leading-body' },
+    { part: 'Helper text', property: 'Gap from the label', token: '--space-1' },
+    { part: 'Thumb', property: 'Slide duration', token: '--duration-base' },
+    { part: 'Focus ring', property: 'Width', token: '--focus-width' },
+    { part: 'Focus ring', property: 'Offset', token: '--focus-offset' },
+    { part: 'Hit area', property: 'Minimum on touch screens', token: '--target-coarse' },
+  ]}
+/>
+
+## Color
+
+Off is a `--control-border` track (3:1 on the page, so the control is
+visible at all) with a page-coloured thumb. On takes the variant's solid,
+and the thumb its label colour, measured at 4.5:1 against it.
+
+<SpecTable
+  caption="Off, every variant"
+  rows={[
+    { part: 'Track', property: 'Background', token: '--control-border' },
+    { part: 'Thumb', property: 'Background', token: '--background' },
+  ]}
+/>
+
+<SpecTable
+  caption="primary, on"
+  rows={[
+    { part: 'Track', property: 'Background', token: '--primary' },
+    { part: 'Thumb', property: 'Background', token: '--primary-foreground' },
+  ]}
+/>
+
+<SpecTable
+  caption="accent, on"
+  rows={[
+    { part: 'Track', property: 'Background', token: '--foreground' },
+    { part: 'Thumb', property: 'Background', token: '--background' },
+  ]}
+/>
+
+<SpecTable
+  caption="destructive, on"
+  rows={[
+    { part: 'Track', property: 'Background', token: '--destructive' },
+    { part: 'Thumb', property: 'Background', token: '--destructive-foreground' },
+  ]}
+/>
+
+<SpecTable
+  caption="Every variant"
+  rows={[
+    { part: 'Label', property: 'Colour', token: '--foreground' },
+    { part: 'Helper text', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Track, error', property: 'Inner edge', token: '--danger-text' },
+    { part: 'Helper text, error', property: 'Colour', token: '--danger-text' },
+    { part: 'Helper text, success', property: 'Colour', token: '--success-text' },
+    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+  ]}
+/>
+
+## States
+
+<States
+  states={[
+    { label: 'Off' },
+    { label: 'On', content: <Switch defaultChecked label="Email notifications" /> },
+    { label: 'Focus', pseudo: 'focus-visible' },
+    { label: 'Disabled', content: <Switch disabled defaultChecked label="Email notifications" /> },
+    { label: 'Error', content: <Switch validationState="error" label="Email notifications" /> },
+  ]}
+>
+  <Story of={SwitchStories.Default} />
+</States>
+
+- **Hover** changes only the cursor: the track has no lighter or darker
+  step to move to without losing its 3:1.
+- **Focus** is a 2px `--ring` outline, 2px outside the track.
+- **Disabled** dims the track and the label to 50%.
+- **Error** draws a 2px `--danger-text` edge inside the track, so it reads
+  on and off alike and leaves the band outside to the focus ring.
+- **Read-only** looks enabled, with an arrow cursor.
+- The thumb slides over `--duration-base`, and stops animating under
+  `prefers-reduced-motion`.
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={SwitchStories} />
+</div>
+
+`id`, `className`, `aria-label` and `ref` pass through to the track.
 
 ### Differences from the spec
 
@@ -47,25 +197,45 @@ and [Field](https://base-ui.com/react/components/field).
 - **`helperText` is added.** `validationState="error"` needs somewhere to
   say what is wrong; colour alone is not a message.
 
-## Usage
+</DocTab>
+<DocTab value="guidelines">
 
-A switch acts at once, like a light switch. If the choice only applies
-when a form is submitted, use a [Checkbox](?path=/docs/components-controls-checkbox--docs).
+## When to use
 
-<Canvas of={SwitchStories.Sizes} />
+Use a switch for a setting that takes effect the moment it is flipped,
+like a light switch: dark mode, notifications, auto-save.
 
-<Canvas of={SwitchStories.Validation} />
+<DoDont
+  do={<Story of={SwitchStories.DoApplyAtOnce} />}
+  doCaption="The setting applies as soon as the switch moves."
+  dont={<Story of={SwitchStories.DontWaitForSave} />}
+  dontCaption="A switch that waits for Save looks done when it is not. Use a checkbox in a form."
+/>
+
+<Canvas of={SwitchStories.Controlled} />
+
+## When not to use
+
+- **For a choice submitted with a form.** Use a
+  [Checkbox](?path=/docs/components-controls-checkbox--docs).
+- **For more than two options.** Use a
+  [Radio](?path=/docs/components-controls-radio--docs) group or a Select.
+- **For a toggle in a toolbar** (Bold, a filter). Use a
+  [Toggle Button](?path=/docs/components-buttons-togglebutton--docs).
 
 ## Accessibility
 
-- `role="switch"` with `aria-checked`; Space toggles it. The label wraps
-  the control, so it names it and clicking it toggles it.
+- `role="switch"` with `aria-checked`; Space toggles it.
+- The label wraps the control, so it names it and clicking it toggles it.
+- `helperText` is the switch's description (`aria-describedby`); in the
+  error state the switch has `aria-invalid`.
 - The off track is `--control-border`, measured at 3:1 on the page on
   every gray ramp; the thumb is 4.5:1 or more against its track in both
   states.
-- `helperText` is the switch's description (`aria-describedby`); in the
-  error state the switch has `aria-invalid`.
 - A hidden `<input type="checkbox">` carries `name`, `value` and
   `required` into native form submission and validation.
-- 44×44px touch target on coarse pointers; the thumb stops animating
-  under `prefers-reduced-motion`.
+- On is the end side: in a right-to-left page the thumb travels left.
+- 44×44px touch target on coarse pointers.
+
+</DocTab>
+</DocTabs>

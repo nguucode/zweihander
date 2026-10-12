@@ -1,103 +1,231 @@
-import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
+import { ColorPicker } from './ColorPicker'
 import * as ColorPickerStories from './ColorPicker.stories'
 
 <Meta of={ColorPickerStories} />
 
 # Color Picker
 
-Choose a colour: type it in any CSS format, pick from a set of swatches, find it on
-a saturation/brightness area and hue strip, or type its channels in Hex, RGB, HSL or HSB. The panel is laid out like
-Figma's colour picker. Spec:
-[uiguideline.com/components/color-picker](https://www.uiguideline.com/components/color-picker).
-Two exports: `ColorPicker`, a text field with a swatch button that opens
-the picker in a Base UI Popover, and `ColorPanel`, the picker on its own.
+<DocTabs>
+<DocTab value="overview">
 
-<Canvas of={ColorPickerStories.Swatches} />
+Chooses a colour: type it in any CSS format, pick a swatch, find it on a
+saturation and brightness area and a hue strip, or type its channels in
+Hex, RGB, HSL or HSB. The panel is laid out like Figma's colour picker.
+
+<Status of={ColorPickerStories} />
+
+<Canvas of={ColorPickerStories.Default} />
+
+## Variants
+
+Two exports.
+
+| Export | Use for |
+| --- | --- |
+| `ColorPicker` | A form field: the hex in a text field, with a swatch button that opens the panel in a popover. |
+| `ColorPanel` | The panel on its own, always open: a sidebar, an inspector, a settings page about colour. |
+
+<Canvas of={ColorPickerStories.Panel} />
+
+`alpha` adds opacity; `defaultFormat` picks which channels the fields show
+first.
+
+<Canvas of={ColorPickerStories.FormatsAndOpacity} />
+
+## Resources
+
+From npm, or copied into your project through the registry:
+
+```js
+import { ColorPicker, ColorPanel } from 'zweihander/color-picker'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/color-picker.json
+```
+
+- Source: [src/components/controls/ColorPicker.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/controls/ColorPicker.tsx)
+- Spec: [uiguideline.com/components/color-picker](https://www.uiguideline.com/components/color-picker)
+- Behaviour: [Base UI Popover](https://base-ui.com/react/components/popover) and [Slider](https://base-ui.com/react/components/slider)
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
 
 ## Anatomy
 
-| Part | What it is |
-| --- | --- |
-| **Field** | A text field holding the hex, with the label, helper and validation of every Zweihänder field. Reads any CSS colour. |
-| **Swatch button** | At the start of the field, filled with the current colour. Opens the panel. |
-| **Area** | Saturation left to right, brightness bottom to top, in the current hue. |
-| **Hue strip** | A slider round the colour wheel, 0 to 359 degrees. |
-| **Opacity strip** | 0 to 100%, over a checkerboard. Hidden with `alpha={false}`. |
-| **Format menu** | The kit's Select (md, 32px): Hex, RGB, HSL or HSB, which channel fields follow it. |
-| **Channel fields** | One kit field box (md, 32px): the hex, or three numbers, then opacity in %. |
-| **Swatches** | Optional presets under a divider, with a black 10% inner edge (white 10% in dark). The chosen one has a ring in the brand colour (`--primary`). |
+<Anatomy parts={ColorPickerStories.anatomyParts}>
+  <Story of={ColorPickerStories.Anatomy} />
+</Anatomy>
 
-## Props
+The panel here is shown open under its field; in a `ColorPicker` it opens
+in a popover from the swatch button.
 
-`ColorPicker`:
+## Measurements
 
-| Prop | Values | Default | |
-| --- | --- | --- | --- |
-| `value` | `#rrggbb` \| `#rrggbbaa` | – | Controlled. |
-| `defaultValue` | `#rrggbb` | `#3b82f6` | |
-| `onValueChange` | `(hex) => void` | – | On every change: typing (once committed), dragging, keys, swatches. |
-| `alpha` | boolean | `true` | Show opacity. Off, any alpha in the value is dropped and the value is always `#rrggbb`. |
-| `defaultFormat` | `'hex' \| 'rgb' \| 'hsl' \| 'hsb'` | `'hex'` | The channel fields' format on first open. |
-| `swatches` | `(string \| { value, label })[]` | – | A plain string is named by its hex; give brand colours a `label`. |
-| `label`, `helperText`, `validationState`, `size`, `isFullWidth`, `required`, `disabled` | | | As Text Input. `required` is set on the hex input. |
-| `name` | string | – | Submits the hex. |
+The field is a Text Input: the same tiers, padding and label. The panel is
+the same at both field sizes.
+
+<SpecTable
+  caption="Field, sm"
+  rows={[
+    { part: 'Field', property: 'Height', token: '--control-sm' },
+    { part: 'Field', property: 'Corner radius', token: '--control-sm-radius-field' },
+  ]}
+/>
+
+<SpecTable
+  caption="Field, md"
+  rows={[
+    { part: 'Field', property: 'Height', token: '--control-md' },
+    { part: 'Field', property: 'Corner radius', token: '--control-md-radius-field' },
+  ]}
+/>
+
+<SpecTable
+  caption="Panel"
+  rows={[
+    { part: 'Swatch button', property: 'Size', token: '--control-xs' },
+    { part: 'Swatch button and swatches', property: 'Corner radius', token: '--radius-sm' },
+    { part: 'Popover', property: 'Padding', token: '--space-3' },
+    { part: 'Popover', property: 'Corner radius', token: '--radius-panel' },
+    { part: 'Panel', property: 'Gap between sections', token: '--space-3' },
+    { part: 'Area', property: 'Corner radius', token: '--radius-md' },
+    { part: 'Hue and opacity strips', property: 'Thickness', token: '--space-3' },
+    { part: 'Hue and opacity strips', property: 'Gap between them', token: '--space-1' },
+    { part: 'Thumbs', property: 'Size', token: '--space-4' },
+    { part: 'Format menu and channel fields', property: 'Gap', token: '--space-2' },
+    { part: 'Swatches', property: 'Minimum size', token: '--space-6' },
+    { part: 'Swatches', property: 'Gap', token: '--space-2' },
+    { part: 'Focus ring', property: 'Width', token: '--focus-width' },
+    { part: 'Focus ring', property: 'Offset', token: '--focus-offset' },
+    { part: 'Hit area, strip thumbs', property: 'Minimum on touch screens', token: '--target-coarse' },
+  ]}
+/>
+
+The panel is 16rem wide, so eight swatches fit in a row, and the area is
+10rem tall. The format menu and the channels are the kit's md (32px)
+Select and field box.
+
+## Color
+
+The area, the hue strip and the checkerboard are the colour model itself,
+so they are fixed colours, not theme tokens. The thumbs are white rings
+with a dark edge: one of the two is at least 3:1 against whatever colour
+is under them.
+
+<SpecTable
+  rows={[
+    { part: 'Popover', property: 'Background', token: '--popover' },
+    { part: 'Popover', property: 'Text', token: '--popover-foreground' },
+    { part: 'Popover and swatch divider', property: 'Border', token: '--border' },
+    { part: 'Popover', property: 'Shadow', token: '--shadow-md' },
+    { part: 'Swatch button', property: 'Inner edge', token: '--control-border' },
+    { part: 'Chosen swatch', property: 'Ring', token: '--primary' },
+    { part: 'Channel fields', property: 'Divider', token: '--border' },
+    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+  ]}
+/>
+
+Swatches have a faint inner edge, black 10% in light mode and white 10%
+in dark, as in Figma. That is below the 3:1 of WCAG 1.4.11 round a white
+swatch on white, accepted because the hex in the field, not the edge,
+tells the colour.
+
+## States
+
+<States
+  states={[
+    { label: 'Enabled' },
+    { label: 'Focus', pseudo: 'focus-visible' },
+    { label: 'Disabled', content: <ColorPicker label="Brand colour" disabled /> },
+    { label: 'Error', content: <ColorPicker label="Brand colour" validationState="error" helperText="Pick a darker colour." /> },
+  ]}
+>
+  <ColorPicker label="Brand colour" />
+</States>
+
+- **Focus** follows Text Input on the field. In the panel every thumb,
+  swatch and field draws a 2px `--ring` outline, 2px outside.
+- **Disabled** dims the field and disables the swatch button.
+- **Error** is Text Input's. Typed text that is not a colour turns the
+  field to error on its own, with a hint, and keeps the last good value.
+- **Chosen swatch** has a 2px `--primary` ring; focused as well, the ring
+  turns `--ring` and moves 1px further out.
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={ColorPickerStories} />
+</div>
 
 `ColorPanel` takes `value`, `defaultValue`, `onValueChange`, `alpha`,
 `defaultFormat`, `swatches`, `disabled` and `className`.
 
-`parseColor(text)` reads any CSS colour (`rgb(59 130 246)`, `hsl(217 91% 60% / 50%)`,
-`oklch(...)`, `rebeccapurple`) to the same hex, or `null`; the browser
-parses it, so outside one only hex is read. `normalizeHex(text)` is exported too: it turns `#abc`, `ABC` or `#AABBCC`
-into `#aabbcc`, keeps an alpha byte (`#3b82f680`, or `#abc8` as
-`#aabbcc88`) unless it is `ff`, and turns anything else into `null`.
-
-<Controls of={ColorPickerStories.Default} />
+`parseColor(text)` reads any CSS colour (`rgb(59 130 246)`,
+`hsl(217 91% 60% / 50%)`, `oklch(...)`, `rebeccapurple`) to the same hex,
+or `null`; the browser parses it, so outside one only hex is read.
+`normalizeHex(text)` turns `#abc`, `ABC` or `#AABBCC` into `#aabbcc`,
+keeps an alpha byte (`#3b82f680`, or `#abc8` as `#aabbcc88`) unless it is
+`ff`, and turns anything else into `null`.
 
 ### Design notes
 
 - **Hex in, hex out.** The value is lowercase `#rrggbb`, with an alpha
-  byte (`#rrggbbaa`) only while opacity is under 100%, so opaque colours
-  read as before. Typed text is read on Enter or blur: hex of 3, 4, 6 or 8
-  digits with or without `#`, or any CSS colour, `rgb()`, `hsl()`,
-  `oklch()` or a name. It is shown back as hex. Anything else shows a
-  hint and keeps the last good value. The Hex channel in the panel reads
-  the same.
+  byte only while opacity is under 100%. Typed text is read on Enter or
+  blur: hex of 3, 4, 6 or 8 digits with or without `#`, or any CSS colour.
+  It is shown back as hex.
 - **Formats are a view, not a value.** RGB, HSL and HSB only change the
   fields; the value stays hex. Channel fields commit on Enter or blur, and
-  up/down step by 1 (Shift by 10), as in a design tool.
-- **The hue is remembered.** Internally the picker keeps hue, saturation
-  and brightness. Drag to black and back and the hue strip stays where it
-  was, instead of jumping to red as a hex round trip would.
-- **Swatch edges are faint by choice.** Black 10%, as Figma: below the
-  3:1 of WCAG 1.4.11 round a white swatch on white, accepted because the
-  hex in the field, not the edge, tells the colour.
+  up and down step by 1 (Shift by 10), as in a design tool.
+- **The hue is remembered.** The picker keeps hue, saturation and
+  brightness, so dragging to black and back leaves the hue strip where it
+  was instead of jumping to red.
 - **Not in this version:** Figma's library picker ("On this page"),
   gradients and an eyedropper.
-- **Thumbs read on any colour.** A white ring with a dark edge: one of
-  the two is at least 3:1 against whatever is under it.
 
-## Usage
+</DocTab>
+<DocTab value="guidelines">
 
-<Canvas of={ColorPickerStories.Default} />
+## When to use
 
-<Canvas of={ColorPickerStories.FormatsAndOpacity} />
+Use a colour picker when any colour is a valid answer: a brand colour, a
+chart series, a label someone defines. When there is a palette to follow,
+offer it as named swatches.
 
-<Canvas of={ColorPickerStories.Panel} />
+<DoDont
+  do={<Story of={ColorPickerStories.DoBrandSwatches} />}
+  doCaption="The colours people should use, as named swatches: one click, and a screen reader says “Blue”, not a hex."
+  dont={<Story of={ColorPickerStories.DontNoSwatches} />}
+  dontCaption="A palette to follow but no swatches: people match it by eye and land a few steps off."
+/>
 
-<Canvas of={ColorPickerStories.Disabled} />
+<Canvas of={ColorPickerStories.Swatches} />
+
+## When not to use
+
+- **For a few fixed colours.** When only a set of colours is allowed (tag
+  colours, a theme accent), use a
+  [Radio](?path=/docs/components-controls-radio--docs) group of swatches or
+  a Select: the picker lets anyone type any colour.
+- **To show a colour.** Use a swatch and its hex as text.
 
 ## Accessibility
 
-- The field is a text input named by its label; the swatch button is
-  named "Choose colour, #3b82f6 selected", and the popup is a dialog
+- The field is a text input named by its label. The swatch button is
+  named "Choose colour, #3b82f6 selected", and the popover is a dialog
   named "Choose colour" that returns focus to the button on Escape.
 - The area is one tab stop: a slider named "Saturation" whose value text
   reads both numbers ("Saturation 76%, brightness 96%"). Left and right
-  change saturation, up and down brightness, Shift moves 10%, Page Up/Down
-  change brightness by 10%, Home and End set saturation to 0 or 100%.
-  A second "Brightness" slider is there for a screen reader's browse mode.
-- The hue strip is a Base UI slider named "Hue", read as "217 degrees";
-  the opacity strip, "Opacity", read as "50%".
+  change saturation, up and down brightness, Shift moves 10%, Page Up and
+  Page Down change brightness by 10%, Home and End set saturation to 0 or
+  100%. A second "Brightness" slider is there for a screen reader's
+  browse mode.
+- The hue strip is a slider named "Hue", read as "217 degrees"; the
+  opacity strip, "Opacity", read as "50%".
 - The format menu is the kit's Select, named "Colour format". Channel
   fields are text inputs named for what they hold ("Red", "Hue degrees",
   "Lightness percent", "Opacity percent", "Hex"), so they do not share a
@@ -105,7 +233,9 @@ into `#aabbcc`, keeps an alpha byte (`#3b82f680`, or `#abc8` as
 - Swatches are native radios in a radio group named "Swatches": one tab
   stop, arrows move and choose, and the chosen one is checked. None is
   checked while the colour is not one of them. They are 24px with 8px
-  between them, which meets WCAG 2.5.8 without an invisible larger
-  target.
+  between them, which meets WCAG 2.5.8 without a larger invisible target.
 - A colour is never the only way to know the value: the hex is always in
   the field.
+
+</DocTab>
+</DocTabs>

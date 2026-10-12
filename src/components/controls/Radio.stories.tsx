@@ -13,12 +13,79 @@ const meta = {
   title: 'Components/Controls/Radio',
   tags: ['beta'],
   component: RadioGroup,
+  // These descriptions are the docs' API table and the Playground's props panel.
   argTypes: {
-    variant: { control: 'inline-radio', options: ['primary', 'neutral'] },
-    orientation: { control: 'inline-radio', options: ['vertical', 'horizontal'] },
-    validationState: { control: 'inline-radio', options: ['default', 'success', 'error'] },
+    options: {
+      description: 'The radios, in order. Each `label` names its radio; `helperText` describes it; `disabled` skips it.',
+      control: false,
+      table: { type: { summary: '{ value: string; label: ReactNode; helperText?: ReactNode; disabled?: boolean }[]' } },
+    },
+    label: {
+      description: "The group's legend: names the radiogroup.",
+      control: 'text',
+      table: { type: { summary: 'ReactNode' } },
+    },
+    helperText: {
+      description: 'Under the whole group. The error message when `validationState` is `error`, and then on every radio.',
+      control: 'text',
+      table: { type: { summary: 'ReactNode' } },
+    },
+    value: {
+      description: 'Controlled selection: the chosen option’s `value`. Pair with `onValueChange`.',
+      control: 'text',
+      table: { type: { summary: 'string' } },
+    },
+    defaultValue: {
+      description: 'Starting selection when uncontrolled. None selected when left out.',
+      control: 'text',
+      table: { type: { summary: 'string' } },
+    },
+    onValueChange: {
+      description: 'Called with the new value on click and arrow keys.',
+      control: false,
+      table: { type: { summary: '(value: string) => void' } },
+    },
+    variant: {
+      description: 'Colour of the selected radio: `neutral` (the foreground) or `primary` (the accent).',
+      control: 'inline-radio',
+      options: ['primary', 'neutral'],
+      table: { type: { summary: "'primary' | 'neutral'" }, defaultValue: { summary: "'neutral'" } },
+    },
+    orientation: {
+      description: 'Stacked or in a row that wraps. Layout only: arrow keys work either way.',
+      control: 'inline-radio',
+      options: ['vertical', 'horizontal'],
+      table: { type: { summary: "'vertical' | 'horizontal'" }, defaultValue: { summary: "'vertical'" } },
+    },
+    validationState: {
+      description: '`error` sets `aria-invalid` on every radio, turns the outlines and the group message red; `success` turns the message green.',
+      control: 'inline-radio',
+      options: ['default', 'success', 'error'],
+      table: { type: { summary: "'default' | 'success' | 'error'" }, defaultValue: { summary: "'default'" } },
+    },
+    name: {
+      description: 'Submitted with a form, with the selected value.',
+      control: 'text',
+      table: { type: { summary: 'string' } },
+    },
+    disabled: {
+      description: 'Every radio dimmed, and the selection cannot change.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    required: {
+      description: 'One must be selected to submit. Adds an asterisk to the legend.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    readOnly: {
+      description: 'Focusable and submitted, but the selection cannot change.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
   },
   args: { label: 'Plan', options: plans, onValueChange: fn() },
+  excludeStories: ['anatomyParts'],
 } satisfies Meta<typeof RadioGroup>
 
 export default meta
@@ -143,5 +210,59 @@ export const InAForm: Story = {
   ),
   play: async ({ canvasElement }) => {
     await expect(new FormData(canvasElement.querySelector('form')!).get('plan')).toBe('pro')
+  },
+}
+
+/** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
+export const anatomyParts = [
+  { name: 'Legend', selector: '[role="radiogroup"] > :first-child', description: 'Names the group. Optional, but a group without one needs `aria-label`.' },
+  { name: 'Radio', selector: '[role="radio"]', description: 'The 20px circle: an outline when unselected.' },
+  { name: 'Dot', selector: '[role="radio"] > span', description: 'Shown in the selected radio, which fills with the variant.' },
+  { name: 'Option label', selector: 'label > span:last-child', description: 'Names its radio. Part of the click target.' },
+  { name: 'Option helper', selector: '[role="radiogroup"] p', description: 'Optional. Describes one option, indented under its label.' },
+  { name: 'Group helper', selector: '[role="radiogroup"] + p', description: 'Optional. Under the whole group; the error message in the error state.' },
+]
+
+/** Every part present, each option's label in its own element so the docs can point at it. */
+export const Anatomy: Story = {
+  tags: ['!dev'],
+  args: {
+    options: plans.map((p) => ({ ...p, label: <span>{p.label}</span> })),
+    defaultValue: 'pro',
+    helperText: 'You can change plans at any time.',
+  },
+  play: async ({ canvasElement }) => {
+    // The docs markers follow these selectors.
+    const found = anatomyParts.map(({ selector }) => canvasElement.querySelector(selector))
+    await expect(found.every(Boolean)).toBe(true)
+    await expect(new Set(found).size).toBe(anatomyParts.length)
+    await expect(found[0]).toHaveTextContent('Plan')
+    await expect(found[3]).toHaveTextContent('Free')
+  },
+}
+
+/** Guidelines, Do: a few options, all in view, the usual one selected. */
+export const DoFewOptions: Story = {
+  args: {
+    label: 'Delivery',
+    options: [
+      { value: 'standard', label: 'Standard' },
+      { value: 'express', label: 'Express' },
+      { value: 'pickup', label: 'Pick up in store' },
+    ],
+    defaultValue: 'standard',
+  },
+}
+
+/** Guidelines, Don't: a long list of radios belongs in a Select. */
+export const DontTooMany: Story = {
+  tags: ['!dev'],
+  args: {
+    label: 'Country',
+    orientation: 'horizontal',
+    options: ['Australia', 'Brazil', 'Canada', 'France', 'Germany', 'India', 'Japan', 'Mexico', 'Spain', 'Vietnam'].map((c) => ({
+      value: c,
+      label: c,
+    })),
   },
 }
