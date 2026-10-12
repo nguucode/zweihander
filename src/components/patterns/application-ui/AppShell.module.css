@@ -170,7 +170,7 @@
   position: fixed;
   inset: 0;
   z-index: var(--layer-overlay);
-  background: oklch(0% 0 0 / 50%);
+  background: var(--scrim);
   transition: opacity var(--duration-base);
 }
 .backdrop[data-starting-style],

@@ -177,6 +177,22 @@ for (const g of GRAYS) {
 }
 
 /**
+ * --neutral-solid is the gray counterpart of a hue's solid fill (a neutral
+ * solid Avatar), so its label needs 4.5:1 on every gray ramp the Theme can
+ * swap in, in both appearances.
+ */
+for (const g of GRAYS) {
+  for (const mode of ['light', 'dark']) {
+    const c = semantic.color[mode]
+    const gray = Object.fromEntries(entries(primitives.gray[g]).map(([s, v]) => [s, v.$value]))
+    const val = (k) => alias(c[k].$value, { accent: {}, gray })
+    const ratio = contrast(val('neutral-solid-foreground'), val('neutral-solid'))
+    if (ratio < AA_TEXT)
+      throw new Error(`${mode} --neutral-solid-foreground on --neutral-solid on the ${g} ramp is ${ratio.toFixed(2)}:1, below ${AA_TEXT}:1.`)
+  }
+}
+
+/**
  * --muted-foreground is body text (descriptions, hints, captions), so it
  * needs 4.5:1 on every surface it sits on, on every gray ramp, the --muted
  * fill included. The lightest gray step of each ramp sits at a slightly

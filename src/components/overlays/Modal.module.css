@@ -6,9 +6,7 @@
   position: fixed;
   inset: 0;
   z-index: var(--layer-overlay);
-  /* A scrim, not a colour of the kit: black at half strength dims either
-     mode's page by the same amount. */
-  background: oklch(0% 0 0 / 50%);
+  background: var(--scrim);
   transition: opacity var(--duration-base);
 }
 .backdrop[data-starting-style],

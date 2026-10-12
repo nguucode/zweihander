@@ -42,6 +42,7 @@
   box-sizing: border-box;
   inline-size: var(--space-4);
   block-size: var(--space-4);
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- white ring with a dark edge (box-shadow below) reads on any colour the picker shows */
   border: 2px solid #fff;
   border-radius: var(--radius-pill);
   background: var(--picker-color);
@@ -89,6 +90,7 @@
 /* The full hue circle at full saturation: the strip is the colour model
    itself, so it cannot come from theme tokens. */
 .hueTrack {
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- the hue circle itself, see above */
   background: linear-gradient(
     to right,
     hsl(0 100% 50%),
