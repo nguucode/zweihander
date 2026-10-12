@@ -30,6 +30,7 @@ jobs:
       - run: npm run tokens:check
       - run: npm run registry:check
       - run: npm run docs:check
+      - run: npm run playground:check
       - run: npm run lint:css
       - run: npx playwright install --with-deps chromium firefox webkit
       - run: npx tsc -b

@@ -23,8 +23,8 @@ const HEADINGS = [
 const BODY = [
   { token: 'body-lg', px: '16 / 24' },
   { token: 'body', px: '14 / 20' },
-  { token: 'body-sm', px: '13 / 16' },
-  { token: 'body-xs', px: '10 / 14' },
+  { token: 'body-sm', px: '12 / 16' },
+  { token: 'body-xs', px: '11 / 16' },
 ] as const
 
 function Row({ token, px, weight }: { token: string; px: string; weight: number }) {
@@ -88,6 +88,10 @@ export const Body: Story = {
     const el = canvas.getAllByText('Zweihänder')[1]
     // body is 14px, one step down from the 16px many interfaces start at.
     await expect(Number.parseFloat(getComputedStyle(el).fontSize)).toBe(14)
+    // Every body line sits on the 4px grid at 100% scaling.
+    for (const sample of canvas.getAllByText('Zweihänder')) {
+      await expect(Number.parseFloat(getComputedStyle(sample).lineHeight) % 4).toBeCloseTo(0, 5)
+    }
   },
 }
 

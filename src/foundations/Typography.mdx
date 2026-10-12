@@ -79,16 +79,23 @@ UI and worth knowing before you reach for it in long-form content.
 | --- | --- | --- |
 | `--text-body-lg` | 1rem / 16px | 24px |
 | `--text-body` | 0.875rem / 14px | 20px |
-| `--text-body-sm` | 0.8125rem / 13px | 16px |
-| `--text-body-xs` | 0.625rem / 10px | 14px |
+| `--text-body-sm` | 0.75rem / 12px | 16px |
+| `--text-body-xs` | 0.6875rem / 11px | 16px |
 
 **Every component uses these.** Button, the field label, the input itself,
 and the helper and error text are all `--text-body`; only the large Button
 steps up to `--text-body-lg`.
 
-`--text-body-xs` is for dense metadata only — timestamps, badge counts,
-table footnotes. No component reads it, and nothing a user has to read in
-full or act on belongs at 10px.
+`--text-body-sm` is the label of every small control (the `sm` and `xs`
+size tiers, see [Sizing](?path=/docs/foundations-sizing--docs)), and
+secondary text: helper text in a menu, shortcuts, captions.
+
+`--text-body-xs` is for dense metadata only: badge counts, timestamps,
+table footnotes. Badge is the one component that reads it. Nothing a user
+has to read in full or act on belongs at 11px.
+
+Every body line height is a multiple of 4px (24, 20, 16, 16), so body text
+of any size sits on the same 4px grid as the spacing and control heights.
 
 ## Weights
 
@@ -123,6 +130,10 @@ Every size above is `calc(<base> * var(--scaling))`, so the
 spacing together. Line heights are stored as *ratios* — `calc(20 / 14)`
 rather than `1.25rem` — so they follow the font size instead of having to
 be rescaled themselves.
+
+The 4px grid above holds at 100% only. At 110% a 16px line is 17.6px: the
+ratio keeps type in proportion to the controls around it, which matters
+more than whole pixels, and it is the trade-off Radix Themes makes too.
 
 ## What is not here
 

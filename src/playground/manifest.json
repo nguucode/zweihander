@@ -1,0 +1,2228 @@
+{
+  "items": [
+    {
+      "kind": "component",
+      "id": "components-atomic-elements-avatar",
+      "name": "Avatar",
+      "category": "Atomic Elements",
+      "status": "beta",
+      "storyId": "components-atomic-elements-avatar--default",
+      "props": [
+        {
+          "name": "size",
+          "control": "inline-radio",
+          "options": [
+            "xs",
+            "sm",
+            "md",
+            "lg"
+          ],
+          "default": "sm"
+        },
+        {
+          "name": "imageSrc",
+          "control": "text",
+          "default": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20fill%3D%22%23c7d2fe%22%2F%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2226%22%20r%3D%2212%22%20fill%3D%22%236366f1%22%2F%3E%3Crect%20x%3D%2212%22%20y%3D%2242%22%20width%3D%2240%22%20height%3D%2230%22%20rx%3D%2220%22%20fill%3D%22%236366f1%22%2F%3E%3C%2Fsvg%3E"
+        },
+        {
+          "name": "imageAlt",
+          "control": "text",
+          "default": "Mary Thompson",
+          "description": "Who this is. Without it the avatar is decorative and hidden from assistive tech."
+        },
+        {
+          "name": "initials",
+          "control": "text",
+          "description": "Shown when there is no image, or it fails to load. One or two letters."
+        },
+        {
+          "name": "variant",
+          "control": "inline-radio",
+          "options": [
+            "subtle",
+            "solid"
+          ],
+          "default": "subtle",
+          "description": "`subtle` is a tint of the hue; `solid` is its 600 step (400 in dark)."
+        }
+      ]
+    },
+    {
+      "kind": "component",
+      "id": "components-atomic-elements-badge",
+      "name": "Badge",
+      "category": "Atomic Elements",
+      "status": "beta",
+      "storyId": "components-atomic-elements-badge--default",
+      "props": [
+        {
+          "name": "count",
+          "control": "number",
+          "default": 8
+        },
+        {
+          "name": "variant",
+          "control": "inline-radio",
+          "options": [
+            "primary",
+            "accent",
+            "secondary",
+            "destructive",
+            "success",
+            "warning"
+          ],
+          "default": "primary"
+        },
+        {
+          "name": "size",
+          "control": "inline-radio",
+          "options": [
+            "sm",
+            "md"
+          ],
+          "default": "md"
+        },
+        {
+          "name": "isDot",
+          "control": "boolean",
+          "default": false,
+          "description": "A dot with no number: \"something new\", not \"how many\"."
+        },
+        {
+          "name": "maxCount",
+          "control": "number",
+          "description": "Counts above this show as `maxCount+`."
+        },
+        {
+          "name": "isFloating",
+          "control": "boolean",
+          "default": false,
+          "description": "Pins the badge to a corner of `children` instead of sitting inline."
+        },
+        {
+          "name": "floatingPlacement",
+          "control": "inline-radio",
+          "options": [
+            "top-start",
+            "top-end",
+            "bottom-start",
+            "bottom-end"
+          ],
+          "default": "top-end"
+        }
+      ]
+    },
+    {
+      "kind": "component",
+      "id": "components-atomic-elements-divider",
+      "name": "Divider",
+      "category": "Atomic Elements",
+      "status": "beta",
+      "storyId": "components-atomic-elements-divider--default",
+      "props": [
+        {
+          "name": "orientation",
+          "control": "inline-radio",
+          "options": [
+            "horizontal",
+            "vertical"
+          ],
+          "default": "horizontal"
+        },
+        {
+          "name": "inset",
+          "control": "boolean",
+          "default": false,
+          "description": "Indents both ends so the line stops short of its container's edges."
+        },
+        {
+          "name": "size",
+          "control": "inline-radio",
+          "options": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "default": "sm",
+          "description": "Line thickness: 1px, 2px, 4px."
+        },
+        {
+          "name": "appearance",
+          "control": "inline-radio",
+          "options": [
+            "solid",
+            "dashed"
+          ],
+          "default": "solid",
+          "description": "uiguideline calls this `variant`; renamed because `variant` means color here."
+        }
+      ]
+    },
+    {
+      "kind": "component",
+      "id": "components-atomic-elements-tag",
+      "name": "Tag",
+      "category": "Atomic Elements",
+      "status": "beta",
+      "storyId": "components-atomic-elements-tag--default",
+      "props": [
+        {
+          "name": "text",
+          "control": "text",
+          "default": "Account verified"
+        },
+        {
+          "name": "startAvatar",
+          "control": "text",
+          "description": "Image URL for a small avatar before the text, e.g. a person in a filter."
+        },
+        {
+          "name": "size",
+          "control": "inline-radio",
+          "options": [
+            "sm",
+            "md"
+          ],
+          "default": "md"
+        },
+        {
+          "name": "appearance",
+          "control": "inline-radio",
+          "options": [
+            "subtle",
+            "outlined",
+            "solid"
+          ],
+          "default": "subtle"
+        },
+        {
+          "name": "variant",
+          "control": "select",
+          "options": [
+            "neutral",
+            "info",
+            "success",
+            "warning",
+            "danger",
+            "red",
+            "orange",
+            "amber",
+            "yellow",
+            "lime",
+            "green",
+            "emerald",
+            "teal",
+            "cyan",
+            "sky",
+            "blue",
+            "indigo",
+            "violet",
+            "purple",
+            "fuchsia",
+            "pink",
+            "rose"
+          ],
+          "default": "info"
+        },
+        {
+          "name": "hasRemoveButton",
+          "control": "boolean",
+          "default": false
+        }
+      ]
+    },
+    {
+      "kind": "component",
+      "id": "components-buttons-button",
+      "name": "Button",
+      "category": "Buttons",
+      "status": "beta",
+      "storyId": "components-buttons-button--default",
+      "props": [
+        {
+          "name": "children",
+          "control": "text",
+          "default": "Button"
+        },
+        {
+          "name": "variant",
+          "control": "inline-radio",
+          "options": [
+            "primary",
+            "accent",
+            "secondary",
+            "destructive"
+          ],
+          "default": "primary"
+        },
+        {
+          "name": "appearance",
+          "control": "inline-radio",
+          "options": [
+            "contained",
+            "outlined",
+            "ghost"
+          ],
+          "default": "contained"
+        },
+        {
+          "name": "size",
+          "control": "inline-radio",
+          "options": [
+            "sm",
+            "md"
+          ],
+          "default": "md"
+        }
+      ]
+    },
+    {
+      "kind": "component",
+      "id": "components-buttons-togglebutton",
+      "name": "ToggleButton",
+      "category": "Buttons",
+      "status": "beta",
+      "storyId": "components-buttons-togglebutton--default",
+      "props": [
+        {
+          "name": "children",
+          "control": "text",
+          "default": "Subscribe"
+        },
+        {
+          "name": "variant",
+          "control": "inline-radio",
+          "options": [
+            "primary",
+            "accent",
+            "secondary",
+            "destructive"
+          ],
+          "default": "primary"
+        },
+        {
+          "name": "appearance",
+          "control": "inline-radio",
+          "options": [
+            "contained",
+            "outlined",
+            "ghost"
+          ],
+          "default": "contained"
+        },
+        {
+          "name": "size",
+          "control": "inline-radio",
+          "options": [
+            "sm",
+            "md"
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "component",
+      "id": "components-controls-checkbox",
+      "name": "Checkbox",
+      "category": "Controls",
+      "status": "beta",
+      "storyId": "components-controls-checkbox--default",
+      "props": [
+        {
+          "name": "defaultChecked",
+          "control": "boolean"
+        },
+        {
+          "name": "isIndeterminate",
+          "control": "boolean",
+          "description": "Neither checked nor unchecked: a \"select all\" with some selected."
+        },
+        {
+          "name": "value",
+          "control": "text",
+          "description": "Submitted when checked; \"on\" by default."
+        },
+        {
+          "name": "variant",
+          "control": "inline-radio",
+          "options": [
+            "primary",
+            "neutral"
+          ],
+          "default": "neutral",
+          "description": "Colour of the checked box."
+        },
+        {
+          "name": "disabled",
+          "control": "boolean"
+        },
+        {
+          "name": "required",
+          "control": "boolean"
+        },
+        {
+          "name": "readOnly",
+          "control": "boolean"
+        },
+        {
+          "name": "validationState",
+          "control": "inline-radio",
+          "options": [
+            "default",
+            "success",
+            "error"
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "component",
+      "id": "components-controls-color-picker",
+      "name": "Color Picker",
+      "category": "Controls",
+      "status": "beta",
+      "storyId": "components-controls-color-picker--default",
+      "props": [
+        {
+          "name": "validationState",
+          "control": "radio",
+          "options": [
+            "default",
+            "success",
+            "error"
+          ]
+        },
+        {
+          "name": "size",
+          "control": "radio",
+          "options": [
+            "sm",
+            "md"
+          ],
+          "default": "md"
+        },
+        {
+          "name": "isFullWidth",
+          "control": "boolean"
+        },
+        {
+          "name": "required",
+          "control": "boolean"
+        }
+      ]
+    },
+    {
+      "kind": "component",
+      "id": "components-controls-radio",
+      "name": "Radio",
+      "category": "Controls",
+      "status": "beta",
+      "storyId": "components-controls-radio--default",
+      "props": [
+        {
+          "name": "defaultValue",
+          "control": "text"
+        },
+        {
+          "name": "variant",
+          "control": "inline-radio",
+          "options": [
+            "primary",
+            "neutral"
+          ],
+          "default": "neutral",
+          "description": "Colour of the selected radio."
+        },
+        {
+          "name": "orientation",
+          "control": "inline-radio",
+          "options": [
+            "vertical",
+            "horizontal"
+          ],
+          "default": "vertical"
+        },
+        {
+          "name": "disabled",
+          "control": "boolean"
+        },
+        {
+          "name": "required",
+          "control": "boolean"
+        },
+        {
+          "name": "readOnly",
+          "control": "boolean"
+        },
+        {
+          "name": "validationState",
+          "control": "inline-radio",
+          "options": [
+            "default",
+            "success",
+            "error"
+          ],
+          "default": "default"
+        }
+      ]
+    },
+    {
+      "kind": "component",
+      "id": "components-controls-rating",
+      "name": "Rating",
+      "category": "Controls",
+      "status": "beta",
+      "storyId": "components-controls-rating--default",
+      "props": [
+        {
+          "name": "defaultValue",
+          "control": "number",
+          "default": 3
+        },
+        {
+          "name": "max",
+          "control": "number",
+          "default": 5
+        },
+        {
+          "name": "size",
+          "control": "inline-radio",
+          "options": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "default": "md"
+        },
+        {
+          "name": "readOnly",
+          "control": "boolean",
+          "default": false,
+          "description": "Shows a rating rather than asking for one."
+        },
+        {
+          "name": "disabled",
+          "control": "boolean",
+          "default": false
+        }
+      ]
+    },
+    {
+      "kind": "component",
+      "id": "components-controls-slider",
+      "name": "Slider",
+      "category": "Controls",
+      "status": "beta",
+      "storyId": "components-controls-slider--default",
+      "props": [
+        {
+          "name": "min",
+          "control": "number",
+          "default": 0
+        },
+        {
+          "name": "max",
+          "control": "number",
+          "default": 100
+        },
+        {
+          "name": "step",
+          "control": "number",
+          "default": 1
+        },
+        {
+          "name": "largeStep",
+          "control": "number",
+          "description": "Page Up / Page Down and Shift+arrow step."
+        },
+        {
+          "name": "showValue",
+          "control": "boolean",
+          "default": true,
+          "description": "Show the current value (or range) after the label."
+        },
+        {
+          "name": "size",
+          "control": "inline-radio",
+          "options": [
+            "sm",
+            "md"
+          ],
+          "default": "md"
+        },
+        {
+          "name": "orientation",
+          "control": "inline-radio",
+          "options": [
+            "horizontal",
+            "vertical"
+          ],
+          "default": "horizontal"
+        },
+        {
+          "name": "disabled",
+          "control": "boolean",
+          "default": false
+        }
+      ]
+    },
+    {
+      "kind": "component",
+      "id": "components-controls-switch",
+      "name": "Switch",
+      "category": "Controls",
+      "status": "beta",
+      "storyId": "components-controls-switch--default",
+      "props": [
+        {
+          "name": "defaultChecked",
+          "control": "boolean",
+          "description": "Uncontrolled starting state (the spec's `defaultValue`)."
+        },
+        {
+          "name": "value",
+          "control": "text",
+          "description": "Submitted when on; \"on\" by default, like a checkbox."
+        },
+        {
+          "name": "size",
+          "control": "inline-radio",
+          "options": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "default": "md"
+        },
+        {
+          "name": "variant",
+          "control": "inline-radio",
+          "options": [
+            "primary",
+            "accent",
+            "destructive"
+          ],
+          "default": "primary",
+          "description": "Colour of the on state."
+        },
+        {
+          "name": "disabled",
+          "control": "boolean"
+        },
+        {
+          "name": "required",
+          "control": "boolean"
+        },
+        {
+          "name": "readOnly",
+          "control": "boolean"
+        },
+        {
+          "name": "validationState",
+          "control": "inline-radio",
+          "options": [
+            "default",
+            "success",
+            "error"
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "component",
+      "id": "components-data-display-accordion",
+      "name": "Accordion",
+      "category": "Data Display",
+      "status": "beta",
+      "storyId": "components-data-display-accordion--default",
+      "props": [
+        {
+          "name": "multiple",
+          "control": "boolean",
+          "description": "Allow more than one item open at once."
+        },
+        {
+          "name": "appearance",
+          "control": "inline-radio",
+          "options": [
+            "outlined",
+            "flush"
+          ],
+          "default": "outlined"
+        },
+        {
+          "name": "size",
+          "control": "inline-radio",
+          "options": [
+            "sm",
+            "md"
+          ],
+          "default": "md"
+        },
+        {
+          "name": "headingLevel",
+          "control": "inline-radio",
+          "options": [
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "default": 3,
+          "description": "The heading element each trigger sits in. Match it to the page's outline."
+        },
+        {
+          "name": "disabled",
+          "control": "boolean"
+        }
+      ]
+    },
+    {
+      "kind": "component",
+      "id": "components-data-display-calendar",
+      "name": "Calendar",
+      "category": "Data Display",
+      "status": "beta",
+      "storyId": "components-data-display-calendar--default",
+      "props": [
+        {
+          "name": "locale",
+          "control": "text",
+          "default": "en-GB",
+          "description": "BCP 47 tag, e.g. `vi-VN`. Defaults to the browser's."
+        },
+        {
+          "name": "weekStartsOn",
+          "control": "number",
+          "default": 1,
+          "description": "0 = Sunday … 6 = Saturday. Defaults to the locale's."
+        }
+      ]
+    },
+    {
+      "kind": "component",
+      "id": "components-data-display-card",
+      "name": "Card",
+      "category": "Data Display",
+      "status": "beta",
+      "storyId": "components-data-display-card--default",
+      "props": [
+        {
+          "name": "size",
+          "control": "inline-radio",
+          "options": [
+            "xs",
+            "sm",
+            "md",
+            "lg"
+          ]
+        },
+        {
+          "name": "appearance",
+          "control": "inline-radio",
+          "options": [
+            "elevated",
+            "outline",
+            "unstyled"
+          ]
+        },
+        {
+          "name": "orientation",
+          "control": "inline-radio",
+          "options": [
+            "vertical",
+            "horizontal"
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "component",
+      "id": "components-data-display-carousel",
+      "name": "Carousel",
+      "category": "Data Display",
+      "status": "beta",
+      "storyId": "components-data-display-carousel--default",
+      "props": [
+        {
+          "name": "label",
+          "control": "text",
+          "default": "Featured templates",
+          "description": "Names the carousel, e.g. \"Featured templates\". Required: there may be several on a page."
+        },
+        {
+          "name": "slidesPerView",
+          "control": "number",
+          "default": 1,
+          "description": "Slides in view at once."
+        },
+        {
+          "name": "showDots",
+          "control": "boolean",
+          "default": true,
+          "description": "Show a dot per slide under the track."
+        },
+        {
+          "name": "autoPlay",
+          "control": "number",
+          "description": "Advance every this many milliseconds. Paused on hover and focus, and never under reduced motion."
+        },
+        {
+          "name": "loop",
+          "control": "boolean",
+          "default": false,
+          "description": "Previous/next wrap around at the ends."
+        },
+        {
+          "name": "defaultIndex",
+          "control": "number",
+          "default": 0
+        }
+      ]
+    },
+    {
+      "kind": "component",
+      "id": "components-data-display-collapse",
+      "name": "Collapse",
+      "category": "Data Display",
+      "status": "beta",
+      "storyId": "components-data-display-collapse--default",
+      "props": [
+        {
+          "name": "defaultOpen",
+          "control": "boolean"
+        },
+        {
+          "name": "size",
+          "control": "inline-radio",
+          "options": [
+            "sm",
+            "md"
+          ],
+          "default": "md"
+        },
+        {
+          "name": "disabled",
+          "control": "boolean",
+          "default": false
+        },
+        {
+          "name": "hiddenUntilFound",
+          "control": "boolean",
+          "default": true,
+          "description": "Keep the closed content in the page as `hidden=\"until-found\"`, so the\nbrowser's find-in-page reaches it and opens it. On by default."
+        }
+      ]
+    },
+    {
+      "kind": "component",
+      "id": "components-data-display-table",
+      "name": "Table",
+      "category": "Data Display",
+      "status": "beta",
+      "storyId": "components-data-display-table--default",
+      "props": [
+        {
+          "name": "showCaption",
+          "control": "boolean",
+          "default": false
+        },
+        {
+          "name": "isSelectable",
+          "control": "boolean",
+          "default": false,
+          "description": "Adds a checkbox column."
+        },
+        {
+          "name": "density",
+          "control": "inline-radio",
+          "options": [
+            "sm",
+            "md"
+          ],
+          "default": "md",
+          "description": "Row height: 40 (`sm`) or 48px (`md`)."
+        },
+        {
+          "name": "hasStickyHeader",
+          "control": "boolean",
+          "default": false,
+          "description": "Keep the header row in view while the table scrolls inside its container."
+        }
+      ]
+    },
+    {
+      "kind": "component",
+      "id": "components-inputs-combobox",
+      "name": "Combobox",
+      "category": "Inputs",
+      "status": "beta",
+      "storyId": "components-inputs-combobox--default",
+      "props": [
+        {
+          "name": "placeholder",
+          "control": "text",
+          "default": "Type a name"
+        },
+        {
+          "name": "validationState",
+          "control": "inline-radio",
+          "options": [
+            "default",
+            "success",
+            "error"
+          ]
+        },
+        {
+          "name": "size",
+          "control": "inline-radio",
+          "options": [
+            "sm",
+            "md"
+          ],
+          "default": "md"
+        },
+        {
+          "name": "isFullWidth",
+          "control": "boolean"
+        },
+        {
+          "name": "isLoading",
+          "control": "boolean",
+          "description": "Options are still arriving: a spinner, and \"Loading…\" in the list."
+        },
+        {
+          "name": "isClearable",
+          "control": "boolean",
+          "default": true,
+          "description": "Show a button that clears the selection."
+        },
+        {
+          "name": "emptyText",
+          "control": "text",
+          "default": "No matches",
+          "description": "Shown in the list when nothing matches."
+        },
+        {
+          "name": "disabled",
+          "control": "boolean"
+        },
+        {
+          "name": "readOnly",
+          "control": "boolean"
+        },
+        {
+          "name": "required",
+          "control": "boolean"
+        }
+      ]
+    },
+    {
+      "kind": "component",
+      "id": "components-inputs-datepicker",
+      "name": "DatePicker",
+      "category": "Inputs",
+      "status": "beta",
+      "storyId": "components-inputs-datepicker--default",
+      "props": [
+        {
+          "name": "validationState",
+          "control": "radio",
+          "options": [
+            "default",
+            "success",
+            "error"
+          ]
+        },
+        {
+          "name": "size",
+          "control": "inline-radio",
+          "options": [
+            "sm",
+            "md"
+          ],
+          "default": "md"
+        },
+        {
+          "name": "locale",
+          "control": "text",
+          "default": "en-GB",
+          "description": "BCP 47 tag; decides the typed order (day/month/year) and the calendar's."
+        },
+        {
+          "name": "weekStartsOn",
+          "control": "number",
+          "default": 1
+        },
+        {
+          "name": "placeholder",
+          "control": "text",
+          "description": "Defaults to the locale's pattern, e.g. \"dd/mm/yyyy\"."
+        },
+        {
+          "name": "isFullWidth",
+          "control": "boolean"
+        },
+        {
+          "name": "disabled",
+          "control": "boolean"
+        },
+        {
+          "name": "required",
+          "control": "boolean"
+        }
+      ]
+    },
+    {
+      "kind": "component",
+      "id": "components-inputs-daterangepicker",
+      "name": "DateRangePicker",
+      "category": "Inputs",
+      "status": "beta",
+      "storyId": "components-inputs-daterangepicker--default",
+      "props": [
+        {
+          "name": "label",
+          "control": "text",
+          "default": "Period"
+        },
+        {
+          "name": "locale",
+          "control": "text",
+          "default": "en-GB"
+        },
+        {
+          "name": "weekStartsOn",
+          "control": "number",
+          "default": 1
+        },
+        {
+          "name": "presets",
+          "control": "boolean",
+          "default": false,
+          "description": "A list beside the calendars: `true` for the built-in one (Today … Last year), or your own."
+        },
+        {
+          "name": "size",
+          "control": "inline-radio",
+          "options": [
+            "sm",
+            "md"
+          ],
+          "default": "md"
+        }
+      ]
+    },
+    {
+      "kind": "component",
+      "id": "components-inputs-file-uploader",
+      "name": "File Uploader",
+      "category": "Inputs",
+      "status": "beta",
+      "storyId": "components-inputs-file-uploader--default",
+      "props": [
+        {
+          "name": "accept",
+          "control": "text",
+          "default": ".pdf,image/png,image/jpeg",
+          "description": "As the native attribute: extensions and MIME types, e.g. `\".pdf,image/*\"`. Also checked on drop."
+        },
+        {
+          "name": "multiple",
+          "control": "boolean",
+          "default": true
+        },
+        {
+          "name": "maxSize",
+          "control": "number",
+          "default": 5000000,
+          "description": "In bytes."
+        },
+        {
+          "name": "maxFiles",
+          "control": "number"
+        },
+        {
+          "name": "disabled",
+          "control": "boolean",
+          "default": false
+        },
+        {
+          "name": "required",
+          "control": "boolean"
+        },
+        {
+          "name": "isFullWidth",
+          "control": "boolean"
+        }
+      ]
+    },
+    {
+      "kind": "component",
+      "id": "components-inputs-numberinput",
+      "name": "NumberInput",
+      "category": "Inputs",
+      "status": "beta",
+      "storyId": "components-inputs-numberinput--default",
+      "props": [
+        {
+          "name": "defaultValue",
+          "control": "number",
+          "default": 6
+        },
+        {
+          "name": "min",
+          "control": "number",
+          "default": 0
+        },
+        {
+          "name": "max",
+          "control": "number",
+          "default": 100
+        },
+        {
+          "name": "step",
+          "control": "number"
+        },
+        {
+          "name": "precision",
+          "control": "number",
+          "description": "Decimal places shown and accepted."
+        },
+        {
+          "name": "validationState",
+          "control": "inline-radio",
+          "options": [
+            "default",
+            "success",
+            "error"
+          ]
+        },
+        {
+          "name": "size",
+          "control": "inline-radio",
+          "options": [
+            "sm",
+            "md"
+          ],
+          "default": "md"
+        },
+        {
+          "name": "isFullWidth",
+          "control": "boolean"
+        },
+        {
+          "name": "placeholder",
+          "control": "text"
+        },
+        {
+          "name": "disabled",
+          "control": "boolean"
+        },
+        {
+          "name": "readOnly",
+          "control": "boolean"
+        },
+        {
+          "name": "required",
+          "control": "boolean"
+        }
+      ]
+    },
+    {
+      "kind": "component",
+      "id": "components-inputs-search",
+      "name": "Search",
+      "category": "Inputs",
+      "status": "beta",
+      "storyId": "components-inputs-search--default",
+      "props": [
+        {
+          "name": "defaultValue",
+          "control": "text",
+          "default": ""
+        },
+        {
+          "name": "size",
+          "control": "inline-radio",
+          "options": [
+            "sm",
+            "md"
+          ],
+          "default": "md"
+        },
+        {
+          "name": "isFullWidth",
+          "control": "boolean"
+        }
+      ]
+    },
+    {
+      "kind": "component",
+      "id": "components-inputs-select",
+      "name": "Select",
+      "category": "Inputs",
+      "status": "beta",
+      "storyId": "components-inputs-select--default",
+      "props": [
+        {
+          "name": "placeholder",
+          "control": "text",
+          "default": "Choose someone"
+        },
+        {
+          "name": "validationState",
+          "control": "inline-radio",
+          "options": [
+            "default",
+            "success",
+            "error"
+          ]
+        },
+        {
+          "name": "size",
+          "control": "inline-radio",
+          "options": [
+            "sm",
+            "md"
+          ],
+          "default": "md"
+        },
+        {
+          "name": "isFullWidth",
+          "control": "boolean"
+        },
+        {
+          "name": "isLoading",
+          "control": "boolean",
+          "description": "Options are still arriving: a spinner replaces the chevron."
+        },
+        {
+          "name": "disabled",
+          "control": "boolean"
+        },
+        {
+          "name": "readOnly",
+          "control": "boolean"
+        },
+        {
+          "name": "required",
+          "control": "boolean"
+        }
+      ]
+    },
+    {
+      "kind": "component",
+      "id": "components-inputs-textarea",
+      "name": "Textarea",
+      "category": "Inputs",
+      "status": "beta",
+      "storyId": "components-inputs-textarea--default",
+      "props": [
+        {
+          "name": "placeholder",
+          "control": "text",
+          "default": "Write a message…"
+        },
+        {
+          "name": "validationState",
+          "control": "inline-radio",
+          "options": [
+            "default",
+            "success",
+            "error"
+          ]
+        },
+        {
+          "name": "size",
+          "control": "inline-radio",
+          "options": [
+            "sm",
+            "md"
+          ],
+          "default": "md"
+        },
+        {
+          "name": "isFullWidth",
+          "control": "boolean"
+        },
+        {
+          "name": "resize",
+          "control": "inline-radio",
+          "options": [
+            "none",
+            "both",
+            "vertical",
+            "horizontal"
+          ],
+          "default": "vertical",
+          "description": "Which way the user can drag to resize. Ignored with `hasAutoSize`."
+        },
+        {
+          "name": "hasAutoSize",
+          "control": "boolean",
+          "default": false,
+          "description": "Grow and shrink with the content, between `minRows` and `maxRows`."
+        },
+        {
+          "name": "minRows",
+          "control": "number",
+          "default": 3,
+          "description": "The starting height, in lines."
+        },
+        {
+          "name": "maxRows",
+          "control": "number",
+          "description": "The most it grows to before scrolling, in lines."
+        }
+      ]
+    },
+    {
+      "kind": "component",
+      "id": "components-inputs-textinput",
+      "name": "TextInput",
+      "category": "Inputs",
+      "status": "beta",
+      "storyId": "components-inputs-textinput--default",
+      "props": [
+        {
+          "name": "placeholder",
+          "control": "text",
+          "default": "you@example.com"
+        },
+        {
+          "name": "validationState",
+          "control": "inline-radio",
+          "options": [
+            "default",
+            "success",
+            "error"
+          ]
+        },
+        {
+          "name": "size",
+          "control": "inline-radio",
+          "options": [
+            "sm",
+            "md"
+          ],
+          "default": "md"
+        },
+        {
+          "name": "isFullWidth",
+          "control": "boolean"
+        }
+      ]
+    },
+    {
+      "kind": "component",
+      "id": "components-loaders-progressbar",
+      "name": "ProgressBar",
+      "category": "Loaders",
+      "status": "beta",
+      "storyId": "components-loaders-progressbar--default",
+      "props": [
+        {
+          "name": "value",
+          "control": "number",
+          "default": 70
+        },
+        {
+          "name": "max",
+          "control": "number",
+          "default": 100,
+          "description": "The spec's `maxValue`."
+        },
+        {
+          "name": "size",
+          "control": "inline-radio",
+          "options": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "default": "md"
+        },
+        {
+          "name": "isRounded",
+          "control": "boolean",
+          "default": false
+        },
+        {
+          "name": "variant",
+          "control": "inline-radio",
+          "options": [
+            "primary",
+            "accent",
+            "secondary",
+            "destructive"
+          ],
+          "default": "primary"
+        },
+        {
+          "name": "isIndeterminate",
+          "control": "boolean",
+          "default": false,
+          "description": "Progress is happening but how much is unknown: a sliding bar."
+        },
+        {
+          "name": "showValueLabel",
+          "control": "boolean",
+          "default": false,
+          "description": "Show the value (\"70%\") after the bar."
+        }
+      ]
+    },
+    {
+      "kind": "component",
+      "id": "components-loaders-skeleton",
+      "name": "Skeleton",
+      "category": "Loaders",
+      "status": "beta",
+      "storyId": "components-loaders-skeleton--default",
+      "props": [
+        {
+          "name": "appearance",
+          "control": "inline-radio",
+          "options": [
+            "circle",
+            "square",
+            "rounded"
+          ],
+          "default": "square"
+        },
+        {
+          "name": "rows",
+          "control": "number",
+          "description": "Several lines of text: stacked bars, the last one shorter. A circle's rows are rounded bars."
+        },
+        {
+          "name": "isFullWidth",
+          "control": "boolean",
+          "default": false
+        },
+        {
+          "name": "hasAnimation",
+          "control": "boolean",
+          "default": false,
+          "description": "A gentle pulse. Off by default: many pulsing shapes are noise."
+        }
+      ]
+    },
+    {
+      "kind": "component",
+      "id": "components-loaders-spinner",
+      "name": "Spinner",
+      "category": "Loaders",
+      "status": "beta",
+      "storyId": "components-loaders-spinner--default",
+      "props": [
+        {
+          "name": "size",
+          "control": "inline-radio",
+          "options": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "default": "md"
+        },
+        {
+          "name": "variant",
+          "control": "inline-radio",
+          "options": [
+            "primary",
+            "accent",
+            "secondary"
+          ],
+          "default": "accent",
+          "description": "Colour of the indicator. `accent` is the foreground, as on Button."
+        },
+        {
+          "name": "delay",
+          "control": "number",
+          "default": 0,
+          "description": "Wait this many milliseconds before showing, so a fast load never flashes a spinner."
+        },
+        {
+          "name": "value",
+          "control": "number",
+          "description": "0–100. Omit for an indeterminate, spinning indicator."
+        },
+        {
+          "name": "isIndeterminate",
+          "control": "boolean",
+          "default": false,
+          "description": "Spin even when `value` is given."
+        },
+        {
+          "name": "label",
+          "control": "text",
+          "description": "Shown under the indicator and used as its accessible name (\"Loading\" when omitted)."
+        }
+      ]
+    },
+    {
+      "kind": "component",
+      "id": "components-navigation-breadcrumbs",
+      "name": "Breadcrumbs",
+      "category": "Navigation",
+      "status": "beta",
+      "storyId": "components-navigation-breadcrumbs--default",
+      "props": [
+        {
+          "name": "maxItems",
+          "control": "number",
+          "description": "Collapse the middle when there are more than this many: the first item,\n\"…\", and the last `maxItems - 1`. The \"…\" expands them in place."
+        },
+        {
+          "name": "size",
+          "control": "inline-radio",
+          "options": [
+            "sm",
+            "md"
+          ],
+          "default": "md"
+        }
+      ]
+    },
+    {
+      "kind": "component",
+      "id": "components-navigation-link",
+      "name": "Link",
+      "category": "Navigation",
+      "status": "beta",
+      "storyId": "components-navigation-link--default",
+      "props": [
+        {
+          "name": "href",
+          "control": "text",
+          "default": "#pricing"
+        },
+        {
+          "name": "children",
+          "control": "text",
+          "default": "See pricing"
+        },
+        {
+          "name": "variant",
+          "control": "inline-radio",
+          "options": [
+            "primary",
+            "accent",
+            "secondary"
+          ]
+        },
+        {
+          "name": "underline",
+          "control": "inline-radio",
+          "options": [
+            "always",
+            "hover"
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "component",
+      "id": "components-navigation-menu",
+      "name": "Menu",
+      "category": "Navigation",
+      "status": "beta",
+      "storyId": "components-navigation-menu--default",
+      "props": [
+        {
+          "name": "side",
+          "control": "inline-radio",
+          "options": [
+            "top",
+            "right",
+            "bottom",
+            "left"
+          ],
+          "default": "bottom"
+        },
+        {
+          "name": "align",
+          "control": "inline-radio",
+          "options": [
+            "start",
+            "center",
+            "end"
+          ],
+          "default": "start"
+        },
+        {
+          "name": "defaultOpen",
+          "control": "boolean"
+        }
+      ]
+    },
+    {
+      "kind": "component",
+      "id": "components-navigation-pagination",
+      "name": "Pagination",
+      "category": "Navigation",
+      "status": "beta",
+      "storyId": "components-navigation-pagination--default",
+      "props": [
+        {
+          "name": "totalPages",
+          "control": "number",
+          "default": 10
+        },
+        {
+          "name": "defaultPage",
+          "control": "number",
+          "default": 1
+        },
+        {
+          "name": "siblingCount",
+          "control": "number",
+          "default": 1,
+          "description": "Pages shown either side of the current one."
+        },
+        {
+          "name": "boundaryCount",
+          "control": "number",
+          "default": 1,
+          "description": "Pages always shown at each end."
+        },
+        {
+          "name": "size",
+          "control": "inline-radio",
+          "options": [
+            "sm",
+            "md"
+          ],
+          "default": "md"
+        }
+      ]
+    },
+    {
+      "kind": "component",
+      "id": "components-navigation-sidebar",
+      "name": "Sidebar",
+      "category": "Navigation",
+      "status": "beta",
+      "storyId": "components-navigation-sidebar--default",
+      "props": [
+        {
+          "name": "currentHref",
+          "control": "text",
+          "default": "#atlas",
+          "description": "The href of the page the reader is on: that item gets aria-current=\"page\"."
+        },
+        {
+          "name": "defaultCollapsed",
+          "control": "boolean",
+          "default": false
+        },
+        {
+          "name": "isCollapsible",
+          "control": "boolean",
+          "default": false,
+          "description": "Show a button that collapses and expands the sidebar."
+        }
+      ]
+    },
+    {
+      "kind": "component",
+      "id": "components-navigation-stepper",
+      "name": "Stepper",
+      "category": "Navigation",
+      "status": "beta",
+      "storyId": "components-navigation-stepper--default",
+      "props": [
+        {
+          "name": "orientation",
+          "control": "inline-radio",
+          "options": [
+            "horizontal",
+            "vertical"
+          ],
+          "default": "horizontal"
+        },
+        {
+          "name": "size",
+          "control": "inline-radio",
+          "options": [
+            "sm",
+            "md"
+          ],
+          "default": "md"
+        }
+      ]
+    },
+    {
+      "kind": "component",
+      "id": "components-navigation-tabs",
+      "name": "Tabs",
+      "category": "Navigation",
+      "status": "beta",
+      "storyId": "components-navigation-tabs--default",
+      "props": [
+        {
+          "name": "defaultValue",
+          "control": "text"
+        },
+        {
+          "name": "appearance",
+          "control": "inline-radio",
+          "options": [
+            "underline",
+            "pills"
+          ],
+          "default": "underline",
+          "description": "`underline`: a line under the selected tab. `pills`: a filled segment, for switching views in a toolbar."
+        },
+        {
+          "name": "size",
+          "control": "inline-radio",
+          "options": [
+            "sm",
+            "md"
+          ],
+          "default": "md"
+        },
+        {
+          "name": "orientation",
+          "control": "inline-radio",
+          "options": [
+            "horizontal",
+            "vertical"
+          ],
+          "default": "horizontal"
+        },
+        {
+          "name": "isFullWidth",
+          "control": "boolean",
+          "default": false,
+          "description": "Tabs share the full width equally."
+        },
+        {
+          "name": "activateOnFocus",
+          "control": "boolean",
+          "default": false,
+          "description": "Select a tab as soon as it gets focus, rather than on Enter or Space."
+        },
+        {
+          "name": "keepMounted",
+          "control": "boolean",
+          "default": false,
+          "description": "Keep hidden panels in the DOM, e.g. to preserve their state."
+        }
+      ]
+    },
+    {
+      "kind": "component",
+      "id": "components-notifications-alert",
+      "name": "Alert",
+      "category": "Notifications",
+      "status": "beta",
+      "storyId": "components-notifications-alert--default",
+      "props": [
+        {
+          "name": "children",
+          "control": "text",
+          "default": "The card ending in 4242 expires at the end of this month. Update it to avoid an interruption."
+        },
+        {
+          "name": "variant",
+          "control": "inline-radio",
+          "options": [
+            "info",
+            "success",
+            "warning",
+            "danger"
+          ],
+          "default": "info"
+        },
+        {
+          "name": "appearance",
+          "control": "inline-radio",
+          "options": [
+            "subtle",
+            "outlined",
+            "solid"
+          ],
+          "default": "subtle"
+        },
+        {
+          "name": "closeLabel",
+          "control": "text",
+          "default": "Dismiss",
+          "description": "Accessible name of the close button."
+        },
+        {
+          "name": "isLive",
+          "control": "boolean",
+          "default": false,
+          "description": "Announce the alert when it appears. `danger` and `warning` interrupt\n(`role=\"alert\"`), the others wait their turn (`role=\"status\"`). Leave it\noff for an alert that is on the page from the start."
+        }
+      ]
+    },
+    {
+      "kind": "component",
+      "id": "components-notifications-inlinealert",
+      "name": "InlineAlert",
+      "category": "Notifications",
+      "status": "beta",
+      "storyId": "components-notifications-inlinealert--default",
+      "props": [
+        {
+          "name": "children",
+          "control": "text",
+          "default": "Changes are saved automatically."
+        },
+        {
+          "name": "variant",
+          "control": "inline-radio",
+          "options": [
+            "info",
+            "success",
+            "warning",
+            "danger"
+          ],
+          "default": "info"
+        },
+        {
+          "name": "size",
+          "control": "inline-radio",
+          "options": [
+            "sm",
+            "md"
+          ],
+          "default": "md"
+        },
+        {
+          "name": "isLive",
+          "control": "boolean",
+          "default": false,
+          "description": "Announce it when it appears: `danger` and `warning` interrupt\n(`role=\"alert\"`), the others wait (`role=\"status\"`)."
+        }
+      ]
+    },
+    {
+      "kind": "component",
+      "id": "components-notifications-toast",
+      "name": "Toast",
+      "category": "Notifications",
+      "status": "beta",
+      "storyId": "components-notifications-toast--default",
+      "props": [
+        {
+          "name": "placement",
+          "control": "select",
+          "options": [
+            "top-left",
+            "top-center",
+            "top-right",
+            "bottom-left",
+            "bottom-center",
+            "bottom-right"
+          ],
+          "default": "bottom-right"
+        },
+        {
+          "name": "timeout",
+          "control": "number",
+          "default": 5000,
+          "description": "Default time on screen, in milliseconds."
+        },
+        {
+          "name": "limit",
+          "control": "number",
+          "default": 3,
+          "description": "Toasts shown at once; older ones wait."
+        }
+      ]
+    },
+    {
+      "kind": "component",
+      "id": "components-overlays-modal",
+      "name": "Modal",
+      "category": "Overlays",
+      "status": "beta",
+      "storyId": "components-overlays-modal--default",
+      "props": [
+        {
+          "name": "size",
+          "control": "inline-radio",
+          "options": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "default": "md",
+          "description": "Max width: 24rem, 32rem, 48rem. Never wider than the screen."
+        },
+        {
+          "name": "hasCloseButton",
+          "control": "boolean",
+          "description": "Defaults to `true`, or `false` when `isAlert`."
+        },
+        {
+          "name": "closeLabel",
+          "control": "text",
+          "default": "Close"
+        },
+        {
+          "name": "isAlert",
+          "control": "boolean",
+          "default": false,
+          "description": "A decision that must be made: `role=\"alertdialog\"`, and a click on the\nbackdrop does not close it. Pair it with explicit buttons in `footer`."
+        },
+        {
+          "name": "closeOnBackdropClick",
+          "control": "boolean",
+          "default": true,
+          "description": "Close on a click on the backdrop. Ignored when `isAlert`."
+        },
+        {
+          "name": "defaultOpen",
+          "control": "boolean"
+        }
+      ]
+    },
+    {
+      "kind": "component",
+      "id": "components-overlays-popover",
+      "name": "Popover",
+      "category": "Overlays",
+      "status": "beta",
+      "storyId": "components-overlays-popover--default",
+      "props": [
+        {
+          "name": "side",
+          "control": "inline-radio",
+          "options": [
+            "top",
+            "right",
+            "bottom",
+            "left"
+          ],
+          "default": "bottom"
+        },
+        {
+          "name": "align",
+          "control": "inline-radio",
+          "options": [
+            "start",
+            "center",
+            "end"
+          ],
+          "default": "center"
+        },
+        {
+          "name": "hasCloseButton",
+          "control": "boolean",
+          "default": false,
+          "description": "A close button in the corner. Escape and a click outside close it either way."
+        },
+        {
+          "name": "closeLabel",
+          "control": "text",
+          "default": "Close"
+        },
+        {
+          "name": "openOnHover",
+          "control": "boolean",
+          "default": false,
+          "description": "Open on hover as well as click, for previews. Content must still be reachable by click and keyboard."
+        },
+        {
+          "name": "defaultOpen",
+          "control": "boolean"
+        },
+        {
+          "name": "isModal",
+          "control": "boolean",
+          "default": false,
+          "description": "Trap focus inside while open, lock page scroll and block clicks outside (Base UI's modal mode)."
+        }
+      ]
+    },
+    {
+      "kind": "component",
+      "id": "components-overlays-tooltip",
+      "name": "Tooltip",
+      "category": "Overlays",
+      "status": "beta",
+      "storyId": "components-overlays-tooltip--default",
+      "props": [
+        {
+          "name": "side",
+          "control": "inline-radio",
+          "options": [
+            "top",
+            "right",
+            "bottom",
+            "left"
+          ],
+          "default": "top"
+        },
+        {
+          "name": "align",
+          "control": "inline-radio",
+          "options": [
+            "start",
+            "center",
+            "end"
+          ],
+          "default": "center"
+        },
+        {
+          "name": "delay",
+          "control": "number",
+          "default": 300,
+          "description": "Milliseconds of hover before it opens. Focus opens it at once."
+        },
+        {
+          "name": "closeDelay",
+          "control": "number",
+          "default": 0
+        },
+        {
+          "name": "defaultOpen",
+          "control": "boolean",
+          "default": false
+        },
+        {
+          "name": "disabled",
+          "control": "boolean",
+          "default": false,
+          "description": "Never open, e.g. while the trigger's label is already visible."
+        }
+      ]
+    },
+    {
+      "kind": "component",
+      "id": "components-states-emptystate",
+      "name": "EmptyState",
+      "category": "States",
+      "status": "beta",
+      "storyId": "components-states-emptystate--default",
+      "props": [
+        {
+          "name": "size",
+          "control": "inline-radio",
+          "options": [
+            "sm",
+            "md"
+          ],
+          "default": "md",
+          "description": "`sm` for a panel or a table body; `md` for a whole page or section."
+        },
+        {
+          "name": "headingLevel",
+          "control": "inline-radio",
+          "options": [
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "default": 2,
+          "description": "The title's heading level, so it fits the page outline it lands in."
+        }
+      ]
+    },
+    {
+      "kind": "component",
+      "id": "components-states-errorstate",
+      "name": "ErrorState",
+      "category": "States",
+      "status": "beta",
+      "storyId": "components-states-errorstate--default",
+      "props": [
+        {
+          "name": "description",
+          "control": "text",
+          "default": "The server didn’t answer. Your projects are safe; try again in a moment."
+        },
+        {
+          "name": "isLive",
+          "control": "boolean",
+          "default": false,
+          "description": "Announce it when it replaces content that was loading (`role=\"alert\"`)."
+        },
+        {
+          "name": "size",
+          "control": "inline-radio",
+          "options": [
+            "sm",
+            "md"
+          ]
+        },
+        {
+          "name": "headingLevel",
+          "control": "inline-radio",
+          "options": [
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "component",
+      "id": "components-states-successstate",
+      "name": "SuccessState",
+      "category": "States",
+      "status": "beta",
+      "storyId": "components-states-successstate--default",
+      "props": [
+        {
+          "name": "description",
+          "control": "text",
+          "default": "3 people will get an email with a link to join Atlas."
+        },
+        {
+          "name": "isLive",
+          "control": "boolean",
+          "default": false,
+          "description": "Announce it when it replaces a form or a progress view (`role=\"status\"`)."
+        },
+        {
+          "name": "size",
+          "control": "inline-radio",
+          "options": [
+            "sm",
+            "md"
+          ]
+        },
+        {
+          "name": "headingLevel",
+          "control": "inline-radio",
+          "options": [
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "pattern",
+      "id": "patterns-application-ui-app-shell",
+      "name": "App Shell",
+      "category": "Application UI",
+      "status": "experimental",
+      "storyId": "patterns-application-ui-app-shell--with-sidebar",
+      "props": [
+        {
+          "name": "navigationLabel",
+          "control": "text",
+          "default": "Navigation",
+          "description": "Names the drawer and its button."
+        },
+        {
+          "name": "mainId",
+          "control": "text",
+          "description": "The `id` of the `main` element, which the skip link targets. Generated if not given."
+        }
+      ]
+    },
+    {
+      "kind": "pattern",
+      "id": "patterns-application-ui-data-table-page",
+      "name": "Data Table Page",
+      "category": "Application UI",
+      "status": "experimental",
+      "storyId": "patterns-application-ui-data-table-page--toolbar-and-pagination",
+      "props": []
+    },
+    {
+      "kind": "pattern",
+      "id": "patterns-application-ui-description-list",
+      "name": "Description List",
+      "category": "Application UI",
+      "status": "experimental",
+      "storyId": "patterns-application-ui-description-list--columns",
+      "props": [
+        {
+          "name": "layout",
+          "control": "inline-radio",
+          "options": [
+            "columns",
+            "grid",
+            "stacked"
+          ],
+          "default": "columns",
+          "description": "`columns`: term and details side by side, a row each.\n`grid`: two columns of term-over-details pairs.\n`stacked`: term over details, one after another. Columns fall back to\nthis on narrow screens anyway."
+        },
+        {
+          "name": "isCard",
+          "control": "boolean",
+          "default": false,
+          "description": "Put the list on a card with the header in its top band."
+        },
+        {
+          "name": "headingLevel",
+          "control": "radio",
+          "options": [
+            2,
+            3
+          ],
+          "default": 2
+        }
+      ]
+    },
+    {
+      "kind": "pattern",
+      "id": "patterns-application-ui-form-layouts",
+      "name": "Form Layouts",
+      "category": "Application UI",
+      "status": "experimental",
+      "storyId": "patterns-application-ui-form-layouts--settings-sections",
+      "props": []
+    },
+    {
+      "kind": "pattern",
+      "id": "patterns-application-ui-page-heading",
+      "name": "Page Heading",
+      "category": "Application UI",
+      "status": "experimental",
+      "storyId": "patterns-application-ui-page-heading--simple",
+      "props": [
+        {
+          "name": "headingLevel",
+          "control": "radio",
+          "options": [
+            1,
+            2
+          ],
+          "default": 1,
+          "description": "The page's own heading is h1; use 2 when the heading sits inside a larger page."
+        }
+      ]
+    },
+    {
+      "kind": "pattern",
+      "id": "patterns-application-ui-stats",
+      "name": "Stats",
+      "category": "Application UI",
+      "status": "experimental",
+      "storyId": "patterns-application-ui-stats--simple",
+      "props": [
+        {
+          "name": "headingLevel",
+          "control": "radio",
+          "options": [
+            2,
+            3
+          ],
+          "default": 2
+        }
+      ]
+    }
+  ]
+}

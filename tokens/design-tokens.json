@@ -2324,16 +2324,16 @@
     },
     "body-sm": {
       "$type": "dimension",
-      "$value": "0.8125rem",
+      "$value": "0.75rem",
       "$extensions": {
-        "leading": "16 / 13"
+        "leading": "16 / 12"
       }
     },
     "body-xs": {
       "$type": "dimension",
-      "$value": "0.625rem",
+      "$value": "0.6875rem",
       "$extensions": {
-        "leading": "14 / 10"
+        "leading": "16 / 11"
       }
     }
   },
