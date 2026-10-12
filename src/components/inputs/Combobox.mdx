@@ -4,14 +4,10 @@ import { Combobox } from './Combobox'
 import * as ComboboxStories from './Combobox.stories'
 
 {/* A field is 20rem wide; in a state cell it shrinks to the cell instead of
-    spilling into the next. A text input's own default width (about 20
-    characters) is its minimum otherwise, so it is zeroed here and the input
-    grows back to fill the box. */}
+    spilling into the next. A <Story> embed sizes to its content, so it needs
+    a wrapper that may shrink. */}
 export const Fit = ({ children }) => (
-  <div className="zw-fit" style={{ inlineSize: '100%', minInlineSize: 0 }}>
-    <style>{'.zw-fit input { inline-size: 0 }'}</style>
-    {children}
-  </div>
+  <div style={{ inlineSize: '100%', minInlineSize: 0 }}>{children}</div>
 )
 
 <Meta of={ComboboxStories} />

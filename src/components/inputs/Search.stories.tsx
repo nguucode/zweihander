@@ -73,9 +73,11 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const Default: Story = {
-  play: async ({ canvas, userEvent }) => {
+  play: async ({ canvas, canvasElement, userEvent }) => {
     const field = canvas.getByRole('searchbox', { name: 'Search' })
     await expect(field).toHaveAttribute('placeholder', 'Search')
+    // The search icon is decorative.
+    await expect(canvasElement.querySelector('svg')).toHaveAttribute('aria-hidden', 'true')
     // No clear button until there is something to clear.
     await expect(canvas.queryByRole('button', { name: 'Clear search' })).toBeNull()
     await userEvent.type(field, 'badge')
