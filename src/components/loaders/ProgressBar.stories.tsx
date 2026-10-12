@@ -6,11 +6,58 @@ const meta = {
   title: 'Components/Loaders/ProgressBar',
   tags: ['beta'],
   component: ProgressBar,
+  // These descriptions are the docs' API table and the Playground's props panel.
   argTypes: {
-    size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] },
-    variant: { control: 'inline-radio', options: ['primary', 'accent', 'secondary', 'destructive'] },
+    value: {
+      description: 'How far along, out of `max`. Ignored while `isIndeterminate`.',
+      control: { type: 'range', min: 0, max: 100 },
+      table: { type: { summary: 'number' }, defaultValue: { summary: '0' } },
+    },
+    max: {
+      description: 'The value at which the task is done. The spec calls it `maxValue`.',
+      control: 'number',
+      table: { type: { summary: 'number' }, defaultValue: { summary: '100' } },
+    },
+    size: {
+      description: 'Track height: 4px (`sm`), 8px (`md`) or 12px (`lg`).',
+      control: 'inline-radio',
+      options: ['sm', 'md', 'lg'],
+      table: { type: { summary: "'sm' | 'md' | 'lg'" }, defaultValue: { summary: "'md'" } },
+    },
+    variant: {
+      description: 'Colour of the fill. `destructive` for a task that is failing or about to run out, such as storage nearly full.',
+      control: 'inline-radio',
+      options: ['primary', 'accent', 'secondary', 'destructive'],
+      table: { type: { summary: "'primary' | 'accent' | 'secondary' | 'destructive'" }, defaultValue: { summary: "'primary'" } },
+    },
+    isRounded: {
+      description: 'Pill ends on the track and the fill.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    isIndeterminate: {
+      description: 'Progress is happening but how much is unknown: a third of the track slides across.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    showValueLabel: {
+      description: 'Shows the percentage after the bar, in tabular figures. Hidden while indeterminate.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    label: {
+      description: 'A visible label above the bar; also its accessible name.',
+      control: 'text',
+      table: { type: { summary: 'ReactNode' } },
+    },
+    'aria-label': {
+      description: 'The accessible name when there is no visible `label`.',
+      control: 'text',
+      table: { type: { summary: 'string' } },
+    },
   },
   args: { value: 70, label: 'Uploading' },
+  excludeStories: ['anatomyParts'],
   decorators: [(Story) => <div style={{ maxInlineSize: '24rem' }}>{Story()}</div>],
 } satisfies Meta<typeof ProgressBar>
 
@@ -75,4 +122,40 @@ export const WithoutVisibleLabel: Story = {
   play: async ({ canvas }) => {
     await expect(canvas.getByRole('progressbar', { name: 'Storage used' })).toBeVisible()
   },
+}
+
+/** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
+export const anatomyParts = [
+  { name: 'Label', selector: '[role="progressbar"] > :first-child', description: 'Optional, above the bar. Names the progressbar.' },
+  { name: 'Track', selector: '[role="progressbar"] > div > :first-child', description: 'The full length, --secondary.' },
+  { name: 'Indicator', selector: '[role="progressbar"] > div > :first-child > *', description: 'The filled share, coloured by variant. A sliding third when indeterminate.' },
+  { name: 'Value label', selector: '[role="progressbar"] > div > :last-child', description: 'Optional, showValueLabel: the percentage after the bar.' },
+]
+
+/** Every part present. */
+export const Anatomy: Story = {
+  tags: ['!dev'],
+  args: { showValueLabel: true, size: 'lg' },
+  // The docs stage shrink-wraps its example; a bar needs a width to show its fill.
+  decorators: [(Story) => <div style={{ inlineSize: '20rem' }}>{Story()}</div>],
+  play: async ({ canvasElement }) => {
+    // The docs markers follow these selectors: a DOM change must not leave
+    // a marker pointing at nothing, or at the wrong part.
+    const found = anatomyParts.map(({ selector }) => canvasElement.querySelector(selector))
+    await expect(found.every(Boolean)).toBe(true)
+    await expect(new Set(found).size).toBe(anatomyParts.length)
+    await expect(found[0]).toHaveTextContent('Uploading')
+    await expect(found[3]).toHaveTextContent('70%')
+  },
+}
+
+/** Guidelines, Do: the label says what is in progress. */
+export const DoNameTheTask: Story = {
+  args: { label: 'Uploading report.pdf', showValueLabel: true },
+}
+
+/** Guidelines, Don't: a bare bar, with only an aria-label, leaves sighted readers guessing. */
+export const DontBareBar: Story = {
+  tags: ['!dev'],
+  args: { label: undefined, 'aria-label': 'Uploading report.pdf', showValueLabel: true },
 }

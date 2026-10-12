@@ -6,10 +6,42 @@ const meta = {
   title: 'Components/Loaders/Spinner',
   tags: ['beta'],
   component: Spinner,
+  // These descriptions are the docs' API table and the Playground's props panel.
   argTypes: {
-    size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] },
-    variant: { control: 'inline-radio', options: ['primary', 'accent', 'secondary'] },
+    size: {
+      description: 'The ring: 16px (`sm`), 24px (`md`) or 32px (`lg`) across.',
+      control: 'inline-radio',
+      options: ['sm', 'md', 'lg'],
+      table: { type: { summary: "'sm' | 'md' | 'lg'" }, defaultValue: { summary: "'md'" } },
+    },
+    variant: {
+      description: 'Colour of the indicator. `accent` is the foreground, as on Button.',
+      control: 'inline-radio',
+      options: ['primary', 'accent', 'secondary'],
+      table: { type: { summary: "'primary' | 'accent' | 'secondary'" }, defaultValue: { summary: "'accent'" } },
+    },
+    label: {
+      description: 'Shown under the indicator, and its accessible name. Without one the name is "Loading", visually hidden.',
+      control: 'text',
+      table: { type: { summary: 'string' } },
+    },
+    delay: {
+      description: 'Milliseconds before anything shows, so a fast load never flashes a spinner. The live region is there from the start.',
+      control: 'number',
+      table: { type: { summary: 'number' }, defaultValue: { summary: '0' } },
+    },
+    value: {
+      description: '0–100, clamped. Turns the spinner into a progress ring that shows how far along it is. Omit to spin.',
+      control: { type: 'range', min: 0, max: 100 },
+      table: { type: { summary: 'number' } },
+    },
+    isIndeterminate: {
+      description: 'Spin even when `value` is given.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
   },
+  excludeStories: ['anatomyParts'],
 } satisfies Meta<typeof Spinner>
 
 export default meta
@@ -100,4 +132,48 @@ export const Delay: Story = {
     await waitFor(() => expect(canvasElement.querySelector('svg')).toBeVisible(), { timeout: 2000 })
     await expect(status).toHaveTextContent('Loading')
   },
+}
+
+/** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
+export const anatomyParts = [
+  { name: 'Track', selector: 'svg > circle:first-child', description: 'The full ring, --border. Frames the motion; decoration.' },
+  { name: 'Indicator', selector: 'svg > circle:last-child', description: 'The arc: a quarter turn while spinning, or the value as a share of the ring.' },
+  { name: 'Label', selector: '[role="progressbar"] > span', description: 'Optional, under the ring. Also the accessible name.' },
+]
+
+/** Every part present. A progress ring, so the arc holds still to be pointed at. */
+export const Anatomy: Story = {
+  tags: ['!dev'],
+  args: { value: 70, label: 'Uploading', size: 'lg', variant: 'primary' },
+  play: async ({ canvasElement }) => {
+    // The docs markers follow these selectors: a DOM change must not leave
+    // a marker pointing at nothing, or at the wrong part.
+    const found = anatomyParts.map(({ selector }) => canvasElement.querySelector(selector))
+    await expect(found.every(Boolean)).toBe(true)
+    await expect(new Set(found).size).toBe(anatomyParts.length)
+    await expect(found[2]).toHaveTextContent('Uploading')
+  },
+}
+
+/** Guidelines, Do: one spinner, labelled, for the region that is loading. */
+export const DoOneForTheRegion: Story = {
+  render: (args) => (
+    <div aria-busy="true" style={{ display: 'grid', placeItems: 'center', inlineSize: 320, blockSize: 120, border: '1px solid var(--border)', borderRadius: 'var(--radius-md)' }}>
+      <Spinner {...args} label="Loading projects…" />
+    </div>
+  ),
+}
+
+/** Guidelines, Don't: a spinner in every card says the same thing three times. */
+export const DontOnePerItem: Story = {
+  tags: ['!dev'],
+  render: (args) => (
+    <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
+      {[1, 2, 3].map((n) => (
+        <div key={n} style={{ display: 'grid', placeItems: 'center', inlineSize: 100, blockSize: 120, border: '1px solid var(--border)', borderRadius: 'var(--radius-md)' }}>
+          <Spinner {...args} />
+        </div>
+      ))}
+    </div>
+  ),
 }
