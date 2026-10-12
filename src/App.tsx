@@ -560,7 +560,7 @@ export default function App() {
         <span className={styles.version}>Lv {pkg.version}</span>
         <nav aria-label="Main" className={styles.nav}>
           <a href={docs('getting-started-introduction')}>Docs</a>
-          <a href="#forge" className={styles.hideSm}>Play</a>
+          <a href="playground/" className={styles.hideSm}>Play</a>
           <a href="#inventory" className={styles.hideSm}>Components</a>
           <a href="#install" className={styles.hideSm}>Install</a>
           <a href={REPO} className={styles.hideSm}>GitHub</a>

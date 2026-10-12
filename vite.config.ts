@@ -22,6 +22,15 @@ const baseUiEntries = Object.keys(
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
   plugins: [react()],
+  // Two pages: the docs home and the Playground (`/playground/`).
+  build: {
+    rollupOptions: {
+      input: {
+        main: path.join(dirname, 'index.html'),
+        playground: path.join(dirname, 'playground/index.html'),
+      },
+    },
+  },
   optimizeDeps: { include: baseUiEntries },
   resolve: {
     alias: {
