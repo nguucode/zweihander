@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useState } from 'react'
-import { expect, fn, type MockInstance, spyOn, userEvent, waitFor, within } from 'storybook/test'
+import { expect, fn, userEvent, waitFor, within } from 'storybook/test'
 import { Icon } from '@/lib/icon'
 import { Button } from '../buttons/Button'
 import { Menu, type MenuProps } from './Menu'
@@ -73,11 +73,6 @@ const meta = {
       control: 'boolean',
       table: { type: { summary: 'boolean' }, defaultValue: { summary: 'true' } },
     },
-    modal: {
-      description: 'Deprecated: use `isModal`. Removed in the next minor.',
-      control: false,
-      table: { disable: true },
-    },
     container: {
       description: 'Where the popup renders instead of `<body>`, e.g. an element in fullscreen, where a popup in `<body>` would not show.',
       control: false,
@@ -136,26 +131,6 @@ export const Modal: Story = {
 export const NonModal: Story = {
   args: { isModal: false },
   play: async ({ canvas }) => {
-    await userEvent.click(canvas.getByRole('button', { name: 'Actions' }))
-    await body().findByRole('menu')
-    await expect(isScrollLocked()).toBe(false)
-    await userEvent.keyboard('{Escape}')
-    await waitFor(() => expect(body().queryByRole('menu')).toBeNull())
-  },
-}
-
-let warn: MockInstance<typeof console.warn>
-
-/** `modal` is the deprecated name of `isModal`: it still works, and warns in development. */
-export const DeprecatedModalProp: Story = {
-  tags: ['!dev', '!autodocs'],
-  args: { modal: false },
-  beforeEach: () => {
-    warn = spyOn(console, 'warn').mockImplementation(() => {})
-    return () => warn.mockRestore()
-  },
-  play: async ({ canvas }) => {
-    await expect(warn).toHaveBeenCalledWith(expect.stringContaining('`modal` is deprecated'))
     await userEvent.click(canvas.getByRole('button', { name: 'Actions' }))
     await body().findByRole('menu')
     await expect(isScrollLocked()).toBe(false)
