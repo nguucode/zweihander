@@ -2069,6 +2069,18 @@
       "storyId": "components-states-emptystate--default",
       "props": [
         {
+          "name": "title",
+          "control": "text",
+          "default": "No projects match \"atlas\"",
+          "description": "Says what is empty. A real heading, at `headingLevel`."
+        },
+        {
+          "name": "description",
+          "control": "text",
+          "default": "Check the spelling, or clear the search to see every project.",
+          "description": "Why it is empty, or what will appear here. Muted, at most 40 characters wide."
+        },
+        {
           "name": "size",
           "control": "inline-radio",
           "options": [
@@ -2089,7 +2101,7 @@
             6
           ],
           "default": 2,
-          "description": "The title's heading level, so it fits the page outline it lands in."
+          "description": "The title's heading level, so it fits the page outline: `3` inside a section headed by an `h2`."
         }
       ]
     },
@@ -2104,13 +2116,25 @@
         {
           "name": "description",
           "control": "text",
-          "default": "The server didn’t answer. Your projects are safe; try again in a moment."
+          "default": "The server didn’t answer. Your projects are safe; try again in a moment.",
+          "description": "What happened and what is safe: \"Your projects are safe; try again in a moment.\""
+        },
+        {
+          "name": "title",
+          "control": "text",
+          "default": "Couldn’t load projects",
+          "description": "What failed, in the reader's words. The default is the last resort, for failures you cannot describe."
+        },
+        {
+          "name": "details",
+          "control": "text",
+          "description": "A reference for support, e.g. an error code or request id. Shown small and monospaced, selected in one click."
         },
         {
           "name": "isLive",
           "control": "boolean",
           "default": false,
-          "description": "Announce it when it replaces content that was loading (`role=\"alert\"`)."
+          "description": "Makes it a `role=\"alert\"`, announced when it replaces content that was loading."
         },
         {
           "name": "size",
@@ -2118,7 +2142,9 @@
           "options": [
             "sm",
             "md"
-          ]
+          ],
+          "default": "md",
+          "description": "`sm` for a panel or a table body; `md` for a whole page or section."
         },
         {
           "name": "headingLevel",
@@ -2129,7 +2155,9 @@
             4,
             5,
             6
-          ]
+          ],
+          "default": 2,
+          "description": "The title's heading level, so it fits the page outline."
         }
       ]
     },
@@ -2144,13 +2172,20 @@
         {
           "name": "description",
           "control": "text",
-          "default": "3 people will get an email with a link to join Atlas."
+          "default": "3 people will get an email with a link to join Atlas.",
+          "description": "What happens next, or what the reader can now do."
+        },
+        {
+          "name": "title",
+          "control": "text",
+          "default": "Invites sent",
+          "description": "What was done: \"Invites sent\", \"Import finished\"."
         },
         {
           "name": "isLive",
           "control": "boolean",
           "default": false,
-          "description": "Announce it when it replaces a form or a progress view (`role=\"status\"`)."
+          "description": "Makes it a `role=\"status\"`, read politely when it replaces a form or a progress view."
         },
         {
           "name": "size",
@@ -2158,7 +2193,9 @@
           "options": [
             "sm",
             "md"
-          ]
+          ],
+          "default": "md",
+          "description": "`sm` for a panel or a table body; `md` for a whole page or section."
         },
         {
           "name": "headingLevel",
@@ -2169,7 +2206,9 @@
             4,
             5,
             6
-          ]
+          ],
+          "default": 2,
+          "description": "The title's heading level, so it fits the page outline."
         }
       ]
     },

@@ -1,50 +1,170 @@
-import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
 import * as SuccessStateStories from './SuccessState.stories'
 
 <Meta of={SuccessStateStories} />
 
 # Success State
 
+<DocTabs>
+<DocTab value="overview">
+
 What a flow shows when it has finished: the invites are sent, the import
 is done, the inbox is empty. It confirms what happened and offers the
-next step. Our own spec: uiguideline.com has no page for it. Built on
-[Empty State](?path=/docs/components-states-emptystate--docs), in the
-success tone.
+next step.
+
+<Status of={SuccessStateStories} />
 
 <Canvas of={SuccessStateStories.Default} />
 
-## Anatomy
+## Variants
 
-Empty State's parts, with the icon disc in `--success-subtle` behind the
-`success` icon in `--success-text`.
-
-## Props
-
-Every Empty State prop (`icon`, `title`, `description`, `action`,
-`size`, `headingLevel`), and:
-
-| Prop | Values | Default | |
-| --- | --- | --- | --- |
-| `isLive` | boolean | `false` | `role="status"`. |
-
-<Controls of={SuccessStateStories.Default} />
-
-### Design notes
-
-- **A success state ends a flow; a Toast confirms an action.** Use this
-  when the screen the reader was on is finished (a sent form, a completed
-  import) and needs replacing. For a quick "Saved" that leaves the screen
-  as it was, use a Toast.
-- **Lead with the next step.** The action is where the reader goes now.
-
-## Usage
+| Variant | Use for |
+| --- | --- |
+| `md` | The end of a flow that filled the page or a dialog: a sent form, a finished import. Lead with the next step. |
+| `sm` | A panel or a list that is done: "All caught up". Often no action. |
 
 <Canvas of={SuccessStateStories.Small} />
 
+## Resources
+
+From npm, or copied into your project through the registry:
+
+```js
+import { SuccessState } from 'zweihander/success-state'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/success-state.json
+```
+
+- Source: [src/components/states/SuccessState.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/states/SuccessState.tsx)
+- Spec: our own; uiguideline.com has no page for it
+- Behaviour: built on [Empty State](?path=/docs/components-states-emptystate--docs), no Base UI part
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
+## Anatomy
+
+<Anatomy parts={SuccessStateStories.anatomyParts}>
+  <Story of={SuccessStateStories.Anatomy} />
+</Anatomy>
+
+Empty State's parts, with the disc in the success tone.
+
+## Measurements
+
+Empty State's.
+
+<SpecTable
+  caption="sm"
+  rows={[
+    { part: 'Container', property: 'Block padding', token: '--space-8' },
+    { part: 'Container', property: 'Inline padding', token: '--space-4' },
+    { part: 'Icon disc', property: 'Size', token: '--space-10' },
+    { part: 'Title', property: 'Font size', token: '--text-heading-sm' },
+    { part: 'Title', property: 'Line height', token: '--leading-heading-sm' },
+    { part: 'Action', property: 'Space above', token: '--space-4' },
+  ]}
+/>
+
+<SpecTable
+  caption="md"
+  rows={[
+    { part: 'Container', property: 'Block padding', token: '--space-12' },
+    { part: 'Container', property: 'Inline padding', token: '--space-6' },
+    { part: 'Icon disc', property: 'Size', token: '--space-12' },
+    { part: 'Title', property: 'Font size', token: '--text-heading-md' },
+    { part: 'Title', property: 'Line height', token: '--leading-heading-md' },
+    { part: 'Action', property: 'Space above', token: '--space-6' },
+  ]}
+/>
+
+<SpecTable
+  caption="Every size"
+  rows={[
+    { part: 'Icon disc', property: 'Space below', token: '--space-4' },
+    { part: 'Description', property: 'Space above', token: '--space-2' },
+    { part: 'Description', property: 'Font size', token: '--text-body' },
+    { part: 'Action', property: 'Gap between buttons', token: '--space-2' },
+  ]}
+/>
+
+## Color
+
+One tone: success, on the disc only.
+
+<SpecTable
+  caption="Success"
+  rows={[
+    { part: 'Icon disc', property: 'Background', token: '--success-subtle' },
+    { part: 'Icon', property: 'Colour', token: '--success-text' },
+    { part: 'Title', property: 'Colour', token: '--foreground' },
+    { part: 'Description', property: 'Colour', token: '--muted-foreground' },
+  ]}
+/>
+
+`--success-text` on `--success-subtle` is 4.5:1 or more in both modes.
+
+## States
+
+Success State itself is static. Its action has the states of its own
+Buttons.
+
+<States
+  states={[
+    { label: 'Enabled' },
+    { label: 'Action hover', pseudo: 'hover' },
+    { label: 'Action focus', pseudo: 'focus-visible' },
+    { label: 'Action pressed', pseudo: 'active' },
+  ]}
+>
+  <Story of={SuccessStateStories.Default} />
+</States>
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={SuccessStateStories} />
+</div>
+
+Every other `<div>` attribute passes through, including `ref`.
+
+</DocTab>
+<DocTab value="guidelines">
+
+## When to use
+
+Use a Success State when the screen the reader was on is finished and
+needs replacing: a sent form, a completed import, an emptied inbox. Say
+what was done, and lead with the next step.
+
+<DoDont
+  do={<Story of={SuccessStateStories.Default} />}
+  doCaption="The flow is over: say what was done and where to go next."
+  dont={<Story of={SuccessStateStories.DontForQuickSave} />}
+  dontCaption="A quick save is not the end of a flow. This hides the form; a Toast would leave it in place."
+/>
+
+## When not to use
+
+- **To confirm a quick action** such as Save, Copy or Move. Use a Toast:
+  it confirms and leaves the screen as it was.
+- **When there is nothing there yet.** Use an
+  [Empty State](?path=/docs/components-states-emptystate--docs).
+
 ## Accessibility
 
-- The title is a heading, as on Empty State.
+- The title is a real heading, as on Empty State. Set `headingLevel` to
+  fit the outline.
+- The icon is `aria-hidden`; the title says what was done.
 - `isLive` makes it a `role="status"`, read politely when it replaces a
-  form or a progress view.
+  form or a progress view. Without it, nothing is announced.
 
-  <Canvas of={SuccessStateStories.AfterSubmit} />
+<Canvas of={SuccessStateStories.AfterSubmit} />
+
+</DocTab>
+</DocTabs>
