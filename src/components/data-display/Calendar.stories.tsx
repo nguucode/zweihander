@@ -202,6 +202,9 @@ export const Today: Story = {
     // With nothing selected, today holds the tab stop.
     for (const today of canvasElement.querySelectorAll('[data-audit="light"] [aria-current="date"], [data-audit="dark"] [aria-current="date"]'))
       await expect(today).toHaveAttribute('tabindex', '0')
+    // Every grid keeps a tab stop, also when the range starts outside the month.
+    for (const grid of canvasElement.querySelectorAll('[data-audit] [role="grid"]'))
+      await expect(grid.querySelectorAll('button[tabindex="0"]')).toHaveLength(1)
     for (const today of days) {
       const { color, backgroundColor } = getComputedStyle(today)
       const page = getComputedStyle(today.closest<HTMLElement>('[data-audit]')!).backgroundColor
@@ -215,6 +218,7 @@ export const Today: Story = {
 /** Today on the 1st: yesterday is last month, so the range starts outside the month shown. */
 export const TodayOnTheFirst: Story = {
   ...Today,
+  tags: ['!dev'],
   beforeEach: () => mockToday(new Date(2026, 10, 1)),
 }
 

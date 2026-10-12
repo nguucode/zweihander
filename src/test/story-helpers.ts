@@ -1,4 +1,4 @@
-// Helpers for play functions only: not part of the registry or the npm build.
+// Helpers for play functions and story setup only: not part of the registry or the npm build.
 
 // Created on first use, not on import: the Playground manifest script loads
 // story files in Node, where there is no document.
@@ -63,8 +63,10 @@ export const hoverRules = (el: Element) =>
   )
 
 /**
- * Moves the clock to `today` (time of day kept) until the returned cleanup
- * runs: `new Date()` and `Date.now()` follow, dates built from parts do not.
+ * Moves the clock to `today` (hours and minutes kept) until the returned
+ * cleanup runs: `new Date()` and `Date.now()` follow, dates built from parts
+ * do not. Dates made before the mock fail `instanceof Date`, and `Date()`
+ * without `new` throws.
  * For a story `beforeEach`, so a story that reads today can be pinned to a
  * date that breaks it.
  */
