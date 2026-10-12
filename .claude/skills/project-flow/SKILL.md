@@ -69,16 +69,16 @@ Each finding the user picks becomes a new `flow fix` or `flow change` thread (ha
 
 After `to-tickets`, this thread becomes the **map thread**. It does not implement. It hands off one batch at a time.
 
-1. List the current batch's tickets with title, vault path and `Blocked by`. The **frontier** is every ticket in the batch with no open blocker.
+1. List the current batch's tickets with title, vault path and `Blocked by`. The **frontier** is every ticket in the batch with no open blocker. Copy the spec to `/mnt/project-files/<feature>/` and each ticket to `/mnt/project-files/<feature>/issues/`, so a ticket thread can start reading before the user allows the vault. The copies are read-only snapshots; the vault stays the source of truth.
 2. Get the coordinator with `get_channel_session_id`, then `send_message` to it:
 
    ```
    project-flow: start ticket threads for <feature>, batch <N> of <total>.
-   Spec: <vault path>
+   Spec: <vault path> (copy: <project-files path>)
    Start now (frontier):
-   - <NN> <title>: <vault path>
+   - <NN> <title>: <vault path> (copy: <project-files path>)
    Waiting: <NN> blocked by <NN>, ...
-   Brief for each: "Implement ticket <vault path> following .claude/skills/project-flow/TICKET-THREAD.md. Map thread: <this thread's title>."
+   Brief for each: "Implement ticket <vault path> (copy: <project-files path>) following .claude/skills/project-flow/TICKET-THREAD.md. Map thread: <this thread's title>."
    ```
 
 3. The coordinator posts one project-chat line per ticket and starts a thread on it with that brief (its rules are in project memory, `project-flow-tickets`). Frontier tickets run in parallel.
