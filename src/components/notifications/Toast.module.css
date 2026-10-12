@@ -178,6 +178,7 @@
   .toast {
     /* A fade replaces the slide, so this one stays timed: the duration
        tokens are 0ms under reduced motion and would make it a jump. */
+    /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- see above */
     transition: opacity 200ms;
   }
   .top .toast[data-starting-style],

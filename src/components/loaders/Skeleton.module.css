@@ -31,6 +31,7 @@
 }
 
 .animated {
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- own loop, not a UI transition */
   animation: pulse 1.6s ease-in-out infinite;
 }
 
