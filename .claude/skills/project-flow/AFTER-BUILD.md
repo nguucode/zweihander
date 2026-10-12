@@ -25,7 +25,7 @@ A review, QA or CI finding sends the work back to the build step to fix, then do
 ## Ship
 
 1. Work on the thread's branch, never the default branch; never force-push.
-2. Before pushing, run what CI runs (`npm run tokens:check`, `npm run registry:check`, `npm run lint`, `npx tsc -b`, Storybook tests for touched components) and add a changeset in `.changeset/` (an empty one when nothing ships).
+2. Before pushing, run what CI runs (`npm run tokens:check`, `npm run registry:check`, `npm run lint`, `npx tsc -b`, Storybook tests for touched components) and add a changeset in `.changeset/` (an empty one when nothing ships). Component work also passes [COMPONENTS.md](COMPONENTS.md) gates 4 and 5 and pastes its PR checklist.
 3. Open a draft PR and watch it. Fix small CI failures in place; larger ones go back to the build step.
 4. When CI is green, mark the PR ready and tell the user in one line it is ready to merge. The user merges it themselves; wait for the merge event. Ask when a conflict cannot be resolved cleanly.
 5. After merge: mirror repo Markdown to the vault (see [SKILL.md](SKILL.md#vault)), run retro, then the thread's closing step (ticket threads: [TICKET-THREAD.md](TICKET-THREAD.md)).

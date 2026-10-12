@@ -1,6 +1,6 @@
 ---
 name: project-flow
-description: Idea-to-ship workflow for Zweihänder in a Claude Code Project (threads, not the desktop flow mod). Use when a thread is asked to run "flow idea", "flow fix", "flow change" or "flow tidy", to take an idea, bug, behaviour change or repo health check through to merged PRs, or when a thread was started to implement one ticket.
+description: Idea-to-ship workflow for Zweihänder in a Claude Code Project (threads, not the desktop flow mod). Use when a thread is asked to run "flow idea", "flow fix", "flow change" or "flow tidy", to take an idea, bug, behaviour change or repo health check through to merged PRs, when a thread was started to implement one ticket, or for any new, changed, refactored or deprecated component or pattern under src/components/ (conventions in COMPONENTS.md).
 ---
 
 # Project flow
@@ -14,7 +14,7 @@ A thread started for one ticket skips this file and follows [TICKET-THREAD.md](T
 - **User-invoked skills** (`disable-model-invocation: true`: setup-matt-pocock-skills, grill-with-docs, to-spec, to-tickets, implement, improve-codebase-architecture) cannot be reached through the Skill tool. Read `.claude/skills/<name>/SKILL.md` and follow it as if the user had typed the command.
 - **Model-invoked skills** (research, prototype, tdd, diagnosing-bugs, ponytail-*): call the Skill tool.
 - **Built-ins** (`code-review`, `security-review`, `run`) and `a11y-enforcer:a11y-check`: call the Skill tool.
-- Repo conventions sit on top of every step: `docs/agents/*.md` (tracker in the vault, `CONTEXT.md`, ADRs), and `zw-build` for anything under `src/components/`.
+- Repo conventions sit on top of every step: `docs/agents/*.md` (tracker in the vault, `CONTEXT.md`, ADRs), and [COMPONENTS.md](COMPONENTS.md) for anything under `src/components/` (classification and MDX spec before code, code and test gates inside the build step, changeset and status at ship). This flow is the only implementation process; there is no separate component process.
 - The tracker lives in the vault on the user's Mac. Reach it with the device folder tools (`/Volumes/KAFKA/Vault`); if none are connected, call `connect_device` and wait. Write vault files in Vietnamese, following `/Volumes/KAFKA/Vault/CLAUDE.md`.
 
 Steps 3 to 6 stay in one unbroken thread (no compaction before the tickets exist), so grill, spec and tickets share the same reasoning.
