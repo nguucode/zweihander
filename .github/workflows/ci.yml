@@ -5,6 +5,8 @@ name: CI
 on:
   pull_request:
     branches: [main]
+  # Visual baselines starts this after it commits new screenshots.
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -34,4 +36,12 @@ jobs:
       - run: npx playwright install --with-deps chromium firefox webkit
       - run: npx tsc -b
       - run: npx vitest --project storybook run
+      - run: npx vitest --project visual run
+      # A mismatch writes the actual screenshot and a diff beside each other.
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-diffs
+          path: .vitest-attachments
+          if-no-files-found: ignore
       - run: npm run build:lib

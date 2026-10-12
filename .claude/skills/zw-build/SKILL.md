@@ -75,15 +75,16 @@ Test nằm trong `<Name>.stories.tsx`, chạy qua addon-vitest. Test hành vi, k
 - Story cho mọi variant, size và state: default, hover, active, focus-visible, disabled, loading/invalid nếu có, cả light lẫn dark.
 - **Mỗi câu trong `## Accessibility` có ít nhất một `play` kiểm nó**, dùng `userEvent` cho bàn phím.
 - a11y chạy ở chế độ `error`. Story nào phải tắt (ví dụ story đo contrast tự viết) thì đặt `a11y: { test: 'off' }` kèm comment lý do.
-- Thay đổi về hình ảnh: kiểm ảnh visual regression của story đại diện. Nếu ảnh đổi đúng ý thì cập nhật baseline trên CI, không cập nhật trên Mac.
+- Visual regression: mỗi component có một story đại diện trong `src/visual.test.tsx` (story nhiều variant và state nhất), chụp light và dark trên Chromium, so với baseline trong `src/__screenshots__/`. Component mới thì thêm một dòng vào bảng `STORIES`; test `every component has a visual story` đỏ nếu thiếu. Ảnh đổi đúng ý thì gắn label `update screenshots` vào PR: workflow Visual baselines chụp lại trên CI Linux và commit. Không cập nhật baseline trên Mac. Khi CI báo lệch, ảnh thật và ảnh diff nằm trong artifact `visual-diffs` của lượt chạy.
 
 **Gate:**
 
 ```bash
 npx vitest --project storybook run
+npx vitest --project visual run
 ```
 
-Lệnh này xanh trên cả ba trình duyệt. Trên PR, nó là required check `check`. Máy mới cần `npx playwright install chromium firefox webkit` một lần; chạy nhanh một engine thì thêm `--browser=chromium`.
+Lệnh đầu xanh trên cả ba trình duyệt. Lệnh sau chỉ có nghĩa trên CI, vì baseline sinh trên Linux: trên Mac nó báo lệch ở mọi ảnh. Trên PR, nó là required check `check`. Máy mới cần `npx playwright install chromium firefox webkit` một lần; chạy nhanh một engine thì thêm `--browser=chromium`.
 
 ## 4. Release
 
@@ -123,15 +124,9 @@ Checklist dán vào mô tả PR:
 - [ ] MDX: đủ mục bắt buộc (component: Anatomy / Props / Accessibility, thêm Differences nếu lệch spec; pattern: biến thể / Props / Layout / Accessibility)
 - [ ] Code: token only, 'use client', registry (không số lượng), exports
 - [ ] Story + play cho mỗi câu Accessibility; a11y error
-- [ ] tsc, lint, tokens:check, registry:check, vitest storybook (3 trình duyệt)
+- [ ] tsc, lint, tokens:check, registry:check, vitest storybook (3 trình duyệt), vitest visual (CI)
 - [ ] Changeset (hoặc --empty)
 - [ ] Status tag
 - [ ] Figma sync (nếu đổi token/prop)
 - [ ] Vault: build-log, kanban, agent-log
 ```
-
-## Chưa áp dụng được
-
-Luật dưới đây đã được sếp chốt ngày 2026-10-08, nhưng repo chưa có công cụ để thực thi. Khi làm component mà gặp nó thì ghi chú trong PR, đừng chặn PR. Hạ tầng xong thì xoá mục khỏi danh sách này.
-
-- [ ] Visual regression bằng `toMatchScreenshot`, baseline sinh trên CI Linux. Chưa có thì chưa component nào lên `stable`, và pattern dừng ở `experimental`.
