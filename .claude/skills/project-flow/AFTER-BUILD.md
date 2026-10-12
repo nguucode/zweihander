@@ -4,13 +4,15 @@ Shared by `flow idea` (implement here, or one ticket), `flow fix` and `flow chan
 
 Review and QA cover every commit since the flow (or ticket branch) started, not only the uncommitted diff: `implement` commits as it goes.
 
+**No-code change.** A change is no-code when every path in `git diff --name-only origin/main...HEAD` ends in `.md` (not `.mdx`, which Storybook renders) and sits under `.claude/`, `docs/` or `.changeset/`, or is a root `*.md` (`README.md`, `CLAUDE.md`). Anything else (`src/`, `scripts/`, `tokens/`, config, a `.sh` or `.py` inside a skill) makes it code. A no-code change skips review-bugs and qa-run, recorded as one checklist line (`review-bugs, qa-run: skipped, no-code change`); every other step still runs. This is the rule, not the agent's call: a mixed diff never skips.
+
 | Step | Skill | Required | Does |
 | --- | --- | --- | --- |
 | artifact | Artifact tool | optional | Change touches UI: publish an Artifact showing each new or changed screen in its states (default, empty, loading, error) and link it in the thread. No UI: one checklist line, skip. |
-| review-bugs | `code-review` (built-in) | yes | Hunt logic, security and performance bugs. `matt-code-review` (standards + spec) already ran inside `implement`. |
+| review-bugs | `code-review` (built-in) | yes, unless no-code | Hunt logic, security and performance bugs. `matt-code-review` (standards + spec) already ran inside `implement`. |
 | review-lean | ponytail-review | yes | Hunt code that should not exist. |
 | review-security | `security-review` (built-in) | optional | Security pass on the change. |
-| qa-run | `run` (built-in) | yes | Run the real thing (Storybook for components) and check: each acceptance criterion (ticket or spec), the bug is gone (fix), or the change works. Report pass/fail only, fix nothing here. |
+| qa-run | `run` (built-in) | yes, unless no-code | Run the real thing (Storybook for components) and check: each acceptance criterion (ticket or spec), the bug is gone (fix), or the change works. Report pass/fail only, fix nothing here. |
 | qa-a11y | `a11y-enforcer:a11y-check` | optional | WCAG check when there is UI. |
 | debt | ponytail-debt | yes | Ledger of `shortcut:` comments in the change. |
 | ship | none | yes | See below. |
