@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
+import { expect } from 'storybook/test'
 import { Button } from '@/components/buttons/Button'
 import { TextInput } from '@/components/inputs/TextInput'
 import { Theme } from '@/theme/Theme'
@@ -74,4 +75,11 @@ export const SideBySide: Story = {
       </Theme>
     </div>
   ),
+  // Each scope tells the browser its appearance, so native UI it draws
+  // (scrollbars, date and select popups, autofill) matches the tokens.
+  play: async ({ canvasElement }) => {
+    const [light, dark] = canvasElement.querySelectorAll<HTMLElement>('.light, .dark')
+    await expect(getComputedStyle(light).colorScheme).toBe('light')
+    await expect(getComputedStyle(dark).colorScheme).toBe('dark')
+  },
 }
