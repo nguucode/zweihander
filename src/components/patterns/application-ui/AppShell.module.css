@@ -212,6 +212,7 @@
   position: absolute;
   inset-block-start: var(--space-3);
   inset-inline-end: var(--space-3);
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- local stacking inside the shell, not a global layer */
   z-index: 1;
   display: inline-flex;
   align-items: center;

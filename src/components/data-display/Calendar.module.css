@@ -105,7 +105,7 @@
    3.4:1, under the 4.5:1 a 14px figure needs: a deliberate design choice,
    with aria-current carrying today for assistive tech. */
 .today {
-  border-radius: 50%;
+  border-radius: var(--radius-pill);
   background: var(--orange);
   color: var(--orange-foreground);
   font-weight: 600;

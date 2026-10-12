@@ -1,6 +1,7 @@
 /* The stepper buttons float inside the field: no divider, a small inset
    from the end, and a fill only on hover. */
 .group.group {
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- 2px between stepper buttons, below the spacing scale on purpose */
   gap: 2px;
   padding-inline-end: var(--space-1);
 }

@@ -98,6 +98,7 @@
   margin-inline-end: calc(var(--space-1) * -1);
   /* 2px around a 16px icon: a 20px button, one line of body text tall.
      Below the spacing scale on purpose, as on Tag. */
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- see above */
   padding: 2px;
   border: 0;
   border-radius: var(--radius-sm);

@@ -20,6 +20,7 @@
    always there (transparent unless outlined) so appearances never shift
    the layout, and 1px padding makes up the rest. */
 .md {
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- hairline 1px, see above */
   padding: 1px var(--space-2);
   font-size: var(--text-body);
   line-height: var(--leading-body);
@@ -27,6 +28,7 @@
 
 .sm {
   --tag-icon: var(--icon-xs);
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- hairline 1px, see above */
   padding: 1px var(--space-1-5);
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);

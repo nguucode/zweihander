@@ -23,6 +23,7 @@
 }
 
 .required {
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- 2px between label and asterisk, below the spacing scale on purpose */
   margin-inline-start: 0.125rem;
   color: var(--danger-text);
 }

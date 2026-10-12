@@ -29,6 +29,7 @@
 .stars {
   display: inline-flex;
   /* 2px between stars: below the spacing scale on purpose, as on Tag. */
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- see above */
   gap: 2px;
 }
 

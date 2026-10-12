@@ -19,6 +19,7 @@
 }
 
 .required {
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- 2px between label and asterisk, below the spacing scale on purpose */
   margin-inline-start: 0.125rem;
   color: var(--danger-text);
 }
@@ -150,6 +151,7 @@
   font-family: var(--font-sans);
   /* SVG user units on the icon's 20-unit viewBox, not page pixels: the
      label scales with the icon. */
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- SVG user units, see above */
   font-size: 9px;
   font-weight: 700;
 }

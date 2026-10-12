@@ -93,6 +93,7 @@
 .spinner {
   inline-size: var(--space-4);
   block-size: var(--space-4);
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- centres the 16px spinner on the first 20px line */
   margin-block-start: 2px;
   border: 2px solid var(--border);
   border-block-start-color: var(--foreground);
@@ -144,6 +145,7 @@
   flex-shrink: 0;
   margin: 0 calc(var(--space-1) * -1) 0 0;
   /* 2px around a 16px icon: a 20px button, one line tall. */
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- see above */
   padding: 2px;
   border: 0;
   border-radius: var(--radius-sm);
@@ -176,6 +178,7 @@
   .toast {
     /* A fade replaces the slide, so this one stays timed: the duration
        tokens are 0ms under reduced motion and would make it a jump. */
+    /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- see above */
     transition: opacity 200ms;
   }
   .top .toast[data-starting-style],

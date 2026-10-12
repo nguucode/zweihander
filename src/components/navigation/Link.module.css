@@ -61,6 +61,7 @@
 
 .icon {
   display: inline-block;
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- scales with the link text, not the spacing scale */
   margin-inline-start: 0.2em;
   inline-size: 0.9em;
   block-size: 0.9em;

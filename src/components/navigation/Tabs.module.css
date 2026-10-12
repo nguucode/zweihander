@@ -119,6 +119,7 @@
 /* pills: a segmented toggle. A --muted track, the selected tab a --card
    chip with a hairline edge and a soft shadow. */
 .pills .list {
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- 2px track inset, below the spacing scale on purpose */
   padding: 2px;
   border-radius: var(--radius-field);
   background: var(--muted);
@@ -141,6 +142,7 @@
 }
 .pills .indicator {
   position: absolute;
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- local stacking under the tab label, not a global layer */
   z-index: -1;
   inset-inline-start: var(--active-tab-left);
   inset-block-start: var(--active-tab-top);
