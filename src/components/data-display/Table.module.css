@@ -31,7 +31,8 @@
 
 .th,
 .td,
-.select {
+.select,
+.expand {
   box-sizing: border-box;
   block-size: var(--table-row);
   padding: 0 var(--space-4);
@@ -52,7 +53,8 @@ tbody tr:last-child > * {
   white-space: nowrap;
 }
 .sticky thead .th,
-.sticky thead .select {
+.sticky thead .select,
+.sticky thead .expand {
   position: sticky;
   inset-block-start: 0;
   /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- local stacking inside the table, not a global layer */
@@ -134,8 +136,40 @@ tbody tr.selected > * {
   inline-size: var(--space-10);
   padding-inline-end: 0;
 }
-thead .select {
+thead .select,
+thead .expand {
   background: var(--surface-filled);
+}
+
+/* Just wide enough for the icon button. */
+.expand {
+  inline-size: var(--space-10);
+  padding-inline: var(--space-2) 0;
+}
+.expandIcon {
+  display: inline-flex;
+  font-size: var(--icon-md);
+  transition: rotate var(--duration-base);
+}
+[aria-expanded='true'] > .expandIcon {
+  rotate: 90deg;
+}
+
+/* An open row and its content read as one block: no rule between them. */
+tbody tr.expanded > * {
+  border-block-end-color: transparent;
+}
+.expandedContent {
+  padding: var(--space-2) var(--space-4) var(--space-4);
+  border-block-end: 1px solid var(--border);
+}
+/* The content row is not a record: it takes no hover tint of its own. */
+tbody tr.expandedRow:hover > * {
+  background: transparent;
+}
+/* Under a selected row it shares the tint, so the pair still reads as one. */
+tbody tr.selected + tr.expandedRow > * {
+  background: var(--primary-subtle);
 }
 
 .empty {

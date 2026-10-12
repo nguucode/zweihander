@@ -1,8 +1,9 @@
 'use client'
 
-import { useMemo, useState, type ReactNode } from 'react'
+import { Fragment, useId, useMemo, useState, type ReactNode } from 'react'
 import { Icon } from '@/lib/icon'
 import { cn } from '@/lib/utils'
+import { Button } from '../buttons/Button'
 import { Checkbox } from '../controls/Checkbox'
 import styles from './Table.module.css'
 
@@ -48,6 +49,15 @@ export interface TableProps<Row> {
   selectedIds?: string[]
   defaultSelectedIds?: string[]
   onSelectionChange?: (ids: string[]) => void
+  /**
+   * Content shown under a row when it is expanded, across the full width.
+   * Adds an expand button to each row that returns content; a row that
+   * returns `null`, `undefined` or `false` gets none.
+   */
+  expandedContent?: (row: Row) => ReactNode
+  expandedIds?: string[]
+  defaultExpandedIds?: string[]
+  onExpandedChange?: (ids: string[]) => void
   /** Row height: 40 (`sm`) or 48px (`md`). */
   density?: 'sm' | 'md'
   /** Keep the header row in view while the table scrolls inside its container. */
@@ -78,6 +88,10 @@ export function Table<Row>({
   selectedIds: selectedProp,
   defaultSelectedIds = [],
   onSelectionChange,
+  expandedContent,
+  expandedIds: expandedProp,
+  defaultExpandedIds = [],
+  onExpandedChange,
   density = 'md',
   hasStickyHeader = false,
   emptyState,
@@ -87,6 +101,9 @@ export function Table<Row>({
   const [selectedState, setSelectedState] = useState(defaultSelectedIds)
   const sort = sortProp !== undefined ? sortProp : sortState
   const selected = new Set(selectedProp ?? selectedState)
+  const [expandedState, setExpandedState] = useState(defaultExpandedIds)
+  const expanded = new Set(expandedProp ?? expandedState)
+  const baseId = useId()
 
   // Uncontrolled sort is done here; a controlled one is the caller's job.
   const shown = useMemo(() => {
@@ -116,6 +133,12 @@ export function Table<Row>({
     setSelectedState(ids)
     onSelectionChange?.(ids)
   }
+  const setExpanded = (ids: string[]) => {
+    setExpandedState(ids)
+    onExpandedChange?.(ids)
+  }
+  const isExpandable = expandedContent !== undefined
+  const columnCount = columns.length + (isSelectable ? 1 : 0) + (isExpandable ? 1 : 0)
   // Ids come from each row's place in `rows`, so sorting does not change them.
   const position = new Map(rows.map((row, i) => [row, i]))
   const ids = shown.map((row, i) => getRowId(row, position.get(row) ?? i))
@@ -148,6 +171,11 @@ export function Table<Row>({
                 />
               </th>
             )}
+            {isExpandable && (
+              <th scope="col" className={styles.expand}>
+                <span className={styles.srOnly}>Details</span>
+              </th>
+            )}
             {columns.map((col) => {
               const active = sort?.key === col.key
               return (
@@ -176,7 +204,7 @@ export function Table<Row>({
         <tbody>
           {shown.length === 0 && emptyState ? (
             <tr>
-              <td colSpan={columns.length + (isSelectable ? 1 : 0)} className={styles.empty}>
+              <td colSpan={columnCount} className={styles.empty}>
                 {emptyState}
               </td>
             </tr>
@@ -184,32 +212,69 @@ export function Table<Row>({
             shown.map((row, i) => {
               const id = ids[i]
               const isSelected = selected.has(id)
+              const content = expandedContent?.(row)
+              const hasContent = content != null && content !== false
+              const isExpanded = hasContent && expanded.has(id)
+              const contentId = `${baseId}-expanded-${i}`
               return (
-                <tr key={id} aria-selected={isSelectable ? isSelected : undefined} className={cn(isSelected && styles.selected)}>
-                  {isSelectable && (
-                    <td className={styles.select}>
-                      <Checkbox
-                        aria-label={`Select ${rowName(row, i)}`}
-                        checked={isSelected}
-                        onCheckedChange={(on) => setSelected(on ? [...selected, id] : [...selected].filter((x) => x !== id))}
-                      />
-                    </td>
-                  )}
-                  {columns.map((col) => {
-                    const content = col.cell ? col.cell(row) : ((row as Record<string, unknown>)[col.key] as ReactNode)
-                    const Cell = col.isRowHeader ? 'th' : 'td'
-                    return (
-                      <Cell
-                        key={col.key}
-                        scope={col.isRowHeader ? 'row' : undefined}
-                        style={{ textAlign: col.align }}
-                        className={cn(styles.td, col.isRowHeader && styles.rowHeader)}
-                      >
+                <Fragment key={id}>
+                  <tr
+                    aria-selected={isSelectable ? isSelected : undefined}
+                    className={cn(isSelected && styles.selected, isExpanded && styles.expanded)}
+                  >
+                    {isSelectable && (
+                      <td className={styles.select}>
+                        <Checkbox
+                          aria-label={`Select ${rowName(row, i)}`}
+                          checked={isSelected}
+                          onCheckedChange={(on) => setSelected(on ? [...selected, id] : [...selected].filter((x) => x !== id))}
+                        />
+                      </td>
+                    )}
+                    {isExpandable && (
+                      <td className={styles.expand}>
+                        {hasContent && (
+                          <Button
+                            variant="secondary"
+                            appearance="ghost"
+                            size="sm"
+                            isIconOnly
+                            aria-label={`Expand ${rowName(row, i)}`}
+                            aria-expanded={isExpanded}
+                            // Only points at the content row while it exists.
+                            aria-controls={isExpanded ? contentId : undefined}
+                            onClick={() => setExpanded(isExpanded ? [...expanded].filter((x) => x !== id) : [...expanded, id])}
+                          >
+                            <span className={styles.expandIcon} aria-hidden="true">
+                              <Icon name="chevron-right" />
+                            </span>
+                          </Button>
+                        )}
+                      </td>
+                    )}
+                    {columns.map((col) => {
+                      const value = col.cell ? col.cell(row) : ((row as Record<string, unknown>)[col.key] as ReactNode)
+                      const Cell = col.isRowHeader ? 'th' : 'td'
+                      return (
+                        <Cell
+                          key={col.key}
+                          scope={col.isRowHeader ? 'row' : undefined}
+                          style={{ textAlign: col.align }}
+                          className={cn(styles.td, col.isRowHeader && styles.rowHeader)}
+                        >
+                          {value}
+                        </Cell>
+                      )
+                    })}
+                  </tr>
+                  {isExpanded && (
+                    <tr className={styles.expandedRow}>
+                      <td id={contentId} colSpan={columnCount} className={styles.expandedContent}>
                         {content}
-                      </Cell>
-                    )
-                  })}
-                </tr>
+                      </td>
+                    </tr>
+                  )}
+                </Fragment>
               )
             })
           )}

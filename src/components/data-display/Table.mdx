@@ -6,9 +6,9 @@ import * as TableStories from './Table.stories'
 # Table
 
 Rows of records with the same fields, to scan and compare: projects,
-invoices, members. Columns can sort, rows can be selected. Spec:
+invoices, members. Columns can sort, rows can be selected and expanded. Spec:
 [uiguideline.com/components/table](https://www.uiguideline.com/components/table).
-A native `<table>`; selection uses the kit's Checkbox.
+A native `<table>`; selection uses the kit's Checkbox, expansion its Button.
 
 <Canvas of={TableStories.Selectable} />
 
@@ -21,6 +21,8 @@ A native `<table>`; selection uses the kit's Checkbox.
 | **Row** | 48px (40px at `sm`), divided by `--border`. |
 | **Row header** | The column marked `isRowHeader`, medium weight: the name a row is known by. |
 | **Selection column** | Optional checkboxes; the header one selects all and shows "mixed". |
+| **Expand column** | With `expandedContent`: a ghost icon button per row, after the checkbox. The chevron turns down when open. Rows with no content leave the cell empty. |
+| **Expanded row** | One cell spanning every column, under its row, with no rule between them. Holds any layout, e.g. a timeline. |
 
 ## Props
 
@@ -34,6 +36,8 @@ A native `<table>`; selection uses the kit's Checkbox.
 | `sort`, `defaultSort`, `onSortChange` | `{ key, direction } \| null` | `null` | Controlled sort leaves the sorting to you. |
 | `isSelectable` | boolean | `false` | |
 | `selectedIds`, `defaultSelectedIds`, `onSelectionChange` | string[] | `[]` | |
+| `expandedContent` | `(row) => node` | – | Adds the expand column. Return `null`, `undefined` or `false` for a row with nothing to show: it gets no button. |
+| `expandedIds`, `defaultExpandedIds`, `onExpandedChange` | string[] | `[]` | Ids from `getRowId`, so sorting keeps the right rows open. |
 | `density` | `sm`, `md` | `md` | |
 | `hasStickyHeader` | boolean | `false` | Header stays in view while the container scrolls. |
 | `emptyState` | node | – | Shown when there are no rows. |
@@ -67,6 +71,15 @@ the rows already sorted:
 
 <Canvas of={TableStories.ControlledSort} />
 
+Rows with details open under themselves. Expansion is independent of
+selection and survives sorting:
+
+<Canvas of={TableStories.ExpandableRows} />
+
+Pass `expandedIds` to open rows from outside the table:
+
+<Canvas of={TableStories.ControlledExpansion} />
+
 ## Accessibility
 
 - A real `<table>` with a `<caption>`, `<th scope="col">` headers and a
@@ -77,5 +90,12 @@ the rows already sorted:
 - Row checkboxes are named after the row header ("Select Atlas"); the
   header checkbox is "Select all rows" and reports `mixed` when some are
   selected.
+- Each expand button is named after the row header ("Expand Atlas"),
+  reports `aria-expanded`, and while open points at the content cell
+  with `aria-controls`. Enter and Space toggle it; it is in the Tab order
+  like any button. The name stays the same open or closed; the state is
+  carried by `aria-expanded`.
+- The expand column's header is "Details", visually hidden, so the column
+  is announced like the others.
 - The table scrolls sideways inside its container on narrow screens
   instead of squeezing columns.
