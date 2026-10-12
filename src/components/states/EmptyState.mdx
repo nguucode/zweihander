@@ -1,69 +1,190 @@
-import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
 import * as EmptyStateStories from './EmptyState.stories'
 
 <Meta of={EmptyStateStories} />
 
 # Empty State
 
-What a list, a table or a page shows when there is nothing in it yet:
-why it is empty, and what to do about it. Spec:
-[uiguideline.com/components/empty-state](https://www.uiguideline.com/components/empty-state).
-A plain element.
+<DocTabs>
+<DocTab value="overview">
+
+What a list, a table or a page shows when there is nothing in it yet: why
+it is empty, and what to do about it.
+
+<Status of={EmptyStateStories} />
 
 <Canvas of={EmptyStateStories.FirstUse} />
 
-## Anatomy
+## Variants
 
-| Part | What it is |
+There are three kinds of empty, and they need three kinds of copy. The
+component is the same; the words and the action are not.
+
+| Kind | Use for |
 | --- | --- |
-| **Icon** | Optional. An icon on a `--muted` disc, or a small illustration. Decorative. |
-| **Title** | A real heading, level set by `headingLevel`. Says what is empty. |
-| **Description** | Optional, `--muted-foreground`, at most 40 characters wide. Says why, or what will appear here. |
-| **Action** | Optional. The way forward: usually one Button, at most two. |
-
-## Props
-
-| Prop | Values | Default | |
-| --- | --- | --- | --- |
-| `title` | node | – | Required. |
-| `description` | node | – | |
-| `icon` | node | – | |
-| `action` | node | – | |
-| `size` | `sm`, `md` | `md` | `sm` for a panel or a table body. |
-| `headingLevel` | 2–6 | `2` | |
-
-Every other `<div>` attribute passes through.
-
-<Controls of={EmptyStateStories.Default} />
-
-### Design notes
-
-- **Three kinds of empty, three kinds of copy.** First use ("No projects
-  yet", with a way to create one), no results ("No projects match", with
-  a way to clear the filter) and cleared out ("All caught up", often
-  with no action at all). The component is the same; the words are not.
-- **The icon sits on a disc** rather than floating alone, so an empty
-  area gets a centre of gravity without needing an illustration.
-
-## Usage
+| First use | Nothing has been made yet. Say what will live here, and offer the way in: "No projects yet", New project. |
+| No results | A search or a filter matched nothing. Say what was searched, and offer to clear it: "No projects match", Clear search. |
+| Cleared out | Everything is done. Often no action at all: "All caught up". |
 
 <Canvas of={EmptyStateStories.Default} />
 
-<Canvas of={EmptyStateStories.Small} />
-
 <Canvas of={EmptyStateStories.TitleOnly} />
 
-The icon is `aria-hidden`; the title has to say it all.
+`size="sm"` fits a panel or a table body; `md` fills a page or a section.
 
-If the search updates as you type, announce the count elsewhere (a
-`role="status"` line such as "0 results"): the empty state is not
-announced by itself.
+<Canvas of={EmptyStateStories.Small} />
+
+## Resources
+
+From npm, or copied into your project through the registry:
+
+```js
+import { EmptyState } from 'zweihander/empty-state'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/empty-state.json
+```
+
+- Source: [src/components/states/EmptyState.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/states/EmptyState.tsx)
+- Spec: [uiguideline.com/components/empty-state](https://www.uiguideline.com/components/empty-state)
+- Behaviour: a plain element, no Base UI part
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
+## Anatomy
+
+<Anatomy parts={EmptyStateStories.anatomyParts}>
+  <Story of={EmptyStateStories.Anatomy} />
+</Anatomy>
+
+Only the title is required. [Error State](?path=/docs/components-states-errorstate--docs)
+and [Success State](?path=/docs/components-states-successstate--docs) are
+this layout with the disc in their own tone.
+
+## Measurements
+
+The icon is half the disc's size. The description wraps at 40 characters
+(`max-inline-size: 40ch`), so it stays a short paragraph on a wide page.
+
+<SpecTable
+  caption="sm"
+  rows={[
+    { part: 'Container', property: 'Block padding', token: '--space-8' },
+    { part: 'Container', property: 'Inline padding', token: '--space-4' },
+    { part: 'Icon disc', property: 'Size', token: '--space-10' },
+    { part: 'Icon disc', property: 'Space below', token: '--space-4' },
+    { part: 'Title', property: 'Font size', token: '--text-heading-sm' },
+    { part: 'Title', property: 'Line height', token: '--leading-heading-sm' },
+    { part: 'Description', property: 'Space above', token: '--space-2' },
+    { part: 'Action', property: 'Space above', token: '--space-4' },
+  ]}
+/>
+
+<SpecTable
+  caption="md"
+  rows={[
+    { part: 'Container', property: 'Block padding', token: '--space-12' },
+    { part: 'Container', property: 'Inline padding', token: '--space-6' },
+    { part: 'Icon disc', property: 'Size', token: '--space-12' },
+    { part: 'Icon disc', property: 'Space below', token: '--space-4' },
+    { part: 'Title', property: 'Font size', token: '--text-heading-md' },
+    { part: 'Title', property: 'Line height', token: '--leading-heading-md' },
+    { part: 'Description', property: 'Space above', token: '--space-2' },
+    { part: 'Action', property: 'Space above', token: '--space-6' },
+  ]}
+/>
+
+<SpecTable
+  caption="Every size"
+  rows={[
+    { part: 'Icon disc', property: 'Corner radius', token: '--radius-pill' },
+    { part: 'Description', property: 'Font size', token: '--text-body' },
+    { part: 'Description', property: 'Line height', token: '--leading-body' },
+    { part: 'Action', property: 'Gap between buttons', token: '--space-2' },
+  ]}
+/>
+
+## Color
+
+One tone: neutral. Switch the theme in the toolbar: the values follow.
+
+<SpecTable
+  caption="Neutral"
+  rows={[
+    { part: 'Icon disc', property: 'Background', token: '--muted' },
+    { part: 'Icon', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Title', property: 'Colour', token: '--foreground' },
+    { part: 'Description', property: 'Colour', token: '--muted-foreground' },
+  ]}
+/>
+
+The container has no fill: it takes the surface it sits on.
+
+## States
+
+Empty State itself is static: it has no hover, focus or pressed look. Its
+action does, and those are the action's own (here, an outlined Button).
+
+<States
+  states={[
+    { label: 'Enabled' },
+    { label: 'Action hover', pseudo: 'hover' },
+    { label: 'Action focus', pseudo: 'focus-visible' },
+    { label: 'Action pressed', pseudo: 'active' },
+  ]}
+>
+  <Story of={EmptyStateStories.Default} />
+</States>
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={EmptyStateStories} />
+</div>
+
+Every other `<div>` attribute passes through, including `ref`.
+
+</DocTab>
+<DocTab value="guidelines">
+
+## When to use
+
+Use an Empty State wherever a list, a table or a page can have nothing in
+it: before the first item is made, after a search matches nothing, when
+everything is done. Write the title for the reader's situation, and give
+them the next step.
+
+<DoDont
+  do={<Story of={EmptyStateStories.FirstUse} />}
+  doCaption="Say what is empty and what will live here, and offer the way in."
+  dont={<Story of={EmptyStateStories.DontNoData} />}
+  dontCaption="“No data” says neither why nor what to do next."
+/>
+
+## When not to use
+
+- **When loading failed.** Use an
+  [Error State](?path=/docs/components-states-errorstate--docs): "No
+  projects" when the request failed tells the reader their work is gone.
+- **When a flow has finished.** Use a
+  [Success State](?path=/docs/components-states-successstate--docs).
+- **While content is loading.** Use a Skeleton or a Spinner: an empty
+  state shown before the data arrives flashes the wrong message.
 
 ## Accessibility
 
-- The title is a heading, so a screen reader user jumping by headings
-  finds out the area is empty. Set `headingLevel` to fit the outline:
-  `3` inside a section headed by an `h2`.
-- The icon is `aria-hidden`.
-- An empty state that replaces results after a search is not announced by
-  itself.
+- The title is a real heading, so a screen reader user jumping by
+  headings finds out the area is empty. Set `headingLevel` to fit the
+  outline: `3` inside a section headed by an `h2`.
+- The icon is `aria-hidden`; the title has to say it all.
+- It is not a live region, so it is not announced when it replaces
+  results. If a search updates as you type, announce the count elsewhere,
+  in a `role="status"` line such as "0 results".
+
+</DocTab>
+</DocTabs>
