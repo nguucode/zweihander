@@ -57,8 +57,8 @@ export const REQUIRED = {
 }
 const TABS = Object.keys(REQUIRED)
 
-/** `from` and `import` targets in a script, `@import` and `composes … from` in CSS. */
-const IMPORT = { script: /(?:from|import)\s+['"]((?:\.{1,2}|@)\/[^'"]+)['"]/g, css: /(?:@import\s+|composes:[^;]*?from\s+)['"](\.{1,2}\/[^'"]+)['"]/g }
+/** Relative and `@/` targets of `from` and `import` in a script. */
+const IMPORT = /(?:from|import)\s+['"]((?:\.{1,2}|@)\/[^'"]+)['"]/g
 
 /** The file an import names, trying the extensions TypeScript would. */
 const resolveImport = (from, spec) => {
@@ -66,14 +66,14 @@ const resolveImport = (from, spec) => {
   return [base, `${base}.tsx`, `${base}.ts`, join(base, 'index.tsx'), join(base, 'index.ts')].find((f) => existsSync(f) && statSync(f).isFile())
 }
 
-/** Every stylesheet reachable from these files through their imports. */
+/** Every stylesheet these scripts import, directly or through other scripts. */
 const stylesheetsFrom = (entries) => {
   const seen = new Set()
   const visit = (file) => {
     if (!file || seen.has(file)) return
     seen.add(file)
-    const source = readFileSync(file, 'utf8')
-    for (const [, spec] of source.matchAll(file.endsWith('.css') ? IMPORT.css : IMPORT.script))
+    if (file.endsWith('.css')) return
+    for (const [, spec] of readFileSync(file, 'utf8').matchAll(IMPORT))
       if (!/\.(stories|test)$/.test(spec)) visit(resolveImport(file, spec))
   }
   entries.forEach(visit)
@@ -104,7 +104,7 @@ const specTableErrors = (file, where, source) => {
     [...block[0].matchAll(/\btoken\s*[=:]\s*\{?\s*["'](--[a-zA-Z0-9-]+)["']/g)].map((m) => [m[1], block.index + m.index]),
   )
   if (!rows.length) return []
-  const entries = [...source.matchAll(IMPORT.script)]
+  const entries = [...source.matchAll(IMPORT)]
     .map(([, spec]) => spec)
     .filter((spec) => !/\.stories$/.test(spec) && !spec.includes('.storybook'))
     .map((spec) => resolveImport(file, spec))
