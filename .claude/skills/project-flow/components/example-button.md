@@ -1,53 +1,53 @@
-# Ví dụ: Button đi qua cycle
+# Example: Button through the cycle
 
-Button (`src/components/buttons/`) là component mẫu. Dưới đây là từng phần áp vào Button, chỉ ra file thật đáp ứng gate. Khi làm component khác, đối chiếu với file này để biết "đủ" trông thế nào.
+Button (`src/components/buttons/`) is the model component. Below is each section applied to Button, pointing at the real files that meet the gate. When working on another component, compare against this file to see what "enough" looks like.
 
-## 0. Phân loại
+## 0. Classify
 
-> Button — mới (đợt 0) — không breaking — đích `stable`
+> Button — new (batch 0) — non-breaking — target `stable`
 
-Spec gốc: [uiguideline.com/components/button](https://www.uiguideline.com/components/button). Có trong phạm vi 1.0 (`zweihander-component-list.md`, mục Buttons).
+Source spec: [uiguideline.com/components/button](https://www.uiguideline.com/components/button). In the 1.0 scope (`zweihander-component-list.md`, Buttons section).
 
-Ví dụ enhance có breaking: `render` thay `asChild`. Quy ước API đổi trước (vault `05-api-conventions.md`), MDX §Differences ghi "It replaced `asChild` in 0.8", rồi code mới đổi.
+Example of a breaking enhance: `render` replacing `asChild`. The API conventions changed first (vault `05-api-conventions.md`), the MDX §Differences says "It replaced `asChild` in 0.8", and only then the code changed.
 
 ## 1. Spec: `Button.mdx`
 
-Trang mẫu cho format ba tab (ticket pilot của component-docs).
+Model page for the three-tab format (the component-docs pilot ticket).
 
-- **Overview**: một câu mô tả, `<Status>`, canvas `Default`, `## Variants` (canvas `Matrix` cộng bảng variant và appearance, mỗi dòng một Button thật và "dùng khi nào"), canvas `Sizes`, `WithIcons`, `IconOnly`, `## Resources`.
-- **Specs**: `<Anatomy>` đánh số Container, Start icon, Label, End icon (`anatomyParts` và story `Anatomy` trong `Button.stories.tsx`). `## Measurements`: `<SpecTable>` cho `sm`, `md` và một bảng chung (focus ring, hit area). `## Color`: một bảng mỗi variant, cộng focus ring. `## States`: enabled, hover, focus, pressed, disabled, loading; giải thích hover/pressed trộn màu bằng chữ. `## API`: `<ArgTypes>`. `### Differences from the spec`: hai size chứ không phải bốn, `disabled` chứ không phải `isDisabled`, thêm `isIconOnly`, thêm `render`, `accent` là neutral đảo màu, outlined/ghost primary dùng `--primary-text`.
-- **Guidelines**: hai cặp `<DoDont>` (một primary mỗi view; loading thay vì disabled khi đang lưu), `## When not to use` (điều hướng thì dùng `href`, trạng thái bật/tắt thì dùng Toggle Button), `## Accessibility`: các câu đều kiểm được, xem bảng ở phần 3.
-- Props: mọi prop khai báo trong `meta.argTypes` kèm `description`, type và default, vì `ButtonProps` là union nên react-docgen không đọc được.
+- **Overview**: a one-sentence description, `<Status>`, the `Default` canvas, `## Variants` (the `Matrix` canvas plus a variant and appearance table, each row a real Button and "when to use"), the `Sizes`, `WithIcons`, `IconOnly` canvases, `## Resources`.
+- **Specs**: `<Anatomy>` numbering Container, Start icon, Label, End icon (`anatomyParts` and the `Anatomy` story in `Button.stories.tsx`). `## Measurements`: `<SpecTable>` for `sm`, `md` and a shared table (focus ring, hit area). `## Color`: one table per variant, plus the focus ring. `## States`: enabled, hover, focus, pressed, disabled, loading; hover/pressed color mixing explained in text. `## API`: `<ArgTypes>`. `### Differences from the spec`: two sizes rather than four, `disabled` rather than `isDisabled`, adds `isIconOnly`, adds `render`, `accent` is inverted neutral, outlined/ghost primary use `--primary-text`.
+- **Guidelines**: two `<DoDont>` pairs (one primary per view; loading instead of disabled while saving), `## When not to use` (navigation uses `href`, an on/off state uses Toggle Button), `## Accessibility`: every sentence is checkable, see the table in section 3.
+- Props: every prop declared in `meta.argTypes` with `description`, type and default, because `ButtonProps` is a union so react-docgen cannot read it.
 
 ## 2. Code: `Button.tsx`, `Button.module.css`
 
-- Kiểu `ButtonProps` là union. `isIconOnly: true` bắt buộc có `aria-label`, nên luật a11y nằm ngay trong type.
-- Hành vi lấy từ `@base-ui/react/button`. Riêng nhánh `href`/`render` tách sang `useRender`, vì Base UI sẽ gắn `role="button"` lên `<a>`. Comment trong code giải thích vì sao.
-- CSS: mỗi variant đặt bốn biến (`--button-solid`, `--button-on-solid`, `--button-tone`, `--button-border`); appearance quyết định biến nào tô phần nào. Border luôn tồn tại, chỉ trong suốt khi không cần, nên đổi appearance không làm layout nhảy.
-- Chưa đạt: thiếu `'use client'`. Registry description còn ghi "four sizes".
+- The `ButtonProps` type is a union. `isIconOnly: true` requires `aria-label`, so the a11y rule lives in the type itself.
+- Behaviour comes from `@base-ui/react/button`. Only the `href`/`render` branch is split out to `useRender`, because Base UI would put `role="button"` on an `<a>`. A comment in the code explains why.
+- CSS: each variant sets four variables (`--button-solid`, `--button-on-solid`, `--button-tone`, `--button-border`); the appearance decides which variable paints which part. The border always exists, only transparent when not needed, so switching appearance does not make the layout jump.
+- Not met yet: missing `'use client'`. The registry description still says "four sizes".
 
 ## 3. Test: `Button.stories.tsx`
 
-Mỗi câu trong §Accessibility có một story kiểm nó:
+Every sentence in §Accessibility has a story that checks it:
 
-| Câu trong §Accessibility | Story |
+| Sentence in §Accessibility | Story |
 |---|---|
-| Native button, `type="button"`, Enter và Space kích hoạt | `Default` |
-| Icon `aria-hidden`, tên chỉ là label | `WithIcons` |
-| Icon-only vuông, có tên | `IconOnly` |
-| Loading: `aria-busy`, vẫn focus được, không chạy action | `Loading` |
-| Disabled ra khỏi tab order | `Disabled` |
-| Link disabled hoặc loading: bỏ `href`, thêm `aria-disabled` | `DisabledHref`, `DisabledRender` |
-| `render` giữ semantics của element | `Render` |
-| Label 4.5:1 ở rest, hover và active, 17 accent × 2 mode | `StateContrast` |
+| Native button, `type="button"`, Enter and Space activate | `Default` |
+| Icon `aria-hidden`, the name is the label only | `WithIcons` |
+| Icon-only is square, has a name | `IconOnly` |
+| Loading: `aria-busy`, still focusable, does not run the action | `Loading` |
+| Disabled leaves the tab order | `Disabled` |
+| Disabled or loading link: drops `href`, adds `aria-disabled` | `DisabledHref`, `DisabledRender` |
+| `render` keeps the element's semantics | `Render` |
+| Label 4.5:1 at rest, hover and active, 17 accents × 2 modes | `StateContrast` |
 
-`StateContrast` là mẫu cho component có nhiều tổ hợp màu. Nó đọc màu mà trình duyệt đã resolve rồi tính contrast trong test, nên kiểm được CSS thật đang ship. Story này đặt `a11y: { test: 'off' }` kèm comment, vì chính nó đã làm việc kiểm contrast.
+`StateContrast` is the model for a component with many color combinations. It reads the colors the browser has resolved and computes contrast in the test, so it checks the real CSS that ships. This story sets `a11y: { test: 'off' }` with a comment, because it does the contrast check itself.
 
-Visual regression dùng story `Matrix` (light và dark, trong `src/visual.test.tsx`). Chưa đạt: chưa thử VoiceOver.
+Visual regression uses the `Matrix` story (light and dark, in `src/visual.test.tsx`). Not met yet: VoiceOver not tried.
 
 ## 4. Release
 
-Chưa có changeset nào, vì repo chưa cài Changesets. Khi có, thay đổi `render` ở trên sẽ được ghi thế này:
+No changeset yet, because the repo has not installed Changesets. Once it has, the `render` change above would be written like this:
 
 ```md
 ---
@@ -59,7 +59,7 @@ Button: `render` replaces `asChild`. Pass the element itself: `<Button render={<
 
 ## 5. Status
 
-Button hiện đạt `beta`: đủ phần 1–4 ở mức repo cho phép. Để lên `stable` còn thiếu một lần thử VoiceOver + Safari, và một tháng không có breaking change.
+Button currently meets `beta`: sections 1–4 as far as the repo allows. To reach `stable` it still needs one VoiceOver + Safari run, and one month without a breaking change.
 
 ```ts
 const meta = {

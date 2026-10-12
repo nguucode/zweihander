@@ -1,43 +1,43 @@
 # Component conventions
 
-Quy ước cho mọi thay đổi ở `src/components/**` (component hay pattern, tạo mới hay enhance). Đây không phải một quy trình riêng: quy trình duy nhất là project-flow ([SKILL.md](SKILL.md)). File này nói các bước của flow phải đạt gì khi chạm vào component. Trước đây là skill `zw-build`.
+Conventions for every change under `src/components/**` (component or pattern, new or enhanced). This is not a separate process: the only process is project-flow ([SKILL.md](SKILL.md)). This file says what the flow's steps must achieve when they touch a component. It used to be the `zw-build` skill.
 
-Mỗi phần dưới gắn vào một bước của flow, và kết thúc bằng một **gate**. Bước build chỉ coi là xong khi các gate 0 đến 3 xanh; gate 4 và 5 kiểm ở bước ship.
+Each section below hooks into a flow step and ends with a **gate**. The build step counts as done only when gates 0 to 3 are green; gates 4 and 5 are checked at ship.
 
-| Phần | Gắn vào bước flow |
+| Section | Hooks into flow step |
 |---|---|
-| 0. Phân loại, 1. Spec | `flow idea`: grill và spec. `flow fix`, `flow change`, ticket thread: đầu bước build, trước khi sửa code |
-| 2. Code, 3. Test | Bước build (`implement`, `tdd`, `diagnosing-bugs`) |
+| 0. Classify, 1. Spec | `flow idea`: grill and spec. `flow fix`, `flow change`, ticket thread: start of the build step, before editing code |
+| 2. Code, 3. Test | Build step (`implement`, `tdd`, `diagnosing-bugs`) |
 | 4. Release | Ship (changeset) |
-| 5. Status, Kết thúc | Ship và sau merge |
+| 5. Status, Wrap-up | Ship and after merge |
 
-Breaking change phát hiện giữa chừng thì quay lại phần 1 (sửa `argTypes` và MDX trước), rồi mới sửa code.
+A breaking change found midway sends you back to section 1 (fix `argTypes` and the MDX first), then the code.
 
-Trước khi làm, đọc file tham chiếu đúng loại:
+Before starting, read the reference file for the right kind:
 
 - Component (`src/components/<category>/`): [components/component.md](components/component.md)
 - Pattern (`src/components/patterns/`): [components/pattern.md](components/pattern.md)
-- Ví dụ đi hết các phần với Button: [components/example-button.md](components/example-button.md)
+- Example walking every section with Button: [components/example-button.md](components/example-button.md)
 
-Các quyết định gốc nằm trong vault (Definition of done, quy ước API, vai trò Figma): `/Volumes/KAFKA/Vault/10-projects/zweihander/v1-plan/issues/04-definition-of-done.md`, `05-api-conventions.md`, `09-figma-role.md`. File này là cách thực thi các quyết định đó. Nếu file này và vault mâu thuẫn, vault đúng: báo sếp và sửa file này.
+The source decisions live in the vault (Definition of done, API conventions, Figma's role): `/Volumes/KAFKA/Vault/10-projects/zweihander/v1-plan/issues/04-definition-of-done.md`, `05-api-conventions.md`, `09-figma-role.md`. This file is how those decisions are carried out. If this file and the vault disagree, the vault is right: tell the user and fix this file.
 
-## 0. Phân loại
+## 0. Classify
 
-Trả lời ba câu trước khi mở editor:
+Answer three questions before opening the editor:
 
-1. **Component hay pattern?** Pattern là section ghép từ nhiều component, không tự có hành vi.
-2. **Tạo mới hay enhance?**
-   - *Tạo mới:* có spec gốc ở uiguideline.com không? Có trong phạm vi 1.0 không (`zweihander-component-list.md`)? Ngoài phạm vi thì vẫn làm được, nhưng vào với status `experimental`.
-   - *Enhance:* thay đổi có breaking không? Tra bảng breaking trong file tham chiếu. Breaking thì bắt đầu ở phần 1. Chỉ đổi token, màu hay khoảng cách thì đi thẳng phần 2.
-3. **Có cần Figma trước không?** Thay đổi về hình ảnh (component mới, variant mới, đổi anatomy) thì vẽ Figma → sếp duyệt → code. Token luôn đi từ code sang Figma, không bao giờ ngược lại.
+1. **Component or pattern?** A pattern is a section composed of several components, with no behaviour of its own.
+2. **New or enhance?**
+   - *New:* is there a source spec on uiguideline.com? Is it in the 1.0 scope (`zweihander-component-list.md`)? Out of scope can still be built, but it enters with status `experimental`.
+   - *Enhance:* is the change breaking? Check the breaking table in the reference file. Breaking starts at section 1. Only a token, color or spacing change goes straight to section 2.
+3. **Does it need Figma first?** A visual change (new component, new variant, changed anatomy) goes Figma → user approves → code. Tokens always go from code to Figma, never the other way.
 
-**Gate:** ghi được một câu dạng "<Tên> — <mới|enhance> — <breaking|không> — <status đích>".
+**Gate:** you can write one sentence of the form "<Name> — <new|enhance> — <breaking|non-breaking> — <target status>".
 
 ## 1. Spec
 
-Spec chính là file `<Name>.mdx` cạnh component. Không viết spec ở chỗ khác. Trang mẫu: `src/components/buttons/Button.mdx` và `ToggleButton.mdx`; khi phân vân, chép cấu trúc của chúng.
+The spec is the `<Name>.mdx` file next to the component. Do not write the spec anywhere else. Model pages: `src/components/buttons/Button.mdx` and `ToggleButton.mdx`; when in doubt, copy their structure.
 
-Trang component có ba tab, theo Material 3, dựng bằng docs blocks trong `.storybook/blocks/` (demo: Storybook *Internal / Docs blocks*):
+A component page has three tabs, after Material 3, built with the docs blocks in `.storybook/blocks/` (demo: Storybook *Internal / Docs blocks*):
 
 ```mdx
 import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
@@ -55,28 +55,28 @@ import * as NameStories from './Name.stories'
 </DocTabs>
 ```
 
-| Tab | Mục bắt buộc, theo thứ tự |
+| Tab | Required sections, in order |
 |---|---|
-| **Overview**: component là gì | Một câu mô tả. `<Status of={NameStories} />` (đọc tag status trong `meta.tags`). `<Canvas>` story chính. `## Variants`: mỗi variant hoặc appearance một dòng "dùng khi nào", kèm canvas. `## Resources`: import, lệnh registry, source GitHub, spec uiguideline, Base UI nếu có, Figma (ghi "Not in the library yet" khi chưa có) |
-| **Specs**: component được dựng thế nào | `## Anatomy` + `<Anatomy>`. `## Measurements`: một `<SpecTable>` mỗi size. `## Color`: một `<SpecTable>` mỗi variant. `## States` + `<States>` (enabled, hover, focus, pressed, disabled, cộng loading/invalid/selected nếu có). `## API` + `<ArgTypes of={NameStories} />`. `### Differences from the spec` ở cuối, **chỉ khi lệch** uiguideline |
-| **Guidelines**: dùng thế nào cho đúng | `## When to use`, ít nhất một `<DoDont>`. `## When not to use`: dùng component nào thay thế. `## Accessibility`: bàn phím, role và state theo APG |
+| **Overview**: what the component is | A one-sentence description. `<Status of={NameStories} />` (reads the status tag in `meta.tags`). `<Canvas>` of the main story. `## Variants`: one "when to use" line per variant or appearance, with a canvas. `## Resources`: import, registry command, GitHub source, uiguideline spec, Base UI if any, Figma ("Not in the library yet" when there is none) |
+| **Specs**: how the component is built | `## Anatomy` + `<Anatomy>`. `## Measurements`: one `<SpecTable>` per size. `## Color`: one `<SpecTable>` per variant. `## States` + `<States>` (enabled, hover, focus, pressed, disabled, plus loading/invalid/selected if any). `## API` + `<ArgTypes of={NameStories} />`. `### Differences from the spec` at the end, **only when it deviates** from uiguideline |
+| **Guidelines**: how to use it right | `## When to use`, at least one `<DoDont>`. `## When not to use`: which component to use instead. `## Accessibility`: keyboard, role and state per APG |
 
-Quy tắc cho từng block:
+Rules for each block:
 
-- **Props sống trong `argTypes`.** Mỗi prop công khai có `description` trong `meta.argTypes` của story file. `<ArgTypes>` render bảng API từ đó, panel props của Playground đọc cùng nguồn qua `npm run playground:manifest`. Không viết bảng prop bằng tay trong MDX. Type và default thường do react-docgen suy ra; khi nó không đọc được, xem [Ca khó](#ca-khó). Đổi story thì chạy `npm run playground:manifest` và commit `src/playground/manifest.json`.
-- **Anatomy** render component thật, không dùng ảnh. Danh sách part (`name`, `selector`, `description`) export từ story file là `anatomyParts` (thêm vào `excludeStories`), kèm một story `Anatomy` tag `!dev` có `play` kiểm mỗi selector khớp đúng một phần tử khác nhau. Part không có element riêng (label là text node) thì story bọc nó trong `<span>`.
-- **SpecTable** chỉ ghi tên token; giá trị đọc live từ CSS. Chỉ dùng token semantic hoặc token của tier (`--control-md`), không ghi biến nội bộ của component (`--button-bg`): chúng không resolve được ngoài component. Hover và pressed trộn màu bằng `color-mix` thì giải thích bằng chữ dưới `<States>`.
-- **DoDont** lấy cả hai bên từ story thật. Story "Don't" tag `!dev` để ẩn khỏi sidebar và Playground, vẫn chạy test.
-- `npm run docs:check` đỏ khi một trang component (`src/components/<category>/<Name>.mdx`, trừ patterns, templates và các trang Overview) không có `<DocTabs>`, thiếu tab hoặc mục ở bảng trên, nhắc tới token không tồn tại, trỏ tới story mà file stories không export (`<Canvas of={XStories.Gone} />`), hoặc có hàng SpecTable ghi token mà CSS của component (file `.module.css` đi theo import từ `<Name>.tsx`) không đọc bằng `var()`.
+- **Props live in `argTypes`.** Every public prop has a `description` in the story file's `meta.argTypes`. `<ArgTypes>` renders the API table from it, and the Playground props panel reads the same source via `npm run playground:manifest`. Do not hand-write a prop table in the MDX. Type and default are usually inferred by react-docgen; when it cannot read them, see [Hard cases](#hard-cases). Changed a story? Run `npm run playground:manifest` and commit `src/playground/manifest.json`.
+- **Anatomy** renders the real component, not an image. The part list (`name`, `selector`, `description`) is exported from the story file as `anatomyParts` (added to `excludeStories`), with an `Anatomy` story tagged `!dev` whose `play` checks each selector matches exactly one distinct element. A part with no element of its own (a label that is a text node) gets wrapped in a `<span>` by the story.
+- **SpecTable** names tokens only; values are read live from CSS. Use only semantic tokens or tier tokens (`--control-md`), never the component's internal variables (`--button-bg`): they do not resolve outside the component. When hover and pressed mix colors with `color-mix`, explain it in text under `<States>`.
+- **DoDont** takes both sides from real stories. A "Don't" story is tagged `!dev` to hide it from the sidebar and the Playground; its tests still run.
+- `npm run docs:check` goes red when a component page (`src/components/<category>/<Name>.mdx`, except patterns, templates and the Overview pages) has no `<DocTabs>`, is missing a tab or a section from the table above, mentions a token that does not exist, points to a story the stories file does not export (`<Canvas of={XStories.Gone} />`), or has a SpecTable row naming a token that the component's CSS (the `.module.css` file followed from the import in `<Name>.tsx`) does not read with `var()`.
 
-Mọi trang component đều dùng ba tab; không còn format trang dài cũ.
+Every component page uses the three tabs; the old long-page format is gone.
 
-### Ca khó
+### Hard cases
 
-Các ticket docs đã tự xoay ở những chỗ này; làm theo đây thay vì nghĩ lại.
+Docs tickets have already worked their way around these; follow this instead of thinking it through again.
 
-- **States của component tĩnh** (Badge, Divider, Avatar, EmptyState: không có hover, focus, pressed). `docs:check` vẫn đòi `## States`. Mở bằng một câu "X is not interactive: no hover, focus or pressed. Its states are …", rồi `<States>` hiện các dạng hiển thị khác nhau (Badge: count, over `maxCount`, zero, dot) hoặc state của control bên trong nếu có (nút action của EmptyState). Mẫu: `Badge.mdx`, `Divider.mdx`, `EmptyState.mdx` (state của action qua `pseudo`). Component rộng không vừa một ô `<States>` (Tabs, Pagination) thì thêm một story nhỏ tag `!dev` riêng cho ô đó, ví dụ `Tabs.stories.tsx` `StatesUnderline`.
-- **Anatomy của overlay** (Menu, Modal, Popover, Tooltip, Toast: popup render qua portal vào `<body>`). Story `Anatomy` không thấy popup trong `canvasElement`, và trên trang docs popup sẽ đè lên nội dung. Render nó "như một bức ảnh" bằng `Pictured` từ `.storybook/blocks`: mở sẵn, `container` là khung `inert` trong story nên không giữ focus; truyền class `positioner` của component để popup nằm trong flow thay vì positioned, các prop khác đặt lên khung.
+- **States of a static component** (Badge, Divider, Avatar, EmptyState: no hover, focus or pressed). `docs:check` still requires `## States`. Open with a sentence "X is not interactive: no hover, focus or pressed. Its states are …", then `<States>` shows the different display forms (Badge: count, over `maxCount`, zero, dot) or the states of an inner control if there is one (EmptyState's action button). Models: `Badge.mdx`, `Divider.mdx`, `EmptyState.mdx` (the action's states via `pseudo`). A component too wide for one `<States>` cell (Tabs, Pagination) gets a small story tagged `!dev` of its own for that cell, for example `Tabs.stories.tsx` `StatesUnderline`.
+- **Anatomy of an overlay** (Menu, Modal, Popover, Tooltip, Toast: the popup renders through a portal into `<body>`). The `Anatomy` story cannot see the popup in `canvasElement`, and on the docs page the popup would cover the content. Render it "as a picture" with `Pictured` from `.storybook/blocks`: open already, `container` is an `inert` frame in the story so it does not trap focus; pass the component's `positioner` class so the popup sits in flow instead of positioned, and put the other props on the frame.
 
   ```tsx
   <Pictured positioner={styles.positioner}>
@@ -84,26 +84,26 @@ Các ticket docs đã tự xoay ở những chỗ này; làm theo đây thay vì
   </Pictured>
   ```
 
-  `play` của story `Anatomy` gọi `const found = await expectAnatomy(canvasElement, anatomyParts)`: nó chờ các selector, đỏ và nêu tên selector không khớp gì, kiểm mỗi part là một phần tử khác nhau, rồi trả về `Element[]` theo thứ tự `anatomyParts` để kiểm thêm (ví dụ `found[1]` là `role="dialog"`). Backtick trong `description` của part render thành `<code>`. Ghi một câu dưới `<Anatomy>` rằng popup trên tab là ảnh, như `Popover.mdx`. Hai helper này vào main qua #109; nếu #109 chưa merge thì merge main vào sau khi nó merge.
-- **Giá trị chưa có token** (Divider dày 1/2/4px: chưa có thang border-width). `<SpecTable>` chỉ nhận token, nên đặt một bảng markdown thường dưới `## Measurements`, kèm một câu vì sao không phải token. Mẫu: `Divider.mdx`. Đừng ghép một token gần đúng (`--space-1` cho 4px viết cứng): bảng sẽ sai khi `--scaling` đổi.
-- **Prop docgen không đọc được.** react-docgen bỏ sót type và default với props kiểu union (`isIconOnly` bắt `aria-label`) và props kế thừa từ component bọc (ErrorState, SuccessState bọc EmptyState). Khi đó khai trong `meta.argTypes` cho **mọi** prop: `description`, `control`, `table.type.summary`, `table.defaultValue.summary`. Mẫu: `Button.stories.tsx`, `ErrorState.stories.tsx`. Kiểm bằng mắt bảng `<ArgTypes>` và panel props của Playground sau `npm run playground:manifest`.
-- **Không đặt state vào param URL mà Storybook đọc**: `path`, `id`, `viewMode`, `args`, `globals`, `full`, `panel`, `nav`, `shortcuts`, `addonPanel`, `tabs`, `tab`. `?tab=specs` làm Storybook ẩn canvas và trang trắng (#98). Block docs cần state trong URL thì dùng tên riêng, như `?docTab=` của `DocTabs.tsx` (`npm run docs:check` đỏ nếu `PARAM` của DocTabs trùng param Storybook đọc; block mới thì tự kiểm), và kiểm bằng URL Storybook đầy đủ có reload, vì story test không chạy code URL.
+  The `Anatomy` story's `play` calls `const found = await expectAnatomy(canvasElement, anatomyParts)`: it waits for the selectors, goes red naming any selector that matches nothing, checks each part is a distinct element, then returns `Element[]` in `anatomyParts` order for further checks (for example `found[1]` is `role="dialog"`). Backticks in a part's `description` render as `<code>`. Write one sentence under `<Anatomy>` saying the popup on the tab is a picture, as `Popover.mdx` does. These two helpers reach main via #109; if #109 has not merged, merge main in after it merges.
+- **A value with no token yet** (Divider at 1/2/4px thick: there is no border-width scale yet). `<SpecTable>` takes tokens only, so put a plain markdown table under `## Measurements`, with one sentence on why it is not a token. Model: `Divider.mdx`. Do not pair it with a near-enough token (`--space-1` for a hard-coded 4px): the table goes wrong when `--scaling` changes.
+- **Props docgen cannot read.** react-docgen misses type and default for union-typed props (`isIconOnly` requires `aria-label`) and for props inherited from a wrapped component (ErrorState and SuccessState wrap EmptyState). Then declare **every** prop in `meta.argTypes`: `description`, `control`, `table.type.summary`, `table.defaultValue.summary`. Models: `Button.stories.tsx`, `ErrorState.stories.tsx`. Check the `<ArgTypes>` table and the Playground props panel by eye after `npm run playground:manifest`.
+- **Do not put state in a URL param Storybook reads**: `path`, `id`, `viewMode`, `args`, `globals`, `full`, `panel`, `nav`, `shortcuts`, `addonPanel`, `tabs`, `tab`. `?tab=specs` makes Storybook hide the canvas and the page goes blank (#98). A docs block that needs state in the URL uses its own name, like `DocTabs.tsx`'s `?docTab=` (`npm run docs:check` goes red if DocTabs' `PARAM` clashes with a param Storybook reads; check a new block yourself), and verify with a full Storybook URL and a reload, because story tests do not run the URL code.
 
-Breaking change: sửa `argTypes` (và `### Differences from the spec` nếu có) **trước**, rồi mới sửa code.
+Breaking change: fix `argTypes` (and `### Differences from the spec` if any) **first**, then the code.
 
-**Gate:** `npm run docs:check` xanh; có lệch spec thì có `### Differences from the spec`. Mỗi câu trong `## Accessibility` đủ cụ thể để viết được một `play` kiểm nó.
+**Gate:** `npm run docs:check` is green; if it deviates from the spec there is a `### Differences from the spec`. Every sentence in `## Accessibility` is specific enough to write a `play` that checks it.
 
 ## 2. Code
 
-- Theo quy ước API trong file tham chiếu: tên prop, `variant`/`appearance`, `render` thay `asChild`, không `forwardRef`.
-- Chỉ dùng token (`var(--…)`), không giá trị cứng cho màu, khoảng cách, radius hay font.
-- File có hook hoặc state: dòng đầu là `'use client'`.
-- Comment giải thích *vì sao*, không mô tả lại code.
-- Cập nhật `registry.json`. Description **không ghi số lượng** (không viết "four sizes"), vì số lượng sẽ lệch khi code đổi.
-- Component (không phải pattern): export trong `package.json#exports`, entry trong `vite.lib.config.ts` và `tsconfig.build.json`.
-- Vùng bấm tối thiểu 44×44 khi `pointer: coarse`, bằng cách nới vùng bấm, không phóng to phần nhìn thấy.
+- Follow the API conventions in the reference file: prop names, `variant`/`appearance`, `render` instead of `asChild`, no `forwardRef`.
+- Tokens only (`var(--…)`), no hard-coded values for color, spacing, radius or font.
+- A file with a hook or state: the first line is `'use client'`.
+- Comments explain *why*, they do not restate the code.
+- Update `registry.json`. The description **does not state counts** (do not write "four sizes"), because counts drift when the code changes.
+- Component (not pattern): export in `package.json#exports`, entries in `vite.lib.config.ts` and `tsconfig.build.json`.
+- Minimum hit area 44×44 under `pointer: coarse`, by extending the hit area, not enlarging the visible part.
 
-**Gate:** các lệnh sau đều xanh.
+**Gate:** these commands are all green.
 
 ```bash
 npx tsc -b && npm run lint && npm run tokens:check && npm run registry:check
@@ -111,12 +111,12 @@ npx tsc -b && npm run lint && npm run tokens:check && npm run registry:check
 
 ## 3. Test
 
-Test nằm trong `<Name>.stories.tsx`, chạy qua addon-vitest. Test hành vi, không snapshot DOM.
+Tests live in `<Name>.stories.tsx` and run through addon-vitest. Test behaviour, do not snapshot the DOM.
 
-- Story cho mọi variant, size và state: default, hover, active, focus-visible, disabled, loading/invalid nếu có, cả light lẫn dark.
-- **Mỗi câu trong `## Accessibility` có ít nhất một `play` kiểm nó**, dùng `userEvent` cho bàn phím.
-- a11y chạy ở chế độ `error`. Story nào phải tắt (ví dụ story đo contrast tự viết) thì đặt `a11y: { test: 'off' }` kèm comment lý do.
-- Visual regression: mỗi component có một story đại diện trong `src/visual.test.tsx` (story nhiều variant và state nhất), chụp light và dark trên Chromium, so với baseline trong `src/__screenshots__/`. Component mới thì thêm một dòng vào bảng `STORIES`; test `every component has a visual story` đỏ nếu thiếu. Ảnh đổi đúng ý thì gắn label `update screenshots` vào PR: workflow Visual baselines chụp lại trên CI Linux và commit. Không cập nhật baseline trên Mac. Khi CI báo lệch, ảnh thật và ảnh diff nằm trong artifact `visual-diffs` của lượt chạy.
+- A story for every variant, size and state: default, hover, active, focus-visible, disabled, loading/invalid if any, in both light and dark.
+- **Every sentence in `## Accessibility` has at least one `play` checking it**, using `userEvent` for the keyboard.
+- a11y runs in `error` mode. A story that must turn it off (for example a hand-written contrast story) sets `a11y: { test: 'off' }` with a comment giving the reason.
+- Visual regression: each component has one representative story in `src/visual.test.tsx` (the story with the most variants and states), captured light and dark on Chromium and compared with the baseline in `src/__screenshots__/`. A new component adds a line to the `STORIES` table; the test `every component has a visual story` goes red if it is missing. When an image changes on purpose, add the `update screenshots` label to the PR: the Visual baselines workflow recaptures on CI Linux and commits. Do not update baselines on a Mac. When CI reports a diff, the actual and diff images are in the run's `visual-diffs` artifact.
 
 **Gate:**
 
@@ -125,49 +125,49 @@ npx vitest --project storybook run
 npx vitest --project visual run
 ```
 
-Lệnh đầu xanh trên cả ba trình duyệt. Lệnh sau chỉ có nghĩa trên CI, vì baseline sinh trên Linux: trên Mac nó báo lệch ở mọi ảnh. Trên PR, nó là required check `check`. Máy mới cần `npx playwright install chromium firefox webkit` một lần; chạy nhanh một engine thì thêm `--browser=chromium`.
+The first command is green on all three browsers. The second only means something on CI, because the baselines are generated on Linux: on a Mac it reports a diff on every image. On a PR it is the required check `check`. A new machine needs `npx playwright install chromium firefox webkit` once; for a quick single-engine run add `--browser=chromium`.
 
 ## 4. Release
 
-- Mọi PR đổi `src/` cần một changeset: `npx changeset`. PR chỉ sửa docs, test hoặc tooling thì dùng `npx changeset --empty`.
-- Bậc bump: trước 1.0, breaking → `minor`, còn lại → `patch`. Sau 1.0 theo SemVer. Bảng thế nào là breaking nằm trong file tham chiếu.
-- Nội dung changeset viết cho người dùng thư viện: cái gì đổi, và phải sửa code của họ thế nào. Viết bằng tiếng Anh, vì sẽ ra `CHANGELOG.md` công khai.
-- Deprecate làm hai bước. Bản đầu: giữ API cũ, `console.warn` chỉ khi `import.meta.env.DEV`, ghi trong changeset. Bản kế tiếp: xoá. Không viết codemod cho đến khi có người dùng bên ngoài.
+- Every PR that changes `src/` needs a changeset: `npx changeset`. A PR that only touches docs, tests or tooling uses `npx changeset --empty`.
+- Bump level: before 1.0, breaking → `minor`, everything else → `patch`. After 1.0, follow SemVer. The table of what counts as breaking is in the reference file.
+- Changeset text is written for library users: what changed, and how they must change their code. Write it in English, because it goes into the public `CHANGELOG.md`.
+- Deprecate in two steps. First release: keep the old API, `console.warn` only when `import.meta.env.DEV`, noted in the changeset. Next release: remove it. No codemod until there are outside users.
 
-**Gate:** `npx changeset status --since=origin/main` qua.
+**Gate:** `npx changeset status --since=origin/main` passes.
 
 ## 5. Status
 
-Mỗi story file mang đúng một tag status trong `meta.tags`, cạnh `'autodocs'` nếu có. Lọc theo status bằng bộ lọc tag trên sidebar.
+Each story file carries exactly one status tag in `meta.tags`, next to `'autodocs'` if present. Filter by status with the tag filter in the sidebar.
 
 | Status | Component | Pattern |
 |---|---|---|
-| `experimental` | Có story chạy được. API đổi tự do | Như component |
-| `beta` | Đạt phần 1–4: đủ ba tab MDX, test xanh, a11y `error` | Không dùng |
-| `stable` | Beta, cộng: xanh trên Chromium/Firefox/WebKit, có baseline visual regression, đã thử VoiceOver + Safari (ghi build-log), một tháng không có breaking change | Đạt phần 1–4, xanh ba trình duyệt, có baseline visual regression |
-| `deprecated` | Có thay thế, ghi trong MDX. Xoá ở bản kế tiếp | Như component |
+| `experimental` | Has a working story. API changes freely | Same as component |
+| `beta` | Meets sections 1–4: all three MDX tabs, tests green, a11y `error` | Not used |
+| `stable` | Beta, plus: green on Chromium/Firefox/WebKit, has a visual regression baseline, tried with VoiceOver + Safari (noted in the build log), one month without a breaking change | Meets sections 1–4, green on three browsers, has a visual regression baseline |
+| `deprecated` | Has a replacement, noted in the MDX. Removed in the next release | Same as component |
 
-Đừng nâng status khi chưa đủ điều kiện. Không ghi "đã test với screen reader" khi chưa thật sự làm.
+Do not raise a status before the conditions are met. Do not write "tested with a screen reader" until it was actually done.
 
-**Gate:** tag đúng với điều kiện ở trên.
+**Gate:** the tag matches the conditions above.
 
-## Kết thúc
+## Wrap-up
 
-1. Ghi một dòng vào `zweihander-build-log.md` trong vault: quyết định, chỗ lệch spec, việc chờ sếp duyệt.
-2. Cập nhật thẻ trong `zweihander-kanban.md`.
-3. Nếu đổi token hoặc prop có trong Figma: ghi việc sync Figma vào `_context.md` của dự án.
-4. Thêm một dòng vào `/Volumes/KAFKA/Vault/_system/agent-log.md`, ghi sau commit cuối (cùng dòng mà [SKILL.md](SKILL.md#vault) yêu cầu, không ghi hai lần).
+1. Add one line to `zweihander-build-log.md` in the vault: decisions, spec deviations, items waiting on the user's approval.
+2. Update the card in `zweihander-kanban.md`.
+3. If a token or a prop that exists in Figma changed: note the Figma sync in the project's `_context.md`.
+4. Add one line to `/Volumes/KAFKA/Vault/_system/agent-log.md`, written after the last commit (the same line [SKILL.md](SKILL.md#vault) asks for, not written twice).
 
-Checklist dán vào mô tả PR:
+Checklist to paste into the PR description:
 
 ```
-- [ ] Phân loại: <Tên> — <mới|enhance> — <breaking|không> — <status>
-- [ ] MDX: component 3 tab Overview / Specs / Guidelines, `docs:check` xanh, props trong `argTypes`; pattern: biến thể / Props / Layout / Accessibility
-- [ ] Code: token only, 'use client', registry (không số lượng), exports
-- [ ] Story + play cho mỗi câu Accessibility; a11y error
-- [ ] tsc, lint, tokens:check, registry:check, vitest storybook (3 trình duyệt), vitest visual (CI)
-- [ ] Changeset (hoặc --empty)
+- [ ] Classify: <Name> — <new|enhance> — <breaking|non-breaking> — <status>
+- [ ] MDX: component 3 tabs Overview / Specs / Guidelines, `docs:check` green, props in `argTypes`; pattern: variants / Props / Layout / Accessibility
+- [ ] Code: tokens only, 'use client', registry (no counts), exports
+- [ ] Story + play for each Accessibility sentence; a11y error
+- [ ] tsc, lint, tokens:check, registry:check, vitest storybook (3 browsers), vitest visual (CI)
+- [ ] Changeset (or --empty)
 - [ ] Status tag
-- [ ] Figma sync (nếu đổi token/prop)
+- [ ] Figma sync (if a token/prop changed)
 - [ ] Vault: build-log, kanban, agent-log
 ```
