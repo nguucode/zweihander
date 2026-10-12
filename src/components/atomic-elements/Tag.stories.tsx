@@ -17,12 +17,55 @@ const meta = {
   tags: ['beta'],
   component: Tag,
   args: { text: 'Account verified' },
+  // Every prop is listed by hand, with its type and default: these
+  // descriptions are the docs' API table and the Playground's props panel.
   argTypes: {
-    size: { control: 'inline-radio', options: ['sm', 'md'] },
-    appearance: { control: 'inline-radio', options: ['subtle', 'outlined', 'solid'] },
-    variant: { control: 'select', options: TAG_VARIANTS },
-    startIcon: { control: false },
+    text: {
+      description: 'The label. Required. Truncates with an ellipsis rather than wrapping.',
+      control: 'text',
+      table: { type: { summary: 'string' } },
+    },
+    variant: {
+      description:
+        'A status (`neutral`, `info`, `success`, `warning`, `danger`) or one of the 17 accent hues, for categories.',
+      control: 'select',
+      options: TAG_VARIANTS,
+      table: { type: { summary: 'TagVariant' }, defaultValue: { summary: "'info'" } },
+    },
+    appearance: {
+      description: '`subtle` tint, `outlined` border, or `solid` fill. Solid hue tags fall under 4.5:1 on warm hues.',
+      control: 'inline-radio',
+      options: ['subtle', 'outlined', 'solid'],
+      table: { type: { summary: "'subtle' | 'outlined' | 'solid'" }, defaultValue: { summary: "'subtle'" } },
+    },
+    size: {
+      description: '20px (`sm`) or 24px (`md`) tall: the control tier below its name, to sit in a line of text.',
+      control: 'inline-radio',
+      options: ['sm', 'md'],
+      table: { type: { summary: "'sm' | 'md'" }, defaultValue: { summary: "'md'" } },
+    },
+    startIcon: {
+      description: 'Icon before the text, usually `<Icon name="…" />`. Decorative: hidden from screen readers.',
+      control: false,
+      table: { type: { summary: 'ReactNode' } },
+    },
+    startAvatar: {
+      description: 'Image URL for a small round picture before the text, e.g. a person in a filter. Decorative. Wins over `startIcon`.',
+      control: 'text',
+      table: { type: { summary: 'string' } },
+    },
+    hasRemoveButton: {
+      description: 'Adds a remove button named "Remove `text`".',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    onRemove: {
+      description: 'Called when the remove button is pressed. The tag does not remove itself: drop it from your list.',
+      control: false,
+      table: { type: { summary: '(event: MouseEvent) => void' } },
+    },
   },
+  excludeStories: ['anatomyParts'],
 } satisfies Meta<typeof Tag>
 
 export default meta
@@ -215,6 +258,54 @@ export const Truncated: Story = {
   render: (args) => (
     <div style={{ inlineSize: '12rem' }}>
       <Tag {...args} />
+    </div>
+  ),
+}
+
+/** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
+export const anatomyParts = [
+  { name: 'Container', selector: 'span', description: 'The box: fill, border and corner by appearance and variant.' },
+  { name: 'Start icon', selector: 'span > [aria-hidden="true"]', description: 'Optional and decorative. A start avatar takes its place when given.' },
+  { name: 'Text', selector: 'span > span:not([aria-hidden])', description: 'Truncates with an ellipsis rather than wrapping.' },
+  { name: 'Remove button', selector: 'button', description: 'Optional. A real <button> named "Remove" and the text.' },
+]
+
+/** Every part present. */
+export const Anatomy: Story = {
+  tags: ['!dev'],
+  args: { text: 'Design', startIcon: <Icon name="success" />, hasRemoveButton: true },
+  play: async ({ canvasElement }) => {
+    // The docs markers follow these selectors: a DOM change must not leave
+    // a marker pointing at nothing, or at the wrong part.
+    const found = anatomyParts.map(({ selector }) => canvasElement.querySelector(selector))
+    await expect(found.every(Boolean)).toBe(true)
+    await expect(new Set(found).size).toBe(anatomyParts.length)
+    await expect(found[0]).toContainElement(found[3] as HTMLElement)
+    await expect(found[2]).toHaveTextContent('Design')
+  },
+}
+
+/** Guidelines, Do: a hue in subtle or outlined, where every label clears 4.5:1. */
+export const DoSubtleHues: Story = {
+  render: (args) => (
+    <div style={row}>
+      {(['orange', 'amber', 'yellow', 'lime'] as const).map((variant) => (
+        <Tag key={variant} {...args} variant={variant} text={variant} />
+      ))}
+    </div>
+  ),
+}
+
+/** Guidelines, Don't: solid warm hues carry their white label under 4.5:1. */
+export const DontSolidWarmHues: Story = {
+  tags: ['!dev'],
+  // Off on purpose: this story exists to show the label that fails 4.5:1.
+  parameters: { a11y: { test: 'off' } },
+  render: (args) => (
+    <div style={row}>
+      {(['orange', 'amber', 'yellow', 'lime'] as const).map((variant) => (
+        <Tag key={variant} {...args} appearance="solid" variant={variant} text={variant} />
+      ))}
     </div>
   ),
 }
