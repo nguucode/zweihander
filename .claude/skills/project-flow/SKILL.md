@@ -93,9 +93,9 @@ Retro runs once per batch of 5 to 10 finished tickets or threads, not once per t
 **Every build thread logs friction, it does not run retro.** At its closing step, a thread writes one to three raw notes on what cost it time or went wrong (a file it could not find, a check that would have caught a mistake, a wasted tool call, a missing instruction). Facts, not fixes. `none` is a valid note. Where they go:
 
 - Ticket thread: under `## Comments` in its ticket file, as `<date>: retro: <note>`.
-- Any other `flow fix` or `flow change` thread: a new file `10-projects/zweihander/retro-inbox/<date>-<thread-slug>.md` with frontmatter `status: open` and the PR link, notes as bullets. One file per thread, so parallel threads never write the same file.
+- Any other `flow fix` or `flow change` thread: a new file `10-projects/zweihander/retro-inbox/<date>-<thread-slug>.md` with frontmatter `status: open` and the PR link, notes as bullets. One file per thread, so parallel threads never write the same file. No vault reachable from this thread: write the same file to `/mnt/project-files/project-flow/retro-inbox/` instead.
 
-**The batch retro** is run by the map thread when its batch is merged, or by the thread whose note makes 5 open files in `retro-inbox/`:
+**The batch retro** is run by the map thread when its batch is merged, or by the thread whose note makes 5 open files across both `retro-inbox/` folders:
 
 1. Read `.claude/skills/retro/SKILL.md`. Its primary sources are the batch's notes; open a source thread with `fetch_thread` only when a note is too thin to act on.
 2. Merge duplicates, drop one-offs that a check or doc would not prevent, rank by how often and how badly it hit.
