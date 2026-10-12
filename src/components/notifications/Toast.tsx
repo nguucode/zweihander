@@ -1,6 +1,6 @@
 'use client'
 
-import { useSyncExternalStore, type ReactNode } from 'react'
+import { useSyncExternalStore, type ReactNode, type RefObject } from 'react'
 import { Toast as BaseToast } from '@base-ui/react/toast'
 import { Icon, type IconName } from '@/lib/icon'
 import { cn } from '@/lib/utils'
@@ -28,6 +28,13 @@ export interface ToastProviderProps {
   timeout?: number
   /** Toasts shown at once; older ones wait. */
   limit?: number
+  /**
+   * Where the toasts render, `document.body` by default. In an element that
+   * is a containing block for fixed elements (one with a `transform`), they
+   * sit in that element's corner instead of the viewport's: a preview, or a
+   * frame inside the page.
+   */
+  container?: HTMLElement | RefObject<HTMLElement | null> | null
 }
 
 // Base UI's promise() sets these types itself.
@@ -87,14 +94,14 @@ function ToastList({ swipe }: { swipe: 'left' | 'right' | 'up' | 'down' }) {
 }
 
 /** Wrap the app once. Toasts render in a corner of the viewport, above everything. */
-export function ToastProvider({ children, placement = 'bottom-right', timeout = 5000, limit = 3 }: ToastProviderProps) {
+export function ToastProvider({ children, placement = 'bottom-right', timeout = 5000, limit = 3, container }: ToastProviderProps) {
   const [vertical, horizontal] = placement.split('-') as ['top' | 'bottom', 'left' | 'center' | 'right']
   const swipe = horizontal === 'center' ? (vertical === 'top' ? 'up' : 'down') : horizontal
   const dark = useSyncExternalStore(subscribeToPageTheme, pageIsDark, () => false)
   return (
     <BaseToast.Provider timeout={timeout} limit={limit}>
       {children}
-      <BaseToast.Portal>
+      <BaseToast.Portal container={container}>
         <BaseToast.Viewport className={cn(styles.viewport, styles[vertical], styles[horizontal], dark ? 'light' : 'dark')}>
           <ToastList swipe={swipe} />
         </BaseToast.Viewport>

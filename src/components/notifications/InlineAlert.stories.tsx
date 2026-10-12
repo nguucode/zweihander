@@ -11,12 +11,43 @@ const meta = {
   tags: ['beta'],
   component: InlineAlert,
   args: { children: 'Changes are saved automatically.' },
+  // Every prop is described here: these are the docs' API table and the
+  // Playground's props panel.
   argTypes: {
-    variant: { control: 'inline-radio', options: ['info', 'success', 'warning', 'danger'] },
-    size: { control: 'inline-radio', options: ['sm', 'md'] },
-    icon: { control: false },
-    action: { control: false },
+    variant: {
+      description: 'Colour by meaning: the whole line takes it. `danger` and `warning` also decide how `isLive` announces it.',
+      control: 'inline-radio',
+      options: ['info', 'success', 'warning', 'danger'],
+      table: { type: { summary: "'info' | 'success' | 'warning' | 'danger'" }, defaultValue: { summary: "'info'" } },
+    },
+    size: {
+      description: 'Body text (`md`) or small body text (`sm`), with the icon to match.',
+      control: 'inline-radio',
+      options: ['sm', 'md'],
+      table: { type: { summary: "'sm' | 'md'" }, defaultValue: { summary: "'md'" } },
+    },
+    children: {
+      description: 'The message.',
+      control: 'text',
+      table: { type: { summary: 'ReactNode' } },
+    },
+    icon: {
+      description: "Replaces the variant's icon; `false` shows none. Decorative: hidden from screen readers.",
+      control: false,
+      table: { type: { summary: 'ReactNode | false' }, defaultValue: { summary: "the variant's icon" } },
+    },
+    action: {
+      description: 'A short link or button after the message, e.g. "Retry".',
+      control: false,
+      table: { type: { summary: 'ReactNode' } },
+    },
+    isLive: {
+      description: 'Announce it when it appears: `danger` and `warning` interrupt (`role="alert"`), the others wait (`role="status"`).',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
   },
+  excludeStories: ['anatomyParts'],
   decorators: [(Story) => <div style={{ maxInlineSize: '28rem' }}>{Story()}</div>],
 } satisfies Meta<typeof InlineAlert>
 
@@ -106,5 +137,51 @@ export const InAForm: Story = {
   play: async ({ canvas }) => {
     await userEvent.click(canvas.getByRole('button', { name: 'Save' }))
     await expect(await canvas.findByRole('alert')).toHaveTextContent('That URL is taken')
+  },
+}
+
+/** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
+const root = 'div:has(> span[aria-hidden="true"])'
+export const anatomyParts = [
+  { name: 'Icon', selector: `${root} > span:nth-child(1)`, description: "The variant's filled icon, one line tall. Replaceable, or none." },
+  { name: 'Message', selector: `${root} > span:nth-child(2)`, description: "`children`, in the variant's text colour." },
+  { name: 'Action', selector: `${root} > span:nth-child(3)`, description: 'Optional short link or button.' },
+]
+
+/** Every part present. */
+export const Anatomy: Story = {
+  tags: ['!dev'],
+  args: { variant: 'danger', children: 'Couldn’t load comments.', action: <Link href="#retry" variant="accent">Retry</Link> },
+  play: async ({ canvasElement }) => {
+    // The docs markers follow these selectors: a DOM change must not leave
+    // a marker pointing at nothing, or at the wrong part.
+    const found = anatomyParts.map(({ selector }) => canvasElement.querySelector(selector))
+    await expect(found.every(Boolean)).toBe(true)
+    await expect(new Set(found).size).toBe(anatomyParts.length)
+    await expect(found[1]).toHaveTextContent('Couldn’t load comments.')
+    await expect(found[2]).toHaveTextContent('Retry')
+  },
+}
+
+/** Guidelines, Don't: an error about one field belongs to the field, tied to it. */
+export const DontForOneField: Story = {
+  tags: ['!dev'],
+  render: () => (
+    <div style={stack}>
+      <TextInput label="Workspace URL" defaultValue="atlas" isFullWidth />
+      <InlineAlert variant="danger">That URL is taken.</InlineAlert>
+    </div>
+  ),
+}
+
+/** Guidelines, Do: the field's own error, announced with it. */
+export const DoFieldError: Story = {
+  tags: ['!dev'],
+  render: () => (
+    <TextInput label="Workspace URL" defaultValue="atlas" validationState="error" helperText="That URL is taken." isFullWidth />
+  ),
+  play: async ({ canvas }) => {
+    // The message is the field's description: read when the field is focused.
+    await expect(canvas.getByRole('textbox')).toHaveAccessibleDescription('That URL is taken.')
   },
 }

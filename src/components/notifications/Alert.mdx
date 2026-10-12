@@ -1,86 +1,248 @@
-import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
 import * as AlertStories from './Alert.stories'
 
 <Meta of={AlertStories} />
 
 # Alert
 
-A message about a page or a section: something went wrong, something
-needs attention, something worked. It stays where it is until the
-situation changes or the reader dismisses it. For a message that comes
-and goes on its own, use a Toast. Spec:
-[uiguideline.com/components/alert](https://www.uiguideline.com/components/alert).
-A plain element.
+<DocTabs>
+<DocTab value="overview">
+
+A message about a page or a section that stays until the situation changes
+or the reader dismisses it: something went wrong, needs attention, or worked.
+
+<Status of={AlertStories} />
 
 <Canvas of={AlertStories.WithAction} />
 
-## Anatomy
+## Variants
 
-| Part | What it is |
-| --- | --- |
-| **Icon** | The variant's icon: `info`, `success`, `warning`, `danger`. Replaceable, or `false` for none. |
-| **Title** | Optional, semibold. Says what happened in a few words. |
-| **Description** | `children`. What it means and what to do. |
-| **Action** | Optional buttons or links under the description. |
-| **Close button** | Shown when `onClose` is given. |
-
-## Props
-
-| Prop | Values | Default | |
-| --- | --- | --- | --- |
-| `variant` | `info`, `success`, `warning`, `danger` | `info` | |
-| `appearance` | `subtle`, `outlined`, `solid` | `subtle` | The same three as Tag. |
-| `title` | node | – | |
-| `children` | node | – | The description. |
-| `icon` | node or `false` | variant's icon | |
-| `action` | node | – | |
-| `onClose` | function | – | Shows the close button. The alert does not hide itself. |
-| `closeLabel` | string | `Dismiss` | The close button's accessible name. |
-| `isLive` | boolean | `false` | Announce it when it appears. See Accessibility. |
-
-Every other `<div>` attribute passes through.
-
-<Controls of={AlertStories.Default} />
-
-### Design notes
-
-- **The message stays in `--foreground`** on subtle and outlined. A
-  paragraph in the variant's text colour is tiring to read, so the colour
-  goes on the icon and the title, where the eye lands first.
-- **Colours are Tag's.** Each variant reads the same four tokens, e.g.
-  `--danger`, `--danger-foreground`, `--danger-subtle`, `--danger-text`,
-  so an Alert and a Tag of the same variant always agree.
-- **Closing is the parent's job.** `onClose` reports the click; the alert
-  is removed by whoever rendered it. That keeps "dismissed" in your state,
-  where it can be remembered across visits.
-
-## Usage
+`variant` is the colour, by meaning; `appearance` is the emphasis. Any
+variant takes any appearance.
 
 <Canvas of={AlertStories.Variants} />
 
+| Variant | Use for |
+| --- | --- |
+| `info` | Something worth knowing that changes nothing: a plan change, scheduled maintenance. |
+| `success` | Something finished and stays true: a domain verified, an import done. |
+| `warning` | Something that will go wrong if nobody acts: a card expiring, a quota nearly used. |
+| `danger` | Something that went wrong and needs a next step: a failed upload, a lost connection. |
+
 <Canvas of={AlertStories.Appearances} />
+
+| Appearance | Use for |
+| --- | --- |
+| `subtle` | The default. Sits on the page without shouting. |
+| `outlined` | On a tinted or busy background, where a tint would disappear. |
+| `solid` | The one message nobody should miss, such as an outage banner. Rarely more than one per page. |
 
 <Canvas of={AlertStories.Dismissible} />
 
 <Canvas of={AlertStories.WithoutIcon} />
 
-The icon is decorative, so the variant has to be clear from the words
-too. "Upload failed", not just a red box.
+## Resources
+
+From npm, or copied into your project through the registry:
+
+```js
+import { Alert } from 'zweihander/alert'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/alert.json
+```
+
+- Source: [src/components/notifications/Alert.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/notifications/Alert.tsx)
+- Spec: [uiguideline.com/components/alert](https://www.uiguideline.com/components/alert)
+- Behaviour: a plain element, no Base UI part
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
+## Anatomy
+
+<Anatomy parts={AlertStories.anatomyParts}>
+  <Story of={AlertStories.Anatomy} />
+</Anatomy>
+
+Only the description is required. The icon is one line of body text tall,
+so it sits on the title's line.
+
+## Measurements
+
+One size. The text is body text, so an alert sits in running content
+without a jump in size.
+
+<SpecTable
+  caption="Every alert"
+  rows={[
+    { part: 'Container', property: 'Padding', token: '--space-2-5' },
+    { part: 'Container', property: 'Corner radius', token: '--radius-md' },
+    { part: 'Container', property: 'Gap, icon to text', token: '--space-2' },
+    { part: 'Title and description', property: 'Font size', token: '--text-body' },
+    { part: 'Title and description', property: 'Line height', token: '--leading-body' },
+    { part: 'Title and description', property: 'Gap', token: '--space-1' },
+    { part: 'Action', property: 'Space above, and between actions', token: '--space-2' },
+    { part: 'Close button', property: 'Icon size', token: '--icon-md' },
+    { part: 'Close button', property: 'Corner radius', token: '--radius-sm' },
+    { part: 'Close button', property: 'Minimum hit area on touch screens', token: '--target-coarse' },
+    { part: 'Focus ring', property: 'Width', token: '--focus-width' },
+    { part: 'Focus ring', property: 'Offset (inside)', token: '--focus-offset-inset' },
+  ]}
+/>
+
+The border is always there, 1px and transparent unless `outlined`, so
+switching appearance never moves the content.
+
+## Color
+
+Each variant reads four tokens, the same four as a Tag of that variant, so
+the two always agree. Subtle and outlined keep the description in
+`--foreground`: a paragraph in the variant's colour is tiring to read, so
+the colour goes on the icon and the title.
+
+<SpecTable
+  caption="info"
+  rows={[
+    { part: 'Container, subtle', property: 'Background', token: '--info-subtle' },
+    { part: 'Container, outlined', property: 'Border', token: '--info-text' },
+    { part: 'Icon and title, subtle and outlined', property: 'Colour', token: '--info-text' },
+    { part: 'Container, solid', property: 'Background', token: '--info' },
+    { part: 'Content, solid', property: 'Colour', token: '--info-foreground' },
+  ]}
+/>
+
+<SpecTable
+  caption="success"
+  rows={[
+    { part: 'Container, subtle', property: 'Background', token: '--success-subtle' },
+    { part: 'Container, outlined', property: 'Border', token: '--success-text' },
+    { part: 'Icon and title, subtle and outlined', property: 'Colour', token: '--success-text' },
+    { part: 'Container, solid', property: 'Background', token: '--success' },
+    { part: 'Content, solid', property: 'Colour', token: '--success-foreground' },
+  ]}
+/>
+
+<SpecTable
+  caption="warning"
+  rows={[
+    { part: 'Container, subtle', property: 'Background', token: '--warning-subtle' },
+    { part: 'Container, outlined', property: 'Border', token: '--warning-text' },
+    { part: 'Icon and title, subtle and outlined', property: 'Colour', token: '--warning-text' },
+    { part: 'Container, solid', property: 'Background', token: '--warning' },
+    { part: 'Content, solid', property: 'Colour', token: '--warning-foreground' },
+  ]}
+/>
+
+<SpecTable
+  caption="danger"
+  rows={[
+    { part: 'Container, subtle', property: 'Background', token: '--danger-subtle' },
+    { part: 'Container, outlined', property: 'Border', token: '--danger-text' },
+    { part: 'Icon and title, subtle and outlined', property: 'Colour', token: '--danger-text' },
+    { part: 'Container, solid', property: 'Background', token: '--danger' },
+    { part: 'Content, solid', property: 'Colour', token: '--danger-foreground' },
+  ]}
+/>
+
+<SpecTable
+  caption="Every variant"
+  rows={[
+    { part: 'Description, subtle and outlined', property: 'Colour', token: '--foreground' },
+    { part: 'Container, outlined', property: 'Background', token: '--background' },
+    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+  ]}
+/>
+
+## States
+
+The alert itself has no states. Its close button does.
+
+<States
+  states={[
+    { label: 'Enabled' },
+    { label: 'Close hover', pseudo: 'hover' },
+    { label: 'Close focus', pseudo: 'focus-visible' },
+  ]}
+>
+  <Story of={AlertStories.Dismissible} />
+</States>
+
+- **Hover** tints the close button with 15% of the alert's own text
+  colour, so it reads on every variant and appearance.
+- **Focus** is a 2px `--ring` outline, inside the button's edge.
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={AlertStories} />
+</div>
+
+Every other `<div>` attribute passes through, including `ref`.
+
+### Differences from the spec
+
+- **Placed in the content, not at the top of the screen.** The spec
+  describes a prominent message at the top; here an alert goes where the
+  thing it is about is. An outage banner is a `solid` alert placed at the
+  top by the page.
+- **Closing is the parent's job.** `onClose` reports the click and the
+  alert stays until whoever rendered it removes it, so "dismissed" lives in
+  your state and can be remembered across visits.
+
+</DocTab>
+<DocTab value="guidelines">
+
+## When to use
+
+Use an Alert for a message about a page or a section that should stay put
+until it is dealt with: a failed save, a card about to expire, an import
+that finished. The title says what happened; the description says what it
+means and what to do.
+
+<DoDont
+  do={<Story of={AlertStories.DoSayWhatHappened} />}
+  doCaption="Say what happened and offer the next step."
+  dont={<Story of={AlertStories.DontVague} />}
+  dontCaption="“Something went wrong” leaves the red box to do the talking, and the reader with nothing to do."
+/>
+
+The icon is decorative, so the variant has to be clear from the words too:
+"Upload failed", not just a red box.
+
+## When not to use
+
+- **For news about something that just happened and needs nothing more.**
+  Use a [Toast](?path=/docs/components-notifications-toast--docs): it goes
+  away by itself.
+- **For a one-line message under a form or a group of fields.** Use an
+  [Inline Alert](?path=/docs/components-notifications-inlinealert--docs).
+- **For an error on one field.** Use the field's own `validationState` and
+  `helperText`, tied to it with `aria-describedby`.
+- **For a decision the reader must make before going on.** Use a Modal.
 
 ## Accessibility
 
-- By default an alert is a plain `<div>`: one that is on the page when it
-  loads is read in order, like the text around it.
-- An alert that **appears** in response to something (a failed save)
-  needs `isLive`. `danger` and `warning` become `role="alert"` and are
-  read at once; `info` and `success` become `role="status"` and wait for
-  the screen reader to finish.
+- A plain `<div>` by default: an alert on the page when it loads is read in
+  order, like the text around it, and does not interrupt.
+- An alert that **appears** in response to something (a failed save) needs
+  `isLive`. `danger` and `warning` become `role="alert"` and are read at
+  once; `info` and `success` become `role="status"` and wait for the screen
+  reader to finish.
 
   <Canvas of={AlertStories.Live} />
 
-- The icon is decorative (`aria-hidden`).
-- The close button is named `Dismiss` (change it with `closeLabel`),
-  shows the 2px `--ring` on focus, and has a 44px touch target on coarse
-  pointers.
-- Every variant and appearance is checked for contrast by the story
-  tests (light mode).
+- The icon is `aria-hidden`: the words carry the meaning.
+- The close button is a native `<button>` named `Dismiss` (change it with
+  `closeLabel`). Tab reaches it, Enter and Space press it.
+- Focus ring: 2px `--ring` on the close button. On touch screens its hit
+  area grows to 44×44px without the button growing.
+- Every variant and appearance passes the story tests' contrast check
+  (light mode).
+
+</DocTab>
+</DocTabs>
