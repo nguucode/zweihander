@@ -197,6 +197,12 @@ the build if any pair drops under 4.5:1:
 `destructive` is an action that destroys, `danger` is a state that is
 wrong. Keep them apart so either can move without the other.
 
+The 17 hue tokens (`--orange`, `--orange-foreground`, …) keep a white
+`-foreground` on every hue so a row of solid Tags reads as one set, which
+puts the warm hues under 4.5:1. Where text on a hue has to pass,
+`--orange-contrast` is neutral-900 in both modes: 4.99:1 on `--orange`.
+Calendar's today figure uses it.
+
 ## Color is never the only signal
 
 `--destructive` on a button does not say what will be destroyed, and a red

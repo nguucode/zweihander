@@ -20,7 +20,7 @@ date library.
 | **Header** | The short month and year ("Oct 2026") at the start, previous and next month buttons together at the end. |
 | **Weekdays** | Two letters ("Mo"), or the narrow names ("T2") where the short ones are long; the locale's first day first. |
 | **Day** | A 32px button (44px on touch), 4px apart. Days of the months either side are decoration: faded (`--muted-foreground` at 50%), hidden from assistive tech, not pickable, never selected or in a range. Arrow keys still cross into them by moving the month. |
-| **Today** | An `--orange` disc with an `--orange-foreground` (white) figure, round where a selected day is square. White on orange is 3.4:1, under WCAG's 4.5:1: a deliberate choice; `aria-current="date"` carries it for assistive tech. |
+| **Today** | An `--orange` disc with an `--orange-contrast` (near-black) figure at 5.0:1, round where a selected day is square. `aria-current="date"` carries it for assistive tech. |
 | **Selected** | `--primary` (the brand) behind `--primary-foreground`. Wins over today when they are the same day. |
 | **Range** | With `range`: both ends selected, the days between on an `--accent` band as tall as a day, rounded where a week or the month starts or ends. Days of the months either side are not banded, so two months side by side never draw the same day twice. |
 | **Unavailable** | Muted and struck through; before `min`, after `max`, or ruled out by `isDateDisabled`. |

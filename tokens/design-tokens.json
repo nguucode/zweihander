@@ -1412,6 +1412,10 @@
         "$type": "color",
         "$value": "{primitive.gray.neutral.50}"
       },
+      "orange-contrast": {
+        "$type": "color",
+        "$value": "{primitive.gray.neutral.900}"
+      },
       "orange-subtle": {
         "$type": "color",
         "$value": "{primitive.accent.orange.100}"
@@ -1865,6 +1869,10 @@
       "orange-foreground": {
         "$type": "color",
         "$value": "{primitive.gray.neutral.50}"
+      },
+      "orange-contrast": {
+        "$type": "color",
+        "$value": "{primitive.gray.neutral.900}"
       },
       "orange-subtle": {
         "$type": "color",

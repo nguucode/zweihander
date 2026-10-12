@@ -101,18 +101,18 @@
 }
 
 /* Today: an orange disc, round where the selected day is the control's
-   shape, so the two differ by shape as well as colour. White on --orange is
-   3.4:1, under the 4.5:1 a 14px figure needs: a deliberate design choice,
-   with aria-current carrying today for assistive tech. */
+   shape, so the two differ by shape as well as colour. The figure is
+   --orange-contrast (5.0:1): white on --orange is 3.4:1, under the 4.5:1 a
+   14px figure needs. */
 .today {
   border-radius: var(--radius-pill);
   background: var(--orange);
-  color: var(--orange-foreground);
+  color: var(--orange-contrast);
   font-weight: 600;
 }
 .today:hover:not([aria-disabled='true'], .selected) {
   background: var(--orange);
-  color: var(--orange-foreground);
+  color: var(--orange-contrast);
 }
 
 /* After .today: a selected today shows as selected. */
@@ -173,9 +173,9 @@
   color: var(--accent-foreground);
   font-weight: 500;
 }
-/* Today keeps its white figure inside a range too. */
+/* Today keeps its dark figure inside a range too. */
 .between.today {
-  color: var(--orange-foreground);
+  color: var(--orange-contrast);
 }
 
 /* 32px days are below the 44px touch target; they grow on coarse pointers. */
