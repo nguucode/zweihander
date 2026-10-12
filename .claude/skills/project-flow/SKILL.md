@@ -5,7 +5,7 @@ description: Idea-to-ship workflow for Zweihänder in a Claude Code Project (thr
 
 # Project flow
 
-Matt Pocock's loop (grill, spec with seams, small tickets each in a fresh context, two-axis review, retro) as the `flow` mod runs it (`/Volumes/KAFKA/Vault/10-projects/claude-mods/flow.md`), carried into a Claude Code Project. The agent is the sergeant, the user the general: every decision is the user's, made before code. Same four flows and steps; the differences are **who drives** (a thread, not the mod) and **tickets**: after `to-tickets`, every ticket runs in its own thread and ships as its own PR.
+Matt Pocock's loop (grill, spec with seams, small tickets each in a fresh context, two-axis review, retro once per batch) as the `flow` mod runs it (`/Volumes/KAFKA/Vault/10-projects/claude-mods/flow.md`), carried into a Claude Code Project. The agent is the sergeant, the user the general: every decision is the user's, made before code. Same four flows and steps; the differences are **who drives** (a thread, not the mod) and **tickets**: after `to-tickets`, every ticket runs in its own thread and ships as its own PR.
 
 A thread started for one ticket skips this file and follows [TICKET-THREAD.md](TICKET-THREAD.md).
 
@@ -37,7 +37,7 @@ Starting mid-way: if the user says early steps are done ("spec at …, tickets a
 | 3 | grill | grill-with-docs | yes | Interview until clear, writing `CONTEXT.md` and ADRs as terms and decisions land. |
 | 4 | prototype | prototype | optional | Throwaway code for a question that needs something runnable. |
 | 5 | spec | to-spec | yes | Spec into the tracker. Ask: **spec + tickets** (one thread and PR per ticket) or **implement here** (one PR, skip tickets). |
-| 6 | tickets | to-tickets | when tickets chosen | One file per ticket under `10-projects/zweihander/<feature>/issues/`, each with `Blocked by:`, each small enough for one fresh session (well under ~150k tokens). Then hand off, see [Tickets become threads](#tickets-become-threads). |
+| 6 | tickets | to-tickets | when tickets chosen | One file per ticket under `10-projects/zweihander/<feature>/issues/`, each with `Blocked by:` and `Batch:`, each small enough for one fresh session (well under ~150k tokens). Group them into batches of 5 to 10 tickets in dependency order (a feature with 10 or fewer tickets is one batch); a ticket's blockers sit in its own or an earlier batch. Then hand off, see [Tickets become threads](#tickets-become-threads). |
 | 7 | **implement** | implement | yes | **Build step** ("implement here" only). Then [AFTER-BUILD.md](AFTER-BUILD.md). |
 
 ## `flow fix`
@@ -67,13 +67,13 @@ Each finding the user picks becomes a new `flow fix` or `flow change` thread (ha
 
 ## Tickets become threads
 
-After `to-tickets`, this thread becomes the **map thread**. It does not implement.
+After `to-tickets`, this thread becomes the **map thread**. It does not implement. It hands off one batch at a time.
 
-1. List the tickets with title, vault path and `Blocked by`. The **frontier** is every ticket with no open blocker.
+1. List the current batch's tickets with title, vault path and `Blocked by`. The **frontier** is every ticket in the batch with no open blocker.
 2. Get the coordinator with `get_channel_session_id`, then `send_message` to it:
 
    ```
-   project-flow: start ticket threads for <feature>.
+   project-flow: start ticket threads for <feature>, batch <N> of <total>.
    Spec: <vault path>
    Start now (frontier):
    - <NN> <title>: <vault path>
@@ -82,8 +82,25 @@ After `to-tickets`, this thread becomes the **map thread**. It does not implemen
    ```
 
 3. The coordinator posts one project-chat line per ticket and starts a thread on it with that brief (its rules are in project memory, `project-flow-tickets`). Frontier tickets run in parallel.
-4. Each ticket thread messages the coordinator when its PR merges; the coordinator then starts every ticket that merge unblocked. The map thread keeps the checklist (one line per ticket: waiting, running, merged) from what it reads with `list_thread_sessions` / `fetch_thread`.
-5. When every ticket is merged: update the vault (`_context.md` line, `_system/agent-log.md`), then reply once with the PR list and the retro suggestions the ticket threads sent, merged and deduplicated, asking which to apply. Each one the user picks becomes a `flow change` thread. Resolve the thread once that is answered.
+4. Each ticket thread messages the coordinator when its PR merges; the coordinator then starts every ticket in the batch that merge unblocked. The map thread keeps the checklist (one line per ticket: waiting, running, merged) from what it reads with `list_thread_sessions` / `fetch_thread`.
+5. When every ticket in the batch is merged: run the [batch retro](#retro-batches) over the batch's ticket files and reply once with the batch's PR list and the ranked retro list, asking which to apply. Each one the user picks becomes a `flow change` thread. Once the user answers, hand off the next batch (step 1), so the next batch builds on what this one taught.
+6. After the last batch: update the vault (`_context.md` line, `_system/agent-log.md`) and resolve the thread.
+
+## Retro batches
+
+Retro runs once per batch of 5 to 10 finished tickets or threads, not once per thread: one short list the user can read in one sitting, instead of a stream of overlapping suggestions.
+
+**Every build thread logs friction, it does not run retro.** At its closing step, a thread writes one to three raw notes on what cost it time or went wrong (a file it could not find, a check that would have caught a mistake, a wasted tool call, a missing instruction). Facts, not fixes. `none` is a valid note. Where they go:
+
+- Ticket thread: under `## Comments` in its ticket file, as `<date>: retro: <note>`.
+- Any other `flow fix` or `flow change` thread: a new file `10-projects/zweihander/retro-inbox/<date>-<thread-slug>.md` with frontmatter `status: open` and the PR link, notes as bullets. One file per thread, so parallel threads never write the same file.
+
+**The batch retro** is run by the map thread when its batch is merged, or by the thread whose note makes 5 open files in `retro-inbox/`:
+
+1. Read `.claude/skills/retro/SKILL.md`. Its primary sources are the batch's notes; open a source thread with `fetch_thread` only when a note is too thin to act on.
+2. Merge duplicates, drop one-offs that a check or doc would not prevent, rank by how often and how badly it hit.
+3. Present at most 5 items, one line each: the change (lint rule, check, CLAUDE.md line, skill edit), the evidence (which tickets or threads), and the file it touches. Apply nothing.
+4. For an inbox batch, set each processed file's frontmatter to `status: reviewed`.
 
 ## Vault
 

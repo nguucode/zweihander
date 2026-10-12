@@ -3,7 +3,7 @@
     "SessionStart": [
       {
         "hooks": [
-          { "type": "command", "command": "sh \"$CLAUDE_PROJECT_DIR/.claude/hooks/cloud-browsers.sh\"" }
+          { "type": "command", "command": "sh \"$CLAUDE_PROJECT_DIR/.claude/hooks/cloud-browsers.sh\"", "timeout": 600 }
         ]
       }
     ]

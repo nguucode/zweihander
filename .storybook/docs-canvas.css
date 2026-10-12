@@ -1,0 +1,10 @@
+/*
+ * Storybook paints every docs <Canvas> frame (.sbdocs-preview) white from its
+ * own light theme, whatever the toolbar says, so a dark-themed component sat
+ * on a white frame. The theme decorator puts .dark on <html>; repaint the
+ * frame from the tokens so it follows the toolbar like every other docs block.
+ */
+.dark .sbdocs-preview {
+  border-color: var(--border);
+  background: var(--background);
+}

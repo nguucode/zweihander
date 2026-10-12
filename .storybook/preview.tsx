@@ -3,6 +3,7 @@ import { configure } from 'storybook/test'
 // Docs-only: the tokens name these faces, but the package never loads a
 // font for its consumers.
 import '../src/index.css'
+import './docs-canvas.css'
 
 // Puts the toolbar's theme on <html>, where the dark token set is scoped.
 // Set while rendering rather than in an effect: a decorator is a plain
