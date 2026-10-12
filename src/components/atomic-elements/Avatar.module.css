@@ -55,11 +55,11 @@
   color: var(--secondary-foreground);
 }
 
-/* Gray 600 carries a near-white label at 6.5:1 or more on every gray ramp, in
-   both appearances, so neutral solid needs no measured token of its own. */
+/* --neutral-solid is gray 600 in both appearances; the token build measures
+   its label on every gray ramp. */
 .solid {
-  background: var(--gray-600);
-  color: var(--gray-50);
+  background: var(--neutral-solid);
+  color: var(--neutral-solid-foreground);
 }
 
 /* With a hue, the tint and its label are measured per accent by the token
@@ -95,5 +95,5 @@
    carries no information: the name is in imageAlt or next to the avatar.
    Initials keep the measured label. */
 .solid .silhouette {
-  color: var(--gray-50);
+  color: var(--neutral-solid-foreground);
 }

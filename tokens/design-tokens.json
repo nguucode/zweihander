@@ -1280,6 +1280,18 @@
         "$type": "color",
         "$value": "oklch(0% 0 0 / 5%)"
       },
+      "scrim": {
+        "$type": "color",
+        "$value": "oklch(0% 0 0 / 50%)"
+      },
+      "neutral-solid": {
+        "$type": "color",
+        "$value": "{primitive.gray.gray.600}"
+      },
+      "neutral-solid-foreground": {
+        "$type": "color",
+        "$value": "{primitive.gray.gray.50}"
+      },
       "destructive": {
         "$type": "color",
         "$value": "{primitive.accent.red.600}"
@@ -1733,6 +1745,18 @@
       "hover-overlay": {
         "$type": "color",
         "$value": "oklch(100% 0 0 / 6%)"
+      },
+      "scrim": {
+        "$type": "color",
+        "$value": "oklch(0% 0 0 / 50%)"
+      },
+      "neutral-solid": {
+        "$type": "color",
+        "$value": "{primitive.gray.gray.600}"
+      },
+      "neutral-solid-foreground": {
+        "$type": "color",
+        "$value": "{primitive.gray.gray.50}"
       },
       "destructive": {
         "$type": "color",
