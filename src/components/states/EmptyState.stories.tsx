@@ -18,12 +18,44 @@ const meta = {
       </Button>
     ),
   },
+  // Every prop is listed by hand so the API table and the Playground's props
+  // panel carry the same descriptions; react-docgen gives no control for a
+  // ReactNode prop.
   argTypes: {
-    size: { control: 'inline-radio', options: ['sm', 'md'] },
-    headingLevel: { control: 'inline-radio', options: [2, 3, 4, 5, 6] },
-    icon: { control: false },
-    action: { control: false },
+    title: {
+      description: 'Says what is empty. A real heading, at `headingLevel`.',
+      control: 'text',
+      table: { type: { summary: 'ReactNode' } },
+    },
+    description: {
+      description: 'Why it is empty, or what will appear here. Muted, at most 40 characters wide.',
+      control: 'text',
+      table: { type: { summary: 'ReactNode' } },
+    },
+    icon: {
+      description: 'An icon (`<Icon name="search" />`) or a small illustration, on a disc. Decorative: hidden from screen readers.',
+      control: false,
+      table: { type: { summary: 'ReactNode' } },
+    },
+    action: {
+      description: 'The way forward: usually one Button, at most two.',
+      control: false,
+      table: { type: { summary: 'ReactNode' } },
+    },
+    size: {
+      description: '`sm` for a panel or a table body; `md` for a whole page or section.',
+      control: 'inline-radio',
+      options: ['sm', 'md'],
+      table: { type: { summary: "'sm' | 'md'" }, defaultValue: { summary: "'md'" } },
+    },
+    headingLevel: {
+      description: 'The title\'s heading level, so it fits the page outline: `3` inside a section headed by an `h2`.',
+      control: 'inline-radio',
+      options: [2, 3, 4, 5, 6],
+      table: { type: { summary: '2 | 3 | 4 | 5 | 6' }, defaultValue: { summary: '2' } },
+    },
   },
+  excludeStories: ['anatomyParts'],
 } satisfies Meta<typeof EmptyState>
 
 export default meta
@@ -70,4 +102,32 @@ export const Small: Story = {
 
 export const TitleOnly: Story = {
   args: { icon: undefined, description: undefined, action: undefined, title: 'Nothing scheduled for today' },
+}
+
+/** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
+export const anatomyParts = [
+  { name: 'Container', selector: 'div:has(> h2)', description: 'Centres everything; its padding follows the size prop.' },
+  { name: 'Icon disc', selector: 'div:has(> h2) > span', description: 'Optional. An icon on a muted disc. Decorative.' },
+  { name: 'Title', selector: 'h2', description: 'A real heading, level set by headingLevel. Says what is empty.' },
+  { name: 'Description', selector: 'div:has(> h2) > p', description: 'Optional. Says why, or what will appear here.' },
+  { name: 'Action', selector: 'div:has(> h2) > div', description: 'Optional. The way forward: usually one Button, at most two.' },
+]
+
+/** Every part present, so the docs can point at each. */
+export const Anatomy: Story = {
+  tags: ['!dev'],
+  play: async ({ canvasElement }) => {
+    // The docs markers follow these selectors: a DOM change must not leave
+    // a marker pointing at nothing, or at the wrong part.
+    const found = anatomyParts.map(({ selector }) => canvasElement.querySelector(selector))
+    await expect(found.every(Boolean)).toBe(true)
+    await expect(new Set(found).size).toBe(anatomyParts.length)
+    await expect(found[4]).toContainElement(canvasElement.querySelector('button'))
+  },
+}
+
+/** Guidelines, Don't: says nothing about why it is empty, or what to do. */
+export const DontNoData: Story = {
+  tags: ['!dev'],
+  args: { icon: undefined, description: undefined, action: undefined, title: 'No data' },
 }

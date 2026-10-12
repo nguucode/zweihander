@@ -437,9 +437,15 @@
    reverse. [data-accent] and [data-gray] below read them instead of matching
    `.dark [data-accent]`: a descendant selector matches ANY dark ancestor, so a
    light island in a dark page would take the dark palette. The switches
-   inherit, so the nearest scope wins at any depth. */
+   inherit, so the nearest scope wins at any depth.
+
+   color-scheme tells the browser the same thing, for the UI it draws itself
+   (scrollbars, date and select popups, autofill, the canvas behind the page),
+   which would otherwise stay light inside a dark scope. */
 :root,
 .light {
+  color-scheme: light;
+
   --background: var(--gray-50);
   --foreground: var(--gray-950);
   --card: oklch(100% 0 0);
@@ -572,6 +578,8 @@
 }
 
 .dark {
+  color-scheme: dark;
+
   --background: var(--gray-950);
   --foreground: var(--gray-50);
   --card: var(--gray-900);

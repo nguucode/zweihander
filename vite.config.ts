@@ -19,6 +19,17 @@ const baseUiEntries = Object.keys(
   .filter((k) => k !== './package.json' && !k.includes('*'))
   .map((k) => path.posix.join('@base-ui/react', k));
 
+// Cloud containers ship one prebuilt Chromium that does not match the
+// lockfile's Playwright, and no Firefox or WebKit. Locally there:
+// PW_CHROMIUM_PATH=/opt/pw-browsers/chromium VITEST_BROWSERS=chromium.
+// CI sets neither and runs all three engines on Playwright's own builds.
+const chromiumPath = process.env.PW_CHROMIUM_PATH;
+const browserNames = process.env.VITEST_BROWSERS?.split(',').map((b) => b.trim());
+const chromium = {
+  browser: 'chromium' as const,
+  ...(chromiumPath && { provider: playwright({ launchOptions: { executablePath: chromiumPath } }) }),
+};
+
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
   plugins: [react()],
@@ -67,10 +78,10 @@ export default defineConfig({
           // All three engines: a story that passes only in Chromium has not
           // been tested for Safari or Firefox users.
           instances: [
-            { browser: 'chromium' },
-            { browser: 'firefox' },
+            chromium,
+            { browser: 'firefox' as const },
             {
-              browser: 'webkit',
+              browser: 'webkit' as const,
               // Linux WebKit paints through Skia on GL, which on a runner
               // without a GPU is Mesa's software rasteriser. Its shader cache
               // starts empty on every fresh runner, so each new kind of paint
@@ -82,7 +93,7 @@ export default defineConfig({
                 launchOptions: { env: { ...process.env, WEBKIT_SKIA_ENABLE_CPU_RENDERING: '1' } },
               }),
             },
-          ],
+          ].filter((i) => !browserNames || browserNames.includes(i.browser)),
         }
       }
     }, {
@@ -97,7 +108,7 @@ export default defineConfig({
           enabled: true,
           headless: true,
           provider: playwright({}),
-          instances: [{ browser: 'chromium' }],
+          instances: [chromium],
           // Playwright's default window, so the frame is not scaled down
           // and the screenshot keeps every pixel. Wide enough for the
           // AppShell story's 1100px box.

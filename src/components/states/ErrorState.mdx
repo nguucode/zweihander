@@ -1,62 +1,183 @@
-import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
 import * as ErrorStateStories from './ErrorState.stories'
 
 <Meta of={ErrorStateStories} />
 
 # Error State
 
+<DocTabs>
+<DocTab value="overview">
+
 What a list, a panel or a page shows when loading it failed: what went
-wrong, and a way forward, usually "Try again". Our own spec:
-uiguideline.com has no page for it. Built on
-[Empty State](?path=/docs/components-states-emptystate--docs), in the
-danger tone.
+wrong, and a way forward, usually "Try again".
 
-<Canvas of={ErrorStateStories.WithDetails} />
-
-## Anatomy
-
-Empty State's parts (icon disc, title, description, action), plus:
-
-| Part | What it is |
-| --- | --- |
-| **Icon disc** | `--danger-subtle` behind the `danger` icon in `--danger-text`. |
-| **Details** | Optional, under the description: an error code or request id, monospaced and selectable in one click. |
-
-## Props
-
-Every Empty State prop (`icon`, `description`, `action`, `size`,
-`headingLevel`), and:
-
-| Prop | Values | Default | |
-| --- | --- | --- | --- |
-| `title` | node | `Something went wrong` | |
-| `details` | node | – | |
-| `isLive` | boolean | `false` | `role="alert"`. |
-
-<Controls of={ErrorStateStories.Default} />
-
-### Design notes
-
-- **Say what failed and that nothing is lost.** "Couldn’t load projects.
-  Your projects are safe" beats "Error". The default title is the last
-  resort, for failures you cannot describe.
-- **Details are for support, not for the reader.** Keep them small and
-  selectable so they can be pasted into a message.
-
-## Usage
+<Status of={ErrorStateStories} />
 
 <Canvas of={ErrorStateStories.Default} />
 
-<Canvas of={ErrorStateStories.Small} />
+## Variants
+
+| Variant | Use for |
+| --- | --- |
+| With details | A failure support may need to trace: an error code or request id under the description, selected in one click. |
+| Default title | The last resort, for a failure you cannot describe: "Something went wrong". |
+| `sm` | A panel, a card or a table body that failed on its own while the rest of the page loaded. |
+
+<Canvas of={ErrorStateStories.WithDetails} />
 
 <Canvas of={ErrorStateStories.DefaultTitle} />
 
+<Canvas of={ErrorStateStories.Small} />
+
+## Resources
+
+From npm, or copied into your project through the registry:
+
+```js
+import { ErrorState } from 'zweihander/error-state'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/error-state.json
+```
+
+- Source: [src/components/states/ErrorState.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/states/ErrorState.tsx)
+- Spec: our own; uiguideline.com has no page for it
+- Behaviour: built on [Empty State](?path=/docs/components-states-emptystate--docs), no Base UI part
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
+## Anatomy
+
+<Anatomy parts={ErrorStateStories.anatomyParts}>
+  <Story of={ErrorStateStories.Anatomy} />
+</Anatomy>
+
+Empty State's parts, with the disc in the danger tone, plus details under
+the description.
+
+## Measurements
+
+Empty State's, plus the details line.
+
+<SpecTable
+  caption="sm"
+  rows={[
+    { part: 'Container', property: 'Block padding', token: '--space-8' },
+    { part: 'Container', property: 'Inline padding', token: '--space-4' },
+    { part: 'Icon disc', property: 'Size', token: '--space-10' },
+    { part: 'Title', property: 'Font size', token: '--text-heading-sm' },
+    { part: 'Title', property: 'Line height', token: '--leading-heading-sm' },
+    { part: 'Action', property: 'Space above', token: '--space-4' },
+  ]}
+/>
+
+<SpecTable
+  caption="md"
+  rows={[
+    { part: 'Container', property: 'Block padding', token: '--space-12' },
+    { part: 'Container', property: 'Inline padding', token: '--space-6' },
+    { part: 'Icon disc', property: 'Size', token: '--space-12' },
+    { part: 'Title', property: 'Font size', token: '--text-heading-md' },
+    { part: 'Title', property: 'Line height', token: '--leading-heading-md' },
+    { part: 'Action', property: 'Space above', token: '--space-6' },
+  ]}
+/>
+
+<SpecTable
+  caption="Every size"
+  rows={[
+    { part: 'Icon disc', property: 'Space below', token: '--space-4' },
+    { part: 'Description', property: 'Font size', token: '--text-body' },
+    { part: 'Details', property: 'Space above', token: '--space-2' },
+    { part: 'Details', property: 'Font', token: '--font-mono' },
+    { part: 'Details', property: 'Font size', token: '--text-body-sm' },
+    { part: 'Details', property: 'Line height', token: '--leading-body-sm' },
+  ]}
+/>
+
+## Color
+
+One tone: danger, on the disc only. The title and description stay
+neutral, so the page does not shout.
+
+<SpecTable
+  caption="Danger"
+  rows={[
+    { part: 'Icon disc', property: 'Background', token: '--danger-subtle' },
+    { part: 'Icon', property: 'Colour', token: '--danger-text' },
+    { part: 'Title', property: 'Colour', token: '--foreground' },
+    { part: 'Description and details', property: 'Colour', token: '--muted-foreground' },
+  ]}
+/>
+
+`--danger-text` on `--danger-subtle` is 4.5:1 or more in both modes.
+
+## States
+
+Error State itself is static. Its action has the states of its own Button.
+
+<States
+  states={[
+    { label: 'Enabled' },
+    { label: 'Action hover', pseudo: 'hover' },
+    { label: 'Action focus', pseudo: 'focus-visible' },
+    { label: 'Action pressed', pseudo: 'active' },
+  ]}
+>
+  <Story of={ErrorStateStories.Default} />
+</States>
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={ErrorStateStories} />
+</div>
+
+Every other `<div>` attribute passes through, including `ref`.
+
+</DocTab>
+<DocTab value="guidelines">
+
+## When to use
+
+Use an Error State in place of content that failed to load: a list, a
+panel, a whole page. Say what failed in the reader's words, say that
+nothing is lost when that is true, and offer a way forward.
+
+<DoDont
+  do={<Story of={ErrorStateStories.Default} />}
+  doCaption="Say what failed, that nothing is lost, and offer to try again."
+  dont={<Story of={ErrorStateStories.DontRawError} />}
+  dontCaption="A raw error is for developers, and with no action the reader is stuck."
+/>
+
+Details are for support, not for the reader: keep them small and
+selectable so they can be pasted into a message.
+
+## When not to use
+
+- **When there is simply nothing there.** Use an
+  [Empty State](?path=/docs/components-states-emptystate--docs).
+- **When an action failed but the screen is fine**, such as a save. Use an
+  Alert or a Toast and keep the reader's work on screen.
+- **For a field's error.** Show it on the field, through its own error
+  message.
+
 ## Accessibility
 
-- The title is a heading, as on Empty State.
+- The title is a real heading, as on Empty State. Set `headingLevel` to
+  fit the outline.
+- The icon is `aria-hidden`; the title says what failed.
 - `isLive` makes it a `role="alert"`: use it when the error replaces
   content that was loading, so a screen reader hears that it failed.
+  Without it, nothing is announced.
 
-  <Canvas of={ErrorStateStories.Live} />
+<Canvas of={ErrorStateStories.Live} />
 
-- The icon is `aria-hidden`; the title says it.
+</DocTab>
+</DocTabs>
