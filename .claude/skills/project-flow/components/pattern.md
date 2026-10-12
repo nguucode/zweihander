@@ -1,37 +1,37 @@
-# Tham chiếu: pattern
+# Reference: pattern
 
-Dùng cho `src/components/patterns/**`. Pattern là section ghép từ nhiều component (tầng "organisms"), ví dụ PageHeading, AppShell, FormLayouts. Cycle giống component, chỉ khác ở các điểm dưới đây.
+Use for `src/components/patterns/**`. A pattern is a section composed of several components (the "organisms" tier), for example PageHeading, AppShell, FormLayouts. The cycle is the same as for a component, differing only in the points below.
 
-## Khác component ở đâu
+## How it differs from a component
 
 | | Component | Pattern |
 |---|---|---|
-| Hành vi | Từ Base UI, theo APG | Không có hành vi riêng. Mọi tương tác đến từ component bên trong |
-| MDX | Ba tab Overview / Specs / Guidelines ([COMPONENTS.md](../COMPONENTS.md), phần 1) | Trang đơn, không tab: mỗi biến thể một mục kèm `<Canvas>`, rồi Props / Layout / Accessibility. Thêm dòng `npx shadcn add` ở đầu |
-| A11y | Bàn phím, role, state | Landmark (`header`, `nav`, `main`), thứ tự heading, focus order khi chuyển layout, reflow ở 320px |
-| API | Prop phẳng | Chủ yếu là slot nhận node: `actions`, `meta`, `tabs`, `breadcrumbs`. Pattern không sở hữu dữ liệu |
-| Test | Mỗi câu Accessibility một `play` tương tác | Cấu trúc (role, landmark, heading level), layout ở breakpoint, và nội dung khó: rỗng, rất dài, lỗi |
-| Phát hành | npm `exports` và registry | Chỉ registry. Không thêm vào `package.json#exports` |
+| Behaviour | From Base UI, per APG | No behaviour of its own. Every interaction comes from the components inside |
+| MDX | Three tabs Overview / Specs / Guidelines ([COMPONENTS.md](../COMPONENTS.md), section 1) | Single page, no tabs: one section per variant with a `<Canvas>`, then Props / Layout / Accessibility. Add the `npx shadcn add` line at the top |
+| A11y | Keyboard, role, state | Landmarks (`header`, `nav`, `main`), heading order, focus order when the layout changes, reflow at 320px |
+| API | Flat props | Mostly slots taking nodes: `actions`, `meta`, `tabs`, `breadcrumbs`. A pattern owns no data |
+| Test | One interactive `play` per Accessibility sentence | Structure (role, landmark, heading level), layout at breakpoints, and hard content: empty, very long, error |
+| Release | npm `exports` and registry | Registry only. Do not add to `package.json#exports` |
 | Status | `experimental` → `beta` → `stable` | `experimental` → `stable` |
 
 ## Spec
 
-Nếu pattern lấy cảm hứng từ một nguồn (Tailwind UI Application UI, uiguideline…), ghi nguồn ở đầu MDX. Mục `## Differences from the spec` chỉ cần khi có nguồn spec cụ thể.
+If the pattern is inspired by a source (Tailwind UI Application UI, uiguideline…), name the source at the top of the MDX. The `## Differences from the spec` section is only needed when there is a specific spec source.
 
-`## Layout` ghi rõ breakpoint, cái gì xếp chồng, cái gì ẩn, và vì sao. Đây là phần dễ lệch nhất giữa code và docs.
+`## Layout` states the breakpoints, what stacks, what hides, and why. This is the part most likely to drift between code and docs.
 
 ## Code
 
-- Chỉ ghép component đã có của Zweihänder. Cần một mảnh UI chưa có thì làm component trước, theo cycle component, rồi mới dùng trong pattern.
-- Slot nhận `ReactNode` và render nguyên. Không bọc lại hay đổi thứ tự những gì người dùng truyền vào.
-- `registryDependencies` khai báo đủ mọi component bên trong. `registry:check` sẽ bắt nếu thiếu.
+- Compose only existing Zweihänder components. If a piece of UI is missing, build the component first, through the component cycle, then use it in the pattern.
+- Slots take `ReactNode` and render it as is. Do not wrap or reorder what the user passes in.
+- `registryDependencies` declares every component inside. `registry:check` catches it if one is missing.
 
 ## Test
 
-- Kiểm cấu trúc bằng role: `getByRole('heading', { level: 1 })`, `getByRole('navigation', { name: 'Breadcrumb' })`.
-- Kiểm layout bằng kích thước thật (`getBoundingClientRect`) hoặc computed style, không dùng class name.
-- Mỗi pattern ít nhất một story với nội dung khắc nghiệt: chuỗi rất dài không có khoảng trắng, danh sách rỗng, hành động nhiều hơn chỗ chứa.
+- Check structure by role: `getByRole('heading', { level: 1 })`, `getByRole('navigation', { name: 'Breadcrumb' })`.
+- Check layout with real sizes (`getBoundingClientRect`) or computed style, not class names.
+- Each pattern has at least one story with harsh content: a very long string with no spaces, an empty list, more actions than fit.
 
 ## Breaking
 
-Đổi tên hoặc xoá slot, đổi landmark hay heading level mặc định, đổi cấu trúc DOM mà người dùng copy-source có thể đã sửa. Vì pattern phát hành dạng copy-source, changeset phải ghi rõ đoạn code người dùng cần chép lại.
+Renaming or removing a slot, changing a default landmark or heading level, changing DOM structure that copy-source users may have edited. Because patterns ship as copy-source, the changeset must state exactly which code users need to copy again.
