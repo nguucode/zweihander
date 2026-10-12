@@ -1,50 +1,185 @@
-import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
 import * as FileUploaderStories from './FileUploader.stories'
+
+{/* A field is 20rem wide; in a state cell it shrinks to the cell instead of
+    spilling into the next. A text input's own default width (about 20
+    characters) is its minimum otherwise, so it is zeroed here and the input
+    grows back to fill the box. */}
+export const Fit = ({ children }) => (
+  <div className="zw-fit" style={{ inlineSize: '100%', minInlineSize: 0 }}>
+    <style>{'.zw-fit input { inline-size: 0 }'}</style>
+    {children}
+  </div>
+)
 
 <Meta of={FileUploaderStories} />
 
 # File Uploader
 
+<DocTabs>
+<DocTab value="overview">
+
 Choose files to send: drag them onto the drop zone or pick them with the
 button. It checks type, size and count, lists what was chosen, and shows
 progress or an error per file. It does not upload: your code does, and
-tells it how that is going. Spec:
-[uiguideline.com/components/file-uploader](https://www.uiguideline.com/components/file-uploader).
-A native `<input type="file">` behind a kit Button.
+tells it how that is going.
+
+<Status of={FileUploaderStories} />
 
 <Canvas of={FileUploaderStories.WithStatus} />
 
-## Anatomy
+## Variants
 
-| Part | What it is |
+| Mode | Use for |
 | --- | --- |
-| **Label** | Names the whole uploader (a group). |
-| **Drop zone** | A dashed area with an icon, "Drag files here or", the Choose button and the helper text. Solid-edged while a file is over it. |
-| **Choose button** | An `accent contained` button. Opens the system picker. The way in for keyboard, screen reader and touch. |
-| **Helper text** | Inside the drop zone, under the button: what is allowed, e.g. "PDF, PNG or JPG, up to 5 MB each." |
-| **Errors** | One line per file that was not added, in `--danger-text`. |
-| **File list** | Compact rows, no card per file: type icon, name and size on one line, and the remove button; beside it, a progress ring while uploading or a short error. |
-| **Type icon** | A page with a coloured badge, after Microsoft 365: Word, Excel, PowerPoint, PDF, image, audio, from the extension or MIME type. Anything else is the bare page. |
+| `multiple` | Attachments, a batch of photos: files are appended, up to `maxFiles`. |
+| Single | One document: an invoice, a CV. A new file replaces the chosen one, if it passes the checks. |
+
+<Canvas of={FileUploaderStories.Single} />
+
+Each file gets a type icon: a page with a coloured badge for Word, Excel,
+PowerPoint, PDF, image and audio, after Microsoft 365, from the extension
+or MIME type. Anything else is the bare page.
 
 <Canvas of={FileUploaderStories.FileTypes} />
 
-## Props
+## Resources
 
-| Prop | Values | Default | |
-| --- | --- | --- | --- |
-| `files` | `File[]` | – | Controlled. |
-| `defaultFiles` | `File[]` | `[]` | |
-| `onFilesChange` | `(files) => void` | – | After an add or a remove. |
-| `onReject` | `(rejections) => void` | – | `{ file, reason: 'type' \| 'size' \| 'count', message }[]`. |
-| `accept` | string | – | As the native attribute: `.pdf,image/*`. Checked on drop too. |
-| `multiple` | boolean | `false` | One file is replaced by the next; many are appended. |
-| `maxSize` | bytes | – | |
-| `maxFiles` | number | – | With `multiple`. |
-| `getFileStatus` | `(file) => { progress?, error? }` | – | Progress 0–100, or a short error, e.g. "Upload failed". |
-| `label`, `helperText`, `required`, `disabled`, `isFullWidth` | | | |
-| `name` | string | – | The native input carries the whole list, so a plain form post sends it. It follows a controlled `files` too. |
+From npm, or copied into your project through the registry:
 
-<Controls of={FileUploaderStories.Default} />
+```js
+import { FileUploader } from 'zweihander/file-uploader'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/file-uploader.json
+```
+
+- Source: [src/components/inputs/FileUploader.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/inputs/FileUploader.tsx)
+- Spec: [uiguideline.com/components/file-uploader](https://www.uiguideline.com/components/file-uploader)
+- Behaviour: a native `<input type="file">` behind a kit [Button](?path=/docs/components-buttons-button--docs)
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
+## Anatomy
+
+<Anatomy parts={FileUploaderStories.anatomyParts}>
+  <Story of={FileUploaderStories.Anatomy} />
+</Anatomy>
+
+Two more parts show only when needed:
+
+- **Errors**: one line per file that was not added, under the drop zone,
+  e.g. "raw-scan.png is larger than 5 MB."
+- **File error**: in place of the progress ring, a short message from
+  `getFileStatus`, e.g. "Upload failed". A long one truncates.
+
+<Canvas of={FileUploaderStories.Rejected} />
+
+## Measurements
+
+One size. The buttons inside are `sm` Buttons, 24px tall.
+
+<SpecTable
+  caption="Drop zone"
+  rows={[
+    { part: 'Drop zone', property: 'Block padding', token: '--space-6' },
+    { part: 'Drop zone', property: 'Inline padding', token: '--space-4' },
+    { part: 'Drop zone', property: 'Gap', token: '--space-2' },
+    { part: 'Drop zone', property: 'Corner radius', token: '--radius-panel' },
+    { part: 'Icon', property: 'Size', token: '--space-6' },
+    { part: 'Icon', property: 'Padding', token: '--space-2' },
+    { part: 'Choose button', property: 'Height', token: '--control-sm' },
+    { part: 'Prompt', property: 'Font size', token: '--text-body' },
+    { part: 'Helper text', property: 'Font size', token: '--text-body-sm' },
+  ]}
+/>
+
+<SpecTable
+  caption="File list"
+  rows={[
+    { part: 'Label, drop zone, errors, list', property: 'Gap', token: '--space-1-5' },
+    { part: 'File row', property: 'Padding', token: '--space-1' },
+    { part: 'File row', property: 'Gap', token: '--space-2' },
+    { part: 'File row', property: 'Corner radius', token: '--radius-field' },
+    { part: 'Name', property: 'Font size', token: '--text-body' },
+    { part: 'Size, file error', property: 'Font size', token: '--text-body-sm' },
+    { part: 'Remove button', property: 'Size', token: '--control-sm' },
+    { part: 'Remove button', property: 'Minimum on touch screens', token: '--target-coarse' },
+  ]}
+/>
+
+The uploader is 24rem wide unless `isFullWidth`. The type icon is 20px.
+
+## Color
+
+<SpecTable
+  caption="Drop zone"
+  rows={[
+    { part: 'Drop zone', property: 'Background', token: '--surface-filled' },
+    { part: 'Drop zone', property: 'Border, dashed', token: '--field-border' },
+    { part: 'Drop zone, dragging', property: 'Border, solid', token: '--ring' },
+    { part: 'Drop zone, dragging', property: 'Background', token: '--accent' },
+    { part: 'Drop zone, errors', property: 'Border', token: '--danger-text' },
+    { part: 'Icon', property: 'Background', token: '--background' },
+    { part: 'Icon, prompt, helper', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Choose button', property: 'Background', token: '--foreground' },
+    { part: 'Choose button', property: 'Label', token: '--background' },
+    { part: 'Label', property: 'Colour', token: '--foreground' },
+    { part: 'Required asterisk, errors', property: 'Colour', token: '--danger-text' },
+  ]}
+/>
+
+<SpecTable
+  caption="File list"
+  rows={[
+    { part: 'File row, hover', property: 'Background', token: '--hover-overlay' },
+    { part: 'Name', property: 'Colour', token: '--foreground' },
+    { part: 'Size', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Progress ring', property: 'Colour', token: '--primary-text' },
+    { part: 'File error', property: 'Colour', token: '--danger-text' },
+  ]}
+/>
+
+The type badges keep fixed colours in both modes: they are each file
+type's identity, not the theme's, and white on each is above 4.5:1. The
+Choose button is an `accent contained` Button and the remove buttons
+`secondary ghost`; their states are Button's.
+
+## States
+
+<States
+  states={[
+    { label: 'Enabled' },
+    { label: 'Focus', pseudo: 'focus-visible' },
+    { label: 'Uploading', content: <Fit><Story of={FileUploaderStories.Anatomy} /></Fit> },
+    { label: 'Disabled', content: <Fit><Story of={FileUploaderStories.Disabled} /></Fit> },
+  ]}
+>
+  <Fit><Story of={FileUploaderStories.DoStateTheRules} /></Fit>
+</States>
+
+- **Dragging**: while a file is over the drop zone its edge turns solid
+  `--ring` and it fills with `--accent`, so the change is not colour
+  alone.
+- **Rejected or required and empty**: the drop zone's edge turns
+  `--danger-text` and the errors list why, one line per file.
+- **Focus** is the Choose button's and the remove buttons' own ring.
+- **Uploading**: a progress ring beside the remove button while
+  `progress` is under 100; it goes at 100. An `error` takes its place.
+- **Disabled** fades the icon and the buttons, not the text: none of it
+  is a native label, so faded text would fail contrast rather than be
+  exempt.
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={FileUploaderStories} />
+</div>
 
 ### Design notes
 
@@ -56,18 +191,35 @@ A native `<input type="file">` behind a kit Button.
 - **The same file twice is one file.** Name, size and modified time
   match, so it is skipped rather than listed again.
 - **Uploading is yours.** Start it in `onFilesChange` and report through
-  `getFileStatus`. A ring beside the remove button shows while `progress`
-  is under 100 and goes at 100. An `error` takes its place, so keep it short ("Upload failed"); a long one truncates.
+  `getFileStatus`.
 
-## Usage
+</DocTab>
+<DocTab value="guidelines">
 
-<Canvas of={FileUploaderStories.Default} />
+## When to use
 
-<Canvas of={FileUploaderStories.Single} />
+Use a File Uploader to attach files to a form: receipts to a claim,
+documents to an application. Say what is allowed in `helperText`, and set
+`accept`, `maxSize` and `maxFiles` to match, so the rules are read before
+a file is turned away.
 
-<Canvas of={FileUploaderStories.Rejected} />
+<DoDont
+  do={<Story of={FileUploaderStories.DoStateTheRules} />}
+  doCaption="The rules up front: types and size in the helper text, checked by accept and maxSize."
+  dont={<Story of={FileUploaderStories.DontHideTheRules} />}
+  dontCaption="No rules shown: people learn them one rejection at a time."
+/>
 
-<Canvas of={FileUploaderStories.Disabled} />
+Report upload progress per file with `getFileStatus`, and keep errors
+short ("Upload failed"): the row has room for a few words.
+
+## When not to use
+
+- **For text people could paste.** Use a
+  [Textarea](?path=/docs/components-inputs-textarea--docs).
+- **For a link to a file.** Use a
+  [Text Input](?path=/docs/components-inputs-textinput--docs) with
+  `type="url"`.
 
 ## Accessibility
 
@@ -87,7 +239,10 @@ A native `<input type="file">` behind a kit Button.
 - Remove buttons are named "Remove report.pdf". After a remove, focus
   moves to the next file's button, or back to Choose when the list is
   empty, so it is never lost.
-- The drop zone's edge is `--field-border`, as a text field's. The Choose
-  button inside is an `accent contained` button. While dragging the
-  edge turns solid as well as changing colour. Disabled fades the icon and the
-  buttons, not the text.
+- The progress ring is a `progressbar` named "Uploading report.pdf",
+  with its value.
+- While dragging, the drop zone's edge turns solid as well as changing
+  colour.
+
+</DocTab>
+</DocTabs>

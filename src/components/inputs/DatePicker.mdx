@@ -1,41 +1,203 @@
-import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
+import { DatePicker } from './DatePicker'
 import * as DatePickerStories from './DatePicker.stories'
+
+{/* A field is 20rem wide; in a state cell it shrinks to the cell instead of
+    spilling into the next. A text input's own default width (about 20
+    characters) is its minimum otherwise, so it is zeroed here and the input
+    grows back to fill the box. */}
+export const Fit = ({ children }) => (
+  <div className="zw-fit" style={{ inlineSize: '100%', minInlineSize: 0 }}>
+    <style>{'.zw-fit input { inline-size: 0 }'}</style>
+    {children}
+  </div>
+)
 
 <Meta of={DatePickerStories} />
 
 # Date Picker
 
-A date field: type the date, or pick it from a calendar. Spec:
-[uiguideline.com/components/date-picker](https://www.uiguideline.com/components/date-picker).
-Built from the kit's field, Base UI's
-[Popover](https://base-ui.com/react/components/popover) and
-[Calendar](?path=/docs/components-data-display-calendar--docs).
+<DocTabs>
+<DocTab value="overview">
+
+A date field: type the date, or pick it from a calendar.
+
+<Status of={DatePickerStories} />
 
 <Canvas of={DatePickerStories.Default} />
 
+## Variants
+
+Two sizes, `sm` and `md`, and the field's validation states, as on
+[Text Input](?path=/docs/components-inputs-textinput--docs). The typed
+order follows `locale`: day first in `en-GB` and `vi-VN`, month first in
+`en-US`. The form always gets `yyyy-mm-dd`.
+
+| Locale | Typed as |
+| --- | --- |
+| `en-GB`, `vi-VN` | `dd/mm/yyyy` |
+| `en-US` | `mm/dd/yyyy` |
+
+<Canvas of={DatePickerStories.UnitedStates} />
+
+<Canvas of={DatePickerStories.Vietnamese} />
+
+`min`, `max` and `isDateDisabled` limit what can be picked or typed:
+
+<Canvas of={DatePickerStories.Range} />
+
+For a span of days, see
+[Date Range Picker](?path=/docs/components-inputs-daterangepicker--docs).
+
+## Resources
+
+From npm, or copied into your project through the registry:
+
+```js
+import { DatePicker } from 'zweihander/date-picker'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/date-picker.json
+```
+
+- Source: [src/components/inputs/DatePicker.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/inputs/DatePicker.tsx)
+- Spec: [uiguideline.com/components/date-picker](https://www.uiguideline.com/components/date-picker)
+- Behaviour: [Base UI Popover](https://base-ui.com/react/components/popover), and the kit's [Calendar](?path=/docs/components-data-display-calendar--docs)
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
 ## Anatomy
 
-The field's parts (label, box, helper), plus:
+<Anatomy parts={DatePickerStories.anatomyParts}>
+  <Story of={DatePickerStories.Anatomy} />
+</Anatomy>
 
-| Part | What it is |
-| --- | --- |
-| **Input** | Typed date in the locale's numeric order: `dd/mm/yyyy` in `en-GB` and `vi-VN`, `mm/dd/yyyy` in `en-US`. |
-| **Calendar button** | Opens the calendar in a popover, 4px under the field and aligned to its start. A click in the input opens it too. |
+The calendar opens in a popover 4px under the field, aligned to its
+start: a [Calendar](?path=/docs/components-data-display-calendar--docs)
+in a panel. Its days, header and paging buttons are specified there.
 
-## Props
+## Measurements
 
-| Prop | Values | Default | |
-| --- | --- | --- | --- |
-| `value`, `defaultValue`, `onValueChange` | `Date \| null` | `null` | `null` when cleared. |
-| `label`, `helperText`, `validationState` | | | As on Text Input. |
-| `size`, `isFullWidth` | | `md` | As on Text Input. |
-| `min`, `max`, `isDateDisabled` | | – | Passed to the calendar and checked when typing. |
-| `locale`, `weekStartsOn` | | the browser's | |
-| `placeholder` | string | the locale's pattern | |
-| `name` | string | – | Submitted as `yyyy-mm-dd`. |
-| `disabled`, `required` | boolean | `false` | |
+The field is the kit's field: each size is a control tier, with the
+normal inline padding and the field radius.
 
-<Controls of={DatePickerStories.Default} />
+<SpecTable
+  caption="sm"
+  rows={[
+    { part: 'Field', property: 'Height', token: '--control-sm' },
+    { part: 'Field', property: 'Inline padding', token: '--control-sm-pad' },
+    { part: 'Field', property: 'Corner radius', token: '--control-sm-radius-field' },
+    { part: 'Field', property: 'Gap', token: '--control-sm-gap' },
+    { part: 'Calendar button', property: 'Icon size', token: '--icon-sm' },
+    { part: 'Input', property: 'Font size', token: '--text-body-sm' },
+    { part: 'Input', property: 'Line height', token: '--leading-body-sm' },
+  ]}
+/>
+
+<SpecTable
+  caption="md"
+  rows={[
+    { part: 'Field', property: 'Height', token: '--control-md' },
+    { part: 'Field', property: 'Inline padding', token: '--control-md-pad' },
+    { part: 'Field', property: 'Corner radius', token: '--control-md-radius-field' },
+    { part: 'Field', property: 'Gap', token: '--control-md-gap' },
+    { part: 'Calendar button', property: 'Icon size', token: '--icon-md' },
+    { part: 'Input', property: 'Font size', token: '--text-body' },
+    { part: 'Input', property: 'Line height', token: '--leading-body' },
+  ]}
+/>
+
+<SpecTable
+  caption="Every size"
+  rows={[
+    { part: 'Label and helper', property: 'Gap to the field', token: '--space-1-5' },
+    { part: 'Label and helper', property: 'Font size', token: '--text-body' },
+    { part: 'Popover', property: 'Padding', token: '--space-3' },
+    { part: 'Popover', property: 'Corner radius', token: '--radius-panel' },
+    { part: 'Focus ring', property: 'Width', token: '--focus-width' },
+    { part: 'Focus ring', property: 'Offset', token: '--focus-offset' },
+    { part: 'Calendar button', property: 'Minimum on touch screens', token: '--target-coarse' },
+  ]}
+/>
+
+The field is 20rem wide unless `isFullWidth`. The popover never grows
+wider than the screen less 16px a side.
+
+## Color
+
+<SpecTable
+  caption="Field"
+  rows={[
+    { part: 'Field', property: 'Background', token: '--card' },
+    { part: 'Field', property: 'Border', token: '--field-border' },
+    { part: 'Field', property: 'Shadow', token: '--shadow-2xs' },
+    { part: 'Label, input', property: 'Colour', token: '--foreground' },
+    { part: 'Placeholder, helper, calendar icon', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Required asterisk', property: 'Colour', token: '--danger-text' },
+    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+  ]}
+/>
+
+<SpecTable
+  caption="Validation"
+  rows={[
+    { part: 'Border, helper, focus ring, error', property: 'Colour', token: '--danger-text' },
+    { part: 'Border, helper, success', property: 'Colour', token: '--success-text' },
+  ]}
+/>
+
+<SpecTable
+  caption="Popover"
+  rows={[
+    { part: 'Panel', property: 'Background', token: '--popover' },
+    { part: 'Panel', property: 'Colour', token: '--popover-foreground' },
+    { part: 'Panel', property: 'Border', token: '--border' },
+    { part: 'Panel', property: 'Shadow', token: '--shadow-md' },
+  ]}
+/>
+
+The field's edge is a light hairline, about 1.5:1: an approved exception
+to WCAG 1.4.11, as on every kit field. The calendar's own colours are on
+its page.
+
+## States
+
+<States
+  states={[
+    { label: 'Empty', content: <Fit><DatePicker label="Start date" locale="en-GB" /></Fit> },
+    { label: 'Filled' },
+    { label: 'Focus', pseudo: 'focus' },
+    {
+      label: 'Error',
+      content: <Fit><DatePicker label="Start date" locale="en-GB" validationState="error" helperText="Enter a date as dd/mm/yyyy." /></Fit>,
+    },
+    { label: 'Disabled', content: <Fit><DatePicker label="Start date" locale="en-GB" defaultValue={new Date(2026, 8, 18)} disabled /></Fit> },
+  ]}
+>
+  <Fit><DatePicker label="Start date" locale="en-GB" defaultValue={new Date(2026, 8, 18)} /></Fit>
+</States>
+
+- **Focus** is a 2px `--ring` outline, 2px outside the field, drawn while
+  the input has focus, by pointer too. In the error state the ring is
+  `--danger-text`. The calendar button draws its own ring when tabbed to.
+- **Error** turns the edge and the helper `--danger-text`. It is also
+  shown on its own while the typed text is not a date, or is outside
+  `min` and `max`: the helper then gives the expected pattern.
+- **Hover** changes nothing on the field; the calendar icon darkens from
+  `--muted-foreground` to `--foreground`.
+- **Disabled** is the enabled look at 50% opacity; the calendar button is
+  disabled with it.
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={DatePickerStories} />
+</div>
 
 ### Design notes
 
@@ -50,20 +212,36 @@ The field's parts (label, box, helper), plus:
   Alt+Down move focus into the calendar instead.
 - **The form gets ISO.** Whatever the display order, `name` submits
   `yyyy-mm-dd`, so the server never has to guess the locale.
+### Differences from the spec
 
-## Usage
+- **`onValueChange`, not `onChange`**, with a `Date` or `null`, as the
+  kit's other value fields.
 
-<Canvas of={DatePickerStories.ClickToOpen} />
+</DocTab>
+<DocTab value="guidelines">
 
-<Canvas of={DatePickerStories.Typing} />
+## When to use
 
-<Canvas of={DatePickerStories.UnitedStates} />
+Use a Date Picker for one date: a start date, a due date, a booking. Let
+people type it when they know it, and pick it when they want to see the
+week around it. Set `min`, `max` or `isDateDisabled` so a date that cannot
+be used cannot be chosen, rather than refusing it after submit.
 
-<Canvas of={DatePickerStories.Vietnamese} />
+<DoDont
+  do={<Story of={DatePickerStories.DoPatternPlaceholder} />}
+  doCaption="The empty field shows the pattern to type, in the locale's order."
+  dont={<Story of={DatePickerStories.DontExamplePlaceholder} />}
+  dontCaption="An example date as the placeholder reads as a value already filled in."
+/>
 
-<Canvas of={DatePickerStories.Range} />
+## When not to use
 
-<Canvas of={DatePickerStories.Disabled} />
+- **For a span of days.** Use a
+  [Date Range Picker](?path=/docs/components-inputs-daterangepicker--docs):
+  one field, both ends, never back to front.
+- **To show a month on the page.** Use a
+  [Calendar](?path=/docs/components-data-display-calendar--docs) inline.
+- **For a time of day.** The picker holds a date only.
 
 ## Accessibility
 
@@ -72,15 +250,16 @@ The field's parts (label, box, helper), plus:
   `aria-invalid` and the helper explains the format.
 - The calendar button is named "Choose date", with the current date when
   there is one. Alt+Down in the input opens it too.
-- The calendar opens as a dialog with focus on the selected day; Escape
-  closes it without a change.
+- The calendar opens as a dialog named "Choose date" with focus on the
+  selected day; Escape closes it without a change.
 - **After a pick the field goes back to rest.** Picked with the pointer,
   focus leaves the field (no caret, no ring), as in Combobox. Picked with
   the keyboard, focus returns to where it came from (the button, or the
   input), so keyboard and screen reader users are not dropped to the page.
-  The Date Range Picker does the same once both ends are in.
 - The field and calendar's own labels ("Choose date", "Previous month")
   are in English, like the rest of the kit's built-in labels.
+- On touch screens (`pointer: coarse`) the calendar button gets a 44×44px
+  hit area without the field growing.
 
-For a span of days, see
-[Date Range Picker](?path=/docs/components-inputs-daterangepicker--docs).
+</DocTab>
+</DocTabs>
