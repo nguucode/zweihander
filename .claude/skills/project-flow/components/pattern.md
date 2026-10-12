@@ -7,7 +7,7 @@ Dùng cho `src/components/patterns/**`. Pattern là section ghép từ nhiều c
 | | Component | Pattern |
 |---|---|---|
 | Hành vi | Từ Base UI, theo APG | Không có hành vi riêng. Mọi tương tác đến từ component bên trong |
-| MDX | Ba tab Overview / Specs / Guidelines (SKILL.md, phase 1) | Trang đơn, không tab: mỗi biến thể một mục kèm `<Canvas>`, rồi Props / Layout / Accessibility. Thêm dòng `npx shadcn add` ở đầu |
+| MDX | Ba tab Overview / Specs / Guidelines ([COMPONENTS.md](../COMPONENTS.md), phần 1) | Trang đơn, không tab: mỗi biến thể một mục kèm `<Canvas>`, rồi Props / Layout / Accessibility. Thêm dòng `npx shadcn add` ở đầu |
 | A11y | Bàn phím, role, state | Landmark (`header`, `nav`, `main`), thứ tự heading, focus order khi chuyển layout, reflow ở 320px |
 | API | Prop phẳng | Chủ yếu là slot nhận node: `actions`, `meta`, `tabs`, `breadcrumbs`. Pattern không sở hữu dữ liệu |
 | Test | Mỗi câu Accessibility một `play` tương tác | Cấu trúc (role, landmark, heading level), layout ở breakpoint, và nội dung khó: rỗng, rất dài, lỗi |

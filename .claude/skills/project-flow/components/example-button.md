@@ -1,6 +1,6 @@
 # Ví dụ: Button đi qua cycle
 
-Button (`src/components/buttons/`) là component mẫu. Dưới đây là từng phase áp vào Button, chỉ ra file thật đáp ứng gate. Khi làm component khác, đối chiếu với file này để biết "đủ" trông thế nào.
+Button (`src/components/buttons/`) là component mẫu. Dưới đây là từng phần áp vào Button, chỉ ra file thật đáp ứng gate. Khi làm component khác, đối chiếu với file này để biết "đủ" trông thế nào.
 
 ## 0. Phân loại
 
@@ -16,7 +16,7 @@ Trang mẫu cho format ba tab (ticket pilot của component-docs).
 
 - **Overview**: một câu mô tả, `<Status>`, canvas `Default`, `## Variants` (canvas `Matrix` cộng bảng variant và appearance, mỗi dòng một Button thật và "dùng khi nào"), canvas `Sizes`, `WithIcons`, `IconOnly`, `## Resources`.
 - **Specs**: `<Anatomy>` đánh số Container, Start icon, Label, End icon (`anatomyParts` và story `Anatomy` trong `Button.stories.tsx`). `## Measurements`: `<SpecTable>` cho `sm`, `md` và một bảng chung (focus ring, hit area). `## Color`: một bảng mỗi variant, cộng focus ring. `## States`: enabled, hover, focus, pressed, disabled, loading; giải thích hover/pressed trộn màu bằng chữ. `## API`: `<ArgTypes>`. `### Differences from the spec`: hai size chứ không phải bốn, `disabled` chứ không phải `isDisabled`, thêm `isIconOnly`, thêm `render`, `accent` là neutral đảo màu, outlined/ghost primary dùng `--primary-text`.
-- **Guidelines**: hai cặp `<DoDont>` (một primary mỗi view; loading thay vì disabled khi đang lưu), `## When not to use` (điều hướng thì dùng `href`, trạng thái bật/tắt thì dùng Toggle Button), `## Accessibility`: các câu đều kiểm được, xem bảng ở phase 3.
+- **Guidelines**: hai cặp `<DoDont>` (một primary mỗi view; loading thay vì disabled khi đang lưu), `## When not to use` (điều hướng thì dùng `href`, trạng thái bật/tắt thì dùng Toggle Button), `## Accessibility`: các câu đều kiểm được, xem bảng ở phần 3.
 - Props: mọi prop khai báo trong `meta.argTypes` kèm `description`, type và default, vì `ButtonProps` là union nên react-docgen không đọc được.
 
 ## 2. Code: `Button.tsx`, `Button.module.css`
@@ -59,7 +59,7 @@ Button: `render` replaces `asChild`. Pass the element itself: `<Button render={<
 
 ## 5. Status
 
-Button hiện đạt `beta`: đủ phase 1–4 ở mức repo cho phép. Để lên `stable` còn thiếu một lần thử VoiceOver + Safari, và một tháng không có breaking change.
+Button hiện đạt `beta`: đủ phần 1–4 ở mức repo cho phép. Để lên `stable` còn thiếu một lần thử VoiceOver + Safari, và một tháng không có breaking change.
 
 ```ts
 const meta = {
