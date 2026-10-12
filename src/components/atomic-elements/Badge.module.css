@@ -28,6 +28,7 @@
 .sm {
   block-size: 1.6em;
   min-inline-size: 1.6em;
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- 2px, below the spacing scale on purpose */
   padding-inline: 0.125rem;
 }
 

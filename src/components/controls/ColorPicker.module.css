@@ -166,6 +166,7 @@
 .alphaChannel {
   flex: none;
   inline-size: calc(3ch + var(--space-1) + 4px);
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- optical inset for the alpha figure, below the spacing scale on purpose */
   padding-inline-end: 2px;
   text-align: end;
 }

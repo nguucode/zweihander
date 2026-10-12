@@ -26,6 +26,7 @@
   inline-size: var(--choice-control);
   block-size: var(--choice-control-block);
   /* 2px between track edge and thumb at every size. */
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- see above */
   padding: 2px;
   border-radius: var(--radius-pill);
   background: var(--control-border);

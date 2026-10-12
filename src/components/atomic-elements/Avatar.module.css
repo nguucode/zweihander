@@ -9,6 +9,7 @@
   border-radius: var(--radius-pill);
   font-family: var(--font-sans);
   font-weight: 500;
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- initials sit in a fixed circle, not on the type scale */
   line-height: 1;
   user-select: none;
   vertical-align: middle;
