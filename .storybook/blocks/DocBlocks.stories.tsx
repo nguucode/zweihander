@@ -238,6 +238,8 @@ export const StateRow: Story = {
       addons.getChannel().emit(STORY_RENDERED)
       expect(look('Hover'), rewritten()).not.toBe(look('Enabled'))
     })
+    // No transition to wait out: each state shows its end value at once.
+    await expect(getComputedStyle(stage('Hover').querySelector('button')!).transitionDuration).toBe('0s')
     await expect(look('Pressed')).not.toBe(look('Hover'))
     await expect(getComputedStyle(stage('Focus').querySelector('button')!).outlineStyle).toBe('solid')
   },

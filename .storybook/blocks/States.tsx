@@ -21,7 +21,7 @@ export interface StateExample {
  */
 export function States({ states, children }: { states: StateExample[]; children?: ReactNode }) {
   return (
-    <ul className={`sb-unstyled ${styles.block} ${styles.grid}`}>
+    <ul className={`sb-unstyled ${styles.block} ${styles.grid} ${styles.states}`}>
       {states.map((state) => (
         <li key={state.label} className={styles.cell}>
           <div className={`${styles.stage} ${state.pseudo ? `pseudo-${state.pseudo}-all` : ''}`} data-state={state.label} inert>

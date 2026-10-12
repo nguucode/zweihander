@@ -187,3 +187,9 @@
 .dont .verdict {
   color: var(--danger-text);
 }
+
+/* A state is a still picture: shown at its end value at once, not mid-way
+   through the component's own transition into it. */
+.states .stage * {
+  transition: none;
+}
