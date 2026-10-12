@@ -225,9 +225,10 @@
 }
 
 /* ---------------------------------------------------------------- field */
+/* A tier xs swatch (see Foundations/Sizing), like a checkbox box. */
 .trigger {
-  inline-size: calc(var(--space-4) + var(--space-1));
-  block-size: calc(var(--space-4) + var(--space-1));
+  inline-size: var(--control-xs);
+  block-size: var(--control-xs);
   border-radius: var(--radius-sm);
   background:
     linear-gradient(var(--swatch), var(--swatch)),

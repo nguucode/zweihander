@@ -335,6 +335,14 @@ const groupDecls = ROOT_GROUPS.map((g) =>
     .join('\n'),
 ).join('\n')
 
+/* [tier, radius step, field cap at radius="full"]. md's pair is exactly
+   --radius-control / --radius-field: the default tier is what those name. */
+const TIER_RADIUS = [
+  ['xs', 'sm', 'md'],
+  ['sm', 'sm', 'md'],
+  ['md', 'md', 'lg'],
+]
+
 const spaceDecls = entries(semantic.space)
   .map(([k, v]) => `  --space-${k}: calc(${v.$value} * var(--scaling));`)
   .join('\n')
@@ -453,11 +461,14 @@ ${grayScopeDecls()}
    change nothing. On \`*\` every element recomputes them from what it
    inherits, which is what makes scoping work. */
 * {
-  /* Radius steps — the base scale multiplied by the factor. */
-  --radius-sm: calc((var(--radius) - 4px) * var(--radius-factor));
-  --radius-md: calc((var(--radius) - 2px) * var(--radius-factor));
-  --radius-lg: calc(var(--radius) * var(--radius-factor));
-  --radius-xl: calc((var(--radius) + 4px) * var(--radius-factor));
+  /* Radius steps — the base scale multiplied by the preset's factor and by
+     --scaling, like padding. A corner that stayed put while the padding
+     around it shrank would break the nesting rule (inner = outer − inset)
+     at every scaling but 100%. */
+  --radius-sm: calc((var(--radius) - 4px) * var(--radius-factor) * var(--scaling));
+  --radius-md: calc((var(--radius) - 2px) * var(--radius-factor) * var(--scaling));
+  --radius-lg: calc(var(--radius) * var(--radius-factor) * var(--scaling));
+  --radius-xl: calc((var(--radius) + 4px) * var(--radius-factor) * var(--scaling));
 
   /* Radius intent — what components actually use.
 
@@ -470,15 +481,21 @@ ${grayScopeDecls()}
      up with the preset without ever reaching a pill. A fully round text
      field reads as a search pill in a form that is not one, and a fully
      round card stops looking like a container. */
-  --radius-control: max(calc((var(--radius) - 2px) * var(--radius-factor)), var(--radius-full));
-  --radius-field: max(
-    calc((var(--radius) - 2px) * var(--radius-factor)),
-    min(calc(var(--radius) * var(--radius-factor)), var(--radius-full))
-  );
+  --radius-control: max(var(--radius-md), var(--radius-full));
+  --radius-field: max(var(--radius-md), min(var(--radius-lg), var(--radius-full)));
   --radius-panel: max(
-    calc((var(--radius) + 4px) * var(--radius-factor)),
-    min(calc((var(--radius) + 8px) * var(--radius-factor)), var(--radius-full))
+    var(--radius-xl),
+    min(calc((var(--radius) + 8px) * var(--radius-factor) * var(--scaling)), var(--radius-full))
   );
+
+  /* Radius by size tier. The tier picks the step (xs and sm the small one,
+     md the default) and the intent picks what happens at radius="full": a
+     control (Button, Tag, a tab) becomes a pill, a field stops one step up
+     for the same reason --radius-field does. */
+${TIER_RADIUS.map(
+  ([tier, step, cap]) => `  --control-${tier}-radius: max(var(--radius-${step}), var(--radius-full));
+  --control-${tier}-radius-field: max(var(--radius-${step}), min(var(--radius-${cap}), var(--radius-full)));`,
+).join('\n')}
 
   /* Font roles, read from whichever faces the scope sets. */
 ${decls(rootDerived)}

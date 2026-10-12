@@ -23,7 +23,7 @@ export type Radius = 'none' | 'small' | 'medium' | 'large' | 'full'
  */
 const RADIUS_PRESETS: Record<Radius, Record<string, string>> = {
   none: { 'radius-factor': '0', 'radius-full': '0px' },
-  small: { 'radius-factor': '0.5', 'radius-full': '0px' },
+  small: { 'radius-factor': '0.75', 'radius-full': '0px' },
   medium: { 'radius-factor': '1', 'radius-full': '0px' },
   large: { 'radius-factor': '1.5', 'radius-full': '0px' },
   full: { 'radius-factor': '1.5', 'radius-full': '9999px' },

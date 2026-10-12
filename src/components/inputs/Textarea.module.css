@@ -11,11 +11,11 @@
 }
 .pad-sm {
   --pad-block: var(--space-1-5);
-  --pad-inline: var(--space-2);
+  --pad-inline: var(--control-sm-pad);
 }
 .pad-md {
   --pad-block: var(--space-2);
-  --pad-inline: var(--space-2-5);
+  --pad-inline: var(--control-md-pad);
 }
 
 .textarea.textarea {

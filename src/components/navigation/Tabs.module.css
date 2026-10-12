@@ -1,5 +1,12 @@
+/* Each size is a control tier (see Foundations/Sizing). A tab is a button
+   in a row, so it takes the spacious pad and the control radius. */
 .tabs {
   --tab-height: var(--control-md);
+  --tab-pad: var(--control-md-pad-spacious);
+  --tab-gap: var(--control-md-gap);
+  --tab-icon: var(--icon-md);
+  --tab-radius: var(--control-md-radius);
+  --tab-track-radius: var(--control-md-radius-field);
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
@@ -11,6 +18,11 @@
 
 .sm {
   --tab-height: var(--control-sm);
+  --tab-pad: var(--control-sm-pad-spacious);
+  --tab-gap: var(--control-sm-gap);
+  --tab-icon: var(--icon-sm);
+  --tab-radius: var(--control-sm-radius);
+  --tab-track-radius: var(--control-sm-radius-field);
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
 }
@@ -35,13 +47,13 @@
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  gap: var(--space-2);
+  gap: var(--tab-gap);
   box-sizing: border-box;
   min-block-size: var(--tab-height);
   margin: 0;
-  padding: 0 var(--space-3);
+  padding: 0 var(--tab-pad);
   border: 0;
-  border-radius: var(--radius-control);
+  border-radius: var(--tab-radius);
   background: transparent;
   color: var(--muted-foreground);
   font: inherit;
@@ -76,7 +88,7 @@
 
 .icon {
   display: inline-flex;
-  font-size: var(--icon-md);
+  font-size: var(--tab-icon);
 }
 
 /* underline: a rule under the whole list, and a 2px bar under the
@@ -117,11 +129,14 @@
 }
 
 /* pills: a segmented toggle. A --muted track, the selected tab a --card
-   chip with a hairline edge and a soft shadow. */
+   chip with a hairline edge and a soft shadow. The track is the field-like
+   container and the chips sit 2px inside it, so their corner is the
+   track's minus 2px: concentric at every preset, never a pill in a track
+   that is not one. */
 .pills .list {
   /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- 2px track inset, below the spacing scale on purpose */
   padding: 2px;
-  border-radius: var(--radius-field);
+  border-radius: var(--tab-track-radius);
   background: var(--muted);
 }
 .pills.horizontal .list {
@@ -132,6 +147,7 @@
 }
 .pills .tab {
   min-block-size: calc(var(--tab-height) - 4px);
+  border-radius: calc(var(--tab-track-radius) - 2px);
   /* --subtle-foreground, not --muted-foreground: that is 4.3:1 on the
      --muted track, under 4.5. */
   color: var(--subtle-foreground);
@@ -150,7 +166,7 @@
   block-size: var(--active-tab-height);
   box-sizing: border-box;
   border: 1px solid var(--border);
-  border-radius: var(--radius-control);
+  border-radius: calc(var(--tab-track-radius) - 2px);
   background: var(--card);
   box-shadow: var(--shadow-xs);
   transition:
