@@ -1,54 +1,164 @@
-import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
+import { Divider } from './Divider'
 import * as DividerStories from './Divider.stories'
+
+export const Stack = ({ children }) => (
+  <div style={{ display: 'grid', gap: 'var(--space-3)', inlineSize: '8rem' }}>
+    <span>Above</span>
+    {children}
+    <span>Below</span>
+  </div>
+)
 
 <Meta of={DividerStories} />
 
 # Divider
 
+<DocTabs>
+<DocTab value="overview">
+
 A thin line that separates content into groups: sections of a card, items
-in a toolbar, blocks of a page. Spec: [uiguideline.com/components/divider](https://www.uiguideline.com/components/divider).
+in a toolbar, blocks of a page.
+
+<Status of={DividerStories} />
 
 <Canvas of={DividerStories.Default} />
 
+## Variants
+
+| Appearance | Use for |
+| --- | --- |
+| `solid` | Almost everywhere: the quiet default. |
+| `dashed` | A boundary that is softer or provisional: a drop zone, a "more below" break, a draft section. |
+
+<Canvas of={DividerStories.Dashed} />
+
+A **vertical** divider separates items in a row: toolbar groups, links in
+a footer. It has no fixed height and stretches to its flex row.
+
+<Canvas of={DividerStories.Vertical} />
+
+**Inset** stops the line short of the container's edges, so it aligns with
+the text in a padded list rather than running edge to edge.
+
+<Canvas of={DividerStories.Inset} />
+
+<Canvas of={DividerStories.Sizes} />
+
+## Resources
+
+From npm, or copied into your project through the registry:
+
+```js
+import { Divider } from 'zweihander/divider'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/divider.json
+```
+
+- Source: [src/components/atomic-elements/Divider.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/atomic-elements/Divider.tsx)
+- Spec: [uiguideline.com/components/divider](https://www.uiguideline.com/components/divider)
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
 ## Anatomy
 
-One part: the **line**. It is an `<hr>`, drawn with a border in the
-`--border` color, so it follows light and dark mode without extra code.
+<Anatomy parts={DividerStories.anatomyParts}>
+  <Story of={DividerStories.Anatomy} />
+</Anatomy>
 
-## Props
+One part. The line is a border, top for horizontal and start for
+vertical, and the box shrinks to it: a vertical divider is exactly as
+wide as its line.
 
-| Prop | Values | Default | |
-| --- | --- | --- | --- |
-| `orientation` | `horizontal`, `vertical` | `horizontal` | |
-| `inset` | boolean | `false` | Indents both ends by `--space-4` (horizontal) or `--space-2` (vertical). |
-| `size` | `sm`, `md`, `lg` | `sm` | Thickness: 1px, 2px, 4px. |
-| `appearance` | `solid`, `dashed` | `solid` | uiguideline's `variant`. See below. |
+## Measurements
 
-Every other `<hr>` attribute passes through, including `ref` and `className`.
+Thickness is whole pixels, not a token: the token layer has no
+border-width scale, and a rule should stay a crisp pixel at every
+`--scaling`.
 
-<Controls of={DividerStories.Default} />
+| Size | Thickness |
+| --- | --- |
+| `sm` | 1px |
+| `md` | 2px |
+| `lg` | 4px |
+
+<SpecTable
+  caption="inset, every size"
+  rows={[
+    { part: 'Horizontal line', property: 'Inline margin', token: '--space-4' },
+    { part: 'Vertical line', property: 'Block margin', token: '--space-2' },
+  ]}
+/>
+
+## Color
+
+Every size and appearance uses the same colour.
+
+<SpecTable caption="Every appearance" rows={[{ part: 'Line', property: 'Colour', token: '--border' }]} />
+
+## States
+
+A divider is not interactive: no hover, focus or pressed. It looks the same
+whether it is announced or decorative; only a screen reader tells them
+apart.
+
+<States
+  states={[
+    { label: 'Solid', content: <Stack><Divider /></Stack> },
+    { label: 'Dashed', content: <Stack><Divider appearance="dashed" size="md" /></Stack> },
+    { label: 'Inset', content: <Stack><Divider inset /></Stack> },
+    { label: 'Decorative', content: <Stack><Divider aria-hidden /></Stack> },
+  ]}
+/>
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={DividerStories} />
+</div>
+
+Every other `<hr>` attribute passes through, including `ref` and
+`aria-hidden`.
 
 ### Differences from the spec
 
 - **`appearance`, not `variant`.** In this kit `variant` always means a
-  color by intent (primary, destructive…) and `appearance` means a style.
+  colour by intent (primary, destructive…) and `appearance` means a style.
   Solid versus dashed is a style.
 - **Thickness is raw px.** The token layer has no border-width scale, and
   a divider is the only component that needs three.
 
-## Usage
+</DocTab>
+<DocTab value="guidelines">
 
-<Canvas of={DividerStories.Sizes} />
+## When to use
 
-A **vertical** divider has no fixed height: it stretches to its flex row,
-which is where it almost always sits. Anywhere else, give it a height.
+Use a Divider between groups that spacing alone does not separate: the
+sections of a menu, the blocks of a settings page, groups in a toolbar.
+Divide groups, not every item: a line after each row turns a list into
+stripes and makes the real breaks harder to see.
 
-<Canvas of={DividerStories.Vertical} />
+<DoDont
+  do={<Story of={DividerStories.DoDivideGroups} />}
+  doCaption="One line between two groups: the break carries meaning."
+  dont={<Story of={DividerStories.DontDivideEveryItem} />}
+  dontCaption="A line after every item: nothing stands out as a group."
+/>
 
-Use **inset** when the line sits inside a padded list and should align
-with the text rather than run edge to edge.
+## When not to use
 
-<Canvas of={DividerStories.Inset} />
+- **Where space already separates.** Cards, list items with padding and
+  headed sections are grouped by their own whitespace; a line adds noise.
+- **As the only thing that tells groups apart.** The line is faint on
+  purpose (see Accessibility). Pair it with a heading or space.
+- **For a border of a component.** Draw that with the component's own
+  border, not a Divider beside it.
 
 ## Accessibility
 
@@ -57,6 +167,9 @@ with the text rather than run edge to edge.
   already the default.
 - If the line is purely decorative, e.g. between two icons that are
   already grouped, pass `aria-hidden` so it isn't announced at all.
-- The `--border` color is below 3:1 against the background on purpose: a
+- The `--border` colour is below 3:1 against the background on purpose: a
   divider is decoration and is not required to meet the non-text contrast
   ratio. Never let a divider be the only thing that tells groups apart.
+
+</DocTab>
+</DocTabs>

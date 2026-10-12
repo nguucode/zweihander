@@ -8,15 +8,66 @@ const meta = {
   tags: ['beta'],
   component: Badge,
   args: { count: 8 },
+  // Every prop is listed by hand, with its type and default: these
+  // descriptions are the docs' API table and the Playground's props panel.
   argTypes: {
-    variant: { control: 'inline-radio', options: ['primary', 'accent', 'secondary', 'destructive', 'success', 'warning'] },
-    size: { control: 'inline-radio', options: ['sm', 'md'] },
+    count: {
+      description: 'The number shown. Nothing renders without `count` or `isDot`. `0` shows "0".',
+      control: 'number',
+      table: { type: { summary: 'number' } },
+    },
+    variant: {
+      description:
+        'Colour. `accent` is the inverted neutral. For presence: `success` Online, `warning` Away, `destructive` Busy, `secondary` Offline.',
+      control: 'inline-radio',
+      options: ['primary', 'accent', 'secondary', 'destructive', 'success', 'warning'],
+      table: {
+        type: { summary: "'primary' | 'accent' | 'secondary' | 'destructive' | 'success' | 'warning'" },
+        defaultValue: { summary: "'primary'" },
+      },
+    },
+    size: {
+      description: '16px (`sm`) or 20px (`md`) tall. Dots are 6px and 8px.',
+      control: 'inline-radio',
+      options: ['sm', 'md'],
+      table: { type: { summary: "'sm' | 'md'" }, defaultValue: { summary: "'md'" } },
+    },
+    isDot: {
+      description: 'A dot with no number: "something new", not "how many". Hidden from assistive tech unless it has `aria-label`.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    maxCount: {
+      description: 'Counts above this show as `maxCount+`, e.g. `99+`, so a large number does not stretch the badge.',
+      control: 'number',
+      table: { type: { summary: 'number' } },
+    },
+    isFloating: {
+      description: 'Pins the badge to a corner of `children`, with a ring in the page colour. Hidden from assistive tech.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
     floatingPlacement: {
+      description: 'The corner a floating badge sits on. Start and end are physical: left and right.',
       control: 'inline-radio',
       options: ['top-start', 'top-end', 'bottom-start', 'bottom-end'],
+      table: {
+        type: { summary: "'top-start' | 'top-end' | 'bottom-start' | 'bottom-end'" },
+        defaultValue: { summary: "'top-end'" },
+      },
     },
-    children: { control: false },
+    children: {
+      description: 'The element a floating badge is pinned to. Put the meaning in its name, e.g. "Notifications, 4 unread".',
+      control: false,
+      table: { type: { summary: 'ReactNode' } },
+    },
+    'aria-label': {
+      description: 'Exposes the badge as an image with this name, e.g. "Online" on a status dot.',
+      control: 'text',
+      table: { type: { summary: 'string' } },
+    },
   },
+  excludeStories: ['anatomyParts'],
 } satisfies Meta<typeof Badge>
 
 export default meta
@@ -152,4 +203,75 @@ export const FloatingDot: Story = {
       </Badge>
     </div>
   ),
+}
+
+/** Zero is a count like any other: hide the badge yourself if nothing new means none. */
+export const Zero: Story = {
+  args: { count: 0 },
+  play: async ({ canvas }) => {
+    await expect(canvas.getByText('0')).toBeVisible()
+  },
+}
+
+/** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
+export const anatomyParts = [
+  { name: 'Anchor', selector: 'span:has(> button)', description: 'Wraps the element a floating badge pins to.' },
+  { name: 'Container', selector: 'button + span', description: 'The pill and its count, in tabular figures. Past maxCount, a "+" follows. Floating, it gets a ring in the page colour.' },
+  { name: 'Dot', selector: 'span:has(> button) + span', description: 'The container with no count: something new, not how many.' },
+]
+
+/** A floating count past maxCount, and a dot, so every part is on screen. */
+export const Anatomy: Story = {
+  tags: ['!dev'],
+  args: { count: 120, maxCount: 99, isFloating: true, variant: 'destructive' },
+  render: (args) => (
+    <div style={{ ...row, gap: 'var(--space-8)', padding: 'var(--space-4)' }}>
+      <Badge {...args}>
+        <Button variant="secondary">Inbox</Button>
+      </Badge>
+      <Badge isDot variant="success" />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    // The docs markers follow these selectors: a DOM change must not leave
+    // a marker pointing at nothing, or at the wrong part.
+    const found = anatomyParts.map(({ selector }) => canvasElement.querySelector(selector))
+    await expect(found.every(Boolean)).toBe(true)
+    await expect(new Set(found).size).toBe(anatomyParts.length)
+    await expect(found[1]).toHaveTextContent('99+')
+    await expect(found[2]).toBeEmptyDOMElement()
+  },
+}
+
+/** Guidelines, Do: the anchor's name carries the count the floating badge shows. */
+export const DoNameTheAnchor: Story = {
+  args: { count: 4, isFloating: true, variant: 'destructive' },
+  render: (args) => (
+    <div style={{ padding: 'var(--space-4)' }}>
+      <Badge {...args}>
+        <Button variant="secondary" aria-label="Notifications, 4 unread">
+          Notifications
+        </Button>
+      </Badge>
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    await expect(canvas.getByRole('button')).toHaveAccessibleName('Notifications, 4 unread')
+  },
+}
+
+/** Guidelines, Don't: the floating badge is hidden, so a screen reader never hears the count. */
+export const DontCountOnlyInBadge: Story = {
+  tags: ['!dev'],
+  args: { count: 4, isFloating: true, variant: 'destructive' },
+  render: (args) => (
+    <div style={{ padding: 'var(--space-4)' }}>
+      <Badge {...args}>
+        <Button variant="secondary">Notifications</Button>
+      </Badge>
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    await expect(canvas.getByRole('button')).toHaveAccessibleName('Notifications')
+  },
 }
