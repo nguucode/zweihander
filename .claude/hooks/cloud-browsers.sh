@@ -8,4 +8,5 @@
   printf 'export PW_CHROMIUM_PATH=/opt/pw-browsers/chromium\nexport VITEST_BROWSERS=chromium\n' >> "$CLAUDE_ENV_FILE"
 cd "${CLAUDE_PROJECT_DIR:-.}" || exit 0
 # stdout of a SessionStart hook lands in the session's context; keep npm's out.
-[ -d node_modules ] || npm ci --no-audit --no-fund >&2
+# npm writes .package-lock.json last, so a half-finished install retries.
+[ -f node_modules/.package-lock.json ] || npm ci --no-audit --no-fund >&2
