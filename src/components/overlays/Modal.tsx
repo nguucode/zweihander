@@ -30,7 +30,8 @@ export interface ModalProps {
   closeOnBackdropClick?: boolean
   /**
    * While open, trap focus, lock page scroll and make the rest of the page
-   * inert. `false` leaves the page as is. Ignored when `isAlert`: an alert
+   * inert. `false` drops those three; the backdrop still covers the page.
+   * Ignored when `isAlert`: an alert
    * is always modal.
    */
   isModal?: boolean

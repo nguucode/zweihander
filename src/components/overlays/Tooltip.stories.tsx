@@ -261,6 +261,18 @@ export const DoShortLabel: Story = {
 export const DontEssentialInfo: Story = {
   tags: ['!dev'],
   parameters: { picture: true },
-  args: { content: 'At least 12 characters, with a number and a symbol.', children: <TextInput label="Password" type="password" /> },
-  render: (args) => <Pictured {...args} />,
+  args: {
+    content: 'At least 12 characters, with a number and a symbol.',
+    children: (
+      <Button isIconOnly aria-label="Password rules" appearance="ghost" variant="accent">
+        <Icon name="info" />
+      </Button>
+    ),
+  },
+  render: (args) => (
+    <div style={{ display: 'flex', alignItems: 'end', gap: 'var(--space-1)' }}>
+      <TextInput label="Password" type="password" />
+      <Pictured {...args} />
+    </div>
+  ),
 }

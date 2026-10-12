@@ -102,7 +102,7 @@ const meta = {
       table: { type: { summary: '(open: boolean) => void' } },
     },
     isModal: {
-      description: 'While open, traps focus, locks page scroll and makes the rest of the page inert. `false` leaves the page usable. Ignored when `isAlert`: an alert is always modal.',
+      description: 'While open, traps focus, locks page scroll and makes the rest of the page inert. `false` drops those three, for pictures of a modal; the backdrop still covers the page. Ignored when `isAlert`: an alert is always modal.',
       control: 'boolean',
       table: { type: { summary: 'boolean' }, defaultValue: { summary: 'true' } },
     },
@@ -295,8 +295,9 @@ export const Anatomy: Story = {
     await expect(new Set(found).size).toBe(anatomyParts.length)
     await expect(found[1]).toBe(dialog)
     await expect(found[2]).toHaveTextContent('Edit profile')
-    // Not modal: the page around the picture keeps its scroll.
-    await expect(getComputedStyle(document.documentElement).overflow).not.toBe('hidden')
+    // Not modal: the page around the picture keeps its scroll (Default
+    // shows a modal locks it on <body>).
+    await expect(getComputedStyle(document.body).overflow).not.toBe('hidden')
   },
 }
 

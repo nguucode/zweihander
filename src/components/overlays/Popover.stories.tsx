@@ -298,7 +298,7 @@ function Pictured(props: PopoverProps) {
   return (
     <div ref={setContainer} inert data-popover-picture style={{ display: 'grid', justifyItems: 'center', gap: 6 }}>
       <style>{`[data-popover-picture] .${styles.positioner} { position: static !important; transform: none !important; }`}</style>
-      {container && <Popover {...props} open isModal={false} container={container} />}
+      {container && <Popover {...props} open container={container} />}
     </div>
   )
 }

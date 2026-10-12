@@ -187,8 +187,8 @@ in the `secondary` variant.
   events are blocked by the backdrop, and its scroll is locked. Closing
   returns focus to the trigger.
 - `isModal={false}` drops the focus trap, the scroll lock and the hidden
-  page. It is for pictures of a modal, such as the ones on these tabs: a
-  real modal stays modal.
+  page, but the backdrop still covers the page. It is for pictures of a
+  modal, such as the ones on these tabs: a real modal stays modal.
 - Escape closes it, as does a press outside unless `isAlert` or
   `closeOnBackdropClick={false}`. An alert dialog closes only through its
   own buttons (and Escape).

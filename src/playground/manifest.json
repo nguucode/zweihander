@@ -1979,7 +1979,7 @@
           "name": "isModal",
           "control": "boolean",
           "default": true,
-          "description": "While open, traps focus, locks page scroll and makes the rest of the page inert. `false` leaves the page usable. Ignored when `isAlert`: an alert is always modal."
+          "description": "While open, traps focus, locks page scroll and makes the rest of the page inert. `false` drops those three, for pictures of a modal; the backdrop still covers the page. Ignored when `isAlert`: an alert is always modal."
         },
         {
           "name": "defaultOpen",
