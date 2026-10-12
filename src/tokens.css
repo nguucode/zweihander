@@ -830,8 +830,8 @@
   --text-heading-2xs: calc(0.75rem * var(--scaling));
   --text-body-lg: calc(1rem * var(--scaling));
   --text-body: calc(0.875rem * var(--scaling));
-  --text-body-sm: calc(0.8125rem * var(--scaling));
-  --text-body-xs: calc(0.625rem * var(--scaling));
+  --text-body-sm: calc(0.75rem * var(--scaling));
+  --text-body-xs: calc(0.6875rem * var(--scaling));
 
   --leading-heading-2xl: calc(36 / 32);
   --leading-heading-xl: calc(32 / 28);
@@ -842,8 +842,8 @@
   --leading-heading-2xs: calc(16 / 12);
   --leading-body-lg: calc(24 / 16);
   --leading-body: calc(20 / 14);
-  --leading-body-sm: calc(16 / 13);
-  --leading-body-xs: calc(14 / 10);
+  --leading-body-sm: calc(16 / 12);
+  --leading-body-xs: calc(16 / 11);
 
   /* Shadows read from the elevation tokens each appearance sets. */
   --shadow-none: var(--elevation-none);

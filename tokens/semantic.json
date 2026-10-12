@@ -359,7 +359,7 @@
     "heading-2xs": { "$type": "dimension", "$value": "0.75rem", "$extensions": { "leading": "16 / 12" } },
     "body-lg": { "$type": "dimension", "$value": "1rem", "$extensions": { "leading": "24 / 16" } },
     "body": { "$type": "dimension", "$value": "0.875rem", "$extensions": { "leading": "20 / 14" } },
-    "body-sm": { "$type": "dimension", "$value": "0.8125rem", "$extensions": { "leading": "16 / 13" } },
-    "body-xs": { "$type": "dimension", "$value": "0.625rem", "$extensions": { "leading": "14 / 10" } }
+    "body-sm": { "$type": "dimension", "$value": "0.75rem", "$extensions": { "leading": "16 / 12" } },
+    "body-xs": { "$type": "dimension", "$value": "0.6875rem", "$extensions": { "leading": "16 / 11" } }
   }
 }
