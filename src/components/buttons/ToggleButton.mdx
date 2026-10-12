@@ -1,48 +1,194 @@
-import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
+import { ToggleButton } from './ToggleButton'
 import * as ToggleButtonStories from './ToggleButton.stories'
 
 <Meta of={ToggleButtonStories} />
 
 # Toggle Button
 
+<DocTabs>
+<DocTab value="overview">
+
 A button that stays pressed: bold on or off, following or not, a filter
-applied or not. Spec:
-[uiguideline.com/components/toggle-button](https://www.uiguideline.com/components/toggle-button).
-Behaviour from Base UI's [Toggle](https://base-ui.com/react/components/toggle);
-the look is [Button](?path=/docs/components-buttons-button--docs)'s.
+applied or not. It looks like a [Button](?path=/docs/components-buttons-button--docs).
+
+<Status of={ToggleButtonStories} />
+
+<Canvas of={ToggleButtonStories.Default} />
+
+## Variants
+
+Unpressed is always the same neutral button, so the pressed one is the one
+that stands out. `variant` and `appearance` choose how it looks when
+pressed. Each pair below: unpressed, then pressed.
 
 <Canvas of={ToggleButtonStories.Matrix} />
 
+| Appearance when pressed | Use for |
+| --- | --- |
+| `contained` | A toggle that should read as clearly on from across the screen: a filter, Follow. |
+| `outlined` | A toggle among other outlined controls. Pressed, it fills neutral and keeps the variant's border. |
+| `ghost` | Toolbars and dense rows: Bold, Italic, a star. Usually `isIconOnly`. |
+
+<Canvas of={ToggleButtonStories.IconOnly} />
+
+<Canvas of={ToggleButtonStories.WithIcon} />
+
+## Resources
+
+From npm, or copied into your project through the registry:
+
+```js
+import { ToggleButton } from 'zweihander/toggle-button'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/toggle-button.json
+```
+
+- Source: [src/components/buttons/ToggleButton.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/buttons/ToggleButton.tsx)
+- Spec: [uiguideline.com/components/toggle-button](https://www.uiguideline.com/components/toggle-button)
+- Behaviour: [Base UI Toggle](https://base-ui.com/react/components/toggle)
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
 ## Anatomy
 
-The same parts as Button — **container**, **start icon**, **label**, **end
-icon**, **spinner** — plus one state: **pressed**.
+<Anatomy parts={ToggleButtonStories.anatomyParts}>
+  <Story of={ToggleButtonStories.Anatomy} />
+</Anatomy>
 
-| State | Looks like |
-| --- | --- |
-| Unpressed | Always neutral: `secondary outlined` (or `ghost` when the appearance is ghost). |
-| Pressed, `contained` | The variant's solid fill. |
-| Pressed, `outlined` | The variant's border on the neutral secondary fill. |
-| Pressed, `ghost` | The neutral secondary fill. |
+The parts are Button's: an icon can sit at the start or the end, and while
+`isLoading` a spinner takes the content's place.
 
-## Props
+## Measurements
 
-| Prop | Values | Default | |
-| --- | --- | --- | --- |
-| `pressed` | boolean | – | Controlled. The spec's `isSelected`. |
-| `defaultPressed` | boolean | `false` | Uncontrolled starting state. |
-| `onPressedChange` | `(pressed) => void` | – | |
-| `variant` | `primary`, `accent`, `secondary`, `destructive` | `primary` | Colour of the pressed state. |
-| `appearance` | `contained`, `outlined`, `ghost` | `contained` | Style of the pressed state. |
-| `size` | `sm`, `md` | `md` | 24, 32px, as on Button. |
-| `startIcon`, `endIcon` | node | – | |
-| `isIconOnly` | boolean | `false` | Requires `aria-label`. |
-| `isLoading` | boolean | `false` | |
-| `isFullWidth` | boolean | `false` | |
-| `disabled` | boolean | `false` | |
-| `onClick` | function | – | |
+The same as Button: each size is a control tier.
 
-<Controls of={ToggleButtonStories.Default} />
+<SpecTable
+  caption="sm"
+  rows={[
+    { part: 'Container', property: 'Height', token: '--control-sm' },
+    { part: 'Container', property: 'Inline padding', token: '--control-sm-pad-spacious' },
+    { part: 'Container', property: 'Corner radius', token: '--control-sm-radius' },
+    { part: 'Container', property: 'Gap', token: '--control-sm-gap' },
+    { part: 'Icon', property: 'Size', token: '--icon-sm' },
+    { part: 'Label', property: 'Font size', token: '--text-body-sm' },
+  ]}
+/>
+
+<SpecTable
+  caption="md"
+  rows={[
+    { part: 'Container', property: 'Height', token: '--control-md' },
+    { part: 'Container', property: 'Inline padding', token: '--control-md-pad-spacious' },
+    { part: 'Container', property: 'Corner radius', token: '--control-md-radius' },
+    { part: 'Container', property: 'Gap', token: '--control-md-gap' },
+    { part: 'Icon', property: 'Size', token: '--icon-md' },
+    { part: 'Label', property: 'Font size', token: '--text-body' },
+  ]}
+/>
+
+<SpecTable
+  caption="Every size"
+  rows={[
+    { part: 'Focus ring', property: 'Width', token: '--focus-width' },
+    { part: 'Focus ring', property: 'Offset', token: '--focus-offset' },
+    { part: 'Hit area', property: 'Minimum on touch screens', token: '--target-coarse' },
+  ]}
+/>
+
+## Color
+
+Unpressed is the same in every variant. Pressed and `contained` takes the
+variant's solid, as on Button. Pressed `outlined` and `ghost` fill with the
+neutral secondary instead of a tint of the variant: a toggle stays pressed
+indefinitely, so its label has to pass 4.5:1 on the fill, and red text on a
+red tint measures 3.7:1.
+
+<SpecTable
+  caption="Unpressed, every variant (ghost has no border)"
+  rows={[
+    { part: 'Container', property: 'Border', token: '--input' },
+    { part: 'Label', property: 'Colour', token: '--foreground' },
+  ]}
+/>
+
+<SpecTable
+  caption="Pressed, outlined and ghost, every variant"
+  rows={[
+    { part: 'Container', property: 'Background', token: '--secondary' },
+    { part: 'Label', property: 'Colour', token: '--secondary-foreground' },
+  ]}
+/>
+
+<SpecTable
+  caption="primary, pressed"
+  rows={[
+    { part: 'Container, contained', property: 'Background', token: '--primary' },
+    { part: 'Label, contained', property: 'Colour', token: '--primary-foreground' },
+    { part: 'Container, outlined', property: 'Border', token: '--primary-text' },
+  ]}
+/>
+
+<SpecTable
+  caption="accent, pressed"
+  rows={[
+    { part: 'Container, contained', property: 'Background', token: '--foreground' },
+    { part: 'Label, contained', property: 'Colour', token: '--background' },
+    { part: 'Container, outlined', property: 'Border', token: '--foreground' },
+  ]}
+/>
+
+<SpecTable
+  caption="secondary, pressed"
+  rows={[
+    { part: 'Container, contained', property: 'Background', token: '--secondary' },
+    { part: 'Label, contained', property: 'Colour', token: '--secondary-foreground' },
+    { part: 'Container, outlined', property: 'Border', token: '--input' },
+  ]}
+/>
+
+<SpecTable
+  caption="destructive, pressed"
+  rows={[
+    { part: 'Container, contained', property: 'Background', token: '--destructive' },
+    { part: 'Label, contained', property: 'Colour', token: '--destructive-foreground' },
+    { part: 'Container, outlined', property: 'Border', token: '--destructive' },
+  ]}
+/>
+
+<SpecTable caption="Every variant" rows={[{ part: 'Focus ring', property: 'Colour', token: '--ring' }]} />
+
+## States
+
+<States
+  states={[
+    { label: 'Unpressed' },
+    { label: 'Pressed', content: <ToggleButton defaultPressed>Subscribe</ToggleButton> },
+    { label: 'Hover', pseudo: 'hover' },
+    { label: 'Focus', pseudo: 'focus-visible' },
+    { label: 'Disabled', content: <Story of={ToggleButtonStories.Disabled} /> },
+    { label: 'Loading', content: <Story of={ToggleButtonStories.Loading} /> },
+  ]}
+>
+  <Story of={ToggleButtonStories.Default} />
+</States>
+
+Hover, focus, disabled and loading behave as on Button, in both the
+pressed and the unpressed look.
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={ToggleButtonStories} />
+</div>
+
+Every other `<button>` attribute passes through, including `ref`.
 
 ### Differences from the spec
 
@@ -57,18 +203,35 @@ icon**, **spinner** — plus one state: **pressed**.
   pressed whether it was or not.
 - **A pressed outlined or ghost toggle is filled neutral, not tinted with
   its variant.** It stays in that state indefinitely, so its label has to
-  pass 4.5:1 on the fill — and red text on a red tint measures 3.7:1.
+  pass 4.5:1 on the fill.
 - **`isIconOnly`**, as on Button.
 
-## Usage
+</DocTab>
+<DocTab value="guidelines">
 
-Use a toggle for a setting that is on or off and applies immediately.
-If the choice is submitted with a form, use a Checkbox or Switch instead.
-For one-of-many, use a group of radios or tabs.
+## When to use
 
-<Canvas of={ToggleButtonStories.IconOnly} />
+Use a toggle for a setting that is on or off and applies immediately:
+Bold, Follow, a filter. The label names the setting, and stays the same in
+both states.
+
+<DoDont
+  do={<Story of={ToggleButtonStories.DoSameLabel} />}
+  doCaption="The label names the setting; pressed says it is on. A screen reader hears “Follow, toggle button, pressed”."
+  dont={<Story of={ToggleButtonStories.DontSwitchLabel} />}
+  dontCaption="A label that flips to the action reads as “Unfollow, pressed”, which contradicts itself."
+/>
 
 <Canvas of={ToggleButtonStories.Controlled} />
+
+## When not to use
+
+- **For a choice submitted with a form.** Use a Checkbox or a Switch: a
+  toggle applies at once, a form field waits for Submit.
+- **For one of many.** Use radios or Tabs. Toggles are independent: pressing
+  one does not release another.
+- **For an action.** Something that happens once (Save, Send) is a
+  [Button](?path=/docs/components-buttons-button--docs).
 
 ## Accessibility
 
@@ -78,5 +241,9 @@ For one-of-many, use a group of radios or tabs.
   state; a label that switches from "Follow" to "Unfollow" as well reads
   as "Unfollow, pressed", which contradicts itself.
 - Enter and Space both toggle it.
+- `isIconOnly` needs `aria-label`, as on Button.
 - `isLoading` keeps it focusable but inert, as on Button.
 - 44×44px touch target at `sm` and `md`, from Button.
+
+</DocTab>
+</DocTabs>

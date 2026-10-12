@@ -35,22 +35,45 @@ Trả lời ba câu trước khi mở editor:
 
 ## 1. Spec
 
-Spec chính là file `<Name>.mdx` cạnh component. Không viết spec ở chỗ khác.
+Spec chính là file `<Name>.mdx` cạnh component. Không viết spec ở chỗ khác. Trang mẫu: `src/components/buttons/Button.mdx` và `ToggleButton.mdx`; khi phân vân, chép cấu trúc của chúng.
 
-MDX của component bắt buộc có ba mục, cộng một mục khi component lệch spec:
+Trang component có ba tab, theo Material 3, dựng bằng docs blocks trong `.storybook/blocks/` (demo: Storybook *Internal / Docs blocks*):
 
-| Mục | Nội dung |
+```mdx
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
+import * as NameStories from './Name.stories'
+
+<Meta of={NameStories} />
+
+# Name
+
+<DocTabs>
+<DocTab value="overview">…</DocTab>
+<DocTab value="specs">…</DocTab>
+<DocTab value="guidelines">…</DocTab>
+</DocTabs>
+```
+
+| Tab | Mục bắt buộc, theo thứ tự |
 |---|---|
-| `## Anatomy` | Bảng tên từng part và vai trò |
-| `## Props` | Bảng prop: values, default, ghi chú. Thêm `<Controls>` |
-| `## Differences from the spec` | **Chỉ khi lệch** uiguideline: mọi chỗ lệch kèm lý do. Không lệch thì bỏ hẳn mục này, không ghi "Không lệch" |
-| `## Accessibility` | Hành vi bàn phím, role và state theo APG |
+| **Overview**: component là gì | Một câu mô tả. `<Status of={NameStories} />` (đọc tag status trong `meta.tags`). `<Canvas>` story chính. `## Variants`: mỗi variant hoặc appearance một dòng "dùng khi nào", kèm canvas. `## Resources`: import, lệnh registry, source GitHub, spec uiguideline, Base UI nếu có, Figma (ghi "Not in the library yet" khi chưa có) |
+| **Specs**: component được dựng thế nào | `## Anatomy` + `<Anatomy>`. `## Measurements`: một `<SpecTable>` mỗi size. `## Color`: một `<SpecTable>` mỗi variant. `## States` + `<States>` (enabled, hover, focus, pressed, disabled, cộng loading/invalid/selected nếu có). `## API` + `<ArgTypes of={NameStories} />`. `### Differences from the spec` ở cuối, **chỉ khi lệch** uiguideline |
+| **Guidelines**: dùng thế nào cho đúng | `## When to use`, ít nhất một `<DoDont>`. `## When not to use`: dùng component nào thay thế. `## Accessibility`: bàn phím, role và state theo APG |
 
-Pattern dùng bộ mục riêng: mỗi biến thể một mục kèm `<Canvas>`, rồi `## Props`, `## Layout` và `## Accessibility`. Xem file tham chiếu pattern.
+Quy tắc cho từng block:
 
-Breaking change: sửa `## Props` (và `## Differences` nếu có) **trước**, rồi mới sửa code.
+- **Props sống trong `argTypes`.** Mỗi prop công khai có `description` trong `meta.argTypes` của story file. `<ArgTypes>` render bảng API từ đó, panel props của Playground đọc cùng nguồn qua `npm run playground:manifest`. Không viết bảng prop bằng tay trong MDX. Type và default thường do react-docgen suy ra; nó không đọc được props kiểu union (ví dụ `isIconOnly` bắt `aria-label`), khi đó khai báo thêm `table.type.summary`, `table.defaultValue.summary` và `control` cho mọi prop (xem `Button.stories.tsx`). Đổi story thì chạy `npm run playground:manifest` và commit `src/playground/manifest.json`.
+- **Anatomy** render component thật, không dùng ảnh. Danh sách part (`name`, `selector`, `description`) export từ story file là `anatomyParts` (thêm vào `excludeStories`), kèm một story `Anatomy` tag `!dev` có `play` kiểm mỗi selector khớp đúng một phần tử khác nhau. Part không có element riêng (label là text node) thì story bọc nó trong `<span>`.
+- **SpecTable** chỉ ghi tên token; giá trị đọc live từ CSS. Chỉ dùng token semantic hoặc token của tier (`--control-md`), không ghi biến nội bộ của component (`--button-bg`): chúng không resolve được ngoài component. Hover và pressed trộn màu bằng `color-mix` thì giải thích bằng chữ dưới `<States>`.
+- **DoDont** lấy cả hai bên từ story thật. Story "Don't" tag `!dev` để ẩn khỏi sidebar và Playground, vẫn chạy test.
+- `npm run docs:check` đỏ khi trang dùng `<DocTabs>` thiếu tab hoặc mục ở bảng trên, hoặc nhắc tới token không tồn tại.
 
-**Gate:** đủ các mục bắt buộc; có lệch spec thì có `## Differences from the spec`. Mỗi câu trong `## Accessibility` đủ cụ thể để viết được một `play` kiểm nó.
+Trang chưa migrate (chưa có `<DocTabs>`) giữ format cũ cho đến ticket migrate category của nó. Component mới luôn dùng ba tab.
+
+Breaking change: sửa `argTypes` (và `### Differences from the spec` nếu có) **trước**, rồi mới sửa code.
+
+**Gate:** `npm run docs:check` xanh; có lệch spec thì có `### Differences from the spec`. Mỗi câu trong `## Accessibility` đủ cụ thể để viết được một `play` kiểm nó.
 
 ## 2. Code
 
@@ -102,7 +125,7 @@ Mỗi story file mang đúng một tag status trong `meta.tags`, cạnh `'autodo
 | Status | Component | Pattern |
 |---|---|---|
 | `experimental` | Có story chạy được. API đổi tự do | Như component |
-| `beta` | Đạt phase 1–4: đủ các mục MDX, test xanh, a11y `error` | Không dùng |
+| `beta` | Đạt phase 1–4: đủ ba tab MDX, test xanh, a11y `error` | Không dùng |
 | `stable` | Beta, cộng: xanh trên Chromium/Firefox/WebKit, có baseline visual regression, đã thử VoiceOver + Safari (ghi build-log), một tháng không có breaking change | Đạt phase 1–4, xanh ba trình duyệt, có baseline visual regression |
 | `deprecated` | Có thay thế, ghi trong MDX. Xoá ở bản kế tiếp | Như component |
 
@@ -121,7 +144,7 @@ Checklist dán vào mô tả PR:
 
 ```
 - [ ] Phân loại: <Tên> — <mới|enhance> — <breaking|không> — <status>
-- [ ] MDX: đủ mục bắt buộc (component: Anatomy / Props / Accessibility, thêm Differences nếu lệch spec; pattern: biến thể / Props / Layout / Accessibility)
+- [ ] MDX: component 3 tab Overview / Specs / Guidelines, `docs:check` xanh, props trong `argTypes`; pattern: biến thể / Props / Layout / Accessibility
 - [ ] Code: token only, 'use client', registry (không số lượng), exports
 - [ ] Story + play cho mỗi câu Accessibility; a11y error
 - [ ] tsc, lint, tokens:check, registry:check, vitest storybook (3 trình duyệt), vitest visual (CI)

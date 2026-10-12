@@ -8,14 +8,86 @@ const meta = {
   title: 'Components/Buttons/ToggleButton',
   tags: ['beta'],
   component: ToggleButton,
+  // Listed by hand: ToggleButtonProps is a union (icon-only needs
+  // aria-label), and react-docgen reads no types from a union. These
+  // descriptions are the docs' API table and the Playground's props panel.
   argTypes: {
-    variant: { control: 'inline-radio', options: ['primary', 'accent', 'secondary', 'destructive'] },
-    appearance: { control: 'inline-radio', options: ['contained', 'outlined', 'ghost'] },
-    size: { control: 'inline-radio', options: ['sm', 'md'] },
-    startIcon: { control: false },
-    endIcon: { control: false },
+    pressed: {
+      description: 'Controlled pressed state. Pair with `onPressedChange`.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' } },
+    },
+    defaultPressed: {
+      description: 'Starting pressed state when uncontrolled.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    onPressedChange: {
+      description: 'Called with the new state on click, Enter and Space.',
+      control: false,
+      table: { type: { summary: '(pressed: boolean) => void' } },
+    },
+    variant: {
+      description: 'Colour of the pressed state. Unpressed is always neutral.',
+      control: 'inline-radio',
+      options: ['primary', 'accent', 'secondary', 'destructive'],
+      table: { type: { summary: "'primary' | 'accent' | 'secondary' | 'destructive'" }, defaultValue: { summary: "'primary'" } },
+    },
+    appearance: {
+      description: 'Style of the pressed state. Unpressed is `outlined`, or `ghost` when this is `ghost`.',
+      control: 'inline-radio',
+      options: ['contained', 'outlined', 'ghost'],
+      table: { type: { summary: "'contained' | 'outlined' | 'ghost'" }, defaultValue: { summary: "'contained'" } },
+    },
+    size: {
+      description: '24px (`sm`) or 32px (`md`) tall, as on Button.',
+      control: 'inline-radio',
+      options: ['sm', 'md'],
+      table: { type: { summary: "'sm' | 'md'" }, defaultValue: { summary: "'md'" } },
+    },
+    children: {
+      description: 'The label. Keep it the same in both states: `aria-pressed` carries the state.',
+      control: 'text',
+      table: { type: { summary: 'ReactNode' } },
+    },
+    startIcon: {
+      description: 'Icon before the label. Decorative.',
+      control: false,
+      table: { type: { summary: 'ReactNode' } },
+    },
+    endIcon: {
+      description: 'Icon after the label. Decorative.',
+      control: false,
+      table: { type: { summary: 'ReactNode' } },
+    },
+    isIconOnly: {
+      description: 'Square, for an icon with no visible label. Requires `aria-label`.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    isLoading: {
+      description: 'Shows a spinner and stops toggling, keeping focus.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    isFullWidth: {
+      description: 'Fills the width of its container.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    disabled: {
+      description: 'Native `disabled`: dimmed and out of the tab order.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    value: {
+      description: 'Identifies the toggle inside a group.',
+      control: false,
+      table: { type: { summary: 'string' } },
+    },
   },
   args: { children: 'Subscribe', onPressedChange: fn() },
+  excludeStories: ['anatomyParts'],
 } satisfies Meta<typeof ToggleButton>
 
 export default meta
@@ -134,4 +206,35 @@ export const Loading: Story = {
     await expect(args.onPressedChange).not.toHaveBeenCalled()
     await expect(toggle).toHaveAttribute('aria-pressed', 'false')
   },
+}
+
+/** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
+export const anatomyParts = [
+  { name: 'Container', selector: 'button', description: 'Neutral when unpressed; the pressed style comes from variant × appearance.' },
+  { name: 'Icon', selector: 'button > span:first-child', description: 'The start or end icon. Decorative.' },
+  { name: 'Label', selector: 'button > span:last-child', description: 'The text, kept the same in both states.' },
+]
+
+/** Pressed, with an icon, the label in its own element so the docs can point at it. */
+export const Anatomy: Story = {
+  tags: ['!dev'],
+  args: { startIcon: <Icon name="star" />, children: <span>Star</span>, defaultPressed: true },
+  play: async ({ canvasElement }) => {
+    // The docs markers follow these selectors.
+    const found = anatomyParts.map(({ selector }) => canvasElement.querySelector(selector))
+    await expect(found.every(Boolean)).toBe(true)
+    await expect(new Set(found).size).toBe(anatomyParts.length)
+    await expect(found[2]).toHaveTextContent('Star')
+  },
+}
+
+/** Guidelines, Do: the label names the setting; `aria-pressed` says whether it is on. */
+export const DoSameLabel: Story = {
+  args: { children: 'Follow', defaultPressed: true },
+}
+
+/** Guidelines, Don't: a label that flips to the action reads as "Unfollow, pressed". */
+export const DontSwitchLabel: Story = {
+  tags: ['!dev'],
+  args: { children: 'Unfollow', defaultPressed: true },
 }

@@ -8,15 +8,87 @@ const meta = {
   title: 'Components/Buttons/Button',
   tags: ['beta'],
   component: Button,
+  // Every prop is listed by hand: ButtonProps is a union (icon-only needs
+  // aria-label), and react-docgen reads no types from a union, so neither
+  // the API table nor the Playground would show them otherwise. These
+  // descriptions are the docs' API table and the Playground's props panel.
   argTypes: {
-    variant: { control: 'inline-radio', options: ['primary', 'accent', 'secondary', 'destructive'] },
-    appearance: { control: 'inline-radio', options: ['contained', 'outlined', 'ghost'] },
-    size: { control: 'inline-radio', options: ['sm', 'md'] },
-    startIcon: { control: false },
-    endIcon: { control: false },
-    render: { control: false },
+    variant: {
+      description: 'Colour by meaning. `accent` is the inverted neutral; `destructive` is for actions that delete or cannot be undone.',
+      control: 'inline-radio',
+      options: ['primary', 'accent', 'secondary', 'destructive'],
+      table: { type: { summary: "'primary' | 'accent' | 'secondary' | 'destructive'" }, defaultValue: { summary: "'primary'" } },
+    },
+    appearance: {
+      description: 'Emphasis: `contained` for the main action, `outlined` and `ghost` for the rest.',
+      control: 'inline-radio',
+      options: ['contained', 'outlined', 'ghost'],
+      table: { type: { summary: "'contained' | 'outlined' | 'ghost'" }, defaultValue: { summary: "'contained'" } },
+    },
+    size: {
+      description: '24px (`sm`) or 32px (`md`) tall, from the control tiers. `sm` takes a 12px label.',
+      control: 'inline-radio',
+      options: ['sm', 'md'],
+      table: { type: { summary: "'sm' | 'md'" }, defaultValue: { summary: "'md'" } },
+    },
+    children: {
+      description: 'The label. With `isIconOnly`, the icon.',
+      control: 'text',
+      table: { type: { summary: 'ReactNode' } },
+    },
+    startIcon: {
+      description: 'Icon before the label, usually `<Icon name="…" />`. Decorative: hidden from screen readers.',
+      control: false,
+      table: { type: { summary: 'ReactNode' } },
+    },
+    endIcon: {
+      description: 'Icon after the label, e.g. a chevron for a menu. Decorative.',
+      control: false,
+      table: { type: { summary: 'ReactNode' } },
+    },
+    isIconOnly: {
+      description: 'Square, for an icon with no visible label. Requires `aria-label`: a type error without it.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    isLoading: {
+      description: 'Shows a spinner in place of the content, keeping the width and focus, and blocks clicks. On a link it behaves as disabled.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    isFullWidth: {
+      description: 'Fills the width of its container.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    disabled: {
+      description: 'Native `disabled`: dimmed and out of the tab order. On a link, drops `href`.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    type: {
+      description: 'Native button type. `button` by default, so it never submits a form by accident.',
+      control: false,
+      table: { type: { summary: "'button' | 'submit' | 'reset'" }, defaultValue: { summary: "'button'" } },
+    },
+    href: {
+      description: 'Renders an `<a>` instead: it navigates, it does not act. `target` and `rel` pass through.',
+      control: false,
+      table: { type: { summary: 'string' } },
+    },
+    render: {
+      description: "Replaces the rendered element, e.g. a router's `<Link />`. Props and styles merge onto it.",
+      control: false,
+      table: { type: { summary: 'ReactElement | (props, state) => ReactElement' } },
+    },
+    onClick: {
+      description: 'Called on click, Enter and Space. Not called while disabled or loading.',
+      control: false,
+      table: { type: { summary: '(event: MouseEvent) => void' } },
+    },
   },
   args: { children: 'Button', onClick: fn() },
+  excludeStories: ['anatomyParts'],
 } satisfies Meta<typeof Button>
 
 export default meta
@@ -255,4 +327,55 @@ export const StateContrast: Story = {
     }
     await expect(failures).toEqual([])
   },
+}
+
+/** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
+export const anatomyParts = [
+  { name: 'Container', selector: 'button', description: 'The box: fill, border and label colour, from variant × appearance.' },
+  { name: 'Start icon', selector: 'button > span:first-child', description: 'Optional. Decorative, sized to the button.' },
+  { name: 'Label', selector: 'button > span:nth-child(2)', description: 'The text. An icon-only button has an icon here instead, and an aria-label.' },
+  { name: 'End icon', selector: 'button > span:last-child', description: 'Optional, e.g. a chevron for a menu.' },
+]
+
+/** Every part present, the label in its own element so the docs can point at it. */
+export const Anatomy: Story = {
+  tags: ['!dev'],
+  args: { startIcon: <Icon name="plus" />, endIcon: <Icon name="chevron-down" />, children: <span>Add product</span> },
+  play: async ({ canvasElement }) => {
+    // The docs markers follow these selectors: a DOM change must not leave
+    // a marker pointing at nothing, or at the wrong part.
+    const found = anatomyParts.map(({ selector }) => canvasElement.querySelector(selector))
+    await expect(found.every(Boolean)).toBe(true)
+    await expect(new Set(found).size).toBe(anatomyParts.length)
+    await expect(found[2]).toHaveTextContent('Add product')
+  },
+}
+
+/** Guidelines, Do: one primary action, the rest stepped down. */
+export const DoOnePrimary: Story = {
+  render: (args) => (
+    <div style={row}>
+      <Button {...args}>Save</Button>
+      <Button {...args} variant="secondary" appearance="outlined">
+        Cancel
+      </Button>
+    </div>
+  ),
+}
+
+/** Guidelines, Don't: two primaries compete for the same click. */
+export const DontTwoPrimaries: Story = {
+  tags: ['!dev'],
+  render: (args) => (
+    <div style={row}>
+      <Button {...args}>Save</Button>
+      <Button {...args}>Publish</Button>
+    </div>
+  ),
+}
+
+/** Guidelines, Don't: disabling to show progress drops focus and hides the button's state. */
+export const DontDisableWhileSaving: Story = {
+  tags: ['!dev'],
+  args: { disabled: true, children: 'Saving…' },
 }

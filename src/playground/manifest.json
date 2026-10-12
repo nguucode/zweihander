@@ -242,7 +242,8 @@
         {
           "name": "children",
           "control": "text",
-          "default": "Button"
+          "default": "Button",
+          "description": "The label. With `isIconOnly`, the icon."
         },
         {
           "name": "variant",
@@ -253,7 +254,8 @@
             "secondary",
             "destructive"
           ],
-          "default": "primary"
+          "default": "primary",
+          "description": "Colour by meaning. `accent` is the inverted neutral; `destructive` is for actions that delete or cannot be undone."
         },
         {
           "name": "appearance",
@@ -263,7 +265,8 @@
             "outlined",
             "ghost"
           ],
-          "default": "contained"
+          "default": "contained",
+          "description": "Emphasis: `contained` for the main action, `outlined` and `ghost` for the rest."
         },
         {
           "name": "size",
@@ -272,7 +275,32 @@
             "sm",
             "md"
           ],
-          "default": "md"
+          "default": "md",
+          "description": "24px (`sm`) or 32px (`md`) tall, from the control tiers. `sm` takes a 12px label."
+        },
+        {
+          "name": "isLoading",
+          "control": "boolean",
+          "default": false,
+          "description": "Shows a spinner in place of the content, keeping the width and focus, and blocks clicks. On a link it behaves as disabled."
+        },
+        {
+          "name": "isFullWidth",
+          "control": "boolean",
+          "default": false,
+          "description": "Fills the width of its container."
+        },
+        {
+          "name": "isIconOnly",
+          "control": "boolean",
+          "default": false,
+          "description": "Square, for an icon with no visible label. Requires `aria-label`: a type error without it."
+        },
+        {
+          "name": "disabled",
+          "control": "boolean",
+          "default": false,
+          "description": "Native `disabled`: dimmed and out of the tab order. On a link, drops `href`."
         }
       ]
     },
@@ -287,7 +315,8 @@
         {
           "name": "children",
           "control": "text",
-          "default": "Subscribe"
+          "default": "Subscribe",
+          "description": "The label. Keep it the same in both states: `aria-pressed` carries the state."
         },
         {
           "name": "variant",
@@ -298,7 +327,8 @@
             "secondary",
             "destructive"
           ],
-          "default": "primary"
+          "default": "primary",
+          "description": "Colour of the pressed state. Unpressed is always neutral."
         },
         {
           "name": "appearance",
@@ -308,7 +338,14 @@
             "outlined",
             "ghost"
           ],
-          "default": "contained"
+          "default": "contained",
+          "description": "Style of the pressed state. Unpressed is `outlined`, or `ghost` when this is `ghost`."
+        },
+        {
+          "name": "defaultPressed",
+          "control": "boolean",
+          "default": false,
+          "description": "Starting pressed state when uncontrolled."
         },
         {
           "name": "size",
@@ -316,7 +353,33 @@
           "options": [
             "sm",
             "md"
-          ]
+          ],
+          "default": "md",
+          "description": "24px (`sm`) or 32px (`md`) tall, as on Button."
+        },
+        {
+          "name": "isIconOnly",
+          "control": "boolean",
+          "default": false,
+          "description": "Square, for an icon with no visible label. Requires `aria-label`."
+        },
+        {
+          "name": "isLoading",
+          "control": "boolean",
+          "default": false,
+          "description": "Shows a spinner and stops toggling, keeping focus."
+        },
+        {
+          "name": "isFullWidth",
+          "control": "boolean",
+          "default": false,
+          "description": "Fills the width of its container."
+        },
+        {
+          "name": "disabled",
+          "control": "boolean",
+          "default": false,
+          "description": "Native `disabled`: dimmed and out of the tab order."
         }
       ]
     },
