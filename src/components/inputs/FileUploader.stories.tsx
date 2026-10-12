@@ -16,6 +16,32 @@ const meta = {
   title: 'Components/Inputs/File Uploader',
   tags: ['beta'],
   component: FileUploader,
+  // These descriptions are the docs' API table and the Playground's props
+  // panel; react-docgen supplies the types and defaults.
+  argTypes: {
+    files: { description: 'Controlled list. Pair with `onFilesChange`.', control: false },
+    defaultFiles: { description: 'Starting list when uncontrolled.', control: false },
+    onFilesChange: { description: 'The list after an add or a remove. Rejected files are never in it. Start uploads here.', control: false },
+    onReject: {
+      description: 'Files that did not pass `accept`, `maxSize` or `maxFiles`: `{ file, reason, message }[]`, `reason` being `type`, `size` or `count`.',
+      control: false,
+    },
+    accept: { description: 'As the native attribute: extensions and MIME types, e.g. `.pdf,image/*`. Checked on drop too.', control: 'text' },
+    multiple: { description: 'Many files, appended. Without it, a new file replaces the chosen one.', control: 'boolean' },
+    maxSize: { description: 'Largest file, in bytes.', control: 'number' },
+    maxFiles: { description: 'Most files in the list, with `multiple`.', control: 'number' },
+    label: { description: 'Names the whole uploader, a group.', control: 'text' },
+    helperText: { description: 'Inside the drop zone, under the button: what is allowed, e.g. "PNG or JPG, up to 5 MB."', control: 'text' },
+    getFileStatus: {
+      description: 'Upload progress (0–100) or a short error per file. The uploader does not upload: your code does, and reports here.',
+      control: false,
+    },
+    name: { description: 'Submitted with the form, as a native file input carrying the whole list.', control: 'text' },
+    disabled: { description: 'Fades the icon and buttons; nothing can be added or removed.', control: 'boolean' },
+    required: { description: 'An empty submit shows "Choose at least one file." and focuses the Choose button.', control: 'boolean' },
+    isFullWidth: { description: 'Fills the width of its container instead of 24rem.', control: 'boolean' },
+    className: { description: 'On the outer group.', control: false },
+  },
   args: {
     label: 'Attachments',
     helperText: 'PDF, PNG or JPG, up to 5 MB each.',
@@ -25,6 +51,7 @@ const meta = {
     onFilesChange: fn(),
     onReject: fn(),
   },
+  excludeStories: ['anatomyParts'],
 } satisfies Meta<typeof FileUploader>
 
 export default meta
@@ -226,4 +253,43 @@ export const InForm: Story = {
     const sent = new FormData(canvas.getByRole('form') as HTMLFormElement).getAll('attachments') as File[]
     await expect(sent.map((f) => f.name)).toEqual(['Q3 report.pdf', 'team-photo.jpg'])
   },
+}
+
+/** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
+export const anatomyParts = [
+  { name: 'Label', selector: '[id$="-label"]', description: 'Names the whole uploader, a group.' },
+  { name: 'Drop zone', selector: 'div:has(> input[type="file"])', description: 'Dashed edge; solid while a file is dragged over it.' },
+  { name: 'Choose button', selector: 'div:has(> input[type="file"]) > button', description: 'An accent contained Button. Opens the system picker: the way in for keyboard, screen reader and touch.' },
+  { name: 'Helper text', selector: '[id$="-helper"]', description: 'What is allowed. Describes the Choose button.' },
+  { name: 'File row', selector: 'li', description: 'Type icon, name and size on one line. The name truncates, the size never does.' },
+  { name: 'Type icon', selector: 'li > svg', description: 'A page with a coloured badge for Word, Excel, PowerPoint, PDF, image and audio.' },
+  { name: 'Progress ring', selector: '[role="progressbar"]', description: 'While getFileStatus reports progress under 100. An error takes its place.' },
+  { name: 'Remove button', selector: '[data-remove]', description: 'A ghost icon Button named "Remove <file name>".' },
+]
+
+/** Every part present: helper text, one file uploading and one done. */
+export const Anatomy: Story = {
+  tags: ['!dev'],
+  args: {
+    defaultFiles: [photo, report],
+    getFileStatus: (f) => (f.name === 'team-photo.jpg' ? { progress: 45 } : undefined),
+  },
+  play: async ({ canvasElement }) => {
+    // The docs markers follow these selectors: a DOM change must not leave
+    // a marker pointing at nothing, or at the wrong part.
+    const found = anatomyParts.map(({ selector }) => canvasElement.querySelector(selector))
+    await expect(found.every(Boolean)).toBe(true)
+    await expect(new Set(found).size).toBe(anatomyParts.length)
+    await expect(found[2]).toHaveAccessibleName('Choose files')
+    await expect(found[4]).toContainElement(found[6] as HTMLElement)
+  },
+}
+
+/** Guidelines, Do: the rules up front, so nobody learns them from a rejection. */
+export const DoStateTheRules: Story = {}
+
+/** Guidelines, Don't: no rules shown, so people learn them from a rejection. */
+export const DontHideTheRules: Story = {
+  tags: ['!dev'],
+  args: { helperText: undefined },
 }

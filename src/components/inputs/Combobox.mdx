@@ -1,59 +1,253 @@
-import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
+import { Combobox } from './Combobox'
 import * as ComboboxStories from './Combobox.stories'
+
+{/* A field is 20rem wide; in a state cell it shrinks to the cell instead of
+    spilling into the next. A text input's own default width (about 20
+    characters) is its minimum otherwise, so it is zeroed here and the input
+    grows back to fill the box. */}
+export const Fit = ({ children }) => (
+  <div className="zw-fit" style={{ inlineSize: '100%', minInlineSize: 0 }}>
+    <style>{'.zw-fit input { inline-size: 0 }'}</style>
+    {children}
+  </div>
+)
 
 <Meta of={ComboboxStories} />
 
 # Combobox
 
+<DocTabs>
+<DocTab value="overview">
+
 A field you type into to filter a list of options, then choose one.
-Spec: [uiguideline.com/components/combobox](https://www.uiguideline.com/components/combobox).
-Behaviour from Base UI's [Combobox](https://base-ui.com/react/components/combobox).
+
+<Status of={ComboboxStories} />
 
 <Canvas of={ComboboxStories.Default} />
 
+## Variants
+
+Two sizes, and the field's validation states. Typing filters the list and
+marks the match; the chosen option carries a check.
+
+<Canvas of={ComboboxStories.Sizes} />
+
+| Size | Use for |
+| --- | --- |
+| `md` | Forms and settings: the default. |
+| `sm` | Dense places: a toolbar filter, a table row, beside `sm` buttons. |
+
+<Canvas of={ComboboxStories.Validation} />
+
+<Canvas of={ComboboxStories.Clear} />
+
+## Resources
+
+From npm, or copied into your project through the registry:
+
+```js
+import { Combobox } from 'zweihander/combobox'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/combobox.json
+```
+
+- Source: [src/components/inputs/Combobox.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/inputs/Combobox.tsx)
+- Spec: [uiguideline.com/components/combobox](https://www.uiguideline.com/components/combobox)
+- Behaviour: [Base UI Combobox](https://base-ui.com/react/components/combobox)
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
 ## Anatomy
 
-| Part | What it is |
-| --- | --- |
-| **Label** | `label`. |
-| **Combobox input** | A text input; typing filters the list. |
-| **Clear button** | "Clear selection", a filled circle-x, when `isClearable`. |
-| **Open button** | "Show options": the chevron. Opens the full list. |
-| **Options list** | Filtered as you type; "No matches" when empty, "Loading…" while loading. Options are inset by the field's padding, so their content starts where the input text does. |
-| **Check** | Before the chosen option's label, in the brand colour. |
-| **Option (matched)** | The typed text is marked in each option. |
+<Anatomy parts={ComboboxStories.anatomyParts}>
+  <Story of={ComboboxStories.Anatomy} />
+</Anatomy>
 
-## Props
+The options list opens under the field, at least as wide as it:
 
-| Prop | Values | Default | |
-| --- | --- | --- | --- |
-| `options` | `string[]` or `{ value, label, disabled? }[]` | – | Required. Labels are strings: they are typed and matched. |
-| `value`, `defaultValue` | string or `null` | – | |
-| `onValueChange` | `(value) => void` | – | The spec's `onChange`; `null` when cleared. |
-| `isClearable` | boolean | `true` | |
-| `emptyText` | string | `"No matches"` | |
-| `placeholder`, `label`, `helperText`, `validationState` | | – | |
-| `size`, `isFullWidth` | | | As on Text Input. |
-| `isLoading` | boolean | `false` | Spinner in the field and "Loading…" in the list. |
-| `name` | string | – | Submits the option's value. |
-| `disabled`, `readOnly`, `required`, `autoFocus` | boolean | `false` | |
+- **Option**: the label, with the typed text marked by weight and
+  underline. Options are inset by the field's padding, so their text
+  starts where the input's does.
+- **Check**: before the chosen option's label, in a column kept for every
+  option so labels never shift.
+- **Message**: "No matches" (`emptyText`) when nothing matches,
+  "Loading…" while `isLoading`.
 
-<Controls of={ComboboxStories.Default} />
+<Canvas of={ComboboxStories.OpenButton} />
+
+## Measurements
+
+Each size is a control tier (Foundations / Sizing). Fields take the normal
+inline padding, so the value lines up with the label above it, and the
+field radius, which never becomes a pill.
+
+<SpecTable
+  caption="sm"
+  rows={[
+    { part: 'Field', property: 'Height', token: '--control-sm' },
+    { part: 'Field', property: 'Inline padding', token: '--control-sm-pad' },
+    { part: 'Field', property: 'Corner radius', token: '--control-sm-radius-field' },
+    { part: 'Field', property: 'Gap', token: '--control-sm-gap' },
+    { part: 'Icons and buttons', property: 'Size', token: '--icon-sm' },
+    { part: 'Input', property: 'Font size', token: '--text-body-sm' },
+    { part: 'Input', property: 'Line height', token: '--leading-body-sm' },
+  ]}
+/>
+
+<SpecTable
+  caption="md"
+  rows={[
+    { part: 'Field', property: 'Height', token: '--control-md' },
+    { part: 'Field', property: 'Inline padding', token: '--control-md-pad' },
+    { part: 'Field', property: 'Corner radius', token: '--control-md-radius-field' },
+    { part: 'Field', property: 'Gap', token: '--control-md-gap' },
+    { part: 'Icons and buttons', property: 'Size', token: '--icon-md' },
+    { part: 'Input', property: 'Font size', token: '--text-body' },
+    { part: 'Input', property: 'Line height', token: '--leading-body' },
+  ]}
+/>
+
+<SpecTable
+  caption="Every size"
+  rows={[
+    { part: 'Label and helper', property: 'Gap to the field', token: '--space-1-5' },
+    { part: 'Label and helper', property: 'Font size', token: '--text-body' },
+    { part: 'Clear and open buttons', property: 'Gap between them', token: '--space-1' },
+    { part: 'Options list', property: 'Block padding', token: '--space-1' },
+    { part: 'Options list', property: 'Corner radius', token: '--radius-field' },
+    { part: 'Option', property: 'Minimum height', token: '--control-md' },
+    { part: 'Check', property: 'Size', token: '--icon-md' },
+    { part: 'Focus ring', property: 'Width', token: '--focus-width' },
+    { part: 'Focus ring', property: 'Offset', token: '--focus-offset' },
+    { part: 'Option, buttons', property: 'Minimum on touch screens', token: '--target-coarse' },
+  ]}
+/>
+
+The field is 20rem wide unless `isFullWidth`; the list is at least as
+wide as the field, 4px under it, and scrolls after 20rem (about ten
+options).
+
+## Color
+
+<SpecTable
+  caption="Field"
+  rows={[
+    { part: 'Field', property: 'Background', token: '--card' },
+    { part: 'Field', property: 'Border', token: '--field-border' },
+    { part: 'Field', property: 'Shadow', token: '--shadow-2xs' },
+    { part: 'Label, input', property: 'Colour', token: '--foreground' },
+    { part: 'Placeholder, helper, icons', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Required asterisk', property: 'Colour', token: '--danger-text' },
+    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+  ]}
+/>
+
+<SpecTable
+  caption="Validation and read-only"
+  rows={[
+    { part: 'Border, helper, focus ring, error', property: 'Colour', token: '--danger-text' },
+    { part: 'Border, helper, success', property: 'Colour', token: '--success-text' },
+    { part: 'Field, read-only', property: 'Background', token: '--surface-filled' },
+  ]}
+/>
+
+<SpecTable
+  caption="Options list"
+  rows={[
+    { part: 'List', property: 'Background', token: '--popover' },
+    { part: 'List', property: 'Border', token: '--border' },
+    { part: 'List', property: 'Shadow', token: '--shadow-md' },
+    { part: 'Option', property: 'Colour', token: '--popover-foreground' },
+    { part: 'Option, highlighted', property: 'Background', token: '--accent' },
+    { part: 'Option, highlighted', property: 'Colour', token: '--accent-foreground' },
+    { part: 'Check', property: 'Colour', token: '--primary-text' },
+    { part: 'No matches, Loading…', property: 'Colour', token: '--muted-foreground' },
+  ]}
+/>
+
+The field's edge is a light hairline, about 1.5:1, as in the Claude apps:
+an approved exception to WCAG 1.4.11. The label, placeholder and focus
+ring still mark the field. The matched text keeps the option's own colour,
+so it holds full contrast on the highlighted row.
+
+## States
+
+<States
+  states={[
+    { label: 'Enabled' },
+    { label: 'Focus', pseudo: 'focus' },
+    { label: 'Filled', content: <Fit><Story of={ComboboxStories.Clear} /></Fit> },
+    { label: 'Error', content: <Fit><Story of={ComboboxStories.Validation} /></Fit> },
+    { label: 'Read-only', content: <Fit><Combobox label="Team member" options={['Miya Burns']} defaultValue="Miya Burns" readOnly /></Fit> },
+    { label: 'Disabled', content: <Fit><Story of={ComboboxStories.Disabled} /></Fit> },
+    { label: 'Loading', content: <Fit><Story of={ComboboxStories.Loading} /></Fit> },
+  ]}
+>
+  <Fit><Story of={ComboboxStories.Default} /></Fit>
+</States>
+
+- **Focus** is a 2px `--ring` outline, 2px outside the field, drawn while
+  the input has focus, by pointer too: that is where typing goes. In the
+  error state the ring is `--danger-text`. The clear and open buttons draw
+  their own ring when tabbed to, so the field never shows two.
+- **Hover** changes nothing on the field; the clear and open buttons
+  darken from `--muted-foreground` to `--foreground`.
+- **Error** turns the edge and the helper `--danger-text` together; the
+  words are the message, the colour only points at it.
+- **Read-only** fills the field with `--surface-filled`; there is no clear
+  button.
+- **Disabled** is the enabled look at 50% opacity.
+- **Loading** adds a spinner before the buttons and says "Loading…" in the
+  list.
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={ComboboxStories} />
+</div>
 
 ### Differences from the spec
 
 - **Labels must be strings**, not components: they are what is typed,
   matched and shown in the input.
 - **`emptyText`** is added: an empty list needs to say why.
-- `onValueChange` and native names, as on Select.
+- **`onValueChange`, not `onChange`**, and native names (`disabled`,
+  `readOnly`, `required`), as on Select.
 
-## Usage
+</DocTab>
+<DocTab value="guidelines">
 
-For long lists, or when people already know what they are looking for.
-It chooses from the list only; free text that is not an option is not a
-value.
+## When to use
 
-<Canvas of={ComboboxStories.Clear} />
+Use a Combobox to choose one option from a long list, when people already
+know what they are looking for: a person, a country, a project. Typing a
+few letters is faster than scrolling. It chooses from the list only; free
+text that is not an option is not a value.
+
+<DoDont
+  do={<Story of={ComboboxStories.DoLongList} />}
+  doCaption="A long list people know an entry of: type a few letters, pick it."
+  dont={<Story of={ComboboxStories.DontFewOptions} />}
+  dontCaption="Three options hidden behind typing. A Select or a radio group shows them all."
+/>
+
+## When not to use
+
+- **For a handful of options.** Under about seven, use a
+  [Select](?path=/docs/components-inputs-select--docs), or a
+  [Radio](?path=/docs/components-controls-radio--docs) group when they
+  should all be visible.
+- **For free text.** If any answer is valid, use a
+  [Text Input](?path=/docs/components-inputs-textinput--docs); to filter
+  a page, use [Search](?path=/docs/components-inputs-search--docs).
+- **For several values.** It holds one; a multi-select is not built yet.
 
 ## Accessibility
 
@@ -67,7 +261,14 @@ value.
 - The open button is named "Show options" and is out of the tab order
   (the input already opens the list); the clear button is "Clear
   selection".
+- `validationState="error"` sets `aria-invalid`, and the helper text is
+  the input's description.
 - Loading and empty states are announced from the list.
 - After an option is picked with the pointer, the input loses focus and the
   field returns to rest (no caret, no ring). A keyboard pick keeps focus in
   the input, so keyboard and screen reader users are not dropped to the page.
+- Options are 32px tall; on touch screens (`pointer: coarse`) they grow to
+  44px, and the clear and open buttons get a 44×44px hit area.
+
+</DocTab>
+</DocTabs>

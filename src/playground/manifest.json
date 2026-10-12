@@ -926,7 +926,19 @@
         {
           "name": "placeholder",
           "control": "text",
-          "default": "Type a name"
+          "default": "Type a name",
+          "description": "Shown while the input is empty. A hint, never the label."
+        },
+        {
+          "name": "label",
+          "control": "text",
+          "default": "Team member",
+          "description": "Names the field. Also names the options list."
+        },
+        {
+          "name": "helperText",
+          "control": "text",
+          "description": "Under the field. Read with it as its description."
         },
         {
           "name": "validationState",
@@ -935,7 +947,8 @@
             "default",
             "success",
             "error"
-          ]
+          ],
+          "description": "`error` turns the edge and helper red and sets `aria-invalid`; `success` turns them green."
         },
         {
           "name": "size",
@@ -944,22 +957,24 @@
             "sm",
             "md"
           ],
-          "default": "md"
+          "default": "md",
+          "description": "24px (`sm`) or 32px (`md`) tall, from the control tiers."
         },
         {
           "name": "isFullWidth",
-          "control": "boolean"
+          "control": "boolean",
+          "description": "Fills the width of its container instead of 20rem."
         },
         {
           "name": "isLoading",
           "control": "boolean",
-          "description": "Options are still arriving: a spinner, and \"Loading…\" in the list."
+          "description": "Options are still arriving: a spinner in the field, \"Loading…\" in the list."
         },
         {
           "name": "isClearable",
           "control": "boolean",
           "default": true,
-          "description": "Show a button that clears the selection."
+          "description": "Shows a button that clears the selection."
         },
         {
           "name": "emptyText",
@@ -969,15 +984,18 @@
         },
         {
           "name": "disabled",
-          "control": "boolean"
+          "control": "boolean",
+          "description": "Dimmed, out of the tab order, not submitted."
         },
         {
           "name": "readOnly",
-          "control": "boolean"
+          "control": "boolean",
+          "description": "Shown and submitted, but cannot be changed."
         },
         {
           "name": "required",
-          "control": "boolean"
+          "control": "boolean",
+          "description": "Marks the label with an asterisk and blocks an empty form submit."
         }
       ]
     },
@@ -990,13 +1008,25 @@
       "storyId": "components-inputs-datepicker--default",
       "props": [
         {
+          "name": "label",
+          "control": "text",
+          "default": "Start date",
+          "description": "Names the field."
+        },
+        {
+          "name": "helperText",
+          "control": "text",
+          "description": "Under the field. Replaced by the expected pattern while the typed text is not a valid date."
+        },
+        {
           "name": "validationState",
-          "control": "radio",
+          "control": "inline-radio",
           "options": [
             "default",
             "success",
             "error"
-          ]
+          ],
+          "description": "`error` turns the edge and helper red and sets `aria-invalid`; `success` turns them green."
         },
         {
           "name": "size",
@@ -1005,35 +1035,40 @@
             "sm",
             "md"
           ],
-          "default": "md"
+          "default": "md",
+          "description": "24px (`sm`) or 32px (`md`) tall, from the control tiers."
         },
         {
           "name": "locale",
           "control": "text",
           "default": "en-GB",
-          "description": "BCP 47 tag; decides the typed order (day/month/year) and the calendar's."
+          "description": "BCP 47 tag. Sets the typed order (day/month/year) and the calendar's month and day names."
         },
         {
           "name": "weekStartsOn",
           "control": "number",
-          "default": 1
+          "default": 1,
+          "description": "First column of the calendar: 0 is Sunday, 1 is Monday. Defaults to the locale's."
         },
         {
           "name": "placeholder",
           "control": "text",
-          "description": "Defaults to the locale's pattern, e.g. \"dd/mm/yyyy\"."
+          "description": "Defaults to the locale's pattern, e.g. \"dd/mm/yyyy\". Keep it a pattern, not an example date."
         },
         {
           "name": "isFullWidth",
-          "control": "boolean"
+          "control": "boolean",
+          "description": "Fills the width of its container instead of 20rem."
         },
         {
           "name": "disabled",
-          "control": "boolean"
+          "control": "boolean",
+          "description": "Dimmed, out of the tab order, not submitted."
         },
         {
           "name": "required",
-          "control": "boolean"
+          "control": "boolean",
+          "description": "Marks the label with an asterisk and blocks an empty form submit."
         }
       ]
     },
@@ -1048,23 +1083,26 @@
         {
           "name": "label",
           "control": "text",
-          "default": "Period"
+          "default": "Period",
+          "description": "Names the field."
         },
         {
           "name": "locale",
           "control": "text",
-          "default": "en-GB"
+          "default": "en-GB",
+          "description": "BCP 47 tag. Sets the typed order and the calendars' month and day names."
         },
         {
           "name": "weekStartsOn",
           "control": "number",
-          "default": 1
+          "default": 1,
+          "description": "First column of the calendars, and the start of \"This week\". Defaults to the locale's."
         },
         {
           "name": "presets",
           "control": "boolean",
           "default": false,
-          "description": "A list beside the calendars: `true` for the built-in one (Today … Last year), or your own."
+          "description": "Whole periods beside the calendars. `true` for the built-in list (Today to Last year); `rangePresets(weekStartsOn)` returns it, to extend."
         },
         {
           "name": "size",
@@ -1073,7 +1111,43 @@
             "sm",
             "md"
           ],
-          "default": "md"
+          "default": "md",
+          "description": "24px (`sm`) or 32px (`md`) tall, from the control tiers."
+        },
+        {
+          "name": "helperText",
+          "control": "text",
+          "description": "Under the field. Replaced by the expected pattern while the typed text is not a valid range."
+        },
+        {
+          "name": "validationState",
+          "control": "inline-radio",
+          "options": [
+            "default",
+            "success",
+            "error"
+          ],
+          "description": "`error` turns the edge and helper red and sets `aria-invalid`; `success` turns them green."
+        },
+        {
+          "name": "placeholder",
+          "control": "text",
+          "description": "Defaults to the locale's pattern, e.g. \"dd/mm/yyyy – dd/mm/yyyy\"."
+        },
+        {
+          "name": "isFullWidth",
+          "control": "boolean",
+          "description": "Fills the width of its container instead of 20rem."
+        },
+        {
+          "name": "disabled",
+          "control": "boolean",
+          "description": "Dimmed, out of the tab order, not submitted."
+        },
+        {
+          "name": "required",
+          "control": "boolean",
+          "description": "Marks the label with an asterisk and blocks an empty form submit."
         }
       ]
     },
@@ -1089,35 +1163,52 @@
           "name": "accept",
           "control": "text",
           "default": ".pdf,image/png,image/jpeg",
-          "description": "As the native attribute: extensions and MIME types, e.g. `\".pdf,image/*\"`. Also checked on drop."
+          "description": "As the native attribute: extensions and MIME types, e.g. `.pdf,image/*`. Checked on drop too."
         },
         {
           "name": "multiple",
           "control": "boolean",
-          "default": true
+          "default": true,
+          "description": "Many files, appended. Without it, a new file replaces the chosen one."
         },
         {
           "name": "maxSize",
           "control": "number",
           "default": 5000000,
-          "description": "In bytes."
+          "description": "Largest file, in bytes."
         },
         {
           "name": "maxFiles",
-          "control": "number"
+          "control": "number",
+          "description": "Most files in the list, with `multiple`."
+        },
+        {
+          "name": "label",
+          "control": "text",
+          "default": "Attachments",
+          "description": "Names the whole uploader, a group."
+        },
+        {
+          "name": "helperText",
+          "control": "text",
+          "default": "PDF, PNG or JPG, up to 5 MB each.",
+          "description": "Inside the drop zone, under the button: what is allowed, e.g. \"PNG or JPG, up to 5 MB.\""
         },
         {
           "name": "disabled",
           "control": "boolean",
-          "default": false
+          "default": false,
+          "description": "Fades the icon and buttons; nothing can be added or removed."
         },
         {
           "name": "required",
-          "control": "boolean"
+          "control": "boolean",
+          "description": "An empty submit shows \"Choose at least one file.\" and focuses the Choose button."
         },
         {
           "name": "isFullWidth",
-          "control": "boolean"
+          "control": "boolean",
+          "description": "Fills the width of its container instead of 24rem."
         }
       ]
     },

@@ -32,14 +32,41 @@ const meta = {
     },
   },
   args: { label: 'Start date', locale: 'en-GB', weekStartsOn: 1, defaultValue: new Date(2026, 8, 18), onValueChange: fn() },
+  // These descriptions are the docs' API table and the Playground's props
+  // panel; react-docgen supplies the types and defaults.
   argTypes: {
-    size: { control: 'inline-radio', options: ['sm', 'md'] },
-    value: { control: false },
-    defaultValue: { control: false },
-    min: { control: false },
-    max: { control: false },
+    value: { description: 'Controlled date, or `null`. Pair with `onValueChange`.', control: false },
+    defaultValue: { description: 'Starting date when uncontrolled.', control: false },
+    onValueChange: {
+      description: 'Called with the picked or typed date, or `null` when cleared. Not called while the typed text is not a date yet.',
+      control: false,
+    },
+    label: { description: 'Names the field.', control: 'text' },
+    helperText: { description: 'Under the field. Replaced by the expected pattern while the typed text is not a valid date.', control: 'text' },
+    validationState: {
+      description: '`error` turns the edge and helper red and sets `aria-invalid`; `success` turns them green.',
+      control: 'inline-radio',
+      options: ['default', 'success', 'error'],
+    },
+    size: { description: '24px (`sm`) or 32px (`md`) tall, from the control tiers.', control: 'inline-radio', options: ['sm', 'md'] },
+    min: { description: 'Earliest allowed date. Days before it are disabled in the calendar and rejected when typed.', control: false },
+    max: { description: 'Latest allowed date, as `min`.', control: false },
+    isDateDisabled: { description: 'Return `true` to disable a day, e.g. weekends. Checked when typing too.', control: false },
+    locale: { description: 'BCP 47 tag. Sets the typed order (day/month/year) and the calendar\'s month and day names.', control: 'text' },
+    weekStartsOn: { description: 'First column of the calendar: 0 is Sunday, 1 is Monday. Defaults to the locale\'s.', control: 'number' },
+    placeholder: { description: 'Defaults to the locale\'s pattern, e.g. "dd/mm/yyyy". Keep it a pattern, not an example date.', control: 'text' },
+    isFullWidth: { description: 'Fills the width of its container instead of 20rem.', control: 'boolean' },
+    name: { description: 'Submitted as `yyyy-mm-dd`, whatever the display order.', control: 'text' },
+    disabled: { description: 'Dimmed, out of the tab order, not submitted.', control: 'boolean' },
+    required: { description: 'Marks the label with an asterisk and blocks an empty form submit.', control: 'boolean' },
+    id: { description: 'For the input, e.g. to point an outside label at it.', control: false },
+    className: { description: 'On the field\'s outer element.', control: false },
+    'aria-label': { description: 'Names the field when there is no visible `label`.', control: 'text' },
   },
-  decorators: [(Story) => <div style={{ minBlockSize: '26rem' }}>{Story()}</div>],
+  // Room for the open calendar, which the plays open. The docs' still
+  // pictures (anatomy, do and don't) opt out with `popupRoom: false`.
+  decorators: [(Story, { parameters }) => (parameters.popupRoom === false ? Story() : <div style={{ minBlockSize: '26rem' }}>{Story()}</div>)],
+  excludeStories: ['anatomyParts'],
 } satisfies Meta<typeof DatePicker>
 
 export default meta
@@ -180,3 +207,44 @@ export const InAForm: Story = {
 }
 
 export const Disabled: Story = { args: { disabled: true } }
+
+/** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
+export const anatomyParts = [
+  { name: 'Label', selector: 'label', description: 'Names the field.' },
+  { name: 'Field', selector: ':has(> input)', description: 'The box: edge, fill and focus ring. A click anywhere in it focuses the input.' },
+  { name: 'Input', selector: 'input', description: 'The date as text, in the locale\'s order. A click opens the calendar and keeps focus here.' },
+  { name: 'Calendar button', selector: 'button[aria-label^="Choose date"]', description: 'Opens the calendar with focus on the selected day.' },
+  { name: 'Helper text', selector: 'p', description: 'Optional. Shows the expected pattern while the text is not a date.' },
+]
+
+/** Every part present, the calendar closed. The calendar itself is the Calendar component. */
+export const Anatomy: Story = {
+  tags: ['!dev'],
+  args: { helperText: 'Your first day at work.' },
+  parameters: { popupRoom: false },
+  play: async ({ canvasElement }) => {
+    // The docs markers follow these selectors: a DOM change must not leave
+    // a marker pointing at nothing, or at the wrong part.
+    const found = anatomyParts.map(({ selector }) => canvasElement.querySelector(selector))
+    await expect(found.every(Boolean)).toBe(true)
+    await expect(new Set(found).size).toBe(anatomyParts.length)
+    await expect(found[1]).toContainElement(found[3] as HTMLElement)
+    await expect(found[4]).toHaveTextContent('Your first day at work.')
+  },
+}
+
+/** Guidelines, Do: the empty field shows the pattern to type. */
+export const DoPatternPlaceholder: Story = {
+  args: { defaultValue: null, helperText: 'Your first day at work.' },
+  parameters: { popupRoom: false },
+  play: async ({ canvas }) => {
+    await expect(canvas.getByRole('textbox')).toHaveAttribute('placeholder', 'dd/mm/yyyy')
+  },
+}
+
+/** Guidelines, Don't: an example date as the placeholder reads as a value already filled in. */
+export const DontExamplePlaceholder: Story = {
+  tags: ['!dev'],
+  args: { defaultValue: null, placeholder: '18/09/2026', helperText: 'Your first day at work.' },
+  parameters: { popupRoom: false },
+}

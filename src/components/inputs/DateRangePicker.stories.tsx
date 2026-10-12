@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test'
-import { DateRangePicker, rangePresets } from './DatePicker'
+import { DatePicker, DateRangePicker, rangePresets } from './DatePicker'
 
 /** A day's accessible name, from the same formatter the calendar uses. */
 const day = (year: number, month: number, date: number) =>
@@ -34,15 +34,45 @@ const meta = {
     defaultValue: { start: new Date(2026, 8, 7), end: new Date(2026, 8, 13) },
     onValueChange: fn(),
   },
+  // These descriptions are the docs' API table and the Playground's props
+  // panel; react-docgen supplies the types and defaults.
   argTypes: {
-    size: { control: 'inline-radio', options: ['sm', 'md'] },
-    value: { control: false },
-    defaultValue: { control: false },
-    min: { control: false },
-    max: { control: false },
-    presets: { control: 'boolean' },
+    value: { description: 'Controlled range, `{ start, end }` with both ends set, or `null`. Pair with `onValueChange`.', control: false },
+    defaultValue: { description: 'Starting range when uncontrolled.', control: false },
+    onValueChange: {
+      description: 'Called once both ends are in, with `start` never after `end`, or with `null` when cleared.',
+      control: false,
+    },
+    presets: {
+      description: 'Whole periods beside the calendars. `true` for the built-in list (Today to Last year); `rangePresets(weekStartsOn)` returns it, to extend.',
+      control: 'boolean',
+    },
+    label: { description: 'Names the field.', control: 'text' },
+    helperText: { description: 'Under the field. Replaced by the expected pattern while the typed text is not a valid range.', control: 'text' },
+    validationState: {
+      description: '`error` turns the edge and helper red and sets `aria-invalid`; `success` turns them green.',
+      control: 'inline-radio',
+      options: ['default', 'success', 'error'],
+    },
+    size: { description: '24px (`sm`) or 32px (`md`) tall, from the control tiers.', control: 'inline-radio', options: ['sm', 'md'] },
+    min: { description: 'Earliest allowed date, for either end.', control: false },
+    max: { description: 'Latest allowed date, for either end.', control: false },
+    isDateDisabled: { description: 'Return `true` to disable a day. Checked when typing too.', control: false },
+    locale: { description: 'BCP 47 tag. Sets the typed order and the calendars\' month and day names.', control: 'text' },
+    weekStartsOn: { description: 'First column of the calendars, and the start of "This week". Defaults to the locale\'s.', control: 'number' },
+    placeholder: { description: 'Defaults to the locale\'s pattern, e.g. "dd/mm/yyyy – dd/mm/yyyy".', control: 'text' },
+    isFullWidth: { description: 'Fills the width of its container instead of 20rem.', control: 'boolean' },
+    name: { description: 'Submitted as `yyyy-mm-dd/yyyy-mm-dd`, an ISO 8601 interval.', control: 'text' },
+    disabled: { description: 'Dimmed, out of the tab order, not submitted.', control: 'boolean' },
+    required: { description: 'Marks the label with an asterisk and blocks an empty form submit.', control: 'boolean' },
+    id: { description: 'For the input, e.g. to point an outside label at it.', control: false },
+    className: { description: 'On the field\'s outer element.', control: false },
+    'aria-label': { description: 'Names the field when there is no visible `label`.', control: 'text' },
   },
-  decorators: [(Story) => <div style={{ minBlockSize: '30rem' }}>{Story()}</div>],
+  // Room for the open calendars, which the plays open. The docs' still
+  // pictures (anatomy, do and don't) opt out with `popupRoom: false`.
+  decorators: [(Story, { parameters }) => (parameters.popupRoom === false ? Story() : <div style={{ minBlockSize: '30rem' }}>{Story()}</div>)],
+  excludeStories: ['anatomyParts'],
 } satisfies Meta<typeof DateRangePicker>
 
 export default meta
@@ -137,3 +167,46 @@ export const InAForm: Story = {
 }
 
 export const Vietnamese: Story = { args: { label: 'Khoảng thời gian', locale: 'vi-VN', weekStartsOn: undefined, presets: true } }
+
+/** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
+export const anatomyParts = [
+  { name: 'Label', selector: 'label', description: 'Names the field.' },
+  { name: 'Field', selector: ':has(> input)', description: 'The box: edge, fill and focus ring, as Date Picker\'s.' },
+  { name: 'Input', selector: 'input', description: 'Both dates as text, start first. A click opens the calendars and keeps focus here.' },
+  { name: 'Calendar button', selector: 'button[aria-label^="Choose dates"]', description: 'Opens the calendars, with focus in them.' },
+  { name: 'Helper text', selector: 'p', description: 'Optional. Shows the expected pattern while the text is not a range.' },
+]
+
+/** Every part present, the calendars closed. */
+export const Anatomy: Story = {
+  tags: ['!dev'],
+  args: { helperText: 'Up to one quarter.' },
+  parameters: { popupRoom: false },
+  play: async ({ canvasElement }) => {
+    // The docs markers follow these selectors: a DOM change must not leave
+    // a marker pointing at nothing, or at the wrong part.
+    const found = anatomyParts.map(({ selector }) => canvasElement.querySelector(selector))
+    await expect(found.every(Boolean)).toBe(true)
+    await expect(new Set(found).size).toBe(anatomyParts.length)
+    await expect(found[1]).toContainElement(found[3] as HTMLElement)
+    await expect(found[4]).toHaveTextContent('Up to one quarter.')
+  },
+}
+
+/** Guidelines, Do: one field for one period. */
+export const DoOneField: Story = {
+  args: { label: 'Report period', presets: true },
+  parameters: { popupRoom: false },
+}
+
+/** Guidelines, Don't: two Date Pickers for one period, which can be left half done or set back to front. */
+export const DontTwoFields: Story = {
+  tags: ['!dev'],
+  parameters: { popupRoom: false },
+  render: () => (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-3)' }}>
+      <DatePicker label="From" locale="en-GB" defaultValue={new Date(2026, 8, 13)} />
+      <DatePicker label="To" locale="en-GB" defaultValue={new Date(2026, 8, 7)} />
+    </div>
+  ),
+}
