@@ -94,6 +94,15 @@ export default defineConfig({
           // A failure already writes the actual image and a diff; another
           // screenshot would land beside the baselines.
           screenshotFailures: false,
+          expect: {
+            toMatchScreenshot: {
+              // Flat in src/__screenshots__/. The default puts them in a
+              // folder named after the test file, visual.test.tsx/, which
+              // any src/**/*.tsx glob then tries to read as a file.
+              resolveScreenshotPath: ({ root, testFileDirectory, arg, browserName, platform, ext }) =>
+                `${root}/${testFileDirectory}/__screenshots__/${arg}-${browserName}-${platform}${ext}`,
+            },
+          },
         },
       },
     }]

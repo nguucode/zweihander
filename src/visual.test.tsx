@@ -7,7 +7,7 @@ import { within } from 'storybook/test'
 import preview from '../.storybook/preview'
 
 /* Visual regression: one story per component, light and dark, compared
-   pixel by pixel against a baseline in __screenshots__/visual.test.tsx/.
+   pixel by pixel against a baseline in __screenshots__/.
 
    Baselines are only valid from the machine that made them, so they are
    made on the CI runner (Linux, Chromium), never on a Mac: label the PR
