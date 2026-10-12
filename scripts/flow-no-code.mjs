@@ -17,7 +17,7 @@ const isNoCode = (path) =>
 export const codePaths = (paths) => paths.filter((p) => !isNoCode(p))
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  const git = (...args) => execFileSync('git', args, { encoding: 'utf8' }).split('\n').filter(Boolean)
+  const git = (...args) => execFileSync('git', ['-c', 'core.quotePath=false', ...args], { encoding: 'utf8' }).split('\n').filter(Boolean)
   const [base] = git('merge-base', 'origin/main', 'HEAD')
   const paths = [
     ...new Set([...git('diff', '--name-only', '--no-renames', base), ...git('ls-files', '--others', '--exclude-standard')]),
