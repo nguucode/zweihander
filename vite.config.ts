@@ -31,7 +31,9 @@ export default defineConfig({
       },
     },
   },
-  optimizeDeps: { include: baseUiEntries },
+  // The docs block tests import two Storybook entry points the stories do not;
+  // listed for the same reason as Base UI's.
+  optimizeDeps: { include: [...baseUiEntries, 'storybook/internal/core-events', 'storybook/preview-api'] },
   resolve: {
     alias: {
       '@': path.resolve(dirname, './src'),

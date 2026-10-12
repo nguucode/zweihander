@@ -90,6 +90,8 @@ const preview: Preview = {
           'Patterns',
           'Templates',
           ['Overview'],
+          // Tooling for the docs themselves, last.
+          'Internal',
         ],
       },
     },
