@@ -1,62 +1,199 @@
-import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
 import * as BreadcrumbsStories from './Breadcrumbs.stories'
 
 <Meta of={BreadcrumbsStories} />
 
 # Breadcrumbs
 
-The trail from the top of a hierarchy down to the current page, each
-step a link back up. Spec:
-[uiguideline.com/components/breadcrumbs](https://www.uiguideline.com/components/breadcrumbs).
-A plain element.
+<DocTabs>
+<DocTab value="overview">
+
+The trail from the top of a hierarchy down to the current page, each step a
+link back up.
+
+<Status of={BreadcrumbsStories} />
 
 <Canvas of={BreadcrumbsStories.Default} />
 
-## Anatomy
+## Variants
 
-| Part | What it is |
+Breadcrumbs has one look. What changes is the size, how a long trail
+collapses, and what sits between the steps.
+
+| Form | Use for |
 | --- | --- |
-| **Link** | Each level above the current page, `--muted-foreground`, underlined on hover. |
-| **Separator** | A chevron (or any node), decorative. |
-| **Current page** | The last item, `--foreground`, medium weight, not a link. |
-| **Ellipsis** | With `maxItems`, a button standing in for the collapsed middle. |
-
-## Props
-
-| Prop | Values | Default | |
-| --- | --- | --- | --- |
-| `items` | `{ label, href?, render? }[]` | – | Required. Top level first; the last is the current page. |
-| `maxItems` | number (2 or more) | – | Collapse the middle beyond this many. |
-| `separator` | node | chevron | |
-| `size` | `sm`, `md` | `md` | `body-sm` or `body`. |
-| `aria-label` | string | `Breadcrumb` | The landmark's name. |
-
-`render` on an item replaces its `<a>`, e.g. with a router's link. Every
-other `<nav>` attribute passes through.
-
-<Controls of={BreadcrumbsStories.Default} />
-
-### Design notes
-
-- **Muted links, underlined on hover.** The trail is obviously a row of
-  links, so it can drop the permanent underline that links in running
-  text keep; the current page stands out by colour and weight instead.
-- **The current page is not a link.** A link to the page you are on does
-  nothing useful and reads as one more place to go.
-
-## Usage
-
-<Canvas of={BreadcrumbsStories.Collapsed} />
+| `md` | Under a page title, at body size. The default. |
+| `sm` | Dense headers, panels and side sheets, at `body-sm`. |
+| `maxItems` | Deep hierarchies, or a trail in a narrow place: the middle collapses to "…", which expands in place. |
+| `separator` | A slash or other glyph, where a chevron would clash with nearby icons. |
 
 <Canvas of={BreadcrumbsStories.Small} />
 
+<Canvas of={BreadcrumbsStories.Collapsed} />
+
 <Canvas of={BreadcrumbsStories.CustomSeparator} />
+
+## Resources
+
+From npm, or copied into your project through the registry:
+
+```js
+import { Breadcrumbs } from 'zweihander/breadcrumbs'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/breadcrumbs.json
+```
+
+- Source: [src/components/navigation/Breadcrumbs.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/navigation/Breadcrumbs.tsx)
+- Spec: [uiguideline.com/components/breadcrumbs](https://www.uiguideline.com/components/breadcrumbs)
+- Behaviour: a plain `<nav>` and `<ol>`, after the [APG breadcrumb pattern](https://www.w3.org/WAI/ARIA/apg/patterns/breadcrumb/)
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
+## Anatomy
+
+<Anatomy parts={BreadcrumbsStories.anatomyParts}>
+  <Story of={BreadcrumbsStories.Anatomy} />
+</Anatomy>
+
+Each step is a list item: its link (or the ellipsis), then a separator.
+The last item has no separator after it.
+
+## Measurements
+
+Breadcrumbs is text, not a row of controls: its height is the line height
+of its size.
+
+<SpecTable
+  caption="sm"
+  rows={[
+    { part: 'Text', property: 'Font size', token: '--text-body-sm' },
+    { part: 'Text', property: 'Line height', token: '--leading-body-sm' },
+  ]}
+/>
+
+<SpecTable
+  caption="md"
+  rows={[
+    { part: 'Text', property: 'Font size', token: '--text-body' },
+    { part: 'Text', property: 'Line height', token: '--leading-body' },
+  ]}
+/>
+
+<SpecTable
+  caption="Every size"
+  rows={[
+    { part: 'Item', property: 'Gap between items, and around the separator', token: '--space-1' },
+    { part: 'Ellipsis', property: 'Inline padding', token: '--space-1' },
+    { part: 'Link and ellipsis', property: 'Corner radius', token: '--radius-sm' },
+    { part: 'Focus ring', property: 'Width', token: '--focus-width' },
+    { part: 'Focus ring', property: 'Offset', token: '--focus-offset' },
+    { part: 'Ellipsis', property: 'Hit area on touch screens', token: '--target-coarse' },
+  ]}
+/>
+
+The separator icon is 1em: it follows the text size.
+
+## Color
+
+One colour set. Switch the theme in the toolbar: the values follow.
+
+<SpecTable
+  caption="Every size"
+  rows={[
+    { part: 'Link', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Link, hover', property: 'Colour', token: '--foreground' },
+    { part: 'Current page', property: 'Colour', token: '--foreground' },
+    { part: 'Separator', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Ellipsis', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Ellipsis, hover', property: 'Background', token: '--accent' },
+    { part: 'Ellipsis, hover', property: 'Colour', token: '--accent-foreground' },
+    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+  ]}
+/>
+
+## States
+
+<States
+  states={[
+    { label: 'Enabled' },
+    { label: 'Hover', pseudo: 'hover' },
+    { label: 'Focus', pseudo: 'focus-visible' },
+  ]}
+>
+  <Story of={BreadcrumbsStories.StatesExample} />
+</States>
+
+- **Hover** turns a link to `--foreground` and underlines it; on the
+  ellipsis it fills an `--accent` chip.
+- **Focus** is a 2px `--ring` outline, 2px outside the link or the
+  ellipsis.
+- There is no disabled state: a level the reader cannot open is left out
+  of the trail.
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={BreadcrumbsStories} />
+</div>
+
+Every other `<nav>` attribute passes through.
+
+</DocTab>
+<DocTab value="guidelines">
+
+## When to use
+
+Use Breadcrumbs on pages three or more levels deep, under the page title,
+so a reader can see where they are and jump back up any number of levels.
+It is a secondary aid: the main navigation still has to get people
+everywhere.
+
+Keep the trail on one line. When it would wrap, collapse the middle with
+`maxItems`; the first level and the nearest ones stay in view.
+
+<DoDont
+  do={<Story of={BreadcrumbsStories.DoCollapseLongTrail} />}
+  doCaption="Collapse a long trail with maxItems: one line, and the levels that matter most stay visible."
+  dont={<Story of={BreadcrumbsStories.DontWrapLongTrail} />}
+  dontCaption="A trail that wraps reads as two rows and pushes the page down."
+/>
+
+Write each label as the title of the page it opens, short enough to scan.
+The last item is the current page, as text: a link to the page you are on
+does nothing useful.
+
+## When not to use
+
+- **For history.** Breadcrumbs shows where a page sits, not how the reader
+  got there. For "go back", use a Back link or
+  [Button](?path=/docs/components-buttons-button--docs).
+- **On a flat site.** One or two levels need no trail; the main
+  navigation already says where you are.
+- **For the steps of a task.** Use a Stepper: it shows the steps ahead
+  too, and which are done.
+- **As the main navigation.** Use a Sidebar or Tabs.
 
 ## Accessibility
 
-- A `<nav>` landmark named "Breadcrumb", around an ordered list: screen
-  readers announce "list, 4 items" and the position of each.
-- The last item has `aria-current="page"`.
+- A `<nav>` landmark named "Breadcrumb" (change it with `aria-label`),
+  around an ordered list: screen readers announce the number of items and
+  the position of each.
+- Each level above the current page is a real `<a href>`, in the tab
+  order.
+- The last item is text with `aria-current="page"`, not a link.
 - Separators are `aria-hidden`, so they are not read between items.
-- The ellipsis is a button named "Show 3 more". Pressing it expands the
-  trail and moves focus to the first item it revealed.
+- The ellipsis is a button named "Show 3 more". Enter or Space expands the
+  trail and moves focus to the first item it revealed, rather than
+  dropping it on the page.
+- The ellipsis is under 44px; on touch screens (`pointer: coarse`) its hit
+  area grows to 44×44px without it growing.
+- Focus ring: 2px `--ring`, 2px offset.
+
+</DocTab>
+</DocTabs>

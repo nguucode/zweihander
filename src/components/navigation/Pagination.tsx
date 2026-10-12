@@ -68,9 +68,11 @@ export function Pagination({
       'aria-current': current ? ('page' as const) : undefined,
     }
     if (getHref) {
-      // A link at the ends has nowhere to go: no href, aria-disabled.
+      // A link at the ends has nowhere to go: no href, aria-disabled. Without
+      // href an <a> has no role, and aria-label is not allowed on it, so the
+      // role is set back explicitly.
       return disabled ? (
-        <a {...common} aria-disabled="true">
+        <a {...common} role="link" aria-disabled="true">
           {content}
         </a>
       ) : (

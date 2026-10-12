@@ -1,76 +1,245 @@
-import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
 import * as TabsStories from './Tabs.stories'
 
 <Meta of={TabsStories} />
 
 # Tabs
 
+<DocTabs>
+<DocTab value="overview">
+
 Switches between views of the same thing without leaving the page:
-Overview, Activity, Settings of one project. Spec:
-[uiguideline.com/components/tabs](https://www.uiguideline.com/components/tabs).
-Behaviour from Base UI's [Tabs](https://base-ui.com/react/components/tabs).
+Overview, Activity, Settings of one project.
+
+<Status of={TabsStories} />
 
 <Canvas of={TabsStories.Default} />
 
-## Anatomy
+## Variants
 
-| Part | What it is |
+`appearance` is the look. Either takes either size and orientation.
+
+| Appearance | Use for |
 | --- | --- |
-| **Tab list** | The row (or column) of tabs. |
-| **Tab** | Optional icon and a label, medium weight. `--muted-foreground` until selected, then `--primary-text` (underline) or `--foreground` (pills; `--subtle-foreground` until selected). |
-| **Indicator** | `underline`: a 2px `--primary` bar that slides to the selected tab. `pills`: a `--card` chip with a `--border` hairline and `--shadow-xs` on a `--muted` track. |
-| **Panel** | The selected tab's `content`. |
-
-## Props
-
-| Prop | Values | Default | |
-| --- | --- | --- | --- |
-| `items` | `{ value, label, content?, icon?, disabled? }[]` | – | Required. |
-| `value`, `defaultValue`, `onValueChange` | string | first enabled | Controlled or uncontrolled. |
-| `appearance` | `underline`, `pills` | `underline` | |
-| `size` | `sm`, `md` | `md` | 24 or 32px tabs. |
-| `orientation` | `horizontal`, `vertical` | `horizontal` | |
-| `isFullWidth` | boolean | `false` | Tabs share the width equally. |
-| `activateOnFocus` | boolean | `false` | Select as focus moves. |
-| `keepMounted` | boolean | `false` | Keep hidden panels in the DOM. |
-| `aria-label` | string | – | Names the tab list. |
-
-<Controls of={TabsStories.Default} />
-
-### Design notes
-
-- **Underline for sections, pills for view switches.** Underline tabs
-  sit on a 1px rule and read as the sections of a page; pills sit in a
-  `--muted` track and suit a compact "List / Board" switch in a toolbar.
-- **Pills keep full-strength labels.** `--muted-foreground` is 4.3:1 on
-  the `--muted` track, under the 4.5:1 floor, so every pill label is
-  `--foreground` and the selected one is marked by its lifted,
-  outlined segment rather than by colour.
-- **Selection is manual by default.** Arrow keys move focus; Enter or
-  Space selects. That keeps a slow panel from loading on every keypress;
-  `activateOnFocus` switches to selecting as you go, for light panels.
-
-## Usage
-
-Name the list with `aria-label` when no heading does.
+| `underline` | The sections of a page or a panel. Tabs sit on a 1px rule; a bar slides under the selected one. The default. |
+| `pills` | A compact view switch in a toolbar, such as List / Board. A segmented track with the selected tab lifted. |
 
 <Canvas of={TabsStories.Pills} />
 
-<Canvas of={TabsStories.FullWidth} />
+| Form | Use for |
+| --- | --- |
+| `isFullWidth` | Two to four tabs that should fill a narrow container, such as a side panel or a phone screen. |
+| `vertical` | Many sections, or labels too long for a row: settings pages, a panel beside its content. |
+| Icons | Recognisable icons beside the label. Never an icon alone: the label is the tab's name. |
 
-<Canvas of={TabsStories.WithIcons} />
+<Canvas of={TabsStories.FullWidth} />
 
 <Canvas of={TabsStories.Vertical} />
 
-<Canvas of={TabsStories.Small} />
+<Canvas of={TabsStories.WithIcons} />
+
+## Resources
+
+From npm, or copied into your project through the registry:
+
+```js
+import { Tabs } from 'zweihander/tabs'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/tabs.json
+```
+
+- Source: [src/components/navigation/Tabs.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/navigation/Tabs.tsx)
+- Spec: [uiguideline.com/components/tabs](https://www.uiguideline.com/components/tabs)
+- Behaviour: [Base UI Tabs](https://base-ui.com/react/components/tabs)
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
+## Anatomy
+
+<Anatomy parts={TabsStories.anatomyParts}>
+  <Story of={TabsStories.Anatomy} />
+</Anatomy>
+
+The indicator is one element for the whole list. It moves to the selected
+tab rather than each tab drawing its own, so a change of tab slides it
+across.
+
+## Measurements
+
+Each size is a control tier (Foundations / Sizing). A tab is a button in a
+row, so it takes the spacious inline padding.
+
+<SpecTable
+  caption="sm"
+  rows={[
+    { part: 'Tab', property: 'Height', token: '--control-sm' },
+    { part: 'Tab', property: 'Inline padding', token: '--control-sm-pad-spacious' },
+    { part: 'Tab', property: 'Gap between icon and label', token: '--control-sm-gap' },
+    { part: 'Tab, pills', property: 'Track corner radius', token: '--control-sm-radius-field' },
+    { part: 'Icon', property: 'Size', token: '--icon-sm' },
+    { part: 'Label', property: 'Font size', token: '--text-body-sm' },
+    { part: 'Label', property: 'Line height', token: '--leading-body-sm' },
+  ]}
+/>
+
+<SpecTable
+  caption="md"
+  rows={[
+    { part: 'Tab', property: 'Height', token: '--control-md' },
+    { part: 'Tab', property: 'Inline padding', token: '--control-md-pad-spacious' },
+    { part: 'Tab', property: 'Gap between icon and label', token: '--control-md-gap' },
+    { part: 'Tab, pills', property: 'Track corner radius', token: '--control-md-radius-field' },
+    { part: 'Icon', property: 'Size', token: '--icon-md' },
+    { part: 'Label', property: 'Font size', token: '--text-body' },
+    { part: 'Label', property: 'Line height', token: '--leading-body' },
+  ]}
+/>
+
+<SpecTable
+  caption="Every size"
+  rows={[
+    { part: 'Tab list', property: 'Gap between tabs', token: '--space-1' },
+    { part: 'Tab list', property: 'Gap to the panel', token: '--space-4' },
+    { part: 'Tab, underline', property: 'Corner radius (the focus ring follows it)', token: '--radius-sm' },
+    { part: 'Tab', property: 'Focus ring offset (inside the tab)', token: '--focus-offset-inset' },
+    { part: 'Panel', property: 'Focus ring offset', token: '--focus-offset' },
+    { part: 'Focus ring', property: 'Width', token: '--focus-width' },
+    { part: 'Tab', property: 'Height on touch screens', token: '--target-coarse' },
+  ]}
+/>
+
+The underline indicator is 2px. In `pills`, the track has a 2px inset
+and the chip's corner is the track's minus 2px, so the two stay concentric
+at every size.
+
+## Color
+
+Each appearance has its own label colours and indicator. Switch the theme
+and the accent in the toolbar: the values follow.
+
+<SpecTable
+  caption="underline"
+  rows={[
+    { part: 'Tab', property: 'Label colour', token: '--muted-foreground' },
+    { part: 'Tab, hover', property: 'Label colour', token: '--foreground' },
+    { part: 'Selected tab', property: 'Label colour', token: '--primary-text' },
+    { part: 'Indicator', property: 'Colour', token: '--primary' },
+    { part: 'Tab list', property: 'Rule', token: '--border' },
+  ]}
+/>
+
+<SpecTable
+  caption="pills"
+  rows={[
+    { part: 'Tab list', property: 'Track', token: '--muted' },
+    { part: 'Tab', property: 'Label colour', token: '--subtle-foreground' },
+    { part: 'Tab, hover, and selected tab', property: 'Label colour', token: '--foreground' },
+    { part: 'Indicator', property: 'Background', token: '--card' },
+    { part: 'Indicator', property: 'Border', token: '--border' },
+    { part: 'Indicator', property: 'Shadow', token: '--shadow-xs' },
+  ]}
+/>
+
+<SpecTable caption="Every appearance" rows={[{ part: 'Focus ring', property: 'Colour', token: '--ring' }]} />
+
+Pill labels use `--subtle-foreground`, not `--muted-foreground`: that is
+4.3:1 on the `--muted` track, under 4.5:1.
+
+## States
+
+<States
+  states={[
+    { label: 'Enabled' },
+    { label: 'Hover', pseudo: 'hover' },
+    { label: 'Focus', pseudo: 'focus-visible' },
+  ]}
+>
+  <Story of={TabsStories.StatesUnderline} />
+</States>
+
+<States
+  states={[
+    { label: 'Enabled, pills' },
+    { label: 'Hover, pills', pseudo: 'hover' },
+    { label: 'Focus, pills', pseudo: 'focus-visible' },
+  ]}
+>
+  <Story of={TabsStories.StatesPills} />
+</States>
+
+- **Selected**: the label takes the selected colour and the indicator
+  slides under it (`underline`) or behind it (`pills`).
+- **Hover** brings an unselected label up to `--foreground`. It adds no
+  fill.
+- **Focus** is a 2px `--ring` outline drawn just inside the tab, so it is
+  not clipped by the list.
+- **Disabled** (Archive, above) is the enabled look at 50% opacity. It
+  still takes focus.
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={TabsStories} />
+</div>
+
+</DocTab>
+<DocTab value="guidelines">
+
+## When to use
+
+Use Tabs to split one thing into views the reader moves between freely,
+in any order: the overview, activity and settings of a project. Every
+panel is about the same object, and only one is needed at a time.
+
+Label each tab with a word or two. Labels do not wrap or shrink, so long
+ones push the row past its container.
+
+<DoDont
+  do={<Story of={TabsStories.DoShortLabels} />}
+  doCaption="Short labels, a word or two: the row fits, and each reads at a glance."
+  dont={<Story of={TabsStories.DontLongLabels} />}
+  dontCaption="Long labels run past the edge of the container. Shorten them, or go vertical."
+/>
+
+Use `underline` for the sections of a page and `pills` for a view switch
+in a toolbar. Name the tab list with `aria-label` when no heading does.
+Selection is manual by default: arrow keys move focus, Enter or Space
+selects, so a slow panel does not load on every keypress. Turn on
+`activateOnFocus` only for light panels.
+
+## When not to use
+
+- **For a sequence.** Steps that must be done in order belong in a
+  Stepper.
+- **To compare content side by side.** Tabs show one panel at a time; put
+  things that are read together on the same view.
+- **To go to another page.** Use links, a Sidebar or Breadcrumbs: a tab
+  changes the view, not the URL.
+- **For one setting with two or three options.** Use a radio group or a
+  [Toggle Button](?path=/docs/components-buttons-togglebutton--docs) group:
+  that changes a value, not the view.
 
 ## Accessibility
 
 - `role="tablist"` of `role="tab"` buttons with `aria-selected` and
   `aria-controls`; each panel is a `role="tabpanel"` labelled by its tab.
-- One tab stop: Tab moves into the list and out to the panel; arrows
-  move between tabs (Up and Down when vertical), Home and End jump to
-  the ends.
+- One tab stop: Tab moves into the list on the selected tab and the next
+  Tab moves on to the panel.
+- Arrow keys move between tabs (Left and Right, or Up and Down when
+  vertical, with `aria-orientation` set); Home and End jump to the ends.
+- Arrows move focus without selecting; Enter or Space selects. With
+  `activateOnFocus`, arrows select as they go.
 - A disabled tab still takes focus, marked `aria-disabled`, so it is
   found and announced, but it cannot be selected.
-- Tabs are 24 or 32px tall and grow to 44px on coarse pointers.
+- Tabs are 24 or 32px tall and grow to 44px on touch screens
+  (`pointer: coarse`).
+- Focus ring: 2px `--ring`, drawn inside the tab.
+
+</DocTab>
+</DocTabs>
