@@ -218,7 +218,26 @@ export const StateRow: Story = {
       const s = getComputedStyle(stage(label).querySelector('button')!)
       return `${s.backgroundColor} ${s.outlineStyle}`
     }
-    await waitFor(() => expect(look('Hover')).not.toBe(look('Enabled')))
+    // What the addon did to the stylesheets, for the failure message.
+    const rewritten = () => {
+      const button = stage('Hover').querySelector('button')!
+      const rules = [...document.styleSheets].flatMap((sheet) => {
+        try {
+          return [...sheet.cssRules]
+        } catch {
+          return []
+        }
+      })
+      const hover = rules.filter((r): r is CSSStyleRule => r instanceof CSSStyleRule && r.selectorText.includes(':hover'))
+      const forced = hover.filter((r) => r.selectorText.includes('pseudo-hover-all'))
+      const engaged = forced.filter((r) => button.matches(r.selectorText))
+      return `${document.styleSheets.length} sheets, ${hover.length} :hover rules, ${forced.length} rewritten, ${engaged.length} reach the button: ${engaged.map((r) => r.cssText).join(' | ').slice(0, 300) || hover.find((r) => r.selectorText.includes('button'))?.cssText.slice(0, 300)}`
+    }
+    await waitFor(() => {
+      // Again on each try: a stylesheet Vite injects late is rewritten too.
+      addons.getChannel().emit(STORY_RENDERED)
+      expect(look('Hover'), rewritten()).not.toBe(look('Enabled'))
+    })
     await expect(look('Pressed')).not.toBe(look('Hover'))
     await expect(getComputedStyle(stage('Focus').querySelector('button')!).outlineStyle).toBe('solid')
   },
