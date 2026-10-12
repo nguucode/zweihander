@@ -2026,7 +2026,7 @@
           "description": "How the popup lines up with the trigger along that side."
         },
         {
-          "name": "modal",
+          "name": "isModal",
           "control": "boolean",
           "default": true,
           "description": "While open, locks page scroll and makes the rest of the page inert. `false` leaves the page scrollable and clickable."
