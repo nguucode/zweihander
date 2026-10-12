@@ -1,6 +1,6 @@
 // Spec §5: these properties take a token, not a literal. An exception is a
 // `stylelint-disable-next-line … -- <reason>` comment; the reason is required.
-const keywords = ['0', 'inherit', 'initial', 'unset', 'currentColor', 'transparent', /var\(--/.toString()]
+const keywords = ['0', 'inherit', 'initial', 'unset', '/var\\(--/']
 
 export default {
   plugins: ['stylelint-declaration-strict-value'],
