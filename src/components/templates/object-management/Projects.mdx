@@ -1,0 +1,86 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks'
+import * as ProjectsStories from './Projects.stories'
+
+<Meta of={ProjectsStories} />
+
+# Projects
+
+An object-management page: every project in a table, sliced by tabs with
+counts, narrowed by search and a status filter, sortable, selectable for
+a bulk archive, and expandable to each project's activity. Built from
+[App Shell](?path=/docs/patterns-application-ui-app-shell--docs),
+[Page Heading](?path=/docs/patterns-application-ui-page-heading--docs),
+[Data Table Page](?path=/docs/patterns-application-ui-data-table-page--docs)'s
+toolbar and the kit's Table, Tabs, Search, Menu, Tag, Badge, Avatar and
+Button. The data is made up.
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/projects-template.json
+```
+
+<Canvas of={ProjectsStories.Default} />
+
+## What works
+
+- **Tabs** are saved filters: All, Risk, On hold, Potential risk, On
+  track, Archived. Each count is the number of rows its tab shows, so the
+  counts follow the search and the status filter.
+- **Search** matches the project name and the PM.
+- **Status filter** is a radio Menu; its trigger shows the current choice.
+- **Sort** by name, PM, last update, resources, timeline or estimation.
+- **Selection** turns the toolbar into an Archive action; archived
+  projects move to the Archived tab. Changing tab clears the selection,
+  so you never act on rows you cannot see.
+- **Expand** a row to see its activity: status changes with their note,
+  estimation changes, and when it was created.
+- **Compact rows** (the toggle at the start of the toolbar) switches the
+  table to its small density.
+
+## Make it yours
+
+`Projects` takes `projects` (an array of `Project`, see
+`projects-data.ts`) and keeps a copy in state. Replace `sampleProjects`
+with your data, and the `setProjects` calls (Archive) with calls to your
+API. The activity list is local to the file on purpose: it becomes a
+`Timeline` component once a second screen needs one.
+
+## Props
+
+| Prop | Values | Default | |
+| --- | --- | --- | --- |
+| `projects` | `Project[]` | `sampleProjects` | The rows. Read once; later changes are local. |
+
+Any other prop goes to the App Shell's root, e.g. `style` to set its
+`block-size` when the page is not the whole viewport.
+
+## Layout
+
+<Canvas of={ProjectsStories.Tablet} />
+
+- From 64rem the sidebar sits beside the page; below that it moves into
+  a drawer behind the header's menu button (App Shell).
+- The toolbar wraps: on a phone the search takes its own line, and the
+  status filter and "Add project" flow under it.
+- The tab list scrolls sideways when the six tabs do not fit, instead of
+  wrapping onto a second line.
+- The table keeps its columns and scrolls inside its own frame; the page
+  never scrolls sideways.
+
+<Canvas of={ProjectsStories.Mobile} />
+
+## Accessibility
+
+- One `h1` ("Projects" and the count), a `main` landmark with a skip link,
+  and the sidebar as the "Main" navigation (App Shell).
+- The tab list is named "Project views"; each tab's name includes its
+  count ("Risk 3"), and the table is in the selected tab's panel.
+- The table's caption names the current view ("Risk projects"); the
+  project name is each row's header, so the checkbox and the expand button
+  are named after it ("Select Harbor Lights", "Expand Harbor Lights").
+- An expanded row's activity is a region named after the project
+  ("Harbor Lights activity"),
+  holding an ordered list, newest first. The arrow between a timeline's
+  dates is hidden and read as "to".
+- A PM without a name says "Unassigned", and a project without dates says
+  "Not scheduled", instead of an empty cell.
+- The selection count is announced as it changes (Data Table Page).

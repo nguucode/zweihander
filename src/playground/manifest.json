@@ -2223,6 +2223,15 @@
           "default": 2
         }
       ]
+    },
+    {
+      "kind": "template",
+      "id": "templates-object-management-projects",
+      "name": "Projects",
+      "category": "Object Management",
+      "status": "experimental",
+      "storyId": "templates-object-management-projects--default",
+      "props": []
     }
   ]
 }
