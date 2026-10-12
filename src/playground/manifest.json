@@ -1604,7 +1604,8 @@
             "bottom",
             "left"
           ],
-          "default": "bottom"
+          "default": "bottom",
+          "description": "Which side of the trigger the popup opens on. It flips when there is no room."
         },
         {
           "name": "align",
@@ -1614,11 +1615,14 @@
             "center",
             "end"
           ],
-          "default": "start"
+          "default": "start",
+          "description": "How the popup lines up with the trigger along that side."
         },
         {
-          "name": "defaultOpen",
-          "control": "boolean"
+          "name": "modal",
+          "control": "boolean",
+          "default": true,
+          "description": "While open, locks page scroll and makes the rest of the page inert. `false` leaves the page scrollable and clickable."
         }
       ]
     },
@@ -1675,18 +1679,19 @@
           "name": "currentHref",
           "control": "text",
           "default": "#atlas",
-          "description": "The href of the page the reader is on: that item gets aria-current=\"page\"."
+          "description": "The `href` of the page the reader is on. That item gets the selected fill and `aria-current=\"page\"`."
         },
         {
           "name": "defaultCollapsed",
           "control": "boolean",
-          "default": false
+          "default": false,
+          "description": "Starts as the icon rail, uncontrolled."
         },
         {
           "name": "isCollapsible",
           "control": "boolean",
           "default": false,
-          "description": "Show a button that collapses and expands the sidebar."
+          "description": "Shows a button in the header that collapses and expands the sidebar."
         }
       ]
     },
@@ -1705,7 +1710,8 @@
             "horizontal",
             "vertical"
           ],
-          "default": "horizontal"
+          "default": "horizontal",
+          "description": "`horizontal` puts each label under its marker; `vertical` stacks the steps, for long descriptions or a narrow column."
         },
         {
           "name": "size",
@@ -1714,7 +1720,8 @@
             "sm",
             "md"
           ],
-          "default": "md"
+          "default": "md",
+          "description": "A 32px (`md`) or 24px (`sm`) marker. `sm` takes a 12px label."
         }
       ]
     },

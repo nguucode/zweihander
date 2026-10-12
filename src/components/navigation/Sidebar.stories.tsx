@@ -30,8 +30,62 @@ const meta = {
     footer: <span style={{ paddingInline: 'var(--space-3)', color: 'var(--muted-foreground)' }}>sam@atlas.dev</span>,
     onCollapsedChange: fn(),
   },
-  argTypes: { items: { control: false }, header: { control: false }, footer: { control: false } },
-  decorators: [(Story) => <div style={{ blockSize: '32rem', display: 'flex' }}>{Story()}</div>],
+  // Every prop is described here: these are the docs' API table and the
+  // Playground's props panel.
+  argTypes: {
+    items: {
+      description:
+        "The links, as data. An item is `{ label, href, icon?, badge?, render? }`; a group is `{ type: 'group', label, items }`. `render` replaces the `<a>`, e.g. with a router's `<Link />`.",
+      control: false,
+      table: { type: { summary: 'SidebarEntry[]' } },
+    },
+    currentHref: {
+      description: 'The `href` of the page the reader is on. That item gets the selected fill and `aria-current="page"`.',
+      control: 'text',
+      table: { type: { summary: 'string' } },
+    },
+    header: {
+      description: 'Above the items: the product name, a workspace switcher. Hidden in the rail.',
+      control: false,
+      table: { type: { summary: 'ReactNode' } },
+    },
+    footer: {
+      description: 'Pinned to the bottom: the signed-in user, help. Hidden in the rail.',
+      control: false,
+      table: { type: { summary: 'ReactNode' } },
+    },
+    isCollapsed: {
+      description: 'Controlled: the icon rail, labels in tooltips. Every item needs an `icon`. Pair with `onCollapsedChange`.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' } },
+    },
+    defaultCollapsed: {
+      description: 'Starts as the icon rail, uncontrolled.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    onCollapsedChange: {
+      description: 'Called with the new state when the collapse button is pressed.',
+      control: false,
+      table: { type: { summary: '(collapsed: boolean) => void' } },
+    },
+    isCollapsible: {
+      description: 'Shows a button in the header that collapses and expands the sidebar.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    'aria-label': {
+      description: "The `<nav>` landmark's name. Change it when a page has more than one navigation.",
+      control: 'text',
+      table: { type: { summary: 'string' }, defaultValue: { summary: "'Main'" } },
+    },
+  },
+  excludeStories: ['anatomyParts'],
+  // A sidebar fills the height it is given; `bare` stories size to content.
+  decorators: [
+    (Story, { parameters }) =>
+      parameters.bare ? Story() : <div style={{ blockSize: '32rem', display: 'flex' }}>{Story()}</div>,
+  ],
 } satisfies Meta<typeof Sidebar>
 
 export default meta
@@ -83,4 +137,68 @@ export const Collapsed: Story = { args: { defaultCollapsed: true, isCollapsible:
 
 export const Plain: Story = {
   args: { header: undefined, footer: undefined, items: items.slice(0, 2), currentHref: '#inbox' },
+}
+
+/** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
+export const anatomyParts = [
+  { name: 'Header', selector: 'nav > div:first-child > div:first-child', description: 'Optional: the product name, a workspace switcher.' },
+  { name: 'Collapse button', selector: 'button[aria-expanded]', description: 'With isCollapsible: folds the sidebar to the icon rail and back.' },
+  { name: 'Item', selector: 'a[href="#search"]', description: 'A link: icon, label, optional badge. A flush row of tier md.' },
+  { name: 'Icon', selector: 'a[href="#search"] > span:first-child', description: 'Decorative. Required for the rail, where it is all that shows.' },
+  { name: 'Badge', selector: 'a[href="#inbox"] > span:last-child', description: 'Optional: a count or a short tag.' },
+  { name: 'Group label', selector: 'div:has(> ul[aria-labelledby]) > div:first-child', description: 'Names the group\'s list. A label, not a heading.' },
+  { name: 'Current item', selector: 'a[aria-current="page"]', description: 'The page the reader is on: the selected fill and medium weight.' },
+  { name: 'Footer', selector: 'nav > div:last-child', description: 'Optional, pinned to the bottom: the signed-in user, help.' },
+]
+
+/** Every part present. */
+export const Anatomy: Story = {
+  tags: ['!dev'],
+  args: { isCollapsible: true },
+  play: async ({ canvasElement }) => {
+    // The docs markers follow these selectors: a DOM change must not leave
+    // a marker pointing at nothing, or at the wrong part.
+    const found = anatomyParts.map(({ selector }) => canvasElement.querySelector(selector))
+    await expect(found.every(Boolean)).toBe(true)
+    await expect(new Set(found).size).toBe(anatomyParts.length)
+    await expect(found[0]).toHaveTextContent('Zweihänder')
+    await expect(found[5]).toHaveTextContent('Projects')
+    await expect(found[7]).toHaveTextContent('sam@atlas.dev')
+  },
+}
+
+/** One item, sized to its content, for the States table. */
+export const Item: Story = {
+  tags: ['!dev'],
+  parameters: { bare: true },
+  args: {
+    header: undefined,
+    footer: undefined,
+    items: [{ label: 'Inbox', href: '#inbox', icon: <Icon name="info" />, badge: 12 }],
+    currentHref: undefined,
+  },
+}
+
+/** The same item, current. */
+export const CurrentItem: Story = { ...Item, args: { ...Item.args, currentHref: '#inbox' } }
+
+/** Guidelines, Do: short labels, each with an icon, grouped under a few names. */
+export const DoGroupWithIcons: Story = {
+  tags: ['!dev'],
+  args: { header: undefined, footer: undefined },
+}
+
+/** Guidelines, Don't: items without icons cannot collapse to a rail, and long labels get cut. */
+export const DontLongLabelsNoIcons: Story = {
+  tags: ['!dev'],
+  args: {
+    header: undefined,
+    footer: undefined,
+    currentHref: '#reports',
+    items: [
+      { label: 'Search across every workspace', href: '#search' },
+      { label: 'Quarterly revenue reports for finance', href: '#reports' },
+      { label: 'Customer onboarding checklist templates', href: '#onboarding' },
+    ],
+  },
 }

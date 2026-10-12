@@ -1,69 +1,214 @@
-import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
 import * as MenuStories from './Menu.stories'
 
 <Meta of={MenuStories} />
 
 # Menu
 
+<DocTabs>
+<DocTab value="overview">
+
 A list of actions that opens from a button: the "…" on a row, an
-"Actions" dropdown, a "View" menu of toggles. It acts or toggles; to pick
-a value for a form, use a Select. Spec:
-[uiguideline.com/components/menu](https://www.uiguideline.com/components/menu).
-Behaviour from Base UI's [Menu](https://base-ui.com/react/components/menu).
+"Actions" dropdown, a "View" menu of toggles. It acts or toggles; to pick a
+value for a form, use a [Select](?path=/docs/components-inputs-select--docs).
+
+<Status of={MenuStories} />
 
 <Canvas of={MenuStories.Default} />
 
-## Anatomy
+## Variants
 
-| Part | What it is |
+Menu has one look. What changes is the kind of entry in `items`, and a
+menu can mix them:
+
+| Entry | Use for |
 | --- | --- |
-| **Trigger** | `trigger`: one button. Menu merges its props onto it. |
-| **Popup** | The Select list's surface: `--popover`, border, `--shadow-md`, `--radius-field`, at least 12rem wide. |
-| **Item** | Icon (optional), label, shortcut (optional). 32px tall, 44px on touch. |
-| **Checkbox / radio item** | A check in the icon column, for both. They do not close the menu. |
-| **Submenu trigger** | An item with `items`, and a chevron. |
-| **Group label**, **separator** | Structure for longer menus. |
-
-## Props
-
-| Prop | Values | Default | |
-| --- | --- | --- | --- |
-| `trigger` | element | – | Required. |
-| `items` | `MenuEntry[]` | – | Required. See below. |
-| `side` | `top`, `right`, `bottom`, `left` | `bottom` | |
-| `align` | `start`, `center`, `end` | `start` | |
-| `open`, `defaultOpen`, `onOpenChange` | | | Controlled or uncontrolled. |
-
-<Controls of={MenuStories.Default} />
-
-`items` is data, like Select's `options`. Each entry is one of:
-
-| `type` | Fields | |
-| --- | --- | --- |
-| omitted or `'item'` | `label`, `onSelect`, `icon`, `shortcut`, `isDestructive`, `disabled`, `href`, `items` | `href` makes it a link; `items` makes it a submenu. |
-| `'checkbox'` | `label`, `checked`, `defaultChecked`, `onCheckedChange`, `disabled` | |
-| `'radio'` | `label`, `value`, `defaultValue`, `onValueChange`, `options` | One labelled group of radio items. |
-| `'group'` | `label`, `items` | A labelled group. |
-| `'separator'` | | |
-
-Give a `textValue` when `label` is not plain text, for typeahead.
-
-### Design notes
-
-- **Destructive items use the danger text colour**, on a `--danger-subtle`
-  highlight, both at 4.5:1. Put them last, after a separator.
-- **Toggles keep the menu open**, so several can be changed in one go;
-  actions close it.
-- **Shortcuts are display only.** `shortcut` shows "⌘ D"; binding the
-  key is up to the page.
-
-## Usage
+| Action (the default) | Something to do now: Edit, Duplicate, Delete. Closes the menu. `isDestructive` draws it in the danger colour. |
+| Link (`href`) | Going somewhere: Documentation, Settings. A real `<a>`. |
+| Submenu (`items`) | A set of choices that belongs under one item: Move to, Share with. |
+| Checkbox (`type: 'checkbox'`) | Settings that are on or off, several at a time: Show hidden files. Keeps the menu open. |
+| Radio (`type: 'radio'`) | One of a few settings: Sort by name, date or size. Keeps the menu open. |
+| Group (`type: 'group'`) and separator | Structure for a longer menu: a label over related items, a rule between sets. |
 
 <Canvas of={MenuStories.Groups} />
 
 <Canvas of={MenuStories.Submenu} />
 
 <Canvas of={MenuStories.Links} />
+
+## Resources
+
+From npm, or copied into your project through the registry:
+
+```js
+import { Menu } from 'zweihander/menu'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/menu.json
+```
+
+- Source: [src/components/navigation/Menu.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/navigation/Menu.tsx)
+- Spec: [uiguideline.com/components/menu](https://www.uiguideline.com/components/menu)
+- Behaviour: [Base UI Menu](https://base-ui.com/react/components/menu)
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
+## Anatomy
+
+<Anatomy parts={MenuStories.anatomyParts}>
+  <Story of={MenuStories.Anatomy} />
+</Anatomy>
+
+A link item has the same parts as an action. Checkbox and radio items show
+a check where an action shows its icon, so their labels line up.
+
+## Measurements
+
+The popup is the Select list's surface. Each item is a row of the md
+control tier, with the normal pad: its text is left-aligned. The item's
+corner nests inside the popup's: the popup radius minus the popup padding,
+so the highlight runs parallel to the popup edge.
+
+<SpecTable
+  caption="Popup"
+  rows={[
+    { part: 'Popup', property: 'Padding', token: '--space-1' },
+    { part: 'Popup', property: 'Corner radius', token: '--radius-field' },
+    { part: 'Popup', property: 'Shadow', token: '--shadow-md' },
+    { part: 'Popup', property: 'Layer', token: '--layer-overlay' },
+    { part: 'Separator', property: 'Margin', token: '--space-1' },
+  ]}
+/>
+
+<SpecTable
+  caption="Item"
+  rows={[
+    { part: 'Item', property: 'Height', token: '--control-md' },
+    { part: 'Item', property: 'Inline padding', token: '--control-md-pad' },
+    { part: 'Item', property: 'Block padding', token: '--space-1-5' },
+    { part: 'Item', property: 'Gap', token: '--control-md-gap' },
+    { part: 'Icon, check, chevron', property: 'Size', token: '--icon-md' },
+    { part: 'Label', property: 'Font size', token: '--text-body' },
+    { part: 'Label', property: 'Line height', token: '--leading-body' },
+    { part: 'Shortcut, group label', property: 'Font size', token: '--text-body-sm' },
+    { part: 'Shortcut', property: 'Space before', token: '--space-4' },
+    { part: 'Hit area', property: 'Minimum on touch screens', token: '--target-coarse' },
+  ]}
+/>
+
+The popup is at least 12rem wide, or the trigger's width if that is wider,
+and no taller than the space on screen: past that it scrolls. It opens
+4px from the trigger.
+
+## Color
+
+<SpecTable
+  caption="Popup"
+  rows={[
+    { part: 'Popup', property: 'Background', token: '--popover' },
+    { part: 'Popup', property: 'Text', token: '--popover-foreground' },
+    { part: 'Popup', property: 'Border', token: '--border' },
+    { part: 'Separator', property: 'Colour', token: '--border' },
+    { part: 'Group label, shortcut, chevron', property: 'Colour', token: '--muted-foreground' },
+  ]}
+/>
+
+<SpecTable
+  caption="Item"
+  rows={[
+    { part: 'Icon', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Item, highlighted', property: 'Background', token: '--accent' },
+    { part: 'Item, highlighted', property: 'Text and icon', token: '--accent-foreground' },
+    { part: 'Item, disabled', property: 'Text', token: '--muted-foreground' },
+  ]}
+/>
+
+<SpecTable
+  caption="Destructive item"
+  rows={[
+    { part: 'Item', property: 'Text and icon', token: '--danger-text' },
+    { part: 'Item, highlighted', property: 'Background', token: '--danger-subtle' },
+  ]}
+/>
+
+The destructive item uses the danger text colour, not the solid: it reads
+at 4.5:1 on the popup and on its highlight.
+
+## States
+
+<States
+  states={[
+    { label: 'Closed', content: <Story of={MenuStories.Default} /> },
+    { label: 'Open', content: <Story of={MenuStories.Open} /> },
+  ]}
+/>
+
+- **Highlighted** is where the arrow keys or the pointer are: a `--accent`
+  fill, the icon taking the text colour. A submenu's item stays highlighted
+  while its submenu is open. Focus moves with the highlight, so there is no
+  separate focus ring inside the popup.
+- **Disabled** items are muted at 60% opacity and skipped by the arrow
+  keys (Archive, above).
+- **Checked** checkbox and radio items show the check; unchecked ones keep
+  the empty column.
+- The trigger's own hover, focus and pressed states are the
+  [Button](?path=/docs/components-buttons-button--docs)'s.
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={MenuStories} />
+</div>
+
+`items` is data, like Select's `options`, not child components.
+`shortcut` is display only: binding the key is left to the page, which
+knows what else is bound.
+
+</DocTab>
+<DocTab value="guidelines">
+
+## When to use
+
+Use a Menu for actions that belong to one thing but would crowd the
+screen as buttons: the actions on a table row, a card's overflow, a
+toolbar's "More". Keep it short, put the most used item first, and give
+destructive actions the last place, after a separator.
+
+<DoDont
+  do={<Story of={MenuStories.DoDestructiveLast} />}
+  doCaption="Delete last, after a separator, in the danger colour."
+  dont={<Story of={MenuStories.DontDestructiveAmongOthers} />}
+  dontCaption="Delete between two everyday actions: one arrow key too far and it is chosen."
+/>
+
+<DoDont
+  do={<Story of={MenuStories.DoActions} />}
+  doCaption="A menu of actions. Each item does something now."
+  dont={<Story of={MenuStories.DontMenuAsField} />}
+  dontCaption="A menu standing in for a form field. Use a Select: it has a label, a value and a form name."
+/>
+
+## When not to use
+
+- **To pick a value for a form.** Use a
+  [Select](?path=/docs/components-inputs-select--docs), or a
+  [Combobox](?path=/docs/components-inputs-combobox--docs) when the list
+  is long enough to search.
+- **For one or two actions.** Show them as
+  [Buttons](?path=/docs/components-buttons-button--docs): a hidden action
+  is one fewer person finds.
+- **For the app's main navigation.** Use a
+  [Sidebar](?path=/docs/components-navigation-sidebar--docs) or
+  [Tabs](?path=/docs/components-navigation-tabs--docs), which show where
+  the reader is.
+- **For content: a form, a preview.** Use a
+  [Popover](?path=/docs/components-overlays-popover--docs). A menu holds
+  only menu items.
 
 ## Accessibility
 
@@ -75,5 +220,15 @@ Give a `textValue` when `label` is not plain text, for typeahead.
   move (disabled items are skipped), typing a few letters jumps to the
   matching item, Enter selects, Arrow Right opens a submenu and Arrow
   Left closes it, Escape closes and returns focus to the trigger.
+- Toggles keep the menu open, so several can be changed in one go;
+  actions close it and focus returns to the trigger.
 - The icon and shortcut are hidden from assistive tech; the label names
-  the item.
+  the item. Give `textValue` when a label is not plain text, or typeahead
+  cannot find it.
+- A disabled link has no `href`, so it cannot be followed.
+- Items are 32px tall, 44px on touch screens (`pointer: coarse`).
+- `modal` (the default) makes the rest of the page inert while the menu
+  is open, so a screen reader stays in the menu.
+
+</DocTab>
+</DocTabs>
