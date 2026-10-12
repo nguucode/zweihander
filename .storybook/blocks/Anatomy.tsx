@@ -66,12 +66,20 @@ export function Anatomy({ parts, children }: { parts: AnatomyPart[]; children: R
     }
     measure()
     // A <Story> renders after this block mounts, and fonts or a theme switch
-    // move the parts, so measure again whenever the example changes.
-    const resize = new ResizeObserver(measure)
+    // move the parts, so measure again whenever the example changes. In the
+    // next frame: measuring inside a ResizeObserver callback and setting
+    // state there reports a "ResizeObserver loop" error.
+    let frame = 0
+    const later = () => {
+      cancelAnimationFrame(frame)
+      frame = requestAnimationFrame(measure)
+    }
+    const resize = new ResizeObserver(later)
     resize.observe(stage.current!)
-    const mutate = new MutationObserver(measure)
+    const mutate = new MutationObserver(later)
     mutate.observe(example.current!, { subtree: true, childList: true, attributes: true })
     return () => {
+      cancelAnimationFrame(frame)
       resize.disconnect()
       mutate.disconnect()
     }
