@@ -25,6 +25,21 @@ one it fits, or propose a new category if none fit.
 
 Unchecked = not built yet.
 
+## How a component page reads
+
+Every component page has the same three tabs, after Material 3, so the
+answer you need is always in the same place.
+
+| Tab | Answers | What is on it |
+| --- | --- | --- |
+| **Overview** | What is it? | One-line description, the main example, a gallery of variants with when to use each, the status, and Resources: the import line, the registry command, the source. |
+| **Specs** | How is it built? | Anatomy (the real component with numbered parts), Measurements for every size, Color for every variant, States side by side, and the API table with live controls. Where Zweihänder departs from the reference spec, "Differences from the spec" says how. |
+| **Guidelines** | How do I use it well? | When to use it, when to reach for something else, Do and Don't pairs rendered from real stories, and Accessibility: keyboard, roles and states, each line checked by a test. |
+
+Every value on Specs is read live from the tokens, so it follows the theme
+in the toolbar and cannot drift from the code. `npm run docs:check` fails CI
+when a component page is missing a tab or a required section.
+
 ## Behaviour comes from Base UI
 
 Components are styled with CSS Modules over the token layer; their

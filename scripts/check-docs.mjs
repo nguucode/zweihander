@@ -13,13 +13,15 @@
  *    purpose because it does NOT exist ("there is no `--radius-xs`") says so
  *    with an MDX comment, reason required, like a stylelint disable:
  *      {/* docs:check allow --radius-xs -- the page explains why it is absent *\/}
- * 2. A page that uses <DocTabs> has the three tabs, in order, and the sections
- *    each tab must carry (spec: component-docs, Q14). Pages not yet migrated
- *    are left alone until the lock-format ticket turns this on for all.
+ * 2. Every component page (src/components/<category>/<Name>.mdx) uses
+ *    <DocTabs>, so the format cannot drift back to one long page. Patterns,
+ *    templates and the Overview pages are not component docs and keep theirs.
+ * 3. A page that uses <DocTabs> has the three tabs, in order, and the sections
+ *    each tab must carry (spec: component-docs, Q14).
  */
 import { readFileSync, readdirSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
-import { dirname, join, relative } from 'node:path'
+import { dirname, join, relative, sep } from 'node:path'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 
@@ -58,6 +60,12 @@ const tokenMentions = (source) => {
   return found
 }
 
+/** src/components/<category>/<Name>.mdx, minus the categories that are not components. */
+const isComponentPage = (where) => {
+  const m = where.split(sep).join('/').match(/^src\/components\/([^/]+)\/([^/]+)\.mdx$/)
+  return !!m && !['patterns', 'templates'].includes(m[1]) && m[2] !== 'Overview'
+}
+
 /** The body of each <DocTab value="…"> on a page, in order. */
 const tabsOf = (source) =>
   [...source.matchAll(/<DocTab\s+value=["']([a-z]+)["']\s*>([\s\S]*?)<\/DocTab>/g)].map(([, value, body]) => ({
@@ -76,7 +84,10 @@ export const checkFile = (file, source = readFileSync(file, 'utf8')) => {
   for (const [name, line] of tokenMentions(source))
     if (!declared.has(name) && !allowed.has(name)) errors.push(`${where}:${line}: names ${name}, which no stylesheet in src/ declares`)
 
-  if (/<DocTabs[\s>]/.test(source)) {
+  const hasTabs = /<DocTabs[\s>]/.test(source)
+  if (!hasTabs && isComponentPage(where))
+    errors.push(`${where}: a component docs page needs <DocTabs> with the overview, specs and guidelines tabs (see .storybook/blocks/DocBlocks.mdx)`)
+  if (hasTabs) {
     const tabs = tabsOf(source)
     const order = tabs.map((t) => t.value).join(', ')
     if (order !== TABS.join(', '))
@@ -99,5 +110,5 @@ if (isMain) {
     console.error(`\ndocs:check: ${errors.length} problem${errors.length === 1 ? '' : 's'}`)
     process.exit(1)
   }
-  console.log(`docs:check: ${files.length} MDX files, all tokens exist, migrated pages complete`)
+  console.log(`docs:check: ${files.length} MDX files, all tokens exist, every component page has its three tabs`)
 }

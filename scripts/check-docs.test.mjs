@@ -36,8 +36,19 @@ test('an allow comment needs a reason', () => {
   assert.match(checkFile(file, '{/* docs:check allow --radius-xs */}\nThere is no `--radius-xs`.')[0], /needs a reason/)
 })
 
-test('a page without DocTabs is not checked for tabs', () => {
+test('a page outside a component category is not checked for tabs', () => {
   assert.deepEqual(checkFile(file, '# Button\n\n## Props\n'), [])
+})
+
+test('a component page in a category must use DocTabs', () => {
+  const component = new URL('../src/components/buttons/Fixture.mdx', import.meta.url).pathname
+  assert.match(checkFile(component, '# Button\n\n## Props\n')[0], /buttons\/Fixture\.mdx: a component docs page needs <DocTabs>/)
+  assert.deepEqual(checkFile(component, page(complete)), [])
+})
+
+test('category overviews, patterns and templates keep their own format', () => {
+  for (const path of ['buttons/Overview.mdx', 'patterns/application-ui/Fixture.mdx', 'templates/Overview.mdx', 'Overview.mdx'])
+    assert.deepEqual(checkFile(new URL(`../src/components/${path}`, import.meta.url).pathname, '# Page\n'), [], path)
 })
 
 test('a complete migrated page passes', () => {
