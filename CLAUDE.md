@@ -5,7 +5,7 @@ Project info (decisions, tickets, roadmap, Figma links) lives in the Obsidian va
 
 - Before writing to the vault, read `/Volumes/KAFKA/Vault/CLAUDE.md` (frontmatter, `_context.md`, `_system/agent-log.md`). Design or front-end work also reads `/Volumes/KAFKA/Vault/_system/context/design-system.md`.
 - Docs that ship with the code (README, Storybook MDX) stay in this repo. Do not copy them into the vault.
-- Code is the token source: edit `tokens/*.json`, run `npm run tokens`, then sync to Figma. `npm run tokens:check`, `npm run registry:check` and `npm run playground:check` must pass. Changed a story? Run `npm run playground:manifest` and commit `src/playground/manifest.json`.
+- Code is the token source: edit `tokens/*.json`, run `npm run tokens`, then sync to Figma. `npm run tokens:check`, `npm run registry:check` and `npm run playground:check` must pass. Edited a skill or CLAUDE.md? `npm run skills:check` (links and `.claude/skills/` paths exist). Changed a story? Run `npm run playground:manifest` and commit `src/playground/manifest.json`.
 - Dev: `npm run storybook` (6006), `npm run dev` (5173), `npm run lint`.
 - Story tests in a cloud container (one prebuilt Chromium, no Firefox/WebKit): `npx vitest run --project=storybook <path>`. A SessionStart hook (`.claude/hooks/cloud-browsers.sh`) sets `PW_CHROMIUM_PATH=/opt/pw-browsers/chromium VITEST_BROWSERS=chromium`; if they are missing, set them by hand. No hand-made config; CI sets neither and runs all three engines.
 - Drive is exFAT: use `npm`, not `pnpm` (no hardlinks).
