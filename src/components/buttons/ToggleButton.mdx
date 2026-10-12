@@ -1,5 +1,6 @@
 import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
 import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
+import { ToggleButton } from './ToggleButton'
 import * as ToggleButtonStories from './ToggleButton.stories'
 
 <Meta of={ToggleButtonStories} />
@@ -167,7 +168,7 @@ red tint measures 3.7:1.
 <States
   states={[
     { label: 'Unpressed' },
-    { label: 'Pressed', content: <Story of={ToggleButtonStories.WithIcon} /> },
+    { label: 'Pressed', content: <ToggleButton defaultPressed>Subscribe</ToggleButton> },
     { label: 'Hover', pseudo: 'hover' },
     { label: 'Focus', pseudo: 'focus-visible' },
     { label: 'Disabled', content: <Story of={ToggleButtonStories.Disabled} /> },
