@@ -1,39 +1,166 @@
-import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
+import { Search } from './Search'
 import * as SearchStories from './Search.stories'
 
 <Meta of={SearchStories} />
 
 # Search
 
-A field for a search query, with a button to clear it. Spec:
-[uiguideline.com/components/search](https://www.uiguideline.com/components/search).
-The field is [Text Input](?path=/docs/components-inputs-textinput--docs)'s.
+<DocTabs>
+<DocTab value="overview">
+
+A field for a search query, with a button to clear it. The field is
+[Text Input](?path=/docs/components-inputs-textinput--docs)'s.
+
+<Status of={SearchStories} />
 
 <Canvas of={SearchStories.Clear} />
 
+## Variants
+
+One appearance, the white outlined box, in two sizes, with or without a
+visible label.
+
+<Canvas of={SearchStories.Sizes} />
+
+| Size | Use for |
+| --- | --- |
+| `md` | Above a list or a page of results: the default. |
+| `sm` | Toolbars and table headers, beside `sm` buttons. |
+
+<Canvas of={SearchStories.WithLabel} />
+
+| Label | Use for |
+| --- | --- |
+| None (default) | A search box whose place makes its purpose plain: a page header, above a list. It is named "Search", or by `aria-label`. |
+| `label` | A search inside a form, among other labelled fields. |
+
+## Resources
+
+From npm, or copied into your project through the registry:
+
+```js
+import { Search } from 'zweihander/search'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/search.json
+```
+
+- Source: [src/components/inputs/Search.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/inputs/Search.tsx)
+- Spec: [uiguideline.com/components/search](https://www.uiguideline.com/components/search)
+- Behaviour: [Base UI Field](https://base-ui.com/react/components/field)
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
 ## Anatomy
 
-| Part | What it is |
-| --- | --- |
-| **Search icon** | The `search` icon at the start. Decorative. |
-| **Input** | `type="search"`. |
-| **Placeholder** | "Search" unless given. |
-| **Clear button** | "Clear search", a filled circle-x: shown while there is text, hidden when disabled or read-only. |
+<Anatomy parts={SearchStories.anatomyParts}>
+  <Story of={SearchStories.Anatomy} />
+</Anatomy>
 
-## Props
+The placeholder is the input's, "Search" unless given. The browser's own
+clear control is hidden, so there are not two.
 
-| Prop | Values | Default | |
-| --- | --- | --- | --- |
-| `value`, `defaultValue` | string | `''` | |
-| `onChange` | `(event) => void` | – | Native event, including when cleared. |
-| `placeholder` | string | `"Search"` | |
-| `label` | node | – | Optional visible label. |
-| `aria-label` | string | `"Search"` | Used when there is no `label`. |
-| `size` | `sm`, `md` | `md` | 24, 32px. |
-| `isFullWidth` | boolean | `false` | |
-| `disabled`, `readOnly`, `autoFocus` | boolean | `false` | Native. |
+## Measurements
 
-<Controls of={SearchStories.Default} />
+Each size is a control tier, as on Text Input. The search icon and the
+clear button both take the tier's icon size.
+
+<SpecTable
+  caption="sm"
+  rows={[
+    { part: 'Container', property: 'Height', token: '--control-sm' },
+    { part: 'Container', property: 'Inline padding', token: '--control-sm-pad' },
+    { part: 'Container', property: 'Corner radius', token: '--control-sm-radius-field' },
+    { part: 'Container', property: 'Gap', token: '--control-sm-gap' },
+    { part: 'Search icon and clear button', property: 'Size', token: '--icon-sm' },
+    { part: 'Input', property: 'Font size', token: '--text-body-sm' },
+  ]}
+/>
+
+<SpecTable
+  caption="md"
+  rows={[
+    { part: 'Container', property: 'Height', token: '--control-md' },
+    { part: 'Container', property: 'Inline padding', token: '--control-md-pad' },
+    { part: 'Container', property: 'Corner radius', token: '--control-md-radius-field' },
+    { part: 'Container', property: 'Gap', token: '--control-md-gap' },
+    { part: 'Search icon and clear button', property: 'Size', token: '--icon-md' },
+    { part: 'Input', property: 'Font size', token: '--text-body' },
+  ]}
+/>
+
+<SpecTable
+  caption="Every size"
+  rows={[
+    { part: 'Clear button', property: 'Hit area on touch screens', token: '--target-coarse' },
+    { part: 'Clear button', property: 'Corner radius', token: '--radius-sm' },
+    { part: 'Focus ring', property: 'Width', token: '--focus-width' },
+    { part: 'Focus ring', property: 'Offset', token: '--focus-offset' },
+  ]}
+/>
+
+20rem wide, capped at its container, or the container's width with
+`isFullWidth`.
+
+## Color
+
+Search has no validation state; its field colours are Text Input's
+default ones.
+
+<SpecTable
+  caption="default"
+  rows={[
+    { part: 'Container', property: 'Background', token: '--card' },
+    { part: 'Container', property: 'Border', token: '--field-border' },
+    { part: 'Container', property: 'Shadow', token: '--shadow-2xs' },
+    { part: 'Input', property: 'Colour', token: '--foreground' },
+    { part: 'Placeholder and search icon', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Clear button', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Clear button, hover', property: 'Colour', token: '--foreground' },
+    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+  ]}
+/>
+
+<SpecTable caption="Read-only" rows={[{ part: 'Container', property: 'Background', token: '--surface-filled' }]} />
+
+## States
+
+<States
+  states={[
+    { label: 'Empty' },
+    { label: 'Focus', pseudo: 'focus' },
+    { label: 'With a query', content: <Search defaultValue="tooltip" /> },
+    { label: 'Clear hover', pseudo: 'hover', content: <Search defaultValue="tooltip" /> },
+    { label: 'Read-only', content: <Search defaultValue="tooltip" readOnly /> },
+    { label: 'Disabled', content: <Search defaultValue="tooltip" disabled /> },
+  ]}
+>
+  <Search />
+</States>
+
+- **The clear button** appears once there is a query, and not while the
+  field is disabled or read-only. On hover its icon darkens to
+  `--foreground`.
+- **Focus** is the field's 2px `--ring` outline around the box, on click
+  as well as keyboard. The clear button, when tabbed to, draws its own
+  ring instead, so the two never double.
+- **Read-only** fills the box with `--surface-filled`.
+- **Disabled** is the enabled look at 50% opacity.
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={SearchStories} />
+</div>
+
+Every other `<input>` attribute passes through, including `ref`, `name`,
+`autoFocus` and `onKeyDown`. `type` is always `search`.
 
 ### Differences from the spec
 
@@ -44,13 +171,32 @@ The field is [Text Input](?path=/docs/components-inputs-textinput--docs)'s.
 - **`value` is added** for a controlled query.
 - Native `disabled`, `readOnly` names.
 
-## Usage
+</DocTab>
+<DocTab value="guidelines">
 
-<Canvas of={SearchStories.Sizes} />
+## When to use
 
-Put the field inside a `<form role="search">` (or `<search>`) when it
-searches the site, so it becomes a landmark. The component is only the
-field: filtering a list in place does not need a landmark.
+Use Search to find or filter: a list of components, a table, the whole
+site. Say in the placeholder what is searched.
+
+<DoDont
+  do={<Story of={SearchStories.DoSaySearchWhat} />}
+  doCaption="A Search field: a searchbox to assistive tech, with a clear button and Escape to clear."
+  dont={<Story of={SearchStories.DontTextInputWithIcon} />}
+  dontCaption="A Text Input with a search icon looks the same but is a plain textbox, with no way to clear it."
+/>
+
+When it searches the site, put it inside a `<form role="search">` (or
+`<search>`) so it becomes a landmark people can jump to. The component is
+only the field: filtering a list in place does not need a landmark.
+
+## When not to use
+
+- **To choose one value from a list.** Use a
+  [Combobox](?path=/docs/components-inputs-combobox--docs): it shows the
+  matches and keeps the choice.
+- **For other free text.** Use a
+  [Text Input](?path=/docs/components-inputs-textinput--docs).
 
 ## Accessibility
 
@@ -58,7 +204,15 @@ field: filtering a list in place does not need a landmark.
   or "Search". A placeholder is not a name.
 - **Clearing works the same everywhere:** the button, and Escape in the
   field (Chrome and Safari do this natively; Firefox did not). Either way
-  `onChange` fires with a real event and focus stays in the field.
-- The clear button is a real button named "Clear search", with a 44px
-  touch target. The browser's own clear control is hidden so there are
-  not two.
+  `onChange` fires with a real event.
+- The clear button is a real `<button>` named "Clear search", reached
+  with Tab after the input. Pressed from the keyboard, it hands focus
+  back to the field instead of losing it; a mouse press leaves focus
+  where it was.
+- The clear button's hit area grows to 44px on touch screens.
+- The search icon is decorative and hidden from screen readers.
+- The edge is the light `--field-border`, the approved exception to WCAG
+  1.4.11 described on Text Input.
+
+</DocTab>
+</DocTabs>

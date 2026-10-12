@@ -8,6 +8,13 @@
   font-family: var(--font-sans);
 }
 
+/* Grid items never shrink below their content by default, and an <input>'s
+   content is about 20 characters wide: in a container narrower than that
+   the box, or Number Input's wrapper round it, overflowed the field. */
+.field > * {
+  min-inline-size: 0;
+}
+
 .fullWidth {
   display: grid;
   inline-size: 100%;
@@ -60,6 +67,8 @@
   align-items: center;
   box-sizing: border-box;
   inline-size: 100%;
+  /* Inside Number Input's wrapper the box is a block, not a grid item. */
+  min-inline-size: 0;
   border: 1px solid var(--field-edge);
   background: var(--card);
   box-shadow: var(--shadow-2xs);

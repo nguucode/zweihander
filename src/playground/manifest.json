@@ -1235,26 +1235,42 @@
         {
           "name": "defaultValue",
           "control": "number",
-          "default": 6
+          "default": 6,
+          "description": "The starting number, uncontrolled."
         },
         {
           "name": "min",
           "control": "number",
-          "default": 0
+          "default": 0,
+          "description": "The lowest value. The decrease button is disabled there."
         },
         {
           "name": "max",
           "control": "number",
-          "default": 100
+          "default": 100,
+          "description": "The highest value. The increase button is disabled there."
         },
         {
           "name": "step",
-          "control": "number"
+          "control": "number",
+          "default": 1,
+          "description": "How much the buttons and arrow keys change the value. With the arrow keys, Shift steps by 10 and Alt by 0.1 instead."
         },
         {
           "name": "precision",
           "control": "number",
-          "description": "Decimal places shown and accepted."
+          "description": "Decimal places shown and accepted, e.g. `2` for a price."
+        },
+        {
+          "name": "label",
+          "control": "text",
+          "default": "Quantity",
+          "description": "The visible name, above the field. A real `<label>`: clicking it focuses the input."
+        },
+        {
+          "name": "helperText",
+          "control": "text",
+          "description": "Under the field, read as its description. The error message when `validationState` is `error`."
         },
         {
           "name": "validationState",
@@ -1263,7 +1279,9 @@
             "default",
             "success",
             "error"
-          ]
+          ],
+          "default": "default",
+          "description": "Colours the edge and the helper text. `error` also sets `aria-invalid`."
         },
         {
           "name": "size",
@@ -1272,27 +1290,37 @@
             "sm",
             "md"
           ],
-          "default": "md"
+          "default": "md",
+          "description": "24px (`sm`) or 32px (`md`) tall, from the control tiers. The steppers are 16 or 24px."
         },
         {
           "name": "isFullWidth",
-          "control": "boolean"
+          "control": "boolean",
+          "default": false,
+          "description": "Fills the width of its container. Otherwise 20rem, capped at the container."
         },
         {
           "name": "placeholder",
-          "control": "text"
+          "control": "text",
+          "description": "Shown while empty."
         },
         {
           "name": "disabled",
-          "control": "boolean"
+          "control": "boolean",
+          "default": false,
+          "description": "Dimmed, out of the tab order, steppers off."
         },
         {
           "name": "readOnly",
-          "control": "boolean"
+          "control": "boolean",
+          "default": false,
+          "description": "Focusable and submitted, but neither typing nor the steppers change it."
         },
         {
           "name": "required",
-          "control": "boolean"
+          "control": "boolean",
+          "default": false,
+          "description": "Must have a value to submit. Adds an asterisk to the label, hidden from screen readers."
         }
       ]
     },
@@ -1307,7 +1335,13 @@
         {
           "name": "defaultValue",
           "control": "text",
-          "default": ""
+          "default": "",
+          "description": "The starting query, uncontrolled."
+        },
+        {
+          "name": "label",
+          "control": "text",
+          "description": "An optional visible label, above the field. Without one, `aria-label` names it."
         },
         {
           "name": "size",
@@ -1316,11 +1350,32 @@
             "sm",
             "md"
           ],
-          "default": "md"
+          "default": "md",
+          "description": "24px (`sm`) or 32px (`md`) tall, from the control tiers. Match the toolbar or form it sits in."
         },
         {
           "name": "isFullWidth",
-          "control": "boolean"
+          "control": "boolean",
+          "default": false,
+          "description": "Fills the width of its container. Otherwise 20rem, capped at the container."
+        },
+        {
+          "name": "placeholder",
+          "control": "text",
+          "default": "Search",
+          "description": "What can be searched, e.g. \"Search components\". Not a name: the field is named by `label` or `aria-label`."
+        },
+        {
+          "name": "disabled",
+          "control": "boolean",
+          "default": false,
+          "description": "Native `disabled`: dimmed, out of the tab order, no clear button."
+        },
+        {
+          "name": "readOnly",
+          "control": "boolean",
+          "default": false,
+          "description": "Native `readOnly`: the query can be read and copied, not changed. No clear button."
         }
       ]
     },
@@ -1335,7 +1390,19 @@
         {
           "name": "placeholder",
           "control": "text",
-          "default": "Choose someone"
+          "default": "Choose someone",
+          "description": "Shown in the field until something is chosen."
+        },
+        {
+          "name": "label",
+          "control": "text",
+          "default": "Team member",
+          "description": "The visible name, above the field. Clicking it focuses the field without opening it."
+        },
+        {
+          "name": "helperText",
+          "control": "text",
+          "description": "Under the field, read as its description. The error message when `validationState` is `error`."
         },
         {
           "name": "validationState",
@@ -1344,7 +1411,9 @@
             "default",
             "success",
             "error"
-          ]
+          ],
+          "default": "default",
+          "description": "Colours the edge and the helper text. `error` also sets `aria-invalid`."
         },
         {
           "name": "size",
@@ -1353,28 +1422,38 @@
             "sm",
             "md"
           ],
-          "default": "md"
+          "default": "md",
+          "description": "24px (`sm`) or 32px (`md`) tall, from the control tiers. Options are 32px either way."
         },
         {
           "name": "isFullWidth",
-          "control": "boolean"
+          "control": "boolean",
+          "default": false,
+          "description": "Fills the width of its container. Otherwise 20rem, capped at the container."
         },
         {
           "name": "isLoading",
           "control": "boolean",
-          "description": "Options are still arriving: a spinner replaces the chevron."
+          "default": false,
+          "description": "Options are still arriving: a spinner replaces the chevron, and the field is `aria-busy`."
         },
         {
           "name": "disabled",
-          "control": "boolean"
+          "control": "boolean",
+          "default": false,
+          "description": "Dimmed, out of the tab order, and the list does not open."
         },
         {
           "name": "readOnly",
-          "control": "boolean"
+          "control": "boolean",
+          "default": false,
+          "description": "The list opens so the options can be read, but choosing one changes nothing."
         },
         {
           "name": "required",
-          "control": "boolean"
+          "control": "boolean",
+          "default": false,
+          "description": "Must have a value to submit. Adds an asterisk to the label, hidden from screen readers."
         }
       ]
     },
@@ -1389,7 +1468,19 @@
         {
           "name": "placeholder",
           "control": "text",
-          "default": "Write a message…"
+          "default": "Write a message…",
+          "description": "A hint of what to write, gone as soon as anyone types. Never a replacement for `label`."
+        },
+        {
+          "name": "label",
+          "control": "text",
+          "default": "Message",
+          "description": "The visible name, above the field. A real `<label>`: clicking it focuses the textarea."
+        },
+        {
+          "name": "helperText",
+          "control": "text",
+          "description": "Under the field, read as its description. The error message when `validationState` is `error`."
         },
         {
           "name": "validationState",
@@ -1398,7 +1489,9 @@
             "default",
             "success",
             "error"
-          ]
+          ],
+          "default": "default",
+          "description": "Colours the edge and the helper text. `error` also sets `aria-invalid`."
         },
         {
           "name": "size",
@@ -1407,11 +1500,14 @@
             "sm",
             "md"
           ],
-          "default": "md"
+          "default": "md",
+          "description": "Text and padding from the `sm` or `md` control tier: 12px text and 6px block padding, or 14px and 8px."
         },
         {
           "name": "isFullWidth",
-          "control": "boolean"
+          "control": "boolean",
+          "default": false,
+          "description": "Fills the width of its container. Otherwise 20rem, capped at the container."
         },
         {
           "name": "resize",
@@ -1423,24 +1519,47 @@
             "horizontal"
           ],
           "default": "vertical",
-          "description": "Which way the user can drag to resize. Ignored with `hasAutoSize`."
+          "description": "Which way the user can drag the handle in the corner. Ignored with `hasAutoSize`."
         },
         {
           "name": "hasAutoSize",
           "control": "boolean",
           "default": false,
-          "description": "Grow and shrink with the content, between `minRows` and `maxRows`."
+          "description": "Grows and shrinks with the text, between `minRows` and `maxRows`. Hides the resize handle."
         },
         {
           "name": "minRows",
           "control": "number",
           "default": 3,
-          "description": "The starting height, in lines."
+          "description": "The starting height, in lines (the `rows` attribute)."
         },
         {
           "name": "maxRows",
           "control": "number",
-          "description": "The most it grows to before scrolling, in lines."
+          "description": "The most it grows to before scrolling, in lines. Caps a manual resize too."
+        },
+        {
+          "name": "disabled",
+          "control": "boolean",
+          "default": false,
+          "description": "Native `disabled`: dimmed, out of the tab order, not submitted."
+        },
+        {
+          "name": "readOnly",
+          "control": "boolean",
+          "default": false,
+          "description": "Native `readOnly`: focusable and submitted, but not editable. Filled grey."
+        },
+        {
+          "name": "required",
+          "control": "boolean",
+          "default": false,
+          "description": "Native `required`. Adds an asterisk to the label, hidden from screen readers."
+        },
+        {
+          "name": "maxLength",
+          "control": "number",
+          "description": "Native `maxLength`: typing stops at this many characters."
         }
       ]
     },
@@ -1455,7 +1574,19 @@
         {
           "name": "placeholder",
           "control": "text",
-          "default": "you@example.com"
+          "default": "you@example.com",
+          "description": "A hint of the expected format, gone as soon as anyone types. Never a replacement for `label`."
+        },
+        {
+          "name": "label",
+          "control": "text",
+          "default": "Email",
+          "description": "The visible name, above the field. A real `<label>`: clicking it focuses the input."
+        },
+        {
+          "name": "helperText",
+          "control": "text",
+          "description": "Under the field, read as its description. The error message when `validationState` is `error`."
         },
         {
           "name": "validationState",
@@ -1464,7 +1595,9 @@
             "default",
             "success",
             "error"
-          ]
+          ],
+          "default": "default",
+          "description": "Colours the edge and the helper text. `error` also sets `aria-invalid`."
         },
         {
           "name": "size",
@@ -1473,11 +1606,32 @@
             "sm",
             "md"
           ],
-          "default": "md"
+          "default": "md",
+          "description": "24px (`sm`) or 32px (`md`) tall, from the control tiers. `sm` takes a 12px value."
         },
         {
           "name": "isFullWidth",
-          "control": "boolean"
+          "control": "boolean",
+          "default": false,
+          "description": "Fills the width of its container. Otherwise 20rem, capped at the container."
+        },
+        {
+          "name": "disabled",
+          "control": "boolean",
+          "default": false,
+          "description": "Native `disabled`: dimmed, out of the tab order, not submitted."
+        },
+        {
+          "name": "readOnly",
+          "control": "boolean",
+          "default": false,
+          "description": "Native `readOnly`: focusable and submitted, but not editable. Filled grey."
+        },
+        {
+          "name": "required",
+          "control": "boolean",
+          "default": false,
+          "description": "Native `required`. Adds an asterisk to the label, hidden from screen readers, which hear \"required\" from the input."
         }
       ]
     },

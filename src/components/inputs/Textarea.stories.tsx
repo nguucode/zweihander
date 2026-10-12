@@ -7,12 +7,101 @@ const meta = {
   title: 'Components/Inputs/Textarea',
   tags: ['beta'],
   component: Textarea,
+  // Every prop is listed by hand, with a description: react-docgen reads the
+  // types but not what each prop is for. These are the docs' API table and
+  // the Playground's props panel.
   argTypes: {
-    size: { control: 'inline-radio', options: ['sm', 'md'] },
-    validationState: { control: 'inline-radio', options: ['default', 'success', 'error'] },
-    resize: { control: 'inline-radio', options: ['none', 'both', 'vertical', 'horizontal'] },
+    label: {
+      description: 'The visible name, above the field. A real `<label>`: clicking it focuses the textarea.',
+      control: 'text',
+      table: { type: { summary: 'ReactNode' } },
+    },
+    placeholder: {
+      description: 'A hint of what to write, gone as soon as anyone types. Never a replacement for `label`.',
+      control: 'text',
+      table: { type: { summary: 'string' } },
+    },
+    helperText: {
+      description: 'Under the field, read as its description. The error message when `validationState` is `error`.',
+      control: 'text',
+      table: { type: { summary: 'ReactNode' } },
+    },
+    validationState: {
+      description: 'Colours the edge and the helper text. `error` also sets `aria-invalid`.',
+      control: 'inline-radio',
+      options: ['default', 'success', 'error'],
+      table: { type: { summary: "'default' | 'success' | 'error'" }, defaultValue: { summary: "'default'" } },
+    },
+    size: {
+      description: 'Text and padding from the `sm` or `md` control tier: 12px text and 6px block padding, or 14px and 8px.',
+      control: 'inline-radio',
+      options: ['sm', 'md'],
+      table: { type: { summary: "'sm' | 'md'" }, defaultValue: { summary: "'md'" } },
+    },
+    minRows: {
+      description: 'The starting height, in lines (the `rows` attribute).',
+      control: 'number',
+      table: { type: { summary: 'number' }, defaultValue: { summary: '3' } },
+    },
+    maxRows: {
+      description: 'The most it grows to before scrolling, in lines. Caps a manual resize too.',
+      control: 'number',
+      table: { type: { summary: 'number' } },
+    },
+    hasAutoSize: {
+      description: 'Grows and shrinks with the text, between `minRows` and `maxRows`. Hides the resize handle.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    resize: {
+      description: 'Which way the user can drag the handle in the corner. Ignored with `hasAutoSize`.',
+      control: 'inline-radio',
+      options: ['none', 'both', 'vertical', 'horizontal'],
+      table: { type: { summary: "'none' | 'both' | 'vertical' | 'horizontal'" }, defaultValue: { summary: "'vertical'" } },
+    },
+    isFullWidth: {
+      description: 'Fills the width of its container. Otherwise 20rem, capped at the container.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    disabled: {
+      description: 'Native `disabled`: dimmed, out of the tab order, not submitted.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    readOnly: {
+      description: 'Native `readOnly`: focusable and submitted, but not editable. Filled grey.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    required: {
+      description: 'Native `required`. Adds an asterisk to the label, hidden from screen readers.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    maxLength: {
+      description: 'Native `maxLength`: typing stops at this many characters.',
+      control: 'number',
+      table: { type: { summary: 'number' } },
+    },
+    value: {
+      description: 'The text, controlled. Pair with `onChange`.',
+      control: false,
+      table: { type: { summary: 'string' } },
+    },
+    defaultValue: {
+      description: 'The starting text, uncontrolled.',
+      control: false,
+      table: { type: { summary: 'string' } },
+    },
+    onChange: {
+      description: 'The native change event, as on `<textarea>`: read `event.target.value`.',
+      control: false,
+      table: { type: { summary: '(event: ChangeEvent<HTMLTextAreaElement>) => void' } },
+    },
   },
   args: { label: 'Message', placeholder: 'Write a message…', onChange: fn() },
+  excludeStories: ['anatomyParts'],
 } satisfies Meta<typeof Textarea>
 
 export default meta
@@ -117,4 +206,37 @@ export const Controlled: Story = {
     await userEvent.type(canvas.getByLabelText('Message'), 'Hello')
     await expect(canvas.getByText('5 characters')).toBeVisible()
   },
+}
+
+/** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
+export const anatomyParts = [
+  { name: 'Label', selector: 'label', description: 'Names the field. Clicking it focuses the textarea.' },
+  { name: 'Container', selector: 'label + span', description: 'The box: edge, fill and focus ring. It grows with the textarea.' },
+  { name: 'Input', selector: 'textarea', description: 'The text, padded inside the box, so the resize handle sits in its corner.' },
+  { name: 'Helper text', selector: 'label + span + p', description: 'The textarea\'s description. The error message when invalid.' },
+]
+
+/** Every part present. */
+export const Anatomy: Story = {
+  tags: ['!dev'],
+  args: { label: 'Description', defaultValue: 'Sturdy oak table, seats six.', helperText: 'Shown on the product page.', minRows: 3 },
+  play: async ({ canvasElement }) => {
+    // The docs markers follow these selectors: a DOM change must not leave
+    // a marker pointing at nothing, or at the wrong part.
+    const found = anatomyParts.map(({ selector }) => canvasElement.querySelector(selector))
+    await expect(found.every(Boolean)).toBe(true)
+    await expect(new Set(found).size).toBe(anatomyParts.length)
+    await expect(found[3]).toHaveTextContent('Shown on the product page.')
+  },
+}
+
+/** Guidelines, Do: a starting height that fits the answer expected. */
+export const DoFitTheAnswer: Story = {
+  args: { label: 'Description', placeholder: 'What it is, what it is made of, who it is for', minRows: 4 },
+}
+
+/** Guidelines, Don't: one row reads as a single-line field and hides what is written. */
+export const DontOneRow: Story = {
+  tags: ['!dev'],
+  args: { label: 'Description', placeholder: 'What it is, what it is made of, who it is for', minRows: 1 },
 }

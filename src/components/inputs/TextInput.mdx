@@ -1,44 +1,198 @@
-import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
+import { TextInput } from './TextInput'
 import * as TextInputStories from './TextInput.stories'
 
 <Meta of={TextInputStories} />
 
 # Text Input
 
-A single line of text: a name, an email, a URL. Spec:
-[uiguideline.com/components/text-input](https://www.uiguideline.com/components/text-input).
-Label, description and invalid state are wired by Base UI's
-[Field](https://base-ui.com/react/components/field).
+<DocTabs>
+<DocTab value="overview">
+
+A single line of text: a name, an email, a URL.
+
+<Status of={TextInputStories} />
 
 <Canvas of={TextInputStories.Default} />
 
+## Variants
+
+There is one appearance, the white outlined box. What changes is the
+size, what sits beside the value, and the validation state.
+
+<Canvas of={TextInputStories.Sizes} />
+
+| Size | Use for |
+| --- | --- |
+| `md` | Forms and dialogs: the default. |
+| `sm` | Dense places: toolbars, table filters, inline edits. |
+
+<Canvas of={TextInputStories.PrefixSuffix} />
+
+| Affix | Use for |
+| --- | --- |
+| `prefix` | A fixed start the value continues: "https://", a currency sign, an icon that says what the field holds. |
+| `suffix` | A unit the value is measured in: "kg", "%", "days". |
+
+<Canvas of={TextInputStories.Validation} />
+
+| Validation state | Use for |
+| --- | --- |
+| `default` | Before anything is checked. |
+| `error` | The value cannot be accepted. `helperText` says what to change. |
+| `success` | A value checked against the server and accepted, such as a free username. Not for every field that passes. |
+
+## Resources
+
+From npm, or copied into your project through the registry:
+
+```js
+import { TextInput } from 'zweihander/text-input'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/text-input.json
+```
+
+- Source: [src/components/inputs/TextInput.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/inputs/TextInput.tsx)
+- Spec: [uiguideline.com/components/text-input](https://www.uiguideline.com/components/text-input)
+- Behaviour: [Base UI Field](https://base-ui.com/react/components/field)
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
 ## Anatomy
 
-| Part | What it is |
-| --- | --- |
-| **Label** | `label`, above the field. Clicking it focuses the input. |
-| **Field** | The box that draws the edge, fill and focus ring. |
-| **Prefix** / **Suffix** | `prefix`, `suffix`: text or an icon inside the field, in the muted colour. |
-| **Placeholder** | `placeholder`. A hint, never a replacement for the label. |
-| **Helper text** | `helperText`, under the field. The error message when `validationState` is error. |
+<Anatomy parts={TextInputStories.anatomyParts}>
+  <Story of={TextInputStories.Anatomy} />
+</Anatomy>
 
-## Props
+The placeholder has no element of its own: it is the input's, shown in
+`--muted-foreground` while the input is empty. With `required`, an
+asterisk follows the label.
 
-| Prop | Values | Default | |
-| --- | --- | --- | --- |
-| `label` | node | – | |
-| `helperText` | node | – | |
-| `validationState` | `default`, `success`, `error` | `default` | |
-| `size` | `sm`, `md` | `md` | 24, 32px. |
-| `prefix`, `suffix` | node | – | |
-| `isFullWidth` | boolean | `false` | Otherwise 20rem, capped at its container. |
-| `value`, `defaultValue`, `onChange` | | – | As on `<input>`: `onChange` gets the event. |
-| `placeholder`, `name`, `pattern`, `maxLength`, `type`, `autoFocus` | | – | Native. |
-| `disabled`, `required`, `readOnly` | boolean | `false` | Native. |
+## Measurements
 
-Every other `<input>` attribute passes through to the input, including `ref`.
+Each size is a control tier (Foundations / Sizing). Fields take the normal
+inline padding, not Button's spacious one, so the value lines up with the
+label above it, and the field radius, which never becomes a pill.
 
-<Controls of={TextInputStories.Default} />
+<SpecTable
+  caption="sm"
+  rows={[
+    { part: 'Container', property: 'Height', token: '--control-sm' },
+    { part: 'Container', property: 'Inline padding', token: '--control-sm-pad' },
+    { part: 'Container', property: 'Corner radius', token: '--control-sm-radius-field' },
+    { part: 'Container', property: 'Gap', token: '--control-sm-gap' },
+    { part: 'Prefix and suffix icon', property: 'Size', token: '--icon-sm' },
+    { part: 'Input', property: 'Font size', token: '--text-body-sm' },
+    { part: 'Input', property: 'Line height', token: '--leading-body-sm' },
+  ]}
+/>
+
+<SpecTable
+  caption="md"
+  rows={[
+    { part: 'Container', property: 'Height', token: '--control-md' },
+    { part: 'Container', property: 'Inline padding', token: '--control-md-pad' },
+    { part: 'Container', property: 'Corner radius', token: '--control-md-radius-field' },
+    { part: 'Container', property: 'Gap', token: '--control-md-gap' },
+    { part: 'Prefix and suffix icon', property: 'Size', token: '--icon-md' },
+    { part: 'Input', property: 'Font size', token: '--text-body' },
+    { part: 'Input', property: 'Line height', token: '--leading-body' },
+  ]}
+/>
+
+<SpecTable
+  caption="Every size"
+  rows={[
+    { part: 'Label and helper text', property: 'Font size', token: '--text-body' },
+    { part: 'Label and helper text', property: 'Line height', token: '--leading-body' },
+    { part: 'Label, container, helper', property: 'Gap between', token: '--space-1-5' },
+    { part: 'Focus ring', property: 'Width', token: '--focus-width' },
+    { part: 'Focus ring', property: 'Offset', token: '--focus-offset' },
+  ]}
+/>
+
+The label and helper stay at body size in `sm` too: only the box gets
+smaller. The field is 20rem wide, capped at its container; with
+`isFullWidth` it fills the container. The edge is 1px.
+
+## Color
+
+The field has no colour variants. Its validation state changes the edge
+and the helper text together. Switch the theme in the toolbar: the values
+follow.
+
+<SpecTable
+  caption="default"
+  rows={[
+    { part: 'Container', property: 'Background', token: '--card' },
+    { part: 'Container', property: 'Border', token: '--field-border' },
+    { part: 'Container', property: 'Shadow', token: '--shadow-2xs' },
+    { part: 'Label and input', property: 'Colour', token: '--foreground' },
+    { part: 'Placeholder, prefix, suffix', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Helper text', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Required asterisk', property: 'Colour', token: '--danger-text' },
+    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+  ]}
+/>
+
+<SpecTable
+  caption="error"
+  rows={[
+    { part: 'Container', property: 'Border', token: '--danger-text' },
+    { part: 'Helper text', property: 'Colour', token: '--danger-text' },
+    { part: 'Focus ring', property: 'Colour', token: '--danger-text' },
+  ]}
+/>
+
+<SpecTable
+  caption="success"
+  rows={[
+    { part: 'Container', property: 'Border', token: '--success-text' },
+    { part: 'Helper text', property: 'Colour', token: '--success-text' },
+  ]}
+/>
+
+<SpecTable caption="Read-only" rows={[{ part: 'Container', property: 'Background', token: '--surface-filled' }]} />
+
+## States
+
+<States
+  states={[
+    { label: 'Enabled' },
+    { label: 'Focus', pseudo: 'focus' },
+    { label: 'Filled', content: <TextInput label="Name" defaultValue="Okami" /> },
+    { label: 'Error', content: <TextInput label="Name" validationState="error" helperText="Enter a name." required /> },
+    { label: 'Read-only', content: <TextInput label="Name" defaultValue="Okami" readOnly /> },
+    { label: 'Disabled', content: <TextInput label="Name" defaultValue="Okami" disabled /> },
+  ]}
+>
+  <TextInput label="Name" placeholder="Your name" />
+</States>
+
+- **Hover** changes nothing: the field is already plainly a field, and the
+  cursor turns to a text cursor.
+- **Focus** is a 2px `--ring` outline, 2px outside the box, drawn on click
+  as well as from the keyboard, since that is where typing will go. In the
+  error state the ring is `--danger-text`.
+- **Read-only** fills the box with `--surface-filled`: it can be focused
+  and copied, not changed.
+- **Disabled** is the enabled look at 50% opacity.
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={TextInputStories} />
+</div>
+
+Every other `<input>` attribute passes through to the input, including
+`ref`, `type`, `name`, `pattern`, `maxLength`, `inputMode` and
+`autoComplete`.
 
 ### Differences from the spec
 
@@ -52,29 +206,71 @@ Every other `<input>` attribute passes through to the input, including `ref`.
 - **Changed in 0.8:** `error` became `validationState="error"` plus
   `helperText`; `forwardRef` is gone (`ref` is a prop in React 19).
 
-## Usage
+</DocTab>
+<DocTab value="guidelines">
 
-<Canvas of={TextInputStories.Sizes} />
+## When to use
 
-<Canvas of={TextInputStories.PrefixSuffix} />
+Use a Text Input for short free text on one line: a name, an email
+address, a URL, a title. Give every field a visible label, and use the
+placeholder only for a hint of the format.
 
-<Canvas of={TextInputStories.Validation} />
+<DoDont
+  do={<Story of={TextInputStories.DoVisibleLabel} />}
+  doCaption="A visible label names the field; the placeholder only hints at the format."
+  dont={<Story of={TextInputStories.DontPlaceholderAsLabel} />}
+  dontCaption="A placeholder as the label disappears on the first keystroke, and with it what the field was for."
+/>
+
+**Errors** say what to change, in the helper text, next to the field. The
+red edge only points at the message.
+
+<DoDont
+  do={<Story of={TextInputStories.DoSayWhatToFix} />}
+  doCaption="The error says what is wrong and how to fix it."
+  dont={<Story of={TextInputStories.DontColourOnly} />}
+  dontCaption="A red edge and 'Invalid' leave people guessing what to change."
+/>
+
+## When not to use
+
+- **For several lines.** Use a
+  [Textarea](?path=/docs/components-inputs-textarea--docs): Enter adds a
+  line instead of submitting.
+- **For a quantity.** Use a
+  [Number Input](?path=/docs/components-inputs-numberinput--docs), which
+  steps and parses. For numbers that are identifiers (postcodes, card
+  numbers, phone numbers) keep the Text Input with `inputMode="numeric"`.
+- **For a search query.** Use [Search](?path=/docs/components-inputs-search--docs),
+  which clears and is exposed as a searchbox.
+- **To pick from a known list.** Use a
+  [Select](?path=/docs/components-inputs-select--docs) or a
+  [Combobox](?path=/docs/components-inputs-combobox--docs).
+- **For a date.** Use a [Date Picker](?path=/docs/components-inputs-datepicker--docs).
 
 ## Accessibility
 
-- The label is a real `<label>` for the input; the helper is its
-  description (`aria-describedby`); the error state sets `aria-invalid`.
-  Do not rely on the placeholder as a label: it disappears as soon as
-  anyone types.
-- **The edge is `--field-border`, about 1.5:1 — a deliberate exception
-  to WCAG 1.4.11** (approved 2026-10-08), for the light hairline of the
-  Claude apps. The outlined field is a white `--card` box with a faint
-  drop on the off-white page, and the label, placeholder and focus ring
-  mark it too. Low-vision users may still find the box hard to see; if
-  your audience needs 3:1, set `--field-border: var(--control-border)`.
-- Focus draws a 2px ring around the whole field (in the danger colour
-  when invalid), on click as well as keyboard, since that is where typing
-  goes.
-- Pressing the field's padding or a prefix focuses the input, like a
-  native field.
-- Heights are 24 or 32px, 44px hit area on touch; the label is part of the target too.
+- The label is a real `<label>` for the input: clicking it focuses the
+  input, and it is the input's accessible name.
+- `helperText` is the input's description (`aria-describedby`), so a
+  screen reader reads it after the name.
+- `validationState="error"` sets `aria-invalid="true"` on the input.
+  Colour is never the only signal: the helper text carries the message.
+- `required` sets the native `required`; the asterisk is `aria-hidden`, so
+  it is not read as "star".
+- Do not rely on the placeholder as a label: it is not reliably announced
+  and disappears as soon as anyone types. Without a visible label, pass
+  `aria-label`.
+- Pressing the field's padding or a prefix focuses the input, as a click
+  anywhere on a native field does.
+- **The edge is `--field-border`, about 1.5:1, a deliberate exception to
+  WCAG 1.4.11** (approved 2026-10-08), for the light hairline of the
+  Claude apps. The field is a white `--card` box with a faint drop on the
+  off-white page, and the label, placeholder and focus ring mark it too.
+  If your audience needs 3:1, set `--field-border: var(--control-border)`.
+- Focus ring: 2px, 2px offset, on click and keyboard alike.
+- Heights are 24 and 32px, at or above WCAG 2.5.8's 24px minimum. The
+  label is part of the target, since clicking it focuses the input.
+
+</DocTab>
+</DocTabs>
