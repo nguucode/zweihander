@@ -158,13 +158,32 @@ export const Loop: Story = {
     await userEvent.click(next)
     await expect(args.onIndexChange).toHaveBeenLastCalledWith(0)
     // Native buttons: Enter and Space press them, Tab moves on to the track and the dots.
+    // Each press waits for the track to rest: a press mid-scroll interrupts
+    // the smooth scroll, and Firefox then reports where it stopped.
+    const track = canvas.getByRole('group', { name: '1 of 5' }).parentElement!
+    const rest = async (slide: number) => {
+      await waitFor(() => expect(canvas.getByRole('button', { name: `Slide ${slide}` })).toHaveAttribute('aria-current', 'true'))
+      let last = NaN
+      await waitFor(
+        () => {
+          const now = track.scrollLeft
+          const still = now === last
+          last = now
+          expect(still).toBe(true)
+        },
+        { interval: 150, timeout: 3000 },
+      )
+    }
     await expect(next).toHaveFocus()
+    await rest(1)
     await userEvent.keyboard('{Enter}')
     await expect(args.onIndexChange).toHaveBeenLastCalledWith(1)
+    await rest(2)
     await userEvent.keyboard(' ')
     await expect(args.onIndexChange).toHaveBeenLastCalledWith(2)
+    await rest(3)
     await userEvent.tab()
-    await expect(canvas.getByRole('group', { name: '1 of 5' }).parentElement).toHaveFocus()
+    await expect(track).toHaveFocus()
     await userEvent.tab()
     await expect(canvas.getByRole('button', { name: 'Slide 1' })).toHaveFocus()
   },
