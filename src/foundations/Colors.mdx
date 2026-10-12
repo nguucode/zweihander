@@ -135,10 +135,10 @@ until hovered or current, as in the Claude apps' sidebar. It reads about
 7.5:1 on the light page, so it is body-safe; use `--muted-foreground` for
 genuinely secondary text.
 
-**`--surface-subtle` is a filled panel that muted text can sit on.**
+**`--surface-filled` is a filled panel that muted text can sit on.**
 Muted text reads 4.85:1 on it (gray-50) and 5.64:1 on gray-800 in dark — a step off `--card` so a filled panel still reads as filled. The build
 measures `--muted-foreground` on `--background`, `--card`,
-`--surface-subtle` and `--muted` in both modes on all nine gray ramps, and
+`--surface-filled` and `--muted` in both modes on all nine gray ramps, and
 stops if any pair drops under 4.5:1. The tightest is neutral on `--muted`,
 at 4.60:1.
 
@@ -226,7 +226,7 @@ swappable on its own: an **accent** (blue by default) for `--primary` and
 | `scrim` | black 50% | black 50% | fixed |
 | `muted-foreground` | gray-500 | gray-400 | gray |
 | `subtle-foreground` | gray-600 | gray-300 | gray |
-| `surface-subtle` | gray-50 | gray-800 | gray |
+| `surface-filled` | gray-50 | gray-800 | gray |
 | `neutral-solid` | gray-600 | gray-600 | gray |
 | `neutral-solid-foreground` | gray-50 | gray-50 | gray |
 | `destructive` | red-600 | red-400 | fixed |
@@ -243,7 +243,7 @@ clears 4.5:1 on that fill — the warm hues take dark labels. Exceptions to
 the ramp rule: light `--card`/`--popover` (pure white, so a panel reads
 lighter than the gray-50 page) and dark `--border`/`--input`/`--selected`, and `--hover-overlay` in both
 (alpha, so they work over any surface — the sidebar's hover sits on
-`--surface-subtle`, which in dark equals the opaque `--accent` fill).
+`--surface-filled`, which in dark equals the opaque `--accent` fill).
 
 `--destructive` deliberately does **not** follow the accent. A status
 colour that changes with the brand stops being a status.

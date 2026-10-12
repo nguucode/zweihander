@@ -79,7 +79,7 @@
 .card > .footer {
   padding: var(--space-4) var(--space-6);
   border-block-start: 1px solid var(--border);
-  background: var(--surface-subtle);
+  background: var(--surface-filled);
 }
 
 .footer {

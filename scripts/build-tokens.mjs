@@ -204,7 +204,7 @@ for (const g of GRAYS) {
     const c = semantic.color[mode]
     const gray = Object.fromEntries(entries(primitives.gray[g]).map(([s, v]) => [s, v.$value]))
     const val = (k) => alias(c[k].$value, { accent: {}, gray })
-    for (const bg of ['background', 'card', 'surface-subtle', 'muted']) {
+    for (const bg of ['background', 'card', 'surface-filled', 'muted']) {
       const ratio = contrast(val('muted-foreground'), val(bg))
       worstMuted = Math.min(worstMuted, ratio)
       if (ratio < AA_TEXT)
