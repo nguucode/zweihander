@@ -33,6 +33,9 @@ jobs:
       # The copy-source path has no build step on our side, so a registry item
       # that ships an unresolvable import only fails in someone else's repo.
       - run: npm run registry:check
+      # The Playground's item list and props panels come from the story files;
+      # fails if a story file no longer loads or the committed list is stale.
+      - run: npm run playground:check
       - run: npx playwright install --with-deps chromium firefox webkit
       - run: npx tsc -b
       - run: npx vitest --project storybook run
