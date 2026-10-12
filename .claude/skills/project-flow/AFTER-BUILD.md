@@ -16,6 +16,8 @@ Review and QA cover every commit since the flow (or ticket branch) started, not 
 | ship | none | yes | See below. |
 | retro | retro | yes | After merge, run on this thread's own session (it is the primary source). Suggestions only: lint rules, checks, CLAUDE.md, coding standards. Apply nothing; list them in the closing reply. |
 
+**Visual impact (qa-run).** Local visual tests always fail against the CI baselines (other fonts and Chromium build), so a red run says nothing. Instead run `npx vitest --project visual run` on the base commit and again on the change, keeping a copy of `.vitest-attachments/` from each, and compare the two sets of actual images. Identical: no `update screenshots` label. Different: the label is needed, and the diff shows what changed.
+
 ## Loops
 
 A review, QA or CI finding sends the work back to the build step to fix, then down the table again. Up to 3 loops; the 4th needs the user's yes (`ask_decision`).
