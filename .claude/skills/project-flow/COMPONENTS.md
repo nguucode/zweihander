@@ -63,13 +63,23 @@ import * as NameStories from './Name.stories'
 
 Quy tắc cho từng block:
 
-- **Props sống trong `argTypes`.** Mỗi prop công khai có `description` trong `meta.argTypes` của story file. `<ArgTypes>` render bảng API từ đó, panel props của Playground đọc cùng nguồn qua `npm run playground:manifest`. Không viết bảng prop bằng tay trong MDX. Type và default thường do react-docgen suy ra; nó không đọc được props kiểu union (ví dụ `isIconOnly` bắt `aria-label`), khi đó khai báo thêm `table.type.summary`, `table.defaultValue.summary` và `control` cho mọi prop (xem `Button.stories.tsx`). Đổi story thì chạy `npm run playground:manifest` và commit `src/playground/manifest.json`.
+- **Props sống trong `argTypes`.** Mỗi prop công khai có `description` trong `meta.argTypes` của story file. `<ArgTypes>` render bảng API từ đó, panel props của Playground đọc cùng nguồn qua `npm run playground:manifest`. Không viết bảng prop bằng tay trong MDX. Type và default thường do react-docgen suy ra; khi nó không đọc được, xem [Ca khó](#ca-khó). Đổi story thì chạy `npm run playground:manifest` và commit `src/playground/manifest.json`.
 - **Anatomy** render component thật, không dùng ảnh. Danh sách part (`name`, `selector`, `description`) export từ story file là `anatomyParts` (thêm vào `excludeStories`), kèm một story `Anatomy` tag `!dev` có `play` kiểm mỗi selector khớp đúng một phần tử khác nhau. Part không có element riêng (label là text node) thì story bọc nó trong `<span>`.
 - **SpecTable** chỉ ghi tên token; giá trị đọc live từ CSS. Chỉ dùng token semantic hoặc token của tier (`--control-md`), không ghi biến nội bộ của component (`--button-bg`): chúng không resolve được ngoài component. Hover và pressed trộn màu bằng `color-mix` thì giải thích bằng chữ dưới `<States>`.
 - **DoDont** lấy cả hai bên từ story thật. Story "Don't" tag `!dev` để ẩn khỏi sidebar và Playground, vẫn chạy test.
 - `npm run docs:check` đỏ khi một trang component (`src/components/<category>/<Name>.mdx`, trừ patterns, templates và các trang Overview) không có `<DocTabs>`, thiếu tab hoặc mục ở bảng trên, hoặc nhắc tới token không tồn tại.
 
 Mọi trang component đều dùng ba tab; không còn format trang dài cũ.
+
+### Ca khó
+
+Các ticket docs đã tự xoay ở những chỗ này; làm theo đây thay vì nghĩ lại.
+
+- **States của component tĩnh** (Badge, Divider, Avatar, EmptyState: không có hover, focus, pressed). `docs:check` vẫn đòi `## States`. Mở bằng một câu "X is not interactive: no hover, focus or pressed. Its states are …", rồi `<States>` hiện các dạng hiển thị khác nhau (Badge: count, over `maxCount`, zero, dot) hoặc state của control bên trong nếu có (nút action của EmptyState). Mẫu: `Badge.mdx`, `Divider.mdx`, `EmptyState.mdx` (state của action qua `pseudo`). Component rộng không vừa một ô `<States>` (Tabs, Pagination) thì thêm một story nhỏ tag `!dev` riêng cho ô đó, ví dụ `Tabs.stories.tsx` `StatesUnderline`.
+- **Anatomy của overlay** (Menu, Modal, Popover, Tooltip, Toast: popup render qua portal vào `<body>`). Story `Anatomy` không thấy popup trong `canvasElement`, và trên trang docs popup sẽ đè lên nội dung. Render nó "như một bức ảnh": mở sẵn, `container` trỏ vào một `div` trong story, `inert` để không giữ focus, popup nằm trong flow thay vì positioned. Dùng helper `Pictured` và `expectAnatomy(canvasElement, anatomyParts)` từ `.storybook/blocks` (thread "Shared docs helpers"); khi helper chưa có trên main thì chép mẫu `Pictured` trong `Popover.stories.tsx` và merge main sau khi helper vào. Ghi một câu dưới `<Anatomy>` rằng popup trên tab là ảnh, như `Popover.mdx`.
+- **Giá trị chưa có token** (Divider dày 1/2/4px: chưa có thang border-width). `<SpecTable>` chỉ nhận token, nên đặt một bảng markdown thường dưới `## Measurements`, kèm một câu vì sao không phải token. Mẫu: `Divider.mdx`. Đừng ghép một token gần đúng (`--space-1` cho 4px viết cứng): bảng sẽ sai khi `--scaling` đổi.
+- **Prop docgen không đọc được.** react-docgen bỏ sót type và default với props kiểu union (`isIconOnly` bắt `aria-label`) và props kế thừa từ component bọc (ErrorState, SuccessState bọc EmptyState). Khi đó khai trong `meta.argTypes` cho **mọi** prop: `description`, `control`, `table.type.summary`, `table.defaultValue.summary`. Mẫu: `Button.stories.tsx`, `ErrorState.stories.tsx`. Kiểm bằng mắt bảng `<ArgTypes>` và panel props của Playground sau `npm run playground:manifest`.
+- **Không đặt state vào param URL mà Storybook đọc**: `path`, `id`, `viewMode`, `args`, `globals`, `full`, `panel`, `nav`, `shortcuts`, `addonPanel`, `tabs`, `tab`. `?tab=specs` làm Storybook ẩn canvas và trang trắng (#98). Block docs cần state trong URL thì dùng tên riêng, như `?docTab=` của `DocTabs.tsx`, và kiểm bằng URL Storybook đầy đủ có reload, vì story test không chạy code URL.
 
 Breaking change: sửa `argTypes` (và `### Differences from the spec` nếu có) **trước**, rồi mới sửa code.
 
