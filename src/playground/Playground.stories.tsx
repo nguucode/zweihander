@@ -1,18 +1,34 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect, screen, waitFor, within } from 'storybook/test'
-import { Playground, type Manifest, type ManifestItem } from './Playground'
+import { Playground, type Manifest, type ManifestItem, type Prop } from './Playground'
 
-const item = (kind: ManifestItem['kind'], name: string, category: string, status: string): ManifestItem => {
+const item = (
+  kind: ManifestItem['kind'],
+  name: string,
+  category: string,
+  status: string,
+  props: Prop[] = [],
+): ManifestItem => {
   const root = { component: 'components', pattern: 'patterns', template: 'templates' }[kind]
   const id = `${root}-${category}-${name}`.toLowerCase().replaceAll(' ', '-')
-  return { kind, id, name, category, status, storyId: `${id}--default`, props: [] }
+  return { kind, id, name, category, status, storyId: `${id}--default`, props }
 }
 
-/** A small stand-in for manifest.json: no Templates, so that group stays hidden. */
+/**
+ * A small stand-in for manifest.json: no Templates, so that group stays hidden.
+ * Button and Badge between them have one prop of each control; Tooltip has none.
+ */
 const manifest: Manifest = {
   items: [
-    item('component', 'Badge', 'Atomic Elements', 'beta'),
-    item('component', 'Button', 'Buttons', 'beta'),
+    item('component', 'Badge', 'Atomic Elements', 'beta', [
+      { name: 'count', control: 'number', default: 8 },
+      { name: 'isDot', control: 'boolean', default: false, description: 'A dot with no number.' },
+    ]),
+    item('component', 'Button', 'Buttons', 'beta', [
+      { name: 'variant', control: 'inline-radio', options: ['primary', 'secondary'], default: 'primary' },
+      { name: 'isLoading', control: 'boolean' },
+      { name: 'children', control: 'text', default: 'Button' },
+    ]),
     item('component', 'Tooltip', 'Overlays', 'experimental'),
     item('pattern', 'App Shell', 'Application UI', 'experimental'),
   ],
@@ -29,13 +45,27 @@ const openItems = async (canvas: ReturnType<typeof within>, userEvent: { click: 
 
 const frame = (canvas: ReturnType<typeof within>) => canvas.findByTitle(/live view$/)
 const param = (key: string) => new URLSearchParams(location.search).get(key)
+const propsPanel = (canvas: ReturnType<typeof within>) => within(canvas.getByRole('complementary', { name: 'Props' }))
+
+type ChannelEvent = { type: string; args: unknown[] }
+/**
+ * Stands in for Storybook's preview: says the story rendered, then keeps
+ * every channel event the page sends into the frame.
+ */
+const fakePreview = async (iframe: HTMLIFrameElement) => {
+  await waitFor(() => expect(iframe.contentDocument?.readyState).toBe('complete'))
+  const received: ChannelEvent[] = []
+  iframe.contentWindow!.addEventListener('message', (e) => received.push(JSON.parse(e.data).event))
+  const data = JSON.stringify({ key: 'storybook-channel', event: { type: 'storyRendered', args: [] } })
+  window.dispatchEvent(new MessageEvent('message', { data, source: iframe.contentWindow }))
+  return received
+}
 
 /** Starts from a clean address bar and puts the test page's own URL back after. */
 const withUrl = (search: Record<string, string>) => () => {
   const before = location.href
   const url = new URL(before)
-  url.searchParams.delete('item')
-  url.searchParams.delete('vp')
+  for (const key of ['item', 'vp', ...manifest.items.flatMap((i) => i.props.map((p) => p.name))]) url.searchParams.delete(key)
   for (const [k, v] of Object.entries(search)) url.searchParams.set(k, v)
   history.replaceState(null, '', url)
   return () => history.replaceState(null, '', before)
@@ -98,6 +128,8 @@ export const Default: Story = {
     await waitFor(async () => expect((await frame(canvas)).getAttribute('src')).toContain(`id=${tooltip.storyId}`))
     await expect(canvas.getByRole('heading', { name: 'Tooltip', level: 2 })).toBeVisible()
     await expect(param('item')).toBe(tooltip.id)
+    // Tooltip has no props: no right column.
+    await expect(canvas.queryByRole('complementary', { name: 'Props' })).toBeNull()
 
     // The filters survive closing and reopening the drawer.
     items = await openItems(canvas, userEvent)
@@ -119,14 +151,93 @@ export const Default: Story = {
   },
 }
 
+export const Props: Story = {
+  play: async ({ canvas, userEvent }) => {
+    const panel = propsPanel(canvas)
+    const iframe = await frame(canvas)
+    const src = iframe.getAttribute('src')
+    const received = await fakePreview(iframe)
+    const last = () => received.at(-1)
+    const update = (updatedArgs: object) => ({ type: 'updateStoryArgs', args: [{ storyId: button.storyId, updatedArgs }] })
+
+    // Controls start at the defaults.
+    await expect(panel.getByRole('combobox', { name: 'variant' })).toHaveTextContent('primary')
+    await expect(panel.getByRole('switch', { name: 'isLoading' })).not.toBeChecked()
+    await expect(panel.getByRole('textbox', { name: 'children' })).toHaveValue('Button')
+
+    // Each control sends its change into the frame and writes it to the URL.
+    await userEvent.click(panel.getByRole('combobox', { name: 'variant' }))
+    await userEvent.click(await screen.findByRole('option', { name: 'secondary' }))
+    await waitFor(() => expect(last()).toEqual(update({ variant: 'secondary' })))
+    await expect(param('variant')).toBe('secondary')
+
+    await userEvent.click(panel.getByRole('switch', { name: 'isLoading' }))
+    await waitFor(() => expect(last()).toEqual(update({ isLoading: true })))
+    await expect(param('isLoading')).toBe('true')
+
+    const text = panel.getByRole('textbox', { name: 'children' })
+    await userEvent.clear(text)
+    await userEvent.type(text, 'Save it!')
+    await waitFor(() => expect(last()).toEqual(update({ children: 'Save it!' })))
+    await expect(param('children')).toBe('Save it!')
+
+    // Back to its default, a prop is reset in the frame and leaves the URL.
+    await userEvent.click(panel.getByRole('switch', { name: 'isLoading' }))
+    await waitFor(() =>
+      expect(last()).toEqual({ type: 'resetStoryArgs', args: [{ storyId: button.storyId, argNames: ['isLoading'] }] }),
+    )
+    await expect(param('isLoading')).toBeNull()
+
+    // Reset puts everything back.
+    await userEvent.click(panel.getByRole('button', { name: 'Reset' }))
+    await waitFor(() =>
+      expect(last()).toEqual({
+        type: 'resetStoryArgs',
+        args: [{ storyId: button.storyId, argNames: ['variant', 'children'] }],
+      }),
+    )
+    await expect(param('variant')).toBeNull()
+    await expect(param('children')).toBeNull()
+    await expect(panel.getByRole('combobox', { name: 'variant' })).toHaveTextContent('primary')
+    await expect(panel.getByRole('textbox', { name: 'children' })).toHaveValue('Button')
+
+    // None of it reloaded the frame.
+    await expect((await frame(canvas)).getAttribute('src')).toBe(src)
+  },
+}
+
 export const FromUrl: Story = {
-  beforeEach: withUrl({ item: badge.id, vp: 'tablet' }),
-  play: async ({ canvas }) => {
+  beforeEach: withUrl({ item: badge.id, vp: 'tablet', count: '3', isDot: 'true', gone: 'x' }),
+  play: async ({ canvas, userEvent }) => {
     await expect(canvas.getByRole('heading', { name: 'Badge', level: 2 })).toBeVisible()
     const iframe = await frame(canvas)
     await expect(iframe.getAttribute('src')).toContain(`id=${badge.storyId}`)
     await expect(iframe.style.width).toBe('768px')
     await expect(canvas.getByRole('button', { name: 'Tablet' })).toHaveAttribute('aria-pressed', 'true')
+
+    // The shared props fill the panel and go into the frame once it has rendered; the unknown one is ignored.
+    const panel = propsPanel(canvas)
+    const count = panel.getByRole('textbox', { name: 'count' })
+    await expect(count).toHaveValue('3')
+    await expect(panel.getByRole('switch', { name: 'isDot' })).toBeChecked()
+    const received = await fakePreview(iframe)
+    await waitFor(() =>
+      expect(received).toEqual([
+        { type: 'updateStoryArgs', args: [{ storyId: badge.storyId, updatedArgs: { count: 3, isDot: true } }] },
+      ]),
+    )
+
+    // The number control: only the change goes into the frame.
+    await userEvent.clear(count)
+    await userEvent.type(count, '12')
+    await userEvent.tab()
+    await waitFor(() =>
+      expect(received.at(-1)).toEqual({
+        type: 'updateStoryArgs',
+        args: [{ storyId: badge.storyId, updatedArgs: { count: 12 } }],
+      }),
+    )
+    await expect(param('count')).toBe('12')
   },
 }
 
