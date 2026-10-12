@@ -28,3 +28,6 @@ dist-ssr
 storybook-static
 public/r
 site
+
+# Visual regression: actual and diff images of a failed comparison
+.vitest-attachments

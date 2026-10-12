@@ -74,6 +74,28 @@ export default defineConfig({
           ],
         }
       }
+    }, {
+      extends: true,
+      test: {
+        name: 'visual',
+        include: ['src/visual.test.tsx'],
+        // Pixels differ between engines, so a baseline per browser triples
+        // what a reviewer looks at for little gain: the story tests already
+        // run every component in all three. Chromium only.
+        browser: {
+          enabled: true,
+          headless: true,
+          provider: playwright({}),
+          instances: [{ browser: 'chromium' }],
+          // Playwright's default window, so the frame is not scaled down
+          // and the screenshot keeps every pixel. Wide enough for the
+          // AppShell story's 1100px box.
+          viewport: { width: 1280, height: 720 },
+          // A failure already writes the actual image and a diff; another
+          // screenshot would land beside the baselines.
+          screenshotFailures: false,
+        },
+      },
     }]
   }
 });
