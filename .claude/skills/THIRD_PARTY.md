@@ -1,15 +1,17 @@
 # Third-party skills
 
-Skill folders in `.claude/skills/` copied verbatim from upstream (no edits). `zw-build` is ours.
+Skill folders in `.claude/skills/` copied from upstream. `zw-build` is ours.
+
+Local edits: mattpocock `code-review` renamed to `matt-code-review` (folder and `name:`) because Claude Code's built-in `/code-review` shadows it; references in `ask-matt`, `implement`, `implement-spec` and `tdd` updated to match. Everything else is verbatim.
 
 | Source | Commit | License | Folders |
 | --- | --- | --- | --- |
-| https://github.com/mattpocock/skills (`skills/engineering`, `skills/productivity`) | `49dd158d1076134a641b33efb035946536778336` | MIT | ask-matt, code-review, codebase-design, diagnosing-bugs, domain-modeling, grill-me, grill-with-docs, grilling, handoff, implement, implement-spec, improve-codebase-architecture, pr, prototype, research, retro, setup-matt-pocock-skills, tdd, teach, to-questionnaire, to-spec, to-tickets, triage, wait-what, wayfinder, wizard, writing-for-agents |
+| https://github.com/mattpocock/skills (`skills/engineering`, `skills/productivity`) | `49dd158d1076134a641b33efb035946536778336` | MIT | ask-matt, matt-code-review, codebase-design, diagnosing-bugs, domain-modeling, grill-me, grill-with-docs, grilling, handoff, implement, implement-spec, improve-codebase-architecture, pr, prototype, research, retro, setup-matt-pocock-skills, tdd, teach, to-questionnaire, to-spec, to-tickets, triage, wait-what, wayfinder, wizard, writing-for-agents |
 | https://github.com/DietrichGebert/ponytail (`skills/`) | `9b58c1ffb790c075ca32e70a89cf1d80588f4abf` | MIT | ponytail, ponytail-audit, ponytail-debt, ponytail-gain, ponytail-help, ponytail-review |
 
 Not copied: mattpocock `misc/`, `in-progress/`, `deprecated/` and repo tooling; ponytail hooks, plugin manifests, benchmarks, assets.
 
-To update: re-clone at a newer commit, replace the folders above, bump the commit here.
+To update: re-clone at a newer commit, replace the folders above, bump the commit here, and re-apply the local edits above.
 
 ## mattpocock/skills license
 
