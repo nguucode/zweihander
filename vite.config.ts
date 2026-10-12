@@ -22,7 +22,9 @@ const baseUiEntries = Object.keys(
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
   plugins: [react()],
-  optimizeDeps: { include: baseUiEntries },
+  // The docs block tests import two Storybook entry points the stories do not;
+  // listed for the same reason as Base UI's.
+  optimizeDeps: { include: [...baseUiEntries, 'storybook/internal/core-events', 'storybook/preview-api'] },
   resolve: {
     alias: {
       '@': path.resolve(dirname, './src'),

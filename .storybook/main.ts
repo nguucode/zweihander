@@ -4,7 +4,10 @@ import remarkGfm from 'remark-gfm';
 const config: StorybookConfig = {
   "stories": [
     "../src/**/*.mdx",
-    "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"
+    "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)",
+    // Docs blocks for the component docs pages, and their tests.
+    "./blocks/*.mdx",
+    "./blocks/*.stories.tsx"
   ],
   "addons": [
     "@chromatic-com/storybook",
@@ -23,7 +26,9 @@ const config: StorybookConfig = {
         },
       },
     },
-    "@storybook/addon-mcp"
+    "@storybook/addon-mcp",
+    // Forces :hover, :focus-visible and :active for the <States> docs block.
+    "storybook-addon-pseudo-states"
   ],
   "framework": "@storybook/react-vite",
   "staticDirs": ["../public"]
