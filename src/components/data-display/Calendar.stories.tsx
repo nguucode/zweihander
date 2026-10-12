@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test'
+import { Theme } from '@/theme/Theme'
+import { contrast } from '@/test/story-helpers'
 import { Calendar } from './Calendar'
 
 /**
@@ -16,14 +18,13 @@ const meta = {
   component: Calendar,
   // Days of the months either side are aria-hidden decoration, faded below
   // 4.5:1 on purpose (WCAG 1.4.3 exempts decoration); axe cannot tell, so
-  // only color-contrast skips them. Today's white on --orange is 3.4:1 by design
-  // (see Calendar.module.css), so it is skipped too.
+  // only color-contrast skips them.
   parameters: {
     // Replaces the global rules list, so it repeats the focus-guard rule.
     a11y: {
       config: {
         rules: [
-          { id: 'color-contrast', selector: '*:not([data-outside], [aria-current="date"])' },
+          { id: 'color-contrast', selector: '*:not([data-outside])' },
           { id: 'aria-command-name', selector: '[role="link"], [role="button"]:not([data-base-ui-focus-guard]), [role="menuitem"]' },
           // Same guards: aria-hidden yet focusable by design, so Tab lands on them
           // and is sent back into or out of the popup.
@@ -80,6 +81,42 @@ export const Keyboard: Story = {
     await waitFor(() => expect(focused()).toBe(day(2025, 11, 5)))
     await userEvent.keyboard('{Enter}')
     await expect(args.onValueChange).toHaveBeenLastCalledWith(new Date(2025, 10, 5))
+  },
+}
+
+/**
+ * Today, on its own and inside a range, in both modes. The other stories pin
+ * September 2026, so this is the one that always shows the current month:
+ * axe checks the disc here, and the play measures it.
+ */
+export const Today: Story = {
+  args: { defaultValue: undefined },
+  render: (args) => {
+    const now = new Date()
+    const range = { start: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1), end: new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1) }
+    return (
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16 }}>
+        {(['light', 'dark'] as const).flatMap((mode) =>
+          [undefined, range].map((r) => (
+            <Theme key={mode + !!r} appearance={mode} style={{ background: 'var(--background)', padding: 8 }} data-audit={`${mode}${r ? ' range' : ''}`}>
+              <Calendar {...args} range={r} />
+            </Theme>
+          )),
+        )}
+      </div>
+    )
+  },
+  play: async ({ canvasElement }) => {
+    const failures: string[] = []
+    const days = canvasElement.querySelectorAll<HTMLElement>('[aria-current="date"]')
+    await expect(days).toHaveLength(4)
+    for (const today of days) {
+      const { color, backgroundColor } = getComputedStyle(today)
+      const page = getComputedStyle(today.closest<HTMLElement>('[data-audit]')!).backgroundColor
+      const ratio = contrast(color, page, backgroundColor)
+      if (ratio < 4.5) failures.push(`${today.closest<HTMLElement>('[data-audit]')!.dataset.audit}: ${ratio.toFixed(2)}`)
+    }
+    await expect(failures).toEqual([])
   },
 }
 
