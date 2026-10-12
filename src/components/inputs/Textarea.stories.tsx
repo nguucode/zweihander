@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useState } from 'react'
 import { expect, fn } from 'storybook/test'
+import { expectAnatomy } from '../../../.storybook/blocks'
 import { Textarea } from './Textarea'
 
 const meta = {
@@ -221,11 +222,7 @@ export const Anatomy: Story = {
   tags: ['!dev'],
   args: { label: 'Description', defaultValue: 'Sturdy oak table, seats six.', helperText: 'Shown on the product page.', minRows: 3 },
   play: async ({ canvasElement }) => {
-    // The docs markers follow these selectors: a DOM change must not leave
-    // a marker pointing at nothing, or at the wrong part.
-    const found = anatomyParts.map(({ selector }) => canvasElement.querySelector(selector))
-    await expect(found.every(Boolean)).toBe(true)
-    await expect(new Set(found).size).toBe(anatomyParts.length)
+    const found = await expectAnatomy(canvasElement, anatomyParts)
     await expect(found[3]).toHaveTextContent('Shown on the product page.')
   },
 }

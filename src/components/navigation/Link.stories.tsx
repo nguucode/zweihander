@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect, fn, userEvent } from 'storybook/test'
+import { expectAnatomy } from '../../../.storybook/blocks'
 import { Link } from './Link'
 
 const meta = {
@@ -171,11 +172,7 @@ export const Anatomy: Story = {
   tags: ['!dev'],
   args: { href: 'https://base-ui.com', isExternal: true, size: 'lg', children: <span>Base UI docs</span> },
   play: async ({ canvasElement }) => {
-    // The docs markers follow these selectors: a DOM change must not leave
-    // a marker pointing at nothing, or at the wrong part.
-    const found = anatomyParts.map(({ selector }) => canvasElement.querySelector(selector))
-    await expect(found.every(Boolean)).toBe(true)
-    await expect(new Set(found).size).toBe(anatomyParts.length)
+    const found = await expectAnatomy(canvasElement, anatomyParts)
     await expect(found[0]).toHaveTextContent('Base UI docs')
   },
 }

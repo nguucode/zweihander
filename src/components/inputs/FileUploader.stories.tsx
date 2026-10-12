@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect, fireEvent, fn, userEvent, waitFor } from 'storybook/test'
+import { expectAnatomy } from '../../../.storybook/blocks'
 import { Button } from '../buttons/Button'
 import { FileUploader } from './FileUploader'
 
@@ -275,11 +276,7 @@ export const Anatomy: Story = {
     getFileStatus: (f) => (f.name === 'team-photo.jpg' ? { progress: 45 } : undefined),
   },
   play: async ({ canvasElement }) => {
-    // The docs markers follow these selectors: a DOM change must not leave
-    // a marker pointing at nothing, or at the wrong part.
-    const found = anatomyParts.map(({ selector }) => canvasElement.querySelector(selector))
-    await expect(found.every(Boolean)).toBe(true)
-    await expect(new Set(found).size).toBe(anatomyParts.length)
+    const found = await expectAnatomy(canvasElement, anatomyParts)
     await expect(found[2]).toHaveAccessibleName('Choose files')
     await expect(found[4]).toContainElement(found[6] as HTMLElement)
   },

@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useEffect, useState } from 'react'
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test'
+import { expectAnatomy } from '../../../.storybook/blocks'
 import { Button } from '../buttons/Button'
 import { Modal } from '../overlays/Modal'
 import { ToastProvider, useToast, type ToastOptions } from './Toast'
@@ -314,11 +315,7 @@ export const Anatomy: Story = {
   render: () => <Preview toasts={[{ ...moved, variant: 'success' }]} />,
   play: async ({ canvasElement }) => {
     await within(canvasElement).findByRole('dialog', {}, { timeout: 3000 })
-    // The docs markers follow these selectors: a DOM change must not leave
-    // a marker pointing at nothing, or at the wrong part.
-    const found = anatomyParts.map(({ selector }) => canvasElement.querySelector(selector))
-    await expect(found.every(Boolean)).toBe(true)
-    await expect(new Set(found).size).toBe(anatomyParts.length)
+    const found = await expectAnatomy(canvasElement, anatomyParts)
     await expect(found[2]).toHaveTextContent('File moved to Trash')
     await expect(found[4]).toHaveTextContent('Undo')
   },

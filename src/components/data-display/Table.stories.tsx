@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useState } from 'react'
 import { expect, fn, userEvent, within } from 'storybook/test'
+import { expectAnatomy } from '../../../.storybook/blocks'
 import { Icon } from '@/lib/icon'
 import { Tag } from '../atomic-elements/Tag'
 import { Button } from '../buttons/Button'
@@ -414,11 +415,7 @@ export const Anatomy: Story = {
   tags: ['!dev'],
   args: { showCaption: true, isSelectable: true, expandedContent: details, defaultExpandedIds: ['p1'], rows: projects.slice(0, 3) },
   play: async ({ canvasElement, canvas }) => {
-    // The docs markers follow these selectors: a DOM change must not leave
-    // a marker pointing at nothing, or at the wrong part.
-    const found = anatomyParts.map(({ selector }) => canvasElement.querySelector(selector))
-    await expect(found.every(Boolean)).toBe(true)
-    await expect(new Set(found).size).toBe(anatomyParts.length)
+    const found = await expectAnatomy(canvasElement, anatomyParts)
     await expect(found[7]).toHaveTextContent('Atlas')
     await expect(found[8]).toHaveTextContent(/Sam Rivera owns Atlas/)
     // The expand column is announced like the others, by a hidden header.

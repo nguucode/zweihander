@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect, fn, userEvent, waitFor } from 'storybook/test'
+import { expectAnatomy } from '../../../.storybook/blocks'
 import { Icon } from '@/lib/icon'
 import { Tabs } from './Tabs'
 import { mediaRules } from '@/test/story-helpers'
@@ -197,12 +198,7 @@ export const Anatomy: Story = {
   tags: ['!dev'],
   args: WithIcons.args,
   play: async ({ canvasElement }) => {
-    // The docs markers follow these selectors: a DOM change must not leave
-    // a marker pointing at nothing, or at the wrong part.
-    await waitFor(() => expect(canvasElement.querySelector(anatomyParts[3].selector)).not.toBeNull())
-    const found = anatomyParts.map(({ selector }) => canvasElement.querySelector(selector))
-    await expect(found.every(Boolean)).toBe(true)
-    await expect(new Set(found).size).toBe(anatomyParts.length)
+    const found = await expectAnatomy(canvasElement, anatomyParts)
     await expect(found[2]).toHaveTextContent('Files')
   },
 }

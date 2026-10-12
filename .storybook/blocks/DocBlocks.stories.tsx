@@ -63,7 +63,7 @@ const anatomy = (
   <Anatomy
     parts={[
       { name: 'Container', selector: 'button', description: 'The box.' },
-      { name: 'Start icon', selector: 'svg', description: 'Decorative.' },
+      { name: 'Start icon', selector: 'svg', description: 'Decorative: `aria-hidden`.' },
     ]}
   >
     {example}
@@ -94,6 +94,9 @@ export const AnatomyMarkers: Story = {
     const key = canvas.getByRole('table')
     await expect(within(key).getByRole('rowheader', { name: 'Start icon' })).toBeVisible()
     await expect(key).not.toHaveTextContent('Not found')
+    // Backticks in a description become inline code.
+    await expect(within(key).getByText('aria-hidden').tagName).toBe('CODE')
+    await expect(key).not.toHaveTextContent('`')
   },
 }
 

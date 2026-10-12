@@ -1,6 +1,6 @@
-import { useState } from 'react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
+import { expectAnatomy, Pictured } from '../../../.storybook/blocks'
 import { Icon } from '@/lib/icon'
 import { Button } from '../buttons/Button'
 import { TextInput } from '../inputs/TextInput'
@@ -188,22 +188,12 @@ export const Disabled: Story = {
   },
 }
 
-/**
- * The tooltip open in place, as a picture: rendered inside the story instead
- * of `<body>`, and inert, so a docs page can show several beside other
- * examples. The popup sits in the flow 6px above the trigger, as it opens:
- * positioned, it would flip below the trigger whenever the picture is high
- * in the window.
- */
-function Pictured(props: TooltipProps) {
-  const [container, setContainer] = useState<HTMLDivElement | null>(null)
-  return (
-    <div ref={setContainer} inert data-tooltip-picture style={{ display: 'flex', flexDirection: 'column-reverse', alignItems: 'center', gap: 6 }}>
-      <style>{`[data-tooltip-picture] .${styles.positioner} { position: static !important; transform: none !important; }`}</style>
-      {container && <Tooltip {...props} open container={container} />}
-    </div>
-  )
-}
+/** The tooltip open in place, as a picture, 6px above the trigger. */
+const picture = (args: TooltipProps) => (
+  <Pictured positioner={styles.positioner} style={{ display: 'flex', flexDirection: 'column-reverse', alignItems: 'center', gap: 6 }}>
+    {(container) => <Tooltip {...args} open container={container} />}
+  </Pictured>
+)
 
 const linkSharing = {
   content: 'Anyone with the link can view this file. Change it under Share → General access.',
@@ -221,15 +211,11 @@ export const Anatomy: Story = {
   tags: ['!dev'],
   parameters: { picture: true },
   args: linkSharing,
-  render: (args) => <Pictured {...args} />,
+  render: picture,
   play: async ({ canvas, canvasElement }) => {
     // Rendered inside the story, not <body>.
     const tip = await canvas.findByRole('tooltip', { hidden: true })
-    // The docs markers follow these selectors: a DOM change must not leave
-    // a marker pointing at nothing, or at the wrong part.
-    const found = anatomyParts.map(({ selector }) => canvasElement.querySelector(selector))
-    await expect(found.every(Boolean)).toBe(true)
-    await expect(new Set(found).size).toBe(anatomyParts.length)
+    const found = await expectAnatomy(canvasElement, anatomyParts)
     await expect(found[0]).toBe(tip)
     await expect(found[1]).toHaveAttribute('aria-describedby', tip.id)
   },
@@ -247,14 +233,14 @@ export const OpenPicture: Story = {
   tags: ['!dev'],
   parameters: { picture: true },
   args: linkSharing,
-  render: (args) => <Pictured {...args} />,
+  render: picture,
 }
 
 /** Guidelines, Do: a short label for an icon-only button. */
 export const DoShortLabel: Story = {
   tags: ['!dev'],
   parameters: { picture: true },
-  render: (args) => <Pictured {...args} />,
+  render: picture,
 }
 
 /** Guidelines, Don't: something the reader needs, hidden in a tooltip. */
@@ -272,7 +258,7 @@ export const DontEssentialInfo: Story = {
   render: (args) => (
     <div style={{ display: 'flex', alignItems: 'end', gap: 'var(--space-1)' }}>
       <TextInput label="Password" type="password" />
-      <Pictured {...args} />
+      {picture(args)}
     </div>
   ),
 }

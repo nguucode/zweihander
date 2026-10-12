@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test'
+import { expectAnatomy } from '../../../.storybook/blocks'
 import { Theme } from '@/theme/Theme'
 import { contrast, mockToday } from '@/test/story-helpers'
 import { Calendar } from './Calendar'
@@ -328,11 +329,7 @@ export const Anatomy: Story = {
   tags: ['!dev'],
   args: { isDateDisabled: (d: Date) => d.getMonth() === 8 && (d.getDate() === 23 || d.getDate() === 24) },
   play: async ({ canvasElement }) => {
-    // The docs markers follow these selectors: a DOM change must not leave
-    // a marker pointing at nothing, or at the wrong part.
-    const found = anatomyParts.map(({ selector }) => canvasElement.querySelector(selector))
-    await expect(found.every(Boolean)).toBe(true)
-    await expect(new Set(found).size).toBe(anatomyParts.length)
+    const found = await expectAnatomy(canvasElement, anatomyParts)
     // Short month names differ between CLDR versions ("Sep", "Sept"): read the formatter.
     const title = new Intl.DateTimeFormat('en-GB', { month: 'short', year: 'numeric', calendar: 'gregory' }).format(new Date(2026, 8))
     await expect(found[0]).toHaveTextContent(title)
