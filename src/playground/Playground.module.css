@@ -251,3 +251,18 @@
   padding: var(--space-4);
   background: var(--background);
 }
+
+/* --- right column --------------------------------------------------------- */
+
+.props {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.propsHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
