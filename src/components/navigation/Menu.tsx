@@ -59,6 +59,13 @@ export interface MenuProps {
   open?: boolean
   defaultOpen?: boolean
   onOpenChange?: (open: boolean) => void
+  /**
+   * While open, lock page scroll and make the rest of the page inert, so the
+   * menu is the only thing to interact with. `false` leaves the page as is.
+   */
+  modal?: boolean
+  /** Where the popup renders instead of `<body>`, e.g. an element in fullscreen. */
+  container?: HTMLElement | null
   className?: string
 }
 
@@ -185,17 +192,19 @@ function Surface({
   side,
   align,
   sideOffset,
+  container,
   className,
   children,
 }: {
   side: MenuProps['side']
   align: MenuProps['align']
   sideOffset: number
+  container?: HTMLElement | null
   className?: string
   children: ReactNode
 }) {
   return (
-    <BaseMenu.Portal>
+    <BaseMenu.Portal container={container}>
       <BaseMenu.Positioner className={styles.positioner} side={side} align={align} sideOffset={sideOffset}>
         <BaseMenu.Popup className={cn(styles.popup, className)}>{children}</BaseMenu.Popup>
       </BaseMenu.Positioner>
@@ -211,12 +220,19 @@ export function Menu({
   open,
   defaultOpen,
   onOpenChange,
+  modal = true,
+  container,
   className,
 }: MenuProps) {
   return (
-    <BaseMenu.Root open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange && ((next) => onOpenChange(next))}>
+    <BaseMenu.Root
+      open={open}
+      defaultOpen={defaultOpen}
+      onOpenChange={onOpenChange && ((next) => onOpenChange(next))}
+      modal={modal}
+    >
       <BaseMenu.Trigger render={trigger} />
-      <Surface side={side} align={align} sideOffset={4} className={className}>
+      <Surface side={side} align={align} sideOffset={4} container={container} className={className}>
         <Entries items={items} />
       </Surface>
     </BaseMenu.Root>
