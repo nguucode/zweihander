@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
+import { useEffect, useState } from 'react'
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test'
 import { Button } from '../buttons/Button'
 import { Modal } from '../overlays/Modal'
@@ -16,13 +17,40 @@ const meta = {
   tags: ['beta'],
   component: ToastProvider,
   args: { children: null, placement: 'bottom-right', timeout: 5000, limit: 3 },
+  // Every prop is described here: these are the docs' API table and the
+  // Playground's props panel.
   argTypes: {
+    children: {
+      description: 'The app. `useToast()` works anywhere inside it.',
+      control: false,
+      table: { type: { summary: 'ReactNode' } },
+    },
     placement: {
+      description: 'The corner, or edge centre, toasts appear in. They swipe away toward the nearest edge.',
       control: 'select',
       options: ['top-left', 'top-center', 'top-right', 'bottom-left', 'bottom-center', 'bottom-right'],
+      table: {
+        type: { summary: "'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right'" },
+        defaultValue: { summary: "'bottom-right'" },
+      },
     },
-    children: { control: false },
+    timeout: {
+      description: 'Default time on screen, in milliseconds. A toast can set its own; `0` keeps it until dismissed.',
+      control: 'number',
+      table: { type: { summary: 'number' }, defaultValue: { summary: '5000' } },
+    },
+    limit: {
+      description: 'Toasts shown at once; newer ones wait until one closes.',
+      control: 'number',
+      table: { type: { summary: 'number' }, defaultValue: { summary: '3' } },
+    },
+    container: {
+      description: "Where the toasts render. In an element with a `transform` they sit in its corner instead of the window's; in a size container (`container-type: inline-size`) they fit its width.",
+      control: false,
+      table: { type: { summary: 'HTMLElement | RefObject<HTMLElement | null> | null' }, defaultValue: { summary: 'document.body' } },
+    },
   },
+  excludeStories: ['anatomyParts'],
 } satisfies Meta<typeof ToastProvider>
 
 export default meta
@@ -186,4 +214,135 @@ export const FromModal: Story = {
       return expect(title.contains(document.elementFromPoint(r.x + 2, r.y + r.height / 2))).toBe(true)
     })
   },
+}
+
+/** Shows these toasts on mount, kept open, and closes them on unmount. */
+function Shown({ toasts, pending }: { toasts: ToastOptions[]; pending?: string }) {
+  const toast = useToast()
+  useEffect(() => {
+    for (const options of toasts) toast.add({ timeout: 0, ...options })
+    // A promise that never settles keeps a loading toast on screen.
+    if (pending) toast.promise(new Promise(() => {}), { loading: pending, success: '', error: '' })
+    return () => toast.close()
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps -- shown once, on mount
+  return null
+}
+
+/**
+ * Toasts drawn in place, for the docs. The inner layer's `transform` makes it
+ * the containing block of the fixed viewport, so the toasts sit in its corner
+ * rather than the window's; as a size container, they fit its width.
+ */
+function Preview({ toasts, pending, height = '7rem' }: { toasts: ToastOptions[]; pending?: string; height?: string }) {
+  // The layer must exist before the portal mounts into it.
+  const [layer, setLayer] = useState<HTMLDivElement | null>(null)
+  return (
+    <div style={{ position: 'relative', blockSize: height }}>
+      {/* Sets the width: a toast's, or less when there is less room. The
+          fixed toasts give the box no width of their own, and a replaced
+          element with a percentage max-width can shrink to fit. */}
+      <svg aria-hidden="true" style={{ display: 'block', inlineSize: '26rem', maxInlineSize: '100%', blockSize: 0 }} />
+      <div ref={setLayer} style={{ position: 'absolute', inset: 0, containerType: 'inline-size', transform: 'translateZ(0)' }}>
+        {layer && (
+          <ToastProvider container={layer} placement="top-left" limit={toasts.length + (pending ? 1 : 0)}>
+            <Shown toasts={toasts} pending={pending} />
+          </ToastProvider>
+        )}
+      </div>
+    </div>
+  )
+}
+
+const moved: ToastOptions = { title: 'File moved to Trash', description: 'Q3 report.pdf', action: { label: 'Undo', onClick: () => {} } }
+
+/** One toast in place, every part showing. */
+export const Static: Story = {
+  render: () => <Preview toasts={[moved]} />,
+  play: async ({ canvasElement }) => {
+    // Rendered into the story, not the page's corner.
+    const toast = await within(canvasElement).findByRole('dialog', {}, { timeout: 3000 })
+    await expect(toast).toHaveTextContent('File moved to Trash')
+  },
+}
+
+/** Every variant in place: the colour is on the icon only. */
+export const VariantsStatic: Story = {
+  render: () => (
+    <Preview
+      height="22rem"
+      toasts={(['default', 'info', 'success', 'warning', 'danger'] as const).map((variant) => ({
+        variant,
+        title: `${variant[0].toUpperCase()}${variant.slice(1)}`,
+        description: 'Something happened.',
+        // A picture of each variant. A high-priority toast hides itself from
+        // assistive tech until focused (Base UI announces its text through a
+        // live region of its own), which axe flags in a static preview.
+        priority: 'low',
+      }))}
+    />
+  ),
+  play: async ({ canvasElement }) => {
+    await waitFor(() => expect(canvasElement.querySelectorAll('[role="dialog"], [role="alertdialog"]')).toHaveLength(5))
+  },
+}
+
+/** The States block's example: four side by side are narrow, so the title wraps. */
+export const StateExample: Story = {
+  tags: ['!dev'],
+  render: () => <Preview toasts={[moved]} height="8.5rem" />,
+}
+
+/** While a `promise()` is pending: a spinner in place of the icon. */
+export const Pending: Story = {
+  tags: ['!dev'],
+  render: () => <Preview toasts={[]} pending="Uploading 3 files…" height="5.5rem" />,
+}
+
+/** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
+export const anatomyParts = [
+  { name: 'Container', selector: '[role="dialog"]', description: 'The surface, in the opposite appearance to the page.' },
+  { name: 'Icon', selector: '[role="dialog"] > span[aria-hidden="true"]', description: "The variant's filled icon; none for `default`, a spinner while pending." },
+  { name: 'Title', selector: '[role="dialog"] h2', description: 'Semibold. What happened.' },
+  { name: 'Description', selector: '[role="dialog"] p', description: 'Optional, muted.' },
+  { name: 'Action', selector: '[role="dialog"] button:not([aria-label])', description: 'Optional, one text button, e.g. "Undo".' },
+  { name: 'Close button', selector: '[role="dialog"] button[aria-label="Dismiss"]', description: 'Always there.' },
+]
+
+/** Every part present, in place. */
+export const Anatomy: Story = {
+  tags: ['!dev'],
+  render: () => <Preview toasts={[{ ...moved, variant: 'success' }]} />,
+  play: async ({ canvasElement }) => {
+    await within(canvasElement).findByRole('dialog', {}, { timeout: 3000 })
+    // The docs markers follow these selectors: a DOM change must not leave
+    // a marker pointing at nothing, or at the wrong part.
+    const found = anatomyParts.map(({ selector }) => canvasElement.querySelector(selector))
+    await expect(found.every(Boolean)).toBe(true)
+    await expect(new Set(found).size).toBe(anatomyParts.length)
+    await expect(found[2]).toHaveTextContent('File moved to Trash')
+    await expect(found[4]).toHaveTextContent('Undo')
+  },
+}
+
+/** Guidelines, Do: news about something done, with a way to undo it. */
+export const DoUndo: Story = {
+  tags: ['!dev'],
+  render: () => <Preview toasts={[moved]} />,
+}
+
+/** Guidelines, Don't: a problem the reader must fix, in something that goes away. */
+export const DontMustAct: Story = {
+  tags: ['!dev'],
+  render: () => (
+    <Preview
+      toasts={[
+        {
+          variant: 'warning',
+          title: 'Your card expires tomorrow',
+          description: 'Update it to keep your plan.',
+          action: { label: 'Update card', onClick: () => {} },
+        },
+      ]}
+    />
+  ),
 }

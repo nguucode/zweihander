@@ -1,66 +1,164 @@
-import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
 import * as InlineAlertStories from './InlineAlert.stories'
 
 <Meta of={InlineAlertStories} />
 
 # Inline Alert
 
-A one-line message that sits in the flow of a form or a section: "That
-URL is taken", "Changes are saved automatically". No box, no title, no
-close button. For a message about a whole page or region, use an
-[Alert](?path=/docs/components-notifications-alert--docs). Our own spec:
-uiguideline.com has no page for it. A plain element.
+<DocTabs>
+<DocTab value="overview">
+
+A one-line message in the flow of a form or a section, with no box, no
+title and no close button: "Changes are saved automatically", "Couldn't
+reach the server".
+
+<Status of={InlineAlertStories} />
 
 <Canvas of={InlineAlertStories.Variants} />
 
-## Anatomy
+## Variants
 
-| Part | What it is |
+`variant` is the colour, by meaning, and the whole line takes it.
+
+| Variant | Use for |
 | --- | --- |
-| **Icon** | The variant's filled icon, one line tall. Replaceable, or `false` for none. |
-| **Message** | `children`, in the variant's text colour. |
-| **Action** | Optional short link or button after the message. |
+| `info` | A fact about what is above it: "Changes are saved automatically." |
+| `success` | A check that passed: "Domain verified." |
+| `warning` | A consequence to know before going on: "This link expires in 24 hours." |
+| `danger` | Something that failed: "Couldn't reach the server." |
 
-## Props
-
-| Prop | Values | Default | |
-| --- | --- | --- | --- |
-| `variant` | `info`, `success`, `warning`, `danger` | `info` | |
-| `size` | `sm`, `md` | `md` | `body-sm` or `body`. |
-| `icon` | node or `false` | variant's icon | |
-| `action` | node | – | |
-| `isLive` | boolean | `false` | Announce it when it appears. |
-
-Every other `<div>` attribute passes through.
-
-<Controls of={InlineAlertStories.Default} />
-
-### Design notes
-
-- **The whole line is in the variant's text colour.** Alert can keep its
-  message in `--foreground` because the box carries the colour; an
-  inline alert has no box, so the text does. Every `--*-text` token is
-  4.5:1 on the page in both modes, so a message of any length stays
-  readable.
-- **Alert or Inline Alert?** Alert when the message is about a page or a
-  region and may need a title, an action row or dismissing; Inline Alert
-  when it is about the thing right above it.
-
-## Usage
-
-<Canvas of={InlineAlertStories.InAForm} />
+<Canvas of={InlineAlertStories.Small} />
 
 <Canvas of={InlineAlertStories.WithAction} />
 
 <Canvas of={InlineAlertStories.LongMessage} />
 
-<Canvas of={InlineAlertStories.Small} />
+## Resources
 
-For an error on a single field, use the field's own `validationState`
-and `helperText`: it is tied to the field with `aria-describedby`. Inline
-Alert is for messages about a group of fields or a whole form.
+From npm, or copied into your project through the registry:
 
-The icon is `aria-hidden`: the words have to carry the meaning.
+```js
+import { InlineAlert } from 'zweihander/inline-alert'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/inline-alert.json
+```
+
+- Source: [src/components/notifications/InlineAlert.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/notifications/InlineAlert.tsx)
+- Spec: our own; uiguideline.com has no page for it
+- Behaviour: a plain element, no Base UI part
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
+## Anatomy
+
+<Anatomy parts={InlineAlertStories.anatomyParts}>
+  <Story of={InlineAlertStories.Anatomy} />
+</Anatomy>
+
+The icon box is one line tall, so on a message that wraps it stays on the
+first line.
+
+## Measurements
+
+<SpecTable
+  caption="sm"
+  rows={[
+    { part: 'Message', property: 'Font size', token: '--text-body-sm' },
+    { part: 'Message', property: 'Line height', token: '--leading-body-sm' },
+    { part: 'Icon', property: 'Size', token: '--icon-xs' },
+    { part: 'Container', property: 'Gap, icon to message', token: '--space-1-5' },
+  ]}
+/>
+
+<SpecTable
+  caption="md"
+  rows={[
+    { part: 'Message', property: 'Font size', token: '--text-body' },
+    { part: 'Message', property: 'Line height', token: '--leading-body' },
+    { part: 'Icon', property: 'Size', token: '--icon-md' },
+    { part: 'Container', property: 'Gap, icon to message', token: '--space-2' },
+  ]}
+/>
+
+<SpecTable caption="Every size" rows={[{ part: 'Action', property: 'Space before', token: '--space-1' }]} />
+
+No padding, border or background: it lines up with the text and fields
+around it.
+
+## Color
+
+The whole line, icon and message, takes the variant's text colour. An Alert
+can keep its message in `--foreground` because its box carries the colour;
+an inline alert has no box, so the text does. Every `--*-text` token is
+4.5:1 on the page in both modes, so a message of any length stays readable.
+
+<SpecTable
+  caption="Icon and message, by variant"
+  rows={[
+    { part: 'info', property: 'Colour', token: '--info-text' },
+    { part: 'success', property: 'Colour', token: '--success-text' },
+    { part: 'warning', property: 'Colour', token: '--warning-text' },
+    { part: 'danger', property: 'Colour', token: '--danger-text' },
+  ]}
+/>
+
+The action keeps its own colours: a Link or a Button, as passed.
+
+## States
+
+The message has no states. An action in it has its own.
+
+<States
+  states={[
+    { label: 'Enabled' },
+    { label: 'Action hover', pseudo: 'hover' },
+    { label: 'Action focus', pseudo: 'focus-visible' },
+  ]}
+>
+  <Story of={InlineAlertStories.WithAction} />
+</States>
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={InlineAlertStories} />
+</div>
+
+Every other `<div>` attribute passes through, including `ref`.
+
+</DocTab>
+<DocTab value="guidelines">
+
+## When to use
+
+Use an Inline Alert for a short message about the thing right above it: a
+group of fields, a whole form, a section. A failed submit is the common
+case.
+
+<Canvas of={InlineAlertStories.InAForm} />
+
+<DoDont
+  do={<Story of={InlineAlertStories.DoFieldError} />}
+  doCaption="An error about one field goes on the field, as its helper text: it is read when the field is focused."
+  dont={<Story of={InlineAlertStories.DontForOneField} />}
+  dontCaption="An inline alert under a field is not tied to it: a screen reader in the field never hears it."
+/>
+
+## When not to use
+
+- **For an error on one field.** Use the field's own `validationState` and
+  `helperText`, tied to it with `aria-describedby`.
+- **For a message about a whole page or region**, or one that needs a
+  title, an action row or a close button. Use an
+  [Alert](?path=/docs/components-notifications-alert--docs).
+- **For news about something that just happened.** Use a
+  [Toast](?path=/docs/components-notifications-toast--docs).
 
 ## Accessibility
 
@@ -68,4 +166,9 @@ The icon is `aria-hidden`: the words have to carry the meaning.
 - `isLive` for a message that appears in response to something (a failed
   submit): `danger` and `warning` become `role="alert"` and are read at
   once, `info` and `success` become `role="status"` and wait.
-- The icon is `aria-hidden`.
+- The icon is `aria-hidden`: the words carry the meaning.
+- The action is whatever you pass (a Link, a Button) and keeps its own
+  keyboard behaviour and focus ring.
+
+</DocTab>
+</DocTabs>

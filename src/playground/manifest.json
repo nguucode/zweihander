@@ -2189,7 +2189,8 @@
         {
           "name": "children",
           "control": "text",
-          "default": "The card ending in 4242 expires at the end of this month. Update it to avoid an interruption."
+          "default": "The card ending in 4242 expires at the end of this month. Update it to avoid an interruption.",
+          "description": "The description: what it means and what to do."
         },
         {
           "name": "variant",
@@ -2200,7 +2201,8 @@
             "warning",
             "danger"
           ],
-          "default": "info"
+          "default": "info",
+          "description": "Colour by meaning. `danger` and `warning` also decide how `isLive` announces it."
         },
         {
           "name": "appearance",
@@ -2210,19 +2212,26 @@
             "outlined",
             "solid"
           ],
-          "default": "subtle"
+          "default": "subtle",
+          "description": "Emphasis, the same three as Tag: `subtle` tint, `outlined` border, `solid` fill."
+        },
+        {
+          "name": "title",
+          "control": "text",
+          "default": "Payment method expiring",
+          "description": "Optional, semibold. What happened, in a few words."
         },
         {
           "name": "closeLabel",
           "control": "text",
           "default": "Dismiss",
-          "description": "Accessible name of the close button."
+          "description": "The close button's accessible name."
         },
         {
           "name": "isLive",
           "control": "boolean",
           "default": false,
-          "description": "Announce the alert when it appears. `danger` and `warning` interrupt\n(`role=\"alert\"`), the others wait their turn (`role=\"status\"`). Leave it\noff for an alert that is on the page from the start."
+          "description": "Announce it when it appears: `danger` and `warning` interrupt (`role=\"alert\"`), the others wait (`role=\"status\"`). Off for an alert that is on the page from the start."
         }
       ]
     },
@@ -2237,7 +2246,8 @@
         {
           "name": "children",
           "control": "text",
-          "default": "Changes are saved automatically."
+          "default": "Changes are saved automatically.",
+          "description": "The message."
         },
         {
           "name": "variant",
@@ -2248,7 +2258,8 @@
             "warning",
             "danger"
           ],
-          "default": "info"
+          "default": "info",
+          "description": "Colour by meaning: the whole line takes it. `danger` and `warning` also decide how `isLive` announces it."
         },
         {
           "name": "size",
@@ -2257,13 +2268,14 @@
             "sm",
             "md"
           ],
-          "default": "md"
+          "default": "md",
+          "description": "Body text (`md`) or small body text (`sm`), with the icon to match."
         },
         {
           "name": "isLive",
           "control": "boolean",
           "default": false,
-          "description": "Announce it when it appears: `danger` and `warning` interrupt\n(`role=\"alert\"`), the others wait (`role=\"status\"`)."
+          "description": "Announce it when it appears: `danger` and `warning` interrupt (`role=\"alert\"`), the others wait (`role=\"status\"`)."
         }
       ]
     },
@@ -2286,19 +2298,20 @@
             "bottom-center",
             "bottom-right"
           ],
-          "default": "bottom-right"
+          "default": "bottom-right",
+          "description": "The corner, or edge centre, toasts appear in. They swipe away toward the nearest edge."
         },
         {
           "name": "timeout",
           "control": "number",
           "default": 5000,
-          "description": "Default time on screen, in milliseconds."
+          "description": "Default time on screen, in milliseconds. A toast can set its own; `0` keeps it until dismissed."
         },
         {
           "name": "limit",
           "control": "number",
           "default": 3,
-          "description": "Toasts shown at once; older ones wait."
+          "description": "Toasts shown at once; newer ones wait until one closes."
         }
       ]
     },
