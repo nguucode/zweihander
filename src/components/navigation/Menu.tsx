@@ -1,6 +1,6 @@
 'use client'
 
-import type { ReactElement, ReactNode } from 'react'
+import { type ReactElement, type ReactNode, useEffect } from 'react'
 import { Menu as BaseMenu } from '@base-ui/react/menu'
 import { Icon } from '@/lib/icon'
 import { cn } from '@/lib/utils'
@@ -214,8 +214,6 @@ function Surface({
   )
 }
 
-let warnedModal = false
-
 export function Menu({
   trigger,
   items,
@@ -229,10 +227,10 @@ export function Menu({
   container,
   className,
 }: MenuProps) {
-  if (import.meta.env.DEV && modal !== undefined && !warnedModal) {
-    warnedModal = true
-    console.warn('Menu: `modal` is deprecated, use `isModal`. It is removed in the next minor.')
-  }
+  const hasModal = modal !== undefined
+  useEffect(() => {
+    if (import.meta.env.DEV && hasModal) console.warn('Menu: `modal` is deprecated, use `isModal`. It is removed in the next minor.')
+  }, [hasModal])
   return (
     <BaseMenu.Root
       open={open}
