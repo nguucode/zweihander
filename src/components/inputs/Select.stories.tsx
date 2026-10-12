@@ -15,11 +15,115 @@ const meta = {
   title: 'Components/Inputs/Select',
   tags: ['beta'],
   component: Select,
+  // Every prop is listed by hand, with a description: react-docgen reads the
+  // types but not what each prop is for. These are the docs' API table and
+  // the Playground's props panel.
   argTypes: {
-    size: { control: 'inline-radio', options: ['sm', 'md'] },
-    validationState: { control: 'inline-radio', options: ['default', 'success', 'error'] },
+    options: {
+      description: 'The choices: strings, or `{ value, label, disabled? }` objects when the label differs from the value or is a node. Required.',
+      control: false,
+      table: { type: { summary: 'string[] | { value: string; label: ReactNode; disabled?: boolean }[]' } },
+    },
+    label: {
+      description: 'The visible name, above the field. Clicking it focuses the field without opening it.',
+      control: 'text',
+      table: { type: { summary: 'ReactNode' } },
+    },
+    placeholder: {
+      description: 'Shown in the field until something is chosen.',
+      control: 'text',
+      table: { type: { summary: 'string' } },
+    },
+    helperText: {
+      description: 'Under the field, read as its description. The error message when `validationState` is `error`.',
+      control: 'text',
+      table: { type: { summary: 'ReactNode' } },
+    },
+    validationState: {
+      description: 'Colours the edge and the helper text. `error` also sets `aria-invalid`.',
+      control: 'inline-radio',
+      options: ['default', 'success', 'error'],
+      table: { type: { summary: "'default' | 'success' | 'error'" }, defaultValue: { summary: "'default'" } },
+    },
+    size: {
+      description: '24px (`sm`) or 32px (`md`) tall, from the control tiers. Options are 32px either way.',
+      control: 'inline-radio',
+      options: ['sm', 'md'],
+      table: { type: { summary: "'sm' | 'md'" }, defaultValue: { summary: "'md'" } },
+    },
+    isLoading: {
+      description: 'Options are still arriving: a spinner replaces the chevron, and the field is `aria-busy`.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    isFullWidth: {
+      description: 'Fills the width of its container. Otherwise 20rem, capped at the container.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    disabled: {
+      description: 'Dimmed, out of the tab order, and the list does not open.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    readOnly: {
+      description: 'The list opens so the options can be read, but choosing one changes nothing.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    required: {
+      description: 'Must have a value to submit. Adds an asterisk to the label, hidden from screen readers.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    value: {
+      description: 'The chosen value, controlled. `null` is nothing chosen. Pair with `onValueChange`.',
+      control: false,
+      table: { type: { summary: 'string | null' } },
+    },
+    defaultValue: {
+      description: 'The starting value, uncontrolled.',
+      control: false,
+      table: { type: { summary: 'string | null' } },
+    },
+    onValueChange: {
+      description: 'Called with the chosen option\'s value.',
+      control: false,
+      table: { type: { summary: '(value: string | null) => void' } },
+    },
+    name: {
+      description: 'Submitted with the form, with the chosen value.',
+      control: false,
+      table: { type: { summary: 'string' } },
+    },
+    autoFocus: {
+      description: 'Focuses the field on mount.',
+      control: false,
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    'aria-label': {
+      description: 'The name when there is no visible `label`.',
+      control: false,
+      table: { type: { summary: 'string' } },
+    },
+    ref: {
+      description: "Points at the field's `<button>`.",
+      control: false,
+      table: { type: { summary: 'Ref' } },
+    },
+    id: {
+      description: "The id of the field's `<button>`.",
+      control: false,
+      table: { type: { summary: 'string' } },
+    },
+    className: {
+      description: 'Added to the outer element, the field with its label and helper text.',
+      control: false,
+      table: { type: { summary: 'string' } },
+    },
   },
   args: { label: 'Team member', placeholder: 'Choose someone', options: members, onValueChange: fn() },
+  excludeStories: ['anatomyParts'],
 } satisfies Meta<typeof Select>
 
 export default meta
@@ -155,4 +259,39 @@ export const InAForm: Story = {
   play: async ({ canvasElement }) => {
     await expect(new FormData(canvasElement.querySelector('form')!).get('assignee')).toBe('marlone')
   },
+}
+
+/** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
+export const anatomyParts = [
+  { name: 'Label', selector: 'div:has(+ [role="combobox"])', description: 'Names the field. Clicking it focuses the field without opening the list.' },
+  { name: 'Container', selector: '[role="combobox"]', description: 'The field: a button that opens the list, with the edge, fill and focus ring.' },
+  { name: 'Value', selector: '[role="combobox"] > span:first-child', description: 'The chosen option\'s label, or the placeholder.' },
+  { name: 'Chevron', selector: '[role="combobox"] > span:last-child', description: 'Points at the list. A spinner while `isLoading`.' },
+  { name: 'Helper text', selector: '[role="combobox"] ~ p', description: 'The field\'s description. The error message when invalid.' },
+]
+
+/** Every part present. */
+export const Anatomy: Story = {
+  tags: ['!dev'],
+  args: { defaultValue: 'phoenix', helperText: 'They get an email when assigned.' },
+  play: async ({ canvasElement }) => {
+    // The docs markers follow these selectors: a DOM change must not leave
+    // a marker pointing at nothing, or at the wrong part.
+    const found = anatomyParts.map(({ selector }) => canvasElement.querySelector(selector))
+    await expect(found.every(Boolean)).toBe(true)
+    await expect(new Set(found).size).toBe(anatomyParts.length)
+    await expect(found[0]).toHaveTextContent('Team member')
+    await expect(found[2]).toHaveTextContent('Phoenix Hickman')
+  },
+}
+
+/** Guidelines, Do: a handful of options people pick from. */
+export const DoAHandful: Story = {
+  args: { label: 'Priority', placeholder: 'Choose a priority', options: ['Low', 'Medium', 'High', 'Urgent'] },
+}
+
+/** Guidelines, Don't: two options hide one behind a click; a Switch or radios show both. */
+export const DontTwoOptions: Story = {
+  tags: ['!dev'],
+  args: { label: 'Notifications', placeholder: undefined, options: ['On', 'Off'], defaultValue: 'On' },
 }

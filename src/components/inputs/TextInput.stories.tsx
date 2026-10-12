@@ -8,13 +8,85 @@ const meta = {
   title: 'Components/Inputs/TextInput',
   tags: ['beta'],
   component: TextInput,
+  // Every prop is listed by hand, with a description: react-docgen reads the
+  // types but not what each prop is for. These are the docs' API table and
+  // the Playground's props panel.
   argTypes: {
-    size: { control: 'inline-radio', options: ['sm', 'md'] },
-    validationState: { control: 'inline-radio', options: ['default', 'success', 'error'] },
-    prefix: { control: false },
-    suffix: { control: false },
+    label: {
+      description: 'The visible name, above the field. A real `<label>`: clicking it focuses the input.',
+      control: 'text',
+      table: { type: { summary: 'ReactNode' } },
+    },
+    placeholder: {
+      description: 'A hint of the expected format, gone as soon as anyone types. Never a replacement for `label`.',
+      control: 'text',
+      table: { type: { summary: 'string' } },
+    },
+    helperText: {
+      description: 'Under the field, read as its description. The error message when `validationState` is `error`.',
+      control: 'text',
+      table: { type: { summary: 'ReactNode' } },
+    },
+    validationState: {
+      description: 'Colours the edge and the helper text. `error` also sets `aria-invalid`.',
+      control: 'inline-radio',
+      options: ['default', 'success', 'error'],
+      table: { type: { summary: "'default' | 'success' | 'error'" }, defaultValue: { summary: "'default'" } },
+    },
+    size: {
+      description: '24px (`sm`) or 32px (`md`) tall, from the control tiers. `sm` takes a 12px value.',
+      control: 'inline-radio',
+      options: ['sm', 'md'],
+      table: { type: { summary: "'sm' | 'md'" }, defaultValue: { summary: "'md'" } },
+    },
+    prefix: {
+      description: 'Text or an icon before the value, in the muted colour: `<Icon name="user" />`, "https://".',
+      control: false,
+      table: { type: { summary: 'ReactNode' } },
+    },
+    suffix: {
+      description: 'Text or an icon after the value, e.g. a unit: "kg".',
+      control: false,
+      table: { type: { summary: 'ReactNode' } },
+    },
+    isFullWidth: {
+      description: 'Fills the width of its container. Otherwise 20rem, capped at the container.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    disabled: {
+      description: 'Native `disabled`: dimmed, out of the tab order, not submitted.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    readOnly: {
+      description: 'Native `readOnly`: focusable and submitted, but not editable. Filled grey.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    required: {
+      description: 'Native `required`. Adds an asterisk to the label, hidden from screen readers, which hear "required" from the input.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    value: {
+      description: 'The text, controlled. Pair with `onChange`.',
+      control: false,
+      table: { type: { summary: 'string' } },
+    },
+    defaultValue: {
+      description: 'The starting text, uncontrolled.',
+      control: false,
+      table: { type: { summary: 'string' } },
+    },
+    onChange: {
+      description: 'The native change event, as on `<input>`: read `event.target.value`.',
+      control: false,
+      table: { type: { summary: '(event: ChangeEvent<HTMLInputElement>) => void' } },
+    },
   },
   args: { label: 'Email', placeholder: 'you@example.com', onChange: fn() },
+  excludeStories: ['anatomyParts'],
 } satisfies Meta<typeof TextInput>
 
 export default meta
@@ -127,6 +199,18 @@ export const FullWidth: Story = {
   },
 }
 
+export const NarrowContainer: Story = {
+  render: (args) => (
+    <div style={{ inlineSize: '8rem' }}>
+      <TextInput {...args} />
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    // The box stays inside the field, however narrow, rather than spilling out.
+    await expect(canvas.getByLabelText('Email').parentElement!.getBoundingClientRect().width).toBe(128)
+  },
+}
+
 export const Controlled: Story = {
   render: function Render(args) {
     const [value, setValue] = useState('')
@@ -141,4 +225,51 @@ export const Controlled: Story = {
     await userEvent.type(canvas.getByLabelText('Email'), 'abc')
     await expect(canvas.getByText('Value: ABC')).toBeVisible()
   },
+}
+
+/** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
+export const anatomyParts = [
+  { name: 'Label', selector: 'label', description: 'Names the field. Clicking it focuses the input.' },
+  { name: 'Container', selector: 'label + span', description: 'The box: edge, fill and focus ring. Pressing its padding focuses the input.' },
+  { name: 'Prefix', selector: 'label + span > span:first-child', description: 'Optional text or icon before the value, in the muted colour.' },
+  { name: 'Input', selector: 'input', description: 'The value, or the placeholder while empty.' },
+  { name: 'Suffix', selector: 'label + span > span:last-child', description: 'Optional text or icon after the value, e.g. a unit.' },
+  { name: 'Helper text', selector: 'label + span + p', description: 'The input\'s description. The error message when invalid.' },
+]
+
+/** Every part present. */
+export const Anatomy: Story = {
+  tags: ['!dev'],
+  args: { label: 'Website', placeholder: 'example', prefix: 'https://', suffix: '.com', helperText: 'Where people can find you.' },
+  play: async ({ canvasElement }) => {
+    // The docs markers follow these selectors: a DOM change must not leave
+    // a marker pointing at nothing, or at the wrong part.
+    const found = anatomyParts.map(({ selector }) => canvasElement.querySelector(selector))
+    await expect(found.every(Boolean)).toBe(true)
+    await expect(new Set(found).size).toBe(anatomyParts.length)
+    await expect(found[2]).toHaveTextContent('https://')
+    await expect(found[4]).toHaveTextContent('.com')
+  },
+}
+
+/** Guidelines, Do: a visible label, the format as a hint. */
+export const DoVisibleLabel: Story = {
+  args: { label: 'Email', placeholder: 'you@example.com' },
+}
+
+/** Guidelines, Don't: the placeholder as the only label disappears on the first keystroke. */
+export const DontPlaceholderAsLabel: Story = {
+  tags: ['!dev'],
+  args: { label: undefined, placeholder: 'Email', 'aria-label': 'Email' },
+}
+
+/** Guidelines, Do: the error says what to fix. */
+export const DoSayWhatToFix: Story = {
+  args: { defaultValue: 'okami@', validationState: 'error', helperText: 'Add the domain after @, e.g. okami@example.com.' },
+}
+
+/** Guidelines, Don't: colour alone, with nothing to act on. */
+export const DontColourOnly: Story = {
+  tags: ['!dev'],
+  args: { defaultValue: 'okami@', validationState: 'error', helperText: 'Invalid.' },
 }

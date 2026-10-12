@@ -1,64 +1,239 @@
-import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
+import { Textarea } from './Textarea'
 import * as TextareaStories from './Textarea.stories'
 
 <Meta of={TextareaStories} />
 
 # Textarea
 
-Several lines of text: a message, a description, a note. Spec:
-[uiguideline.com/components/textarea](https://www.uiguideline.com/components/textarea).
-The same field as [Text Input](?path=/docs/components-inputs-textinput--docs):
-label, helper, validation and sizes are shared. Outlined only.
+<DocTabs>
+<DocTab value="overview">
+
+Several lines of text: a message, a description, a note. The same field as
+[Text Input](?path=/docs/components-inputs-textinput--docs): label, helper,
+validation and sizes are shared.
+
+<Status of={TextareaStories} />
+
+<Canvas of={TextareaStories.Default} />
+
+## Variants
+
+One appearance, the white outlined box. What changes is the size and how
+the height is set.
 
 <Canvas of={TextareaStories.Sizes} />
 
+| Size | Use for |
+| --- | --- |
+| `md` | Forms and dialogs: the default. |
+| `sm` | Dense places: a comment box in a table row, a side panel. |
+
+<Canvas of={TextareaStories.AutoSize} />
+
+| Height | Use for |
+| --- | --- |
+| `resize="vertical"` (default) | People may want to see more at once and drag the corner to get it. |
+| `hasAutoSize` with `maxRows` | Text whose length varies a lot, such as a chat message: the field grows as they write, up to `maxRows`, then scrolls. |
+| `resize="none"` | A fixed height the layout depends on. |
+
+## Resources
+
+From npm, or copied into your project through the registry:
+
+```js
+import { Textarea } from 'zweihander/textarea'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/textarea.json
+```
+
+- Source: [src/components/inputs/Textarea.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/inputs/Textarea.tsx)
+- Spec: [uiguideline.com/components/textarea](https://www.uiguideline.com/components/textarea)
+- Behaviour: [Base UI Field](https://base-ui.com/react/components/field)
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
 ## Anatomy
 
-| Part | What it is |
-| --- | --- |
-| **Label** | `label`, above the field. |
-| **Field** | The box: edge, fill and focus ring, padded top and bottom so it grows with the text. |
-| **Placeholder** | `placeholder`. |
-| **Resize handle** | The browser's own, in the field's bottom corner, on the axes `resize` allows. Hidden with `hasAutoSize`. |
-| **Helper text** | `helperText`; the error message when `validationState` is error. |
+<Anatomy parts={TextareaStories.anatomyParts}>
+  <Story of={TextareaStories.Anatomy} />
+</Anatomy>
 
-## Props
+The resize handle is the browser's own, in the input's bottom corner, on
+the axes `resize` allows; `hasAutoSize` hides it. The placeholder is the
+textarea's, in `--muted-foreground`.
 
-Everything Text Input takes except `prefix`, `suffix` and `appearance`, plus:
+## Measurements
 
-| Prop | Values | Default | |
-| --- | --- | --- | --- |
-| `resize` | `none`, `both`, `vertical`, `horizontal` | `vertical` | |
-| `hasAutoSize` | boolean | `false` | Grows and shrinks with the text. |
-| `minRows` | number | `3` | Starting height (the `rows` attribute). |
-| `maxRows` | number | – | Where auto-size stops and scrolling starts. |
+A textarea grows, so it has no height token: it takes block padding
+instead, which puts the first line where a single-line field of the same
+size puts its text. The starting height is `minRows` lines (3 by default)
+plus that padding. The padding sits on the textarea, not the box, so the
+resize handle lands in the field's corner.
 
-`onChange` is the native event; every other `<textarea>` attribute passes
-through, including `ref`.
+<SpecTable
+  caption="sm"
+  rows={[
+    { part: 'Input', property: 'Block padding', token: '--space-1-5' },
+    { part: 'Input', property: 'Inline padding', token: '--control-sm-pad' },
+    { part: 'Input', property: 'Font size', token: '--text-body-sm' },
+    { part: 'Input', property: 'Line height', token: '--leading-body-sm' },
+    { part: 'Container', property: 'Corner radius', token: '--control-sm-radius-field' },
+  ]}
+/>
 
-<Controls of={TextareaStories.Default} />
+<SpecTable
+  caption="md"
+  rows={[
+    { part: 'Input', property: 'Block padding', token: '--space-2' },
+    { part: 'Input', property: 'Inline padding', token: '--control-md-pad' },
+    { part: 'Input', property: 'Font size', token: '--text-body' },
+    { part: 'Input', property: 'Line height', token: '--leading-body' },
+    { part: 'Container', property: 'Corner radius', token: '--control-md-radius-field' },
+  ]}
+/>
+
+<SpecTable
+  caption="Every size"
+  rows={[
+    { part: 'Label and helper text', property: 'Font size', token: '--text-body' },
+    { part: 'Label, container, helper', property: 'Gap between', token: '--space-1-5' },
+    { part: 'Focus ring', property: 'Width', token: '--focus-width' },
+    { part: 'Focus ring', property: 'Offset', token: '--focus-offset' },
+  ]}
+/>
+
+20rem wide, capped at its container, or the container's width with
+`isFullWidth`. With `maxRows`, the input stops at that many lines plus its
+padding, whether it grew by itself or was dragged.
+
+## Color
+
+The same colours as Text Input: no colour variants, and the validation
+state changes the edge and the helper text together.
+
+<SpecTable
+  caption="default"
+  rows={[
+    { part: 'Container', property: 'Background', token: '--card' },
+    { part: 'Container', property: 'Border', token: '--field-border' },
+    { part: 'Container', property: 'Shadow', token: '--shadow-2xs' },
+    { part: 'Label and input', property: 'Colour', token: '--foreground' },
+    { part: 'Placeholder and helper text', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+  ]}
+/>
+
+<SpecTable
+  caption="error"
+  rows={[
+    { part: 'Container', property: 'Border', token: '--danger-text' },
+    { part: 'Helper text', property: 'Colour', token: '--danger-text' },
+    { part: 'Focus ring', property: 'Colour', token: '--danger-text' },
+  ]}
+/>
+
+<SpecTable
+  caption="success"
+  rows={[
+    { part: 'Container', property: 'Border', token: '--success-text' },
+    { part: 'Helper text', property: 'Colour', token: '--success-text' },
+  ]}
+/>
+
+<SpecTable caption="Read-only" rows={[{ part: 'Container', property: 'Background', token: '--surface-filled' }]} />
+
+## States
+
+<States
+  states={[
+    { label: 'Enabled' },
+    { label: 'Focus', pseudo: 'focus' },
+    { label: 'Error', content: <Textarea label="Note" minRows={2} validationState="error" helperText="Add a note." required /> },
+    { label: 'Read-only', content: <Textarea label="Note" minRows={2} defaultValue="Ships Monday." readOnly /> },
+    { label: 'Disabled', content: <Textarea label="Note" minRows={2} defaultValue="Ships Monday." disabled /> },
+  ]}
+>
+  <Textarea label="Note" minRows={2} placeholder="Add a note" />
+</States>
+
+- **Hover** changes nothing; the cursor turns to a text cursor.
+- **Focus** is a 2px `--ring` outline around the whole box, 2px outside
+  it, on click as well as keyboard. In the error state it is
+  `--danger-text`.
+- **Read-only** fills the box with `--surface-filled`.
+- **Disabled** is the enabled look at 50% opacity.
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={TextareaStories} />
+</div>
+
+Every other `<textarea>` attribute passes through, including `ref`,
+`name` and `autoComplete`.
 
 ### Differences from the spec
 
+- **No `filled` appearance**, as on Text Input: every field is the white
+  outlined box.
 - Native `disabled`, `required`, `readOnly` names, and native `onChange`,
   as on Text Input.
 - **`minRows` defaults to 3.** The spec gives none; the browser's own
   default of 2 is too short to read as a multi-line field.
+- **`hasAutoSize`, `minRows` and `maxRows` are added**: the spec has a
+  fixed `rows` only.
 
-## Usage
+</DocTab>
+<DocTab value="guidelines">
 
-<Canvas of={TextareaStories.AutoSize} />
+## When to use
 
-Use auto-size for text whose length varies a lot, with a `maxRows` so the
-page does not grow without limit. Keep the manual handle (`vertical`) when
-people may want to see more at once.
+Use a Textarea when the answer may run past one line: a message, a
+description, feedback, an address. Set `minRows` to the length you expect,
+so the field shows how much to write before anyone starts.
+
+<DoDont
+  do={<Story of={TextareaStories.DoFitTheAnswer} />}
+  doCaption="A starting height that fits the answer expected tells people how much to write."
+  dont={<Story of={TextareaStories.DontOneRow} />}
+  dontCaption="One row looks like a single-line field and hides what has been written."
+/>
+
+Use auto-size for text whose length varies a lot, always with a `maxRows`,
+so a long entry never pushes the rest of the form off the screen.
+
+## When not to use
+
+- **For one line**, such as a name or a title. Use a
+  [Text Input](?path=/docs/components-inputs-textinput--docs): Enter can
+  submit the form there.
+- **For formatted text** (bold, lists, links). A Textarea is plain text;
+  use a rich-text editor.
+- **For a search query.** Use [Search](?path=/docs/components-inputs-search--docs).
 
 ## Accessibility
 
-- A real `<textarea>` with its `<label>`, the helper as its description,
-  and `aria-invalid` in the error state.
-- Edge is the light `--field-border` (about 1.5:1, see Text Input); focus ring around the
-  whole field.
+- A real `<textarea>` with its `<label>`: clicking the label focuses it,
+  and the label is its accessible name.
+- `helperText` is its description (`aria-describedby`);
+  `validationState="error"` sets `aria-invalid="true"`. The helper text
+  carries the message, not only the colour.
+- `required` sets the native `required`; the label's asterisk is
+  `aria-hidden`.
 - Enter inserts a line break; it does not submit the form.
-- Auto-size caps at `maxRows` and scrolls beyond it, so a long entry never
-  pushes the rest of the form off screen.
+- Auto-size caps at `maxRows` and scrolls beyond it, so the page does not
+  grow without limit and the text stays reachable by keyboard.
+- The edge is the light `--field-border`, about 1.5:1, the same approved
+  exception to WCAG 1.4.11 as Text Input; set
+  `--field-border: var(--control-border)` where 3:1 is needed.
+- Focus ring: 2px, 2px offset, around the whole field.
+
+</DocTab>
+</DocTabs>

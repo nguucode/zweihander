@@ -1,16 +1,72 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useState } from 'react'
 import { expect, fn } from 'storybook/test'
+import { Icon } from '@/lib/icon'
 import { Search } from './Search'
+import { TextInput } from './TextInput'
 
 const meta = {
   title: 'Components/Inputs/Search',
   tags: ['beta'],
   component: Search,
+  // Every prop is listed by hand, with a description: react-docgen reads the
+  // types but not what each prop is for. These are the docs' API table and
+  // the Playground's props panel.
   argTypes: {
-    size: { control: 'inline-radio', options: ['sm', 'md'] },
+    placeholder: {
+      description: 'What can be searched, e.g. "Search components". Not a name: the field is named by `label` or `aria-label`.',
+      control: 'text',
+      table: { type: { summary: 'string' }, defaultValue: { summary: "'Search'" } },
+    },
+    label: {
+      description: 'An optional visible label, above the field. Without one, `aria-label` names it.',
+      control: 'text',
+      table: { type: { summary: 'ReactNode' } },
+    },
+    'aria-label': {
+      description: 'The name when there is no visible `label`.',
+      control: 'text',
+      table: { type: { summary: 'string' }, defaultValue: { summary: "'Search'" } },
+    },
+    size: {
+      description: '24px (`sm`) or 32px (`md`) tall, from the control tiers. Match the toolbar or form it sits in.',
+      control: 'inline-radio',
+      options: ['sm', 'md'],
+      table: { type: { summary: "'sm' | 'md'" }, defaultValue: { summary: "'md'" } },
+    },
+    isFullWidth: {
+      description: 'Fills the width of its container. Otherwise 20rem, capped at the container.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    disabled: {
+      description: 'Native `disabled`: dimmed, out of the tab order, no clear button.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    readOnly: {
+      description: 'Native `readOnly`: the query can be read and copied, not changed. No clear button.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    value: {
+      description: 'The query, controlled. Pair with `onChange`.',
+      control: false,
+      table: { type: { summary: 'string' } },
+    },
+    defaultValue: {
+      description: 'The starting query, uncontrolled.',
+      control: 'text',
+      table: { type: { summary: 'string' }, defaultValue: { summary: "''" } },
+    },
+    onChange: {
+      description: 'The native change event, also fired when the clear button or Escape empties the field.',
+      control: false,
+      table: { type: { summary: '(event: ChangeEvent<HTMLInputElement>) => void' } },
+    },
   },
   args: { onChange: fn() },
+  excludeStories: ['anatomyParts'],
 } satisfies Meta<typeof Search>
 
 export default meta
@@ -109,4 +165,38 @@ export const ReadOnly: Story = {
   play: async ({ canvas }) => {
     await expect(canvas.queryByRole('button', { name: 'Clear search' })).toBeNull()
   },
+}
+
+/** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
+export const anatomyParts = [
+  { name: 'Label', selector: 'label', description: 'Optional. Without it, the field is named "Search" or by `aria-label`.' },
+  { name: 'Container', selector: 'span:has(> input)', description: 'The box: edge, fill and focus ring.' },
+  { name: 'Search icon', selector: 'span:has(> input) > span:first-child', description: 'Decorative: hidden from screen readers.' },
+  { name: 'Input', selector: 'input', description: 'The query, or the placeholder while empty.' },
+  { name: 'Clear button', selector: 'button', description: 'Shown while there is a query, unless disabled or read-only. Named "Clear search".' },
+]
+
+/** Every part present: a label, and a query so the clear button shows. */
+export const Anatomy: Story = {
+  tags: ['!dev'],
+  args: { label: 'Find a component', defaultValue: 'tooltip' },
+  play: async ({ canvasElement }) => {
+    // The docs markers follow these selectors: a DOM change must not leave
+    // a marker pointing at nothing, or at the wrong part.
+    const found = anatomyParts.map(({ selector }) => canvasElement.querySelector(selector))
+    await expect(found.every(Boolean)).toBe(true)
+    await expect(new Set(found).size).toBe(anatomyParts.length)
+    await expect(found[4]).toHaveAccessibleName('Clear search')
+  },
+}
+
+/** Guidelines, Do: the placeholder says what is searched. */
+export const DoSaySearchWhat: Story = {
+  args: { placeholder: 'Search components' },
+}
+
+/** Guidelines, Don't: a Text Input with a search icon is not a search field. */
+export const DontTextInputWithIcon: Story = {
+  tags: ['!dev'],
+  render: () => <TextInput aria-label="Search" placeholder="Search components" prefix={<Icon name="search" />} defaultValue="tool" />,
 }
