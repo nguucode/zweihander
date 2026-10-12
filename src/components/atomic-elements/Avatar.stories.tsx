@@ -17,11 +17,44 @@ const meta = {
   tags: ['beta'],
   component: Avatar,
   args: { imageSrc: portrait, imageAlt: 'Mary Thompson' },
+  // Every prop is listed by hand, with its type and default: these
+  // descriptions are the docs' API table and the Playground's props panel.
   argTypes: {
-    size: { control: 'inline-radio', options: ['xs', 'sm', 'md', 'lg'] },
-    variant: { control: 'inline-radio', options: ['subtle', 'solid'] },
-    color: { control: 'select', options: [undefined, ...ACCENT_COLORS] },
+    size: {
+      description: '24, 32, 40 or 48px across. Initials step up from 12px to 16px with it.',
+      control: 'inline-radio',
+      options: ['xs', 'sm', 'md', 'lg'],
+      table: { type: { summary: "'xs' | 'sm' | 'md' | 'lg'" }, defaultValue: { summary: "'sm'" } },
+    },
+    imageSrc: {
+      description: 'The picture, cropped to fill the circle. If it fails to load, the initials or the silhouette show instead.',
+      control: 'text',
+      table: { type: { summary: 'string' } },
+    },
+    imageAlt: {
+      description: 'Who this is. Names the whole avatar. Without it the avatar is decorative and hidden from assistive tech.',
+      control: 'text',
+      table: { type: { summary: 'string' } },
+    },
+    initials: {
+      description: 'One or two letters, shown when there is no image. Pass the letters, not a name: they are uppercased by style.',
+      control: 'text',
+      table: { type: { summary: 'string' } },
+    },
+    color: {
+      description: 'Any accent hue, to tell people apart in a list. Unset is the neutral gray. Carries no meaning.',
+      control: 'select',
+      options: [undefined, ...ACCENT_COLORS],
+      table: { type: { summary: 'AccentColor' } },
+    },
+    variant: {
+      description: '`subtle` is a tint of the hue; `solid` is its fill (600 in light, 400 in dark).',
+      control: 'inline-radio',
+      options: ['subtle', 'solid'],
+      table: { type: { summary: "'subtle' | 'solid'" }, defaultValue: { summary: "'subtle'" } },
+    },
   },
+  excludeStories: ['anatomyParts'],
 } satisfies Meta<typeof Avatar>
 
 export default meta
@@ -193,5 +226,64 @@ export const Contrast: Story = {
     }
     await expect(failures).toEqual([])
     await expect([...solidSilhouettes.values()].every((colours) => colours.size === 1)).toBe(true)
+  },
+}
+
+/** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
+export const anatomyParts = [
+  { name: 'Container', selector: '[role="img"]', description: 'The circle, in the chosen colour and variant. Clips its content and carries the name.' },
+  { name: 'Image', selector: 'img', description: 'Cropped to fill. Silent itself: the name is on the container.' },
+  { name: 'Initials', selector: '[role="img"] > span', description: 'Shown when there is no image, or it fails to load.' },
+  { name: 'Silhouette', selector: 'svg', description: 'A head and shoulders, when there is neither.' },
+]
+
+/** One avatar per fallback, so every part is on screen at once. */
+export const Anatomy: Story = {
+  tags: ['!dev'],
+  args: { size: 'lg' },
+  render: (args) => (
+    <div style={row}>
+      <Avatar {...args} />
+      <Avatar {...args} imageSrc={undefined} initials="SR" imageAlt="Sam Rivera" />
+      <Avatar {...args} imageSrc={undefined} imageAlt="Unknown user" />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    // The docs markers follow these selectors: a DOM change must not leave
+    // a marker pointing at nothing, or at the wrong part.
+    const found = anatomyParts.map(({ selector }) => canvasElement.querySelector(selector))
+    await expect(found.every(Boolean)).toBe(true)
+    await expect(new Set(found).size).toBe(anatomyParts.length)
+    await expect(found[2]).toHaveTextContent('SR')
+  },
+}
+
+/** Guidelines, Do: the name is printed, so the avatar beside it stays decorative. */
+export const DoDecorativeBesideName: Story = {
+  args: { imageAlt: undefined },
+  render: (args) => (
+    <div style={{ ...row, gap: 'var(--space-2)' }}>
+      <Avatar {...args} />
+      <span>Mary Thompson</span>
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    // Said once, by the text.
+    await expect(canvas.queryByRole('img')).toBeNull()
+    await expect(canvas.getByText('Mary Thompson')).toBeVisible()
+  },
+}
+
+/** Guidelines, Don't: imageAlt repeats the printed name, so it is read twice. */
+export const DontRepeatName: Story = {
+  tags: ['!dev'],
+  render: (args) => (
+    <div style={{ ...row, gap: 'var(--space-2)' }}>
+      <Avatar {...args} />
+      <span>Mary Thompson</span>
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    await expect(canvas.getByRole('img', { name: 'Mary Thompson' })).toBeVisible()
   },
 }

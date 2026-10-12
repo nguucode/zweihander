@@ -1,39 +1,180 @@
-import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
+import { Avatar } from './Avatar'
 import * as AvatarStories from './Avatar.stories'
 
 <Meta of={AvatarStories} />
 
 # Avatar
 
-A picture of a person or account, with initials or a silhouette when
-there is no picture. Neutral by default, or any accent hue as a tint or a solid fill. Spec:
-[uiguideline.com/components/avatar](https://www.uiguideline.com/components/avatar).
+<DocTabs>
+<DocTab value="overview">
+
+A picture of a person or account, with initials or a silhouette when there
+is no picture.
+
+<Status of={AvatarStories} />
 
 <Canvas of={AvatarStories.Fallbacks} />
 
+## Variants
+
+Neutral by default. `color` picks any accent hue, and `variant` how strong
+it is. Behind a photo the colour only shows while it loads or where the
+image is transparent.
+
+<Canvas of={AvatarStories.Colors} />
+
+| Variant | Use for |
+| --- | --- |
+| <Avatar initials="SR" /> `subtle` | Most places: lists, comments, a byline. A tint that sits quietly next to text. |
+| <Avatar initials="SR" variant="solid" /> `solid` | Where the avatar has to stand out on its own: a header, an account menu trigger. |
+
+Colour tells people apart in a list; it carries no meaning. Pick it from the
+person (a hash of their id), never from a status.
+
+<Canvas of={AvatarStories.Sizes} />
+
+## Resources
+
+From npm, or copied into your project through the registry:
+
+```js
+import { Avatar } from 'zweihander/avatar'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/avatar.json
+```
+
+- Source: [src/components/atomic-elements/Avatar.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/atomic-elements/Avatar.tsx)
+- Spec: [uiguideline.com/components/avatar](https://www.uiguideline.com/components/avatar)
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
 ## Anatomy
 
-| Part | What it is |
-| --- | --- |
-| **Container** | The circle, in `color` and `variant`. Clips its content. |
-| **Image** | `imageSrc`, cropped to fill (`object-fit: cover`). |
-| **Initials** | `initials`, shown when there is no image or it fails to load. |
-| **Silhouette** | A filled head and shoulders, when there is neither. |
+<Anatomy parts={AvatarStories.anatomyParts}>
+  <Story of={AvatarStories.Anatomy} />
+</Anatomy>
 
-## Props
+One avatar shows one of image, initials or silhouette, in that order of
+preference. A broken image falls back to the next.
 
-| Prop | Values | Default | |
-| --- | --- | --- | --- |
-| `size` | `xs`, `sm`, `md`, `lg` | `sm` | 24, 32, 40, 48px. |
-| `imageSrc` | string | – | |
-| `imageAlt` | string | – | Who this is. See Accessibility. |
-| `initials` | string | – | Not in the spec's prop list; see below. |
-| `color` | any accent hue | – | Unset is the neutral gray. |
-| `variant` | `subtle`, `solid` | `subtle` | Solid is the hue's 600 step (400 in dark). |
+## Measurements
 
-Every other `<span>` attribute passes through to the container.
+The circle ignores the Theme's radius preset: a circle is the shape, not a
+corner setting.
 
-<Controls of={AvatarStories.Default} />
+<SpecTable
+  caption="xs"
+  rows={[
+    { part: 'Container', property: 'Size', token: '--space-6' },
+    { part: 'Initials', property: 'Font size', token: '--text-body-sm' },
+  ]}
+/>
+
+<SpecTable
+  caption="sm"
+  rows={[
+    { part: 'Container', property: 'Size', token: '--space-8' },
+    { part: 'Initials', property: 'Font size', token: '--text-body-sm' },
+  ]}
+/>
+
+<SpecTable
+  caption="md"
+  rows={[
+    { part: 'Container', property: 'Size', token: '--space-10' },
+    { part: 'Initials', property: 'Font size', token: '--text-body' },
+  ]}
+/>
+
+<SpecTable
+  caption="lg"
+  rows={[
+    { part: 'Container', property: 'Size', token: '--space-12' },
+    { part: 'Initials', property: 'Font size', token: '--text-body-lg' },
+  ]}
+/>
+
+<SpecTable caption="Every size" rows={[{ part: 'Container', property: 'Corner radius', token: '--radius-pill' }]} />
+
+The image and the silhouette fill the circle edge to edge.
+
+## Color
+
+`color` sets the Theme's own `data-accent` on the avatar, so a hue avatar
+reads the accent tokens of that hue: switch the accent in the toolbar to see
+the values for another one.
+
+<SpecTable
+  caption="subtle, neutral"
+  rows={[
+    { part: 'Container', property: 'Background', token: '--secondary' },
+    { part: 'Initials', property: 'Colour', token: '--secondary-foreground' },
+    { part: 'Silhouette', property: 'Colour', token: '--muted-foreground' },
+  ]}
+/>
+
+<SpecTable
+  caption="subtle, with a hue"
+  rows={[
+    { part: 'Container', property: 'Background', token: '--primary-subtle' },
+    { part: 'Initials and silhouette', property: 'Colour', token: '--primary-subtle-text' },
+  ]}
+/>
+
+<SpecTable
+  caption="solid, neutral"
+  rows={[
+    { part: 'Container', property: 'Background', token: '--neutral-solid' },
+    { part: 'Initials and silhouette', property: 'Colour', token: '--neutral-solid-foreground' },
+  ]}
+/>
+
+<SpecTable
+  caption="solid, with a hue"
+  rows={[
+    { part: 'Container', property: 'Background', token: '--primary' },
+    { part: 'Initials', property: 'Colour', token: '--primary-foreground' },
+    { part: 'Silhouette', property: 'Colour', token: '--neutral-solid-foreground' },
+  ]}
+/>
+
+On `solid` the silhouette is always white, one look across hues; see
+Accessibility for what that costs.
+
+## States
+
+An avatar is not interactive: no hover, focus or pressed. Its states are
+which part it can show.
+
+<States
+  states={[
+    { label: 'Image', content: <Avatar size="lg" imageSrc={AvatarStories.default.args.imageSrc} imageAlt="Mary Thompson" /> },
+    { label: 'Initials', content: <Avatar size="lg" initials="SR" imageAlt="Sam Rivera" /> },
+    { label: 'Silhouette', content: <Avatar size="lg" imageAlt="Unknown user" /> },
+    { label: 'Broken image', content: <Story of={AvatarStories.BrokenImage} /> },
+  ]}
+/>
+
+- **Image** shows while `imageSrc` loads and after.
+- **Broken image** drops the `<img>` and shows the initials, or the
+  silhouette when there are none, instead of the browser's broken-image
+  icon. A new `imageSrc` is tried again. An empty `imageSrc` is no image.
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={AvatarStories} />
+</div>
+
+Every other `<span>` attribute passes through to the container, including
+`ref`.
 
 ### Differences from the spec
 
@@ -41,54 +182,64 @@ Every other `<span>` attribute passes through to the container.
   its prop list has no way to set them. Pass the letters, not a name:
   how to abbreviate a name depends on the language, and the kit should
   not guess.
-- **A broken image falls back** to initials or the placeholder instead
-  of showing the browser's broken-image icon. A new `imageSrc` is tried
-  again.
+- **A broken image falls back** to initials or the silhouette instead
+  of showing the browser's broken-image icon.
 - **No square, no `appearance`.** Always a circle, so a person never
   reads as a product or workspace logo.
 - **The placeholder is a silhouette**, not the outline `user` icon: it
   fills the circle edge to edge and takes `color` and `variant` like
   initials do.
-- **`color` and `variant` are added.** Colour tells people apart in a
-  list; it carries no meaning, so pick it from the person (a hash of
-  their id) rather than from a status.
+- **`color` and `variant` are added**, to tell people apart in a list.
 - **The circle ignores the radius preset.**
 
-## Usage
+</DocTab>
+<DocTab value="guidelines">
 
-<Canvas of={AvatarStories.Sizes} />
+## When to use
 
-Without `imageAlt` the avatar is decorative (see Accessibility). That is
-right when the person's name is already printed next to it; announcing it
-twice is noise.
+Use an Avatar to show who: the author of a comment, the people on a
+project, the account that is signed in. Give it `imageAlt` when the avatar
+is the only thing that says who it is. When the name is printed next to
+it, leave `imageAlt` out: the avatar is decorative, and the name is read
+once.
 
-### Colour
+<DoDont
+  do={<Story of={AvatarStories.DoDecorativeBesideName} />}
+  doCaption="The name is printed, so the avatar has no imageAlt. A screen reader hears “Mary Thompson” once."
+  dont={<Story of={AvatarStories.DontRepeatName} />}
+  dontCaption="imageAlt repeats the printed name: “Mary Thompson, image, Mary Thompson”."
+/>
 
-<Canvas of={AvatarStories.Colors} />
+## When not to use
 
-`color` sets the Theme's own `data-accent` on the avatar, so it uses the
-same measured palette as everything else: `subtle` is the hue's 100 tint
-(950 in dark) with the nearest step that reads on it, `solid` is the
-accent fill and its label. Behind a photo the colour only shows while it
-loads or where the image is transparent.
+- **For a product, team or workspace logo.** An Avatar is always round, so
+  it reads as a person. Use an image with its own shape.
+- **For status.** Colour on an avatar means nothing. Put a
+  [Badge](?path=/docs/components-atomic-elements-badge--docs) dot on it
+  for Online or Away.
+- **For an icon in a circle.** Use the icon itself, or an icon-only
+  [Button](?path=/docs/components-buttons-button--docs) when it acts.
 
 ## Accessibility
 
-- `imageAlt` names the **whole avatar**, not just the image, so the
-  image, the initials and the silhouette all announce the same person.
-  The inner `<img>` has `alt=""`.
-- Without `imageAlt` the avatar is **decorative** and hidden.
+- `imageAlt` names the **whole avatar** (`role="img"`), not just the
+  image, so the image, the initials and the silhouette all announce the
+  same person. The inner `<img>` has `alt=""`.
+- Without `imageAlt` the avatar is **decorative** and hidden
+  (`aria-hidden`).
 - Initials are never read out: with `imageAlt` the avatar's name replaces
   them, without it the avatar is hidden. They are uppercased with CSS, so
   the text keeps the letters as passed.
-- Initials meet 4.5:1 in every colour and variant. The hue pairs are
-  measured by the token build, which fails if a ramp edit breaks one;
-  neutral solid is gray 600 under gray 50, 6.5:1 or more on every gray
-  ramp.
+- Initials meet 4.5:1 in every colour and variant, on every gray ramp in
+  both modes, measured by the `Contrast` story. Neutral solid is gray 600
+  under gray 50, 6.5:1 or more.
 - On `subtle` the silhouette uses the initials colour (neutral uses
   `--muted-foreground`), past the 3:1 a graphic needs.
-- On `solid` the silhouette is **always white**, by choice: one look
-  across hues. In light mode that is under 3:1 on the warm hues (orange
-  to lime); in dark mode, where the fill is the lighter 400 step, it is
-  under 3:1 on most hues. It is accepted because the silhouette carries no information; the name
-  is in `imageAlt` or printed beside the avatar.
+- On `solid` the silhouette is **always white**, by choice. In light mode
+  that is under 3:1 on the warm hues (orange to lime); in dark mode, where
+  the fill is the lighter 400 step, on most hues. It is accepted because
+  the silhouette carries no information: the name is in `imageAlt` or
+  printed beside the avatar.
+
+</DocTab>
+</DocTabs>

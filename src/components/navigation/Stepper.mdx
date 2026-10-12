@@ -1,72 +1,223 @@
-import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
 import * as StepperStories from './Stepper.stories'
 
 <Meta of={StepperStories} />
 
 # Stepper
 
+<DocTabs>
+<DocTab value="overview">
+
 Shows where the reader is in a flow of a few ordered steps: sign-up,
-checkout, a setup wizard. Spec:
-[uiguideline.com/components/stepper](https://www.uiguideline.com/components/stepper).
-A plain element.
+checkout, a setup wizard.
+
+<Status of={StepperStories} />
 
 <Canvas of={StepperStories.Default} />
 
-## Anatomy
+## Variants
 
-| Part | What it is |
+| Variant | Use for |
 | --- | --- |
-| **Marker** | A 32px disc (24px at `sm`): a check when complete, the number when current (primary ring) or upcoming (grey ring), a warning icon on error. |
-| **Label** | Medium weight; muted for upcoming steps, danger for an error. |
-| **Description** | Optional, small, muted. |
-| **Connector** | The line to the next step: primary once the step is complete, `--border` ahead. |
-
-## Props
-
-| Prop | Values | Default | |
-| --- | --- | --- | --- |
-| `steps` | `{ label, description?, status? }[]` | – | Required. |
-| `current` | number (0-based) | – | Required. Earlier steps are complete. |
-| `orientation` | `horizontal`, `vertical` | `horizontal` | |
-| `size` | `sm`, `md` | `md` | |
-| `onStepClick` | `(index) => void` | – | Makes finished and current steps buttons. |
-| `aria-label` | string | `Progress` | The landmark's name. |
-
-A step's `status` (`complete`, `current`, `upcoming`, `error`) overrides
-the one worked out from `current`. Every other `<nav>` attribute passes
-through.
-
-<Controls of={StepperStories.Default} />
-
-### Design notes
-
-- **Horizontal puts the text under the marker**, so the connectors run
-  marker to marker and every step gets the same width whatever the
-  length of its label. Use vertical when the steps have long
-  descriptions, or in a narrow sidebar.
-- **Only finished steps can be revisited.** With `onStepClick`, complete
-  and current steps become buttons; upcoming ones stay text, because a
-  flow that can be skipped ahead is a set of Tabs.
-- **Complete is filled, current is ringed.** Both use the primary
-  colour; the fill says "done", the ring says "you are here".
-
-## Usage
+| Horizontal (default) | Three to five steps above a form. The label sits under its marker, so every step gets the same width whatever its label. |
+| Vertical | Steps with long descriptions, or a narrow column beside the form. |
+| `sm` | Dense places: a dialog, a side panel. |
+| Navigable (`onStepClick`) | Flows where going back to fix an earlier step is normal. Finished steps become buttons. |
 
 <Canvas of={StepperStories.Navigable} />
 
 <Canvas of={StepperStories.Vertical} />
 
-<Canvas of={StepperStories.WithError} />
-
 <Canvas of={StepperStories.Small} />
+
+## Resources
+
+From npm, or copied into your project through the registry:
+
+```js
+import { Stepper } from 'zweihander/stepper'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/stepper.json
+```
+
+- Source: [src/components/navigation/Stepper.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/navigation/Stepper.tsx)
+- Spec: [uiguideline.com/components/stepper](https://www.uiguideline.com/components/stepper)
+- Behaviour: a plain `<nav>` around an ordered list
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
+## Anatomy
+
+<Anatomy parts={StepperStories.anatomyParts}>
+  <Story of={StepperStories.Anatomy} />
+</Anatomy>
+
+The last step has no connector. Vertical, the connector runs down from
+each marker, beside the text.
+
+## Measurements
+
+<SpecTable
+  caption="md"
+  rows={[
+    { part: 'Marker', property: 'Size', token: '--space-8' },
+    { part: 'Label', property: 'Font size', token: '--text-body' },
+    { part: 'Label', property: 'Line height', token: '--leading-body' },
+  ]}
+/>
+
+<SpecTable
+  caption="sm"
+  rows={[
+    { part: 'Marker', property: 'Size', token: '--space-6' },
+    { part: 'Label', property: 'Font size', token: '--text-body-sm' },
+    { part: 'Label', property: 'Line height', token: '--leading-body-sm' },
+  ]}
+/>
+
+<SpecTable
+  caption="Every size"
+  rows={[
+    { part: 'Marker', property: 'Corner radius', token: '--radius-pill' },
+    { part: 'Marker number, description', property: 'Font size', token: '--text-body-sm' },
+    { part: 'Marker to text, horizontal', property: 'Gap', token: '--space-2' },
+    { part: 'Marker to text, vertical', property: 'Gap', token: '--space-3' },
+    { part: 'Connector, vertical', property: 'Minimum length', token: '--space-6' },
+    { part: 'Connector', property: 'Corner radius', token: '--radius-pill' },
+    { part: 'Focus ring', property: 'Width', token: '--focus-width' },
+    { part: 'Focus ring', property: 'Offset', token: '--focus-offset' },
+    { part: 'Hit area', property: 'Minimum on touch screens', token: '--target-coarse' },
+  ]}
+/>
+
+The marker's ring and the connector are 2px. Horizontal, a connector runs
+along the markers' centre line from one marker to the next, `--space-2`
+clear of each.
+
+## Color
+
+<SpecTable
+  caption="Complete"
+  rows={[
+    { part: 'Marker', property: 'Background and ring', token: '--primary' },
+    { part: 'Check', property: 'Colour', token: '--primary-foreground' },
+    { part: 'Connector', property: 'Colour', token: '--primary' },
+  ]}
+/>
+
+<SpecTable
+  caption="Current"
+  rows={[
+    { part: 'Marker', property: 'Background', token: '--background' },
+    { part: 'Marker', property: 'Ring and number', token: '--primary-text' },
+    { part: 'Label', property: 'Colour', token: '--foreground' },
+  ]}
+/>
+
+<SpecTable
+  caption="Upcoming"
+  rows={[
+    { part: 'Marker', property: 'Ring', token: '--control-border' },
+    { part: 'Marker number, label', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Connector', property: 'Colour', token: '--border' },
+  ]}
+/>
+
+<SpecTable
+  caption="Error"
+  rows={[
+    { part: 'Marker', property: 'Background', token: '--danger-subtle' },
+    { part: 'Marker ring, icon, label', property: 'Colour', token: '--danger-text' },
+  ]}
+/>
+
+<SpecTable
+  caption="Every status"
+  rows={[
+    { part: 'Description', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+  ]}
+/>
+
+Complete and current share the primary colour: the filled disc says done,
+the ring says here. The current ring uses `--primary-text`, the step of
+the accent that reads at 4.5:1 on the page, because it frames a number.
+
+## States
+
+A step's status is its state. With `onStepClick`, finished steps and the
+current one are buttons, with hover and focus of their own.
+
+<States
+  states={[
+    { label: 'Statuses', content: <Story of={StepperStories.Statuses} /> },
+    { label: 'Clickable' },
+    { label: 'Hover', pseudo: 'hover' },
+    { label: 'Focus', pseudo: 'focus-visible' },
+  ]}
+>
+  <Story of={StepperStories.Clickable} />
+</States>
+
+- **Hover** underlines the label of a clickable step.
+- **Focus** is a 2px `--ring` outline, 2px outside the step.
+- **Upcoming** steps are never buttons, so they have no hover or focus.
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={StepperStories} />
+</div>
+
+Every other `<nav>` attribute passes through.
+
+A step's `status` is only for the exception, such as an error: the rest
+is worked out from `current`. Only finished steps can be clicked; upcoming
+ones stay text, because a flow that can be skipped ahead is a set of Tabs.
+
+</DocTab>
+<DocTab value="guidelines">
+
+## When to use
+
+Use a Stepper when a task is split into a few steps that must be done in
+order, and it helps to know how many are left: checkout, onboarding, an
+import wizard. Keep it to three to five steps with a word or two each.
+
+<DoDont
+  do={<Story of={StepperStories.DoFewShortSteps} />}
+  doCaption="Four steps, one word each: the whole flow at a glance."
+  dont={<Story of={StepperStories.DontTooManySteps} />}
+  dontCaption="Ten steps squeeze every label and make the flow look longer than it is. Merge steps, or drop the stepper."
+/>
+
+## When not to use
+
+- **For sections the reader can visit in any order.** Use
+  [Tabs](?path=/docs/components-navigation-tabs--docs).
+- **For progress with no steps to name**, such as an upload. Use a
+  [Progress Bar](?path=/docs/components-loaders-progressbar--docs).
+- **For a single-page form.** Headings do the job; a stepper over one page
+  promises steps that are not there.
 
 ## Accessibility
 
 - A `<nav>` landmark named "Progress" around an ordered list: screen
   readers announce the number of steps and the position of each.
 - The current step has `aria-current="step"`.
-- The marker is decorative, so each label carries its status in
-  visually hidden text: "Account, completed", "Invite, not started",
-  "Workspace, has an error".
-- With `onStepClick`, the clickable steps are real buttons with the
-  focus ring, and grow to 44px on coarse pointers.
+- The marker is decorative, so each label carries its status in visually
+  hidden text: "Account, completed", "Invite, not started", "Workspace,
+  has an error".
+- Without `onStepClick` nothing is focusable. With it, complete and
+  current steps are real buttons: reached with Tab, pressed with Enter or
+  Space, showing the focus ring, and 44px tall on touch screens
+  (`pointer: coarse`).
+
+</DocTab>
+</DocTabs>

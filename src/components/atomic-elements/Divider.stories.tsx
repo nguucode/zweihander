@@ -2,18 +2,46 @@ import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect } from 'storybook/test'
 import { Divider } from './Divider'
 
+const menu = { display: 'grid', gap: 'var(--space-2)', inlineSize: '12rem' }
+
 const meta = {
   title: 'Components/Atomic Elements/Divider',
   tags: ['beta'],
   component: Divider,
+  // Every prop is listed by hand, with its type and default: these
+  // descriptions are the docs' API table and the Playground's props panel.
   argTypes: {
-    orientation: { control: 'inline-radio', options: ['horizontal', 'vertical'] },
-    size: { control: 'inline-radio', options: ['sm', 'md', 'lg'] },
-    appearance: { control: 'inline-radio', options: ['solid', 'dashed'] },
+    orientation: {
+      description: 'Horizontal between stacked blocks; vertical between items in a row, where it stretches to the row.',
+      control: 'inline-radio',
+      options: ['horizontal', 'vertical'],
+      table: { type: { summary: "'horizontal' | 'vertical'" }, defaultValue: { summary: "'horizontal'" } },
+    },
+    inset: {
+      description: 'Indents both ends so the line stops short of its container: 16px horizontal, 8px vertical.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    size: {
+      description: 'Line thickness: 1px, 2px or 4px.',
+      control: 'inline-radio',
+      options: ['sm', 'md', 'lg'],
+      table: { type: { summary: "'sm' | 'md' | 'lg'" }, defaultValue: { summary: "'sm'" } },
+    },
+    appearance: {
+      description: "Line style. The spec's `variant`: here `variant` always means colour.",
+      control: 'inline-radio',
+      options: ['solid', 'dashed'],
+      table: { type: { summary: "'solid' | 'dashed'" }, defaultValue: { summary: "'solid'" } },
+    },
   },
+  excludeStories: ['anatomyParts'],
   decorators: [
-    (Story, { args }) =>
-      args.orientation === 'vertical' ? (
+    // A story that brings its own surroundings sets `parameters.bare`.
+    (Story, { args, parameters }) =>
+      parameters.bare ? (
+        <Story />
+      ) : args.orientation === 'vertical' ? (
         <div style={{ display: 'flex', gap: 'var(--space-4)', height: 'var(--space-12)' }}>
           <span>Left</span>
           <Story />
@@ -105,4 +133,67 @@ export const VerticalInset: Story = {
     const row = divider.parentElement!.getBoundingClientRect()
     await expect(divider.getBoundingClientRect().height).toBeLessThan(row.height)
   },
+}
+
+/** Between two icons already grouped, the line is decoration: hidden, not announced. */
+export const Decorative: Story = {
+  args: { orientation: 'vertical', 'aria-hidden': true },
+  play: async ({ canvas, canvasElement }) => {
+    await expect(canvas.queryByRole('separator')).toBeNull()
+    await expect(canvasElement.querySelector('hr')).toBeVisible()
+  },
+}
+
+/** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
+export const anatomyParts = [
+  { name: 'Line', selector: 'hr', description: 'An <hr>, drawn as a border in the border colour.' },
+]
+
+/** The thickest line, so the marker has something to point at. */
+export const Anatomy: Story = {
+  tags: ['!dev'],
+  args: { size: 'lg' },
+  // Alone, at a width: the marker's leader would otherwise cross the text.
+  parameters: { bare: true },
+  render: (args) => (
+    <div style={{ inlineSize: '16rem' }}>
+      <Divider {...args} />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    // The docs marker follows this selector.
+    const found = anatomyParts.map(({ selector }) => canvasElement.querySelector(selector))
+    await expect(found.every(Boolean)).toBe(true)
+  },
+}
+
+/** Guidelines, Do: one divider between two groups. */
+export const DoDivideGroups: Story = {
+  parameters: { bare: true },
+  render: (args) => (
+    <div style={menu}>
+      <span>Profile</span>
+      <span>Settings</span>
+      <Divider {...args} />
+      <span>Sign out</span>
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    await expect(canvas.getAllByRole('separator')).toHaveLength(1)
+  },
+}
+
+/** Guidelines, Don't: a line after every item turns the list into stripes. */
+export const DontDivideEveryItem: Story = {
+  tags: ['!dev'],
+  parameters: { bare: true },
+  render: (args) => (
+    <div style={menu}>
+      <span>Profile</span>
+      <Divider {...args} />
+      <span>Settings</span>
+      <Divider {...args} />
+      <span>Sign out</span>
+    </div>
+  ),
 }

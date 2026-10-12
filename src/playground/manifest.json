@@ -17,23 +17,25 @@
             "md",
             "lg"
           ],
-          "default": "sm"
+          "default": "sm",
+          "description": "24, 32, 40 or 48px across. Initials step up from 12px to 16px with it."
         },
         {
           "name": "imageSrc",
           "control": "text",
-          "default": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20fill%3D%22%23c7d2fe%22%2F%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2226%22%20r%3D%2212%22%20fill%3D%22%236366f1%22%2F%3E%3Crect%20x%3D%2212%22%20y%3D%2242%22%20width%3D%2240%22%20height%3D%2230%22%20rx%3D%2220%22%20fill%3D%22%236366f1%22%2F%3E%3C%2Fsvg%3E"
+          "default": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20fill%3D%22%23c7d2fe%22%2F%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2226%22%20r%3D%2212%22%20fill%3D%22%236366f1%22%2F%3E%3Crect%20x%3D%2212%22%20y%3D%2242%22%20width%3D%2240%22%20height%3D%2230%22%20rx%3D%2220%22%20fill%3D%22%236366f1%22%2F%3E%3C%2Fsvg%3E",
+          "description": "The picture, cropped to fill the circle. If it fails to load, the initials or the silhouette show instead."
         },
         {
           "name": "imageAlt",
           "control": "text",
           "default": "Mary Thompson",
-          "description": "Who this is. Without it the avatar is decorative and hidden from assistive tech."
+          "description": "Who this is. Names the whole avatar. Without it the avatar is decorative and hidden from assistive tech."
         },
         {
           "name": "initials",
           "control": "text",
-          "description": "Shown when there is no image, or it fails to load. One or two letters."
+          "description": "One or two letters, shown when there is no image. Pass the letters, not a name: they are uppercased by style."
         },
         {
           "name": "variant",
@@ -43,7 +45,7 @@
             "solid"
           ],
           "default": "subtle",
-          "description": "`subtle` is a tint of the hue; `solid` is its 600 step (400 in dark)."
+          "description": "`subtle` is a tint of the hue; `solid` is its fill (600 in light, 400 in dark)."
         }
       ]
     },
@@ -58,7 +60,8 @@
         {
           "name": "count",
           "control": "number",
-          "default": 8
+          "default": 8,
+          "description": "The number shown. Nothing renders without `count` or `isDot`. `0` shows \"0\"."
         },
         {
           "name": "variant",
@@ -71,7 +74,8 @@
             "success",
             "warning"
           ],
-          "default": "primary"
+          "default": "primary",
+          "description": "Colour. `accent` is the inverted neutral. For presence: `success` Online, `warning` Away, `destructive` Busy, `secondary` Offline."
         },
         {
           "name": "size",
@@ -80,24 +84,25 @@
             "sm",
             "md"
           ],
-          "default": "md"
+          "default": "md",
+          "description": "16px (`sm`) or 20px (`md`) tall. Dots are 6px and 8px."
         },
         {
           "name": "isDot",
           "control": "boolean",
           "default": false,
-          "description": "A dot with no number: \"something new\", not \"how many\"."
+          "description": "A dot with no number: \"something new\", not \"how many\". Hidden from assistive tech unless it has `aria-label`."
         },
         {
           "name": "maxCount",
           "control": "number",
-          "description": "Counts above this show as `maxCount+`."
+          "description": "Counts above this show as `maxCount+`, e.g. `99+`, so a large number does not stretch the badge."
         },
         {
           "name": "isFloating",
           "control": "boolean",
           "default": false,
-          "description": "Pins the badge to a corner of `children` instead of sitting inline."
+          "description": "Pins the badge to a corner of `children`, with a ring in the page colour. Hidden from assistive tech."
         },
         {
           "name": "floatingPlacement",
@@ -108,7 +113,8 @@
             "bottom-start",
             "bottom-end"
           ],
-          "default": "top-end"
+          "default": "top-end",
+          "description": "The corner a floating badge sits on. Start and end are physical: left and right."
         }
       ]
     },
@@ -127,13 +133,14 @@
             "horizontal",
             "vertical"
           ],
-          "default": "horizontal"
+          "default": "horizontal",
+          "description": "Horizontal between stacked blocks; vertical between items in a row, where it stretches to the row."
         },
         {
           "name": "inset",
           "control": "boolean",
           "default": false,
-          "description": "Indents both ends so the line stops short of its container's edges."
+          "description": "Indents both ends so the line stops short of its container: 16px horizontal, 8px vertical."
         },
         {
           "name": "size",
@@ -144,7 +151,7 @@
             "lg"
           ],
           "default": "sm",
-          "description": "Line thickness: 1px, 2px, 4px."
+          "description": "Line thickness: 1px, 2px or 4px."
         },
         {
           "name": "appearance",
@@ -154,7 +161,7 @@
             "dashed"
           ],
           "default": "solid",
-          "description": "uiguideline calls this `variant`; renamed because `variant` means color here."
+          "description": "Line style. The spec's `variant`: here `variant` always means colour."
         }
       ]
     },
@@ -169,12 +176,13 @@
         {
           "name": "text",
           "control": "text",
-          "default": "Account verified"
+          "default": "Account verified",
+          "description": "The label. Required. Truncates with an ellipsis rather than wrapping."
         },
         {
           "name": "startAvatar",
           "control": "text",
-          "description": "Image URL for a small avatar before the text, e.g. a person in a filter."
+          "description": "Image URL for a small round picture before the text, e.g. a person in a filter. Decorative. Wins over `startIcon`."
         },
         {
           "name": "size",
@@ -183,7 +191,8 @@
             "sm",
             "md"
           ],
-          "default": "md"
+          "default": "md",
+          "description": "20px (`sm`) or 24px (`md`) tall: the control tier below its name, to sit in a line of text."
         },
         {
           "name": "appearance",
@@ -193,7 +202,8 @@
             "outlined",
             "solid"
           ],
-          "default": "subtle"
+          "default": "subtle",
+          "description": "`subtle` tint, `outlined` border, or `solid` fill. Solid hue tags fall under 4.5:1 on warm hues."
         },
         {
           "name": "variant",
@@ -222,12 +232,14 @@
             "pink",
             "rose"
           ],
-          "default": "info"
+          "default": "info",
+          "description": "A status (`neutral`, `info`, `success`, `warning`, `danger`) or one of the 17 accent hues, for categories."
         },
         {
           "name": "hasRemoveButton",
           "control": "boolean",
-          "default": false
+          "default": false,
+          "description": "Adds a remove button named \"Remove `text`\"."
         }
       ]
     },
@@ -1604,7 +1616,8 @@
             "bottom",
             "left"
           ],
-          "default": "bottom"
+          "default": "bottom",
+          "description": "Which side of the trigger the popup opens on. It flips when there is no room."
         },
         {
           "name": "align",
@@ -1614,11 +1627,14 @@
             "center",
             "end"
           ],
-          "default": "start"
+          "default": "start",
+          "description": "How the popup lines up with the trigger along that side."
         },
         {
-          "name": "defaultOpen",
-          "control": "boolean"
+          "name": "modal",
+          "control": "boolean",
+          "default": true,
+          "description": "While open, locks page scroll and makes the rest of the page inert. `false` leaves the page scrollable and clickable."
         }
       ]
     },
@@ -1675,18 +1691,19 @@
           "name": "currentHref",
           "control": "text",
           "default": "#atlas",
-          "description": "The href of the page the reader is on: that item gets aria-current=\"page\"."
+          "description": "The `href` of the page the reader is on. That item gets the selected fill and `aria-current=\"page\"`."
         },
         {
           "name": "defaultCollapsed",
           "control": "boolean",
-          "default": false
+          "default": false,
+          "description": "Starts as the icon rail, uncontrolled."
         },
         {
           "name": "isCollapsible",
           "control": "boolean",
           "default": false,
-          "description": "Show a button that collapses and expands the sidebar."
+          "description": "Shows a button in the header that collapses and expands the sidebar."
         }
       ]
     },
@@ -1705,7 +1722,8 @@
             "horizontal",
             "vertical"
           ],
-          "default": "horizontal"
+          "default": "horizontal",
+          "description": "`horizontal` puts each label under its marker; `vertical` stacks the steps, for long descriptions or a narrow column."
         },
         {
           "name": "size",
@@ -1714,7 +1732,8 @@
             "sm",
             "md"
           ],
-          "default": "md"
+          "default": "md",
+          "description": "A 32px (`md`) or 24px (`sm`) marker. `sm` takes a 12px label."
         }
       ]
     },
@@ -2082,6 +2101,18 @@
       "storyId": "components-states-emptystate--default",
       "props": [
         {
+          "name": "title",
+          "control": "text",
+          "default": "No projects match \"atlas\"",
+          "description": "Says what is empty. A real heading, at `headingLevel`."
+        },
+        {
+          "name": "description",
+          "control": "text",
+          "default": "Check the spelling, or clear the search to see every project.",
+          "description": "Why it is empty, or what will appear here. Muted, at most 40 characters wide."
+        },
+        {
           "name": "size",
           "control": "inline-radio",
           "options": [
@@ -2102,7 +2133,7 @@
             6
           ],
           "default": 2,
-          "description": "The title's heading level, so it fits the page outline it lands in."
+          "description": "The title's heading level, so it fits the page outline: `3` inside a section headed by an `h2`."
         }
       ]
     },
@@ -2117,13 +2148,25 @@
         {
           "name": "description",
           "control": "text",
-          "default": "The server didn’t answer. Your projects are safe; try again in a moment."
+          "default": "The server didn’t answer. Your projects are safe; try again in a moment.",
+          "description": "What happened and what is safe: \"Your projects are safe; try again in a moment.\""
+        },
+        {
+          "name": "title",
+          "control": "text",
+          "default": "Couldn’t load projects",
+          "description": "What failed, in the reader's words. The default is the last resort, for failures you cannot describe."
+        },
+        {
+          "name": "details",
+          "control": "text",
+          "description": "A reference for support, e.g. an error code or request id. Shown small and monospaced, selected in one click."
         },
         {
           "name": "isLive",
           "control": "boolean",
           "default": false,
-          "description": "Announce it when it replaces content that was loading (`role=\"alert\"`)."
+          "description": "Makes it a `role=\"alert\"`, announced when it replaces content that was loading."
         },
         {
           "name": "size",
@@ -2131,7 +2174,9 @@
           "options": [
             "sm",
             "md"
-          ]
+          ],
+          "default": "md",
+          "description": "`sm` for a panel or a table body; `md` for a whole page or section."
         },
         {
           "name": "headingLevel",
@@ -2142,7 +2187,9 @@
             4,
             5,
             6
-          ]
+          ],
+          "default": 2,
+          "description": "The title's heading level, so it fits the page outline."
         }
       ]
     },
@@ -2157,13 +2204,20 @@
         {
           "name": "description",
           "control": "text",
-          "default": "3 people will get an email with a link to join Atlas."
+          "default": "3 people will get an email with a link to join Atlas.",
+          "description": "What happens next, or what the reader can now do."
+        },
+        {
+          "name": "title",
+          "control": "text",
+          "default": "Invites sent",
+          "description": "What was done: \"Invites sent\", \"Import finished\"."
         },
         {
           "name": "isLive",
           "control": "boolean",
           "default": false,
-          "description": "Announce it when it replaces a form or a progress view (`role=\"status\"`)."
+          "description": "Makes it a `role=\"status\"`, read politely when it replaces a form or a progress view."
         },
         {
           "name": "size",
@@ -2171,7 +2225,9 @@
           "options": [
             "sm",
             "md"
-          ]
+          ],
+          "default": "md",
+          "description": "`sm` for a panel or a table body; `md` for a whole page or section."
         },
         {
           "name": "headingLevel",
@@ -2182,7 +2238,9 @@
             4,
             5,
             6
-          ]
+          ],
+          "default": 2,
+          "description": "The title's heading level, so it fits the page outline."
         }
       ]
     },

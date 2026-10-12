@@ -1,70 +1,213 @@
-import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
 import * as SidebarStories from './Sidebar.stories'
 
 <Meta of={SidebarStories} />
 
 # Sidebar
 
-The app's main navigation, down the side of the screen: a header,
-links in named groups, and a footer. It can collapse to an icon rail.
-Our own spec: uiguideline.com has no page for it. A plain element; the
-rail's labels use [Tooltip](?path=/docs/components-overlays-tooltip--docs).
+<DocTabs>
+<DocTab value="overview">
+
+The app's main navigation, down the side of the screen: a header, links
+in named groups, and a footer. It can collapse to an icon rail.
+
+<Status of={SidebarStories} />
 
 <Canvas of={SidebarStories.Default} />
 
-## Anatomy
+## Variants
 
-| Part | What it is |
+| Variant | Use for |
 | --- | --- |
-| **Header** | Optional: the product name, a workspace switcher. The collapse button sits here. |
-| **Item** | 16px icon, label and optional badge, a flush 32px row (44px on touch). |
-| **Current item** | A `--selected` fill and medium weight. No accent colour and no edge. |
-| **Group** | A small muted label over its items. In the rail, a rule. |
-| **Footer** | Optional, pinned to the bottom: the signed-in user, help. Hidden in the rail. |
-
-## Props
-
-| Prop | Values | Default | |
-| --- | --- | --- | --- |
-| `items` | `SidebarEntry[]` | – | Required. Items `{ label, href, icon?, badge?, render? }` and groups `{ type: 'group', label, items }`. |
-| `currentHref` | string | – | That item gets `aria-current="page"`. |
-| `header`, `footer` | node | – | |
-| `isCollapsed`, `defaultCollapsed`, `onCollapsedChange` | boolean | `false` | Controlled or uncontrolled. |
-| `isCollapsible` | boolean | `false` | Show the collapse button. |
-| `aria-label` | string | `Main` | The landmark's name. |
-
-`render` on an item replaces its `<a>`, e.g. with a router's link. Every
-other `<nav>` attribute passes through.
-
-<Controls of={SidebarStories.Default} />
-
-### Design notes
-
-- **The current page is a fill, not a highlight.** `--selected` sits a
-  step past the hover fill (gray-200 against gray-100 in light, white 10%
-  in dark), so hover and current never read alike, and medium weight
-  carries the state for anyone who cannot tell the fills apart. It stays
-  off the accent: where you are is not a call to action.
-- **Group names are labels, not headings.** They name their list
-  ("Projects, list, 3 items") without adding `<h2>`s that would compete
-  with the page's own outline.
-- **The rail needs an icon on every item.** Collapsed, the label moves
-  into a tooltip on hover and focus, and stays the link's name.
-
-## Usage
+| Expanded | The default: icon, label and badge on every row. |
+| Collapsible (`isCollapsible`) | Apps where the content needs the width at times: a button in the header folds the sidebar to the rail. |
+| Rail (`isCollapsed` or `defaultCollapsed`) | Icons only, labels in tooltips. For tools the reader knows well. Every item needs an icon. |
+| Plain | No header or footer: a section's own navigation inside a larger layout. |
 
 <Canvas of={SidebarStories.Collapsible} />
 
 <Canvas of={SidebarStories.Plain} />
 
+## Resources
+
+From npm, or copied into your project through the registry:
+
+```js
+import { Sidebar } from 'zweihander/sidebar'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/sidebar.json
+```
+
+- Source: [src/components/navigation/Sidebar.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/navigation/Sidebar.tsx)
+- Spec: our own; uiguideline.com has no page for it
+- Behaviour: a plain `<nav>`; the rail's labels use [Tooltip](?path=/docs/components-overlays-tooltip--docs)
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
+## Anatomy
+
+<Anatomy parts={SidebarStories.anatomyParts}>
+  <Story of={SidebarStories.Anatomy} />
+</Anatomy>
+
+In the rail, the header, the labels, the badges and the footer are hidden;
+each group starts with a rule instead of its label.
+
+## Measurements
+
+Items are rows of the md control tier, flush against each other: a fill
+marks a row, not a gap.
+
+<SpecTable
+  caption="Sidebar"
+  rows={[
+    { part: 'Sidebar', property: 'Padding', token: '--space-2' },
+    { part: 'Sidebar', property: 'Gap between groups', token: '--space-4' },
+    { part: 'Header', property: 'Height', token: '--control-md' },
+    { part: 'Header', property: 'Space below', token: '--space-2' },
+    { part: 'Collapse button', property: 'Size', token: '--control-md' },
+    { part: 'Footer', property: 'Space and padding above', token: '--space-3' },
+  ]}
+/>
+
+<SpecTable
+  caption="Item"
+  rows={[
+    { part: 'Item', property: 'Height', token: '--control-md' },
+    { part: 'Item', property: 'Inline padding', token: '--space-2' },
+    { part: 'Item', property: 'Gap', token: '--space-2' },
+    { part: 'Item', property: 'Corner radius', token: '--radius-control' },
+    { part: 'Icon', property: 'Size', token: '--icon-md' },
+    { part: 'Label', property: 'Font size', token: '--text-body' },
+    { part: 'Label', property: 'Line height', token: '--leading-body' },
+    { part: 'Group label, badge', property: 'Font size', token: '--text-body-sm' },
+    { part: 'Badge', property: 'Inline padding', token: '--space-1-5' },
+    { part: 'Badge', property: 'Corner radius', token: '--radius-pill' },
+    { part: 'Hit area', property: 'Minimum on touch screens', token: '--target-coarse' },
+  ]}
+/>
+
+<SpecTable
+  caption="Focus ring"
+  rows={[
+    { part: 'Item, collapse button', property: 'Width', token: '--focus-width' },
+    { part: 'Item, collapse button', property: 'Offset (inside)', token: '--focus-offset-inset' },
+  ]}
+/>
+
+Expanded, the sidebar is 16rem wide. The rail is one square row plus the
+padding either side: `--control-md` plus twice `--space-2`. A long label is
+cut with an ellipsis. Give the sidebar the height to fill; its body
+scrolls when the items do not fit.
+
+## Color
+
+<SpecTable
+  caption="Sidebar"
+  rows={[
+    { part: 'Sidebar', property: 'Background', token: '--surface-filled' },
+    { part: 'Sidebar', property: 'Edge', token: '--border' },
+    { part: 'Group label', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Footer', property: 'Rule', token: '--border' },
+  ]}
+/>
+
+<SpecTable
+  caption="Item"
+  rows={[
+    { part: 'Label', property: 'Colour', token: '--subtle-foreground' },
+    { part: 'Icon', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Item, hover', property: 'Background', token: '--hover-overlay' },
+    { part: 'Item, hover', property: 'Label and icon', token: '--accent-foreground' },
+    { part: 'Item, current', property: 'Background', token: '--selected' },
+    { part: 'Item, current', property: 'Label and icon', token: '--foreground' },
+    { part: 'Badge', property: 'Background', token: '--secondary' },
+    { part: 'Badge', property: 'Colour', token: '--secondary-foreground' },
+    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+  ]}
+/>
+
+Hover is an overlay, not a solid: in dark mode the sidebar's own surface
+is the same grey as `--accent`, so an opaque hover fill would vanish.
+
+## States
+
+<States
+  states={[
+    { label: 'Enabled' },
+    { label: 'Hover', pseudo: 'hover' },
+    { label: 'Focus', pseudo: 'focus-visible' },
+    { label: 'Current', content: <Story of={SidebarStories.CurrentItem} /> },
+  ]}
+>
+  <Story of={SidebarStories.Item} />
+</States>
+
+- **Current** is a `--selected` fill, a step past the hover fill so the
+  two never read alike, plus medium weight for anyone who cannot tell the
+  fills apart. It stays off the accent: where you are is not a call to
+  action.
+- **Focus** is a 2px `--ring` outline drawn inside the row, so rows that
+  sit flush do not cover each other's ring.
+- **Collapsed** is the rail; see Variants.
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={SidebarStories} />
+</div>
+
+Every other `<nav>` attribute passes through.
+
+</DocTab>
+<DocTab value="guidelines">
+
+## When to use
+
+Use a Sidebar for an app's main navigation when it has more than five or
+so destinations, or will grow: the list runs down and does not wrap. Name
+groups by what is in them, keep labels to a word or two, and give every
+item an icon if the sidebar can collapse.
+
+<DoDont
+  do={<Story of={SidebarStories.DoGroupWithIcons} />}
+  doCaption="Short labels, an icon on each, grouped under a few names."
+  dont={<Story of={SidebarStories.DontLongLabelsNoIcons} />}
+  dontCaption="Long labels get cut, and with no icons there is nothing to show in the rail."
+/>
+
+## When not to use
+
+- **For three to five sections of one page or object.** Use
+  [Tabs](?path=/docs/components-navigation-tabs--docs) across the top.
+- **For actions.** A sidebar goes places. Put actions in
+  [Buttons](?path=/docs/components-buttons-button--docs) or a
+  [Menu](?path=/docs/components-navigation-menu--docs).
+- **On a phone, as is.** 16rem is most of a phone's width. Put it in a
+  drawer, as the [App Shell](?path=/docs/patterns-application-ui-app-shell--docs)
+  does.
+
 ## Accessibility
 
-- A `<nav>` landmark named "Main". The current item has
+- A `<nav>` landmark named "Main"; rename it with `aria-label` when the
+  page has another navigation. The current item has
   `aria-current="page"`.
-- Each group's label names its list through `aria-labelledby`, and
-  keeps doing so in the rail, where it is only visually hidden.
+- Each group's label names its list through `aria-labelledby` ("Projects,
+  list, 3 items"), and keeps doing so in the rail, where it is only
+  visually hidden. Labels are not headings, so they do not compete with
+  the page's outline.
 - In the rail each link keeps its name through `aria-label`, badge
-  included ("Inbox, 12"), and a tooltip shows the same text on hover
-  and keyboard focus.
-- The collapse button is named "Collapse sidebar" / "Expand sidebar"
-  and carries `aria-expanded`.
+  included ("Inbox, 12"), and a tooltip shows the same text on hover and
+  on keyboard focus.
+- The collapse button is named "Collapse sidebar" / "Expand sidebar" and
+  carries `aria-expanded`.
+- Rows are 32px tall, 44px on touch screens (`pointer: coarse`).
+
+</DocTab>
+</DocTabs>

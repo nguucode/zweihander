@@ -1,41 +1,194 @@
-import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
+import { Badge } from './Badge'
 import * as BadgeStories from './Badge.stories'
 
 <Meta of={BadgeStories} />
 
 # Badge
 
+<DocTabs>
+<DocTab value="overview">
+
 A small count or dot that flags something new on another element: unread
-messages on an inbox, a status on an avatar. Spec:
-[uiguideline.com/components/badge](https://www.uiguideline.com/components/badge).
+messages on an inbox, a status on an avatar.
+
+<Status of={BadgeStories} />
 
 <Canvas of={BadgeStories.Variants} />
 
+## Variants
+
+Each variant comes as a count or, with `isDot`, a dot.
+
+| Variant | Use for |
+| --- | --- |
+| <Badge count={8} /> `primary` | The default: new items in the brand colour. |
+| <Badge count={8} variant="accent" /> `accent` | Strong and neutral, where the brand colour would clash. |
+| <Badge count={8} variant="secondary" /> `secondary` | Low emphasis: a total, not news. As a dot, Offline. |
+| <Badge count={8} variant="destructive" /> `destructive` | Something needs attention: failures, overdue items. As a dot, Busy. |
+| <Badge count={8} variant="success" /> `success` | As a dot, Online. |
+| <Badge count={8} variant="warning" /> `warning` | As a dot, Away or Pending. |
+
+<Canvas of={BadgeStories.Status} />
+
+<Canvas of={BadgeStories.Sizes} />
+
+`maxCount` keeps a large number from stretching the badge past its anchor.
+
+<Canvas of={BadgeStories.MaxCount} />
+
+`isFloating` pins the badge to a corner of the element it wraps.
+
+<Canvas of={BadgeStories.Floating} />
+
+## Resources
+
+From npm, or copied into your project through the registry:
+
+```js
+import { Badge } from 'zweihander/badge'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/badge.json
+```
+
+- Source: [src/components/atomic-elements/Badge.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/atomic-elements/Badge.tsx)
+- Spec: [uiguideline.com/components/badge](https://www.uiguideline.com/components/badge)
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
 ## Anatomy
 
-| Part | What it is |
-| --- | --- |
-| **Container** | The pill. Always fully rounded, whatever the Theme's radius preset. |
-| **Count** | The number, in tabular figures so `9` and `10` keep their width. |
-| **Suffix "+"** | Added after `maxCount` when `count` is larger: `99+`. |
-| **Dot** | `isDot`: the container with no count, for "something new" rather than "how many". |
+<Anatomy parts={BadgeStories.anatomyParts}>
+  <Story of={BadgeStories.Anatomy} />
+</Anatomy>
 
-## Props
+The anchor only exists when the badge has `children`. A badge on its own
+is just the container.
 
-| Prop | Values | Default | |
-| --- | --- | --- | --- |
-| `count` | number | – | Nothing renders without `count` or `isDot`. |
-| `variant` | `primary`, `accent`, `secondary`, `destructive`, `success`, `warning` | `primary` | Status colours: `success` Online, `warning` Away, `destructive` Busy, `secondary` Offline. |
-| `size` | `sm`, `md` | `md` | 16px / 20px tall, 11px text; dots are 6px / 8px. |
-| `isDot` | boolean | `false` | |
-| `maxCount` | number | – | |
-| `isFloating` | boolean | `false` | Pins the badge to a corner of `children`. |
-| `floatingPlacement` | `top-start`, `top-end`, `bottom-start`, `bottom-end` | `top-end` | |
-| `children` | node | – | The element a floating badge sits on. |
+## Measurements
 
-Every other `<span>` attribute passes through to the badge.
+`md` is the xs control tier (Foundations / Sizing). Both sizes keep a
+single digit a circle: the minimum width equals the height. `sm` pads the
+count by 2px either side, below the spacing scale on purpose.
 
-<Controls of={BadgeStories.Default} />
+<SpecTable
+  caption="sm"
+  rows={[
+    { part: 'Container', property: 'Height and minimum width', token: '--space-4' },
+    { part: 'Dot', property: 'Size', token: '--space-1-5' },
+  ]}
+/>
+
+<SpecTable
+  caption="md"
+  rows={[
+    { part: 'Container', property: 'Height and minimum width', token: '--control-xs' },
+    { part: 'Container', property: 'Inline padding', token: '--space-1' },
+    { part: 'Dot', property: 'Size', token: '--space-2' },
+  ]}
+/>
+
+<SpecTable
+  caption="Every size"
+  rows={[
+    { part: 'Container', property: 'Corner radius', token: '--radius-pill' },
+    { part: 'Count', property: 'Font size', token: '--text-body-xs' },
+    { part: 'Count', property: 'Line height', token: '--leading-body-xs' },
+  ]}
+/>
+
+A floating badge is centred on its corner of the anchor, half in and half
+out, with a 2px ring.
+
+## Color
+
+<SpecTable
+  caption="primary"
+  rows={[
+    { part: 'Container and dot', property: 'Background', token: '--primary' },
+    { part: 'Count', property: 'Colour', token: '--primary-foreground' },
+  ]}
+/>
+
+<SpecTable
+  caption="accent"
+  rows={[
+    { part: 'Container and dot', property: 'Background', token: '--foreground' },
+    { part: 'Count', property: 'Colour', token: '--background' },
+  ]}
+/>
+
+<SpecTable
+  caption="secondary"
+  rows={[
+    { part: 'Container', property: 'Background', token: '--secondary' },
+    { part: 'Count', property: 'Colour', token: '--secondary-foreground' },
+    { part: 'Dot', property: 'Background', token: '--muted-foreground' },
+  ]}
+/>
+
+<SpecTable
+  caption="destructive"
+  rows={[
+    { part: 'Container and dot', property: 'Background', token: '--destructive' },
+    { part: 'Count', property: 'Colour', token: '--destructive-foreground' },
+  ]}
+/>
+
+<SpecTable
+  caption="success"
+  rows={[
+    { part: 'Container and dot', property: 'Background', token: '--success' },
+    { part: 'Count', property: 'Colour', token: '--success-foreground' },
+  ]}
+/>
+
+<SpecTable
+  caption="warning"
+  rows={[
+    { part: 'Container', property: 'Background', token: '--warning' },
+    { part: 'Count', property: 'Colour', token: '--warning-foreground' },
+    { part: 'Dot', property: 'Background', token: '--warning-indicator' },
+  ]}
+/>
+
+<SpecTable caption="Floating, every variant" rows={[{ part: 'Ring', property: 'Colour', token: '--background' }]} />
+
+A dot has no text to carry it, so it must reach 3:1 against the page on its
+own. That is why the `secondary` and `warning` dots step to a darker colour
+than their pill.
+
+## States
+
+A badge is not interactive: no hover, focus or pressed. Its states are what
+it shows.
+
+<States
+  states={[
+    { label: 'Count', content: <Badge count={8} /> },
+    { label: 'Over maxCount', content: <Badge count={120} maxCount={99} /> },
+    { label: 'Zero', content: <Badge count={0} /> },
+    { label: 'Dot', content: <Badge isDot /> },
+  ]}
+/>
+
+`count={0}` shows "0". Hide the badge yourself if nothing new should mean
+no badge.
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={BadgeStories} />
+</div>
+
+Every other `<span>` attribute passes through to the badge, not to the
+anchor.
 
 ### Differences from the spec
 
@@ -45,29 +198,42 @@ Every other `<span>` attribute passes through to the badge.
 - **`accent` is the inverted neutral.** The token set has one brand hue,
   which `primary` already uses, so `accent` is foreground-on-background:
   the strongest contrast available without inventing a colour.
-- **`success` and `warning` are added** from the status tokens,
-  for presence and state dots. A `warning` dot uses `--warning-indicator`
-  (amber-600 in light mode): amber-500 alone reaches only 2:1 on the page,
-  under the 3:1 a status graphic needs.
-
-<Canvas of={BadgeStories.Status} />
+- **`success` and `warning` are added** from the status tokens, for
+  presence and state dots.
 - **`floatingPlacement` defaults to `top-end`**, the usual notification
   corner; the spec gives no default.
 - **Start and end are physical** (left and right). RTL pages would get
   mirrored placement.
 
-## Usage
+</DocTab>
+<DocTab value="guidelines">
 
-<Canvas of={BadgeStories.Sizes} />
+## When to use
 
-Use `maxCount` so a large number does not stretch the badge past its anchor.
+Use a Badge to say something is new, or how many, on the element it
+belongs to: unread messages on an inbox button, a status dot on an avatar.
+A floating badge is hidden from assistive tech, so the element it sits on
+carries the meaning in its own name.
 
-<Canvas of={BadgeStories.MaxCount} />
+<DoDont
+  do={<Story of={BadgeStories.DoNameTheAnchor} />}
+  doCaption="The button is named “Notifications, 4 unread”: the count reaches a screen reader too."
+  dont={<Story of={BadgeStories.DontCountOnlyInBadge} />}
+  dontCaption="The count lives only in the badge, which is hidden: a screen reader hears “Notifications”."
+/>
 
-A floating badge gets a ring in the page background, so it separates from
-whatever it overlaps.
+Colour is never the only signal. A destructive badge still needs words
+somewhere that say what is wrong, and a status dot needs `aria-label` or
+a name beside it.
 
-<Canvas of={BadgeStories.Floating} />
+## When not to use
+
+- **For a label or category.** Use a
+  [Tag](?path=/docs/components-atomic-elements-tag--docs): it holds words,
+  a badge holds a number.
+- **For a message that needs reading.** Use an Alert or a Toast.
+- **On every item of a list.** A badge flags what is new; if everything
+  is, nothing stands out.
 
 ## Accessibility
 
@@ -80,8 +246,7 @@ whatever it overlaps.
 - A **dot** has no text and is hidden too.
 - Pass `aria-label` to any badge to expose it as an image with that name
   instead, e.g. a status dot on an avatar: `aria-label="Online"`.
-- `count={0}` shows "0". Hide the badge yourself if nothing new should
-  mean no badge.
-- Colour is never the only signal: a destructive badge still needs words
-  somewhere that say what is wrong.
 - Contrast is checked by addon-a11y in error mode for every story.
+
+</DocTab>
+</DocTabs>
