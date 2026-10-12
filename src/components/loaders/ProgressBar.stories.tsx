@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect } from 'storybook/test'
+import { ACCENT_COLORS, Theme } from '@/theme/Theme'
+import { contrast, mediaRules } from '@/test/story-helpers'
 import { ProgressBar } from './ProgressBar'
 
 const meta = {
@@ -71,13 +73,27 @@ export const Default: Story = {
     const bar = canvas.getByRole('progressbar', { name: 'Uploading' })
     await expect(bar).toHaveAttribute('aria-valuenow', '70')
     await expect(bar).toHaveAttribute('aria-valuemax', '100')
+    // The fill eases on --duration-slow, which reduced motion sets to 0ms.
+    const probe = document.createElement('span')
+    probe.style.transitionDuration = 'var(--duration-slow)'
+    bar.append(probe)
+    const indicator = bar.querySelector('[role="progressbar"] > div > :first-child > *')!
+    await expect(getComputedStyle(indicator).transitionDuration).toBe(getComputedStyle(probe).transitionDuration)
+    probe.remove()
   },
 }
 
 export const ValueLabel: Story = {
   args: { showValueLabel: true },
   play: async ({ canvas }) => {
-    await expect(canvas.getByText('70%')).toBeVisible()
+    const value = canvas.getByText('70%')
+    await expect(value).toBeVisible()
+    // The value label is --muted-foreground (read back through a probe beside it).
+    const probe = document.createElement('span')
+    probe.style.color = 'var(--muted-foreground)'
+    value.after(probe)
+    await expect(getComputedStyle(value).color).toBe(getComputedStyle(probe).color)
+    probe.remove()
   },
 }
 
@@ -113,7 +129,13 @@ export const Indeterminate: Story = {
   args: { isIndeterminate: true, label: 'Connecting' },
   play: async ({ canvas }) => {
     // No value to report: aria-valuenow is absent, not 0.
-    await expect(canvas.getByRole('progressbar', { name: 'Connecting' })).not.toHaveAttribute('aria-valuenow')
+    const bar = canvas.getByRole('progressbar', { name: 'Connecting' })
+    await expect(bar).not.toHaveAttribute('aria-valuenow')
+    // Reduced motion slows the slide to 4s a pass. A play cannot set
+    // prefers-reduced-motion, so read the rule that would apply.
+    const indicator = bar.querySelector(':scope > div > :first-child > *')!
+    await expect(getComputedStyle(indicator).animationDuration).toBe('1.4s')
+    await expect(mediaRules('prefers-reduced-motion: reduce', indicator).map((r) => r.style.animationDuration)).toContain('4s')
   },
 }
 
@@ -158,4 +180,35 @@ export const DoNameTheTask: Story = {
 export const DontBareBar: Story = {
   tags: ['!dev'],
   args: { label: undefined, 'aria-label': 'Uploading report.pdf', showValueLabel: true },
+}
+
+/** The fill clears 3:1 on the track for every variant, under all seventeen accents, in both modes. */
+export const FillContrast: Story = {
+  decorators: [],
+  render: () => (
+    <div>
+      {(['light', 'dark'] as const).map((mode) => (
+        <Theme key={mode} appearance={mode} style={{ background: 'var(--background)', padding: 8 }}>
+          {ACCENT_COLORS.map((accent) => (
+            <Theme key={accent} accentColor={accent} style={{ display: 'flex', gap: 4 }}>
+              {(['primary', 'accent', 'secondary', 'destructive'] as const).map((variant) => (
+                <ProgressBar key={variant} size="sm" variant={variant} value={50} aria-label={`${mode} ${accent} ${variant}`} />
+              ))}
+            </Theme>
+          ))}
+        </Theme>
+      ))}
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const failures: string[] = []
+    for (const bar of canvasElement.querySelectorAll<HTMLElement>('[role="progressbar"]')) {
+      const page = getComputedStyle(bar.parentElement!.parentElement!).backgroundColor
+      const track = bar.querySelector(':scope > div > :first-child')!
+      const fill = getComputedStyle(track.firstElementChild!).backgroundColor
+      const value = contrast(fill, page, getComputedStyle(track).backgroundColor)
+      if (value < 3) failures.push(`${bar.getAttribute('aria-label')}: ${value.toFixed(2)}`)
+    }
+    await expect(failures).toEqual([])
+  },
 }

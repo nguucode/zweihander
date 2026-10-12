@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect, waitFor } from 'storybook/test'
+import { ACCENT_COLORS, Theme } from '@/theme/Theme'
+import { contrast, mediaRules } from '@/test/story-helpers'
 import { Spinner } from './Spinner'
 
 const meta = {
@@ -47,14 +49,30 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
+/** --duration-slow as the browser resolves it where `el` is. */
+const durationSlow = (el: Element) => {
+  const probe = document.createElement('span')
+  probe.style.transitionDuration = 'var(--duration-slow)'
+  el.append(probe)
+  const value = getComputedStyle(probe).transitionDuration
+  probe.remove()
+  return value
+}
+
 const row = { display: 'flex', gap: 'var(--space-6)', alignItems: 'center' }
 
 export const Default: Story = {
-  play: async ({ canvas }) => {
+  play: async ({ canvas, canvasElement }) => {
     // A status, named "Loading" when no label is given; the text that is
     // announced arrives after the region is in the page.
     const status = canvas.getByRole('status', { name: 'Loading' })
     await waitFor(() => expect(status).toHaveTextContent('Loading'))
+    const svg = canvasElement.querySelector('svg')!
+    await expect(svg).toHaveAttribute('aria-hidden', 'true')
+    // Reduced motion slows the turn rather than stopping it. A play cannot
+    // set prefers-reduced-motion, so read the rule that would apply.
+    const reduced = mediaRules('prefers-reduced-motion: reduce', svg).map((r) => r.style.animationDuration)
+    await expect(reduced).toContain('var(--duration-spin-reduced)')
   },
 }
 
@@ -99,6 +117,11 @@ export const Determinate: Story = {
   play: async ({ canvas }) => {
     const ring = canvas.getByRole('progressbar', { name: 'Uploading' })
     await expect(ring).toHaveAttribute('aria-valuenow', '70')
+    await expect(ring).toHaveAttribute('aria-valuemin', '0')
+    await expect(ring).toHaveAttribute('aria-valuemax', '100')
+    // The ring eases on --duration-slow, which reduced motion sets to 0ms.
+    const arc = ring.querySelector('svg > circle:last-child')!
+    await expect(getComputedStyle(arc).transitionDuration).toBe(durationSlow(ring))
   },
 }
 
@@ -176,4 +199,32 @@ export const DontOnePerItem: Story = {
       ))}
     </div>
   ),
+}
+
+/** The indicator clears 3:1 on the page for every variant, under all seventeen accents, in both modes. */
+export const IndicatorContrast: Story = {
+  render: () => (
+    <div>
+      {(['light', 'dark'] as const).map((mode) => (
+        <Theme key={mode} appearance={mode} style={{ background: 'var(--background)', padding: 8 }}>
+          {ACCENT_COLORS.map((accent) => (
+            <Theme key={accent} accentColor={accent} style={{ display: 'flex', gap: 4 }}>
+              {(['primary', 'accent', 'secondary'] as const).map((variant) => (
+                <Spinner key={variant} size="sm" variant={variant} value={50} label={`${mode} ${accent} ${variant}`} />
+              ))}
+            </Theme>
+          ))}
+        </Theme>
+      ))}
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const failures: string[] = []
+    for (const ring of canvasElement.querySelectorAll<HTMLElement>('[role="progressbar"]')) {
+      const page = getComputedStyle(ring.parentElement!.parentElement!).backgroundColor
+      const value = contrast(getComputedStyle(ring.querySelector('svg > circle:last-child')!).stroke, page)
+      if (value < 3) failures.push(`${ring.getAttribute('aria-label')}: ${value.toFixed(2)}`)
+    }
+    await expect(failures).toEqual([])
+  },
 }
