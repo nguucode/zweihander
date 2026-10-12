@@ -47,13 +47,115 @@ const meta = {
     onSelectionChange: fn(),
     onExpandedChange: fn(),
   },
+  // Listed by hand: Table is generic over the row type, and react-docgen
+  // reads no types from a generic. These descriptions are the docs' API
+  // table and the Playground's props panel.
   argTypes: {
-    density: { control: 'inline-radio', options: ['sm', 'md'] },
-    columns: { control: false },
-    rows: { control: false },
-    emptyState: { control: false },
-    expandedContent: { control: false },
+    columns: {
+      description:
+        'The columns, in order: `{ key, header, cell?, sortable?, sortValue?, align?, width?, isRowHeader? }`. See TableColumn below the table.',
+      control: false,
+      table: { type: { summary: 'TableColumn<Row>[]' } },
+    },
+    rows: {
+      description: 'The records, one per row. Pass one page at a time when paging.',
+      control: false,
+      table: { type: { summary: 'Row[]' } },
+    },
+    caption: {
+      description: 'Names the table for assistive tech. Visually hidden unless `showCaption`.',
+      control: 'text',
+      table: { type: { summary: 'ReactNode' } },
+    },
+    showCaption: {
+      description: 'Shows the caption above the table.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    getRowId: {
+      description: "A stable id per row. Needed for selection and expansion that survive sorting and paging; defaults to the row's index in `rows`.",
+      control: false,
+      table: { type: { summary: '(row: Row, index: number) => string' }, defaultValue: { summary: 'the index' } },
+    },
+    sort: {
+      description: 'Controlled sort. When set, the table shows the rows as given: sort them yourself, e.g. on the server.',
+      control: false,
+      table: { type: { summary: "{ key: string; direction: 'ascending' | 'descending' } | null" } },
+    },
+    defaultSort: {
+      description: 'The starting sort when uncontrolled. The table sorts its own copy of the rows.',
+      control: false,
+      table: { type: { summary: "{ key: string; direction: 'ascending' | 'descending' } | null" }, defaultValue: { summary: 'null' } },
+    },
+    onSortChange: {
+      description: 'Called with the new sort, or `null` when a third click turns it off.',
+      control: false,
+      table: { type: { summary: '(sort: TableSort | null) => void' } },
+    },
+    isSelectable: {
+      description: 'Adds a checkbox column, with a header checkbox that selects every row shown.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    selectedIds: {
+      description: 'Controlled selection: ids from `getRowId`.',
+      control: false,
+      table: { type: { summary: 'string[]' } },
+    },
+    defaultSelectedIds: {
+      description: 'The starting selection when uncontrolled.',
+      control: false,
+      table: { type: { summary: 'string[]' }, defaultValue: { summary: '[]' } },
+    },
+    onSelectionChange: {
+      description: "Called with every selected id. Ids selected on other pages are kept when the header checkbox changes this page's rows.",
+      control: false,
+      table: { type: { summary: '(ids: string[]) => void' } },
+    },
+    expandedContent: {
+      description:
+        'Content shown under a row when it is open, across the full width. Adds an expand button to each row that returns content; a row that returns `null`, `undefined` or `false` gets none. Runs for every row on each render, so keep it cheap.',
+      control: false,
+      table: { type: { summary: '(row: Row) => ReactNode' } },
+    },
+    expandedIds: {
+      description: 'Controlled expansion: ids from `getRowId`, so sorting keeps the right rows open.',
+      control: false,
+      table: { type: { summary: 'string[]' } },
+    },
+    defaultExpandedIds: {
+      description: 'The rows open at first when uncontrolled.',
+      control: false,
+      table: { type: { summary: 'string[]' }, defaultValue: { summary: '[]' } },
+    },
+    onExpandedChange: {
+      description: 'Called with every open id when an expand button is pressed.',
+      control: false,
+      table: { type: { summary: '(ids: string[]) => void' } },
+    },
+    density: {
+      description: 'Row height: 40px (`sm`) or 48px (`md`).',
+      control: 'inline-radio',
+      options: ['sm', 'md'],
+      table: { type: { summary: "'sm' | 'md'" }, defaultValue: { summary: "'md'" } },
+    },
+    hasStickyHeader: {
+      description: 'Keeps the header row in view while the table scrolls inside its container, when something limits the container\'s height.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    emptyState: {
+      description: 'Shown in place of the rows when there are none, e.g. an Empty State.',
+      control: false,
+      table: { type: { summary: 'ReactNode' } },
+    },
+    className: {
+      description: 'Added to the scroll container around the table.',
+      control: false,
+      table: { type: { summary: 'string' } },
+    },
   },
+  excludeStories: ['anatomyParts'],
 } satisfies Meta<typeof Table<Project>>
 
 export default meta
@@ -92,6 +194,8 @@ export const Selectable: Story = {
     // Some selected: the header box is mixed.
     await expect(all).toHaveAttribute('aria-checked', 'mixed')
     // Each row's box is named by the row header.
+    // The row itself reports it, too.
+    await expect(canvas.getByRole('checkbox', { name: 'Select Billing revamp' }).closest('tr')).toHaveAttribute('aria-selected', 'true')
     await userEvent.click(canvas.getByRole('checkbox', { name: 'Select Atlas' }))
     await expect(args.onSelectionChange).toHaveBeenLastCalledWith(['p2', 'p1'])
     await userEvent.click(all)
@@ -285,5 +389,75 @@ export const ControlledExpansion: Story = {
     await expect(args.onExpandedChange).toHaveBeenLastCalledWith([])
     await expect(onboarding).toHaveAttribute('aria-expanded', 'false')
     await expect(canvas.getByRole('button', { name: 'Open Onboarding' })).toBeVisible()
+  },
+}
+
+/** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
+export const anatomyParts = [
+  { name: 'Caption', selector: 'caption', description: 'Names the table. Visually hidden unless showCaption.' },
+  { name: 'Header row', selector: 'thead tr', description: 'Small muted labels on --surface-filled. Stays in view with hasStickyHeader.' },
+  { name: 'Sort button', selector: 'th[aria-sort] button', description: 'The whole header label, with an icon for the sort. Only on sortable columns.' },
+  { name: 'Select all', selector: 'thead [role="checkbox"]', description: 'With isSelectable. Selects or clears every row shown, and shows mixed when some are selected.' },
+  { name: 'Row', selector: 'tbody tr', description: '48px tall (40px at sm), divided by --border. Tinted when hovered or selected.' },
+  { name: 'Row checkbox', selector: 'tbody [role="checkbox"]', description: 'Named after the row header: "Select Atlas".' },
+  { name: 'Expand button', selector: 'tbody [aria-expanded]', description: 'With expandedContent: a ghost icon button. The chevron turns down when open.' },
+  { name: 'Row header', selector: 'tbody th[scope="row"]', description: 'The column marked isRowHeader, medium weight: the name a row is known by.' },
+  {
+    name: 'Expanded row',
+    selector: 'tbody td[colspan]',
+    description: 'One cell spanning every column, under its row, with no rule between them. Holds any layout.',
+  },
+]
+
+/** Every part present: caption shown, a sortable column, selection, one row open. */
+export const Anatomy: Story = {
+  tags: ['!dev'],
+  args: { showCaption: true, isSelectable: true, expandedContent: details, defaultExpandedIds: ['p1'], rows: projects.slice(0, 3) },
+  play: async ({ canvasElement, canvas }) => {
+    // The docs markers follow these selectors: a DOM change must not leave
+    // a marker pointing at nothing, or at the wrong part.
+    const found = anatomyParts.map(({ selector }) => canvasElement.querySelector(selector))
+    await expect(found.every(Boolean)).toBe(true)
+    await expect(new Set(found).size).toBe(anatomyParts.length)
+    await expect(found[7]).toHaveTextContent('Atlas')
+    await expect(found[8]).toHaveTextContent(/Sam Rivera owns Atlas/)
+    // The expand column is announced like the others, by a hidden header.
+    await expect(canvas.getByRole('columnheader', { name: 'Details' })).toBeInTheDocument()
+  },
+}
+
+/** Two columns and two rows, small enough for the Specs tab's States to sit side by side. */
+const brief = { columns: columns.filter((c) => c.key === 'name' || c.key === 'files'), rows: projects.slice(0, 2) }
+
+/** Specs, States: the plain table. */
+export const StateEnabled: Story = { tags: ['!dev'], args: brief }
+
+/** Specs, States: sorted by Files, ascending. */
+export const StateSorted: Story = { tags: ['!dev'], args: { ...brief, defaultSort: { key: 'files', direction: 'ascending' } } }
+
+/** Specs, States: Atlas selected. */
+export const StateSelected: Story = { tags: ['!dev'], args: { ...brief, isSelectable: true, defaultSelectedIds: ['p1'] } }
+
+/** Specs, States: Atlas open. */
+export const StateExpanded: Story = { tags: ['!dev'], args: { ...brief, expandedContent: details, defaultExpandedIds: ['p1'] } }
+
+/** Guidelines, Don't: numbers at the start, so the digits do not line up. */
+export const DontNumbersAtStart: Story = {
+  tags: ['!dev'],
+  args: { columns: columns.map(({ align: _align, ...c }) => c) },
+}
+
+/** Guidelines, Don't: no row header, so a row's checkbox can only say which number it is. */
+export const DontNoRowHeader: Story = {
+  tags: ['!dev'],
+  args: { isSelectable: true, columns: columns.map(({ isRowHeader: _isRowHeader, ...c }) => c) },
+  play: async ({ canvas }) => {
+    // Counted from `rows`, so a sort does not rename it; but "row 1" says nothing.
+    await expect(canvas.getByRole('checkbox', { name: 'Select row 1' })).toBeInTheDocument()
+    await expect(canvas.queryByRole('rowheader')).toBeNull()
+    // Sorted by Files, Atlas moves to the third row and keeps its name.
+    await userEvent.click(within(canvas.getByRole('columnheader', { name: /Files/ })).getByRole('button'))
+    await expect(canvas.getByRole('checkbox', { name: 'Select row 1' }).closest('tr')).toHaveTextContent('Atlas')
+    await expect(canvas.getAllByRole('row')[3]).toHaveTextContent('Atlas')
   },
 }

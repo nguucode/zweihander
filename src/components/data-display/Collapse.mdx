@@ -1,57 +1,186 @@
-import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
 import * as CollapseStories from './Collapse.stories'
 
 <Meta of={CollapseStories} />
 
 # Collapse
 
-One show/hide section: "Show details", "Advanced settings". A text button
-with a chevron, and the content it reveals under it. For a list of
-sections, use an [Accordion](?path=/docs/components-data-display-accordion--docs).
-Our own spec: uiguideline.com has no page for it. Behaviour from Base
-UI's [Collapsible](https://base-ui.com/react/components/collapsible).
+<DocTabs>
+<DocTab value="overview">
+
+One show/hide section, such as "Show details" or "Advanced settings": a
+text button with a chevron, and the content it reveals under it.
+
+<Status of={CollapseStories} />
 
 <Canvas of={CollapseStories.Open} />
 
-## Anatomy
+## Variants
 
-| Part | What it is |
+Collapse has one look. `size` matches it to the text around it, and
+`openLabel` decides whether the label changes when it opens.
+
+| Size | Use for |
 | --- | --- |
-| **Trigger** | A medium-weight text button, underlined on hover, with a chevron that turns from right to down. |
-| **Panel** | The content, 8px under the trigger. Its height animates open and shut. |
-
-## Props
-
-| Prop | Values | Default | |
-| --- | --- | --- | --- |
-| `label` | node | – | Required. The trigger's text. |
-| `openLabel` | node | `label` | The trigger's text while open, e.g. "Hide details". |
-| `children` | node | – | Required. |
-| `open`, `defaultOpen`, `onOpenChange` | | | Controlled or uncontrolled. |
-| `size` | `sm`, `md` | `md` | `body-sm` or `body`. |
-| `disabled` | boolean | `false` | |
-| `hiddenUntilFound` | boolean | `true` | Closed content stays findable. |
-
-<Controls of={CollapseStories.Default} />
-
-### Design notes
-
-- **A text button, not a bar.** Accordion items are full-width bars with
-  dividers because they are the page's structure; a Collapse is one
-  aside in running content, so its trigger reads like a link in a
-  sentence.
-- **Findable when closed.** By default closed content is kept as
-  `hidden="until-found"`: the browser's find-in-page still matches it and
-  opens the section. Turn it off only for content that is expensive to
-  render.
-
-## Usage
+| `md` | Body text, 14px. The default. |
+| `sm` | Small text, 12px: captions, dense panels, notes under a field. |
 
 <Canvas of={CollapseStories.Default} />
 
 <Canvas of={CollapseStories.Small} />
 
-<Canvas of={CollapseStories.Disabled} />
+| Label | Use for |
+| --- | --- |
+| With `openLabel` | A label that names the action: "Show details" becomes "Hide details". |
+| Without `openLabel` | A label that names the section: "Advanced settings" stays the same, and the chevron shows the state. |
+
+## Resources
+
+From npm, or copied into your project through the registry:
+
+```js
+import { Collapse } from 'zweihander/collapse'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/collapse.json
+```
+
+- Source: [src/components/data-display/Collapse.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/data-display/Collapse.tsx)
+- Spec: the kit's own. uiguideline.com has no page for it.
+- Behaviour: [Base UI Collapsible](https://base-ui.com/react/components/collapsible)
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
+## Anatomy
+
+<Anatomy parts={CollapseStories.anatomyParts}>
+  <Story of={CollapseStories.Anatomy} />
+</Anatomy>
+
+## Measurements
+
+The trigger has no padding: it is as tall as a line of its text, 20px at
+`md` and 16px at `sm`.
+
+<SpecTable
+  caption="sm"
+  rows={[
+    { part: 'Label', property: 'Font size', token: '--text-body-sm' },
+    { part: 'Label', property: 'Line height', token: '--leading-body-sm' },
+    { part: 'Trigger', property: 'Gap', token: '--space-1' },
+    { part: 'Chevron', property: 'Size', token: '--icon-md' },
+    { part: 'Panel', property: 'Space above the content', token: '--space-2' },
+  ]}
+/>
+
+<SpecTable
+  caption="md"
+  rows={[
+    { part: 'Label', property: 'Font size', token: '--text-body' },
+    { part: 'Label', property: 'Line height', token: '--leading-body' },
+    { part: 'Trigger', property: 'Gap', token: '--space-1' },
+    { part: 'Chevron', property: 'Size', token: '--icon-md' },
+    { part: 'Panel', property: 'Space above the content', token: '--space-2' },
+  ]}
+/>
+
+<SpecTable
+  caption="Every size"
+  rows={[
+    { part: 'Trigger', property: 'Corner radius (focus ring)', token: '--radius-sm' },
+    { part: 'Focus ring', property: 'Width', token: '--focus-width' },
+    { part: 'Focus ring', property: 'Offset', token: '--focus-offset' },
+    { part: 'Hit area', property: 'Minimum on touch screens', token: '--target-coarse' },
+    { part: 'Panel and chevron', property: 'Open and close duration', token: '--duration-base' },
+  ]}
+/>
+
+The label is medium weight (500). The content takes the size's font and
+line height too.
+
+## Color
+
+<SpecTable
+  caption="Every size"
+  rows={[
+    { part: 'Label', property: 'Colour', token: '--foreground' },
+    { part: 'Chevron', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Panel', property: 'Text colour', token: '--foreground' },
+    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+  ]}
+/>
+
+The trigger has no fill and no border in any state.
+
+## States
+
+<States
+  states={[
+    { label: 'Enabled' },
+    { label: 'Hover', pseudo: 'hover' },
+    { label: 'Focus', pseudo: 'focus-visible' },
+    { label: 'Pressed', pseudo: 'active' },
+    { label: 'Open', content: <Story of={CollapseStories.Open} /> },
+    { label: 'Disabled', content: <Story of={CollapseStories.Disabled} /> },
+  ]}
+>
+  <Story of={CollapseStories.Default} />
+</States>
+
+- **Hover** underlines the label, like a link.
+- **Focus** is a 2px `--ring` outline, 2px outside the trigger.
+- **Pressed** has no look of its own: the label stays underlined while the
+  pointer is down.
+- **Open** turns the chevron from right to down, shows `openLabel` if
+  there is one, and animates the panel's height over `--duration-base`.
+- **Disabled** dims the trigger to 50% opacity, with no underline on hover.
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={CollapseStories} />
+</div>
+
+The props are the kit's own, since there is no spec to follow. Closed
+content is kept as `hidden="until-found"` by default: the browser's
+find-in-page still matches it and opens the section.
+
+<Canvas of={CollapseStories.Searchable} />
+
+</DocTab>
+<DocTab value="guidelines">
+
+## When to use
+
+Use a Collapse for one aside in running content: billing details under a
+plan, advanced settings under a form. It is a text button, not a bar,
+because it belongs to the content around it, and its trigger reads like a
+link in a sentence.
+
+<DoDont
+  do={<Story of={CollapseStories.DoAsideInText} />}
+  doCaption="One aside, under the text it belongs to. The label says what opening it does."
+  dont={<Story of={CollapseStories.DontStackAsList} />}
+  dontCaption="A stack of Collapses is a list of sections. Use an Accordion: its items are real headings, framed and divided."
+/>
+
+## When not to use
+
+- **For a list of sections.** Use an
+  [Accordion](?path=/docs/components-data-display-accordion--docs). Its
+  items are full-width bars with dividers because they are the page's
+  structure.
+- **For a short hint about a control.** Use a
+  [Tooltip](?path=/docs/components-overlays-tooltip--docs) or a
+  [Popover](?path=/docs/components-overlays-popover--docs), which do not
+  push the page down.
+- **For content most readers need.** Hiding it costs everyone a click.
+  Show it.
 
 ## Accessibility
 
@@ -59,8 +188,14 @@ UI's [Collapsible](https://base-ui.com/react/components/collapsible).
   pointing at the panel.
 - Enter or Space toggles it. With `openLabel`, the button's name changes
   with its state ("Show details" / "Hide details"), and `aria-expanded`
-  says it either way.
-- The chevron is decorative. The trigger grows to a 44px target on
-  coarse pointers.
+  says it either way. Without it, the name stays the same.
+- The chevron is decorative (`aria-hidden`), so it adds nothing to the
+  name.
+- Closed content is `hidden="until-found"` by default, so find-in-page
+  reaches it.
+- The trigger grows to a 44px target on coarse pointers.
 - Under `prefers-reduced-motion` the panel and chevron change without
   animating.
+
+</DocTab>
+</DocTabs>

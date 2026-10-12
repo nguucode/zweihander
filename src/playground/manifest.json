@@ -702,7 +702,8 @@
         {
           "name": "multiple",
           "control": "boolean",
-          "description": "Allow more than one item open at once."
+          "default": false,
+          "description": "Allow more than one item open at once. Off: opening an item closes the one that was open."
         },
         {
           "name": "appearance",
@@ -711,7 +712,8 @@
             "outlined",
             "flush"
           ],
-          "default": "outlined"
+          "default": "outlined",
+          "description": "`outlined` frames the items in a panel; `flush` leaves them edge to edge, with no side padding."
         },
         {
           "name": "size",
@@ -720,7 +722,8 @@
             "sm",
             "md"
           ],
-          "default": "md"
+          "default": "md",
+          "description": "Triggers 32px (`md`) or 24px (`sm`) tall, from the control tiers. `sm` takes 12px text."
         },
         {
           "name": "headingLevel",
@@ -733,11 +736,13 @@
             6
           ],
           "default": 3,
-          "description": "The heading element each trigger sits in. Match it to the page's outline."
+          "description": "The heading element each trigger sits in. Match it to the page's outline, which the component cannot know."
         },
         {
           "name": "disabled",
-          "control": "boolean"
+          "control": "boolean",
+          "default": false,
+          "description": "Disables every item. To disable one, set `disabled` on its entry in `items`."
         }
       ]
     },
@@ -753,13 +758,16 @@
           "name": "locale",
           "control": "text",
           "default": "en-GB",
-          "description": "BCP 47 tag, e.g. `vi-VN`. Defaults to the browser's."
+          "description": "BCP 47 tag, e.g. `vi-VN`, for the month and weekday names and the first day of the week."
         },
         {
           "name": "weekStartsOn",
           "control": "number",
+          "min": 0,
+          "max": 6,
+          "step": 1,
           "default": 1,
-          "description": "0 = Sunday … 6 = Saturday. Defaults to the locale's."
+          "description": "0 = Sunday … 6 = Saturday. Defaults to the locale's, or Monday where the browser does not know it."
         }
       ]
     },
@@ -779,7 +787,9 @@
             "sm",
             "md",
             "lg"
-          ]
+          ],
+          "default": "sm",
+          "description": "Padding 12, 16, 24 or 32px; the gap between children scales with it."
         },
         {
           "name": "appearance",
@@ -788,7 +798,9 @@
             "elevated",
             "outline",
             "unstyled"
-          ]
+          ],
+          "default": "elevated",
+          "description": "`elevated`: the card surface with a faint shadow. `outline`: the surface and its edge, no shadow. `unstyled`: keeps the padding and layout, drops every visual."
         },
         {
           "name": "orientation",
@@ -796,7 +808,21 @@
           "options": [
             "vertical",
             "horizontal"
-          ]
+          ],
+          "default": "vertical",
+          "description": "How children flow: `vertical` stacks them, `horizontal` sets them side by side (media and text)."
+        },
+        {
+          "name": "isRounded",
+          "control": "boolean",
+          "default": true,
+          "description": "Rounds the corners with `--radius-panel`. Off: square corners."
+        },
+        {
+          "name": "hasBorder",
+          "control": "boolean",
+          "default": true,
+          "description": "The 1px `--border` edge. Off: no visible edge. `unstyled` never has one."
         }
       ]
     },
@@ -817,30 +843,32 @@
         {
           "name": "slidesPerView",
           "control": "number",
+          "min": 1,
           "default": 1,
-          "description": "Slides in view at once."
+          "description": "Slides in view at once. With three in view, five slides have three stops (1-3, 2-4, 3-5)."
         },
         {
           "name": "showDots",
           "control": "boolean",
           "default": true,
-          "description": "Show a dot per slide under the track."
+          "description": "A dot per stop under the track. Hidden anyway when everything fits in one stop."
         },
         {
           "name": "autoPlay",
           "control": "number",
-          "description": "Advance every this many milliseconds. Paused on hover and focus, and never under reduced motion."
+          "description": "Advance every this many milliseconds. Adds a stop/start button; paused on hover and focus, and never runs under reduced motion."
         },
         {
           "name": "loop",
           "control": "boolean",
           "default": false,
-          "description": "Previous/next wrap around at the ends."
+          "description": "Previous and next wrap around at the ends instead of being disabled there."
         },
         {
           "name": "defaultIndex",
           "control": "number",
-          "default": 0
+          "default": 0,
+          "description": "Uncontrolled starting slide. The track jumps there on mount, without a scroll animation."
         }
       ]
     },
@@ -853,8 +881,22 @@
       "storyId": "components-data-display-collapse--default",
       "props": [
         {
+          "name": "label",
+          "control": "text",
+          "default": "Show details",
+          "description": "The trigger's text, e.g. \"Show details\". Required."
+        },
+        {
+          "name": "openLabel",
+          "control": "text",
+          "default": "Hide details",
+          "description": "The trigger's text while open, e.g. \"Hide details\". Defaults to `label`. The button's name follows the state; `aria-expanded` says it either way."
+        },
+        {
           "name": "defaultOpen",
-          "control": "boolean"
+          "control": "boolean",
+          "default": false,
+          "description": "Starting open state when uncontrolled."
         },
         {
           "name": "size",
@@ -863,18 +905,20 @@
             "sm",
             "md"
           ],
-          "default": "md"
+          "default": "md",
+          "description": "The text size: `--text-body` (`md`) or `--text-body-sm` (`sm`). Match the text around it."
         },
         {
           "name": "disabled",
           "control": "boolean",
-          "default": false
+          "default": false,
+          "description": "Dimmed, and clicking does nothing."
         },
         {
           "name": "hiddenUntilFound",
           "control": "boolean",
           "default": true,
-          "description": "Keep the closed content in the page as `hidden=\"until-found\"`, so the\nbrowser's find-in-page reaches it and opens it. On by default."
+          "description": "Keep the closed content in the page as `hidden=\"until-found\"`, so the browser's find-in-page reaches it and opens it. Turn it off only for content that is expensive to render."
         }
       ]
     },
@@ -887,15 +931,22 @@
       "storyId": "components-data-display-table--default",
       "props": [
         {
+          "name": "caption",
+          "control": "text",
+          "default": "Projects",
+          "description": "Names the table for assistive tech. Visually hidden unless `showCaption`."
+        },
+        {
           "name": "showCaption",
           "control": "boolean",
-          "default": false
+          "default": false,
+          "description": "Shows the caption above the table."
         },
         {
           "name": "isSelectable",
           "control": "boolean",
           "default": false,
-          "description": "Adds a checkbox column."
+          "description": "Adds a checkbox column, with a header checkbox that selects every row shown."
         },
         {
           "name": "density",
@@ -905,13 +956,13 @@
             "md"
           ],
           "default": "md",
-          "description": "Row height: 40 (`sm`) or 48px (`md`)."
+          "description": "Row height: 40px (`sm`) or 48px (`md`)."
         },
         {
           "name": "hasStickyHeader",
           "control": "boolean",
           "default": false,
-          "description": "Keep the header row in view while the table scrolls inside its container."
+          "description": "Keeps the header row in view while the table scrolls inside its container, when something limits the container's height."
         }
       ]
     },

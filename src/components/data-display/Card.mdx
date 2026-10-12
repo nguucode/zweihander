@@ -1,37 +1,193 @@
-import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
 import * as CardStories from './Card.stories'
 
 <Meta of={CardStories} />
 
 # Card
 
+<DocTabs>
+<DocTab value="overview">
+
 A surface that groups related content: a summary, a person, a setting.
-Spec: [uiguideline.com/components/card](https://www.uiguideline.com/components/card).
+
+<Status of={CardStories} />
+
+<Canvas of={CardStories.Default} />
+
+## Variants
+
+`appearance` is how the surface stands off the page. Every appearance
+takes every size and orientation.
 
 <Canvas of={CardStories.Appearances} />
 
+| Appearance | Use for |
+| --- | --- |
+| `elevated` | The default panel: a white `--card` on the off-white page, with an edge and a faint shadow. |
+| `outline` | Cards in a dense grid or inside another panel, where a shadow per card is too much. |
+| `unstyled` | The card's padding and layout with nothing visible, e.g. inside a surface that already has its own. |
+
+`size` sets the padding and the gap between children, from 12px (`xs`) to
+32px (`lg`).
+
+<Canvas of={CardStories.Sizes} />
+
+`orientation="horizontal"` sets the children side by side: media, text and
+an action.
+
+<Canvas of={CardStories.Horizontal} />
+
+With `onClick` the whole card is one button; with `render={<a href />}` it
+is a link.
+
+<Canvas of={CardStories.Clickable} />
+
+<Canvas of={CardStories.NoBorderSquare} />
+
+## Resources
+
+From npm, or copied into your project through the registry:
+
+```js
+import { Card } from 'zweihander/card'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/card.json
+```
+
+- Source: [src/components/data-display/Card.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/data-display/Card.tsx)
+- Spec: [uiguideline.com/components/card](https://www.uiguideline.com/components/card)
+- Composition: [Base UI useRender](https://base-ui.com/react/utils/use-render)
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
 ## Anatomy
 
-| Part | What it is |
-| --- | --- |
-| **Container** | The surface: `--card`, padded by `size`. |
-| **Border** | `--border`, the non-interactive one. `hasBorder` turns it off. |
-| **Content** | `children`, stacked or side by side (`orientation`). |
+<Anatomy parts={CardStories.anatomyParts}>
+  <Story of={CardStories.Anatomy} />
+</Anatomy>
 
-## Props
+The card is only the container. Title and body are your own elements, at
+the heading level the page needs.
 
-| Prop | Values | Default | |
-| --- | --- | --- | --- |
-| `children` | node | – | The spec's `content`. |
-| `size` | `xs`, `sm`, `md`, `lg` | `sm` | Padding 12, 16, 24, 32px; gap between children scales with it. |
-| `appearance` | `elevated`, `outline`, `unstyled` | `elevated` | |
-| `orientation` | `vertical`, `horizontal` | `vertical` | |
-| `isRounded` | boolean | `true` | `--radius-panel`. |
-| `hasBorder` | boolean | `true` | |
-| `onClick` | function | – | Makes the card a `<button>`. |
-| `render` | element or function | – | E.g. `<a href>` for a card that navigates. |
+## Measurements
 
-<Controls of={CardStories.Default} />
+Each size is a step of the spacing scale, padding on every side and the
+gap between children.
+
+<SpecTable
+  caption="xs"
+  rows={[
+    { part: 'Container', property: 'Padding', token: '--space-3' },
+    { part: 'Container', property: 'Gap', token: '--space-2' },
+  ]}
+/>
+
+<SpecTable
+  caption="sm"
+  rows={[
+    { part: 'Container', property: 'Padding', token: '--space-4' },
+    { part: 'Container', property: 'Gap', token: '--space-3' },
+  ]}
+/>
+
+<SpecTable
+  caption="md"
+  rows={[
+    { part: 'Container', property: 'Padding', token: '--space-6' },
+    { part: 'Container', property: 'Gap', token: '--space-4' },
+  ]}
+/>
+
+<SpecTable
+  caption="lg"
+  rows={[
+    { part: 'Container', property: 'Padding', token: '--space-8' },
+    { part: 'Container', property: 'Gap', token: '--space-6' },
+  ]}
+/>
+
+<SpecTable
+  caption="Every size"
+  rows={[
+    { part: 'Container', property: 'Corner radius', token: '--radius-panel' },
+    { part: 'Content', property: 'Font size', token: '--text-body' },
+    { part: 'Content', property: 'Line height', token: '--leading-body' },
+    { part: 'Focus ring', property: 'Width', token: '--focus-width' },
+    { part: 'Focus ring', property: 'Offset', token: '--focus-offset' },
+  ]}
+/>
+
+The border is 1px, transparent when `hasBorder` is off, so turning it on
+or off never moves the content. `isRounded={false}` gives square corners.
+
+## Color
+
+Switch the theme in the toolbar: the values follow.
+
+<SpecTable
+  caption="elevated"
+  rows={[
+    { part: 'Container', property: 'Background', token: '--card' },
+    { part: 'Container', property: 'Border', token: '--border' },
+    { part: 'Container', property: 'Shadow', token: '--shadow-sm' },
+    { part: 'Container, hover', property: 'Shadow', token: '--shadow-md' },
+    { part: 'Content', property: 'Colour', token: '--card-foreground' },
+  ]}
+/>
+
+<SpecTable
+  caption="outline"
+  rows={[
+    { part: 'Container', property: 'Background', token: '--card' },
+    { part: 'Container', property: 'Border', token: '--border' },
+    { part: 'Container, hover', property: 'Border', token: '--control-border' },
+    { part: 'Content', property: 'Colour', token: '--card-foreground' },
+  ]}
+/>
+
+`unstyled` has no background, border or shadow, and its content takes the
+colour of what it sits on.
+
+<SpecTable caption="Every appearance" rows={[{ part: 'Focus ring', property: 'Colour', token: '--ring' }]} />
+
+## States
+
+A plain card is a container and has no states. A clickable or link card
+has these:
+
+<States
+  states={[
+    { label: 'Enabled' },
+    { label: 'Hover', pseudo: 'hover' },
+    { label: 'Focus', pseudo: 'focus-visible' },
+    { label: 'Hover, outline', pseudo: 'hover', content: <Story of={CardStories.ClickableOutline} /> },
+  ]}
+>
+  <Story of={CardStories.Clickable} />
+</States>
+
+- **Hover** never touches the surface: muted text sits on `--card` at
+  4.5:1 with no margin to spare, and darkening it 6% took muted text to
+  3.9:1. An `elevated` card lifts to `--shadow-md`; an `outline` card's
+  edge strengthens to `--control-border`, the 3:1 control border. An
+  `unstyled` card has no hover look.
+- **Focus** is a 2px `--ring` outline, 2px outside the card.
+- **Pressed and disabled** have no look of their own. A card has no
+  `disabled` prop: a card that cannot act is a plain card.
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={CardStories} />
+</div>
+
+Every other `<div>` attribute passes through, including `ref`.
 
 ### Differences from the spec
 
@@ -46,29 +202,55 @@ Spec: [uiguideline.com/components/card](https://www.uiguideline.com/components/c
   page, with an edge or a faint shadow.
 - **`unstyled`** keeps the padding and layout and drops every visual.
 
-## Usage
+</DocTab>
+<DocTab value="guidelines">
 
-<Canvas of={CardStories.Horizontal} />
+## When to use
 
-<Canvas of={CardStories.Clickable} />
+Use a Card to group content about one thing, so it reads as a unit: a
+person, a plan, a setting. Put headings inside at the level the page
+needs; the card has none of its own.
 
-A button may only hold phrasing content: use spans for a clickable card's
-title and text, not headings or paragraphs, and put no links or buttons
-inside it — nested interactive content is invalid and unreachable. If a
-card needs its own actions, leave it plain and put a button in it (the
-Horizontal story).
+A clickable card is one button, and a button may only hold phrasing
+content: use spans for its title and text, not headings or paragraphs,
+and put no links or buttons inside it. If a card needs its own actions,
+leave it plain and put a button in it.
 
-A card that navigates should be a link (`render={<a href>}`), not a button
-with a click handler.
+<DoDont
+  do={<Story of={CardStories.Horizontal} />}
+  doCaption="A plain card with its own Follow button: each control is reachable on its own."
+  dont={<Story of={CardStories.DontNestButtons} />}
+  dontCaption="A button inside a clickable card is invalid HTML, and neither control can be reached reliably."
+/>
 
-Put headings inside at the level the page needs; the card has none of its
-own.
+A card that navigates should be a link (`render={<a href />}`), not a
+button with a click handler: a link opens in a new tab and shows its
+address.
+
+<Canvas of={CardStories.Link} />
+
+## When not to use
+
+- **For rows of data to compare.** Use a
+  [Table](?path=/docs/components-data-display-table--docs): columns line
+  values up, cards do not.
+- **To show and hide content.** Use an
+  [Accordion](?path=/docs/components-data-display-accordion--docs) or a
+  [Collapse](?path=/docs/components-data-display-collapse--docs).
+- **Just to add space or a background.** A plain `<div>` with padding
+  does that without suggesting a unit.
 
 ## Accessibility
 
-- A plain card is a `<div>` and adds nothing to the accessibility tree.
-- **A clickable card is one `<button>`, so everything inside becomes its
-  label.**
+- A plain card is a `<div>`: no role, no tab stop, nothing added to the
+  accessibility tree.
+- **A clickable card is one `<button type="button">`, so everything inside
+  becomes its label.** Click, Enter and Space all call `onClick`.
+- A link card is a real `<a href>`, in the tab order, with no `type`.
 - The card has no heading of its own.
-- Muted text clears 4.5:1 on every appearance, at rest and on hover:
-  hover changes the shadow or the edge, never the surface under the text.
+- Muted text clears 4.5:1 on every appearance, in both modes, at rest and
+  on hover: hover changes the shadow or the edge, never the surface under
+  the text. The `Contrast` story measures it.
+
+</DocTab>
+</DocTabs>
