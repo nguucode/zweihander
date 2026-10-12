@@ -67,7 +67,7 @@ Quy tắc cho từng block:
 - **Anatomy** render component thật, không dùng ảnh. Danh sách part (`name`, `selector`, `description`) export từ story file là `anatomyParts` (thêm vào `excludeStories`), kèm một story `Anatomy` tag `!dev` có `play` kiểm mỗi selector khớp đúng một phần tử khác nhau. Part không có element riêng (label là text node) thì story bọc nó trong `<span>`.
 - **SpecTable** chỉ ghi tên token; giá trị đọc live từ CSS. Chỉ dùng token semantic hoặc token của tier (`--control-md`), không ghi biến nội bộ của component (`--button-bg`): chúng không resolve được ngoài component. Hover và pressed trộn màu bằng `color-mix` thì giải thích bằng chữ dưới `<States>`.
 - **DoDont** lấy cả hai bên từ story thật. Story "Don't" tag `!dev` để ẩn khỏi sidebar và Playground, vẫn chạy test.
-- `npm run docs:check` đỏ khi một trang component (`src/components/<category>/<Name>.mdx`, trừ patterns, templates và các trang Overview) không có `<DocTabs>`, thiếu tab hoặc mục ở bảng trên, hoặc nhắc tới token không tồn tại.
+- `npm run docs:check` đỏ khi một trang component (`src/components/<category>/<Name>.mdx`, trừ patterns, templates và các trang Overview) không có `<DocTabs>`, thiếu tab hoặc mục ở bảng trên, nhắc tới token không tồn tại, trỏ tới story mà file stories không export (`<Canvas of={XStories.Gone} />`), hoặc có hàng SpecTable ghi token mà CSS của component (file `.module.css` đi theo import từ `<Name>.tsx`) không đọc bằng `var()`.
 
 Mọi trang component đều dùng ba tab; không còn format trang dài cũ.
 

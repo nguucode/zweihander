@@ -88,3 +88,42 @@ test("DocTabs keeps its tab in a URL parameter Storybook's manager does not read
   assert.ok(reserved.has('tab'), 'the scan still finds what Storybook reads')
   assert.ok(!reserved.has(param), `?${param}= is Storybook's own parameter`)
 })
+
+// A page beside real code, so the story and CSS lookups read the files they would in CI.
+const buttonPage = new URL('../src/components/buttons/Fixture.mdx', import.meta.url).pathname
+const withButton = (body) => `import { Button } from './Button'\nimport * as ButtonStories from './Button.stories'\n\n${body}\n`
+// The fixture is a component page without tabs; these tests are about the other rules.
+const check = (source) => checkFile(buttonPage, source).filter((e) => !e.includes('<DocTabs>'))
+
+test('a story the stories file exports passes, as does its default export', () => {
+  assert.deepEqual(check(withButton('<Canvas of={ButtonStories.Default} />\n<Story of={ButtonStories.Loading} />\n{ButtonStories.default.title}')), [])
+})
+
+test('a story the stories file does not export fails, with its line', () => {
+  const errors = check(withButton('<Canvas of={ButtonStories.Default} />\n<Story of={ButtonStories.Gone} />'))
+  assert.equal(errors.length, 1)
+  assert.match(errors[0], /buttons\/Fixture\.mdx:5: ButtonStories\.Gone is not exported by \.\/Button\.stories/)
+})
+
+test('a stories import that points at no file fails', () => {
+  assert.match(check("import * as S from './Nope.stories'\n")[0], /\.\/Nope\.stories: no such stories file/)
+})
+
+test("a SpecTable token the component's CSS reads passes, through its imports", () => {
+  // Button.tsx imports Button.module.css, which reads both.
+  assert.deepEqual(check(withButton("<SpecTable rows={[{ token: '--control-md' }, { token: '--primary' }]} />")), [])
+})
+
+test("a SpecTable token the component's CSS never reads fails, with its line", () => {
+  const errors = check(withButton("<SpecTable\n  rows={[\n    { token: '--control-md' },\n    { token: '--sidebar-width' },\n  ]}\n/>"))
+  assert.equal(errors.length, 1)
+  assert.match(errors[0], /buttons\/Fixture\.mdx:7: SpecTable names --sidebar-width, which the component's CSS never reads/)
+})
+
+test('the command line takes relative and absolute paths', async () => {
+  const { execFileSync } = await import('node:child_process')
+  const script = new URL('./check-docs.mjs', import.meta.url).pathname
+  const page = new URL('../src/components/buttons/Button.mdx', import.meta.url).pathname
+  for (const arg of [page, 'src/components/buttons/Button.mdx'])
+    assert.match(execFileSync('node', [script, arg], { cwd: new URL('..', import.meta.url).pathname, encoding: 'utf8' }), /1 MDX files/, arg)
+})
