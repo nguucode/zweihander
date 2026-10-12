@@ -3,13 +3,11 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-2);
   box-sizing: border-box;
   margin: 0;
   /* Always present, transparent unless outlined, so switching appearance
      never shifts the layout by a pixel. */
   border: 1px solid transparent;
-  border-radius: var(--radius-control);
   font-family: var(--font-sans);
   font-size: var(--text-body);
   line-height: var(--leading-body);
@@ -144,13 +142,16 @@ a[href].button {
 
 /* ---------------------------------------------------------------- sizes */
 
-/* Two sizes, as in the Claude apps: sm is the 24px inline control (13px
-   label, a step tighter radius); md, the default, is the 32px button. */
+/* Each size is a control tier (see Foundations/Sizing): height, padding,
+   gap, icon and radius all come from it. Buttons take the spacious pad: a
+   centred label needs more room either side than a field's left-aligned
+   text. There is no xs: 20px is below the 24px target of WCAG 2.5.8. */
 .sm {
   --button-icon: var(--icon-sm);
   block-size: var(--control-sm);
-  padding-inline: var(--space-2);
-  border-radius: max(var(--radius-sm), var(--radius-full));
+  gap: var(--control-sm-gap);
+  padding-inline: var(--control-sm-pad-spacious);
+  border-radius: var(--control-sm-radius);
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
 }
@@ -158,7 +159,9 @@ a[href].button {
 .md {
   --button-icon: var(--icon-md);
   block-size: var(--control-md);
-  padding-inline: var(--space-3);
+  gap: var(--control-md-gap);
+  padding-inline: var(--control-md-pad-spacious);
+  border-radius: var(--control-md-radius);
 }
 
 .iconOnly {

@@ -30,23 +30,31 @@ label — gaps where a full 4px reads as a break rather than a pairing.
 
 ## What the kit uses
 
-Every component here stays on a small set of steps:
+Spacing steps lay out the space *between* things: a label and its input,
+cards in a grid, sections of a page.
 
 | Step | Used for |
 | --- | --- |
 | `1.5` (6px) | gap between a field label, its input and its helper text |
-| `2` (8px) | gap between a button's icon and its label |
-| `2` (8px) | horizontal padding, small button and small input |
-| `2.5` (10px) | horizontal padding, default input; its option list is inset to match |
-| `3` (12px) | horizontal padding, default button |
+| `4` (16px) | padding inside a popover; gap between tabs and their panel |
 
-**Control heights are their own tokens**, not spacing steps:
-`--control-sm` and `--control-md` are 24 and 32px — two steps, as in
-the Claude apps. A 32px default is what makes a button,
-a text input, a tab and a sidebar row line up without either being
-nudged, and anything that should sit alongside them — a select, a date
-picker — has to land on the same heights rather than pick its own. They
-scale with `--scaling` like everything else.
+**Inside a control, padding and gaps are not spacing steps.** They belong
+to the control's size tier, with two pad variants:
+
+| Token | `xs` | `sm` | `md` | Used by |
+| --- | --- | --- | --- | --- |
+| `--control-{tier}-pad` | 6px | 8px | 10px | fields and rows: text lines up with the label above it |
+| `--control-{tier}-pad-spacious` | 6px | 8px | 12px | buttons: a centred label needs room either side |
+| `--control-{tier}-gap` | 4px | 6px | 8px | between a control's icon and its label |
+
+A field's option list is inset by the field's own pad, so an option's text
+starts where the field's value does.
+
+**Control heights are tokens too**, `--control-xs`, `--control-sm` and
+`--control-md` at 20, 24 and 32px. One height per tier is what makes a
+button, a text input, a tab and a select line up without anything being
+nudged. See [Sizing](?path=/docs/foundations-sizing--docs) for the whole
+tier and which component reads which.
 
 ## Customization
 

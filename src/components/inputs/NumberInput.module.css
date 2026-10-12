@@ -10,27 +10,29 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* Square, 8px shorter than the field: 24px in md, 16px in sm. */
+/* Square, inset 4px top and bottom: 24px in md, 16px in sm. */
 .step {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  inline-size: calc(var(--field-size) - 8px);
-  block-size: calc(var(--field-size) - 8px);
+  inline-size: calc(var(--field-size) - 2 * var(--space-1));
+  block-size: calc(var(--field-size) - 2 * var(--space-1));
   margin: 0;
   padding: 0;
   border: 0;
   border-radius: var(--radius-sm);
   background: transparent;
   color: var(--muted-foreground);
-  font-size: var(--icon-md);
+  font-size: var(--field-icon);
   cursor: var(--cursor-button);
   transition:
     background-color var(--duration-base),
     color var(--duration-base);
 }
 
+/* The one icon below its tier: an sm stepper is a 16px button, and a 14px
+   chevron would fill it edge to edge. */
 .sm .step {
   font-size: var(--icon-xs);
 }
