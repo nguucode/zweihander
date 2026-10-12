@@ -52,7 +52,8 @@ export interface TableProps<Row> {
   /**
    * Content shown under a row when it is expanded, across the full width.
    * Adds an expand button to each row that returns content; a row that
-   * returns `null`, `undefined` or `false` gets none.
+   * returns `null`, `undefined` or `false` gets none. Runs for every row on
+   * each render, open or not, so keep it cheap.
    */
   expandedContent?: (row: Row) => ReactNode
   expandedIds?: string[]
@@ -144,9 +145,10 @@ export function Table<Row>({
   const ids = shown.map((row, i) => getRowId(row, position.get(row) ?? i))
   const header = columns.find((c) => c.isRowHeader)
   /** What a row is called, for its checkbox: the row header's text if it has one. */
-  const rowName = (row: Row, i: number) => {
+  const rowName = (row: Row) => {
     const v = header && (header.cell ? header.cell(row) : (row as Record<string, unknown>)[header.key])
-    return typeof v === 'string' || typeof v === 'number' ? String(v) : `row ${i + 1}`
+    // The fallback counts from `rows`, so a sort does not rename the row.
+    return typeof v === 'string' || typeof v === 'number' ? String(v) : `row ${(position.get(row) ?? 0) + 1}`
   }
   const allSelected = ids.length > 0 && ids.every((id) => selected.has(id))
   const someSelected = !allSelected && ids.some((id) => selected.has(id))
@@ -215,7 +217,7 @@ export function Table<Row>({
               const content = expandedContent?.(row)
               const hasContent = content != null && content !== false
               const isExpanded = hasContent && expanded.has(id)
-              const contentId = `${baseId}-expanded-${i}`
+              const contentId = `${baseId}-expanded-${position.get(row) ?? i}`
               return (
                 <Fragment key={id}>
                   <tr
@@ -225,7 +227,7 @@ export function Table<Row>({
                     {isSelectable && (
                       <td className={styles.select}>
                         <Checkbox
-                          aria-label={`Select ${rowName(row, i)}`}
+                          aria-label={`Select ${rowName(row)}`}
                           checked={isSelected}
                           onCheckedChange={(on) => setSelected(on ? [...selected, id] : [...selected].filter((x) => x !== id))}
                         />
@@ -239,7 +241,7 @@ export function Table<Row>({
                             appearance="ghost"
                             size="sm"
                             isIconOnly
-                            aria-label={`Expand ${rowName(row, i)}`}
+                            aria-label={`Expand ${rowName(row)}`}
                             aria-expanded={isExpanded}
                             // Only points at the content row while it exists.
                             aria-controls={isExpanded ? contentId : undefined}

@@ -154,6 +154,21 @@ thead .expand {
 [aria-expanded='true'] > .expandIcon {
   rotate: 90deg;
 }
+/* Closed, the chevron points along the reading direction; open, down.
+   Mirrored, the same quarter turn would point up, so RTL turns the other
+   way. Not :dir(rtl), for the reason in Calendar.module.css. */
+:global([dir='rtl']) .expandIcon {
+  scale: -1 1;
+}
+:global([dir='rtl']) [aria-expanded='true'] > .expandIcon {
+  rotate: -90deg;
+}
+:global([dir='rtl'] [dir='ltr']) .expandIcon {
+  scale: none;
+}
+:global([dir='rtl'] [dir='ltr']) [aria-expanded='true'] > .expandIcon {
+  rotate: 90deg;
+}
 
 /* An open row and its content read as one block: no rule between them. */
 tbody tr.expanded > * {
@@ -167,8 +182,11 @@ tbody tr.expanded > * {
 tbody tr.expandedRow:hover > * {
   background: transparent;
 }
-/* Under a selected row it shares the tint, so the pair still reads as one. */
-tbody tr.selected + tr.expandedRow > * {
+/* It shares its row's hover and selected tint, so the pair still reads as one. */
+tbody tr.expanded:hover + tr.expandedRow > * {
+  background: var(--accent);
+}
+tbody tr.selected.expanded + tr.expandedRow > * {
   background: var(--primary-subtle);
 }
 
