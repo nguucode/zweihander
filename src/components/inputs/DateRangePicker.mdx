@@ -3,17 +3,6 @@ import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../
 import { DateRangePicker } from './DatePicker'
 import * as DateRangePickerStories from './DateRangePicker.stories'
 
-{/* A field is 20rem wide; in a state cell it shrinks to the cell instead of
-    spilling into the next. A text input's own default width (about 20
-    characters) is its minimum otherwise, so it is zeroed here and the input
-    grows back to fill the box. */}
-export const Fit = ({ children }) => (
-  <div className="zw-fit" style={{ inlineSize: '100%', minInlineSize: 0 }}>
-    <style>{'.zw-fit input { inline-size: 0 }'}</style>
-    {children}
-  </div>
-)
-
 <Meta of={DateRangePickerStories} />
 
 # Date Range Picker
@@ -160,20 +149,20 @@ The days and the band between the range's ends are the
 
 <States
   states={[
-    { label: 'Empty', content: <Fit><DateRangePicker label="Period" locale="en-GB" /></Fit> },
+    { label: 'Empty', content: <DateRangePicker label="Period" locale="en-GB" /> },
     { label: 'Filled' },
     { label: 'Focus', pseudo: 'focus' },
     {
       label: 'Error',
-      content: <Fit><DateRangePicker label="Period" locale="en-GB" validationState="error" helperText="Choose both ends." /></Fit>,
+      content: <DateRangePicker label="Period" locale="en-GB" validationState="error" helperText="Choose both ends." />,
     },
     {
       label: 'Disabled',
-      content: <Fit><DateRangePicker label="Period" locale="en-GB" defaultValue={{ start: new Date(2026, 8, 7), end: new Date(2026, 8, 13) }} disabled /></Fit>,
+      content: <DateRangePicker label="Period" locale="en-GB" defaultValue={{ start: new Date(2026, 8, 7), end: new Date(2026, 8, 13) }} disabled />,
     },
   ]}
 >
-  <Fit><DateRangePicker label="Period" locale="en-GB" defaultValue={{ start: new Date(2026, 8, 7), end: new Date(2026, 8, 13) }} /></Fit>
+  <DateRangePicker label="Period" locale="en-GB" defaultValue={{ start: new Date(2026, 8, 7), end: new Date(2026, 8, 13) }} />
 </States>
 
 The field's states are Date Picker's: a `--ring` outline while the input

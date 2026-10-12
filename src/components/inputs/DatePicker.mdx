@@ -3,17 +3,6 @@ import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../
 import { DatePicker } from './DatePicker'
 import * as DatePickerStories from './DatePicker.stories'
 
-{/* A field is 20rem wide; in a state cell it shrinks to the cell instead of
-    spilling into the next. A text input's own default width (about 20
-    characters) is its minimum otherwise, so it is zeroed here and the input
-    grows back to fill the box. */}
-export const Fit = ({ children }) => (
-  <div className="zw-fit" style={{ inlineSize: '100%', minInlineSize: 0 }}>
-    <style>{'.zw-fit input { inline-size: 0 }'}</style>
-    {children}
-  </div>
-)
-
 <Meta of={DatePickerStories} />
 
 # Date Picker
@@ -168,17 +157,17 @@ its page.
 
 <States
   states={[
-    { label: 'Empty', content: <Fit><DatePicker label="Start date" locale="en-GB" /></Fit> },
+    { label: 'Empty', content: <DatePicker label="Start date" locale="en-GB" /> },
     { label: 'Filled' },
     { label: 'Focus', pseudo: 'focus' },
     {
       label: 'Error',
-      content: <Fit><DatePicker label="Start date" locale="en-GB" validationState="error" helperText="Enter a date as dd/mm/yyyy." /></Fit>,
+      content: <DatePicker label="Start date" locale="en-GB" validationState="error" helperText="Enter a date as dd/mm/yyyy." />,
     },
-    { label: 'Disabled', content: <Fit><DatePicker label="Start date" locale="en-GB" defaultValue={new Date(2026, 8, 18)} disabled /></Fit> },
+    { label: 'Disabled', content: <DatePicker label="Start date" locale="en-GB" defaultValue={new Date(2026, 8, 18)} disabled /> },
   ]}
 >
-  <Fit><DatePicker label="Start date" locale="en-GB" defaultValue={new Date(2026, 8, 18)} /></Fit>
+  <DatePicker label="Start date" locale="en-GB" defaultValue={new Date(2026, 8, 18)} />
 </States>
 
 - **Focus** is a 2px `--ring` outline, 2px outside the field, drawn while
