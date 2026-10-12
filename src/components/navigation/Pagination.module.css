@@ -74,7 +74,10 @@ a.control[href] {
   cursor: default;
 }
 
+/* Previous and next hold only an icon: no padding, so they stay square
+   like a single-digit page instead of growing by the pad either side. */
 .step {
+  padding-inline: 0;
   font-size: var(--pagination-icon);
 }
 
