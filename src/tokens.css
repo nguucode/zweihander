@@ -747,11 +747,14 @@
    change nothing. On `*` every element recomputes them from what it
    inherits, which is what makes scoping work. */
 * {
-  /* Radius steps — the base scale multiplied by the factor. */
-  --radius-sm: calc((var(--radius) - 4px) * var(--radius-factor));
-  --radius-md: calc((var(--radius) - 2px) * var(--radius-factor));
-  --radius-lg: calc(var(--radius) * var(--radius-factor));
-  --radius-xl: calc((var(--radius) + 4px) * var(--radius-factor));
+  /* Radius steps — the base scale multiplied by the preset's factor and by
+     --scaling, like padding. A corner that stayed put while the padding
+     around it shrank would break the nesting rule (inner = outer − inset)
+     at every scaling but 100%. */
+  --radius-sm: calc((var(--radius) - 4px) * var(--radius-factor) * var(--scaling));
+  --radius-md: calc((var(--radius) - 2px) * var(--radius-factor) * var(--scaling));
+  --radius-lg: calc(var(--radius) * var(--radius-factor) * var(--scaling));
+  --radius-xl: calc((var(--radius) + 4px) * var(--radius-factor) * var(--scaling));
 
   /* Radius intent — what components actually use.
 
@@ -764,15 +767,23 @@
      up with the preset without ever reaching a pill. A fully round text
      field reads as a search pill in a form that is not one, and a fully
      round card stops looking like a container. */
-  --radius-control: max(calc((var(--radius) - 2px) * var(--radius-factor)), var(--radius-full));
-  --radius-field: max(
-    calc((var(--radius) - 2px) * var(--radius-factor)),
-    min(calc(var(--radius) * var(--radius-factor)), var(--radius-full))
-  );
+  --radius-control: max(var(--radius-md), var(--radius-full));
+  --radius-field: max(var(--radius-md), min(var(--radius-lg), var(--radius-full)));
   --radius-panel: max(
-    calc((var(--radius) + 4px) * var(--radius-factor)),
-    min(calc((var(--radius) + 8px) * var(--radius-factor)), var(--radius-full))
+    var(--radius-xl),
+    min(calc((var(--radius) + 8px) * var(--radius-factor) * var(--scaling)), var(--radius-full))
   );
+
+  /* Radius by size tier. The tier picks the step (xs and sm the small one,
+     md the default) and the intent picks what happens at radius="full": a
+     control (Button, Tag, a tab) becomes a pill, a field stops one step up
+     for the same reason --radius-field does. */
+  --control-xs-radius: max(var(--radius-sm), var(--radius-full));
+  --control-xs-radius-field: max(var(--radius-sm), min(var(--radius-md), var(--radius-full)));
+  --control-sm-radius: max(var(--radius-sm), var(--radius-full));
+  --control-sm-radius-field: max(var(--radius-sm), min(var(--radius-md), var(--radius-full)));
+  --control-md-radius: max(var(--radius-md), var(--radius-full));
+  --control-md-radius-field: max(var(--radius-md), min(var(--radius-lg), var(--radius-full)));
 
   /* Font roles, read from whichever faces the scope sets. */
   --font-heading: var(--font-sans);
@@ -791,8 +802,18 @@
   --space-2-5: calc(0.625rem * var(--scaling));
 
   /* Control heights — one scale for every button, field, tab and row. */
+  --control-xs: calc(1.25rem * var(--scaling));
   --control-sm: calc(1.5rem * var(--scaling));
   --control-md: calc(2rem * var(--scaling));
+  --control-xs-pad: calc(0.375rem * var(--scaling));
+  --control-sm-pad: calc(0.5rem * var(--scaling));
+  --control-md-pad: calc(0.625rem * var(--scaling));
+  --control-xs-pad-spacious: calc(0.375rem * var(--scaling));
+  --control-sm-pad-spacious: calc(0.5rem * var(--scaling));
+  --control-md-pad-spacious: calc(0.75rem * var(--scaling));
+  --control-xs-gap: calc(0.25rem * var(--scaling));
+  --control-sm-gap: calc(0.375rem * var(--scaling));
+  --control-md-gap: calc(0.5rem * var(--scaling));
 
   /* Icon sizes — one per control tier. */
   --icon-xs: calc(0.75rem * var(--scaling));
