@@ -587,7 +587,7 @@
   align-items: stretch;
   max-inline-size: 100%;
   border: var(--px) solid var(--edge);
-  background: var(--surface-subtle);
+  background: var(--surface-filled);
   color: var(--foreground);
 }
 
@@ -747,7 +747,7 @@
   display: grid;
   place-items: center;
   padding-block: 12px;
-  background: conic-gradient(var(--surface-subtle) 25%, transparent 0 50%, var(--surface-subtle) 0 75%, transparent 0) 0 0 / 16px 16px;
+  background: conic-gradient(var(--surface-filled) 25%, transparent 0 50%, var(--surface-filled) 0 75%, transparent 0) 0 0 / 16px 16px;
   border: var(--px) solid var(--border);
 }
 
@@ -811,7 +811,7 @@
   border: var(--px) solid var(--edge);
   background:
     repeating-linear-gradient(90deg, transparent 0 calc(100% / 32 - 1px), var(--border) 0 calc(100% / 32)),
-    var(--surface-subtle);
+    var(--surface-filled);
 }
 
 .zone {
@@ -1129,7 +1129,7 @@
   margin: 0;
   padding: 14px;
   border: var(--px) solid var(--edge);
-  background: var(--surface-subtle);
+  background: var(--surface-filled);
   font-family: var(--font-mono);
   font-size: var(--text-body);
   overflow-x: auto;

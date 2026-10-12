@@ -44,7 +44,7 @@ tbody tr:last-child > * {
 }
 
 .th {
-  background: var(--surface-subtle);
+  background: var(--surface-filled);
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
   font-weight: 500;
@@ -57,7 +57,7 @@ tbody tr:last-child > * {
   inset-block-start: 0;
   /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- local stacking inside the table, not a global layer */
   z-index: 1;
-  background: var(--surface-subtle);
+  background: var(--surface-filled);
 }
 
 .rowHeader {
@@ -135,7 +135,7 @@ tbody tr.selected > * {
   padding-inline-end: 0;
 }
 thead .select {
-  background: var(--surface-subtle);
+  background: var(--surface-filled);
 }
 
 .empty {
