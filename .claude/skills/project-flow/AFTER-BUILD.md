@@ -4,7 +4,7 @@ Shared by `flow idea` (implement here, or one ticket), `flow fix` and `flow chan
 
 Review and QA cover every commit since the flow (or ticket branch) started, not only the uncommitted diff: `implement` commits as it goes.
 
-**No-code change.** A change is no-code when every path in `git diff --name-only origin/main...HEAD` ends in `.md` (not `.mdx`, which Storybook renders) and sits under `.claude/`, `docs/` or `.changeset/`, or is a root `*.md` (`README.md`, `CLAUDE.md`). Anything else (`src/`, `scripts/`, `tokens/`, config, a `.sh` or `.py` inside a skill) makes it code. A no-code change skips review-bugs and qa-run, recorded as one checklist line (`review-bugs, qa-run: skipped, no-code change`); every other step still runs. This is the rule, not the agent's call: a mixed diff never skips.
+**No-code change.** Run `npm run flow:no-code`; do not judge the diff by eye. Exit 0 means no-code: every changed path (commits since the merge base with `origin/main`, plus uncommitted and untracked files) ends in `.md` (not `.mdx`, which Storybook renders) and sits under `.claude/`, `docs/` or `.changeset/`, or is a root `*.md` (`README.md`, `CLAUDE.md`). Exit 1 means code, and it prints the paths that make it so (`src/`, `scripts/`, `tokens/`, config, a `.sh` or `.py` inside a skill). A no-code change skips review-bugs and qa-run, recorded as one checklist line (`review-bugs, qa-run: skipped, no-code change`); every other step still runs. This is the rule, not the agent's call: a mixed diff never skips.
 
 | Step | Skill | Required | Does |
 | --- | --- | --- | --- |
