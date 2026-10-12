@@ -413,9 +413,15 @@ ${GRAYS.map((hue) => `[data-gray='${hue}'] {\n${grayVars(hue)}\n}`).join('\n')}
    reverse. [data-accent] and [data-gray] below read them instead of matching
    \`.dark [data-accent]\`: a descendant selector matches ANY dark ancestor, so a
    light island in a dark page would take the dark palette. The switches
-   inherit, so the nearest scope wins at any depth. */
+   inherit, so the nearest scope wins at any depth.
+
+   color-scheme tells the browser the same thing, for the UI it draws itself
+   (scrollbars, date and select popups, autofill, the canvas behind the page),
+   which would otherwise stay light inside a dark scope. */
 :root,
 .light {
+  color-scheme: light;
+
 ${colorBlock('light')}
 
 ${shadowDecls('light')}
@@ -425,6 +431,8 @@ ${shadowDecls('light')}
 }
 
 .dark {
+  color-scheme: dark;
+
 ${colorBlock('dark')}
 
 ${shadowDecls('dark')}
