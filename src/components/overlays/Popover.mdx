@@ -1,72 +1,180 @@
-import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
 import * as PopoverStories from './Popover.stories'
 
 <Meta of={PopoverStories} />
 
 # Popover
 
-A small panel anchored to a button, for content you interact with: a
-share form, a filter, a set of options. It opens on click, stays until
-you close it, and holds links, inputs and buttons, which a Tooltip must
-not. Spec:
-[uiguideline.com/components/popover](https://www.uiguideline.com/components/popover).
-Behaviour from Base UI's [Popover](https://base-ui.com/react/components/popover).
+<DocTabs>
+<DocTab value="overview">
+
+A small panel anchored to a button, for content you interact with: a share
+form, a filter, a set of options. It opens on click and stays until you
+close it.
+
+<Status of={PopoverStories} />
 
 <Canvas of={PopoverStories.Open} />
 
-## Anatomy
+## Variants
 
-| Part | What it is |
+| Variant | Use for |
 | --- | --- |
-| **Trigger** | `trigger`: one button. Popover merges its props onto it. |
-| **Popup** | `--popover` surface, 1px `--border`, `--shadow-md`, `--radius-panel`, 16px padding, at most 22rem wide. |
-| **Title** | Optional. Names the dialog. |
-| **Description** | Optional, `--muted-foreground`. Describes the dialog. |
-| **Body** | `children`. |
-| **Close button** | Optional, in the corner. |
+| Non-modal (default) | Most popovers. Tab can leave it and the page stays usable while it is open. |
+| Modal (`isModal`) | A popover that must be finished or closed first: focus stays inside, the page does not scroll and presses outside are blocked. |
+| `openOnHover` | A preview that also opens on hover. Click, keyboard and touch still open it. |
 
-## Props
-
-| Prop | Values | Default | |
-| --- | --- | --- | --- |
-| `trigger` | element | – | Required. |
-| `title` | node | – | Or `aria-label` when there is none. |
-| `description` | node | – | |
-| `children` | node | – | |
-| `side` | `top`, `right`, `bottom`, `left` | `bottom` | Flips if there is no room. |
-| `align` | `start`, `center`, `end` | `center` | |
-| `hasCloseButton` | boolean | `false` | |
-| `closeLabel` | string | `Close` | |
-| `openOnHover` | boolean | `false` | Also opens on hover, for previews. |
-| `isModal` | boolean | `false` | See Accessibility. |
-| `open`, `defaultOpen`, `onOpenChange` | | | Controlled or uncontrolled. |
-
-<Controls of={PopoverStories.Default} />
-
-### Design notes
-
-- **Same surface as the Select list.** Popover, Select and Combobox
-  popups share the `--popover` colour, border and shadow, and the same
-  z-index layer (50); tooltips sit above them at 60.
-- **No arrow.** The popup opens 6px from its trigger and lines up with
-  it; the gap and alignment already tie it to the trigger.
-
-## Usage
-
-<Canvas of={PopoverStories.Default} />
+A title is optional. Without one, name the popover with `aria-label`:
 
 <Canvas of={PopoverStories.ContentOnly} />
+
+## Resources
+
+From npm, or copied into your project through the registry:
+
+```js
+import { Popover } from 'zweihander/popover'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/popover.json
+```
+
+- Source: [src/components/overlays/Popover.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/overlays/Popover.tsx)
+- Spec: [uiguideline.com/components/popover](https://www.uiguideline.com/components/popover)
+- Behaviour: [Base UI Popover](https://base-ui.com/react/components/popover)
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
+## Anatomy
+
+<Anatomy parts={PopoverStories.anatomyParts}>
+  <Story of={PopoverStories.Anatomy} />
+</Anatomy>
+
+The open popovers on this tab and the next are pictures: real popovers
+rendered in place with `container` and inert, the popup laid out under the
+trigger where it opens.
+
+## Measurements
+
+<SpecTable
+  caption="Container"
+  rows={[
+    { part: 'Container', property: 'Padding', token: '--space-4' },
+    { part: 'Container', property: 'Corner radius', token: '--radius-panel' },
+    { part: 'Container', property: 'Shadow', token: '--shadow-md' },
+    { part: 'Title', property: 'Font size', token: '--text-body' },
+    { part: 'Title', property: 'Line height', token: '--leading-body' },
+    { part: 'Title to close button', property: 'Gap', token: '--space-3' },
+    { part: 'Title to description', property: 'Gap', token: '--space-1' },
+    { part: 'Body', property: 'Gap above', token: '--space-3' },
+  ]}
+/>
+
+<SpecTable
+  caption="Close button"
+  rows={[
+    { part: 'Close button', property: 'Corner radius', token: '--radius-sm' },
+    { part: 'Icon', property: 'Size', token: '--icon-md' },
+    { part: 'Focus ring', property: 'Width', token: '--focus-width' },
+    { part: 'Focus ring', property: 'Offset', token: '--focus-offset-inset' },
+    { part: 'Hit area', property: 'Minimum on touch screens', token: '--target-coarse' },
+  ]}
+/>
+
+The container is as wide as its content, at most 22rem and never wider
+than the room beside the trigger. It has no arrow: it opens 6px from the
+trigger and lines up with it, which already ties the two. It has a 1px
+border and a semibold title. The close button is 20px: 2px around its icon,
+one line of text tall. Popovers sit on the `--layer-overlay` layer and fade
+in over `--duration-fast`.
+
+## Color
+
+<SpecTable
+  caption="Every popover"
+  rows={[
+    { part: 'Container', property: 'Background', token: '--popover' },
+    { part: 'Container', property: 'Border', token: '--border' },
+    { part: 'Title, body', property: 'Colour', token: '--popover-foreground' },
+    { part: 'Description', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Close button', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Close button, hover', property: 'Background', token: '--accent' },
+    { part: 'Close button, hover', property: 'Colour', token: '--accent-foreground' },
+    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+  ]}
+/>
+
+Select and Combobox lists use the same surface: `--popover`, its border
+and shadow.
+
+## States
+
+The popover is open or closed. Opening fades it in and scales it up from
+97%, from the trigger's side. The trigger keeps the states of its own
+component (see Button); the close button is the only part with states of
+its own:
+
+<States
+  states={[
+    { label: 'Enabled' },
+    { label: 'Hover', pseudo: 'hover' },
+    { label: 'Focus', pseudo: 'focus-visible' },
+  ]}
+>
+  <Story of={PopoverStories.CloseButton} />
+</States>
+
+- **Hover** fills the close button with `--accent`.
+- **Focus** is a 2px `--ring` outline drawn inside the button.
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={PopoverStories} />
+</div>
+
+</DocTab>
+<DocTab value="guidelines">
+
+## When to use
+
+Use a Popover for a short task that belongs to the button that opens it:
+share a file, set a filter, pick from a few options. It holds links,
+inputs and buttons, which a Tooltip must not.
+
+<DoDont
+  do={<Story of={PopoverStories.DoShortTask} />}
+  doCaption="A short task tied to its button: one field and one action."
+  dont={<Story of={PopoverStories.DontLongForm} />}
+  dontCaption="A whole form in a popover. It closes on a stray press outside and loses the work: use a Modal."
+/>
+
+## When not to use
+
+- **For a label or a hint** on hover or focus. Use a
+  [Tooltip](?path=/docs/components-overlays-tooltip--docs).
+- **For a list of actions or commands.** Use a
+  [Menu](?path=/docs/components-navigation-menu--docs): it has the
+  arrow-key navigation a list of commands needs.
+- **For a long form or a decision with consequences.** Use a
+  [Modal](?path=/docs/components-overlays-modal--docs).
 
 ## Accessibility
 
 - The popup is a `role="dialog"` named by `title` (or `aria-label`) and
   described by `description`. The trigger carries `aria-expanded` and
   `aria-haspopup`.
-- Opening moves focus into the popup; Escape or a click outside closes
-  it and returns focus to the trigger.
+- Opening moves focus into the popup; Escape or a press outside closes it
+  and returns focus to the trigger.
 - **Non-modal by default:** Tab can leave the popup, and the page stays
   usable. `isModal` switches to Base UI's modal mode: focus is trapped,
-  page scroll is locked and clicks outside are blocked.
+  page scroll is locked and presses outside are blocked.
 - Base UI only traps focus when the popup contains a close button, and a
   touch screen reader needs one to get out. So a modal popover without
   `hasCloseButton` still renders one: hidden until it has keyboard focus,
@@ -76,3 +184,8 @@ Behaviour from Base UI's [Popover](https://base-ui.com/react/components/popover)
 
 - `openOnHover` adds hover to click, it does not replace it: the content
   stays reachable by keyboard and touch.
+- The close button has the 2px focus ring and a 44px hit area on touch
+  screens.
+
+</DocTab>
+</DocTabs>

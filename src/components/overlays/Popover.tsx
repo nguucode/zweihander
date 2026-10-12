@@ -25,6 +25,8 @@ export interface PopoverProps {
   onOpenChange?: (open: boolean) => void
   /** Trap focus inside while open, lock page scroll and block clicks outside (Base UI's modal mode). */
   isModal?: boolean
+  /** Where the popup renders instead of `<body>`, e.g. an element in fullscreen. */
+  container?: HTMLElement | null
   'aria-label'?: string
   className?: string
 }
@@ -43,6 +45,7 @@ export function Popover({
   defaultOpen,
   onOpenChange,
   isModal = false,
+  container,
   'aria-label': ariaLabel,
   className,
 }: PopoverProps) {
@@ -54,7 +57,7 @@ export function Popover({
       modal={isModal}
     >
       <BasePopover.Trigger render={trigger} openOnHover={openOnHover} />
-      <BasePopover.Portal>
+      <BasePopover.Portal container={container}>
         <BasePopover.Positioner className={styles.positioner} side={side} align={align} sideOffset={6}>
           <BasePopover.Popup aria-label={title ? undefined : ariaLabel} className={cn(styles.popup, className)}>
             {(title || hasCloseButton) && (
