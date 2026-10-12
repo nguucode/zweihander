@@ -1420,6 +1420,10 @@
         "$type": "color",
         "$value": "{primitive.accent.orange.800}"
       },
+      "orange-contrast": {
+        "$type": "color",
+        "$value": "{primitive.gray.neutral.900}"
+      },
       "amber": {
         "$type": "color",
         "$value": "{primitive.accent.amber.600}"
@@ -1873,6 +1877,10 @@
       "orange-text": {
         "$type": "color",
         "$value": "{primitive.accent.orange.300}"
+      },
+      "orange-contrast": {
+        "$type": "color",
+        "$value": "{primitive.gray.neutral.900}"
       },
       "amber": {
         "$type": "color",
