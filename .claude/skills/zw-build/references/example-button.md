@@ -12,10 +12,12 @@ Ví dụ enhance có breaking: `render` thay `asChild`. Quy ước API đổi tr
 
 ## 1. Spec: `Button.mdx`
 
-- `## Anatomy`: Container, Start/End icon, Label, Spinner.
-- `## Props`: bảng prop kèm `<Controls>`.
-- `## Differences from the spec`: hai size chứ không phải bốn, `disabled` chứ không phải `isDisabled`, thêm `isIconOnly`, thêm `render`, `accent` là neutral đảo màu, outlined/ghost primary dùng `--primary-text`.
-- `## Accessibility`: các câu đều kiểm được, xem bảng ở phase 3.
+Trang mẫu cho format ba tab (ticket pilot của component-docs).
+
+- **Overview**: một câu mô tả, `<Status>`, canvas `Default`, `## Variants` (canvas `Matrix` cộng bảng variant và appearance, mỗi dòng một Button thật và "dùng khi nào"), canvas `Sizes`, `WithIcons`, `IconOnly`, `## Resources`.
+- **Specs**: `<Anatomy>` đánh số Container, Start icon, Label, End icon (`anatomyParts` và story `Anatomy` trong `Button.stories.tsx`). `## Measurements`: `<SpecTable>` cho `sm`, `md` và một bảng chung (focus ring, hit area). `## Color`: một bảng mỗi variant, cộng focus ring. `## States`: enabled, hover, focus, pressed, disabled, loading; giải thích hover/pressed trộn màu bằng chữ. `## API`: `<ArgTypes>`. `### Differences from the spec`: hai size chứ không phải bốn, `disabled` chứ không phải `isDisabled`, thêm `isIconOnly`, thêm `render`, `accent` là neutral đảo màu, outlined/ghost primary dùng `--primary-text`.
+- **Guidelines**: hai cặp `<DoDont>` (một primary mỗi view; loading thay vì disabled khi đang lưu), `## When not to use` (điều hướng thì dùng `href`, trạng thái bật/tắt thì dùng Toggle Button), `## Accessibility`: các câu đều kiểm được, xem bảng ở phase 3.
+- Props: mọi prop khai báo trong `meta.argTypes` kèm `description`, type và default, vì `ButtonProps` là union nên react-docgen không đọc được.
 
 ## 2. Code: `Button.tsx`, `Button.module.css`
 

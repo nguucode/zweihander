@@ -1,49 +1,208 @@
-import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
+import { Button } from './Button'
 import * as ButtonStories from './Button.stories'
 
 <Meta of={ButtonStories} />
 
 # Button
 
-Triggers an action on the current page — or, with `href`, navigates.
-Spec: [uiguideline.com/components/button](https://www.uiguideline.com/components/button).
+<DocTabs>
+<DocTab value="overview">
+
+Triggers an action on the current page, or, with `href`, navigates.
+
+<Status of={ButtonStories} />
+
+<Canvas of={ButtonStories.Default} />
+
+## Variants
+
+`variant` is the colour, by meaning; `appearance` is the emphasis. Any
+variant takes any appearance.
 
 <Canvas of={ButtonStories.Matrix} />
 
+| Variant | Use for |
+| --- | --- |
+| <Button>Primary</Button> | The next step: Save, Continue, Create. One per view. |
+| <Button variant="accent">Accent</Button> | A strong action in neutral black or white, where the brand colour would clash or already means something else. |
+| <Button variant="secondary">Secondary</Button> | Everything else: Cancel, Back, Export. |
+| <Button variant="destructive">Destructive</Button> | Deleting, or anything that cannot be undone. |
+
+| Appearance | Use for |
+| --- | --- |
+| <Button>Contained</Button> | The action to take, filled so it is found first. |
+| <Button appearance="outlined">Outlined</Button> | Actions that matter but are not the next step. |
+| <Button appearance="ghost">Ghost</Button> | Low emphasis and dense places: toolbars, table rows, a card's corner. |
+
+<Canvas of={ButtonStories.Sizes} />
+
+<Canvas of={ButtonStories.WithIcons} />
+
+<Canvas of={ButtonStories.IconOnly} />
+
+## Resources
+
+From npm, or copied into your project through the registry:
+
+```js
+import { Button } from 'zweihander/button'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/button.json
+```
+
+- Source: [src/components/buttons/Button.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/buttons/Button.tsx)
+- Spec: [uiguideline.com/components/button](https://www.uiguideline.com/components/button)
+- Behaviour: [Base UI Button](https://base-ui.com/react/components/button)
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
 ## Anatomy
 
-| Part | What it is |
-| --- | --- |
-| **Container** | The box. Fill, border and label colour come from `variant` × `appearance`. |
-| **Start icon** / **End icon** | `startIcon`, `endIcon`. Decorative; sized to the button. |
-| **Label** | `children`. With `isIconOnly`, the icon is the whole content. |
-| **Spinner** | Replaces the content while `isLoading`, without changing the width. |
+<Anatomy parts={ButtonStories.anatomyParts}>
+  <Story of={ButtonStories.Anatomy} />
+</Anatomy>
 
-## Props
+While `isLoading`, a spinner takes the content's place; the content stays,
+invisible, so the button keeps its width and its name.
 
-| Prop | Values | Default | |
-| --- | --- | --- | --- |
-| `variant` | `primary`, `accent`, `secondary`, `destructive` | `primary` | Colour by meaning. |
-| `appearance` | `contained`, `outlined`, `ghost` | `contained` | |
-| `size` | `sm`, `md` | `md` | 24, 32px (`--control-*`). `sm` takes a 12px label and `--radius-sm`. |
-| `startIcon`, `endIcon` | node | – | Usually `<Icon name="…" />`. |
-| `isIconOnly` | boolean | `false` | Square. **Requires `aria-label`** (a type error without it). |
-| `isLoading` | boolean | `false` | |
-| `isFullWidth` | boolean | `false` | |
-| `disabled` | boolean | `false` | |
-| `type` | `button`, `submit`, `reset` | `button` | |
-| `href` | string | – | Renders `<a>`. `target` and `rel` pass through. |
-| `render` | element or function | – | Replaces the element, e.g. a router's `<Link />`. |
-| `onClick` | function | – | |
+## Measurements
+
+Each size is a control tier (Foundations / Sizing). Buttons take the
+spacious inline padding: a centred label needs more room either side than
+a field's left-aligned text.
+
+<SpecTable
+  caption="sm"
+  rows={[
+    { part: 'Container', property: 'Height', token: '--control-sm' },
+    { part: 'Container', property: 'Inline padding', token: '--control-sm-pad-spacious' },
+    { part: 'Container', property: 'Corner radius', token: '--control-sm-radius' },
+    { part: 'Container', property: 'Gap', token: '--control-sm-gap' },
+    { part: 'Icon', property: 'Size', token: '--icon-sm' },
+    { part: 'Label', property: 'Font size', token: '--text-body-sm' },
+    { part: 'Label', property: 'Line height', token: '--leading-body-sm' },
+  ]}
+/>
+
+<SpecTable
+  caption="md"
+  rows={[
+    { part: 'Container', property: 'Height', token: '--control-md' },
+    { part: 'Container', property: 'Inline padding', token: '--control-md-pad-spacious' },
+    { part: 'Container', property: 'Corner radius', token: '--control-md-radius' },
+    { part: 'Container', property: 'Gap', token: '--control-md-gap' },
+    { part: 'Icon', property: 'Size', token: '--icon-md' },
+    { part: 'Label', property: 'Font size', token: '--text-body' },
+    { part: 'Label', property: 'Line height', token: '--leading-body' },
+  ]}
+/>
+
+<SpecTable
+  caption="Every size"
+  rows={[
+    { part: 'Focus ring', property: 'Width', token: '--focus-width' },
+    { part: 'Focus ring', property: 'Offset', token: '--focus-offset' },
+    { part: 'Hit area', property: 'Minimum on touch screens', token: '--target-coarse' },
+  ]}
+/>
+
+An icon-only button is square: its width is its height. With `isFullWidth`
+it fills its container.
+
+## Color
+
+Each variant has a solid (the contained fill), a colour on that solid, and
+a tone that outlined and ghost use for their label. Switch the theme and the
+accent in the toolbar: the values follow.
+
+<SpecTable
+  caption="primary"
+  rows={[
+    { part: 'Container, contained', property: 'Background', token: '--primary' },
+    { part: 'Label, contained', property: 'Colour', token: '--primary-foreground' },
+    { part: 'Label, outlined and ghost', property: 'Colour', token: '--primary-text' },
+    { part: 'Container, outlined', property: 'Border', token: '--primary-text' },
+  ]}
+/>
+
+<SpecTable
+  caption="accent"
+  rows={[
+    { part: 'Container, contained', property: 'Background', token: '--foreground' },
+    { part: 'Label, contained', property: 'Colour', token: '--background' },
+    { part: 'Label, outlined and ghost', property: 'Colour', token: '--foreground' },
+    { part: 'Container, outlined', property: 'Border', token: '--foreground' },
+  ]}
+/>
+
+<SpecTable
+  caption="secondary"
+  rows={[
+    { part: 'Container, contained', property: 'Background', token: '--secondary' },
+    { part: 'Label, contained', property: 'Colour', token: '--secondary-foreground' },
+    { part: 'Label, outlined and ghost', property: 'Colour', token: '--foreground' },
+    { part: 'Container, outlined', property: 'Border', token: '--input' },
+  ]}
+/>
+
+<SpecTable
+  caption="destructive"
+  rows={[
+    { part: 'Container, contained', property: 'Background', token: '--destructive' },
+    { part: 'Label, contained', property: 'Colour', token: '--destructive-foreground' },
+    { part: 'Label, outlined and ghost', property: 'Colour', token: '--destructive' },
+    { part: 'Container, outlined', property: 'Border', token: '--destructive' },
+  ]}
+/>
+
+<SpecTable caption="Every variant" rows={[{ part: 'Focus ring', property: 'Colour', token: '--ring' }]} />
+
+Ghost and outlined have no fill at rest.
+
+## States
+
+<States
+  states={[
+    { label: 'Enabled' },
+    { label: 'Hover', pseudo: 'hover' },
+    { label: 'Focus', pseudo: 'focus-visible' },
+    { label: 'Pressed', pseudo: 'active' },
+    { label: 'Disabled', content: <Story of={ButtonStories.Disabled} /> },
+    { label: 'Loading', content: <Story of={ButtonStories.Loading} /> },
+  ]}
+>
+  <Story of={ButtonStories.Default} />
+</States>
+
+- **Hover and pressed** are mixed from the variant's own colours, not a
+  token each. A coloured solid (primary, destructive) moves away from its
+  label and gains contrast; accent and secondary move toward it. Outlined
+  and ghost tint the background with their tone, 8% on hover and 14% when
+  pressed. Every state keeps the label at 4.5:1, measured by the
+  `StateContrast` story under all seventeen accents in both modes.
+- **Focus** is a 2px `--ring` outline, 2px outside the button.
+- **Disabled** is the enabled look at 50% opacity.
+- **Loading** keeps the full colour: the button is busy, not unavailable.
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={ButtonStories} />
+</div>
 
 Every other `<button>` attribute passes through, including `ref`.
-
-<Controls of={ButtonStories.Default} />
 
 ### Differences from the spec
 
 - **Two sizes, not four.** `sm` (24px) and `md` (32px) only, the compact control scale of the Claude apps. The spec's larger steps were dropped; a big call to action is `md` with more room around it, not a taller box.
-- **`disabled`, not `isDisabled`** — the native attribute keeps its name.
+- **`disabled`, not `isDisabled`**: the native attribute keeps its name.
 - **`isIconOnly` is added.** The spec has no icon-only button, and a
   square button that still requires a name is common enough to need one.
 - **`render` is added** for composition with routers and other elements,
@@ -54,26 +213,44 @@ Every other `<button>` attribute passes through, including `ref`.
   measured to read at 4.5:1 on the page. The solid step would not, for
   warm accents.
 
-## Usage
+</DocTab>
+<DocTab value="guidelines">
 
-One `primary contained` button per view: the thing to do next. Everything
-else steps down to `outlined` or `ghost`, or to `secondary`.
+## When to use
 
-<Canvas of={ButtonStories.Sizes} />
+Use a Button for an action on the current page: save, submit, open a
+dialog, delete. Use one `primary contained` button per view, for the thing
+to do next. Everything else steps down to `outlined` or `ghost`, or to
+`secondary`.
 
-<Canvas of={ButtonStories.WithIcons} />
-
-<Canvas of={ButtonStories.IconOnly} />
+<DoDont
+  do={<Story of={ButtonStories.DoOnePrimary} />}
+  doCaption="One primary button: the thing to do next. The rest step down."
+  dont={<Story of={ButtonStories.DontTwoPrimaries} />}
+  dontCaption="Two primary buttons compete for the same click."
+/>
 
 **Loading** keeps the button's width and focus and blocks it from acting
 again, so a double-submit is impossible and a keyboard user is not dropped
 back to the top of the page.
 
-<Canvas of={ButtonStories.Loading} />
+<DoDont
+  do={<Story of={ButtonStories.Loading} />}
+  doCaption="Show progress with isLoading: the button stays where focus is, and cannot fire twice."
+  dont={<Story of={ButtonStories.DontDisableWhileSaving} />}
+  dontCaption="Disabling it to show progress drops keyboard focus and reads as unavailable."
+/>
 
-**A link is not a button.** `href` renders a real `<a>`: it keeps link
-semantics, opens in a new tab on middle-click, and gets the link cursor.
-Use it for navigation, and a plain Button for actions.
+## When not to use
+
+- **To navigate.** A link is not a button. Pass `href` and Button renders a
+  real `<a>`: it keeps link semantics, opens in a new tab on middle-click,
+  and gets the link cursor. A plain Button with an `onClick` that changes
+  the page does none of that.
+- **For a setting that stays on or off.** Use a
+  [Toggle Button](?path=/docs/components-buttons-togglebutton--docs), a
+  Switch or a Checkbox.
+- **For a link inside running text.** Use Link.
 
 <Canvas of={ButtonStories.Href} />
 
@@ -86,8 +263,8 @@ Use it for navigation, and a plain Button for actions.
 - `isLoading` sets `aria-busy` and `aria-disabled` but keeps the button
   focusable. `disabled` removes it from the tab order, as native buttons
   do.
-- A disabled or loading link renders a bare `<a>` with no `href` — the
-  only thing that stops an `<a>` navigating — and `aria-disabled`. With
+- A disabled or loading link renders a bare `<a>` with no `href` (the
+  only thing that stops an `<a>` navigating) and `aria-disabled`. With
   `render`, the render element is dropped too, since a router's Link would
   keep its own `href`.
 - `render` is for elements that are already interactive: a link or a
@@ -99,3 +276,6 @@ Use it for navigation, and a plain Button for actions.
 - `sm` and `md` are under 44px; on touch screens (`pointer: coarse`) the
   hit area grows to 44×44px without the button growing.
 - Focus ring: 2px `--ring`, 2px offset, at 3:1 or better on the page.
+
+</DocTab>
+</DocTabs>

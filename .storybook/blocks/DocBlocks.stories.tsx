@@ -4,7 +4,7 @@ import { addons } from 'storybook/preview-api'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { Button } from '@/components/buttons/Button'
 import { Icon } from '@/lib/icon'
-import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States } from '.'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '.'
 
 /* Stories for the docs blocks themselves, tagged !dev: they run as tests (and
    a11y) like any story, but stay out of the sidebar and the Playground. The
@@ -268,6 +268,20 @@ export const Pair: Story = {
     await expect(good.querySelector('figcaption')).toHaveTextContent(/^Do One primary button/)
     await expect(bad.querySelector('figcaption')).toHaveTextContent(/^Don’t Two primary buttons/)
     await expect(within(good).getByRole('button', { name: 'Save' })).toBeVisible()
+  },
+}
+
+export const StatusTag: Story = {
+  name: 'Status',
+  render: () => (
+    <>
+      <Status of={{ default: { tags: ['beta'] } }} />
+      <Status of={{ default: { tags: ['autodocs'] } }} />
+    </>
+  ),
+  play: async ({ canvasElement }) => {
+    // The status tag, capitalised; a module with no status tag shows nothing.
+    await expect(canvasElement.textContent).toBe('Beta')
   },
 }
 
