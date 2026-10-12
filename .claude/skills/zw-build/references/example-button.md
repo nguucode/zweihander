@@ -41,7 +41,7 @@ Mỗi câu trong §Accessibility có một story kiểm nó:
 
 `StateContrast` là mẫu cho component có nhiều tổ hợp màu. Nó đọc màu mà trình duyệt đã resolve rồi tính contrast trong test, nên kiểm được CSS thật đang ship. Story này đặt `a11y: { test: 'off' }` kèm comment, vì chính nó đã làm việc kiểm contrast.
 
-Chưa đạt: chỉ chạy trên Chromium, chưa có baseline visual regression (story đại diện sẽ là `Matrix`), chưa thử VoiceOver.
+Visual regression dùng story `Matrix` (light và dark, trong `src/visual.test.tsx`). Chưa đạt: chưa thử VoiceOver.
 
 ## 4. Release
 
@@ -57,7 +57,7 @@ Button: `render` replaces `asChild`. Pass the element itself: `<Button render={<
 
 ## 5. Status
 
-Button hiện đạt `beta`: đủ phase 1–4 ở mức repo cho phép. Để lên `stable` còn thiếu ba trình duyệt, baseline visual regression, một lần thử VoiceOver + Safari, và một tháng không có breaking change.
+Button hiện đạt `beta`: đủ phase 1–4 ở mức repo cho phép. Để lên `stable` còn thiếu một lần thử VoiceOver + Safari, và một tháng không có breaking change.
 
 ```ts
 const meta = {

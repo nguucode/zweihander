@@ -31,7 +31,8 @@
 
 .th,
 .td,
-.select {
+.select,
+.expand {
   box-sizing: border-box;
   block-size: var(--table-row);
   padding: 0 var(--space-4);
@@ -52,7 +53,8 @@ tbody tr:last-child > * {
   white-space: nowrap;
 }
 .sticky thead .th,
-.sticky thead .select {
+.sticky thead .select,
+.sticky thead .expand {
   position: sticky;
   inset-block-start: 0;
   /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- local stacking inside the table, not a global layer */
@@ -126,16 +128,71 @@ tbody tr:last-child > * {
 tbody tr:hover > * {
   background: var(--accent);
 }
+/* --border is as light as --primary-subtle in light mode, so between two
+   selected rows it vanishes. The divider takes the tint's own text colour,
+   mixed down, to stay visible on it in both modes. */
 tbody tr.selected > * {
   background: var(--primary-subtle);
+  border-block-end-color: color-mix(in oklab, var(--primary-subtle) 75%, var(--primary-subtle-text));
 }
 
 .select {
   inline-size: var(--space-10);
   padding-inline-end: 0;
 }
-thead .select {
+thead .select,
+thead .expand {
   background: var(--surface-filled);
+}
+
+/* Just wide enough for the icon button. */
+.expand {
+  inline-size: var(--space-10);
+  padding-inline: var(--space-2) 0;
+}
+.expandIcon {
+  display: inline-flex;
+  font-size: var(--icon-md);
+  transition: rotate var(--duration-base);
+}
+[aria-expanded='true'] > .expandIcon {
+  rotate: 90deg;
+}
+/* Closed, the chevron points along the reading direction; open, down.
+   Mirrored, the same quarter turn would point up, so RTL turns the other
+   way. Not :dir(rtl), for the reason in Calendar.module.css. */
+:global([dir='rtl']) .expandIcon {
+  scale: -1 1;
+}
+:global([dir='rtl']) [aria-expanded='true'] > .expandIcon {
+  rotate: -90deg;
+}
+:global([dir='rtl'] [dir='ltr']) .expandIcon {
+  scale: none;
+}
+:global([dir='rtl'] [dir='ltr']) [aria-expanded='true'] > .expandIcon {
+  rotate: 90deg;
+}
+
+/* An open row and its content read as one block: no rule between them. */
+tbody tr.expanded > * {
+  border-block-end-color: transparent;
+}
+.expandedContent {
+  padding: var(--space-2) var(--space-4) var(--space-4);
+  border-block-end: 1px solid var(--border);
+}
+/* The content row is not a record: it takes no hover tint of its own. */
+tbody tr.expandedRow:hover > * {
+  background: transparent;
+}
+/* It shares its row's hover and selected tint, so the pair still reads as one. */
+tbody tr.expanded:hover + tr.expandedRow > * {
+  background: var(--accent);
+}
+tbody tr.selected.expanded + tr.expandedRow > * {
+  background: var(--primary-subtle);
+  border-block-end-color: color-mix(in oklab, var(--primary-subtle) 75%, var(--primary-subtle-text));
 }
 
 .empty {

@@ -22,6 +22,15 @@ const baseUiEntries = Object.keys(
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
   plugins: [react()],
+  // Two pages: the docs home and the Playground (`/playground/`).
+  build: {
+    rollupOptions: {
+      input: {
+        main: path.join(dirname, 'index.html'),
+        playground: path.join(dirname, 'playground/index.html'),
+      },
+    },
+  },
   // The docs block tests import two Storybook entry points the stories do not;
   // listed for the same reason as Base UI's.
   optimizeDeps: { include: [...baseUiEntries, 'storybook/internal/core-events', 'storybook/preview-api'] },
@@ -76,6 +85,37 @@ export default defineConfig({
           ],
         }
       }
+    }, {
+      extends: true,
+      test: {
+        name: 'visual',
+        include: ['src/visual.test.tsx'],
+        // Pixels differ between engines, so a baseline per browser triples
+        // what a reviewer looks at for little gain: the story tests already
+        // run every component in all three. Chromium only.
+        browser: {
+          enabled: true,
+          headless: true,
+          provider: playwright({}),
+          instances: [{ browser: 'chromium' }],
+          // Playwright's default window, so the frame is not scaled down
+          // and the screenshot keeps every pixel. Wide enough for the
+          // AppShell story's 1100px box.
+          viewport: { width: 1280, height: 720 },
+          // A failure already writes the actual image and a diff; another
+          // screenshot would land beside the baselines.
+          screenshotFailures: false,
+          expect: {
+            toMatchScreenshot: {
+              // Flat in src/__screenshots__/. The default puts them in a
+              // folder named after the test file, visual.test.tsx/, which
+              // any src/**/*.tsx glob then tries to read as a file.
+              resolveScreenshotPath: ({ root, testFileDirectory, arg, browserName, platform, ext }) =>
+                `${root}/${testFileDirectory}/__screenshots__/${arg}-${browserName}-${platform}${ext}`,
+            },
+          },
+        },
+      },
     }]
   }
 });
