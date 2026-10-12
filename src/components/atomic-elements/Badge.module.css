@@ -22,19 +22,21 @@
   white-space: nowrap;
 }
 
-/* 16px at sm, 20px at md, in em so the Theme's scaling carries them.
-   min-inline-size equal to the height keeps a single digit a circle
-   rather than an oval. */
+/* 16px at sm; md is tier xs, 20px (see Foundations/Sizing). Both follow
+   the Theme's scaling. min-inline-size equal to the height keeps a single
+   digit a circle rather than an oval. The tier's pad is not used: a count
+   is one or two digits in a pill, and 6px either side would turn "9" into
+   an oval. */
 .sm {
-  block-size: 1.6em;
-  min-inline-size: 1.6em;
+  block-size: var(--space-4);
+  min-inline-size: var(--space-4);
   /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- 2px, below the spacing scale on purpose */
   padding-inline: 0.125rem;
 }
 
 .md {
-  block-size: 2em;
-  min-inline-size: 2em;
+  block-size: var(--control-xs);
+  min-inline-size: var(--control-xs);
   padding-inline: var(--space-1);
 }
 

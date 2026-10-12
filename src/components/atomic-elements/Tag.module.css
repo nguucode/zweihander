@@ -1,35 +1,41 @@
 .tag {
-  --tag-icon: var(--icon-md);
   display: inline-flex;
   align-items: center;
-  gap: var(--space-1);
   max-inline-size: 100%;
   box-sizing: border-box;
   border: 1px solid transparent;
-  /* Follows the Theme's radius preset like every control: a pill under
-     radius="full", square under "none". */
-  border-radius: var(--radius-control);
   font-family: var(--font-sans);
   font-weight: 500;
   white-space: nowrap;
   vertical-align: middle;
 }
 
-/* Height is line-height + 1px padding + 1px border each side: 24px at md,
-   20px at sm. The 1px is below the spacing scale on purpose: the border is
-   always there (transparent unless outlined) so appearances never shift
-   the layout, and 1px padding makes up the rest. */
+/* A tag sits in a line of text, so each size is the tier below its name
+   (see Foundations/Sizing): md reads tier sm, sm reads tier xs. Pad, gap,
+   icon and corner come from the tier; the corner follows the Theme's
+   radius preset like every control, a pill under radius="full".
+
+   Height is line-height + 1px padding + 1px border each side, which lands
+   on the tier's height: 24px at md, 20px at sm. The 1px is below the
+   spacing scale on purpose: the border is always there (transparent unless
+   outlined) so appearances never shift the layout, and 1px padding makes
+   up the rest. */
 .md {
+  --tag-icon: var(--icon-sm);
+  gap: var(--control-sm-gap);
   /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- hairline 1px, see above */
-  padding: 1px var(--space-2);
+  padding: 1px var(--control-sm-pad-spacious);
+  border-radius: var(--control-sm-radius);
   font-size: var(--text-body);
   line-height: var(--leading-body);
 }
 
 .sm {
   --tag-icon: var(--icon-xs);
+  gap: var(--control-xs-gap);
   /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- hairline 1px, see above */
-  padding: 1px var(--space-1-5);
+  padding: 1px var(--control-xs-pad-spacious);
+  border-radius: var(--control-xs-radius);
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
 }
