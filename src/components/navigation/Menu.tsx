@@ -1,6 +1,6 @@
 'use client'
 
-import type { ReactElement, ReactNode } from 'react'
+import { type ReactElement, type ReactNode, useEffect } from 'react'
 import { Menu as BaseMenu } from '@base-ui/react/menu'
 import { Icon } from '@/lib/icon'
 import { cn } from '@/lib/utils'
@@ -63,6 +63,8 @@ export interface MenuProps {
    * While open, lock page scroll and make the rest of the page inert, so the
    * menu is the only thing to interact with. `false` leaves the page as is.
    */
+  isModal?: boolean
+  /** @deprecated Use `isModal`. Removed in the next minor. */
   modal?: boolean
   /** Where the popup renders instead of `<body>`, e.g. an element in fullscreen. */
   container?: HTMLElement | null
@@ -220,16 +222,21 @@ export function Menu({
   open,
   defaultOpen,
   onOpenChange,
-  modal = true,
+  isModal,
+  modal,
   container,
   className,
 }: MenuProps) {
+  const hasModal = modal !== undefined
+  useEffect(() => {
+    if (import.meta.env.DEV && hasModal) console.warn('Menu: `modal` is deprecated, use `isModal`. It is removed in the next minor.')
+  }, [hasModal])
   return (
     <BaseMenu.Root
       open={open}
       defaultOpen={defaultOpen}
       onOpenChange={onOpenChange && ((next) => onOpenChange(next))}
-      modal={modal}
+      modal={isModal ?? modal ?? true}
     >
       <BaseMenu.Trigger render={trigger} />
       <Surface side={side} align={align} sideOffset={4} container={container} className={className}>

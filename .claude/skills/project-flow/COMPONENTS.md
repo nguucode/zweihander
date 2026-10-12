@@ -1,25 +1,25 @@
----
-name: zw-build
-description: Quy trình chính thức để tạo mới hoặc enhance một component hay pattern của Zweihänder, gồm spec MDX, code, story test, a11y, registry, changeset và status. Dùng mỗi khi thêm, sửa, refactor, deprecate component hoặc pattern trong src/components/, kể cả khi chỉ đổi token hay prop.
----
+# Component conventions
 
-# zw-build
+Quy ước cho mọi thay đổi ở `src/components/**` (component hay pattern, tạo mới hay enhance). Đây không phải một quy trình riêng: quy trình duy nhất là project-flow ([SKILL.md](SKILL.md)). File này nói các bước của flow phải đạt gì khi chạm vào component. Trước đây là skill `zw-build`.
 
-Mọi thay đổi ở `src/components/**` đều đi qua cycle này, dù là component hay pattern, tạo mới hay enhance. Mỗi phase kết thúc bằng một **gate**. Chưa qua gate thì không sang phase sau.
+Mỗi phần dưới gắn vào một bước của flow, và kết thúc bằng một **gate**. Bước build chỉ coi là xong khi các gate 0 đến 3 xanh; gate 4 và 5 kiểm ở bước ship.
 
-```
-0. Phân loại ─► 1. Spec ─► 2. Code ─► 3. Test ─► 4. Release ─► 5. Status
-                   ▲                                              │
-                   └────────── breaking change quay lại Spec ◄────┘
-```
+| Phần | Gắn vào bước flow |
+|---|---|
+| 0. Phân loại, 1. Spec | `flow idea`: grill và spec. `flow fix`, `flow change`, ticket thread: đầu bước build, trước khi sửa code |
+| 2. Code, 3. Test | Bước build (`implement`, `tdd`, `diagnosing-bugs`) |
+| 4. Release | Ship (changeset) |
+| 5. Status, Kết thúc | Ship và sau merge |
+
+Breaking change phát hiện giữa chừng thì quay lại phần 1 (sửa `argTypes` và MDX trước), rồi mới sửa code.
 
 Trước khi làm, đọc file tham chiếu đúng loại:
 
-- Component (`src/components/<category>/`): [references/component.md](references/component.md)
-- Pattern (`src/components/patterns/`): [references/pattern.md](references/pattern.md)
-- Ví dụ đi hết cycle với Button: [references/example-button.md](references/example-button.md)
+- Component (`src/components/<category>/`): [components/component.md](components/component.md)
+- Pattern (`src/components/patterns/`): [components/pattern.md](components/pattern.md)
+- Ví dụ đi hết các phần với Button: [components/example-button.md](components/example-button.md)
 
-Các quyết định gốc nằm trong vault (Definition of done, quy ước API, vai trò Figma): `/Volumes/KAFKA/Vault/10-projects/zweihander/v1-plan/issues/04-definition-of-done.md`, `05-api-conventions.md`, `09-figma-role.md`. Skill này là cách thực thi các quyết định đó. Nếu skill và vault mâu thuẫn, vault đúng: báo sếp và sửa skill.
+Các quyết định gốc nằm trong vault (Definition of done, quy ước API, vai trò Figma): `/Volumes/KAFKA/Vault/10-projects/zweihander/v1-plan/issues/04-definition-of-done.md`, `05-api-conventions.md`, `09-figma-role.md`. File này là cách thực thi các quyết định đó. Nếu file này và vault mâu thuẫn, vault đúng: báo sếp và sửa file này.
 
 ## 0. Phân loại
 
@@ -28,7 +28,7 @@ Trả lời ba câu trước khi mở editor:
 1. **Component hay pattern?** Pattern là section ghép từ nhiều component, không tự có hành vi.
 2. **Tạo mới hay enhance?**
    - *Tạo mới:* có spec gốc ở uiguideline.com không? Có trong phạm vi 1.0 không (`zweihander-component-list.md`)? Ngoài phạm vi thì vẫn làm được, nhưng vào với status `experimental`.
-   - *Enhance:* thay đổi có breaking không? Tra bảng breaking trong file tham chiếu. Breaking thì bắt đầu ở phase 1. Chỉ đổi token, màu hay khoảng cách thì đi thẳng phase 2.
+   - *Enhance:* thay đổi có breaking không? Tra bảng breaking trong file tham chiếu. Breaking thì bắt đầu ở phần 1. Chỉ đổi token, màu hay khoảng cách thì đi thẳng phần 2.
 3. **Có cần Figma trước không?** Thay đổi về hình ảnh (component mới, variant mới, đổi anatomy) thì vẽ Figma → sếp duyệt → code. Token luôn đi từ code sang Figma, không bao giờ ngược lại.
 
 **Gate:** ghi được một câu dạng "<Tên> — <mới|enhance> — <breaking|không> — <status đích>".
@@ -125,8 +125,8 @@ Mỗi story file mang đúng một tag status trong `meta.tags`, cạnh `'autodo
 | Status | Component | Pattern |
 |---|---|---|
 | `experimental` | Có story chạy được. API đổi tự do | Như component |
-| `beta` | Đạt phase 1–4: đủ ba tab MDX, test xanh, a11y `error` | Không dùng |
-| `stable` | Beta, cộng: xanh trên Chromium/Firefox/WebKit, có baseline visual regression, đã thử VoiceOver + Safari (ghi build-log), một tháng không có breaking change | Đạt phase 1–4, xanh ba trình duyệt, có baseline visual regression |
+| `beta` | Đạt phần 1–4: đủ ba tab MDX, test xanh, a11y `error` | Không dùng |
+| `stable` | Beta, cộng: xanh trên Chromium/Firefox/WebKit, có baseline visual regression, đã thử VoiceOver + Safari (ghi build-log), một tháng không có breaking change | Đạt phần 1–4, xanh ba trình duyệt, có baseline visual regression |
 | `deprecated` | Có thay thế, ghi trong MDX. Xoá ở bản kế tiếp | Như component |
 
 Đừng nâng status khi chưa đủ điều kiện. Không ghi "đã test với screen reader" khi chưa thật sự làm.
@@ -138,7 +138,7 @@ Mỗi story file mang đúng một tag status trong `meta.tags`, cạnh `'autodo
 1. Ghi một dòng vào `zweihander-build-log.md` trong vault: quyết định, chỗ lệch spec, việc chờ sếp duyệt.
 2. Cập nhật thẻ trong `zweihander-kanban.md`.
 3. Nếu đổi token hoặc prop có trong Figma: ghi việc sync Figma vào `_context.md` của dự án.
-4. Thêm một dòng vào `/Volumes/KAFKA/Vault/_system/agent-log.md`, ghi sau commit cuối.
+4. Thêm một dòng vào `/Volumes/KAFKA/Vault/_system/agent-log.md`, ghi sau commit cuối (cùng dòng mà [SKILL.md](SKILL.md#vault) yêu cầu, không ghi hai lần).
 
 Checklist dán vào mô tả PR:
 

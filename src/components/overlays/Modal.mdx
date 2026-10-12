@@ -1,92 +1,210 @@
-import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
 import * as ModalStories from './Modal.stories'
 
 <Meta of={ModalStories} />
 
 # Modal
 
+<DocTabs>
+<DocTab value="overview">
+
 A dialog over the page that has to be dealt with before going back: a
-short form, a confirmation, a decision. Everything behind it is dimmed
-and out of reach until it closes. Spec:
-[uiguideline.com/components/modal](https://www.uiguideline.com/components/modal).
-Behaviour from Base UI's [Dialog](https://base-ui.com/react/components/dialog)
-and [Alert Dialog](https://base-ui.com/react/components/alert-dialog).
+short form, a confirmation, a decision. Everything behind it is dimmed and
+out of reach until it closes.
+
+<Status of={ModalStories} />
 
 <Canvas of={ModalStories.Default} />
 
-## Anatomy
+## Variants
 
-| Part | What it is |
+| Variant | Use for |
 | --- | --- |
-| **Backdrop** | A black scrim at 50% over the whole page. |
-| **Popup** | `--popover` surface, `--shadow-xl`, `--radius-panel`, 16px padding, centred. |
-| **Title** | Required. `heading-sm` (16px), medium. Names the dialog. |
-| **Close button** | Top right. On by default, off for `isAlert`. |
-| **Description** | Optional, `--muted-foreground`. |
-| **Body** | `children`. Scrolls when the modal is taller than the screen. |
-| **Footer** | Actions, right-aligned, the main one last. Dismiss actions (Cancel) use the `secondary` button. |
-
-## Props
-
-| Prop | Values | Default | |
-| --- | --- | --- | --- |
-| `title` | node | – | Required. |
-| `trigger` | element | – | Omit when `open` is controlled from elsewhere. |
-| `description` | node | – | |
-| `children` | node | – | |
-| `footer` | node | – | |
-| `size` | `sm`, `md`, `lg` | `md` | Max width 24, 32, 48rem. |
-| `hasCloseButton` | boolean | `!isAlert` | |
-| `closeLabel` | string | `Close` | |
-| `isAlert` | boolean | `false` | `role="alertdialog"`, no backdrop dismissal. |
-| `closeOnBackdropClick` | boolean | `true` | Ignored when `isAlert`. |
-| `initialFocus` | ref | – | By default, the first focusable element. |
-| `open`, `defaultOpen`, `onOpenChange` | | | Controlled or uncontrolled. |
-
-`ModalClose` closes the modal it is in. Give it your own button with
-`render`: `<ModalClose render={<Button />}>Cancel</ModalClose>`.
-
-<Controls of={ModalStories.Default} />
-
-### Design notes
-
-- **One layer with the popups.** Modal, Popover, Select and Combobox all
-  sit at z-index 50. Each portals to the end of `<body>` when it opens,
-  so the most recent is on top: a Select opened inside a modal lists its
-  options above the modal, which a higher modal layer would hide. The
-  `WithSelect` story checks it.
-
-  <Canvas of={ModalStories.WithSelect} />
-
-- **The body scrolls, not the page.** Title and footer stay on screen
-  however long the content is.
-
-  <Canvas of={ModalStories.Long} />
-
-## Usage
-
-For a decision with consequences, use `isAlert` and say exactly what
-will happen in the description. Name the buttons after what they do
-("Delete", "Keep project"), not "OK" and "Cancel".
+| Dialog (default) | A short task on its own: edit a profile, invite people. A close button, Escape and a press on the backdrop all close it. |
+| Alert (`isAlert`) | A decision with consequences: delete, discard, leave. No close button and a press on the backdrop does nothing, so it ends only through its own buttons or Escape. |
 
 <Canvas of={ModalStories.Alert} />
 
-Reach for a modal last: it stops everything else. A Popover suits a
-small form tied to one button; an inline message suits information.
+`size` sets the maximum width: `sm` (24rem) for an alert, `md` (32rem) for
+a short form, `lg` (48rem) for long content. Taller than the screen, the
+body scrolls and the title and footer stay in view.
+
+<Canvas of={ModalStories.Long} />
+
+## Resources
+
+From npm, or copied into your project through the registry:
+
+```js
+import { Modal, ModalClose } from 'zweihander/modal'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/modal.json
+```
+
+- Source: [src/components/overlays/Modal.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/overlays/Modal.tsx)
+- Spec: [uiguideline.com/components/modal](https://www.uiguideline.com/components/modal)
+- Behaviour: [Base UI Dialog](https://base-ui.com/react/components/dialog) and [Alert Dialog](https://base-ui.com/react/components/alert-dialog)
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
+## Anatomy
+
+<Anatomy parts={ModalStories.anatomyParts}>
+  <Story of={ModalStories.Anatomy} />
+</Anatomy>
+
+The open modals on this tab and the next are pictures: real modals
+rendered in a frame with `container`, not modal (`isModal={false}`) and
+inert, so they do not lock this page or take its focus.
+
+## Measurements
+
+<SpecTable
+  caption="Container"
+  rows={[
+    { part: 'Container', property: 'Padding', token: '--space-4' },
+    { part: 'Container', property: 'Corner radius', token: '--radius-panel' },
+    { part: 'Container', property: 'Shadow', token: '--shadow-xl' },
+    { part: 'Container', property: 'Margin to the screen edge', token: '--space-4' },
+    { part: 'Title', property: 'Font size', token: '--text-heading-sm' },
+    { part: 'Title', property: 'Line height', token: '--leading-heading-sm' },
+    { part: 'Title to close button', property: 'Gap', token: '--space-4' },
+    { part: 'Title to description', property: 'Gap', token: '--space-2' },
+    { part: 'Body, footer', property: 'Gap above', token: '--space-4' },
+    { part: 'Footer', property: 'Gap between actions', token: '--space-2' },
+  ]}
+/>
+
+<SpecTable
+  caption="Close button"
+  rows={[
+    { part: 'Close button', property: 'Padding', token: '--space-1' },
+    { part: 'Close button', property: 'Corner radius', token: '--radius-sm' },
+    { part: 'Icon', property: 'Size', token: '--icon-md' },
+    { part: 'Focus ring', property: 'Width', token: '--focus-width' },
+    { part: 'Focus ring', property: 'Offset', token: '--focus-offset-inset' },
+    { part: 'Hit area', property: 'Minimum on touch screens', token: '--target-coarse' },
+  ]}
+/>
+
+Width is `size`: at most 24rem (`sm`), 32rem (`md`) or 48rem (`lg`), and
+never wider than the screen less its margin. The border is 1px. Backdrop
+and modal sit on the `--layer-overlay` layer and fade in over
+`--duration-base`.
+
+## Color
+
+<SpecTable
+  caption="Every modal"
+  rows={[
+    { part: 'Backdrop', property: 'Background', token: '--scrim' },
+    { part: 'Container', property: 'Background', token: '--popover' },
+    { part: 'Container', property: 'Border', token: '--border' },
+    { part: 'Title, body', property: 'Colour', token: '--popover-foreground' },
+    { part: 'Description', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Close button', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Close button, hover', property: 'Background', token: '--accent' },
+    { part: 'Close button, hover', property: 'Colour', token: '--accent-foreground' },
+    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+  ]}
+/>
+
+Buttons in the footer keep their own colours: see Button.
+
+## States
+
+The modal is open or closed. Opening fades the backdrop in and scales the
+container up from 97%; closing reverses it. The close button is the only
+part with states of its own:
+
+<States
+  states={[
+    { label: 'Enabled' },
+    { label: 'Hover', pseudo: 'hover' },
+    { label: 'Focus', pseudo: 'focus-visible' },
+  ]}
+>
+  <Story of={ModalStories.CloseButton} />
+</States>
+
+- **Hover** fills the button with `--accent`.
+- **Focus** is a 2px `--ring` outline drawn inside the button, so it is not
+  clipped at the container's corner.
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={ModalStories} />
+</div>
+
+`ModalClose` closes the modal it is in. Give it your own button with
+`render`: `<ModalClose render={<Button variant="secondary" />}>Cancel</ModalClose>`.
+
+</DocTab>
+<DocTab value="guidelines">
+
+## When to use
+
+Reach for a modal last: it stops everything else. Use one when the task
+must be finished or abandoned before going on, or for a decision with
+consequences. For a decision, use `isAlert`, say exactly what will happen in
+the description, and name the buttons after what they do.
+
+<DoDont
+  do={<Story of={ModalStories.DoNameTheActions} />}
+  doCaption="Name the buttons after what they do: Delete, Keep project. The choice reads without the question."
+  dont={<Story of={ModalStories.DontOkCancel} />}
+  dontCaption="OK and Cancel make the reader go back to the question to know which one deletes."
+/>
+
+Put the main action last in the footer, and dismiss actions (Cancel, Keep)
+in the `secondary` variant.
+
+## When not to use
+
+- **For a small form tied to one button**, such as Share or a filter. Use a
+  [Popover](?path=/docs/components-overlays-popover--docs): it opens beside
+  the button and leaves the page usable.
+- **For information**: a success, a warning, a tip. Use an
+  [Inline Alert](?path=/docs/components-notifications-inlinealert--docs) or a
+  [Toast](?path=/docs/components-notifications-toast--docs); neither stops
+  the reader.
+- **For a long or many-step task.** Give it a page of its own.
+- **Over another modal.** Close the first, or move the second step into it.
 
 ## Accessibility
 
-- `role="dialog"` (or `alertdialog`), named by the title and described
-  by the description.
+- `role="dialog"` (or `alertdialog`), named by the title and described by
+  the description.
 - Opening moves focus to the first focusable element, or `initialFocus`,
   and traps it inside. The page behind is `aria-hidden`, its pointer
   events are blocked by the backdrop, and its scroll is locked. Closing
   returns focus to the trigger.
+- `isModal={false}` drops the focus trap, the scroll lock and the hidden
+  page, but the backdrop still covers the page. It is for pictures of a
+  modal, such as the ones on these tabs: a real modal stays modal.
 - Escape closes it, as does a press outside unless `isAlert` or
   `closeOnBackdropClick={false}`. An alert dialog closes only through its
   own buttons (and Escape).
 
   <Canvas of={ModalStories.Dismissing} />
 
-- The close button is named `Close`, has the 2px focus ring and a 44px
-  touch target on coarse pointers.
+- **One layer with the popups.** Modal, Popover, Select and Combobox all
+  sit at `--layer-overlay`. Each portals to the end of `<body>` when it
+  opens, so the most recent is on top: a Select opened inside a modal
+  lists its options above the modal, which a higher modal layer would
+  hide.
+
+  <Canvas of={ModalStories.WithSelect} />
+
+- The close button is named `Close` (`closeLabel`), has the 2px focus ring
+  and a 44px hit area on touch screens.
+
+</DocTab>
+</DocTabs>

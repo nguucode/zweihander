@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useState } from 'react'
-import { expect, fn, userEvent, waitFor, within } from 'storybook/test'
+import { expect, fn, type MockInstance, spyOn, userEvent, waitFor, within } from 'storybook/test'
 import { Icon } from '@/lib/icon'
 import { Button } from '../buttons/Button'
 import { Menu, type MenuProps } from './Menu'
@@ -68,10 +68,15 @@ const meta = {
       control: false,
       table: { type: { summary: '(open: boolean) => void' } },
     },
-    modal: {
+    isModal: {
       description: 'While open, locks page scroll and makes the rest of the page inert. `false` leaves the page scrollable and clickable.',
       control: 'boolean',
       table: { type: { summary: 'boolean' }, defaultValue: { summary: 'true' } },
+    },
+    modal: {
+      description: 'Deprecated: use `isModal`. Removed in the next minor.',
+      control: false,
+      table: { disable: true },
     },
     container: {
       description: 'Where the popup renders instead of `<body>`, e.g. an element in fullscreen, where a popup in `<body>` would not show.',
@@ -93,6 +98,9 @@ type Story = StoryObj<typeof meta>
 
 const body = () => within(document.body)
 
+const isScrollLocked = () =>
+  [document.documentElement, document.body].some((el) => /hidden|clip/.test(getComputedStyle(el).overflowY))
+
 export const Default: Story = {
   play: async ({ canvas }) => {
     onDuplicate.mockClear()
@@ -109,6 +117,50 @@ export const Default: Story = {
     await expect(onDuplicate).toHaveBeenCalledOnce()
     await waitFor(() => expect(body().queryByRole('menu')).toBeNull())
     await expect(trigger).toHaveFocus()
+  },
+}
+
+/** Modal by default: page scroll is locked while the menu is open. */
+export const Modal: Story = {
+  play: async ({ canvas }) => {
+    await userEvent.click(canvas.getByRole('button', { name: 'Actions' }))
+    await body().findByRole('menu')
+    await waitFor(() => expect(isScrollLocked()).toBe(true))
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(body().queryByRole('menu')).toBeNull())
+    await waitFor(() => expect(isScrollLocked()).toBe(false))
+  },
+}
+
+/** `isModal={false}` leaves the page scrollable while the menu is open. */
+export const NonModal: Story = {
+  args: { isModal: false },
+  play: async ({ canvas }) => {
+    await userEvent.click(canvas.getByRole('button', { name: 'Actions' }))
+    await body().findByRole('menu')
+    await expect(isScrollLocked()).toBe(false)
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(body().queryByRole('menu')).toBeNull())
+  },
+}
+
+let warn: MockInstance<typeof console.warn>
+
+/** `modal` is the deprecated name of `isModal`: it still works, and warns in development. */
+export const DeprecatedModalProp: Story = {
+  tags: ['!dev', '!autodocs'],
+  args: { modal: false },
+  beforeEach: () => {
+    warn = spyOn(console, 'warn').mockImplementation(() => {})
+    return () => warn.mockRestore()
+  },
+  play: async ({ canvas }) => {
+    await expect(warn).toHaveBeenCalledWith(expect.stringContaining('`modal` is deprecated'))
+    await userEvent.click(canvas.getByRole('button', { name: 'Actions' }))
+    await body().findByRole('menu')
+    await expect(isScrollLocked()).toBe(false)
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(body().queryByRole('menu')).toBeNull())
   },
 }
 
@@ -229,7 +281,7 @@ function Pictured(props: MenuProps) {
   return (
     <div ref={setContainer} inert data-menu-picture style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'flex-start', gap: 'var(--space-1)' }}>
       <style>{`[data-menu-picture] .${styles.positioner} { position: static !important; transform: none !important; }`}</style>
-      {container && <Menu {...props} open modal={false} container={container} />}
+      {container && <Menu {...props} open isModal={false} container={container} />}
     </div>
   )
 }

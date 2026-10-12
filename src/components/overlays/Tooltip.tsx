@@ -20,6 +20,8 @@ export interface TooltipProps {
   onOpenChange?: (open: boolean) => void
   /** Never open, e.g. while the trigger's label is already visible. */
   disabled?: boolean
+  /** Where the tooltip renders instead of `<body>`, e.g. an element in fullscreen. */
+  container?: HTMLElement | null
   className?: string
 }
 
@@ -34,6 +36,7 @@ export function Tooltip({
   defaultOpen = false,
   onOpenChange,
   disabled = false,
+  container,
   className,
 }: TooltipProps) {
   const id = useId()
@@ -56,7 +59,7 @@ export function Tooltip({
         // open, point the trigger at it so it is read as a description.
         aria-describedby={open ? id : undefined}
       />
-      <BaseTooltip.Portal>
+      <BaseTooltip.Portal container={container}>
         <BaseTooltip.Positioner className={styles.positioner} side={side} align={align} sideOffset={6}>
           <BaseTooltip.Popup id={id} role="tooltip" className={cn(styles.popup, className)}>
             {content}

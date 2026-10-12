@@ -37,4 +37,4 @@ Sau 1.0: breaking → major, thêm → minor, sửa → patch.
 
 ## Status
 
-Component dùng đủ bốn status: `experimental`, `beta`, `stable`, `deprecated`. Điều kiện từng bậc nằm trong SKILL.md, phase 5.
+Component dùng đủ bốn status: `experimental`, `beta`, `stable`, `deprecated`. Điều kiện từng bậc nằm trong [COMPONENTS.md](../COMPONENTS.md), phần 5.

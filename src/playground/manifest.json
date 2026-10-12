@@ -1995,7 +1995,12 @@
         {
           "name": "maxItems",
           "control": "number",
-          "description": "Collapse the middle when there are more than this many: the first item,\n\"…\", and the last `maxItems - 1`. The \"…\" expands them in place."
+          "description": "Collapse the middle beyond this many items (2 or more): the first item, \"…\", and the last `maxItems - 1`. \"…\" expands them in place."
+        },
+        {
+          "name": "separator",
+          "control": "text",
+          "description": "Drawn between items, hidden from screen readers."
         },
         {
           "name": "size",
@@ -2004,7 +2009,8 @@
             "sm",
             "md"
           ],
-          "default": "md"
+          "default": "md",
+          "description": "Text size: `body-sm` (`sm`) or `body` (`md`)."
         }
       ]
     },
@@ -2019,12 +2025,14 @@
         {
           "name": "href",
           "control": "text",
-          "default": "#pricing"
+          "default": "#pricing",
+          "description": "Where it goes. Without one (or with `isDisabled`) it cannot navigate and is no longer a link to assistive tech."
         },
         {
           "name": "children",
           "control": "text",
-          "default": "See pricing"
+          "default": "See pricing",
+          "description": "The link text. Say where it goes (\"See pricing\"), not \"click here\"."
         },
         {
           "name": "variant",
@@ -2033,7 +2041,9 @@
             "primary",
             "accent",
             "secondary"
-          ]
+          ],
+          "default": "primary",
+          "description": "Colour. `accent` is the foreground, as on Button; `secondary` is muted, for footers and meta text."
         },
         {
           "name": "underline",
@@ -2041,7 +2051,21 @@
           "options": [
             "always",
             "hover"
-          ]
+          ],
+          "default": "always",
+          "description": "`always` inside running text: colour alone does not mark a link. `hover` only where the context already says \"these are links\", like a nav list."
+        },
+        {
+          "name": "isExternal",
+          "control": "boolean",
+          "default": false,
+          "description": "Opens in a new tab, with `rel=\"noopener noreferrer\"`, an external icon and \"(opens in a new tab)\" for screen readers."
+        },
+        {
+          "name": "isDisabled",
+          "control": "boolean",
+          "default": false,
+          "description": "Drops `href` and every `on*` handler, so it cannot navigate; sets `aria-disabled`."
         }
       ]
     },
@@ -2077,7 +2101,7 @@
           "description": "How the popup lines up with the trigger along that side."
         },
         {
-          "name": "modal",
+          "name": "isModal",
           "control": "boolean",
           "default": true,
           "description": "While open, locks page scroll and makes the rest of the page inert. `false` leaves the page scrollable and clickable."
@@ -2095,12 +2119,14 @@
         {
           "name": "totalPages",
           "control": "number",
-          "default": 10
+          "default": 10,
+          "description": "How many pages there are. Below 1 counts as 1."
         },
         {
           "name": "defaultPage",
           "control": "number",
-          "default": 1
+          "default": 1,
+          "description": "The page shown first, when Pagination keeps its own state."
         },
         {
           "name": "siblingCount",
@@ -2121,7 +2147,8 @@
             "sm",
             "md"
           ],
-          "default": "md"
+          "default": "md",
+          "description": "24px (`sm`) or 32px (`md`) controls, from the control tiers."
         }
       ]
     },
@@ -2193,7 +2220,8 @@
       "props": [
         {
           "name": "defaultValue",
-          "control": "text"
+          "control": "text",
+          "description": "The tab selected first, when Tabs keeps its own state."
         },
         {
           "name": "appearance",
@@ -2203,7 +2231,7 @@
             "pills"
           ],
           "default": "underline",
-          "description": "`underline`: a line under the selected tab. `pills`: a filled segment, for switching views in a toolbar."
+          "description": "`underline`: a line under the selected tab, for the sections of a page. `pills`: a filled segment, for switching views in a toolbar."
         },
         {
           "name": "size",
@@ -2212,7 +2240,8 @@
             "sm",
             "md"
           ],
-          "default": "md"
+          "default": "md",
+          "description": "24px (`sm`) or 32px (`md`) tabs, from the control tiers."
         },
         {
           "name": "orientation",
@@ -2221,7 +2250,8 @@
             "horizontal",
             "vertical"
           ],
-          "default": "horizontal"
+          "default": "horizontal",
+          "description": "A row above the panel, or a column beside it. Arrow keys follow: Left and Right, or Up and Down."
         },
         {
           "name": "isFullWidth",
@@ -2233,13 +2263,13 @@
           "name": "activateOnFocus",
           "control": "boolean",
           "default": false,
-          "description": "Select a tab as soon as it gets focus, rather than on Enter or Space."
+          "description": "Select a tab as soon as it gets focus, rather than on Enter or Space. For light panels only."
         },
         {
           "name": "keepMounted",
           "control": "boolean",
           "default": false,
-          "description": "Keep hidden panels in the DOM, e.g. to preserve their state."
+          "description": "Keep hidden panels in the DOM, e.g. to preserve a form's state."
         }
       ]
     },
@@ -2389,6 +2419,18 @@
       "storyId": "components-overlays-modal--default",
       "props": [
         {
+          "name": "title",
+          "control": "text",
+          "default": "Edit profile",
+          "description": "Required: it names the dialog. Say what the modal is for: \"Edit profile\", \"Delete “Atlas”?\"."
+        },
+        {
+          "name": "description",
+          "control": "text",
+          "default": "Changes show on your public page straight away.",
+          "description": "Optional, under the title in `--muted-foreground`. Read as the dialog's description."
+        },
+        {
           "name": "size",
           "control": "inline-radio",
           "options": [
@@ -2397,33 +2439,42 @@
             "lg"
           ],
           "default": "md",
-          "description": "Max width: 24rem, 32rem, 48rem. Never wider than the screen."
+          "description": "Max width: 24rem (`sm`), 32rem (`md`) or 48rem (`lg`). Never wider than the screen."
         },
         {
           "name": "hasCloseButton",
           "control": "boolean",
-          "description": "Defaults to `true`, or `false` when `isAlert`."
+          "description": "The close button in the corner."
         },
         {
           "name": "closeLabel",
           "control": "text",
-          "default": "Close"
+          "default": "Close",
+          "description": "Accessible name of the close button."
         },
         {
           "name": "isAlert",
           "control": "boolean",
           "default": false,
-          "description": "A decision that must be made: `role=\"alertdialog\"`, and a click on the\nbackdrop does not close it. Pair it with explicit buttons in `footer`."
+          "description": "A decision that must be made: `role=\"alertdialog\"`, no close button by default, and a press on the backdrop does not close it."
         },
         {
           "name": "closeOnBackdropClick",
           "control": "boolean",
           "default": true,
-          "description": "Close on a click on the backdrop. Ignored when `isAlert`."
+          "description": "Close on a press on the backdrop. Ignored when `isAlert`."
+        },
+        {
+          "name": "isModal",
+          "control": "boolean",
+          "default": true,
+          "description": "While open, traps focus, locks page scroll and makes the rest of the page inert. `false` drops those three, for pictures of a modal; the backdrop still covers the page. Ignored when `isAlert`: an alert is always modal."
         },
         {
           "name": "defaultOpen",
-          "control": "boolean"
+          "control": "boolean",
+          "default": false,
+          "description": "Open on first render, uncontrolled."
         }
       ]
     },
@@ -2436,6 +2487,18 @@
       "storyId": "components-overlays-popover--default",
       "props": [
         {
+          "name": "title",
+          "control": "text",
+          "default": "Share this file",
+          "description": "Names the popover, which is a dialog. Without one, pass `aria-label`."
+        },
+        {
+          "name": "description",
+          "control": "text",
+          "default": "Anyone you invite can view and comment.",
+          "description": "Optional, under the title in `--muted-foreground`. Read as the dialog's description."
+        },
+        {
           "name": "side",
           "control": "inline-radio",
           "options": [
@@ -2444,7 +2507,8 @@
             "bottom",
             "left"
           ],
-          "default": "bottom"
+          "default": "bottom",
+          "description": "Which side of the trigger it opens on. Flips when there is no room."
         },
         {
           "name": "align",
@@ -2454,34 +2518,38 @@
             "center",
             "end"
           ],
-          "default": "center"
+          "default": "center",
+          "description": "How it lines up with the trigger along that side."
         },
         {
           "name": "hasCloseButton",
           "control": "boolean",
           "default": false,
-          "description": "A close button in the corner. Escape and a click outside close it either way."
+          "description": "A close button in the corner. Escape and a press outside close it either way."
         },
         {
           "name": "closeLabel",
           "control": "text",
-          "default": "Close"
+          "default": "Close",
+          "description": "Accessible name of the close button."
         },
         {
           "name": "openOnHover",
           "control": "boolean",
           "default": false,
-          "description": "Open on hover as well as click, for previews. Content must still be reachable by click and keyboard."
+          "description": "Open on hover as well as on click, for previews. Click, keyboard and touch still open it."
         },
         {
           "name": "defaultOpen",
-          "control": "boolean"
+          "control": "boolean",
+          "default": false,
+          "description": "Open on first render, uncontrolled."
         },
         {
           "name": "isModal",
           "control": "boolean",
           "default": false,
-          "description": "Trap focus inside while open, lock page scroll and block clicks outside (Base UI's modal mode)."
+          "description": "Trap focus inside while open, lock page scroll and block presses outside (Base UI's modal mode)."
         }
       ]
     },
@@ -2494,6 +2562,12 @@
       "storyId": "components-overlays-tooltip--default",
       "props": [
         {
+          "name": "content",
+          "control": "text",
+          "default": "Copy link",
+          "description": "What the tooltip says. Short: a label or a hint, never the only way to learn something essential."
+        },
+        {
           "name": "side",
           "control": "inline-radio",
           "options": [
@@ -2502,7 +2576,8 @@
             "bottom",
             "left"
           ],
-          "default": "top"
+          "default": "top",
+          "description": "Which side of the trigger it opens on. Flips when there is no room."
         },
         {
           "name": "align",
@@ -2512,7 +2587,8 @@
             "center",
             "end"
           ],
-          "default": "center"
+          "default": "center",
+          "description": "How it lines up with the trigger along that side."
         },
         {
           "name": "delay",
@@ -2523,12 +2599,14 @@
         {
           "name": "closeDelay",
           "control": "number",
-          "default": 0
+          "default": 0,
+          "description": "Milliseconds before it closes once the pointer leaves."
         },
         {
           "name": "defaultOpen",
           "control": "boolean",
-          "default": false
+          "default": false,
+          "description": "Open on first render, uncontrolled."
         },
         {
           "name": "disabled",

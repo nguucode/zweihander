@@ -227,8 +227,10 @@ destructive actions the last place, after a separator.
   cannot find it.
 - A disabled link has no `href`, so it cannot be followed.
 - Items are 32px tall, 44px on touch screens (`pointer: coarse`).
-- `modal` (the default) makes the rest of the page inert while the menu
+- `isModal` (the default) makes the rest of the page inert while the menu
   is open, so a screen reader stays in the menu.
+- `modal` is the old name of `isModal`. It still works, warns in
+  development, and is removed in the next minor.
 
 </DocTab>
 </DocTabs>
