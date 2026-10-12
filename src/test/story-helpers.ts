@@ -61,3 +61,24 @@ export const hoverRules = (el: Element) =>
     (r): r is CSSStyleRule =>
       r instanceof CSSStyleRule && r.selectorText.includes(':hover') && el.matches(r.selectorText.replaceAll(':hover', '')),
   )
+
+/**
+ * Moves the clock to `today` (time of day kept) until the returned cleanup
+ * runs: `new Date()` and `Date.now()` follow, dates built from parts do not.
+ * For a story `beforeEach`, so a story that reads today can be pinned to a
+ * date that breaks it.
+ */
+export const mockToday = (today: Date) => {
+  const Real = Date
+  const now = new Real()
+  const offset = new Real(today.getFullYear(), today.getMonth(), today.getDate(), now.getHours(), now.getMinutes()).getTime() - now.getTime()
+  globalThis.Date = class extends Real {
+    constructor(...args: unknown[]) {
+      super(...((args.length ? args : [Real.now() + offset]) as [number]))
+    }
+    static now = () => Real.now() + offset
+  } as DateConstructor
+  return () => {
+    globalThis.Date = Real
+  }
+}

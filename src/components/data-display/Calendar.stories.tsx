@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test'
 import { Theme } from '@/theme/Theme'
-import { contrast } from '@/test/story-helpers'
+import { contrast, mockToday } from '@/test/story-helpers'
 import { Calendar } from './Calendar'
 
 /**
@@ -187,7 +187,8 @@ export const Today: Story = {
         {(['light', 'dark'] as const).flatMap((mode) =>
           [undefined, range].map((r) => (
             <Theme key={mode + !!r} appearance={mode} style={{ background: 'var(--background)', padding: 8 }} data-audit={`${mode}${r ? ' range' : ''}`}>
-              <Calendar {...args} range={r} />
+              {/* Today's month, not the range's: on the 1st the range starts last month. */}
+              <Calendar {...args} range={r} defaultMonth={now} />
             </Theme>
           )),
         )}
@@ -209,6 +210,12 @@ export const Today: Story = {
     }
     await expect(failures).toEqual([])
   },
+}
+
+/** Today on the 1st: yesterday is last month, so the range starts outside the month shown. */
+export const TodayOnTheFirst: Story = {
+  ...Today,
+  beforeEach: () => mockToday(new Date(2026, 10, 1)),
 }
 
 /** 31 January + one month lands on the last day of February. */
