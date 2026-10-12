@@ -8,12 +8,51 @@ const meta = {
   title: 'Components/Loaders/Skeleton',
   tags: ['beta'],
   component: Skeleton,
-  argTypes: { appearance: { control: 'inline-radio', options: ['circle', 'square', 'rounded'] } },
+  // These descriptions are the docs' API table and the Playground's props panel.
+  argTypes: {
+    width: {
+      description: 'A number is pixels; a string is any CSS length. Fills the container when omitted; a circle is 40px.',
+      control: 'number',
+      table: { type: { summary: 'number | string' }, defaultValue: { summary: "'100%'" } },
+    },
+    height: {
+      description: 'Of the shape, or of each line with `rows`. A single circle ignores it: its height is its width.',
+      control: 'number',
+      table: { type: { summary: 'number | string' }, defaultValue: { summary: '16' } },
+    },
+    appearance: {
+      description: 'The corners: `square`, `rounded`, or a `circle` for an avatar. With `rows`, a circle draws rounded lines.',
+      control: 'inline-radio',
+      options: ['circle', 'square', 'rounded'],
+      table: { type: { summary: "'circle' | 'square' | 'rounded'" }, defaultValue: { summary: "'square'" } },
+    },
+    rows: {
+      description: 'Lines of text: stacked bars 8px apart, the last one at 60%.',
+      control: 'number',
+      table: { type: { summary: 'number' } },
+    },
+    isFullWidth: {
+      description: 'Fills the width of its container, whatever `width` says.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    hasAnimation: {
+      description: 'A slow pulse. Off by default: a screen of pulsing shapes is noise.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+  },
   args: { width: 240, height: 16 },
+  excludeStories: ['anatomyParts'],
 } satisfies Meta<typeof Skeleton>
 
 export default meta
 type Story = StoryObj<typeof meta>
+
+// On the page background, as a skeleton sits in an app. In dark mode --muted
+// is the docs stage's own colour (--surface-filled), so a bare skeleton on a
+// stage would vanish.
+const card = { background: 'var(--background)', padding: 'var(--space-4)', borderRadius: 'var(--radius-lg)' }
 
 export const Default: Story = {
   play: async ({ canvasElement }) => {
@@ -79,8 +118,8 @@ export const Animated: Story = {
 /** How it is used: shapes of the content, with aria-busy on the region. */
 export const CardPlaceholder: Story = {
   render: () => (
-    <div aria-busy="true" aria-label="Loading profile" role="region" style={{ display: 'flex', gap: 'var(--space-3)', inlineSize: 320 }}>
-      <Skeleton appearance="circle" width={40} hasAnimation />
+    <div aria-busy="true" aria-label="Loading profile" role="region" style={{ ...card, display: 'flex', alignItems: 'flex-start', gap: 'var(--space-3)', inlineSize: 320 }}>
+      <Skeleton appearance="circle" width={40} hasAnimation style={{ flexShrink: 0 }} />
       <div style={{ flex: 1, display: 'grid', gap: 'var(--space-2)' }}>
         <Skeleton appearance="rounded" height={14} width="50%" hasAnimation />
         <Skeleton appearance="rounded" rows={2} height={10} isFullWidth hasAnimation />
@@ -119,4 +158,39 @@ export const Muted: Story = {
       await expect((x + 0.05) / (y + 0.05)).toBeLessThan(3)
     }
   },
+}
+
+/** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
+export const anatomyParts = [
+  { name: 'Shape', selector: '[data-part="shape"]', description: 'One bone in --muted, sized like what it stands in for: here an avatar.' },
+  { name: 'Line', selector: '[data-part="rows"] > :first-child', description: 'With rows, one line of text.' },
+  { name: 'Last line', selector: '[data-part="rows"] > :last-child', description: 'At 60%, like the end of a paragraph.' },
+]
+
+/** Every part present: a shape, and a stack of lines. */
+export const Anatomy: Story = {
+  tags: ['!dev'],
+  render: () => (
+    <div style={{ ...card, display: 'flex', alignItems: 'flex-start', gap: 'var(--space-3)', inlineSize: 320 }}>
+      <Skeleton appearance="circle" width={40} data-part="shape" style={{ flexShrink: 0 }} />
+      <Skeleton appearance="rounded" rows={3} height={12} isFullWidth data-part="rows" style={{ flex: 1 }} />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    // The docs markers follow these selectors: a DOM change must not leave
+    // a marker pointing at nothing, or at the wrong part.
+    const found = anatomyParts.map(({ selector }) => canvasElement.querySelector(selector))
+    await expect(found.every(Boolean)).toBe(true)
+    await expect(new Set(found).size).toBe(anatomyParts.length)
+  },
+}
+
+/** Guidelines, Don't: one block for a whole card, which jumps to a different layout on load. */
+export const DontOneBlock: Story = {
+  tags: ['!dev'],
+  render: () => (
+    <div aria-busy="true" aria-label="Loading profile" role="region" style={{ ...card, inlineSize: 320 }}>
+      <Skeleton appearance="rounded" height={88} isFullWidth />
+    </div>
+  ),
 }

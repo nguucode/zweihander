@@ -1,76 +1,194 @@
-import { Meta, Canvas, Controls } from '@storybook/addon-docs/blocks'
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
+import { ProgressBar } from './ProgressBar'
 import * as ProgressBarStories from './ProgressBar.stories'
 
 <Meta of={ProgressBarStories} />
 
 # Progress Bar
 
+<DocTabs>
+<DocTab value="overview">
+
 Shows how far a task with a known size has got: an upload, an install,
-steps of a setup. Spec:
-[uiguideline.com/components/progress-bar](https://www.uiguideline.com/components/progress-bar).
-Behaviour from Base UI's [Progress](https://base-ui.com/react/components/progress).
+the steps of a setup.
 
-<Canvas of={ProgressBarStories.Variants} />
-
-## Anatomy
-
-| Part | What it is |
-| --- | --- |
-| **Label** | `label`, above the bar. Names the progressbar. |
-| **Track** | The full length, `--secondary`. |
-| **Indicator** | The filled share, coloured by `variant`. A sliding third when indeterminate. |
-| **Value label** | `showValueLabel`: the percentage after the bar, in tabular figures. |
-
-## Props
-
-| Prop | Values | Default | |
-| --- | --- | --- | --- |
-| `value` | number | `0` | |
-| `max` | number | `100` | The spec's `maxValue`. |
-| `size` | `sm`, `md`, `lg` | `md` | Track height 4, 8, 12px. |
-| `variant` | `primary`, `accent`, `secondary`, `destructive` | `primary` | Colour of the fill. |
-| `isRounded` | boolean | `false` | Pill ends on track and fill. |
-| `isIndeterminate` | boolean | `false` | Progress with no known amount. |
-| `showValueLabel` | boolean | `false` | Hidden while indeterminate. |
-| `label` | node | – | |
-| `aria-label` | string | – | The name when there is no visible `label`. |
-
-Any other prop goes to Base UI's `Progress.Root`: `id`, `aria-labelledby`,
-`min`, `format`, `locale`, `getAriaValueText`.
-
-<Controls of={ProgressBarStories.Default} />
-
-### Differences from the spec
-
-- **`max`, not `maxValue`**, the name Base UI and the native
-  `<progress>` use.
-
-### Design notes
-
-- **The fill is a text colour, not a solid.** The fill is what carries
-  the value, so it must clear 3:1 against the track, and some accent
-  solids do not: amber's is about 2.9:1 on white. So `primary` fills with
-  `--primary-text`, `accent` with `--foreground`, `secondary` with
-  `--muted-foreground` and `destructive` with `--danger-text`, each a
-  colour meant to be read as text on the page, which keeps it at 3:1 or
-  more on the track.
-
-## Usage
+<Status of={ProgressBarStories} />
 
 <Canvas of={ProgressBarStories.ValueLabel} />
 
+## Variants
+
+`variant` is the colour of the fill, by meaning. The track is the same in
+all four.
+
+<Canvas of={ProgressBarStories.Variants} />
+
+| Variant | Use for |
+| --- | --- |
+| `primary` | The default: a task the user started and is waiting on. |
+| `accent` | A strong fill in neutral black or white, where the brand colour would clash or already means something else. |
+| `secondary` | Low emphasis: progress in the background, or one of many bars in a list. |
+| `destructive` | A task that is failing, or a quota about to run out. |
+
+`size` is the track's thickness, and `isRounded` gives it pill ends.
+
 <Canvas of={ProgressBarStories.Sizes} />
+
+When a task has started but its size is not known yet, go indeterminate,
+and switch to a value as soon as there is one.
+
+<Canvas of={ProgressBarStories.Indeterminate} />
+
+## Resources
+
+From npm, or copied into your project through the registry:
+
+```js
+import { ProgressBar } from 'zweihander/progress-bar'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/progress-bar.json
+```
+
+- Source: [src/components/loaders/ProgressBar.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/loaders/ProgressBar.tsx)
+- Spec: [uiguideline.com/components/progress-bar](https://www.uiguideline.com/components/progress-bar)
+- Behaviour: [Base UI Progress](https://base-ui.com/react/components/progress)
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
+## Anatomy
+
+<Anatomy parts={ProgressBarStories.anatomyParts}>
+  <Story of={ProgressBarStories.Anatomy} />
+</Anatomy>
+
+## Measurements
+
+The bar fills the width of its container. Each size sets only the track's
+height.
+
+<SpecTable caption="sm" rows={[{ part: 'Track', property: 'Height', token: '--space-1' }]} />
+
+<SpecTable caption="md" rows={[{ part: 'Track', property: 'Height', token: '--space-2' }]} />
+
+<SpecTable caption="lg" rows={[{ part: 'Track', property: 'Height', token: '--space-3' }]} />
+
+<SpecTable
+  caption="Every size"
+  rows={[
+    { part: 'Label to track', property: 'Gap', token: '--space-1-5' },
+    { part: 'Track to value label', property: 'Gap', token: '--space-3' },
+    { part: 'Track and indicator, rounded', property: 'Corner radius', token: '--radius-pill' },
+    { part: 'Label and value label', property: 'Font size', token: '--text-body' },
+    { part: 'Label and value label', property: 'Line height', token: '--leading-body' },
+    { part: 'Indicator', property: 'Transition between values', token: '--duration-slow' },
+  ]}
+/>
+
+The value label is at least 4 characters wide, so the bar does not jump as
+the number grows from 9% to 100%.
+
+## Color
+
+The fill is what carries the value, so it must clear 3:1 against the
+track. Not every accent's solid does (amber's is about 2.9:1 on white), so
+each variant fills with a colour meant to be read as text on the page,
+which keeps it at 3:1 or better on the track. Switch the theme and the
+accent in the toolbar: the values follow.
+
+<SpecTable caption="primary" rows={[{ part: 'Indicator', property: 'Background', token: '--primary-text' }]} />
+
+<SpecTable caption="accent" rows={[{ part: 'Indicator', property: 'Background', token: '--foreground' }]} />
+
+<SpecTable caption="secondary" rows={[{ part: 'Indicator', property: 'Background', token: '--muted-foreground' }]} />
+
+<SpecTable caption="destructive" rows={[{ part: 'Indicator', property: 'Background', token: '--danger-text' }]} />
+
+<SpecTable
+  caption="Every variant"
+  rows={[
+    { part: 'Track', property: 'Background', token: '--secondary' },
+    { part: 'Label', property: 'Colour', token: '--foreground' },
+    { part: 'Value label', property: 'Colour', token: '--muted-foreground' },
+  ]}
+/>
+
+## States
+
+A progress bar is not interactive: it has no hover, focus or pressed
+state.
+
+<States
+  states={[
+    { label: 'Progress' },
+    { label: 'Indeterminate', content: <ProgressBar isIndeterminate label="Connecting" /> },
+    { label: 'Complete', content: <ProgressBar value={100} label="Uploaded" showValueLabel /> },
+  ]}
+>
+  <ProgressBar value={70} label="Uploading" showValueLabel />
+</States>
+
+- **Progress** fills from the start edge, easing between values over
+  `--duration-slow`.
+- **Indeterminate** slides a third of the track across, once every 1.4s.
+  The value label is hidden: there is no value to show.
+- **Complete** is a full bar. It does not change on its own; replace or
+  remove it when the task ends.
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={ProgressBarStories} />
+</div>
+
+Every other prop goes to Base UI's `Progress.Root`: `id`,
+`aria-labelledby`, `min`, `format`, `locale`, `getAriaValueText`.
+
+### Differences from the spec
+
+- **`max`, not `maxValue`**, the name Base UI and the native `<progress>`
+  use.
+
+</DocTab>
+<DocTab value="guidelines">
+
+## When to use
+
+Use a Progress Bar for a task that takes long enough to wait on and whose
+size is known, or will be: an upload, an import, the steps of a setup.
+Name the task in the `label`.
+
+<DoDont
+  do={<Story of={ProgressBarStories.DoNameTheTask} />}
+  doCaption="The label names the task, so the reader knows what they are waiting for."
+  dont={<Story of={ProgressBarStories.DontBareBar} />}
+  dontCaption="A bare bar leaves sighted readers guessing what it measures, even with an aria-label."
+/>
 
 `value` is out of `max`, and the value label shows the percentage:
 
 <Canvas of={ProgressBarStories.Max} />
 
-When a task has started but its size is not known yet, go indeterminate
-and switch to a value as soon as there is one.
-
-<Canvas of={ProgressBarStories.Indeterminate} />
+Without a visible label, `aria-label` names the bar for screen readers.
+Use it only where the context already says what the bar measures.
 
 <Canvas of={ProgressBarStories.WithoutVisibleLabel} />
+
+## When not to use
+
+- **For a short wait with no known size.** Use a
+  [Spinner](?path=/docs/components-loaders-spinner--docs).
+- **For content whose shape you know.** A
+  [Skeleton](?path=/docs/components-loaders-skeleton--docs) keeps the
+  layout.
+- **For steps the user moves through themselves.** Use a
+  [Stepper](?path=/docs/components-navigation-stepper--docs): it names the
+  steps, and the user can go back.
 
 ## Accessibility
 
@@ -81,7 +199,10 @@ and switch to a value as soon as there is one.
   `aria-label`.
 - The fill clears 3:1 on the track for every variant and accent, in both
   modes. The value label is `--muted-foreground`.
-- Under `prefers-reduced-motion` the fill stops animating between values
-  and the indeterminate slide slows from 1.4s to 4s a pass.
+- Under `prefers-reduced-motion` the fill stops easing between values and
+  the indeterminate slide slows from 1.4s to 4s a pass.
 - A progressbar is not a live region. If completion matters, announce it
   (a Toast, or a status message) when the task ends.
+
+</DocTab>
+</DocTabs>
