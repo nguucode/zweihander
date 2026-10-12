@@ -1,9 +1,12 @@
 // Helpers for play functions only: not part of the registry or the npm build.
 
-const ctx = document.createElement('canvas').getContext('2d', { willReadFrequently: true })!
+// Created on first use, not on import: the Playground manifest script loads
+// story files in Node, where there is no document.
+let canvas: CanvasRenderingContext2D | undefined
 
 /** Any CSS colour (oklch, alpha) to sRGB, painted over the layers beneath it. */
 export const paint = (...layers: string[]) => {
+  const ctx = (canvas ??= document.createElement('canvas').getContext('2d', { willReadFrequently: true })!)
   ctx.clearRect(0, 0, 1, 1)
   for (const layer of layers) {
     ctx.fillStyle = layer
