@@ -1,5 +1,12 @@
+/* Each size is a control tier (see Foundations/Sizing). Page numbers are
+   centred like a button's label, but they are short and the box is square
+   at its minimum, so the normal pad is enough: it only shows on a page
+   number of three digits or more. */
 .pagination {
   --pagination-size: var(--control-md);
+  --pagination-pad: var(--control-md-pad);
+  --pagination-icon: var(--icon-md);
+  --pagination-radius: var(--control-md-radius);
   font-family: var(--font-sans);
   font-size: var(--text-body);
   line-height: var(--leading-body);
@@ -7,6 +14,9 @@
 
 .sm {
   --pagination-size: var(--control-sm);
+  --pagination-pad: var(--control-sm-pad);
+  --pagination-icon: var(--icon-sm);
+  --pagination-radius: var(--control-sm-radius);
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
 }
@@ -30,9 +40,9 @@
   min-inline-size: var(--pagination-size);
   block-size: var(--pagination-size);
   margin: 0;
-  padding: 0 var(--space-2);
+  padding: 0 var(--pagination-pad);
   border: 0;
-  border-radius: var(--radius-control);
+  border-radius: var(--pagination-radius);
   background: transparent;
   color: var(--foreground);
   font: inherit;
@@ -65,7 +75,7 @@ a.control[href] {
 }
 
 .step {
-  font-size: calc(var(--pagination-size) / 2.5);
+  font-size: var(--pagination-icon);
 }
 
 .control:disabled,

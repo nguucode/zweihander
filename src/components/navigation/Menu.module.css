@@ -4,13 +4,15 @@
   outline: none;
 }
 
-/* The same surface as the Select list. */
+/* The same surface as the Select list. --menu-inset is the gap between the
+   popup's edge and its items; the item corner is derived from it below. */
 .popup {
+  --menu-inset: var(--space-1);
   box-sizing: border-box;
   min-inline-size: max(12rem, var(--anchor-width));
   max-block-size: var(--available-height);
   overflow-y: auto;
-  padding: var(--space-1);
+  padding: var(--menu-inset);
   border: 1px solid var(--border);
   border-radius: var(--radius-field);
   background: var(--popover);
@@ -31,13 +33,17 @@
   scale: 0.98;
 }
 
+/* An item is a row of tier md (see Foundations/Sizing): left-aligned text,
+   so the normal pad. Its corner nests inside the popup's: the popup radius
+   minus the inset, so the highlight runs parallel to the popup edge at
+   every preset (8 - 4 = 4px at the default). */
 .item {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--control-md-gap);
   min-block-size: var(--control-md);
-  padding: var(--space-1-5) var(--space-2);
-  border-radius: var(--radius-sm);
+  padding: var(--space-1-5) var(--control-md-pad);
+  border-radius: calc(var(--radius-field) - var(--menu-inset));
   color: inherit;
   text-decoration: none;
   cursor: default;
@@ -79,7 +85,7 @@
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  inline-size: var(--space-4);
+  inline-size: var(--icon-md);
   font-size: var(--icon-md);
 }
 
@@ -115,7 +121,7 @@
 }
 
 .groupLabel {
-  padding: var(--space-1-5) var(--space-2) var(--space-1);
+  padding: var(--space-1-5) var(--control-md-pad) var(--space-1);
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
   font-weight: 500;
