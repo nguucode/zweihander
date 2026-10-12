@@ -1,0 +1,146 @@
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Button } from '../../src/components/buttons/Button'
+import * as ButtonStories from '../../src/components/buttons/Button.stories'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States } from '.'
+
+<Meta title="Internal/Docs blocks demo" />
+
+# Docs blocks demo
+
+The blocks a component docs page is built from, each in use on Button, so
+every one can be checked here in light, dark and at phone width. This page
+is not Button's docs; it passes the same `docs:check` a migrated page must.
+
+Import them in a component's MDX:
+
+```js
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States } from '../../../.storybook/blocks'
+```
+
+<DocTabs>
+<DocTab value="overview">
+
+Overview: what the component is, its main example, its variants, and where
+to get it. `<Canvas>` is Storybook's own block.
+
+<Canvas of={ButtonStories.Default} />
+
+## Resources
+
+`<DocTabs>` takes exactly three `<DocTab>` children: `overview`, `specs`,
+`guidelines`, in that order. The selected tab is kept in the address bar as
+`&tab=specs`, so a link can open on it.
+
+</DocTab>
+<DocTab value="specs">
+
+## Anatomy
+
+`<Anatomy>` takes the real component as children and a list of parts, each
+found by a CSS selector inside it. A selector that finds nothing is called
+out in the key.
+
+<Anatomy
+  parts={[
+    { name: 'Container', selector: 'button', description: 'The box: fill, border and label colour.' },
+    { name: 'Start icon', selector: 'svg', description: 'Decorative, sized to the button.' },
+  ]}
+>
+  <Story of={ButtonStories.WithIcons} />
+</Anatomy>
+
+## Measurements
+
+`<SpecTable>` reads each token's value from the CSS as the page renders, so
+the numbers cannot drift from the code.
+
+<SpecTable
+  caption="md"
+  rows={[
+    { part: 'Container', property: 'Height', token: '--control-md' },
+    { part: 'Container', property: 'Inline padding', token: '--control-md-pad-spacious' },
+    { part: 'Container', property: 'Corner radius', token: '--control-md-radius' },
+    { part: 'Label', property: 'Font size', token: '--text-body' },
+  ]}
+/>
+
+<SpecTable
+  caption="sm"
+  rows={[
+    { part: 'Container', property: 'Height', token: '--control-sm' },
+    { part: 'Container', property: 'Inline padding', token: '--control-sm-pad-spacious' },
+    { part: 'Label', property: 'Font size', token: '--text-body-sm' },
+  ]}
+/>
+
+## Color
+
+Switch the theme in the toolbar: the values follow.
+
+<SpecTable
+  caption="primary, contained"
+  rows={[
+    { part: 'Container', property: 'Background', token: '--primary' },
+    { part: 'Label', property: 'Colour', token: '--primary-foreground' },
+    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+  ]}
+/>
+
+## States
+
+`<States>` shows one example per state. Hover, focus and pressed are forced
+by storybook-addon-pseudo-states; a state that needs other props, like
+disabled, passes its own `content`.
+
+<States
+  states={[
+    { label: 'Enabled' },
+    { label: 'Hover', pseudo: 'hover' },
+    { label: 'Focus', pseudo: 'focus-visible' },
+    { label: 'Pressed', pseudo: 'active' },
+    { label: 'Disabled', content: <Story of={ButtonStories.Disabled} /> },
+  ]}
+>
+  <Story of={ButtonStories.Default} />
+</States>
+
+## API
+
+Storybook's `<ArgTypes>`, from each prop's `argTypes.description` in the
+stories file.
+
+<ArgTypes of={ButtonStories} />
+
+</DocTab>
+<DocTab value="guidelines">
+
+## When to use
+
+`<DoDont>` sets a right and a wrong example side by side. In a real page both
+come from stories (`<Story of={…} />`), the Don't one tagged `!dev`.
+
+## When not to use
+
+These blocks are for component docs. Foundations and Patterns stay single
+pages.
+
+<DoDont
+  do={<Button>Save</Button>}
+  doCaption="One primary button: the thing to do next."
+  dont={
+    <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
+      <Button>Save</Button>
+      <Button>Publish</Button>
+    </div>
+  }
+  dontCaption="Two primary buttons compete for the same click."
+/>
+
+## Accessibility
+
+Each block's own behaviour is tested in `DocBlocks.stories.tsx`: the tabs by
+mouse and arrow keys, the anatomy markers by name, the token values across
+themes, the state labels, and the Do / Don't words.
+
+</DocTab>
+</DocTabs>

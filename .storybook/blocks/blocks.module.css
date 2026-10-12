@@ -1,0 +1,195 @@
+/* Docs blocks: layout for the component docs pages, never shipped.
+   Every root carries `sb-unstyled` (set in the components) so Storybook's
+   docs typography does not restyle the tables and figures drawn here. */
+
+/* Each block is its own card on the kit's background. Storybook's docs page
+   stays light when the toolbar switches to dark, while the tokens switch, so
+   a block that painted on the page would show dark-mode text on white. */
+.block {
+  margin-block: var(--space-6);
+  padding: var(--space-4);
+  font-family: var(--font-sans);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--foreground);
+  background: var(--background);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-panel);
+}
+
+/* A stage holds a live example on the filled surface, centred. */
+.stage {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  padding: var(--space-8) var(--space-6);
+  background: var(--surface-filled);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-panel);
+}
+
+.caption {
+  margin-block-end: var(--space-2);
+  font-weight: 500;
+  text-align: start;
+}
+
+/* The key under an anatomy example. */
+.stage + .scroll {
+  margin-block-start: var(--space-4);
+}
+
+/* Tables scroll inside their own box on a narrow screen, so the page never
+   scrolls sideways. */
+.scroll {
+  overflow-x: auto;
+}
+
+.table {
+  inline-size: 100%;
+  border-collapse: collapse;
+  text-align: start;
+}
+
+.table th,
+.table td {
+  padding: var(--space-2) var(--space-3);
+  border-block-end: 1px solid var(--border);
+  text-align: start;
+  vertical-align: top;
+}
+
+.table tbody tr:last-child > * {
+  border-block-end: none;
+}
+
+.table th {
+  font-weight: 500;
+  color: var(--muted-foreground);
+}
+
+.table code {
+  font-family: var(--font-mono);
+  white-space: nowrap;
+}
+
+.numeral {
+  inline-size: var(--space-6);
+  color: var(--muted-foreground);
+}
+
+.missing {
+  color: var(--danger-text);
+}
+
+/* Anatomy: numbered markers in rows above and below the example (placed by
+   Anatomy.tsx), each with a leader line to its part. Later in the DOM than
+   the example, so painted over it; clicks pass through. */
+.anatomy {
+  padding-block: var(--space-12);
+}
+
+.marker,
+.leader {
+  position: absolute;
+  pointer-events: none;
+}
+
+.marker {
+  display: grid;
+  place-items: center;
+  inline-size: var(--control-xs);
+  block-size: var(--control-xs);
+  translate: -50% -50%;
+  font-size: var(--text-body-xs);
+  line-height: var(--leading-body-xs);
+  font-weight: 600;
+  color: var(--primary-foreground);
+  background: var(--primary);
+  border-radius: var(--radius-pill);
+}
+
+.leader {
+  inline-size: 1px;
+  translate: -50% 0;
+  background: var(--primary);
+}
+
+.value {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.swatch {
+  flex: none;
+  inline-size: var(--space-4);
+  block-size: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+
+/* States and Do / Don't: a grid that wraps to one column when narrow. */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr));
+  gap: var(--space-3);
+  list-style: none;
+}
+
+.pair {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  gap: var(--space-4);
+}
+
+.cell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  min-inline-size: 0;
+}
+
+.cell .stage {
+  flex: 1;
+  padding: var(--space-6) var(--space-4);
+}
+
+.label {
+  color: var(--muted-foreground);
+  text-align: center;
+}
+
+/* Do / Don't: the verdict is a word and an icon, the coloured rule only
+   repeats it. */
+.do .stage {
+  border-block-start: 3px solid var(--success);
+}
+
+.dont .stage {
+  border-block-start: 3px solid var(--destructive);
+}
+
+.verdict {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-weight: 600;
+}
+
+.do .verdict {
+  color: var(--success-text);
+}
+
+.dont .verdict {
+  color: var(--danger-text);
+}
+
+/* A state is a still picture: shown at its end value at once, not mid-way
+   through the component's own transition into it. */
+.states .stage * {
+  transition: none;
+}

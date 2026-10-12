@@ -88,6 +88,8 @@ const preview: Preview = {
           ],
           'Components',
           'Patterns',
+          // Tooling for the docs themselves, last.
+          'Internal',
         ],
       },
     },
