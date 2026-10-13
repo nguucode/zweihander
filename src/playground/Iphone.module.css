@@ -1,6 +1,7 @@
 /* The iPhone frame's colours: Magic UI's neutral greys as the kit's
    semantic tokens, so the frame follows the appearance it sits in. The
-   camera pill is black in both, as on the device. */
+   camera pill departs from Magic UI's light grey: near black in both, as
+   on the device, so it reads as a Dynamic Island over any page. */
 
 .phone {
   --phone-body: color-mix(in oklch, var(--foreground) 12%, var(--card));

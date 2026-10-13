@@ -742,14 +742,14 @@ export const MobileFrame: Story = {
     const look = () => ({
       status: getComputedStyle(status).color,
       home: getComputedStyle(home).backgroundColor,
-      bezel: getComputedStyle(phone.querySelector('path')!).fill,
+      body: getComputedStyle(phone.querySelector('path')!).fill,
     })
     const light = look()
     const dialog = await openTheme(canvas, userEvent)
     await userEvent.click(dialog.getByRole('radio', { name: 'Dark' }))
     await waitFor(() => expect(look().status).not.toBe(light.status))
     await expect(look().home).not.toBe(light.home)
-    await expect(look().bezel).not.toBe(light.bezel)
+    await expect(look().body).not.toBe(light.body)
     await userEvent.keyboard('{Escape}')
   },
 }

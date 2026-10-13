@@ -16,14 +16,14 @@ type BarProps = {
 /**
  * Safari's chrome for the viewport, after the Figma frames: the macOS
  * toolbar on Desktop (1280×52) and the iPad toolbar under a status bar on
- * Tablet (834×86). Mobile has none: the page fills the phone's screen.
+ * Tablet (834×86). Mobile has none: PreviewWindow draws a phone there and
+ * never shows the bar.
  * Drawn in HTML and SVG, not SF Symbols, so it looks the same off Apple
  * systems. Only the address field is real; the rest is decoration and
  * hidden from assistive tech.
  */
 export function SafariBar({ vp, ...props }: BarProps & { vp: Viewport }) {
   if (vp === 'tablet') return <TabletBar {...props} />
-  if (vp === 'mobile') return null
   return <DesktopBar {...props} />
 }
 
