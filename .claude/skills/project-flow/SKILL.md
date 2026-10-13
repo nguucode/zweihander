@@ -15,6 +15,7 @@ A thread started for one ticket skips this file and follows [TICKET-THREAD.md](T
 - **Model-invoked skills** (research, prototype, tdd, diagnosing-bugs, matt-code-review, ponytail-*): call the Skill tool.
 - **Built-ins** (`code-review`, `security-review`, `run`) and `a11y-enforcer:a11y-check`: call the Skill tool.
 - Repo conventions sit on top of every step: `docs/agents/*.md` (tracker in the vault, `CONTEXT.md`, ADRs), and [COMPONENTS.md](COMPONENTS.md) for anything under `src/components/` (classification and MDX spec before code, code and test gates inside the build step, changeset and status at ship). This flow is the only implementation process; there is no separate component process.
+- **Edits under `.claude/`** (skills, hooks, settings) are blocked by auto mode's self-modification guard unless the user's own message names the change; a relay or brief does not count. So when a flow or ticket will touch `.claude/`, whoever writes the brief (coordinator or map thread) puts an exact confirm line in it, such as `cho phép sửa <skill>: <change>`, and the thread's first reply asks the user to type that line verbatim. Keep working on everything else meanwhile; edit `.claude/` only after the user's message arrives. No line in the brief: write one in the first reply, never mid-build.
 - The tracker lives in the vault on the user's Mac. Reach it with the device folder tools (`/Volumes/KAFKA/Vault`); if none are connected, call `connect_device` and wait. Ticket threads never touch the vault; their map thread writes for them. Write vault files in Vietnamese, following `/Volumes/KAFKA/Vault/CLAUDE.md`.
 
 Steps 3 to 6 stay in one unbroken thread (no compaction before the tickets exist), so grill, spec and tickets share the same reasoning.
@@ -79,6 +80,7 @@ After `to-tickets`, this thread becomes the **map thread**. It does not implemen
    - <NN> <title>: <vault path> (copy: <project-files path>)
    Waiting: <NN> blocked by <NN>, ...
    Brief for each: "Implement ticket <vault path> (copy: <project-files path>) following .claude/skills/project-flow/TICKET-THREAD.md. Map thread: <this thread's title>."
+   Ticket touches .claude/: add to its brief: Confirm line: "<exact line>"
    ```
 
 3. The coordinator posts one project-chat line per ticket and starts a thread on it with that brief (its rules are in project memory, `project-flow-tickets`). Frontier tickets run in parallel.
