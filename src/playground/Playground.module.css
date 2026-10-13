@@ -201,8 +201,6 @@
   flex-direction: column;
   /* Under 1024 the column has no height of its own: most of the screen. */
   min-block-size: max(24rem, 70dvh);
-  padding: var(--space-4);
-  background: var(--surface-filled);
 }
 
 .frame {
