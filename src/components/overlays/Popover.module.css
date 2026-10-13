@@ -50,7 +50,9 @@
 }
 
 .header + .body,
-.description + .body {
+.description + .body,
+/* A modal popover's hidden Close sits between the header and the body. */
+.header + .hiddenClose + .body {
   margin-block-start: var(--space-3);
 }
 

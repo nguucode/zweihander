@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useSyncExternalStore, type MouseEvent, type ReactNode } from 'react'
+import { useEffect, useId, useRef, useState, useSyncExternalStore, type MouseEvent, type ReactNode } from 'react'
 import { Tag } from '@/components/atomic-elements/Tag'
 import { Accordion } from '@/components/data-display/Accordion'
 import { Button } from '@/components/buttons/Button'
@@ -17,7 +17,14 @@ import { EmptyState } from '@/components/states/EmptyState'
 import { ErrorState } from '@/components/states/ErrorState'
 import { Icon } from '@/lib/icon'
 import styles from './Playground.module.css'
-import { DEFAULT_PREVIEW_THEME, resolveAppearance, usePrefersDark, type PreviewAppearance, type PreviewTheme } from './PreviewTheme'
+import {
+  DEFAULT_PREVIEW_THEME,
+  parsePreviewTheme,
+  PREVIEW_THEME_VALUES,
+  resolveAppearance,
+  usePrefersDark,
+  type PreviewTheme,
+} from './PreviewTheme'
 import { PreviewWindow } from './PreviewWindow'
 import { DEFAULT_ADDRESS, SafariBar } from './SafariBar'
 import { VIEWPORTS, type Viewport } from './viewports'
@@ -95,6 +102,26 @@ function readUrl(items: ManifestItem[]) {
   }
 }
 
+/**
+ * The Preview theme from `?theme-accent=` and the rest. `theme-` because a
+ * bare `appearance` is already Button's prop. Unknown values fall back.
+ */
+const THEME_KEYS = Object.keys(DEFAULT_PREVIEW_THEME) as (keyof PreviewTheme)[]
+const themeParam = (key: keyof PreviewTheme) => `theme-${key}`
+
+function readTheme(): PreviewTheme {
+  const q = new URLSearchParams(location.search)
+  const read = <K extends keyof PreviewTheme>(key: K) =>
+    parsePreviewTheme(key, q.get(themeParam(key))) ?? DEFAULT_PREVIEW_THEME[key]
+  return { accent: read('accent'), gray: read('gray'), radius: read('radius'), appearance: read('appearance') }
+}
+
+/** The Preview theme as URL changes: only values off the default stay. */
+const themeUrl = (theme: PreviewTheme) =>
+  Object.fromEntries(
+    THEME_KEYS.map((key) => [themeParam(key), theme[key] === DEFAULT_PREVIEW_THEME[key] ? undefined : theme[key]]),
+  )
+
 /** The value a URL param stands for, or undefined when it does not fit the prop. */
 function parseValue(prop: Prop, raw: string): unknown {
   if (prop.options) return prop.options.find((o) => String(o) === raw)
@@ -145,7 +172,8 @@ export interface PlaygroundProps {
 export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl = '../' }: PlaygroundProps) {
   const { items } = manifest
   const [state, setState] = useState(() => readUrl(items))
-  const [previewTheme, setPreviewTheme] = useState(DEFAULT_PREVIEW_THEME)
+  const [previewTheme, setPreviewTheme] = useState(readTheme)
+  const themeRef = useRef(previewTheme)
   const dark = usePrefersDark()
   const [filters, setFilters] = useState(NO_FILTERS)
   const [folds, setFolds] = useState(NO_FOLDS)
@@ -153,7 +181,12 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
   const wide = useWide()
 
   useEffect(() => {
-    const onPop = () => setState(readUrl(items))
+    // The Preview theme is the page's, not the item's: Back keeps it, and
+    // puts it on the entry it lands on.
+    const onPop = () => {
+      setState(readUrl(items))
+      history.replaceState(null, '', urlWith(themeUrl(themeRef.current)))
+    }
     addEventListener('popstate', onPop)
     return () => removeEventListener('popstate', onPop)
   }, [items])
@@ -183,6 +216,11 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
       const { [prop.name]: _, ...args } = s.args
       return { ...s, args: changed ? { ...args, [prop.name]: value } : args }
     })
+  }
+  const setTheme = (theme: PreviewTheme) => {
+    history.replaceState(null, '', urlWith(themeUrl(theme)))
+    themeRef.current = theme
+    setPreviewTheme(theme)
   }
   // What the Browser bar shows; the URL keeps it only off the default. An
   // empty field stands for the default (the bar tidies the field on blur).
@@ -218,7 +256,7 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
         <a href={storybookUrl} className={styles.headerLink}>
           Storybook
         </a>
-        <ThemePopover theme={previewTheme} onChange={setPreviewTheme} />
+        <ThemePopover theme={previewTheme} onChange={setTheme} />
       </header>
 
       <div className={styles.columns}>
@@ -298,14 +336,12 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
   )
 }
 
-const APPEARANCE_OPTIONS = [
-  { value: 'light', label: 'Light' },
-  { value: 'dark', label: 'Dark' },
-  { value: 'system', label: 'System' },
-]
+const titleCase = (value: string) => value[0].toUpperCase() + value.slice(1)
+const choices = (values: readonly string[]) => values.map((value) => ({ value, label: titleCase(value) }))
 
 /** The header's Theme button and its popover: what the item in the frame wears. */
 function ThemePopover({ theme, onChange }: { theme: PreviewTheme; onChange: (theme: PreviewTheme) => void }) {
+  const set = (change: Partial<PreviewTheme>) => onChange({ ...theme, ...change })
   return (
     <Popover
       title="Preview theme"
@@ -317,14 +353,87 @@ function ThemePopover({ theme, onChange }: { theme: PreviewTheme; onChange: (the
         </Button>
       }
     >
-      <RadioGroup
-        label="Theme"
-        orientation="horizontal"
-        options={APPEARANCE_OPTIONS}
-        value={theme.appearance}
-        onValueChange={(appearance) => onChange({ ...theme, appearance: appearance as PreviewAppearance })}
-      />
+      <div className={styles.themeSections}>
+        <fieldset className={styles.themeSection}>
+          <legend className={styles.themeLegend}>Color</legend>
+          <Swatches
+            label="Accent"
+            attribute="data-accent"
+            values={PREVIEW_THEME_VALUES.accent}
+            value={theme.accent}
+            onChange={(accent) => set({ accent })}
+          />
+          <Swatches
+            label="Gray"
+            attribute="data-gray"
+            values={PREVIEW_THEME_VALUES.gray}
+            value={theme.gray}
+            onChange={(gray) => set({ gray })}
+          />
+        </fieldset>
+        <RadioGroup
+          label="Radius"
+          orientation="horizontal"
+          options={choices(PREVIEW_THEME_VALUES.radius)}
+          value={theme.radius}
+          onValueChange={(radius) => set({ radius: radius as PreviewTheme['radius'] })}
+        />
+        <RadioGroup
+          label="Theme"
+          orientation="horizontal"
+          options={choices(PREVIEW_THEME_VALUES.appearance)}
+          value={theme.appearance}
+          onValueChange={(appearance) => set({ appearance: appearance as PreviewTheme['appearance'] })}
+        />
+        <div className={styles.themeFooter}>
+          <Button size="sm" appearance="ghost" variant="secondary" onClick={() => onChange(DEFAULT_PREVIEW_THEME)}>
+            Reset
+          </Button>
+        </div>
+      </div>
     </Popover>
+  )
+}
+
+/**
+ * One colour choice as swatches: native radios, so one tab stop and arrows
+ * to move, each named for screen readers. A swatch shows its palette by
+ * carrying the palette's own attribute, as a `<Theme>` would.
+ */
+function Swatches<T extends string>({
+  label,
+  attribute,
+  values,
+  value,
+  onChange,
+}: {
+  label: string
+  attribute: 'data-accent' | 'data-gray'
+  values: readonly T[]
+  value: T
+  onChange: (value: T) => void
+}) {
+  const name = useId()
+  return (
+    <div role="radiogroup" aria-labelledby={`${name}-label`} className={styles.swatchGroup}>
+      <span id={`${name}-label`} className={styles.swatchLabel}>
+        {label}
+      </span>
+      <div className={styles.swatches}>
+        {values.map((v) => (
+          <input
+            key={v}
+            type="radio"
+            name={name}
+            aria-label={titleCase(v)}
+            {...{ [attribute]: v }}
+            className={styles.swatch}
+            checked={v === value}
+            onChange={() => onChange(v)}
+          />
+        ))}
+      </div>
+    </div>
   )
 }
 

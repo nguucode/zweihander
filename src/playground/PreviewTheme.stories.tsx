@@ -49,6 +49,30 @@ export const SystemOnLightOs: Story = {
   },
 }
 
+export const ColorAndRadius: Story = {
+  globals: { appearance: 'light', accent: 'rose', gray: 'slate', radius: 'full' },
+  play: async ({ canvasElement }) => {
+    const scope = wrapper(canvasElement) as HTMLElement
+    await expect(scope).toHaveAttribute('data-accent', 'rose')
+    await expect(scope).toHaveAttribute('data-gray', 'slate')
+    await expect(scope.style.getPropertyValue('--radius-factor')).toBe('1.5')
+    await expect(scope.style.getPropertyValue('--radius-full')).toBe('9999px')
+    // Popups portal to <body>: the frame's <html> wears the same.
+    await expect(document.documentElement).toHaveAttribute('data-accent', 'rose')
+    await expect(document.documentElement.style.getPropertyValue('--radius-factor')).toBe('1.5')
+  },
+}
+
+/** A value the kit does not have is dropped: the default stays. */
+export const UnknownValues: Story = {
+  globals: { appearance: 'light', accent: 'foo', radius: 'huge' },
+  play: async ({ canvasElement }) => {
+    const scope = wrapper(canvasElement) as HTMLElement
+    await expect(scope).not.toHaveAttribute('data-accent')
+    await expect(scope.style.getPropertyValue('--radius-factor')).toBe('')
+  },
+}
+
 /** Outside the Playground no appearance is set: no wrapper, the toolbar's theme as before. */
 export const ToolbarTheme: Story = {
   globals: { theme: 'dark' },

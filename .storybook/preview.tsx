@@ -4,7 +4,7 @@ import { configure } from 'storybook/test'
 // font for its consumers.
 import '../src/index.css'
 import './docs-canvas.css'
-import { APPEARANCES, PreviewThemeScope, type PreviewAppearance } from '../src/playground/PreviewTheme'
+import { parsePreviewTheme, PreviewThemeScope } from '../src/playground/PreviewTheme'
 
 // Puts the toolbar's theme on <html>, where the dark token set is scoped.
 // Set while rendering rather than in an effect: a decorator is a plain
@@ -18,10 +18,15 @@ configure({ asyncUtilTimeout: 3000 })
 // The Playground's Preview theme, sent as globals over the channel, wins over
 // the toolbar: a story shown in the Playground wears the theme picked there.
 const withTheme: Decorator = (Story, context) => {
-  const appearance = context.globals.appearance as PreviewAppearance | undefined
-  if (appearance && APPEARANCES.includes(appearance))
+  const appearance = parsePreviewTheme('appearance', context.globals.appearance)
+  if (appearance)
     return (
-      <PreviewThemeScope appearance={appearance}>
+      <PreviewThemeScope
+        appearance={appearance}
+        accent={parsePreviewTheme('accent', context.globals.accent)}
+        gray={parsePreviewTheme('gray', context.globals.gray)}
+        radius={parsePreviewTheme('radius', context.globals.radius)}
+      >
         <Story />
       </PreviewThemeScope>
     )
@@ -52,6 +57,9 @@ const preview: Preview = {
     appearance: {
       description: "The Playground's Preview theme: light, dark or system",
     },
+    accent: { description: "The Playground's Preview theme: accent colour" },
+    gray: { description: "The Playground's Preview theme: gray ramp" },
+    radius: { description: "The Playground's Preview theme: radius preset" },
   },
 
   parameters: {
