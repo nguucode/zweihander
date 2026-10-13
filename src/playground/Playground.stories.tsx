@@ -44,6 +44,32 @@ const openItems = async (canvas: ReturnType<typeof within>, userEvent: { click: 
 }
 
 const frame = (canvas: ReturnType<typeof within>) => canvas.findByTitle(/live view$/)
+/** Which item the live view shows: the frame is named after it. */
+const showing = async (canvas: ReturnType<typeof within>, name: string) =>
+  waitFor(async () => expect(await frame(canvas)).toHaveAttribute('title', `${name} live view`))
+
+/**
+ * The page inside the window is the device's size, and the window, scaled
+ * as one piece, is never above 100% and fits the stage both ways, touching
+ * it on at least one side.
+ */
+const fitsDevice = async (canvas: ReturnType<typeof within>, width: number, height: number) => {
+  await waitFor(async () => {
+    const iframe = await frame(canvas)
+    expect([iframe.offsetWidth, iframe.offsetHeight]).toEqual([width, height])
+  })
+  const win = canvas.getByTestId('preview-window')
+  const stage = win.parentElement!.parentElement!
+  const box = win.getBoundingClientRect()
+  const room = { w: Math.min(width, stage.clientWidth), h: Math.min(height, stage.clientHeight) }
+  await expect(box.width).toBeLessThanOrEqual(room.w + 0.5)
+  await expect(box.height).toBeLessThanOrEqual(room.h + 0.5)
+  await expect(box.width >= room.w - 1 || box.height >= room.h - 1).toBe(true)
+  // Scaled as one piece: the window keeps the device's proportions.
+  await expect(box.width / box.height).toBeCloseTo(width / height, 2)
+}
+const viewportTab = (canvas: ReturnType<typeof within>, name: string) =>
+  within(canvas.getByRole('tablist', { name: 'Viewport' })).getByRole('tab', { name })
 const param = (key: string) => new URLSearchParams(location.search).get(key)
 const propsPanel = (canvas: ReturnType<typeof within>) => within(canvas.getByRole('complementary', { name: 'Props' }))
 
@@ -86,11 +112,20 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {
   play: async ({ canvas, userEvent }) => {
     // No item in the URL: Button, on Desktop.
-    await expect(canvas.getByRole('heading', { name: 'Button', level: 2 })).toBeVisible()
+    await showing(canvas, 'Button')
     const iframe = await frame(canvas)
     await expect(iframe.getAttribute('src')).toContain(`id=${button.storyId}`)
-    await expect(iframe.style.width).toBe('1280px')
+    await fitsDevice(canvas, 1280, 800)
+    await expect(viewportTab(canvas, 'Desktop')).toHaveAttribute('aria-selected', 'true')
     await waitFor(() => expect(canvas.queryByRole('status', { name: /Loading/ })).toBeNull())
+
+    // The window has the room: no item name or size line above it, and the
+    // story's Storybook page is one icon button away.
+    await expect(canvas.queryByText(/1280 px/)).toBeNull()
+    await expect(canvas.getByRole('link', { name: 'Open in Storybook' })).toHaveAttribute(
+      'href',
+      `/favicon.svg??path=/story/${button.storyId}`,
+    )
 
     let items = await openItems(canvas, userEvent)
     await expect(items.getByRole('link', { name: /Button/ })).toHaveAttribute('aria-current', 'true')
@@ -126,7 +161,11 @@ export const Default: Story = {
     // Picking a card shows it live and writes it to the URL.
     await userEvent.click(items.getByRole('link', { name: /Tooltip/ }))
     await waitFor(async () => expect((await frame(canvas)).getAttribute('src')).toContain(`id=${tooltip.storyId}`))
-    await expect(canvas.getByRole('heading', { name: 'Tooltip', level: 2 })).toBeVisible()
+    await showing(canvas, 'Tooltip')
+    await expect(canvas.getByRole('link', { name: 'Open in Storybook' })).toHaveAttribute(
+      'href',
+      `/favicon.svg??path=/story/${tooltip.storyId}`,
+    )
     await expect(param('item')).toBe(tooltip.id)
     // Tooltip has no props: no right column.
     await expect(canvas.queryByRole('complementary', { name: 'Props' })).toBeNull()
@@ -137,17 +176,19 @@ export const Default: Story = {
     await expect(items.getAllByRole('link')).toHaveLength(1)
     await userEvent.keyboard('{Escape}')
 
-    // The viewport switch sets the frame's real width and replaces the URL entry.
-    const viewport = canvas.getByRole('group', { name: 'Viewport' })
-    await userEvent.click(within(viewport).getByRole('button', { name: 'Mobile' }))
-    await waitFor(async () => expect((await frame(canvas)).style.width).toBe('375px'))
-    await expect(within(viewport).getByRole('button', { name: 'Mobile' })).toHaveAttribute('aria-pressed', 'true')
+    // The viewport tabs set the device size and replace the URL entry.
+    await userEvent.click(viewportTab(canvas, 'Mobile'))
+    await fitsDevice(canvas, 393, 852)
+    await expect(viewportTab(canvas, 'Mobile')).toHaveAttribute('aria-selected', 'true')
     await expect(param('vp')).toBe('mobile')
+    await userEvent.click(viewportTab(canvas, 'Tablet'))
+    await fitsDevice(canvas, 834, 1194)
+    await expect(param('vp')).toBe('tablet')
 
     // Back steps to the entry before Tooltip: Button on Desktop, as the page opened.
     history.back()
-    await waitFor(() => expect(canvas.getByRole('heading', { name: 'Button', level: 2 })).toBeVisible())
-    await waitFor(async () => expect((await frame(canvas)).style.width).toBe('1280px'))
+    await showing(canvas, 'Button')
+    await fitsDevice(canvas, 1280, 800)
   },
 }
 
@@ -257,11 +298,11 @@ export const Props: Story = {
 export const FromUrl: Story = {
   beforeEach: withUrl({ item: badge.id, vp: 'tablet', count: '3', isDot: 'true', gone: 'x' }),
   play: async ({ canvas, userEvent }) => {
-    await expect(canvas.getByRole('heading', { name: 'Badge', level: 2 })).toBeVisible()
+    await showing(canvas, 'Badge')
     const iframe = await frame(canvas)
     await expect(iframe.getAttribute('src')).toContain(`id=${badge.storyId}`)
-    await expect(iframe.style.width).toBe('768px')
-    await expect(canvas.getByRole('button', { name: 'Tablet' })).toHaveAttribute('aria-pressed', 'true')
+    await fitsDevice(canvas, 834, 1194)
+    await expect(viewportTab(canvas, 'Tablet')).toHaveAttribute('aria-selected', 'true')
 
     // The shared props fill the panel and go into the frame once it has rendered; the unknown one is ignored.
     const panel = propsPanel(canvas)
@@ -292,8 +333,8 @@ export const FromUrl: Story = {
 export const UnknownInUrl: Story = {
   beforeEach: withUrl({ item: 'components-gone-widget', vp: 'watch' }),
   play: async ({ canvas }) => {
-    await expect(canvas.getByRole('heading', { name: 'Button', level: 2 })).toBeVisible()
-    await expect((await frame(canvas)).style.width).toBe('1280px')
+    await showing(canvas, 'Button')
+    await fitsDevice(canvas, 1280, 800)
   },
 }
 
@@ -311,12 +352,17 @@ export const Keyboard: Story = {
     for (let i = 0; i < 20 && document.activeElement !== target; i++) await userEvent.tab()
     await expect(target).toHaveFocus()
     await userEvent.keyboard('{Enter}')
-    await waitFor(() => expect(canvas.getByRole('heading', { name: 'Badge', level: 2 })).toBeVisible())
+    await showing(canvas, 'Badge')
 
-    const tablet = canvas.getByRole('button', { name: 'Tablet' })
-    tablet.focus()
-    await userEvent.keyboard(' ')
-    await expect(tablet).toHaveAttribute('aria-pressed', 'true')
-    await waitFor(async () => expect((await frame(canvas)).style.width).toBe('768px'))
+    // The viewport tabs move with the arrow keys, like any Tabs, and switch as they go.
+    viewportTab(canvas, 'Desktop').focus()
+    await userEvent.keyboard('{ArrowRight}')
+    await expect(viewportTab(canvas, 'Tablet')).toHaveFocus()
+    await expect(viewportTab(canvas, 'Tablet')).toHaveAttribute('aria-selected', 'true')
+    await fitsDevice(canvas, 834, 1194)
+    await expect(param('vp')).toBe('tablet')
+    await userEvent.keyboard('{ArrowRight}')
+    await fitsDevice(canvas, 393, 852)
+    await expect(param('vp')).toBe('mobile')
   },
 }

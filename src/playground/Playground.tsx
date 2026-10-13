@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore, type MouseEvent } from 'react'
+import { useEffect, useRef, useState, useSyncExternalStore, type MouseEvent } from 'react'
 import { Tag } from '@/components/atomic-elements/Tag'
 import { Accordion } from '@/components/data-display/Accordion'
 import { Button } from '@/components/buttons/Button'
@@ -9,11 +9,15 @@ import { Search } from '@/components/inputs/Search'
 import { Select } from '@/components/inputs/Select'
 import { TextInput } from '@/components/inputs/TextInput'
 import { Spinner } from '@/components/loaders/Spinner'
+import { Tabs } from '@/components/navigation/Tabs'
 import { Modal } from '@/components/overlays/Modal'
+import { Tooltip } from '@/components/overlays/Tooltip'
 import { EmptyState } from '@/components/states/EmptyState'
 import { ErrorState } from '@/components/states/ErrorState'
 import { Icon } from '@/lib/icon'
 import styles from './Playground.module.css'
+import { PreviewWindow } from './PreviewWindow'
+import { VIEWPORTS, type Viewport } from './viewports'
 
 /** One entry of `manifest.json`, written by scripts/build-playground-manifest.mjs. */
 export interface ManifestItem {
@@ -44,13 +48,6 @@ type Args = Record<string, unknown>
 export interface Manifest {
   items: ManifestItem[]
 }
-
-const VIEWPORTS = {
-  desktop: { label: 'Desktop', width: 1280 },
-  tablet: { label: 'Tablet', width: 768 },
-  mobile: { label: 'Mobile', width: 375 },
-} as const
-type Viewport = keyof typeof VIEWPORTS
 
 const GROUPS = [
   ['component', 'Components'],
@@ -112,6 +109,9 @@ function urlWith(changes: Record<string, string | undefined>) {
 
 /** Removes an item's props from the URL, so they do not carry over to the next item. */
 const withoutProps = (item: ManifestItem) => Object.fromEntries(item.props.map((p) => [p.name, undefined]))
+
+/** The item's story in the full Storybook. */
+const storyPage = (storybookUrl: string, item: ManifestItem) => `${storybookUrl}?path=/story/${item.storyId}`
 
 function useWide() {
   return useSyncExternalStore(
@@ -229,20 +229,29 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
                 {browser}
               </Modal>
             )}
-            <h2 className={styles.current}>{state.item.name}</h2>
-            <div role="group" aria-label="Viewport" className={styles.viewports}>
-              {(Object.keys(VIEWPORTS) as Viewport[]).map((vp) => (
-                <ToggleButton
-                  key={vp}
+            <div className={styles.viewports}>
+              <Tabs
+                aria-label="Viewport"
+                appearance="pills"
+                size="sm"
+                // Arrow keys switch at once: a viewport change does not reload the frame.
+                activateOnFocus
+                items={Object.entries(VIEWPORTS).map(([value, { label }]) => ({ value, label }))}
+                value={state.vp}
+                onValueChange={(vp) => setVp(vp as Viewport)}
+              />
+              <Tooltip content="Open in Storybook">
+                <Button
                   size="sm"
-                  appearance="outlined"
-                  pressed={state.vp === vp}
-                  // Pressing the current one again keeps it: one is always on.
-                  onPressedChange={(on) => on && setVp(vp)}
+                  appearance="ghost"
+                  variant="secondary"
+                  isIconOnly
+                  aria-label="Open in Storybook"
+                  href={storyPage(storybookUrl, state.item)}
                 >
-                  {VIEWPORTS[vp].label}
-                </ToggleButton>
-              ))}
+                  <Icon name="external" />
+                </Button>
+              </Tooltip>
             </div>
           </div>
           <LiveView
@@ -468,30 +477,16 @@ function LiveView({
   theme: 'light' | 'dark'
   storybookUrl: string
 }) {
-  const { width, label } = VIEWPORTS[vp]
-  const stage = useRef<HTMLDivElement>(null)
   const frame = useRef<HTMLIFrameElement>(null)
-  const [box, setBox] = useState({ w: 0, h: 0 })
   // Which src finished, and how. A src that has not finished is loading.
   const [done, setDone] = useState<{ src: string; ok: boolean } | null>(null)
 
-  useLayoutEffect(() => {
-    const observer = new ResizeObserver(([entry]) =>
-      setBox({ w: entry.contentRect.width, h: entry.contentRect.height }),
-    )
-    observer.observe(stage.current!)
-    return () => observer.disconnect()
-  }, [])
-
-  // The frame is the real width, so media and container queries inside it
-  // fire as they would on a device; it is scaled down when the column is narrower.
-  const scale = box.w ? Math.min(1, box.w / width) : 1
   // embed=true: Storybook skips play functions, so the item shows its starting
   // state, not where a story test left it.
   // Props are not in the src: they go over Storybook's channel (below), so a
   // change re-renders the story without reloading the frame.
   const src = `${storybookUrl}iframe.html?${new URLSearchParams({ id: item.storyId, viewMode: 'story', embed: 'true', globals: `theme:${theme}` })}`
-  const storyLink = `${storybookUrl}?path=/story/${item.storyId}`
+  const storyLink = storyPage(storybookUrl, item)
   const state = done?.src === src ? (done.ok ? 'ready' : 'error') : 'loading'
 
   useEffect(() => {
@@ -535,26 +530,15 @@ function LiveView({
 
   return (
     <div className={styles.live}>
-      <p className={styles.size}>
-        {label} {width} px{scale < 1 && ` · shown at ${Math.round(scale * 100)}%`} ·{' '}
-        <a href={storyLink} className={styles.storyLink}>
-          Open in Storybook
-        </a>
-      </p>
-      <div ref={stage} className={styles.stage}>
-        {box.h > 0 && (
-          <div className={styles.frameBox} style={{ width: width * scale, height: box.h }}>
-            <iframe
-              key={src}
-              ref={frame}
-              title={`${item.name} live view`}
-              src={src}
-              className={styles.frame}
-              style={{ width, height: box.h / scale, transform: `scale(${scale})` }}
-              onLoad={() => setDone({ src, ok: true })}
-            />
-          </div>
-        )}
+      <PreviewWindow vp={vp}>
+        <iframe
+          key={src}
+          ref={frame}
+          title={`${item.name} live view`}
+          src={src}
+          className={styles.frame}
+          onLoad={() => setDone({ src, ok: true })}
+        />
         {state === 'loading' && (
           <div className={styles.overlay}>
             <Spinner label={`Loading ${item.name}`} />
@@ -575,7 +559,7 @@ function LiveView({
             />
           </div>
         )}
-      </div>
+      </PreviewWindow>
     </div>
   )
 }
