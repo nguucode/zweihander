@@ -190,6 +190,24 @@ export const Loop: Story = {
   },
 }
 
+/** A press that interrupts a smooth scroll: Firefox fires scrollend where the old scroll stopped. */
+export const InterruptedScroll: Story = {
+  tags: ['!dev'],
+  play: async ({ args, canvas }) => {
+    const track = canvas.getByRole('group', { name: '1 of 5' }).parentElement!
+    canvas.getByRole('button', { name: 'Next slide' }).click()
+    await expect(args.onIndexChange).toHaveBeenLastCalledWith(1)
+    // The track has barely left slide 1 when that stray scrollend arrives.
+    track.dispatchEvent(new Event('scrollend'))
+    await expect(args.onIndexChange).toHaveBeenLastCalledWith(1)
+    // The scroll that was asked for still reports nothing new when it lands.
+    await waitFor(() => expect(Math.abs(track.scrollLeft)).toBeGreaterThan(100))
+    await new Promise((r) => setTimeout(r, 600))
+    await expect(args.onIndexChange).toHaveBeenLastCalledWith(1)
+    await expect(canvas.getByRole('button', { name: 'Slide 2' })).toHaveAttribute('aria-current', 'true')
+  },
+}
+
 export const RightToLeft: Story = {
   decorators: [(Story) => <div dir="rtl">{Story()}</div>],
   play: async ({ canvas }) => {
