@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore, type MouseEvent } from 'react'
 import { Tag } from '@/components/atomic-elements/Tag'
+import { Accordion } from '@/components/data-display/Accordion'
 import { Button } from '@/components/buttons/Button'
 import { ToggleButton } from '@/components/buttons/ToggleButton'
 import { Switch } from '@/components/controls/Switch'
@@ -258,9 +259,11 @@ interface Filters {
   query: string
   category: string
   status: string
+  /** Category sections the visitor folded, as `kind/category`. Not in the URL. */
+  closed: string[]
 }
 const ALL = 'all'
-const NO_FILTERS: Filters = { query: '', category: ALL, status: ALL }
+const NO_FILTERS: Filters = { query: '', category: ALL, status: ALL, closed: [] }
 
 function Browser({
   items,
@@ -275,7 +278,7 @@ function Browser({
   onFilters: (f: Filters) => void
   onSelect: (item: ManifestItem) => void
 }) {
-  const { query, category, status } = filters
+  const { query, category, status, closed } = filters
   const categories = [...new Set(items.map((i) => i.category))].sort()
   const statuses = [...new Set(items.map((i) => i.status))].sort()
   const needle = query.trim().toLowerCase()
@@ -285,6 +288,9 @@ function Browser({
       (category === ALL || i.category === category) &&
       (status === ALL || i.status === status),
   )
+
+  // A new search or filter opens every section, so a match never sits in a folded one.
+  const filter = (change: Partial<Filters>) => onFilters({ ...filters, ...change, closed: [] })
 
   const open = (event: MouseEvent, item: ManifestItem) => {
     // Let a new tab or window open from the link as usual.
@@ -299,7 +305,7 @@ function Browser({
         aria-label="Search by name"
         placeholder="Search by name"
         value={query}
-        onChange={(e) => onFilters({ ...filters, query: e.target.value })}
+        onChange={(e) => filter({ query: e.target.value })}
         isFullWidth
       />
       <div className={styles.filters}>
@@ -307,16 +313,14 @@ function Browser({
           label="Category"
           options={[{ value: ALL, label: 'All' }, ...categories]}
           value={category}
-          onValueChange={(v) => onFilters({ ...filters, category: v ?? ALL })}
-          size="sm"
+          onValueChange={(v) => filter({ category: v ?? ALL })}
           isFullWidth
         />
         <Select
           label="Status"
           options={[{ value: ALL, label: 'All' }, ...statuses]}
           value={status}
-          onValueChange={(v) => onFilters({ ...filters, status: v ?? ALL })}
-          size="sm"
+          onValueChange={(v) => filter({ status: v ?? ALL })}
           isFullWidth
         />
       </div>
@@ -341,29 +345,56 @@ function Browser({
         GROUPS.map(([kind, label]) => {
           const group = visible.filter((i) => i.kind === kind)
           if (!group.length) return null
+          // Sections with no match are not built at all, so they hide with their items.
+          const sections = [...new Set(group.map((i) => i.category))].sort()
+          const keyOf = (c: string) => `${kind}/${c}`
           return (
             <section key={kind} aria-labelledby={`pg-group-${kind}`} className={styles.group}>
               <h2 id={`pg-group-${kind}`} className={styles.groupTitle}>
                 {label}
               </h2>
-              <ul className={styles.cards}>
-                {group.map((item) => (
-                  <li key={item.id}>
-                    <a
-                      href={urlWith({ ...withoutProps(selected), item: item.id })}
-                      aria-current={item.id === selected.id ? 'true' : undefined}
-                      className={styles.card}
-                      onClick={(e) => open(e, item)}
-                    >
-                      <span className={styles.cardName}>{item.name}</span>
-                      <span className={styles.cardMeta}>
-                        {item.category}
-                        <Tag text={item.status} size="sm" variant={item.status === 'experimental' ? 'warning' : 'info'} />
-                      </span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
+              <Accordion
+                multiple
+                appearance="flush"
+                size="sm"
+                value={sections.map(keyOf).filter((key) => !closed.includes(key))}
+                onValueChange={(opened) =>
+                  onFilters({
+                    ...filters,
+                    closed: [
+                      ...closed.filter((key) => !key.startsWith(`${kind}/`)),
+                      ...sections.map(keyOf).filter((key) => !opened.includes(key)),
+                    ],
+                  })
+                }
+                items={sections.map((section) => ({
+                  value: keyOf(section),
+                  title: section,
+                  content: (
+                    <ul className={styles.cards}>
+                      {group
+                        .filter((item) => item.category === section)
+                        .map((item) => (
+                          <li key={item.id}>
+                            <a
+                              href={urlWith({ ...withoutProps(selected), item: item.id })}
+                              aria-current={item.id === selected.id ? 'true' : undefined}
+                              className={styles.card}
+                              onClick={(e) => open(e, item)}
+                            >
+                              <span className={styles.cardName}>{item.name}</span>
+                              <Tag
+                                text={item.status}
+                                size="sm"
+                                variant={item.status === 'experimental' ? 'warning' : 'info'}
+                              />
+                            </a>
+                          </li>
+                        ))}
+                    </ul>
+                  ),
+                }))}
+              />
             </section>
           )
         })

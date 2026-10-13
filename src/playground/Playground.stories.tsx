@@ -151,6 +151,41 @@ export const Default: Story = {
   },
 }
 
+export const Grouped: Story = {
+  play: async ({ canvas, userEvent }) => {
+    const items = await openItems(canvas, userEvent)
+    const section = (name: string) => items.getByRole('button', { name })
+
+    // Each kind is cut into its Categories, all open at first.
+    for (const name of ['Atomic Elements', 'Buttons', 'Overlays', 'Application UI'])
+      await expect(section(name)).toHaveAttribute('aria-expanded', 'true')
+    // The card has name and status; the section header carries the Category.
+    const badgeCard = items.getByRole('link', { name: /Badge/ })
+    await expect(badgeCard).toHaveTextContent(/^Badgebeta$/)
+
+    // The mouse folds a section and the keyboard opens it again.
+    await userEvent.click(section('Buttons'))
+    await expect(section('Buttons')).toHaveAttribute('aria-expanded', 'false')
+    await waitFor(() => expect(items.getByRole('link', { name: /Button/, hidden: true })).not.toBeVisible())
+    section('Buttons').focus()
+    await userEvent.keyboard('{Enter}')
+    await expect(section('Buttons')).toHaveAttribute('aria-expanded', 'true')
+    await waitFor(() => expect(items.getByRole('link', { name: /Button/ })).toBeVisible())
+    await userEvent.keyboard(' ')
+    await expect(section('Buttons')).toHaveAttribute('aria-expanded', 'false')
+
+    // A search opens the folded section that holds a match and hides the empty ones.
+    await userEvent.click(section('Atomic Elements'))
+    await expect(section('Atomic Elements')).toHaveAttribute('aria-expanded', 'false')
+    await userEvent.type(items.getByRole('searchbox', { name: 'Search by name' }), 'b')
+    await expect(section('Atomic Elements')).toHaveAttribute('aria-expanded', 'true')
+    await expect(section('Buttons')).toHaveAttribute('aria-expanded', 'true')
+    await waitFor(() => expect(items.getByRole('link', { name: /Badge/ })).toBeVisible())
+    await expect(items.queryByRole('button', { name: 'Overlays' })).toBeNull()
+    await expect(items.queryByRole('button', { name: 'Application UI' })).toBeNull()
+  },
+}
+
 export const Props: Story = {
   play: async ({ canvas, userEvent }) => {
     const panel = propsPanel(canvas)
