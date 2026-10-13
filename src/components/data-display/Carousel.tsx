@@ -67,15 +67,31 @@ export function Carousel({
     [onIndexChange],
   )
 
+  // Where a scroll this component started is headed. A press mid-scroll
+  // interrupts the old smooth scroll, and Firefox fires scrollend for it where
+  // it stopped; reading that would report a slide nobody asked for.
+  const heading = useRef<number | null>(null)
+  const scrollTrack = useCallback(
+    (track: HTMLElement, to: number) => {
+      const slide = track.children[to] as HTMLElement | undefined
+      if (!slide) return
+      heading.current = to
+      track.scrollTo({ left: offsetOf(track, slide), behavior: reducedMotion ? 'auto' : 'smooth' })
+    },
+    [reducedMotion],
+  )
+  // The reader taking over (swipe, wheel, arrow keys) ends the wait.
+  const letGo = () => {
+    heading.current = null
+  }
+
   const goTo = useCallback(
     (next: number) => {
       const target = loop ? (next + last + 1) % (last + 1) : Math.min(Math.max(next, 0), last)
-      const track = trackRef.current
-      const slide = track?.children[target] as HTMLElement | undefined
-      if (track && slide) track.scrollTo({ left: offsetOf(track, slide), behavior: reducedMotion ? 'auto' : 'smooth' })
+      if (trackRef.current) scrollTrack(trackRef.current, target)
       report(target)
     },
-    [last, loop, reducedMotion, report],
+    [last, loop, report, scrollTrack],
   )
 
   // Swipes and trackpad scrolls move the track directly; read the index back
@@ -99,6 +115,10 @@ export function Carousel({
     if (!first) return
     const step = first.getBoundingClientRect().width + parseFloat(getComputedStyle(track).columnGap || '0')
     const next = Math.min(last, Math.max(0, Math.round(Math.abs(track.scrollLeft) / step)))
+    if (heading.current !== null) {
+      if (next !== heading.current) return
+      heading.current = null
+    }
     if (next !== index) report(next)
   }
 
@@ -117,9 +137,8 @@ export function Carousel({
     if (indexProp === undefined) return
     const track = trackRef.current
     const slide = track?.children[index] as HTMLElement | undefined
-    if (track && slide && Math.abs(track.scrollLeft - offsetOf(track, slide)) > 1)
-      track.scrollTo({ left: offsetOf(track, slide), behavior: reducedMotion ? 'auto' : 'smooth' })
-  }, [indexProp, index, reducedMotion])
+    if (track && slide && Math.abs(track.scrollLeft - offsetOf(track, slide)) > 1) scrollTrack(track, index)
+  }, [indexProp, index, scrollTrack])
 
   const rotating = autoPlay !== undefined && playing && !paused && !reducedMotion
   useEffect(() => {
@@ -180,6 +199,9 @@ export function Carousel({
         // Focusable so arrow keys scroll it, like any scrolling region.
         tabIndex={0}
         onScroll={onScroll}
+        onPointerDown={letGo}
+        onWheel={letGo}
+        onKeyDown={letGo}
         onScrollEnd={hasScrollEnd ? readIndex : undefined}
       >
         {slides.map((slide, i) => (
