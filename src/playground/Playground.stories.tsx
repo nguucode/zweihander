@@ -53,8 +53,8 @@ const showing = async (canvas: ReturnType<typeof within>, name: string) =>
 
 /**
  * The page inside the window is the device's size, and the window, scaled
- * as one piece, is never above 100% and fits the stage both ways, touching
- * it on at least one side.
+ * as one piece, is never above 100% and fits inside the Stage's padding both
+ * ways, touching it on at least one side.
  */
 const fitsDevice = async (canvas: ReturnType<typeof within>, width: number, height: number) => {
   await waitFor(async () => {
@@ -73,9 +73,15 @@ const fitsDevice = async (canvas: ReturnType<typeof within>, width: number, heig
   // can land a frame after a layout change (the Props column coming back).
   await waitFor(() => {
     const win = canvas.getByTestId('preview-window')
-    const stage = win.parentElement!.parentElement!
+    const stage = canvas.getByTestId('stage')
     const box = win.getBoundingClientRect()
-    const room = { w: Math.min(width, stage.clientWidth), h: Math.min(height, stage.clientHeight) }
+    // The Stage's padding is wallpaper around the frame: the room is inside it.
+    const pad = getComputedStyle(stage)
+    const inner = {
+      w: stage.clientWidth - parseFloat(pad.paddingLeft) - parseFloat(pad.paddingRight),
+      h: stage.clientHeight - parseFloat(pad.paddingTop) - parseFloat(pad.paddingBottom),
+    }
+    const room = { w: Math.min(width, inner.w), h: Math.min(height, inner.h) }
     expect(box.width).toBeLessThanOrEqual(room.w + 0.5)
     expect(box.height).toBeLessThanOrEqual(room.h + 0.5)
     expect(box.width >= room.w - 1 || box.height >= room.h - 1).toBe(true)
@@ -722,5 +728,43 @@ export const BrowserBarDevices: Story = {
     await userEvent.keyboard('{Escape}')
     await userEvent.click(tablet)
     await expect(win.querySelectorAll(':scope > .dark')).toHaveLength(1)
+  },
+}
+
+/** The Stage: a wallpaper in the Preview theme's accent and appearance, the device floating on it. */
+export const Stage: Story = {
+  beforeEach: [withUrl({}), withPrefersDark(false)],
+  play: async ({ canvas, userEvent }) => {
+    // Found before the modal popover opens, which hides the page from queries.
+    const stage = canvas.getByTestId('stage')
+    const wallpaper = stage.firstElementChild!
+    const band = wallpaper.querySelector('path')!
+    const look = () => ({
+      glow: getComputedStyle(stage).backgroundImage,
+      band: getComputedStyle(band).fill,
+      page: getComputedStyle(stage).backgroundColor,
+    })
+    // Decoration only: hidden from assistive tech, and the device stays where it was.
+    await expect(wallpaper).toHaveAttribute('aria-hidden', 'true')
+    await expect(wallpaper.contains(canvas.getByTestId('preview-window'))).toBe(false)
+    await expect(stage).toHaveClass('light')
+    const blue = look()
+
+    const dialog = await openTheme(canvas, userEvent)
+    // Another accent: the glow and the bands take it, the page under them does not.
+    await userEvent.click(dialog.getByRole('radio', { name: 'Rose' }))
+    await waitFor(() => expect(look().band).not.toBe(blue.band))
+    await expect(look().glow).not.toBe(blue.glow)
+    await expect(look().page).toBe(blue.page)
+    const rose = look()
+
+    // Dark: the Stage, wallpaper and frame go dark with it; the page around stays on the OS.
+    await userEvent.click(dialog.getByRole('radio', { name: 'Dark' }))
+    await waitFor(() => expect(stage).toHaveClass('dark'))
+    await expect(look().page).not.toBe(rose.page)
+    await expect(look().band).not.toBe(rose.band)
+    await expect(document.documentElement).not.toHaveClass('dark')
+    await userEvent.keyboard('{Escape}')
+    await fitsDevice(canvas, 1280, 800)
   },
 }

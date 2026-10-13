@@ -183,6 +183,8 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
   const [previewTheme, setPreviewTheme] = useState(readTheme)
   const themeRef = useRef(previewTheme)
   const dark = usePrefersDark()
+  // The Preview theme's light or dark, for what the Playground draws around the page.
+  const appearance = resolveAppearance(previewTheme.appearance, dark)
   const [filters, setFilters] = useState(NO_FILTERS)
   const [folds, setFolds] = useState(NO_FOLDS)
   const [drawerOpen, setDrawerOpen] = useState(false)
@@ -321,12 +323,13 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
             vp={state.vp}
             args={state.args}
             theme={previewTheme}
+            appearance={appearance}
             storybookUrl={storybookUrl}
             bar={
               <SafariBar
                 vp={state.vp}
                 // The bar wears the Preview theme's appearance, as the page in the frame does.
-                appearance={resolveAppearance(previewTheme.appearance, dark)}
+                appearance={appearance}
                 address={state.address}
                 onAddress={setAddress}
               />
@@ -688,6 +691,7 @@ function LiveView({
   vp,
   args,
   theme,
+  appearance,
   storybookUrl,
   bar,
 }: {
@@ -695,6 +699,7 @@ function LiveView({
   vp: Viewport
   args: Args
   theme: PreviewTheme
+  appearance: 'light' | 'dark'
   storybookUrl: string
   bar: ReactNode
 }) {
@@ -763,7 +768,7 @@ function LiveView({
 
   return (
     <div className={styles.live}>
-      <PreviewWindow vp={vp} bar={bar}>
+      <PreviewWindow vp={vp} theme={{ accent: theme.accent, gray: theme.gray, appearance }} bar={bar}>
         <iframe
           key={src}
           ref={frame}
