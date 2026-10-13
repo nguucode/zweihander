@@ -9,7 +9,9 @@ import { ACCENT_COLORS, GRAY_COLORS, Theme, type AccentColor, type GrayColor, ty
 export const APPEARANCES = ['light', 'dark', 'system'] as const
 export type PreviewAppearance = (typeof APPEARANCES)[number]
 
-export const RADII = ['none', 'small', 'medium', 'large', 'full'] as const satisfies readonly Radius[]
+/** A record, not a list, so a preset added to Theme fails here until it is listed. */
+const RADIUS_ORDER: Record<Radius, number> = { none: 0, small: 1, medium: 2, large: 3, full: 4 }
+export const RADII = (Object.keys(RADIUS_ORDER) as Radius[]).sort((a, b) => RADIUS_ORDER[a] - RADIUS_ORDER[b])
 
 export interface PreviewTheme {
   accent: AccentColor

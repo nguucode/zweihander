@@ -308,8 +308,8 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
   )
 }
 
-const label = (value: string) => value[0].toUpperCase() + value.slice(1)
-const choices = (values: readonly string[]) => values.map((value) => ({ value, label: label(value) }))
+const titleCase = (value: string) => value[0].toUpperCase() + value.slice(1)
+const choices = (values: readonly string[]) => values.map((value) => ({ value, label: titleCase(value) }))
 
 /** The header's Theme button and its popover: what the item in the frame wears. */
 function ThemePopover({ theme, onChange }: { theme: PreviewTheme; onChange: (theme: PreviewTheme) => void }) {
@@ -373,7 +373,7 @@ function ThemePopover({ theme, onChange }: { theme: PreviewTheme; onChange: (the
  * carrying the palette's own attribute, as a `<Theme>` would.
  */
 function Swatches<T extends string>({
-  label: groupLabel,
+  label,
   attribute,
   values,
   value,
@@ -389,7 +389,7 @@ function Swatches<T extends string>({
   return (
     <div role="radiogroup" aria-labelledby={`${name}-label`} className={styles.swatchGroup}>
       <span id={`${name}-label`} className={styles.swatchLabel}>
-        {groupLabel}
+        {label}
       </span>
       <div className={styles.swatches}>
         {values.map((v) => (
@@ -397,7 +397,7 @@ function Swatches<T extends string>({
             key={v}
             type="radio"
             name={name}
-            aria-label={label(v)}
+            aria-label={titleCase(v)}
             {...{ [attribute]: v }}
             className={styles.swatch}
             checked={v === value}

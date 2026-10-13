@@ -481,6 +481,16 @@ export const ThemeFromUrl: Story = {
   },
 }
 
+export const ThemeUnknownInUrl: Story = {
+  beforeEach: withUrl({ 'theme-accent': 'foo' }),
+  play: async ({ canvas, userEvent }) => {
+    const received = await fakePreview(await frame(canvas))
+    const dialog = await openTheme(canvas, userEvent)
+    await expect(within(dialog.getByRole('radiogroup', { name: 'Accent' })).getByRole('radio', { name: 'Blue' })).toBeChecked()
+    await expect(received.filter((e) => e.type === 'updateGlobals')).toEqual([])
+  },
+}
+
 export const FollowsOs: Story = {
   beforeEach: withPrefersDark(true),
   play: async ({ canvas }) => {
