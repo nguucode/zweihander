@@ -31,8 +31,9 @@ export function PreviewWindow({
 
   useLayoutEffect(() => {
     // The content box: the padding is the wallpaper's margin around the frame.
-    // Measured once here, before paint, so the window is there on first render
-    // instead of a frame later when the observer first reports.
+    // Measured once here so the window is in the first commit: the observer's
+    // first callback only lands at the next rendering step, after a test (or
+    // anything else reading the DOM right after render) has already looked.
     const el = stage.current!
     const pad = getComputedStyle(el)
     setBox({
