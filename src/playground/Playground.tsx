@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useSyncExternalStore, type MouseEvent } from 'react'
+import { useEffect, useRef, useState, useSyncExternalStore, type MouseEvent, type ReactNode } from 'react'
 import { Tag } from '@/components/atomic-elements/Tag'
 import { Accordion } from '@/components/data-display/Accordion'
 import { Button } from '@/components/buttons/Button'
@@ -19,6 +19,7 @@ import { Icon } from '@/lib/icon'
 import styles from './Playground.module.css'
 import { DEFAULT_PREVIEW_THEME, usePrefersDark, type PreviewAppearance, type PreviewTheme } from './PreviewTheme'
 import { PreviewWindow } from './PreviewWindow'
+import { DEFAULT_ADDRESS, SafariBar } from './SafariBar'
 import { VIEWPORTS, type Viewport } from './viewports'
 
 /** One entry of `manifest.json`, written by scripts/build-playground-manifest.mjs. */
@@ -69,8 +70,9 @@ const LOAD_TIMEOUT = 20000
 // --- URL state ----------------------------------------------------------------
 
 /**
- * `?item=`, `?vp=` and the item's changed props from the address bar.
- * Anything unknown falls back: Button, Desktop, the prop's default.
+ * `?item=`, `?vp=`, `?address=` and the item's changed props from the
+ * address bar. Anything unknown falls back: Button, Desktop, example.com,
+ * the prop's default.
  */
 function readUrl(items: ManifestItem[]) {
   const q = new URLSearchParams(location.search)
@@ -85,7 +87,12 @@ function readUrl(items: ManifestItem[]) {
     const value = raw === null ? undefined : parseValue(prop, raw)
     if (value !== undefined && value !== defaultOf(prop)) args[prop.name] = value
   }
-  return { item, vp: Object.hasOwn(VIEWPORTS, vp) ? (vp as Viewport) : 'desktop', args }
+  return {
+    item,
+    vp: Object.hasOwn(VIEWPORTS, vp) ? (vp as Viewport) : 'desktop',
+    address: q.get('address') || DEFAULT_ADDRESS,
+    args,
+  }
 }
 
 /** The value a URL param stands for, or undefined when it does not fit the prop. */
@@ -177,6 +184,11 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
       return { ...s, args: changed ? { ...args, [prop.name]: value } : args }
     })
   }
+  // What the Browser bar shows; the URL keeps it only off the default.
+  const setAddress = (address: string) => {
+    history.replaceState(null, '', urlWith({ address: address && address !== DEFAULT_ADDRESS ? address : undefined }))
+    setState((s) => ({ ...s, address }))
+  }
   const resetProps = () => {
     history.replaceState(null, '', urlWith(withoutProps(state.item)))
     setState((s) => ({ ...s, args: {} }))
@@ -262,6 +274,16 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
             args={state.args}
             theme={previewTheme}
             storybookUrl={storybookUrl}
+            bar={
+              state.vp === 'desktop' && (
+                <SafariBar
+                  // The bar wears the Preview theme's appearance, as the page in the frame does.
+                  appearance={previewTheme.appearance === 'system' ? (dark ? 'dark' : 'light') : previewTheme.appearance}
+                  address={state.address}
+                  onAddress={setAddress}
+                />
+              )
+            }
           />
         </main>
 
@@ -509,12 +531,14 @@ function LiveView({
   args,
   theme,
   storybookUrl,
+  bar,
 }: {
   item: ManifestItem
   vp: Viewport
   args: Args
   theme: PreviewTheme
   storybookUrl: string
+  bar: ReactNode
 }) {
   const frame = useRef<HTMLIFrameElement>(null)
   // Which src finished, and how. A src that has not finished is loading.
@@ -581,7 +605,7 @@ function LiveView({
 
   return (
     <div className={styles.live}>
-      <PreviewWindow vp={vp}>
+      <PreviewWindow vp={vp} bar={bar}>
         <iframe
           key={src}
           ref={frame}
