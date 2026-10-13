@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect, screen, waitFor, within } from 'storybook/test'
-import { withPrefersDark } from '@/test/story-helpers'
+import { setPrefersDark, withPrefersDark } from '@/test/story-helpers'
 import { Playground, type Manifest, type ManifestItem, type Prop } from './Playground'
 
 const item = (
@@ -290,7 +290,7 @@ export const PreviewTheme: Story = {
 
     const trigger = canvas.getByRole('button', { name: 'Theme' })
     await userEvent.click(trigger)
-    let dialog = within(await screen.findByRole('dialog', { name: 'Preview theme' }))
+    const dialog = within(await screen.findByRole('dialog', { name: 'Preview theme' }))
     await expect(dialog.getByRole('radio', { name: 'System' })).toBeChecked()
     await userEvent.click(dialog.getByRole('radio', { name: 'Dark' }))
     await waitFor(() =>
@@ -307,15 +307,12 @@ export const PreviewTheme: Story = {
     await expect(trigger).toHaveFocus()
     await expect(panel.getByRole('switch', { name: 'isLoading' })).toBeChecked()
 
-    // Focus stays inside while it is open. Left open for the a11y check.
+    // Opening it moves focus inside (the modal trap itself is Base UI's, and a
+    // synthetic Tab cannot exercise it: see Popover.stories). Left open for the a11y check.
     await userEvent.click(trigger)
     const popup = await screen.findByRole('dialog', { name: 'Preview theme' })
-    dialog = within(popup)
-    await expect(dialog.getByRole('radio', { name: 'Dark' })).toBeChecked()
-    for (let i = 0; i < 6; i++) {
-      await userEvent.tab()
-      await expect(popup.contains(document.activeElement)).toBe(true)
-    }
+    await waitFor(() => expect(popup.contains(document.activeElement)).toBe(true))
+    await expect(within(popup).getByRole('radio', { name: 'Dark' })).toBeChecked()
   },
 }
 
@@ -325,5 +322,8 @@ export const FollowsOs: Story = {
     // No Dark button: the page follows the OS, and the Preview theme is apart.
     await expect(canvas.queryByRole('button', { name: 'Dark' })).toBeNull()
     await waitFor(() => expect(document.documentElement).toHaveClass('dark'))
+    // And keeps following it when the OS setting changes.
+    setPrefersDark(false)
+    await waitFor(() => expect(document.documentElement).not.toHaveClass('dark'))
   },
 }

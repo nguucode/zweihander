@@ -40,6 +40,7 @@ export function PreviewThemeScope({ appearance, children }: PreviewTheme & { chi
   // and the page behind the story should not stay light under a dark one.
   useLayoutEffect(() => {
     document.documentElement.classList.toggle('dark', resolved === 'dark')
+    return () => document.documentElement.classList.remove('dark')
   }, [resolved])
   // display: contents keeps the story's own layout; tokens still inherit.
   return (
