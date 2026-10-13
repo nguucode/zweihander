@@ -183,6 +183,19 @@ export const Grouped: Story = {
     await waitFor(() => expect(items.getByRole('link', { name: /Badge/ })).toBeVisible())
     await expect(items.queryByRole('button', { name: 'Overlays' })).toBeNull()
     await expect(items.queryByRole('button', { name: 'Application UI' })).toBeNull()
+
+    // Clearing the search brings back the folds from before it.
+    await userEvent.clear(items.getByRole('searchbox', { name: 'Search by name' }))
+    await expect(section('Atomic Elements')).toHaveAttribute('aria-expanded', 'false')
+    await expect(section('Buttons')).toHaveAttribute('aria-expanded', 'false')
+    await expect(section('Overlays')).toHaveAttribute('aria-expanded', 'true')
+
+    // A filter does the same: only the matching section, open.
+    await userEvent.click(items.getByRole('combobox', { name: 'Category' }))
+    await userEvent.click(await screen.findByRole('option', { name: 'Buttons' }))
+    await waitFor(() => expect(section('Buttons')).toHaveAttribute('aria-expanded', 'true'))
+    await expect(items.queryByRole('button', { name: 'Atomic Elements' })).toBeNull()
+    await expect(items.queryByRole('button', { name: 'Overlays' })).toBeNull()
   },
 }
 

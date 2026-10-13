@@ -138,6 +138,7 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
   const [state, setState] = useState(() => readUrl(items))
   const [dark, setDark] = useState(() => matchMedia('(prefers-color-scheme: dark)').matches)
   const [filters, setFilters] = useState(NO_FILTERS)
+  const [folds, setFolds] = useState(NO_FOLDS)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const wide = useWide()
 
@@ -177,7 +178,17 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
     setState((s) => ({ ...s, args: {} }))
   }
 
-  const browser = <Browser items={items} selected={state.item} filters={filters} onFilters={setFilters} onSelect={select} />
+  const browser = (
+    <Browser
+      items={items}
+      selected={state.item}
+      filters={filters}
+      onFilters={setFilters}
+      folds={folds}
+      onFolds={setFolds}
+      onSelect={select}
+    />
+  )
 
   return (
     <div className={styles.shell}>
@@ -259,28 +270,44 @@ interface Filters {
   query: string
   category: string
   status: string
-  /** Category sections the visitor folded, as `kind/category`. Not in the URL. */
-  closed: string[]
 }
 const ALL = 'all'
-const NO_FILTERS: Filters = { query: '', category: ALL, status: ALL, closed: [] }
+const NO_FILTERS: Filters = { query: '', category: ALL, status: ALL }
+
+/**
+ * Category sections the visitor folded, as `kind:category`; not in the URL.
+ * Folds made while searching or filtering are their own set, emptied by each
+ * new search or filter so a match never sits in a folded section; the folds
+ * from before come back once the search is cleared.
+ */
+interface Folds {
+  browsing: string[]
+  filtering: string[]
+}
+const NO_FOLDS: Folds = { browsing: [], filtering: [] }
+
+const sortedUnique = (values: string[]) => [...new Set(values)].sort()
 
 function Browser({
   items,
   selected,
   filters,
   onFilters,
+  folds,
+  onFolds,
   onSelect,
 }: {
   items: ManifestItem[]
   selected: ManifestItem
   filters: Filters
   onFilters: (f: Filters) => void
+  folds: Folds
+  onFolds: (f: Folds) => void
   onSelect: (item: ManifestItem) => void
 }) {
-  const { query, category, status, closed } = filters
-  const categories = [...new Set(items.map((i) => i.category))].sort()
-  const statuses = [...new Set(items.map((i) => i.status))].sort()
+  const { query, category, status } = filters
+  const categories = sortedUnique(items.map((i) => i.category))
+  const statuses = sortedUnique(items.map((i) => i.status))
   const needle = query.trim().toLowerCase()
   const visible = items.filter(
     (i) =>
@@ -289,8 +316,13 @@ function Browser({
       (status === ALL || i.status === status),
   )
 
-  // A new search or filter opens every section, so a match never sits in a folded one.
-  const filter = (change: Partial<Filters>) => onFilters({ ...filters, ...change, closed: [] })
+  const isFiltering = needle !== '' || category !== ALL || status !== ALL
+  const folded = isFiltering ? folds.filtering : folds.browsing
+  const setFilters = (next: Filters) => {
+    onFilters(next)
+    onFolds({ ...folds, filtering: [] })
+  }
+  const setFilter = (change: Partial<Filters>) => setFilters({ ...filters, ...change })
 
   const open = (event: MouseEvent, item: ManifestItem) => {
     // Let a new tab or window open from the link as usual.
@@ -305,7 +337,7 @@ function Browser({
         aria-label="Search by name"
         placeholder="Search by name"
         value={query}
-        onChange={(e) => filter({ query: e.target.value })}
+        onChange={(e) => setFilter({ query: e.target.value })}
         isFullWidth
       />
       <div className={styles.filters}>
@@ -313,14 +345,14 @@ function Browser({
           label="Category"
           options={[{ value: ALL, label: 'All' }, ...categories]}
           value={category}
-          onValueChange={(v) => filter({ category: v ?? ALL })}
+          onValueChange={(v) => setFilter({ category: v ?? ALL })}
           isFullWidth
         />
         <Select
           label="Status"
           options={[{ value: ALL, label: 'All' }, ...statuses]}
           value={status}
-          onValueChange={(v) => filter({ status: v ?? ALL })}
+          onValueChange={(v) => setFilter({ status: v ?? ALL })}
           isFullWidth
         />
       </div>
@@ -336,7 +368,7 @@ function Browser({
           title="Nothing matches"
           description="No item has that name in the chosen Category and status."
           action={
-            <Button size="sm" appearance="outlined" variant="secondary" onClick={() => onFilters(NO_FILTERS)}>
+            <Button size="sm" appearance="outlined" variant="secondary" onClick={() => setFilters(NO_FILTERS)}>
               Clear search and filters
             </Button>
           }
@@ -346,8 +378,8 @@ function Browser({
           const group = visible.filter((i) => i.kind === kind)
           if (!group.length) return null
           // Sections with no match are not built at all, so they hide with their items.
-          const sections = [...new Set(group.map((i) => i.category))].sort()
-          const keyOf = (c: string) => `${kind}/${c}`
+          const sections = sortedUnique(group.map((i) => i.category))
+          const keys = sections.map((section) => `${kind}:${section}`)
           return (
             <section key={kind} aria-labelledby={`pg-group-${kind}`} className={styles.group}>
               <h2 id={`pg-group-${kind}`} className={styles.groupTitle}>
@@ -357,18 +389,18 @@ function Browser({
                 multiple
                 appearance="flush"
                 size="sm"
-                value={sections.map(keyOf).filter((key) => !closed.includes(key))}
+                value={keys.filter((key) => !folded.includes(key))}
                 onValueChange={(opened) =>
-                  onFilters({
-                    ...filters,
-                    closed: [
-                      ...closed.filter((key) => !key.startsWith(`${kind}/`)),
-                      ...sections.map(keyOf).filter((key) => !opened.includes(key)),
+                  onFolds({
+                    ...folds,
+                    [isFiltering ? 'filtering' : 'browsing']: [
+                      ...folded.filter((key) => !keys.includes(key)),
+                      ...keys.filter((key) => !opened.includes(key)),
                     ],
                   })
                 }
-                items={sections.map((section) => ({
-                  value: keyOf(section),
+                items={sections.map((section, index) => ({
+                  value: keys[index],
                   title: section,
                   content: (
                     <ul className={styles.cards}>
