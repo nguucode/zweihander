@@ -1,5 +1,6 @@
 /**
- * Asserts the agent skills point only at files that exist.
+ * Asserts the agent skills point only at files that exist, and that the
+ * agent config in .claude/*.json parses.
  *
  *   node scripts/check-skills.mjs          check .claude/skills/**.md, CLAUDE.md and .claude/*.json
  *   node scripts/check-skills.mjs <file…>  check only these
@@ -21,10 +22,12 @@ import { dirname, join, relative, resolve } from 'node:path'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 
+// The drive is exFAT: macOS writes an AppleDouble `._<name>` beside every file.
+const isAppleDouble = (name) => name.startsWith('._')
+
 const walk = (dir) =>
   readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
-    // The drive is exFAT: macOS writes an AppleDouble `._<name>` beside every file.
-    if (e.name.startsWith('._')) return []
+    if (isAppleDouble(e.name)) return []
     const path = join(dir, e.name)
     return e.isDirectory() ? walk(path) : e.name.endsWith('.md') ? [path] : []
   })
@@ -72,17 +75,22 @@ export const checkJson = (file, source = readFileSync(file, 'utf8')) => {
 const isMain = process.argv[1] === fileURLToPath(import.meta.url)
 if (isMain) {
   const args = process.argv.slice(2)
-  const files = args.length ? args.map((f) => join(process.cwd(), f)) : [...walk(join(root, '.claude/skills')), join(root, 'CLAUDE.md')]
-  const json = args.length
-    ? []
-    : readdirSync(join(root, '.claude'))
-        .filter((name) => name.endsWith('.json') && !name.startsWith('._'))
-        .map((name) => join(root, '.claude', name))
-  const errors = [...files.flatMap((f) => checkFile(f)), ...json.flatMap((f) => checkJson(f))]
+  const files = args.length
+    ? args.map((f) => join(process.cwd(), f))
+    : [
+        ...walk(join(root, '.claude/skills')),
+        join(root, 'CLAUDE.md'),
+        ...readdirSync(join(root, '.claude'))
+          .filter((name) => name.endsWith('.json') && !isAppleDouble(name))
+          .map((name) => join(root, '.claude', name)),
+      ]
+  const json = files.filter((f) => f.endsWith('.json'))
+  const markdown = files.filter((f) => !f.endsWith('.json'))
+  const errors = [...markdown.flatMap((f) => checkFile(f)), ...json.flatMap((f) => checkJson(f))]
   if (errors.length) {
     console.error(errors.join('\n'))
     console.error(`\nskills:check: ${errors.length} problem${errors.length === 1 ? '' : 's'}`)
     process.exit(1)
   }
-  console.log(`skills:check: ${files.length} Markdown files, every link and skill path exists; ${json.length} .claude JSON files parse`)
+  console.log(`skills:check: ${markdown.length} Markdown files, every link and skill path exists; ${json.length} .claude JSON files parse`)
 }
