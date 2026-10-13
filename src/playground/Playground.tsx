@@ -109,6 +109,9 @@ function urlWith(changes: Record<string, string | undefined>) {
 /** Removes an item's props from the URL, so they do not carry over to the next item. */
 const withoutProps = (item: ManifestItem) => Object.fromEntries(item.props.map((p) => [p.name, undefined]))
 
+/** The item's story in the full Storybook. */
+const storyPage = (storybookUrl: string, item: ManifestItem) => `${storybookUrl}?path=/story/${item.storyId}`
+
 function useWide() {
   return useSyncExternalStore(
     (onChange) => {
@@ -232,7 +235,7 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
                   variant="secondary"
                   isIconOnly
                   aria-label="Open in Storybook"
-                  href={`${storybookUrl}?path=/story/${state.item.storyId}`}
+                  href={storyPage(storybookUrl, state.item)}
                 >
                   <Icon name="external" />
                 </Button>
@@ -420,7 +423,7 @@ function LiveView({
   // Props are not in the src: they go over Storybook's channel (below), so a
   // change re-renders the story without reloading the frame.
   const src = `${storybookUrl}iframe.html?${new URLSearchParams({ id: item.storyId, viewMode: 'story', embed: 'true', globals: `theme:${theme}` })}`
-  const storyLink = `${storybookUrl}?path=/story/${item.storyId}`
+  const storyLink = storyPage(storybookUrl, item)
   const state = done?.src === src ? (done.ok ? 'ready' : 'error') : 'loading'
 
   useEffect(() => {
