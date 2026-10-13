@@ -9,7 +9,7 @@ A ticket thread never touches the vault: no `connect_device`, no folder request,
 2. **Claim**: `send_message` to the map thread: `project-flow: ticket <NN> claimed by thread "<thread title>".`
 3. **Branch** from the latest default branch.
 4. **Build**: read `.claude/skills/implement/SKILL.md` and follow it for this ticket (it drives `tdd` and closes with `matt-code-review`). Component work also meets [COMPONENTS.md](COMPONENTS.md) (gates 0 to 3 before leaving the build step).
-5. **After build**: [AFTER-BUILD.md](AFTER-BUILD.md), artifact through ship. Acceptance criteria come from the ticket. If the ticket turns out too big for one session (well past the ~150k-token smart zone), stop and tell the map thread to split it rather than pushing on.
+5. **After build**: [AFTER-BUILD.md](AFTER-BUILD.md), artifact through ship. Acceptance criteria come from the ticket. Conflicts with `main` (often from a sibling ticket that merged first) are resolved here by merging `main` in ([Merge conflicts](AFTER-BUILD.md#merge-conflicts)), not handed to the user. If the ticket turns out too big for one session (well past the ~150k-token smart zone), stop and tell the map thread to split it rather than pushing on.
 6. **Close** once the PR is merged:
    - `send_message` to the map thread: `project-flow: ticket <NN> merged in <PR link>. Retro: <note>; <note>.` One to three friction notes (see [Retro batches](SKILL.md#retro-batches)), or `none`. No retro run here; the map thread runs one per batch.
    - `send_message` to the coordinator (`get_channel_session_id`): `project-flow: ticket <NN> <title> merged (<PR link>). Start any ticket in the batch this unblocks.`
