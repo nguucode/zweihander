@@ -115,6 +115,7 @@ Tests live in `<Name>.stories.tsx` and run through addon-vitest. Test behaviour,
 
 - A story for every variant, size and state: default, hover, active, focus-visible, disabled, loading/invalid if any, in both light and dark.
 - **Every sentence in `## Accessibility` has at least one `play` checking it**, using `userEvent` for the keyboard.
+- **Base UI popups in a `play`.** A modal Popover hides the rest of the page from the accessibility tree while open, so `getByRole` cannot find elements outside the popup. Query those elements before opening, or check them after closing. `userEvent.tab()` cannot test Base UI's focus trap: check that focus lands inside the popup on open and returns to the trigger on close, not that Tab wraps.
 - a11y runs in `error` mode. A story that must turn it off (for example a hand-written contrast story) sets `a11y: { test: 'off' }` with a comment giving the reason.
 - Visual regression: each component has one representative story in `src/visual.test.tsx` (the story with the most variants and states), captured light and dark on Chromium and compared with the baseline in `src/__screenshots__/`. A new component adds a line to the `STORIES` table; the test `every component has a visual story` goes red if it is missing. When an image changes on purpose, add the `update screenshots` label to the PR: the Visual baselines workflow recaptures on CI Linux and commits. Do not update baselines on a Mac. When CI reports a diff, the actual and diff images are in the run's `visual-diffs` artifact.
 
