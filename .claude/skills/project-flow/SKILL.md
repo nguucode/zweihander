@@ -15,7 +15,7 @@ A thread started for one ticket skips this file and follows [TICKET-THREAD.md](T
 - **Model-invoked skills** (research, prototype, tdd, diagnosing-bugs, matt-code-review, ponytail-*): call the Skill tool.
 - **Built-ins** (`code-review`, `security-review`, `run`) and `a11y-enforcer:a11y-check`: call the Skill tool.
 - Repo conventions sit on top of every step: `docs/agents/*.md` (tracker in the vault, `CONTEXT.md`, ADRs), and [COMPONENTS.md](COMPONENTS.md) for anything under `src/components/` (classification and MDX spec before code, code and test gates inside the build step, changeset and status at ship). This flow is the only implementation process; there is no separate component process.
-- The tracker lives in the vault on the user's Mac. Reach it with the device folder tools (`/Volumes/KAFKA/Vault`); if none are connected, call `connect_device` and wait. Write vault files in Vietnamese, following `/Volumes/KAFKA/Vault/CLAUDE.md`.
+- The tracker lives in the vault on the user's Mac. Reach it with the device folder tools (`/Volumes/KAFKA/Vault`); if none are connected, call `connect_device` and wait. Ticket threads never touch the vault; their map thread writes for them. Write vault files in Vietnamese, following `/Volumes/KAFKA/Vault/CLAUDE.md`.
 
 Steps 3 to 6 stay in one unbroken thread (no compaction before the tickets exist), so grill, spec and tickets share the same reasoning.
 
@@ -69,7 +69,7 @@ Each finding the user picks becomes a new `flow fix` or `flow change` thread (ha
 
 After `to-tickets`, this thread becomes the **map thread**. It does not implement. It hands off one batch at a time.
 
-1. List the current batch's tickets with title, vault path and `Blocked by`. The **frontier** is every ticket in the batch with no open blocker. Copy the spec to `/mnt/project-files/<feature>/` and each ticket to `/mnt/project-files/<feature>/issues/`, so a ticket thread can start reading before the user allows the vault. The copies are read-only snapshots; the vault stays the source of truth.
+1. List the current batch's tickets with title, vault path and `Blocked by`. The **frontier** is every ticket in the batch with no open blocker. Copy the spec to `/mnt/project-files/<feature>/` and each ticket to `/mnt/project-files/<feature>/issues/`, since ticket threads read only these copies. The copies are read-only snapshots; the vault stays the source of truth.
 2. Get the coordinator with `get_channel_session_id`, then `send_message` to it:
 
    ```
@@ -82,7 +82,7 @@ After `to-tickets`, this thread becomes the **map thread**. It does not implemen
    ```
 
 3. The coordinator posts one project-chat line per ticket and starts a thread on it with that brief (its rules are in project memory, `project-flow-tickets`). Frontier tickets run in parallel.
-4. Each ticket thread messages the coordinator when its PR merges; the coordinator then starts every ticket in the batch that merge unblocked. The map thread keeps the checklist (one line per ticket: waiting, running, merged) from what it reads with `list_thread_sessions` / `fetch_thread`.
+4. Each ticket thread messages the coordinator when its PR merges; the coordinator then starts every ticket in the batch that merge unblocked. Each ticket thread also messages the map thread when it claims its ticket and when its PR merges (with retro notes). The map thread writes them to the vault ticket file under `## Comments` (`<date>: claimed by thread "<title>"`; on merge set frontmatter `status: done`, `<date>: merged in <PR link>`, then `<date>: retro: <note>` per note), updates `zweihander-kanban.md` and mirrors repo Markdown (see [Vault](#vault)). The map thread keeps the checklist (one line per ticket: waiting, running, merged) from what it reads with `list_thread_sessions` / `fetch_thread`.
 5. When every ticket in the batch is merged: run the [batch retro](#retro-batches) over the batch's ticket files and reply once with the batch's PR list and the ranked retro list, asking which to apply. Each one the user picks becomes a `flow change` thread. Once the user answers, hand off the next batch (step 1), so the next batch builds on what this one taught.
 6. After the last batch: update the vault (`_context.md` line, `_system/agent-log.md`) and resolve the thread.
 
@@ -92,7 +92,7 @@ Retro runs once per batch of 5 to 10 finished tickets or threads, not once per t
 
 **Every build thread logs friction, it does not run retro.** At its closing step, a thread writes one to three raw notes on what cost it time or went wrong (a file it could not find, a check that would have caught a mistake, a wasted tool call, a missing instruction). Facts, not fixes. `none` is a valid note. Where they go:
 
-- Ticket thread: under `## Comments` in its ticket file, as `<date>: retro: <note>`.
+- Ticket thread: in its merged message to the map thread, which writes them under `## Comments` in the ticket file as `<date>: retro: <note>`.
 - Any other `flow fix` or `flow change` thread: a new file `10-projects/zweihander/retro-inbox/<date>-<thread-slug>.md` with frontmatter `status: open` and the PR link, notes as bullets. One file per thread, so parallel threads never write the same file. No vault reachable from this thread: write the same file to `/mnt/project-files/project-flow/retro-inbox/` instead.
 
 **The batch retro** is run by the map thread when its batch is merged, or by the thread whose note makes 5 open files across both `retro-inbox/` folders:
