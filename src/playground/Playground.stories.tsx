@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect, screen, waitFor, within } from 'storybook/test'
+import { setPrefersDark, withPrefersDark } from '@/test/story-helpers'
 import { Playground, type Manifest, type ManifestItem, type Prop } from './Playground'
 
 const item = (
@@ -364,5 +365,59 @@ export const Keyboard: Story = {
     await userEvent.keyboard('{ArrowRight}')
     await fitsDevice(canvas, 393, 852)
     await expect(param('vp')).toBe('mobile')
+  },
+}
+
+export const PreviewTheme: Story = {
+  beforeEach: withPrefersDark(false),
+  play: async ({ canvas, userEvent }) => {
+    const panel = propsPanel(canvas)
+    const iframe = await frame(canvas)
+    const src = iframe.getAttribute('src')
+    const received = await fakePreview(iframe)
+    // The frame starts on the default, System, without a message.
+    await expect(src).toContain('globals=appearance%3Asystem')
+
+    // A prop changed before the theme stays changed after it.
+    await userEvent.click(panel.getByRole('switch', { name: 'isLoading' }))
+    await waitFor(() => expect(received.at(-1)?.type).toBe('updateStoryArgs'))
+
+    const trigger = canvas.getByRole('button', { name: 'Theme' })
+    await userEvent.click(trigger)
+    const dialog = within(await screen.findByRole('dialog', { name: 'Preview theme' }))
+    await expect(dialog.getByRole('radio', { name: 'System' })).toBeChecked()
+    await userEvent.click(dialog.getByRole('radio', { name: 'Dark' }))
+    await waitFor(() =>
+      expect(received.at(-1)).toEqual({ type: 'updateGlobals', args: [{ globals: { appearance: 'dark' } }] }),
+    )
+    await expect(received.filter((e) => e.type === 'updateStoryArgs')).toHaveLength(1)
+    await expect((await frame(canvas)).getAttribute('src')).toBe(src)
+    // The page itself stays on the OS appearance.
+    await expect(document.documentElement).not.toHaveClass('dark')
+
+    // Escape closes it and gives focus back to the Theme button.
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(screen.queryByRole('dialog', { name: 'Preview theme' })).toBeNull())
+    await expect(trigger).toHaveFocus()
+    await expect(panel.getByRole('switch', { name: 'isLoading' })).toBeChecked()
+
+    // Opening it moves focus inside (the modal trap itself is Base UI's, and a
+    // synthetic Tab cannot exercise it: see Popover.stories). Left open for the a11y check.
+    await userEvent.click(trigger)
+    const popup = await screen.findByRole('dialog', { name: 'Preview theme' })
+    await waitFor(() => expect(popup.contains(document.activeElement)).toBe(true))
+    await expect(within(popup).getByRole('radio', { name: 'Dark' })).toBeChecked()
+  },
+}
+
+export const FollowsOs: Story = {
+  beforeEach: withPrefersDark(true),
+  play: async ({ canvas }) => {
+    // No Dark button: the page follows the OS, and the Preview theme is apart.
+    await expect(canvas.queryByRole('button', { name: 'Dark' })).toBeNull()
+    await waitFor(() => expect(document.documentElement).toHaveClass('dark'))
+    // And keeps following it when the OS setting changes.
+    setPrefersDark(false)
+    await waitFor(() => expect(document.documentElement).not.toHaveClass('dark'))
   },
 }

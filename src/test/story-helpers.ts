@@ -84,3 +84,36 @@ export const mockToday = (today: Date) => {
     globalThis.Date = Real
   }
 }
+
+/**
+ * A story's `beforeEach`: the OS answers `prefers-color-scheme: dark` with
+ * `dark`, other media queries as usual. Puts the real matchMedia back after.
+ * `setPrefersDark` flips it mid-story, as switching the OS setting would.
+ */
+let fakeDark: { matches: boolean; target: EventTarget } | undefined
+
+export const withPrefersDark = (dark: boolean) => () => {
+  const real = window.matchMedia
+  const fake = (fakeDark = { matches: dark, target: new EventTarget() })
+  window.matchMedia = (query: string) => {
+    if (query !== '(prefers-color-scheme: dark)') return real.call(window, query)
+    return {
+      get matches() {
+        return fake.matches
+      },
+      media: query,
+      addEventListener: fake.target.addEventListener.bind(fake.target),
+      removeEventListener: fake.target.removeEventListener.bind(fake.target),
+    } as MediaQueryList
+  }
+  return () => {
+    window.matchMedia = real
+    fakeDark = undefined
+  }
+}
+
+export const setPrefersDark = (dark: boolean) => {
+  if (!fakeDark) throw new Error('setPrefersDark needs withPrefersDark in beforeEach')
+  fakeDark.matches = dark
+  fakeDark.target.dispatchEvent(new Event('change'))
+}
