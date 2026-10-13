@@ -67,15 +67,19 @@ const fitsDevice = async (canvas: ReturnType<typeof within>, width: number, heig
       height - bar,
     ])
   })
-  const win = canvas.getByTestId('preview-window')
-  const stage = win.parentElement!.parentElement!
-  const box = win.getBoundingClientRect()
-  const room = { w: Math.min(width, stage.clientWidth), h: Math.min(height, stage.clientHeight) }
-  await expect(box.width).toBeLessThanOrEqual(room.w + 0.5)
-  await expect(box.height).toBeLessThanOrEqual(room.h + 0.5)
-  await expect(box.width >= room.w - 1 || box.height >= room.h - 1).toBe(true)
-  // Scaled as one piece: the window keeps the device's proportions.
-  await expect(box.width / box.height).toBeCloseTo(width / height, 2)
+  // Waited for: the scale follows the stage through a ResizeObserver, which
+  // can land a frame after a layout change (the Props column coming back).
+  await waitFor(() => {
+    const win = canvas.getByTestId('preview-window')
+    const stage = win.parentElement!.parentElement!
+    const box = win.getBoundingClientRect()
+    const room = { w: Math.min(width, stage.clientWidth), h: Math.min(height, stage.clientHeight) }
+    expect(box.width).toBeLessThanOrEqual(room.w + 0.5)
+    expect(box.height).toBeLessThanOrEqual(room.h + 0.5)
+    expect(box.width >= room.w - 1 || box.height >= room.h - 1).toBe(true)
+    // Scaled as one piece: the window keeps the device's proportions.
+    expect(box.width / box.height).toBeCloseTo(width / height, 2)
+  })
 }
 const viewportTab = (canvas: ReturnType<typeof within>, name: string) =>
   within(canvas.getByRole('tablist', { name: 'Viewport' })).getByRole('tab', { name })
