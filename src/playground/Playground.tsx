@@ -378,13 +378,6 @@ function ThemePopover({ theme, onChange }: { theme: PreviewTheme; onChange: (the
             onChange={(gray) => set({ gray })}
           />
         </fieldset>
-        <RadioGroup
-          label="Radius"
-          orientation="horizontal"
-          options={choices(PREVIEW_THEME_VALUES.radius)}
-          value={theme.radius}
-          onValueChange={(radius) => set({ radius: radius as PreviewTheme['radius'] })}
-        />
         <fieldset className={styles.themeSection}>
           <legend className={styles.themeLegend}>Typo</legend>
           <div className={styles.themeRow}>
@@ -404,6 +397,13 @@ function ThemePopover({ theme, onChange }: { theme: PreviewTheme; onChange: (the
             />
           </div>
         </fieldset>
+        <RadioGroup
+          label="Radius"
+          orientation="horizontal"
+          options={choices(PREVIEW_THEME_VALUES.radius)}
+          value={theme.radius}
+          onValueChange={(radius) => set({ radius: radius as PreviewTheme['radius'] })}
+        />
         <RadioGroup
           label="Theme"
           orientation="horizontal"

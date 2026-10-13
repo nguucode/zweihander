@@ -13,7 +13,7 @@ export type PreviewAppearance = (typeof APPEARANCES)[number]
 export const RADII = Object.keys({ none: 0, small: 0, medium: 0, large: 0, full: 0 } satisfies Record<Radius, 0>) as Radius[]
 
 /**
- * What each font puts in `--font-sans` and `--font-heading`. System is the
+ * What each font puts in `--font-sans`, `--font-heading` and `--font-prose`. System is the
  * token's own stack, so it sets nothing. Inter and Geist are bundled with the
  * Storybook preview (`@fontsource-variable`), never fetched from a CDN.
  */
@@ -121,9 +121,8 @@ export function PreviewThemeScope({
       grayColor={gray}
       radius={radius}
       scaling={scaling}
-      // Heading too: it is var(--font-sans) resolved at the root, so it would
-      // keep the system stack.
-      tokens={stack ? { 'font-sans': stack, 'font-heading': stack } : undefined}
+      // Heading and prose are var(--font-sans) resolved at the root: set each.
+      tokens={stack ? { 'font-sans': stack, 'font-heading': stack, 'font-prose': stack } : undefined}
       data-preview-theme=""
       style={{ display: 'contents' }}
     >
