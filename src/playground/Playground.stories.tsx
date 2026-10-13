@@ -27,6 +27,8 @@ const manifest: Manifest = {
     ]),
     item('component', 'Button', 'Buttons', 'beta', [
       { name: 'variant', control: 'inline-radio', options: ['primary', 'secondary'], default: 'primary' },
+      // Same name as the Preview theme's appearance: the theme's param is prefixed.
+      { name: 'appearance', control: 'select', options: ['filled', 'outlined'], default: 'filled' },
       { name: 'isLoading', control: 'boolean' },
       { name: 'children', control: 'text', default: 'Button' },
     ]),
@@ -93,6 +95,7 @@ const withUrl = (search: Record<string, string>) => () => {
   const before = location.href
   const url = new URL(before)
   for (const key of ['item', 'vp', ...manifest.items.flatMap((i) => i.props.map((p) => p.name))]) url.searchParams.delete(key)
+  for (const key of [...url.searchParams.keys()].filter((k) => k.startsWith('theme-'))) url.searchParams.delete(key)
   for (const [k, v] of Object.entries(search)) url.searchParams.set(k, v)
   history.replaceState(null, '', url)
   return () => history.replaceState(null, '', before)
@@ -407,6 +410,74 @@ export const PreviewTheme: Story = {
     const popup = await screen.findByRole('dialog', { name: 'Preview theme' })
     await waitFor(() => expect(popup.contains(document.activeElement)).toBe(true))
     await expect(within(popup).getByRole('radio', { name: 'Dark' })).toBeChecked()
+  },
+}
+
+const themeParams = () => [...new URLSearchParams(location.search).keys()].filter((k) => k.startsWith('theme-'))
+const openTheme = async (canvas: ReturnType<typeof within>, userEvent: { click: (el: Element) => Promise<void> }) => {
+  await userEvent.click(canvas.getByRole('button', { name: 'Theme' }))
+  return within(await screen.findByRole('dialog', { name: 'Preview theme' }))
+}
+const lastGlobals = (received: ChannelEvent[]) =>
+  (received.findLast((e) => e.type === 'updateGlobals')?.args[0] as { globals: object } | undefined)?.globals
+
+export const ThemeColorRadius: Story = {
+  play: async ({ canvas, userEvent }) => {
+    const received = await fakePreview(await frame(canvas))
+    const dialog = await openTheme(canvas, userEvent)
+    const accent = within(dialog.getByRole('radiogroup', { name: 'Accent' }))
+    const gray = within(dialog.getByRole('radiogroup', { name: 'Gray' }))
+    // Every hue and ramp of the kit, each named; the defaults chosen.
+    await expect(accent.getAllByRole('radio')).toHaveLength(17)
+    await expect(gray.getAllByRole('radio')).toHaveLength(9)
+    await expect(accent.getByRole('radio', { name: 'Blue' })).toBeChecked()
+    await expect(gray.getByRole('radio', { name: 'Gray' })).toBeChecked()
+    await expect(dialog.getByRole('radio', { name: 'Medium' })).toBeChecked()
+
+    await userEvent.click(accent.getByRole('radio', { name: 'Rose' }))
+    await waitFor(() => expect(lastGlobals(received)).toEqual({ accent: 'rose' }))
+    await userEvent.click(gray.getByRole('radio', { name: 'Slate' }))
+    await waitFor(() => expect(lastGlobals(received)).toEqual({ gray: 'slate' }))
+    await userEvent.click(dialog.getByRole('radio', { name: 'Full' }))
+    await waitFor(() => expect(lastGlobals(received)).toEqual({ radius: 'full' }))
+    await userEvent.click(dialog.getByRole('radio', { name: 'Dark' }))
+    await expect([param('theme-accent'), param('theme-gray'), param('theme-radius'), param('theme-appearance')]).toEqual([
+      'rose',
+      'slate',
+      'full',
+      'dark',
+    ])
+
+    // Back to the default: the param goes.
+    await userEvent.click(accent.getByRole('radio', { name: 'Blue' }))
+    await waitFor(() => expect(lastGlobals(received)).toEqual({ accent: 'blue' }))
+    await expect(param('theme-accent')).toBeNull()
+
+    // Reset puts every option back and empties the URL of them.
+    await userEvent.click(dialog.getByRole('button', { name: 'Reset' }))
+    await waitFor(() => expect(lastGlobals(received)).toEqual({ gray: 'gray', radius: 'medium', appearance: 'system' }))
+    await expect(themeParams()).toEqual([])
+    await expect(gray.getByRole('radio', { name: 'Gray' })).toBeChecked()
+    await expect(dialog.getByRole('radio', { name: 'System' })).toBeChecked()
+  },
+}
+
+export const ThemeFromUrl: Story = {
+  beforeEach: withUrl({ 'theme-accent': 'rose', 'theme-radius': 'full', 'theme-gray': 'foo', appearance: 'outlined' }),
+  play: async ({ canvas, userEvent }) => {
+    const received = await fakePreview(await frame(canvas))
+    // Only what differs from the frame's start goes over; the unknown gray is dropped.
+    await waitFor(() => expect(lastGlobals(received)).toEqual({ accent: 'rose', radius: 'full' }))
+    // Button's own appearance prop is untouched by the theme's.
+    await expect(propsPanel(canvas).getByRole('combobox', { name: 'appearance' })).toHaveTextContent('outlined')
+    await expect(received.find((e) => e.type === 'updateStoryArgs')?.args[0]).toMatchObject({
+      updatedArgs: { appearance: 'outlined' },
+    })
+
+    const dialog = await openTheme(canvas, userEvent)
+    await expect(within(dialog.getByRole('radiogroup', { name: 'Accent' })).getByRole('radio', { name: 'Rose' })).toBeChecked()
+    await expect(within(dialog.getByRole('radiogroup', { name: 'Gray' })).getByRole('radio', { name: 'Gray' })).toBeChecked()
+    await expect(dialog.getByRole('radio', { name: 'Full' })).toBeChecked()
   },
 }
 
