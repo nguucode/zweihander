@@ -512,6 +512,66 @@ export const ThemeTypo: Story = {
   },
 }
 
+let clipboard: string[] = []
+/** A fake clipboard: what was written, or a refusal as a blocked one gives. */
+const withClipboard = (isBlocked = false) => () => {
+  const copied: string[] = []
+  // An own property shadows Navigator.prototype's getter; deleting it restores the real one.
+  Object.defineProperty(navigator, 'clipboard', {
+    configurable: true,
+    value: {
+      writeText: async (text: string) => {
+        if (isBlocked) throw new DOMException('Write permission denied.', 'NotAllowedError')
+        copied.push(text)
+      },
+    },
+  })
+  clipboard = copied
+  return () => {
+    delete (navigator as { clipboard?: unknown }).clipboard
+  }
+}
+export const ThemeCopyCode: Story = {
+  beforeEach: withClipboard(),
+  play: async ({ canvas, userEvent }) => {
+    const dialog = await openTheme(canvas, userEvent)
+    const copy = dialog.getByRole('button', { name: 'Copy code' })
+    const status = dialog.getByRole('status')
+    // Nothing changed: a bare <Theme>.
+    await userEvent.click(copy)
+    await waitFor(() => expect(clipboard).toEqual(['<Theme>']))
+    await expect(status).toHaveTextContent('Code copied')
+
+    // Only what differs from the defaults, the font as a token.
+    await userEvent.click(within(dialog.getByRole('radiogroup', { name: 'Accent' })).getByRole('radio', { name: 'Rose' }))
+    await userEvent.click(dialog.getByRole('radio', { name: 'Full' }))
+    await userEvent.click(copy)
+    await waitFor(() => expect(clipboard.at(-1)).toBe('<Theme accentColor="rose" radius="full">'))
+
+    await userEvent.click(within(dialog.getByRole('radiogroup', { name: 'Gray' })).getByRole('radio', { name: 'Slate' }))
+    await userEvent.click(dialog.getByRole('combobox', { name: 'Scaling' }))
+    await userEvent.click(await screen.findByRole('option', { name: '90%' }))
+    await userEvent.click(dialog.getByRole('radio', { name: 'Dark' }))
+    await userEvent.click(dialog.getByRole('combobox', { name: 'Font' }))
+    await userEvent.click(await screen.findByRole('option', { name: 'Serif' }))
+    await userEvent.click(copy)
+    await waitFor(() =>
+      expect(clipboard.at(-1)).toBe(
+        '<Theme accentColor="rose" grayColor="slate" radius="full" scaling="90%" appearance="dark" tokens={{ \'font-sans\': "ui-serif, Georgia, serif" }}>',
+      ),
+    )
+  },
+}
+
+export const ThemeCopyBlocked: Story = {
+  beforeEach: withClipboard(true),
+  play: async ({ canvas, userEvent }) => {
+    const dialog = await openTheme(canvas, userEvent)
+    await userEvent.click(dialog.getByRole('button', { name: 'Copy code' }))
+    await waitFor(() => expect(dialog.getByRole('status')).toHaveTextContent(/could not copy/i))
+  },
+}
+
 export const ThemeFromUrl: Story = {
   beforeEach: withUrl({
     'theme-accent': 'rose',

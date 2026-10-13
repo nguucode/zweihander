@@ -22,6 +22,7 @@ import {
   parsePreviewTheme,
   PREVIEW_THEME_VALUES,
   resolveAppearance,
+  themeCode,
   usePrefersDark,
   type PreviewTheme,
 } from './PreviewTheme'
@@ -349,6 +350,21 @@ const choices = (values: readonly string[]) => values.map((value) => ({ value, l
 /** The header's Theme button and its popover: what the item in the frame wears. */
 function ThemePopover({ theme, onChange }: { theme: PreviewTheme; onChange: (theme: PreviewTheme) => void }) {
   const set = (change: Partial<PreviewTheme>) => onChange({ ...theme, ...change })
+  // Said in the footer's live region; emptied first so a second copy is said again.
+  const [copyStatus, setCopyStatus] = useState('')
+  const clearTimer = useRef<ReturnType<typeof setTimeout>>(undefined)
+  useEffect(() => () => clearTimeout(clearTimer.current), [])
+  const copy = async () => {
+    clearTimeout(clearTimer.current)
+    setCopyStatus('')
+    try {
+      await navigator.clipboard.writeText(themeCode(theme))
+      setCopyStatus('Code copied')
+    } catch {
+      setCopyStatus('Could not copy: the browser blocked the clipboard')
+    }
+    clearTimer.current = setTimeout(() => setCopyStatus(''), 3000)
+  }
   return (
     <Popover
       title="Preview theme"
@@ -412,8 +428,14 @@ function ThemePopover({ theme, onChange }: { theme: PreviewTheme; onChange: (the
           onValueChange={(appearance) => set({ appearance: appearance as PreviewTheme['appearance'] })}
         />
         <div className={styles.themeFooter}>
+          <span role="status" className={styles.themeCopied}>
+            {copyStatus}
+          </span>
           <Button size="sm" appearance="ghost" variant="secondary" onClick={() => onChange(DEFAULT_PREVIEW_THEME)}>
             Reset
+          </Button>
+          <Button size="sm" appearance="outlined" variant="secondary" onClick={copy}>
+            Copy code
           </Button>
         </div>
       </div>
