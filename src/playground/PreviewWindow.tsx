@@ -31,10 +31,18 @@ export function PreviewWindow({
 
   useLayoutEffect(() => {
     // The content box: the padding is the wallpaper's margin around the frame.
+    // Measured once here, before paint, so the window is there on first render
+    // instead of a frame later when the observer first reports.
+    const el = stage.current!
+    const pad = getComputedStyle(el)
+    setBox({
+      w: el.clientWidth - parseFloat(pad.paddingLeft) - parseFloat(pad.paddingRight),
+      h: el.clientHeight - parseFloat(pad.paddingTop) - parseFloat(pad.paddingBottom),
+    })
     const observer = new ResizeObserver(([entry]) =>
       setBox({ w: entry.contentRect.width, h: entry.contentRect.height }),
     )
-    observer.observe(stage.current!)
+    observer.observe(el)
     return () => observer.disconnect()
   }, [])
 
