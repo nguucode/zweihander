@@ -1,7 +1,9 @@
-/* Safari's toolbar on macOS. Positions and sizes are the Figma frame's
-   (Safari desktop, 1280×52); the window around it never changes width, so
-   they stay fixed. Colours are the kit's tokens under the bar's own
-   appearance scope. */
+/* Safari's chrome per viewport. Positions and sizes are the Figma frames'
+   (Safari desktop 1280×52, Safari - Tablet 834×86, Safari - Mobile 393);
+   the window around each never changes width, so they stay fixed. Colours
+   are the kit's tokens under the bar's own appearance scope. */
+
+/* --- Desktop: macOS toolbar ------------------------------------------------ */
 
 .bar {
   position: relative;
@@ -99,6 +101,10 @@
   border: 1px solid var(--border);
   /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- Safari's own field radius, not the kit's (it must not follow the Preview theme's radius) */
   border-radius: 6px;
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- Safari's address text size, not the kit's type scale */
+  font-size: 13px;
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- goes with Safari's 13px above */
+  line-height: 16px;
   cursor: text;
 }
 
@@ -129,11 +135,8 @@
 .copy,
 .input {
   grid-area: 1 / 1;
-  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- Safari's address text size, not the kit's type scale */
-  font-size: 13px;
-  font-family: inherit;
-  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- goes with Safari's 13px above */
-  line-height: 16px;
+  /* The field around it sets the size: each bar has Safari's own. */
+  font: inherit;
 }
 
 .copy {
@@ -147,7 +150,7 @@
   padding: 0;
   border: 0;
   background: transparent;
-  color: var(--subtle-foreground);
+  color: inherit;
   text-align: center;
   outline: none;
 }
@@ -175,4 +178,170 @@
 .tabs {
   inset-block-start: 18px;
   inset-inline-end: 19px;
+}
+
+/* --- Status bar (Tablet, Mobile) -------------------------------------------- */
+
+.status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  block-size: 30px;
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- the iPad status bar's own inset, off the kit's spacing scale */
+  padding-inline: 26px;
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- iOS status bar text size, not the kit's type scale */
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.clock,
+.signals {
+  display: flex;
+  align-items: center;
+}
+
+.clock {
+  gap: var(--space-2);
+}
+
+.signals {
+  gap: var(--space-1);
+}
+
+/* --- Tablet: iPad toolbar, 834×86 ------------------------------------------- */
+
+.tablet {
+  position: relative;
+  flex: none;
+  block-size: 86px;
+  background: var(--background);
+  color: var(--secondary-foreground);
+  font-family: var(--font-sans);
+}
+
+.controls {
+  position: absolute;
+  display: flex;
+  justify-content: space-between;
+  inset-block-start: 32px;
+  inset-inline: 10px 8px;
+}
+
+.leading {
+  display: flex;
+  gap: var(--space-3);
+}
+
+/* A glass pill of Safari's toolbar: one or more 36px symbols. */
+.pill {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  block-size: 44px;
+  padding-inline: var(--space-1);
+  border-radius: var(--radius-pill);
+  background: var(--card);
+  box-shadow: var(--shadow-sm);
+}
+
+/* In dark the pills have an edge, as the Figma frame does; a ring, so it takes no room from the 44px pill. */
+.tablet:global(.dark) .pill {
+  box-shadow:
+    inset 0 0 0 1px var(--border),
+    var(--shadow-sm);
+}
+
+.symbol {
+  display: grid;
+  place-items: center;
+  inline-size: 36px;
+  block-size: 36px;
+}
+
+.tabletField {
+  position: absolute;
+  justify-content: center;
+  inset-block-start: 32px;
+  inset-inline-start: calc(50% - 0.5px);
+  inline-size: 387px;
+  padding-inline: var(--space-12);
+  transform: translateX(-50%);
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- Safari's address text size on iPad, not the kit's type scale */
+  font-size: 17px;
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- goes with Safari's 17px above */
+  line-height: 22px;
+  font-weight: 500;
+  cursor: text;
+}
+
+.tabletRefresh {
+  position: absolute;
+  inset-inline-end: 14px;
+}
+
+.tabletField:focus-within,
+.mobileField:focus-within {
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: 0;
+}
+
+/* --- Mobile: iPhone, status bar on top, bar floating at the bottom ---------- */
+
+.mobileStatus {
+  flex: none;
+  background: var(--background);
+}
+
+.mobile {
+  position: absolute;
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- above the page it floats over, its next sibling; no layer token fits a window's own parts */
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: var(--space-2);
+  inset-inline: 0;
+  inset-block-end: 0;
+  block-size: 82px;
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+/* Frosted glass over the page: the page shows through, blurred. */
+.glass {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: color-mix(in oklab, var(--card) 70%, transparent);
+  box-shadow: var(--shadow-md);
+  backdrop-filter: blur(8px);
+}
+
+.round {
+  display: grid;
+  place-items: center;
+  inline-size: 49px;
+  block-size: 49px;
+}
+
+.mobileField {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  inline-size: 213px;
+  block-size: 48px;
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- Safari's own inset in the iPhone address pill, off the kit's spacing scale */
+  padding-inline: 10px;
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- Safari's address text size on iPhone, not the kit's type scale */
+  font-size: 17px;
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- goes with Safari's 17px above */
+  line-height: 22px;
+  cursor: text;
+}
+
+.mobileField > svg {
+  flex: none;
 }

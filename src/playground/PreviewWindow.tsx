@@ -5,7 +5,8 @@ import { VIEWPORTS, type Viewport } from './viewports'
 /**
  * A browser window at the device's real size, scaled down as one piece
  * (never up) to fit the space it is given both ways, and centred there.
- * The page goes in `children`; `bar` is the browser chrome above it.
+ * The page goes in `children`; `bar` is the browser chrome, above it (and,
+ * positioned against the window, over it).
  */
 export function PreviewWindow({ vp, bar, children }: { vp: Viewport; bar?: ReactNode; children: ReactNode }) {
   const { width, height } = VIEWPORTS[vp]

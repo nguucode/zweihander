@@ -277,14 +277,13 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
             theme={previewTheme}
             storybookUrl={storybookUrl}
             bar={
-              state.vp === 'desktop' && (
-                <SafariBar
-                  // The bar wears the Preview theme's appearance, as the page in the frame does.
-                  appearance={resolveAppearance(previewTheme.appearance, dark)}
-                  address={state.address}
-                  onAddress={setAddress}
-                />
-              )
+              <SafariBar
+                vp={state.vp}
+                // The bar wears the Preview theme's appearance, as the page in the frame does.
+                appearance={resolveAppearance(previewTheme.appearance, dark)}
+                address={state.address}
+                onAddress={setAddress}
+              />
             }
           />
         </main>
