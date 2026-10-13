@@ -1,6 +1,6 @@
 # Ticket thread
 
-A thread started to implement one ticket from a `flow idea` map. One ticket, one branch, one PR, one fresh context. Runs without stopping: the user already approved the spec and the ticket split. The PR auto-merges once CI is green (see [AFTER-BUILD.md](AFTER-BUILD.md#ship)).
+A thread started to implement one ticket from a `flow idea` map. One ticket, one branch, one PR, one fresh context. Runs without stopping: the user already approved the spec and the ticket split. The PR auto-merges once CI is green, except a UI change, which merges only after the user reviews it on localhost (see [AFTER-BUILD.md](AFTER-BUILD.md#ship)).
 
 A ticket thread never touches the vault: no `connect_device`, no folder request, no vault reads or writes. The map thread already has the vault and writes the ticket file for it. To reach the map thread, find its `session_id` by the title in the brief with `list_thread_sessions`, then `send_message` to it.
 
