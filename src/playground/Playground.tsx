@@ -98,15 +98,15 @@ function readUrl(items: ManifestItem[]) {
  * The Preview theme from `?theme-accent=` and the rest. `theme-` because a
  * bare `appearance` is already Button's prop. Unknown values fall back.
  */
-function readTheme(): PreviewTheme {
-  const q = new URLSearchParams(location.search)
-  const theme = { ...DEFAULT_PREVIEW_THEME }
-  for (const key of THEME_KEYS) Object.assign(theme, { [key]: parsePreviewTheme(key, q.get(themeParam(key))) ?? theme[key] })
-  return theme
-}
-
 const THEME_KEYS = Object.keys(DEFAULT_PREVIEW_THEME) as (keyof PreviewTheme)[]
 const themeParam = (key: keyof PreviewTheme) => `theme-${key}`
+
+function readTheme(): PreviewTheme {
+  const q = new URLSearchParams(location.search)
+  const read = <K extends keyof PreviewTheme>(key: K) =>
+    parsePreviewTheme(key, q.get(themeParam(key))) ?? DEFAULT_PREVIEW_THEME[key]
+  return { accent: read('accent'), gray: read('gray'), radius: read('radius'), appearance: read('appearance') }
+}
 
 /** The Preview theme as URL changes: only values off the default stay. */
 const themeUrl = (theme: PreviewTheme) =>
@@ -165,6 +165,7 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
   const { items } = manifest
   const [state, setState] = useState(() => readUrl(items))
   const [previewTheme, setPreviewTheme] = useState(readTheme)
+  const themeRef = useRef(previewTheme)
   const dark = usePrefersDark()
   const [filters, setFilters] = useState(NO_FILTERS)
   const [folds, setFolds] = useState(NO_FOLDS)
@@ -172,9 +173,11 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
   const wide = useWide()
 
   useEffect(() => {
+    // The Preview theme is the page's, not the item's: Back keeps it, and
+    // puts it on the entry it lands on.
     const onPop = () => {
       setState(readUrl(items))
-      setPreviewTheme(readTheme())
+      history.replaceState(null, '', urlWith(themeUrl(themeRef.current)))
     }
     addEventListener('popstate', onPop)
     return () => removeEventListener('popstate', onPop)
@@ -208,6 +211,7 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
   }
   const setTheme = (theme: PreviewTheme) => {
     history.replaceState(null, '', urlWith(themeUrl(theme)))
+    themeRef.current = theme
     setPreviewTheme(theme)
   }
   const resetProps = () => {

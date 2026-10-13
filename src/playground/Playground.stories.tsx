@@ -481,6 +481,24 @@ export const ThemeFromUrl: Story = {
   },
 }
 
+/** The Preview theme belongs to the page: Back changes the item, not the theme. */
+export const ThemeSurvivesBack: Story = {
+  play: async ({ canvas, userEvent }) => {
+    const items = await openItems(canvas, userEvent)
+    await userEvent.click(items.getByRole('link', { name: /Badge/ }))
+    await showing(canvas, 'Badge')
+    if (canvas.queryByRole('button', { name: 'Browse' })) await userEvent.keyboard('{Escape}')
+    const dialog = await openTheme(canvas, userEvent)
+    await userEvent.click(within(dialog.getByRole('radiogroup', { name: 'Accent' })).getByRole('radio', { name: 'Rose' }))
+    await userEvent.keyboard('{Escape}')
+    history.back()
+    await showing(canvas, 'Button')
+    await waitFor(() => expect(param('theme-accent')).toBe('rose'))
+    const again = await openTheme(canvas, userEvent)
+    await expect(within(again.getByRole('radiogroup', { name: 'Accent' })).getByRole('radio', { name: 'Rose' })).toBeChecked()
+  },
+}
+
 export const ThemeUnknownInUrl: Story = {
   beforeEach: withUrl({ 'theme-accent': 'foo' }),
   play: async ({ canvas, userEvent }) => {
