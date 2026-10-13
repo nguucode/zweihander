@@ -37,7 +37,7 @@
   position: absolute;
 }
 
-/* Window controls: always the traffic-light colours, light or dark. */
+/* Window controls: red, amber, green, in the bar's appearance. */
 .lights > * {
   position: absolute;
   inset-block-start: 20px;
@@ -53,7 +53,7 @@
 
 .minimise {
   inset-inline-start: 40px;
-  background: var(--warning);
+  background: var(--amber);
 }
 
 .zoom {

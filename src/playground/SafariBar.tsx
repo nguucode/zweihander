@@ -65,6 +65,8 @@ export function SafariBar({
               className={styles.input}
               value={address}
               onChange={(e) => onAddress(e.target.value)}
+              // Left empty, it goes back to the default, as a shared link would show it.
+              onBlur={() => address.trim() || onAddress(DEFAULT_ADDRESS)}
               spellCheck={false}
               autoComplete="off"
             />

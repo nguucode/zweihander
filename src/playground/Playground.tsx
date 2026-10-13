@@ -17,7 +17,7 @@ import { EmptyState } from '@/components/states/EmptyState'
 import { ErrorState } from '@/components/states/ErrorState'
 import { Icon } from '@/lib/icon'
 import styles from './Playground.module.css'
-import { DEFAULT_PREVIEW_THEME, usePrefersDark, type PreviewAppearance, type PreviewTheme } from './PreviewTheme'
+import { DEFAULT_PREVIEW_THEME, resolveAppearance, usePrefersDark, type PreviewAppearance, type PreviewTheme } from './PreviewTheme'
 import { PreviewWindow } from './PreviewWindow'
 import { DEFAULT_ADDRESS, SafariBar } from './SafariBar'
 import { VIEWPORTS, type Viewport } from './viewports'
@@ -184,9 +184,11 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
       return { ...s, args: changed ? { ...args, [prop.name]: value } : args }
     })
   }
-  // What the Browser bar shows; the URL keeps it only off the default.
+  // What the Browser bar shows; the URL keeps it only off the default. An
+  // empty field stands for the default (the bar puts it back on blur).
   const setAddress = (address: string) => {
-    history.replaceState(null, '', urlWith({ address: address && address !== DEFAULT_ADDRESS ? address : undefined }))
+    const domain = address.trim()
+    history.replaceState(null, '', urlWith({ address: domain && domain !== DEFAULT_ADDRESS ? domain : undefined }))
     setState((s) => ({ ...s, address }))
   }
   const resetProps = () => {
@@ -278,7 +280,7 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
               state.vp === 'desktop' && (
                 <SafariBar
                   // The bar wears the Preview theme's appearance, as the page in the frame does.
-                  appearance={previewTheme.appearance === 'system' ? (dark ? 'dark' : 'light') : previewTheme.appearance}
+                  appearance={resolveAppearance(previewTheme.appearance, dark)}
                   address={state.address}
                   onAddress={setAddress}
                 />

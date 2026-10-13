@@ -432,7 +432,6 @@ export const FollowsOs: Story = {
   },
 }
 
-
 export const BrowserBar: Story = {
   beforeEach: withPrefersDark(false),
   play: async ({ canvas, userEvent }) => {
@@ -447,6 +446,13 @@ export const BrowserBar: Story = {
     await expect(param('address')).toBe('acme.dev')
     await userEvent.clear(address)
     await expect(param('address')).toBeNull()
+    // Left empty, the field goes back to example.com, as the link shows it.
+    await userEvent.tab()
+    await expect(address).toHaveValue('example.com')
+    await userEvent.clear(address)
+    await userEvent.type(address, ' acme.dev ')
+    await expect(param('address')).toBe('acme.dev')
+    await userEvent.clear(address)
     await userEvent.type(address, 'example.com')
     await expect(param('address')).toBeNull()
 
@@ -474,7 +480,7 @@ export const BrowserBarFromUrl: Story = {
   play: async ({ canvas, userEvent }) => {
     // A shared link opens on the same domain.
     await expect(canvas.getByRole('textbox', { name: 'Address' })).toHaveValue('acme.dev')
-    // Switching viewport or item keeps it.
+    // Switching viewport keeps it.
     await userEvent.click(viewportTab(canvas, 'Tablet'))
     await expect(param('address')).toBe('acme.dev')
     await userEvent.click(viewportTab(canvas, 'Desktop'))
