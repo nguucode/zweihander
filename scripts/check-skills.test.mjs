@@ -1,7 +1,7 @@
 // node --test scripts/check-skills.test.mjs: the cases skills:check exists for.
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { checkFile } from './check-skills.mjs'
+import { checkFile, checkJson } from './check-skills.mjs'
 
 // A file inside a real skill folder, so relative links resolve against it.
 const file = new URL('../.claude/skills/project-flow/Fixture.md', import.meta.url).pathname
@@ -33,4 +33,12 @@ test('a .claude/skills path must exist', () => {
 
 test('a placeholder or glob in a .claude/skills path is not a path', () => {
   assert.deepEqual(checkFile(file, '`.claude/skills/<name>/SKILL.md` and `.claude/skills/*/SKILL.md`'), [])
+})
+
+test('a .claude JSON file must parse', () => {
+  const settings = new URL('../.claude/settings.json', import.meta.url).pathname
+  assert.deepEqual(checkJson(settings, '{ "hooks": {} }'), [])
+  const errors = checkJson(settings, '{ "hooks": {}, }')
+  assert.equal(errors.length, 1)
+  assert.match(errors[0], /^\.claude\/settings\.json: invalid JSON: /)
 })

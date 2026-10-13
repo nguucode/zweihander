@@ -1,7 +1,8 @@
 /**
- * Asserts the agent skills point only at files that exist.
+ * Asserts the agent skills point only at files that exist, and that the
+ * agent config in .claude/*.json parses.
  *
- *   node scripts/check-skills.mjs          check .claude/skills/**.md and CLAUDE.md
+ *   node scripts/check-skills.mjs          check .claude/skills/**.md, CLAUDE.md and .claude/*.json
  *   node scripts/check-skills.mjs <file…>  check only these
  *
  * 1. Every relative Markdown link resolves: [x](AFTER-BUILD.md),
@@ -11,6 +12,9 @@
  *    renamed or removed skill (zw-build) otherwise leaves agents reading a
  *    file that is not there. Placeholders (`<name>`) and globs (`*`) are
  *    not paths and are skipped.
+ * 3. Every `.claude/*.json` (settings.json, launch.json) parses. Claude Code
+ *    ignores a settings file it cannot parse, hooks and permissions with it,
+ *    and nothing else reads these files in CI (#110 shipped one broken).
  */
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
@@ -18,10 +22,12 @@ import { dirname, join, relative, resolve } from 'node:path'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 
+// The drive is exFAT: macOS writes an AppleDouble `._<name>` beside every file.
+const isAppleDouble = (name) => name.startsWith('._')
+
 const walk = (dir) =>
   readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
-    // The drive is exFAT: macOS writes an AppleDouble `._<name>` beside every file.
-    if (e.name.startsWith('._')) return []
+    if (isAppleDouble(e.name)) return []
     const path = join(dir, e.name)
     return e.isDirectory() ? walk(path) : e.name.endsWith('.md') ? [path] : []
   })
@@ -57,15 +63,34 @@ export const checkFile = (file, source = readFileSync(file, 'utf8')) => {
   return errors
 }
 
+export const checkJson = (file, source = readFileSync(file, 'utf8')) => {
+  try {
+    JSON.parse(source)
+    return []
+  } catch (error) {
+    return [`${relative(root, file)}: invalid JSON: ${error.message}`]
+  }
+}
+
 const isMain = process.argv[1] === fileURLToPath(import.meta.url)
 if (isMain) {
   const args = process.argv.slice(2)
-  const files = args.length ? args.map((f) => join(process.cwd(), f)) : [...walk(join(root, '.claude/skills')), join(root, 'CLAUDE.md')]
-  const errors = files.flatMap((f) => checkFile(f))
+  const files = args.length
+    ? args.map((f) => join(process.cwd(), f))
+    : [
+        ...walk(join(root, '.claude/skills')),
+        join(root, 'CLAUDE.md'),
+        ...readdirSync(join(root, '.claude'))
+          .filter((name) => name.endsWith('.json') && !isAppleDouble(name))
+          .map((name) => join(root, '.claude', name)),
+      ]
+  const json = files.filter((f) => f.endsWith('.json'))
+  const markdown = files.filter((f) => !f.endsWith('.json'))
+  const errors = [...markdown.flatMap((f) => checkFile(f)), ...json.flatMap((f) => checkJson(f))]
   if (errors.length) {
     console.error(errors.join('\n'))
-    console.error(`\nskills:check: ${errors.length} broken link${errors.length === 1 ? '' : 's'}`)
+    console.error(`\nskills:check: ${errors.length} problem${errors.length === 1 ? '' : 's'}`)
     process.exit(1)
   }
-  console.log(`skills:check: ${files.length} Markdown files, every link and skill path exists`)
+  console.log(`skills:check: ${markdown.length} Markdown files, every link and skill path exists; ${json.length} .claude JSON files parse`)
 }
