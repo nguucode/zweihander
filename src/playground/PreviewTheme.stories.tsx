@@ -63,13 +63,41 @@ export const ColorAndRadius: Story = {
   },
 }
 
+export const Typography: Story = {
+  globals: { appearance: 'light', font: 'inter', scaling: '110%' },
+  play: async ({ canvasElement }) => {
+    const scope = wrapper(canvasElement) as HTMLElement
+    // Both faces: --font-heading is resolved at the root, so it does not follow --font-sans.
+    await expect(scope.style.getPropertyValue('--font-sans')).toContain('Inter')
+    await expect(scope.style.getPropertyValue('--font-heading')).toContain('Inter')
+    await expect(scope.style.getPropertyValue('--scaling')).toBe('1.1')
+    await expect(document.documentElement.style.getPropertyValue('--font-heading')).toContain('Inter')
+    await expect(document.documentElement.style.getPropertyValue('--scaling')).toBe('1.1')
+    // Bundled with the preview, not fetched from a font CDN.
+    await document.fonts.load('16px "Inter Variable"')
+    await expect(document.fonts.check('16px "Inter Variable"')).toBe(true)
+  },
+}
+
+/** System is the token's own stack: nothing set, so the default stays. */
+export const SystemFont: Story = {
+  globals: { appearance: 'light', font: 'system', scaling: '100%' },
+  play: async ({ canvasElement }) => {
+    const scope = wrapper(canvasElement) as HTMLElement
+    await expect(scope.style.getPropertyValue('--font-sans')).toBe('')
+    await expect(scope.style.getPropertyValue('--scaling')).toBe('1')
+  },
+}
+
 /** A value the kit does not have is dropped: the default stays. */
 export const UnknownValues: Story = {
-  globals: { appearance: 'light', accent: 'foo', radius: 'huge' },
+  globals: { appearance: 'light', accent: 'foo', radius: 'huge', font: 'comic', scaling: '200%' },
   play: async ({ canvasElement }) => {
     const scope = wrapper(canvasElement) as HTMLElement
     await expect(scope).not.toHaveAttribute('data-accent')
     await expect(scope.style.getPropertyValue('--radius-factor')).toBe('')
+    await expect(scope.style.getPropertyValue('--font-sans')).toBe('')
+    await expect(scope.style.getPropertyValue('--scaling')).toBe('')
   },
 }
 

@@ -3,6 +3,10 @@ import { configure } from 'storybook/test'
 // Docs-only: the tokens name these faces, but the package never loads a
 // font for its consumers.
 import '../src/index.css'
+// The Playground's Preview theme offers these faces: bundled here, so the
+// preview never asks a font CDN for them.
+import '@fontsource-variable/inter'
+import '@fontsource-variable/geist'
 import './docs-canvas.css'
 import { parsePreviewTheme, PreviewThemeScope } from '../src/playground/PreviewTheme'
 
@@ -26,6 +30,8 @@ const withTheme: Decorator = (Story, context) => {
         accent={parsePreviewTheme('accent', context.globals.accent)}
         gray={parsePreviewTheme('gray', context.globals.gray)}
         radius={parsePreviewTheme('radius', context.globals.radius)}
+        font={parsePreviewTheme('font', context.globals.font)}
+        scaling={parsePreviewTheme('scaling', context.globals.scaling)}
       >
         <Story />
       </PreviewThemeScope>
@@ -60,6 +66,8 @@ const preview: Preview = {
     accent: { description: "The Playground's Preview theme: accent colour" },
     gray: { description: "The Playground's Preview theme: gray ramp" },
     radius: { description: "The Playground's Preview theme: radius preset" },
+    font: { description: "The Playground's Preview theme: font for body and headings" },
+    scaling: { description: "The Playground's Preview theme: spacing and type scale" },
   },
 
   parameters: {

@@ -113,7 +113,14 @@ function readTheme(): PreviewTheme {
   const q = new URLSearchParams(location.search)
   const read = <K extends keyof PreviewTheme>(key: K) =>
     parsePreviewTheme(key, q.get(themeParam(key))) ?? DEFAULT_PREVIEW_THEME[key]
-  return { accent: read('accent'), gray: read('gray'), radius: read('radius'), appearance: read('appearance') }
+  return {
+    accent: read('accent'),
+    gray: read('gray'),
+    radius: read('radius'),
+    font: read('font'),
+    scaling: read('scaling'),
+    appearance: read('appearance'),
+  }
 }
 
 /** The Preview theme as URL changes: only values off the default stay. */
@@ -378,6 +385,25 @@ function ThemePopover({ theme, onChange }: { theme: PreviewTheme; onChange: (the
           value={theme.radius}
           onValueChange={(radius) => set({ radius: radius as PreviewTheme['radius'] })}
         />
+        <fieldset className={styles.themeSection}>
+          <legend className={styles.themeLegend}>Typo</legend>
+          <div className={styles.themeRow}>
+            <Select
+              label="Font"
+              options={choices(PREVIEW_THEME_VALUES.font)}
+              value={theme.font}
+              onValueChange={(font) => font && set({ font: font as PreviewTheme['font'] })}
+              isFullWidth
+            />
+            <Select
+              label="Scaling"
+              options={choices(PREVIEW_THEME_VALUES.scaling)}
+              value={theme.scaling}
+              onValueChange={(scaling) => scaling && set({ scaling: scaling as PreviewTheme['scaling'] })}
+              isFullWidth
+            />
+          </div>
+        </fieldset>
         <RadioGroup
           label="Theme"
           orientation="horizontal"

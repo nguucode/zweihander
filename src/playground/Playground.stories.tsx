@@ -485,12 +485,48 @@ export const ThemeColorRadius: Story = {
   },
 }
 
+export const ThemeTypo: Story = {
+  play: async ({ canvas, userEvent }) => {
+    const received = await fakePreview(await frame(canvas))
+    const dialog = await openTheme(canvas, userEvent)
+    const font = dialog.getByRole('combobox', { name: 'Font' })
+    const scaling = dialog.getByRole('combobox', { name: 'Scaling' })
+    await expect(font).toHaveTextContent('System')
+    await expect(scaling).toHaveTextContent('100%')
+
+    await userEvent.click(font)
+    const fonts = await screen.findByRole('listbox')
+    await expect(within(fonts).getAllByRole('option').map((o) => o.textContent)).toEqual(['System', 'Inter', 'Geist', 'Serif', 'Mono'])
+    await userEvent.click(within(fonts).getByRole('option', { name: 'Inter' }))
+    await waitFor(() => expect(lastGlobals(received)).toEqual({ font: 'inter' }))
+    await userEvent.click(scaling)
+    await userEvent.click(await screen.findByRole('option', { name: '110%' }))
+    await waitFor(() => expect(lastGlobals(received)).toEqual({ scaling: '110%' }))
+    await expect([param('theme-font'), param('theme-scaling')]).toEqual(['inter', '110%'])
+
+    // Reset covers Typo too.
+    await userEvent.click(dialog.getByRole('button', { name: 'Reset' }))
+    await waitFor(() => expect(lastGlobals(received)).toEqual({ font: 'system', scaling: '100%' }))
+    await expect(themeParams()).toEqual([])
+    await expect(font).toHaveTextContent('System')
+  },
+}
+
 export const ThemeFromUrl: Story = {
-  beforeEach: withUrl({ 'theme-accent': 'rose', 'theme-radius': 'full', 'theme-gray': 'foo', appearance: 'outlined' }),
+  beforeEach: withUrl({
+    'theme-accent': 'rose',
+    'theme-radius': 'full',
+    'theme-gray': 'foo',
+    'theme-font': 'geist',
+    'theme-scaling': '90%',
+    appearance: 'outlined',
+  }),
   play: async ({ canvas, userEvent }) => {
     const received = await fakePreview(await frame(canvas))
     // Only what differs from the frame's start goes over; the unknown gray is dropped.
-    await waitFor(() => expect(lastGlobals(received)).toEqual({ accent: 'rose', radius: 'full' }))
+    await waitFor(() =>
+      expect(lastGlobals(received)).toEqual({ accent: 'rose', radius: 'full', font: 'geist', scaling: '90%' }),
+    )
     // Button's own appearance prop is untouched by the theme's.
     await expect(propsPanel(canvas).getByRole('combobox', { name: 'appearance' })).toHaveTextContent('outlined')
     await expect(received.find((e) => e.type === 'updateStoryArgs')?.args[0]).toMatchObject({
@@ -501,6 +537,8 @@ export const ThemeFromUrl: Story = {
     await expect(within(dialog.getByRole('radiogroup', { name: 'Accent' })).getByRole('radio', { name: 'Rose' })).toBeChecked()
     await expect(within(dialog.getByRole('radiogroup', { name: 'Gray' })).getByRole('radio', { name: 'Gray' })).toBeChecked()
     await expect(dialog.getByRole('radio', { name: 'Full' })).toBeChecked()
+    await expect(dialog.getByRole('combobox', { name: 'Font' })).toHaveTextContent('Geist')
+    await expect(dialog.getByRole('combobox', { name: 'Scaling' })).toHaveTextContent('90%')
   },
 }
 
