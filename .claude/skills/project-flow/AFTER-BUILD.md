@@ -9,7 +9,7 @@ Review and QA cover every commit since the flow (or ticket branch) started, not 
 | Step | Skill | Required | Does |
 | --- | --- | --- | --- |
 | artifact | Artifact tool | optional | Change touches UI: publish an Artifact showing each new or changed screen in its states (default, empty, loading, error) and link it in the thread. No UI: one checklist line, skip. |
-| review-spec | `matt-code-review` | yes, unless `implement` ran it | Standards + spec against the ticket, spec or bug report. For `flow idea` and ticket threads it already ran at the end of `implement`: skip with one checklist line. `flow fix` and `flow change` have no `implement`, so it runs here. |
+| review-spec | `matt-code-review` | yes, unless `implement` ran it | Standards + spec against the ticket, spec or bug report. For `flow idea` and ticket threads it already ran at the end of `implement`: skip with one checklist line. `flow fix` and `flow change` have no `implement`, so it runs here. A flow change with no ticket or spec (a retro item, a brief): write the brief and the user's message it cites to a scratch file and pass that path as the spec. |
 | review-bugs | `code-review` (built-in) | yes, unless no-code | Hunt logic, security and performance bugs. |
 | review-lean | ponytail-review | yes | Hunt code that should not exist. |
 | review-security | `security-review` (built-in) | optional | Security pass on the change. |
