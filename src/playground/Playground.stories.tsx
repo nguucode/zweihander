@@ -740,7 +740,9 @@ export const MobileFrame: Story = {
     const phone = await canvas.findByTestId('device')
     const status = canvas.getByTestId('status-bar')
     const home = canvas.getByTestId('home-indicator')
-    await expect(phone.querySelector('svg')).toHaveAttribute('aria-hidden', 'true')
+    // The frame is the phone's own drawing, over the screen (the status bar has icons of its own).
+    const drawing = phone.querySelector(':scope > svg')!
+    await expect(drawing).toHaveAttribute('aria-hidden', 'true')
     await expect(status).toHaveAttribute('aria-hidden', 'true')
     await expect(home).toHaveAttribute('aria-hidden', 'true')
     // No Safari bar: the shared address does not show here.
@@ -750,7 +752,7 @@ export const MobileFrame: Story = {
     const look = () => ({
       status: getComputedStyle(status).color,
       home: getComputedStyle(home).backgroundColor,
-      body: getComputedStyle(phone.querySelector('path')!).fill,
+      body: getComputedStyle(drawing.querySelector('path')!).fill,
     })
     const light = look()
     const dialog = await openTheme(canvas, userEvent)
