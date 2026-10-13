@@ -286,6 +286,20 @@ export const Modal: Story = {
   },
 }
 
+/** Modal with a title and no description: the hidden Close between them keeps the body's gap. */
+export const ModalTitleOnly: Story = {
+  args: { isModal: true, description: undefined },
+  play: async ({ canvas }) => {
+    await userEvent.click(canvas.getByRole('button', { name: 'Share' }))
+    const dialog = await body().findByRole('dialog')
+    const title = within(dialog).getByRole('heading', { name: 'Share this file' })
+    const field = within(dialog).getByRole('textbox', { name: 'Email' })
+    const label = field.closest('div')!.parentElement!
+    // --space-3 (12px) from the title to the content, as without isModal.
+    await expect(label.getBoundingClientRect().top - title.getBoundingClientRect().bottom).toBeGreaterThanOrEqual(11)
+  },
+}
+
 /** The popover open in place, as a picture, 6px under the trigger. */
 const picture = (args: PopoverProps) => (
   <Pictured positioner={styles.positioner} style={{ display: 'grid', justifyItems: 'center', gap: 6 }}>
