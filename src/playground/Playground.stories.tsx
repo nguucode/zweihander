@@ -270,6 +270,9 @@ export const Grouped: Story = {
     await waitFor(() => expect(section('Buttons')).toHaveAttribute('aria-expanded', 'true'))
     await expect(items.queryByRole('button', { name: 'Atomic Elements' })).toBeNull()
     await expect(items.queryByRole('button', { name: 'Overlays' })).toBeNull()
+    // The closing listbox stays in the DOM, unnamed, while it animates out;
+    // the a11y check after the play function must not catch it (WebKit did).
+    await waitFor(() => expect(screen.queryByRole('listbox')).toBeNull())
   },
 }
 
