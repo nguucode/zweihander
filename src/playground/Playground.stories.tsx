@@ -512,6 +512,7 @@ export const ThemeTypo: Story = {
   },
 }
 
+let clipboard: string[] = []
 /** A fake clipboard: what was written, or a refusal as a blocked one gives. */
 const withClipboard = (isBlocked = false) => () => {
   const copied: string[] = []
@@ -530,8 +531,6 @@ const withClipboard = (isBlocked = false) => () => {
     delete (navigator as { clipboard?: unknown }).clipboard
   }
 }
-let clipboard: string[] = []
-
 export const ThemeCopyCode: Story = {
   beforeEach: withClipboard(),
   play: async ({ canvas, userEvent }) => {
