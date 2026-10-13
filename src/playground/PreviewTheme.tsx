@@ -13,14 +13,15 @@ export type PreviewAppearance = (typeof APPEARANCES)[number]
 export const RADII = Object.keys({ none: 0, small: 0, medium: 0, large: 0, full: 0 } satisfies Record<Radius, 0>) as Radius[]
 
 /**
- * What each font puts in `--font-sans`, `--font-heading` and `--font-prose`. System is the
- * token's own stack, so it sets nothing. Inter and Geist are bundled with the
+ * What each font puts in `--font-sans`; `--font-heading` and `--font-prose`
+ * follow, as they derive from it on every element. System is the token's own
+ * stack, so it sets nothing. Inter and Geist are bundled with the
  * Storybook preview (`@fontsource-variable`), never fetched from a CDN.
  */
 const FONT_STACKS = {
   system: undefined,
-  inter: "'Inter Variable', system-ui, sans-serif",
-  geist: "'Geist Variable', system-ui, sans-serif",
+  inter: "'Inter Variable', system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji'",
+  geist: "'Geist Variable', system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji'",
   serif: 'ui-serif, Georgia, serif',
   mono: 'var(--font-mono)',
 }
@@ -121,8 +122,7 @@ export function PreviewThemeScope({
       grayColor={gray}
       radius={radius}
       scaling={scaling}
-      // Heading and prose are var(--font-sans) resolved at the root: set each.
-      tokens={stack ? { 'font-sans': stack, 'font-heading': stack, 'font-prose': stack } : undefined}
+      tokens={stack ? { 'font-sans': stack } : undefined}
       data-preview-theme=""
       style={{ display: 'contents' }}
     >
