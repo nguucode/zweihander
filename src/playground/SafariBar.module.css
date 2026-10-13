@@ -190,6 +190,7 @@
   /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- the iPad status bar's own inset, off the kit's spacing scale */
   padding-inline: 26px;
   color: var(--foreground);
+  font-family: var(--font-sans);
   /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- iOS status bar text size, not the kit's type scale */
   font-size: 12px;
   font-weight: 500;
@@ -243,7 +244,11 @@
   padding-inline: var(--space-1);
   border-radius: var(--radius-pill);
   background: var(--card);
-  /* The edge is a ring, so it takes no room from the 44px pill. */
+  box-shadow: var(--shadow-sm);
+}
+
+/* In dark the pills have an edge, as the Figma frame does; a ring, so it takes no room from the 44px pill. */
+.tablet:global(.dark) .pill {
   box-shadow:
     inset 0 0 0 1px var(--border),
     var(--shadow-sm);
@@ -266,6 +271,8 @@
   transform: translateX(-50%);
   /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- Safari's address text size on iPad, not the kit's type scale */
   font-size: 17px;
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- goes with Safari's 17px above */
+  line-height: 22px;
   font-weight: 500;
   cursor: text;
 }
@@ -330,6 +337,8 @@
   padding-inline: 10px;
   /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- Safari's address text size on iPhone, not the kit's type scale */
   font-size: 17px;
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- goes with Safari's 17px above */
+  line-height: 22px;
   cursor: text;
 }
 

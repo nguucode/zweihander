@@ -86,7 +86,7 @@ function DesktopBar({ appearance, address, onAddress }: BarProps) {
 function TabletBar({ appearance, address, onAddress }: BarProps) {
   return (
     <Theme appearance={appearance} className={styles.tablet}>
-      <StatusBar date />
+      <StatusBar hasDate />
       <div aria-hidden className={styles.controls}>
         <span className={styles.leading}>
           <span className={styles.pill}>
@@ -158,12 +158,12 @@ function MobileBar({ appearance, address, onAddress }: BarProps) {
 }
 
 /** Time (and on iPad the date) on the left; signal, Wi-Fi and a full battery on the right. */
-function StatusBar({ date }: { date?: boolean }) {
+function StatusBar({ hasDate }: { hasDate?: boolean }) {
   return (
     <div aria-hidden className={styles.status}>
       <span className={styles.clock}>
         <span>9:41</span>
-        {date && <span>Tue Apr 1</span>}
+        {hasDate && <span>Tue Apr 1</span>}
       </span>
       <span className={styles.signals}>
         <svg width="17" height="10" viewBox="0 0 17 10" fill="currentColor">
