@@ -30,8 +30,24 @@ A review, QA or CI finding sends the work back to the build step to fix, then do
 1. Work on the thread's branch, never the default branch; never force-push.
 2. Before pushing, run what CI runs (`npm run tokens:check`, `npm run registry:check`, `npm run lint`, `npx tsc -b`, Storybook tests for touched components) and add a changeset in `.changeset/` (an empty one when nothing ships). Component work also passes [COMPONENTS.md](COMPONENTS.md) gates 4 and 5 and pastes its PR checklist.
 3. Open a draft PR and watch it. Fix small CI failures in place; larger ones go back to the build step.
-4. The PR stays draft until CI is green, every acceptance criterion is met (checked by qa-run, or by the review steps for a no-code change), no follow-up commit is planned and the `update screenshots` label is gone (the baselines job removes it when it finishes). Only then mark it ready and turn on auto-merge (GitHub MCP `enable_pr_auto_merge`, method `squash`) for every PR, `update screenshots` ones included. Tell the user in one line it is ready and merges itself once CI is green. The `main` ruleset requires the `check` job, so GitHub merges only on green. GitHub refuses auto-merge on a PR whose checks already passed (clean status), which is the usual case here: then squash-merge it directly (`merge_pull_request`, method `squash`). Any other failure: say why and leave the merge to the user. If a commit becomes needed after that, turn auto-merge off (`disable_pr_auto_merge`) and convert the PR back to draft first, and say so in the thread. Wait for the merge event. Ask when a conflict cannot be resolved cleanly.
+4. The PR stays draft until CI is green, every acceptance criterion is met (checked by qa-run, or by the review steps for a no-code change), no follow-up commit is planned and the `update screenshots` label is gone (the baselines job removes it when it finishes). Only then mark it ready and turn on auto-merge (GitHub MCP `enable_pr_auto_merge`, method `squash`) for every PR, `update screenshots` ones included. Tell the user in one line it is ready and merges itself once CI is green. The `main` ruleset requires the `check` job, so GitHub merges only on green. GitHub refuses auto-merge on a PR whose checks already passed (clean status), which is the usual case here: then squash-merge it directly (`merge_pull_request`, `merge_method: squash`). Any other failure: say why and leave the merge to the user. If a commit becomes needed after that (other than a merge of `main`, see [Merge conflicts](#merge-conflicts)), turn auto-merge off (`disable_pr_auto_merge`) and convert the PR back to draft first, and say so in the thread. Wait for the merge event. Resolve conflicts with `main` yourself ([Merge conflicts](#merge-conflicts)).
 5. After merge: mirror repo Markdown to the vault (see [SKILL.md](SKILL.md#vault)), write the retro notes, then the thread's closing step. Ticket threads skip the mirror and send their retro notes to the map thread instead ([TICKET-THREAD.md](TICKET-THREAD.md)).
+
+### Merge conflicts
+
+A conflict with `main` is the thread's to fix, not the user's. Read the PR (`pull_request_read`, method `get`): `mergeable_state: dirty` (or `mergeable: false`) means a conflict; `mergeable: null` means GitHub is still computing, so read again. Check:
+
+- before marking ready, and right before `merge_pull_request`;
+- on a merge-conflict notice, a failed merge, or any PR event or check-in while waiting for the merge (a sibling PR merging first is the usual cause, and no notice may come).
+
+Resolve it:
+
+1. `git fetch origin main`, then `git merge origin/main` into the branch. The merge commit keeps the PR history and open reviews intact, so rebase, amend and force-push stay off the table.
+2. Resolve each file by keeping both sides' intent: `main`'s change plus this PR's. Regenerate generated files with their script instead of hand-merging: for `package-lock.json` take `main`'s version (`git checkout --theirs package-lock.json`), then `npm install`; tokens output `npm run tokens`; `src/playground/manifest.json` `npm run playground:manifest`.
+3. Rerun the ship step 2 checks, commit the merge (`Merge origin/main into <branch>`), push, and let CI rerun. This push keeps auto-merge on and the PR ready: GitHub merges once the new CI is green. If the PR was not yet ready, continue the ship step where it stopped.
+4. Ask the user (`ask_decision`) only when the two sides conflict on product behaviour or a decision in the spec, so keeping both is impossible and picking one changes what users see. Say which PR's change wins under each option. Everything else (imports, adjacent edits, lists, docs, changesets, generated files) is resolved without asking.
+
+Record it as one checklist line (`merged main, resolved conflicts in <files>`); no reply unless the user had to decide.
 
 ## A bug from an earlier PR
 
