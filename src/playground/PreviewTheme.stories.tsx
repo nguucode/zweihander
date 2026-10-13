@@ -63,13 +63,44 @@ export const ColorAndRadius: Story = {
   },
 }
 
+export const Typography: Story = {
+  globals: { appearance: 'light', font: 'inter', scaling: '110%' },
+  play: async ({ canvasElement }) => {
+    const scope = wrapper(canvasElement) as HTMLElement
+    await expect(scope.style.getPropertyValue('--font-sans')).toContain('Inter')
+    await expect(scope.style.getPropertyValue('--scaling')).toBe('1.1')
+    // Headings follow: --font-heading derives from --font-sans on every element.
+    const text = canvasElement.querySelector('p')!
+    await expect(getComputedStyle(text).getPropertyValue('--font-heading')).toContain('Inter')
+    await expect(getComputedStyle(text).fontFamily).toContain('Inter')
+    // Popups portal to <body>: the frame's <html> wears the same.
+    await expect(getComputedStyle(document.body).getPropertyValue('--font-heading')).toContain('Inter')
+    await expect(document.documentElement.style.getPropertyValue('--scaling')).toBe('1.1')
+    // The face is there: bundled with the preview (the build has no font CDN request).
+    await document.fonts.load('16px "Inter Variable"')
+    await expect(document.fonts.check('16px "Inter Variable"')).toBe(true)
+  },
+}
+
+/** System is the token's own stack: nothing set, so the default stays. */
+export const SystemFont: Story = {
+  globals: { appearance: 'light', font: 'system', scaling: '100%' },
+  play: async ({ canvasElement }) => {
+    const scope = wrapper(canvasElement) as HTMLElement
+    await expect(scope.style.getPropertyValue('--font-sans')).toBe('')
+    await expect(scope.style.getPropertyValue('--scaling')).toBe('1')
+  },
+}
+
 /** A value the kit does not have is dropped: the default stays. */
 export const UnknownValues: Story = {
-  globals: { appearance: 'light', accent: 'foo', radius: 'huge' },
+  globals: { appearance: 'light', accent: 'foo', radius: 'huge', font: 'comic', scaling: '200%' },
   play: async ({ canvasElement }) => {
     const scope = wrapper(canvasElement) as HTMLElement
     await expect(scope).not.toHaveAttribute('data-accent')
     await expect(scope.style.getPropertyValue('--radius-factor')).toBe('')
+    await expect(scope.style.getPropertyValue('--font-sans')).toBe('')
+    await expect(scope.style.getPropertyValue('--scaling')).toBe('')
   },
 }
 
