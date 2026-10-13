@@ -61,6 +61,24 @@ export const PREVIEW_THEME_VALUES: { [K in keyof PreviewTheme]: readonly Preview
 export const parsePreviewTheme = <K extends keyof PreviewTheme>(key: K, raw: unknown) =>
   (PREVIEW_THEME_VALUES[key] as readonly unknown[]).includes(raw) ? (raw as PreviewTheme[K]) : undefined
 
+/**
+ * The `<Theme>` that dresses an app as the Preview theme does: only the props
+ * that differ from the defaults. System appearance is what `<Theme>` does
+ * with none, so it adds nothing.
+ */
+export function themeCode(theme: PreviewTheme) {
+  const changed = <K extends keyof PreviewTheme>(key: K) => theme[key] !== DEFAULT_PREVIEW_THEME[key]
+  const props = [
+    changed('accent') && `accentColor="${theme.accent}"`,
+    changed('gray') && `grayColor="${theme.gray}"`,
+    changed('radius') && `radius="${theme.radius}"`,
+    changed('scaling') && `scaling="${theme.scaling}"`,
+    changed('appearance') && `appearance="${theme.appearance}"`,
+    FONT_STACKS[theme.font] && `tokens={{ 'font-sans': ${JSON.stringify(FONT_STACKS[theme.font])} }}`,
+  ].filter(Boolean)
+  return `<Theme${props.map((prop) => ` ${prop}`).join('')}>`
+}
+
 const DARK = '(prefers-color-scheme: dark)'
 
 /** Whether the OS asks for dark, kept current as the user switches. */
