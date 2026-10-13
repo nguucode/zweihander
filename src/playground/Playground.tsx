@@ -90,7 +90,7 @@ function readUrl(items: ManifestItem[]) {
   return {
     item,
     vp: Object.hasOwn(VIEWPORTS, vp) ? (vp as Viewport) : 'desktop',
-    address: q.get('address') || DEFAULT_ADDRESS,
+    address: q.get('address')?.trim() || DEFAULT_ADDRESS,
     args,
   }
 }
@@ -185,7 +185,7 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
     })
   }
   // What the Browser bar shows; the URL keeps it only off the default. An
-  // empty field stands for the default (the bar puts it back on blur).
+  // empty field stands for the default (the bar tidies the field on blur).
   const setAddress = (address: string) => {
     const domain = address.trim()
     history.replaceState(null, '', urlWith({ address: domain && domain !== DEFAULT_ADDRESS ? domain : undefined }))

@@ -433,7 +433,7 @@ export const FollowsOs: Story = {
 }
 
 export const BrowserBar: Story = {
-  beforeEach: withPrefersDark(false),
+  beforeEach: [withUrl({}), withPrefersDark(false)],
   play: async ({ canvas, userEvent }) => {
     // The address field is a real, named text field, on example.com until changed.
     const address = canvas.getByRole('textbox', { name: 'Address' })
@@ -452,6 +452,8 @@ export const BrowserBar: Story = {
     await userEvent.clear(address)
     await userEvent.type(address, ' acme.dev ')
     await expect(param('address')).toBe('acme.dev')
+    await userEvent.tab()
+    await expect(address).toHaveValue('acme.dev')
     await userEvent.clear(address)
     await userEvent.type(address, 'example.com')
     await expect(param('address')).toBeNull()
