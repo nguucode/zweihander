@@ -1,129 +1,9 @@
-/* Safari's chrome per viewport. Positions and sizes are the Figma frames'
-   (Safari desktop 1280×52, Safari - Tablet 834×86, Safari - Mobile 393);
+/* Safari's chrome on Tablet and Mobile (Desktop's is Safari.module.css).
+   Positions and sizes are the Figma frames' (Safari - Tablet 834×86, Safari - Mobile 393);
    the window around each never changes width, so they stay fixed. Colours
    are the kit's tokens under the bar's own appearance scope. */
 
-/* --- Desktop: macOS toolbar ------------------------------------------------ */
-
-.bar {
-  position: relative;
-  flex: none;
-  block-size: 52px;
-  background: var(--background);
-  /* A line under the bar, inside its 52px. */
-  box-shadow: inset 0 -1px 0 var(--border);
-  color: var(--subtle-foreground);
-  font-family: var(--font-sans);
-}
-
-.left,
-.right {
-  position: absolute;
-  inset-block: 0;
-}
-
-.left {
-  inset-inline-start: 0;
-  inline-size: 240px;
-}
-
-.right {
-  inset-inline-end: 0;
-  inline-size: 160px;
-}
-
-.left > *,
-.right > *,
-.privacy,
-.refresh {
-  position: absolute;
-}
-
-/* Window controls: red, amber, green, in the bar's appearance. */
-.lights > * {
-  position: absolute;
-  inset-block-start: 20px;
-  inline-size: 12px;
-  block-size: 12px;
-  border-radius: var(--radius-pill);
-}
-
-.close {
-  inset-inline-start: 20px;
-  background: var(--red);
-}
-
-.minimise {
-  inset-inline-start: 40px;
-  background: var(--amber);
-}
-
-.zoom {
-  inset-inline-start: 60px;
-  background: var(--green);
-}
-
-.sidebar {
-  inset-block-start: 17px;
-  inset-inline-start: 96px;
-}
-
-.more {
-  inset-block-start: 23px;
-  inset-inline-start: 130px;
-}
-
-.back {
-  inset-block-start: 18px;
-  inset-inline-start: 164px;
-}
-
-/* Nothing to go forward to: Safari greys it out. */
-.forward {
-  inset-block-start: 18px;
-  inset-inline-start: 198px;
-  opacity: 0.35;
-}
-
-.privacy {
-  inset-block-start: 17px;
-  inset-inline-start: 353px;
-}
-
-.field {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  inset-block-start: 13px;
-  inset-inline: 383px;
-  block-size: 26px;
-  border: 1px solid var(--border);
-  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- Safari's own field radius, not the kit's (it must not follow the Preview theme's radius) */
-  border-radius: 6px;
-  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- Safari's address text size, not the kit's type scale */
-  font-size: 13px;
-  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- goes with Safari's 13px above */
-  line-height: 16px;
-  cursor: text;
-}
-
-.field:focus-within {
-  outline: var(--focus-width) solid var(--ring);
-  outline-offset: 0;
-}
-
-.address {
-  display: flex;
-  align-items: center;
-  /* Room for the reload icon on the right, and the same on the left so the text stays centred. */
-  max-inline-size: calc(100% - 48px);
-}
-
-.lock {
-  flex: none;
-  margin-inline-end: var(--space-1);
-}
+/* --- The address field's input, in every bar ---------------------------- */
 
 /* The hidden copy and the input share one cell, so the input is as wide as its text. */
 .sizer {
@@ -153,31 +33,6 @@
   color: inherit;
   text-align: center;
   outline: none;
-}
-
-.refresh {
-  inset-block-start: 6px;
-  inset-inline-end: 5px;
-}
-
-.download {
-  inset-block-start: 17px;
-  inset-inline-end: 130px;
-}
-
-.share {
-  inset-block-start: 15px;
-  inset-inline-end: 94px;
-}
-
-.newTab {
-  inset-block-start: 18px;
-  inset-inline-end: 57px;
-}
-
-.tabs {
-  inset-block-start: 18px;
-  inset-inline-end: 19px;
 }
 
 /* --- Status bar (Tablet, Mobile) -------------------------------------------- */

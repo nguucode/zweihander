@@ -270,6 +270,9 @@ export const Grouped: Story = {
     await waitFor(() => expect(section('Buttons')).toHaveAttribute('aria-expanded', 'true'))
     await expect(items.queryByRole('button', { name: 'Atomic Elements' })).toBeNull()
     await expect(items.queryByRole('button', { name: 'Overlays' })).toBeNull()
+    // The closing listbox stays in the DOM, unnamed, while it animates out;
+    // the a11y check after the play function must not catch it (WebKit did).
+    await waitFor(() => expect(screen.queryByRole('listbox')).toBeNull())
   },
 }
 
@@ -676,13 +679,17 @@ export const BrowserBar: Story = {
 
     // The bar wears the Preview theme's appearance: System follows the OS (light here).
     // Found before the modal popover opens, which hides the page from queries.
-    const bar = address.closest('.light, .dark')
+    const bar = address.closest('.light, .dark')!
     await expect(bar).toHaveClass('light')
+    // Magic UI's toolbar: its art is decoration, only the field is announced.
+    await expect(bar.querySelectorAll('svg:not([aria-hidden="true"])')).toHaveLength(0)
+    const light = getComputedStyle(bar).backgroundColor
     const trigger = canvas.getByRole('button', { name: 'Theme' })
     await userEvent.click(trigger)
     const dialog = within(await screen.findByRole('dialog', { name: 'Preview theme' }))
     await userEvent.click(dialog.getByRole('radio', { name: 'Dark' }))
     await expect(bar).toHaveClass('dark')
+    await expect(getComputedStyle(bar).backgroundColor).not.toBe(light)
     // The page around it does not.
     await expect(document.documentElement).not.toHaveClass('dark')
     await userEvent.click(dialog.getByRole('radio', { name: 'System' }))
@@ -718,7 +725,8 @@ export const BrowserBarDevices: Story = {
   beforeEach: [withUrl({ vp: 'mobile' }), withPrefersDark(false)],
   play: async ({ canvas, userEvent }) => {
     // Found before the modal popover opens, which hides the page from queries.
-    const win = canvas.getByTestId('preview-window')
+    // Found, not got: the window renders once the Stage has been measured.
+    const win = await canvas.findByTestId('preview-window')
     const tablet = viewportTab(canvas, 'Tablet')
     await expect(win.querySelectorAll(':scope > .light')).toHaveLength(2)
     await userEvent.click(canvas.getByRole('button', { name: 'Theme' }))
@@ -736,11 +744,13 @@ export const Stage: Story = {
   beforeEach: [withUrl({}), withPrefersDark(false)],
   play: async ({ canvas, userEvent }) => {
     // Found before the modal popover opens, which hides the page from queries.
+    // Found, not got: the window renders once the Stage has been measured.
+    const win = await canvas.findByTestId('preview-window')
     const stage = canvas.getByTestId('stage')
     const wallpaper = canvas.getByTestId('wallpaper')
     const band = wallpaper.querySelector('path')!
     // The glass frame is the window's holder's ::before: decoration screen readers never see.
-    const glass = canvas.getByTestId('preview-window').parentElement!
+    const glass = win.parentElement!
     const look = () => ({
       frame: getComputedStyle(glass, '::before').backgroundColor,
       glow: getComputedStyle(stage).backgroundImage,
@@ -749,7 +759,7 @@ export const Stage: Story = {
     })
     // Decoration only: hidden from assistive tech, and the device stays where it was.
     await expect(wallpaper).toHaveAttribute('aria-hidden', 'true')
-    await expect(wallpaper.contains(canvas.getByTestId('preview-window'))).toBe(false)
+    await expect(wallpaper.contains(win)).toBe(false)
     await expect(stage).toHaveClass('light')
     const blue = look()
 
