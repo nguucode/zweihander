@@ -58,18 +58,30 @@ const showing = async (canvas: ReturnType<typeof within>, name: string) =>
  */
 const fitsDevice = async (canvas: ReturnType<typeof within>, width: number, height: number) => {
   await waitFor(async () => {
+    const win = canvas.getByTestId('preview-window')
     const iframe = await frame(canvas)
-    expect([iframe.offsetWidth, iframe.offsetHeight]).toEqual([width, height])
+    // The page takes the full width, and the height a Browser bar above it leaves.
+    const bar = win.childElementCount > 1 ? (win.firstElementChild as HTMLElement).offsetHeight : 0
+    expect([win.offsetWidth, win.offsetHeight, iframe.offsetWidth, iframe.offsetHeight]).toEqual([
+      width,
+      height,
+      width,
+      height - bar,
+    ])
   })
-  const win = canvas.getByTestId('preview-window')
-  const stage = win.parentElement!.parentElement!
-  const box = win.getBoundingClientRect()
-  const room = { w: Math.min(width, stage.clientWidth), h: Math.min(height, stage.clientHeight) }
-  await expect(box.width).toBeLessThanOrEqual(room.w + 0.5)
-  await expect(box.height).toBeLessThanOrEqual(room.h + 0.5)
-  await expect(box.width >= room.w - 1 || box.height >= room.h - 1).toBe(true)
-  // Scaled as one piece: the window keeps the device's proportions.
-  await expect(box.width / box.height).toBeCloseTo(width / height, 2)
+  // Waited for: the scale follows the stage through a ResizeObserver, which
+  // can land a frame after a layout change (the Props column coming back).
+  await waitFor(() => {
+    const win = canvas.getByTestId('preview-window')
+    const stage = win.parentElement!.parentElement!
+    const box = win.getBoundingClientRect()
+    const room = { w: Math.min(width, stage.clientWidth), h: Math.min(height, stage.clientHeight) }
+    expect(box.width).toBeLessThanOrEqual(room.w + 0.5)
+    expect(box.height).toBeLessThanOrEqual(room.h + 0.5)
+    expect(box.width >= room.w - 1 || box.height >= room.h - 1).toBe(true)
+    // Scaled as one piece: the window keeps the device's proportions.
+    expect(box.width / box.height).toBeCloseTo(width / height, 2)
+  })
 }
 const viewportTab = (canvas: ReturnType<typeof within>, name: string) =>
   within(canvas.getByRole('tablist', { name: 'Viewport' })).getByRole('tab', { name })
@@ -94,7 +106,7 @@ const fakePreview = async (iframe: HTMLIFrameElement) => {
 const withUrl = (search: Record<string, string>) => () => {
   const before = location.href
   const url = new URL(before)
-  for (const key of ['item', 'vp', ...manifest.items.flatMap((i) => i.props.map((p) => p.name))]) url.searchParams.delete(key)
+  for (const key of ['item', 'vp', 'address', ...manifest.items.flatMap((i) => i.props.map((p) => p.name))]) url.searchParams.delete(key)
   for (const key of [...url.searchParams.keys()].filter((k) => k.startsWith('theme-'))) url.searchParams.delete(key)
   for (const [k, v] of Object.entries(search)) url.searchParams.set(k, v)
   history.replaceState(null, '', url)
@@ -120,6 +132,8 @@ export const Default: Story = {
     const iframe = await frame(canvas)
     await expect(iframe.getAttribute('src')).toContain(`id=${button.storyId}`)
     await fitsDevice(canvas, 1280, 800)
+    // Desktop has Safari's 52px bar above the page.
+    await expect(iframe.offsetHeight).toBe(748)
     await expect(viewportTab(canvas, 'Desktop')).toHaveAttribute('aria-selected', 'true')
     await waitFor(() => expect(canvas.queryByRole('status', { name: /Loading/ })).toBeNull())
 
@@ -183,10 +197,19 @@ export const Default: Story = {
     // The viewport tabs set the device size and replace the URL entry.
     await userEvent.click(viewportTab(canvas, 'Mobile'))
     await fitsDevice(canvas, 393, 852)
+    // Mobile has a 30px status bar above the page; Safari's bar floats over
+    // the page's bottom edge, so the page runs on under it.
+    await expect((await frame(canvas)).offsetHeight).toBe(822)
+    const page = (await frame(canvas)).getBoundingClientRect()
+    const floating = canvas.getByRole('textbox', { name: 'Address' }).closest('label')!.getBoundingClientRect()
+    await expect(floating.top).toBeGreaterThan(page.top)
+    await expect(floating.bottom).toBeLessThan(page.bottom)
     await expect(viewportTab(canvas, 'Mobile')).toHaveAttribute('aria-selected', 'true')
     await expect(param('vp')).toBe('mobile')
     await userEvent.click(viewportTab(canvas, 'Tablet'))
     await fitsDevice(canvas, 834, 1194)
+    // Tablet has the iPad's 86px bar (status bar included) above the page.
+    await expect((await frame(canvas)).offsetHeight).toBe(1108)
     await expect(param('vp')).toBe('tablet')
 
     // Back steps to the entry before Tooltip: Button on Desktop, as the page opened.
@@ -518,5 +541,88 @@ export const FollowsOs: Story = {
     // And keeps following it when the OS setting changes.
     setPrefersDark(false)
     await waitFor(() => expect(document.documentElement).not.toHaveClass('dark'))
+  },
+}
+
+export const BrowserBar: Story = {
+  beforeEach: [withUrl({}), withPrefersDark(false)],
+  play: async ({ canvas, userEvent }) => {
+    // The address field is a real, named text field, on example.com until changed.
+    const address = canvas.getByRole('textbox', { name: 'Address' })
+    await expect(address).toHaveValue('example.com')
+    await expect(param('address')).toBeNull()
+
+    // A domain typed in goes in the URL; back to example.com, it leaves.
+    await userEvent.clear(address)
+    await userEvent.type(address, 'acme.dev')
+    await expect(param('address')).toBe('acme.dev')
+    await userEvent.clear(address)
+    await expect(param('address')).toBeNull()
+    // Left empty, the field goes back to example.com, as the link shows it.
+    await userEvent.tab()
+    await expect(address).toHaveValue('example.com')
+    await userEvent.clear(address)
+    await userEvent.type(address, ' acme.dev ')
+    await expect(param('address')).toBe('acme.dev')
+    await userEvent.tab()
+    await expect(address).toHaveValue('acme.dev')
+    await userEvent.clear(address)
+    await userEvent.type(address, 'example.com')
+    await expect(param('address')).toBeNull()
+
+    // The bar wears the Preview theme's appearance: System follows the OS (light here).
+    // Found before the modal popover opens, which hides the page from queries.
+    const bar = address.closest('.light, .dark')
+    await expect(bar).toHaveClass('light')
+    const trigger = canvas.getByRole('button', { name: 'Theme' })
+    await userEvent.click(trigger)
+    const dialog = within(await screen.findByRole('dialog', { name: 'Preview theme' }))
+    await userEvent.click(dialog.getByRole('radio', { name: 'Dark' }))
+    await expect(bar).toHaveClass('dark')
+    // The page around it does not.
+    await expect(document.documentElement).not.toHaveClass('dark')
+    await userEvent.click(dialog.getByRole('radio', { name: 'System' }))
+    await expect(bar).toHaveClass('light')
+    setPrefersDark(true)
+    await waitFor(() => expect(bar).toHaveClass('dark'))
+    await userEvent.keyboard('{Escape}')
+  },
+}
+
+export const BrowserBarFromUrl: Story = {
+  beforeEach: withUrl({ address: 'acme.dev' }),
+  play: async ({ canvas, userEvent }) => {
+    const address = () => canvas.getByRole('textbox', { name: 'Address' })
+    // A shared link opens on the same domain.
+    await expect(address()).toHaveValue('acme.dev')
+    // Every viewport's bar shows it, and an edit in one carries to the others.
+    await userEvent.click(viewportTab(canvas, 'Tablet'))
+    await expect(address()).toHaveValue('acme.dev')
+    await expect(param('address')).toBe('acme.dev')
+    await userEvent.click(viewportTab(canvas, 'Mobile'))
+    await expect(address()).toHaveValue('acme.dev')
+    await userEvent.clear(address())
+    await userEvent.type(address(), 'shop.dev')
+    await expect(param('address')).toBe('shop.dev')
+    await userEvent.click(viewportTab(canvas, 'Desktop'))
+    await expect(address()).toHaveValue('shop.dev')
+  },
+}
+
+/** Each viewport's bar wears the Preview theme's appearance, Mobile's two pieces both. */
+export const BrowserBarDevices: Story = {
+  beforeEach: [withUrl({ vp: 'mobile' }), withPrefersDark(false)],
+  play: async ({ canvas, userEvent }) => {
+    // Found before the modal popover opens, which hides the page from queries.
+    const win = canvas.getByTestId('preview-window')
+    const tablet = viewportTab(canvas, 'Tablet')
+    await expect(win.querySelectorAll(':scope > .light')).toHaveLength(2)
+    await userEvent.click(canvas.getByRole('button', { name: 'Theme' }))
+    const dialog = within(await screen.findByRole('dialog', { name: 'Preview theme' }))
+    await userEvent.click(dialog.getByRole('radio', { name: 'Dark' }))
+    await expect(win.querySelectorAll(':scope > .dark')).toHaveLength(2)
+    await userEvent.keyboard('{Escape}')
+    await userEvent.click(tablet)
+    await expect(win.querySelectorAll(':scope > .dark')).toHaveLength(1)
   },
 }

@@ -17,6 +17,8 @@
 }
 
 .window {
+  /* The Mobile bar floats at the bottom, over the page. */
+  position: relative;
   display: flex;
   flex-direction: column;
   transform-origin: 0 0;

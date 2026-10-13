@@ -48,6 +48,10 @@ export function usePrefersDark() {
   )
 }
 
+/** Light or dark: `system` follows the OS. */
+export const resolveAppearance = (appearance: PreviewAppearance, prefersDark: boolean) =>
+  appearance === 'system' ? (prefersDark ? 'dark' : 'light') : appearance
+
 /**
  * Wraps a story in the Preview theme. Runs inside Storybook's preview, so
  * `system` resolves against the frame's own media query.
@@ -60,7 +64,7 @@ export function PreviewThemeScope({
   children,
 }: Partial<PreviewTheme> & Pick<PreviewTheme, 'appearance'> & { children: ReactNode }) {
   const prefersDark = usePrefersDark()
-  const resolved = appearance === 'system' ? (prefersDark ? 'dark' : 'light') : appearance
+  const resolved = resolveAppearance(appearance, prefersDark)
   const scope = useRef<HTMLDivElement>(null)
   // The frame's <html> too: popups portal to <body>, outside the wrapper,
   // and the page behind the story should not stay light under a dark one.
