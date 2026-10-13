@@ -72,11 +72,11 @@ export function PreviewWindow({
 /** Soft bands over a gradient, all in the Stage's accent. Decoration only. */
 function Wallpaper() {
   return (
-    <div aria-hidden className={styles.wallpaper}>
+    <div aria-hidden data-testid="wallpaper" className={styles.wallpaper}>
       <svg viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice">
-        <path className={styles.band3} d="M0 260C280 120 520 380 860 250S1380 40 1600 130V0H0Z" />
-        <path className={styles.band1} d="M0 560C300 420 520 720 860 600S1340 360 1600 470V1000H0Z" />
-        <path className={styles.band2} d="M0 760C340 640 600 880 920 780S1380 620 1600 700V1000H0Z" />
+        <path className={styles.bandTop} d="M0 260C280 120 520 380 860 250S1380 40 1600 130V0H0Z" />
+        <path className={styles.bandMiddle} d="M0 560C300 420 520 720 860 600S1340 360 1600 470V1000H0Z" />
+        <path className={styles.bandBottom} d="M0 760C340 640 600 880 920 780S1380 620 1600 700V1000H0Z" />
       </svg>
     </div>
   )

@@ -737,7 +737,7 @@ export const Stage: Story = {
   play: async ({ canvas, userEvent }) => {
     // Found before the modal popover opens, which hides the page from queries.
     const stage = canvas.getByTestId('stage')
-    const wallpaper = stage.firstElementChild!
+    const wallpaper = canvas.getByTestId('wallpaper')
     const band = wallpaper.querySelector('path')!
     const look = () => ({
       glow: getComputedStyle(stage).backgroundImage,

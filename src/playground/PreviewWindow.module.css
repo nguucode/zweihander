@@ -15,8 +15,8 @@
   flex: 1;
   place-items: center;
   min-block-size: 0;
+  /* No clipping here: the frame's shadow may run past the padding. */
   padding: var(--space-8);
-  overflow: hidden;
   /* Under the bands: one glow from the top left, one from the bottom right. */
   background:
     radial-gradient(120% 90% at 0% 0%, color-mix(in oklch, var(--primary) 32%, transparent), transparent 60%),
@@ -40,24 +40,28 @@
 .wallpaper {
   position: absolute;
   inset: 0;
+  overflow: hidden;
 }
 
+/* Soft edges: the bands melt into each other and the glow. Larger than the
+   Stage so the blur's faded rim falls outside the clip. */
 .wallpaper svg {
-  inline-size: 100%;
-  block-size: 100%;
-  /* Soft edges: the bands melt into each other and the glow. */
+  position: absolute;
+  inset: -40px;
+  inline-size: calc(100% + 80px);
+  block-size: calc(100% + 80px);
   filter: blur(20px);
 }
 
-.band1 {
+.bandMiddle {
   fill: color-mix(in oklch, var(--primary) 45%, transparent);
 }
 
-.band2 {
+.bandBottom {
   fill: color-mix(in oklch, var(--primary) 30%, var(--primary-subtle));
 }
 
-.band3 {
+.bandTop {
   fill: color-mix(in oklch, var(--primary) 25%, transparent);
 }
 
