@@ -739,7 +739,10 @@ export const Stage: Story = {
     const stage = canvas.getByTestId('stage')
     const wallpaper = canvas.getByTestId('wallpaper')
     const band = wallpaper.querySelector('path')!
+    // The glass frame is the window's holder's ::before: decoration screen readers never see.
+    const glass = canvas.getByTestId('preview-window').parentElement!
     const look = () => ({
+      frame: getComputedStyle(glass, '::before').backgroundColor,
       glow: getComputedStyle(stage).backgroundImage,
       band: getComputedStyle(band).fill,
       page: getComputedStyle(stage).backgroundColor,
@@ -763,6 +766,7 @@ export const Stage: Story = {
     await waitFor(() => expect(stage).toHaveClass('dark'))
     await expect(look().page).not.toBe(rose.page)
     await expect(look().band).not.toBe(rose.band)
+    await expect(look().frame).not.toBe(rose.frame)
     await expect(document.documentElement).not.toHaveClass('dark')
     await userEvent.keyboard('{Escape}')
     await fitsDevice(canvas, 1280, 800)
