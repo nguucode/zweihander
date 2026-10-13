@@ -52,16 +52,17 @@ const showing = async (canvas: ReturnType<typeof within>, name: string) =>
   waitFor(async () => expect(await frame(canvas)).toHaveAttribute('title', `${name} live view`))
 
 /**
- * The page inside the window is the device's size, and the window, scaled
- * as one piece, is never above 100% and fits inside the Stage's padding both
- * ways, touching it on at least one side.
+ * The page inside the window is the device's size, and the device (the
+ * window, or the phone around it on Mobile), scaled as one piece, is never
+ * above 100% and fits inside the Stage's padding both ways, touching it on
+ * at least one side.
  */
 const fitsDevice = async (canvas: ReturnType<typeof within>, width: number, height: number) => {
   await waitFor(async () => {
     const win = canvas.getByTestId('preview-window')
     const iframe = await frame(canvas)
     // The page takes the full width, and the height a Browser bar above it leaves.
-    const bar = win.childElementCount > 1 ? (win.firstElementChild as HTMLElement).offsetHeight : 0
+    const bar = (iframe.parentElement as HTMLElement).offsetTop
     expect([win.offsetWidth, win.offsetHeight, iframe.offsetWidth, iframe.offsetHeight]).toEqual([
       width,
       height,
@@ -72,21 +73,23 @@ const fitsDevice = async (canvas: ReturnType<typeof within>, width: number, heig
   // Waited for: the scale follows the stage through a ResizeObserver, which
   // can land a frame after a layout change (the Props column coming back).
   await waitFor(() => {
-    const win = canvas.getByTestId('preview-window')
+    const device = canvas.queryByTestId('device') ?? canvas.getByTestId('preview-window')
     const stage = canvas.getByTestId('stage')
-    const box = win.getBoundingClientRect()
+    const box = device.getBoundingClientRect()
+    // Its own size, before the transform: the window's, or the phone's around it.
+    const outer = { width: device.offsetWidth, height: device.offsetHeight }
     // The Stage's padding is wallpaper around the frame: the room is inside it.
     const pad = getComputedStyle(stage)
     const inner = {
       w: stage.clientWidth - parseFloat(pad.paddingLeft) - parseFloat(pad.paddingRight),
       h: stage.clientHeight - parseFloat(pad.paddingTop) - parseFloat(pad.paddingBottom),
     }
-    const room = { w: Math.min(width, inner.w), h: Math.min(height, inner.h) }
+    const room = { w: Math.min(outer.width, inner.w), h: Math.min(outer.height, inner.h) }
     expect(box.width).toBeLessThanOrEqual(room.w + 0.5)
     expect(box.height).toBeLessThanOrEqual(room.h + 0.5)
     expect(box.width >= room.w - 1 || box.height >= room.h - 1).toBe(true)
     // Scaled as one piece: the window keeps the device's proportions.
-    expect(box.width / box.height).toBeCloseTo(width / height, 2)
+    expect(box.width / box.height).toBeCloseTo(outer.width / outer.height, 2)
   })
 }
 const viewportTab = (canvas: ReturnType<typeof within>, name: string) =>
@@ -203,13 +206,16 @@ export const Default: Story = {
     // The viewport tabs set the device size and replace the URL entry.
     await userEvent.click(viewportTab(canvas, 'Mobile'))
     await fitsDevice(canvas, 393, 852)
-    // Mobile has a 30px status bar above the page; Safari's bar floats over
-    // the page's bottom edge, so the page runs on under it.
-    await expect((await frame(canvas)).offsetHeight).toBe(822)
+    // Mobile is a phone with no Safari bar: the page fills the screen and
+    // runs on under the status bar and the Home indicator.
+    await expect((await frame(canvas)).offsetHeight).toBe(852)
+    await expect(canvas.queryByRole('textbox', { name: 'Address' })).toBeNull()
     const page = (await frame(canvas)).getBoundingClientRect()
-    const floating = canvas.getByRole('textbox', { name: 'Address' }).closest('label')!.getBoundingClientRect()
-    await expect(floating.top).toBeGreaterThan(page.top)
-    await expect(floating.bottom).toBeLessThan(page.bottom)
+    const status = canvas.getByTestId('status-bar').getBoundingClientRect()
+    const home = canvas.getByTestId('home-indicator').getBoundingClientRect()
+    await expect(status.top).toBeCloseTo(page.top, 0)
+    await expect(home.top).toBeGreaterThan(page.top)
+    await expect(home.bottom).toBeLessThan(page.bottom)
     await expect(viewportTab(canvas, 'Mobile')).toHaveAttribute('aria-selected', 'true')
     await expect(param('vp')).toBe('mobile')
     await userEvent.click(viewportTab(canvas, 'Tablet'))
@@ -699,11 +705,12 @@ export const BrowserBarFromUrl: Story = {
     const address = () => canvas.getByRole('textbox', { name: 'Address' })
     // A shared link opens on the same domain.
     await expect(address()).toHaveValue('acme.dev')
-    // Every viewport's bar shows it, and an edit in one carries to the others.
-    await userEvent.click(viewportTab(canvas, 'Tablet'))
-    await expect(address()).toHaveValue('acme.dev')
-    await expect(param('address')).toBe('acme.dev')
+    // Mobile has no address field, and leaves the address as it was.
     await userEvent.click(viewportTab(canvas, 'Mobile'))
+    await expect(canvas.queryByRole('textbox', { name: 'Address' })).toBeNull()
+    await expect(param('address')).toBe('acme.dev')
+    // Both bars show it, and an edit in one carries to the other.
+    await userEvent.click(viewportTab(canvas, 'Tablet'))
     await expect(address()).toHaveValue('acme.dev')
     await userEvent.clear(address())
     await userEvent.type(address(), 'shop.dev')
@@ -713,21 +720,37 @@ export const BrowserBarFromUrl: Story = {
   },
 }
 
-/** Each viewport's bar wears the Preview theme's appearance, Mobile's two pieces both. */
-export const BrowserBarDevices: Story = {
-  beforeEach: [withUrl({ vp: 'mobile' }), withPrefersDark(false)],
+/**
+ * Mobile: an iPhone around the page. The frame, status bar and Home
+ * indicator are decoration, hidden from assistive tech, and take the
+ * Preview theme's appearance.
+ */
+export const MobileFrame: Story = {
+  beforeEach: [withUrl({ vp: 'mobile', address: 'acme.dev' }), withPrefersDark(false)],
   play: async ({ canvas, userEvent }) => {
     // Found before the modal popover opens, which hides the page from queries.
-    const win = canvas.getByTestId('preview-window')
-    const tablet = viewportTab(canvas, 'Tablet')
-    await expect(win.querySelectorAll(':scope > .light')).toHaveLength(2)
-    await userEvent.click(canvas.getByRole('button', { name: 'Theme' }))
-    const dialog = within(await screen.findByRole('dialog', { name: 'Preview theme' }))
+    const phone = canvas.getByTestId('device')
+    const status = canvas.getByTestId('status-bar')
+    const home = canvas.getByTestId('home-indicator')
+    await expect(phone.querySelector('svg')).toHaveAttribute('aria-hidden', 'true')
+    await expect(status).toHaveAttribute('aria-hidden', 'true')
+    await expect(home).toHaveAttribute('aria-hidden', 'true')
+    // No Safari bar: the shared address does not show here.
+    await expect(canvas.queryByRole('textbox', { name: 'Address' })).toBeNull()
+    await expect(canvas.queryByText('acme.dev')).toBeNull()
+
+    const look = () => ({
+      status: getComputedStyle(status).color,
+      home: getComputedStyle(home).backgroundColor,
+      bezel: getComputedStyle(phone.querySelector('path')!).fill,
+    })
+    const light = look()
+    const dialog = await openTheme(canvas, userEvent)
     await userEvent.click(dialog.getByRole('radio', { name: 'Dark' }))
-    await expect(win.querySelectorAll(':scope > .dark')).toHaveLength(2)
+    await waitFor(() => expect(look().status).not.toBe(light.status))
+    await expect(look().home).not.toBe(light.home)
+    await expect(look().bezel).not.toBe(light.bezel)
     await userEvent.keyboard('{Escape}')
-    await userEvent.click(tablet)
-    await expect(win.querySelectorAll(':scope > .dark')).toHaveLength(1)
   },
 }
 
