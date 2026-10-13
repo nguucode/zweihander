@@ -84,3 +84,24 @@ export const mockToday = (today: Date) => {
     globalThis.Date = Real
   }
 }
+
+/**
+ * A story's `beforeEach`: the OS answers `prefers-color-scheme: dark` with
+ * `dark`, other media queries as usual. Puts the real matchMedia back after.
+ */
+export const withPrefersDark = (dark: boolean) => () => {
+  const real = window.matchMedia
+  window.matchMedia = (query: string) => {
+    const list = real.call(window, query)
+    if (query !== '(prefers-color-scheme: dark)') return list
+    return {
+      matches: dark,
+      media: query,
+      addEventListener: list.addEventListener.bind(list),
+      removeEventListener: list.removeEventListener.bind(list),
+    } as MediaQueryList
+  }
+  return () => {
+    window.matchMedia = real
+  }
+}

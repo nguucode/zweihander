@@ -4,6 +4,7 @@ import { configure } from 'storybook/test'
 // font for its consumers.
 import '../src/index.css'
 import './docs-canvas.css'
+import { APPEARANCES, PreviewThemeScope, type PreviewAppearance } from '../src/playground/PreviewTheme'
 
 // Puts the toolbar's theme on <html>, where the dark token set is scoped.
 // Set while rendering rather than in an effect: a decorator is a plain
@@ -14,7 +15,16 @@ import './docs-canvas.css'
 // came from GL shader compiles and are fixed in vite.config.ts, not here.
 configure({ asyncUtilTimeout: 3000 })
 
+// The Playground's Preview theme, sent as globals over the channel, wins over
+// the toolbar: a story shown in the Playground wears the theme picked there.
 const withTheme: Decorator = (Story, context) => {
+  const appearance = context.globals.appearance as PreviewAppearance | undefined
+  if (appearance && APPEARANCES.includes(appearance))
+    return (
+      <PreviewThemeScope appearance={appearance}>
+        <Story />
+      </PreviewThemeScope>
+    )
   document.documentElement.classList.toggle('dark', (context.globals.theme ?? 'light') === 'dark')
   return <Story />
 }
@@ -35,6 +45,12 @@ const preview: Preview = {
         ],
         dynamicTitle: true,
       },
+    },
+    // Set by the Playground over the channel (updateGlobals). Storybook drops
+    // a global it was not told about, so it is declared, but with no toolbar:
+    // in Storybook itself the toolbar's theme stays the one switch.
+    appearance: {
+      description: "The Playground's Preview theme: light, dark or system",
     },
   },
 

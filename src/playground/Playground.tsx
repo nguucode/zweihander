@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore, typ
 import { Tag } from '@/components/atomic-elements/Tag'
 import { Button } from '@/components/buttons/Button'
 import { ToggleButton } from '@/components/buttons/ToggleButton'
+import { RadioGroup } from '@/components/controls/Radio'
 import { Switch } from '@/components/controls/Switch'
 import { NumberInput } from '@/components/inputs/NumberInput'
 import { Search } from '@/components/inputs/Search'
@@ -9,10 +10,12 @@ import { Select } from '@/components/inputs/Select'
 import { TextInput } from '@/components/inputs/TextInput'
 import { Spinner } from '@/components/loaders/Spinner'
 import { Modal } from '@/components/overlays/Modal'
+import { Popover } from '@/components/overlays/Popover'
 import { EmptyState } from '@/components/states/EmptyState'
 import { ErrorState } from '@/components/states/ErrorState'
 import { Icon } from '@/lib/icon'
 import styles from './Playground.module.css'
+import { DEFAULT_PREVIEW_THEME, usePrefersDark, type PreviewAppearance, type PreviewTheme } from './PreviewTheme'
 
 /** One entry of `manifest.json`, written by scripts/build-playground-manifest.mjs. */
 export interface ManifestItem {
@@ -135,7 +138,8 @@ export interface PlaygroundProps {
 export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl = '../' }: PlaygroundProps) {
   const { items } = manifest
   const [state, setState] = useState(() => readUrl(items))
-  const [dark, setDark] = useState(() => matchMedia('(prefers-color-scheme: dark)').matches)
+  const [previewTheme, setPreviewTheme] = useState(DEFAULT_PREVIEW_THEME)
+  const dark = usePrefersDark()
   const [filters, setFilters] = useState(NO_FILTERS)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const wide = useWide()
@@ -146,6 +150,7 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
     return () => removeEventListener('popstate', onPop)
   }, [items])
 
+  // The page's own UI follows the OS; the Preview theme only dresses the frame.
   // On <html>, not a wrapper: popups (Select, the drawer) portal to <body>.
   useEffect(() => {
     document.documentElement.classList.toggle('dark', dark)
@@ -188,9 +193,7 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
         <a href={storybookUrl} className={styles.headerLink}>
           Storybook
         </a>
-        <ToggleButton size="sm" appearance="outlined" variant="secondary" pressed={dark} onPressedChange={setDark}>
-          Dark
-        </ToggleButton>
+        <ThemePopover theme={previewTheme} onChange={setPreviewTheme} />
       </header>
 
       <div className={styles.columns}>
@@ -237,7 +240,7 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
             item={state.item}
             vp={state.vp}
             args={state.args}
-            theme={dark ? 'dark' : 'light'}
+            theme={previewTheme}
             storybookUrl={storybookUrl}
           />
         </main>
@@ -249,6 +252,36 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
         )}
       </div>
     </div>
+  )
+}
+
+const APPEARANCE_OPTIONS = [
+  { value: 'light', label: 'Light' },
+  { value: 'dark', label: 'Dark' },
+  { value: 'system', label: 'System' },
+]
+
+/** The header's Theme button and its popover: what the item in the frame wears. */
+function ThemePopover({ theme, onChange }: { theme: PreviewTheme; onChange: (theme: PreviewTheme) => void }) {
+  return (
+    <Popover
+      title="Preview theme"
+      align="end"
+      isModal
+      trigger={
+        <Button size="sm" appearance="outlined" variant="secondary">
+          Theme
+        </Button>
+      }
+    >
+      <RadioGroup
+        label="Theme"
+        orientation="horizontal"
+        options={APPEARANCE_OPTIONS}
+        value={theme.appearance}
+        onValueChange={(appearance) => onChange({ ...theme, appearance: appearance as PreviewAppearance })}
+      />
+    </Popover>
   )
 }
 
@@ -392,6 +425,13 @@ function channelEvent(data: unknown): { type?: string } | undefined {
  */
 const STORYBOOK_CHANNEL = 'storybook-channel'
 
+/** Sends one channel event into the frame showing `src`. */
+const postTo = (target: Window, src: string) => (type: string, payload: object) =>
+  target.postMessage(
+    JSON.stringify({ key: STORYBOOK_CHANNEL, event: { type, args: [payload] } }),
+    new URL(src, location.href).origin,
+  )
+
 function LiveView({
   item,
   vp,
@@ -402,7 +442,7 @@ function LiveView({
   item: ManifestItem
   vp: Viewport
   args: Args
-  theme: 'light' | 'dark'
+  theme: PreviewTheme
   storybookUrl: string
 }) {
   const { width, label } = VIEWPORTS[vp]
@@ -425,9 +465,11 @@ function LiveView({
   const scale = box.w ? Math.min(1, box.w / width) : 1
   // embed=true: Storybook skips play functions, so the item shows its starting
   // state, not where a story test left it.
-  // Props are not in the src: they go over Storybook's channel (below), so a
-  // change re-renders the story without reloading the frame.
-  const src = `${storybookUrl}iframe.html?${new URLSearchParams({ id: item.storyId, viewMode: 'story', embed: 'true', globals: `theme:${theme}` })}`
+  // Props and the Preview theme are not in the src: they go over Storybook's
+  // channel (below), so a change re-renders the story without reloading the
+  // frame. The src only starts the frame on the default theme, so the common
+  // case needs no update after the first render.
+  const src = `${storybookUrl}iframe.html?${new URLSearchParams({ id: item.storyId, viewMode: 'story', embed: 'true', globals: `appearance:${DEFAULT_PREVIEW_THEME.appearance}` })}`
   const storyLink = `${storybookUrl}?path=/story/${item.storyId}`
   const state = done?.src === src ? (done.ok ? 'ready' : 'error') : 'loading'
 
@@ -458,17 +500,27 @@ function LiveView({
     if (!target || target !== rendered) return
     const before = sent.current?.target === target ? sent.current.args : {}
     sent.current = { target, args }
-    const post = (type: string, payload: object) =>
-      target.postMessage(
-        JSON.stringify({ key: STORYBOOK_CHANNEL, event: { type, args: [payload] } }),
-        new URL(src, location.href).origin,
-      )
+    const post = postTo(target, src)
     // Back to default is a reset: Storybook then uses the story's own args.
     const argNames = Object.keys(before).filter((name) => !Object.hasOwn(args, name))
     const updatedArgs = Object.fromEntries(Object.entries(args).filter(([name, value]) => before[name] !== value))
     if (argNames.length) post('resetStoryArgs', { storyId: item.storyId, argNames })
     if (Object.keys(updatedArgs).length) post('updateStoryArgs', { storyId: item.storyId, updatedArgs })
   }, [args, rendered, src, item.storyId])
+
+  // The Preview theme the same way, as Storybook globals. A new frame starts
+  // on the default (its src says so).
+  const sentTheme = useRef<{ target: Window; theme: PreviewTheme } | null>(null)
+  useEffect(() => {
+    const target = frame.current?.contentWindow
+    if (!target || target !== rendered) return
+    const before = sentTheme.current?.target === target ? sentTheme.current.theme : DEFAULT_PREVIEW_THEME
+    sentTheme.current = { target, theme }
+    const globals = Object.fromEntries(
+      Object.entries(theme).filter(([key, value]) => before[key as keyof PreviewTheme] !== value),
+    )
+    if (Object.keys(globals).length) postTo(target, src)('updateGlobals', { globals })
+  }, [theme, rendered, src])
 
   return (
     <div className={styles.live}>
