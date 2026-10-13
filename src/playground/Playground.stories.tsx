@@ -56,8 +56,16 @@ const showing = async (canvas: ReturnType<typeof within>, name: string) =>
  */
 const fitsDevice = async (canvas: ReturnType<typeof within>, width: number, height: number) => {
   await waitFor(async () => {
+    const win = canvas.getByTestId('preview-window')
     const iframe = await frame(canvas)
-    expect([iframe.offsetWidth, iframe.offsetHeight]).toEqual([width, height])
+    // The page takes the full width, and the height a Browser bar above it leaves.
+    const bar = win.childElementCount > 1 ? (win.firstElementChild as HTMLElement).offsetHeight : 0
+    expect([win.offsetWidth, win.offsetHeight, iframe.offsetWidth, iframe.offsetHeight]).toEqual([
+      width,
+      height,
+      width,
+      height - bar,
+    ])
   })
   const win = canvas.getByTestId('preview-window')
   const stage = win.parentElement!.parentElement!
@@ -92,7 +100,7 @@ const fakePreview = async (iframe: HTMLIFrameElement) => {
 const withUrl = (search: Record<string, string>) => () => {
   const before = location.href
   const url = new URL(before)
-  for (const key of ['item', 'vp', ...manifest.items.flatMap((i) => i.props.map((p) => p.name))]) url.searchParams.delete(key)
+  for (const key of ['item', 'vp', 'address', ...manifest.items.flatMap((i) => i.props.map((p) => p.name))]) url.searchParams.delete(key)
   for (const [k, v] of Object.entries(search)) url.searchParams.set(k, v)
   history.replaceState(null, '', url)
   return () => history.replaceState(null, '', before)
@@ -117,6 +125,8 @@ export const Default: Story = {
     const iframe = await frame(canvas)
     await expect(iframe.getAttribute('src')).toContain(`id=${button.storyId}`)
     await fitsDevice(canvas, 1280, 800)
+    // Desktop has Safari's 52px bar above the page.
+    await expect(iframe.offsetHeight).toBe(748)
     await expect(viewportTab(canvas, 'Desktop')).toHaveAttribute('aria-selected', 'true')
     await waitFor(() => expect(canvas.queryByRole('status', { name: /Loading/ })).toBeNull())
 
@@ -419,5 +429,63 @@ export const FollowsOs: Story = {
     // And keeps following it when the OS setting changes.
     setPrefersDark(false)
     await waitFor(() => expect(document.documentElement).not.toHaveClass('dark'))
+  },
+}
+
+export const BrowserBar: Story = {
+  beforeEach: [withUrl({}), withPrefersDark(false)],
+  play: async ({ canvas, userEvent }) => {
+    // The address field is a real, named text field, on example.com until changed.
+    const address = canvas.getByRole('textbox', { name: 'Address' })
+    await expect(address).toHaveValue('example.com')
+    await expect(param('address')).toBeNull()
+
+    // A domain typed in goes in the URL; back to example.com, it leaves.
+    await userEvent.clear(address)
+    await userEvent.type(address, 'acme.dev')
+    await expect(param('address')).toBe('acme.dev')
+    await userEvent.clear(address)
+    await expect(param('address')).toBeNull()
+    // Left empty, the field goes back to example.com, as the link shows it.
+    await userEvent.tab()
+    await expect(address).toHaveValue('example.com')
+    await userEvent.clear(address)
+    await userEvent.type(address, ' acme.dev ')
+    await expect(param('address')).toBe('acme.dev')
+    await userEvent.tab()
+    await expect(address).toHaveValue('acme.dev')
+    await userEvent.clear(address)
+    await userEvent.type(address, 'example.com')
+    await expect(param('address')).toBeNull()
+
+    // The bar wears the Preview theme's appearance: System follows the OS (light here).
+    // Found before the modal popover opens, which hides the page from queries.
+    const bar = address.closest('.light, .dark')
+    await expect(bar).toHaveClass('light')
+    const trigger = canvas.getByRole('button', { name: 'Theme' })
+    await userEvent.click(trigger)
+    const dialog = within(await screen.findByRole('dialog', { name: 'Preview theme' }))
+    await userEvent.click(dialog.getByRole('radio', { name: 'Dark' }))
+    await expect(bar).toHaveClass('dark')
+    // The page around it does not.
+    await expect(document.documentElement).not.toHaveClass('dark')
+    await userEvent.click(dialog.getByRole('radio', { name: 'System' }))
+    await expect(bar).toHaveClass('light')
+    setPrefersDark(true)
+    await waitFor(() => expect(bar).toHaveClass('dark'))
+    await userEvent.keyboard('{Escape}')
+  },
+}
+
+export const BrowserBarFromUrl: Story = {
+  beforeEach: withUrl({ address: 'acme.dev' }),
+  play: async ({ canvas, userEvent }) => {
+    // A shared link opens on the same domain.
+    await expect(canvas.getByRole('textbox', { name: 'Address' })).toHaveValue('acme.dev')
+    // Switching viewport keeps it.
+    await userEvent.click(viewportTab(canvas, 'Tablet'))
+    await expect(param('address')).toBe('acme.dev')
+    await userEvent.click(viewportTab(canvas, 'Desktop'))
+    await expect(canvas.getByRole('textbox', { name: 'Address' })).toHaveValue('acme.dev')
   },
 }
