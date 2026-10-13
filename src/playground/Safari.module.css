@@ -4,15 +4,17 @@
    group and the field's end. Its greys become the kit's tokens under the
    bar's own appearance: white or neutral-800 toolbar (card, secondary),
    neutral-200 or -700 field and window controls (input, which in dark is a
-   light veil over the toolbar), neutral-400 icons (muted-foreground). */
+   light veil over the toolbar), frame line (border), neutral-400 icons
+   (muted-foreground). */
 
 .bar {
   position: relative;
   flex: none;
   block-size: 52px;
   background: var(--card);
-  /* Magic UI's frame shows as a line under the toolbar, inside its 52px. */
-  box-shadow: inset 0 -1px 0 var(--input);
+  /* Magic UI's frame shows as a line under the toolbar, inside its 52px; the
+     window's own edge (PreviewWindow) is the same token. */
+  box-shadow: inset 0 -1px 0 var(--border);
   color: var(--muted-foreground);
   font-family: var(--font-sans);
 }
@@ -37,7 +39,7 @@
 }
 
 /* Magic UI's window controls are the frame's grey, not red, amber, green. */
-.light {
+.control {
   fill: var(--input);
 }
 

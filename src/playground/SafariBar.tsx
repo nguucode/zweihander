@@ -15,8 +15,8 @@ type BarProps = {
 
 /**
  * Safari's chrome for the viewport: Magic UI's macOS toolbar on Desktop
- * (1280×52, see Safari.tsx), and after the Figma frames the iPad toolbar under a status bar on
- * Tablet (834×86), and on Mobile a status bar at the top and the iOS bar
+ * (1280×52, see Safari.tsx); after the Figma frames, the iPad toolbar
+ * under a status bar on Tablet (834×86), and on Mobile a status bar at the top and the iOS bar
  * floating at the bottom, over the page. Drawn in HTML and SVG, not SF
  * Symbols, so it looks the same off Apple systems. Only the address field
  * is real; the rest is decoration and hidden from assistive tech.
@@ -171,7 +171,7 @@ function AddressInput({ address, onAddress }: Pick<BarProps, 'address' | 'onAddr
   )
 }
 
-// Icons the Tablet and Mobile bars share, each passing its own size.
+// Icons for the Tablet and Mobile bars, each caller passing its own size.
 
 function SidebarIcon(props: SVGProps<SVGSVGElement>) {
   return (
