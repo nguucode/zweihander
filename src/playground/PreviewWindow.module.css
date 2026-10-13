@@ -1,0 +1,30 @@
+/* The stage takes the room left in the centre column; the window sits in
+   the middle of it at its scaled size. */
+
+.stage {
+  display: grid;
+  flex: 1;
+  place-items: center;
+  min-block-size: 0;
+}
+
+/* Holds the scaled size in the layout: a transform alone does not. */
+.fit {
+  overflow: hidden;
+  /* A ring, not a border: the box is exactly the scaled window. */
+  box-shadow: 0 0 0 1px var(--border);
+  border-radius: var(--radius-panel);
+}
+
+.window {
+  display: flex;
+  flex-direction: column;
+  transform-origin: 0 0;
+  background: var(--background);
+}
+
+.content {
+  position: relative;
+  flex: 1;
+  min-block-size: 0;
+}

@@ -1,7 +1,7 @@
-import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore, type MouseEvent } from 'react'
+import { useEffect, useRef, useState, useSyncExternalStore, type MouseEvent } from 'react'
 import { Tag } from '@/components/atomic-elements/Tag'
+import { Accordion } from '@/components/data-display/Accordion'
 import { Button } from '@/components/buttons/Button'
-import { ToggleButton } from '@/components/buttons/ToggleButton'
 import { RadioGroup } from '@/components/controls/Radio'
 import { Switch } from '@/components/controls/Switch'
 import { NumberInput } from '@/components/inputs/NumberInput'
@@ -9,13 +9,17 @@ import { Search } from '@/components/inputs/Search'
 import { Select } from '@/components/inputs/Select'
 import { TextInput } from '@/components/inputs/TextInput'
 import { Spinner } from '@/components/loaders/Spinner'
+import { Tabs } from '@/components/navigation/Tabs'
 import { Modal } from '@/components/overlays/Modal'
 import { Popover } from '@/components/overlays/Popover'
+import { Tooltip } from '@/components/overlays/Tooltip'
 import { EmptyState } from '@/components/states/EmptyState'
 import { ErrorState } from '@/components/states/ErrorState'
 import { Icon } from '@/lib/icon'
 import styles from './Playground.module.css'
 import { DEFAULT_PREVIEW_THEME, usePrefersDark, type PreviewAppearance, type PreviewTheme } from './PreviewTheme'
+import { PreviewWindow } from './PreviewWindow'
+import { VIEWPORTS, type Viewport } from './viewports'
 
 /** One entry of `manifest.json`, written by scripts/build-playground-manifest.mjs. */
 export interface ManifestItem {
@@ -46,13 +50,6 @@ type Args = Record<string, unknown>
 export interface Manifest {
   items: ManifestItem[]
 }
-
-const VIEWPORTS = {
-  desktop: { label: 'Desktop', width: 1280 },
-  tablet: { label: 'Tablet', width: 768 },
-  mobile: { label: 'Mobile', width: 375 },
-} as const
-type Viewport = keyof typeof VIEWPORTS
 
 const GROUPS = [
   ['component', 'Components'],
@@ -115,6 +112,9 @@ function urlWith(changes: Record<string, string | undefined>) {
 /** Removes an item's props from the URL, so they do not carry over to the next item. */
 const withoutProps = (item: ManifestItem) => Object.fromEntries(item.props.map((p) => [p.name, undefined]))
 
+/** The item's story in the full Storybook. */
+const storyPage = (storybookUrl: string, item: ManifestItem) => `${storybookUrl}?path=/story/${item.storyId}`
+
 function useWide() {
   return useSyncExternalStore(
     (onChange) => {
@@ -141,6 +141,7 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
   const [previewTheme, setPreviewTheme] = useState(DEFAULT_PREVIEW_THEME)
   const dark = usePrefersDark()
   const [filters, setFilters] = useState(NO_FILTERS)
+  const [folds, setFolds] = useState(NO_FOLDS)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const wide = useWide()
 
@@ -181,7 +182,17 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
     setState((s) => ({ ...s, args: {} }))
   }
 
-  const browser = <Browser items={items} selected={state.item} filters={filters} onFilters={setFilters} onSelect={select} />
+  const browser = (
+    <Browser
+      items={items}
+      selected={state.item}
+      filters={filters}
+      onFilters={setFilters}
+      folds={folds}
+      onFolds={setFolds}
+      onSelect={select}
+    />
+  )
 
   return (
     <div className={styles.shell}>
@@ -220,20 +231,29 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
                 {browser}
               </Modal>
             )}
-            <h2 className={styles.current}>{state.item.name}</h2>
-            <div role="group" aria-label="Viewport" className={styles.viewports}>
-              {(Object.keys(VIEWPORTS) as Viewport[]).map((vp) => (
-                <ToggleButton
-                  key={vp}
+            <div className={styles.viewports}>
+              <Tabs
+                aria-label="Viewport"
+                appearance="pills"
+                size="sm"
+                // Arrow keys switch at once: a viewport change does not reload the frame.
+                activateOnFocus
+                items={Object.entries(VIEWPORTS).map(([value, { label }]) => ({ value, label }))}
+                value={state.vp}
+                onValueChange={(vp) => setVp(vp as Viewport)}
+              />
+              <Tooltip content="Open in Storybook">
+                <Button
                   size="sm"
-                  appearance="outlined"
-                  pressed={state.vp === vp}
-                  // Pressing the current one again keeps it: one is always on.
-                  onPressedChange={(on) => on && setVp(vp)}
+                  appearance="ghost"
+                  variant="secondary"
+                  isIconOnly
+                  aria-label="Open in Storybook"
+                  href={storyPage(storybookUrl, state.item)}
                 >
-                  {VIEWPORTS[vp].label}
-                </ToggleButton>
-              ))}
+                  <Icon name="external" />
+                </Button>
+              </Tooltip>
             </div>
           </div>
           <LiveView
@@ -295,22 +315,40 @@ interface Filters {
 const ALL = 'all'
 const NO_FILTERS: Filters = { query: '', category: ALL, status: ALL }
 
+/**
+ * Category sections the visitor folded, as `kind:category`; not in the URL.
+ * Folds made while searching or filtering are their own set, emptied by each
+ * new search or filter so a match never sits in a folded section; the folds
+ * from before come back once the search is cleared.
+ */
+interface Folds {
+  browsing: string[]
+  filtering: string[]
+}
+const NO_FOLDS: Folds = { browsing: [], filtering: [] }
+
+const sortedUnique = (values: string[]) => [...new Set(values)].sort()
+
 function Browser({
   items,
   selected,
   filters,
   onFilters,
+  folds,
+  onFolds,
   onSelect,
 }: {
   items: ManifestItem[]
   selected: ManifestItem
   filters: Filters
   onFilters: (f: Filters) => void
+  folds: Folds
+  onFolds: (f: Folds) => void
   onSelect: (item: ManifestItem) => void
 }) {
   const { query, category, status } = filters
-  const categories = [...new Set(items.map((i) => i.category))].sort()
-  const statuses = [...new Set(items.map((i) => i.status))].sort()
+  const categories = sortedUnique(items.map((i) => i.category))
+  const statuses = sortedUnique(items.map((i) => i.status))
   const needle = query.trim().toLowerCase()
   const visible = items.filter(
     (i) =>
@@ -318,6 +356,14 @@ function Browser({
       (category === ALL || i.category === category) &&
       (status === ALL || i.status === status),
   )
+
+  const isFiltering = needle !== '' || category !== ALL || status !== ALL
+  const folded = isFiltering ? folds.filtering : folds.browsing
+  const setFilters = (next: Filters) => {
+    onFilters(next)
+    onFolds({ ...folds, filtering: [] })
+  }
+  const setFilter = (change: Partial<Filters>) => setFilters({ ...filters, ...change })
 
   const open = (event: MouseEvent, item: ManifestItem) => {
     // Let a new tab or window open from the link as usual.
@@ -332,7 +378,7 @@ function Browser({
         aria-label="Search by name"
         placeholder="Search by name"
         value={query}
-        onChange={(e) => onFilters({ ...filters, query: e.target.value })}
+        onChange={(e) => setFilter({ query: e.target.value })}
         isFullWidth
       />
       <div className={styles.filters}>
@@ -340,16 +386,14 @@ function Browser({
           label="Category"
           options={[{ value: ALL, label: 'All' }, ...categories]}
           value={category}
-          onValueChange={(v) => onFilters({ ...filters, category: v ?? ALL })}
-          size="sm"
+          onValueChange={(v) => setFilter({ category: v ?? ALL })}
           isFullWidth
         />
         <Select
           label="Status"
           options={[{ value: ALL, label: 'All' }, ...statuses]}
           value={status}
-          onValueChange={(v) => onFilters({ ...filters, status: v ?? ALL })}
-          size="sm"
+          onValueChange={(v) => setFilter({ status: v ?? ALL })}
           isFullWidth
         />
       </div>
@@ -365,7 +409,7 @@ function Browser({
           title="Nothing matches"
           description="No item has that name in the chosen Category and status."
           action={
-            <Button size="sm" appearance="outlined" variant="secondary" onClick={() => onFilters(NO_FILTERS)}>
+            <Button size="sm" appearance="outlined" variant="secondary" onClick={() => setFilters(NO_FILTERS)}>
               Clear search and filters
             </Button>
           }
@@ -374,29 +418,56 @@ function Browser({
         GROUPS.map(([kind, label]) => {
           const group = visible.filter((i) => i.kind === kind)
           if (!group.length) return null
+          // Sections with no match are not built at all, so they hide with their items.
+          const sections = sortedUnique(group.map((i) => i.category))
+          const keys = sections.map((section) => `${kind}:${section}`)
           return (
             <section key={kind} aria-labelledby={`pg-group-${kind}`} className={styles.group}>
               <h2 id={`pg-group-${kind}`} className={styles.groupTitle}>
                 {label}
               </h2>
-              <ul className={styles.cards}>
-                {group.map((item) => (
-                  <li key={item.id}>
-                    <a
-                      href={urlWith({ ...withoutProps(selected), item: item.id })}
-                      aria-current={item.id === selected.id ? 'true' : undefined}
-                      className={styles.card}
-                      onClick={(e) => open(e, item)}
-                    >
-                      <span className={styles.cardName}>{item.name}</span>
-                      <span className={styles.cardMeta}>
-                        {item.category}
-                        <Tag text={item.status} size="sm" variant={item.status === 'experimental' ? 'warning' : 'info'} />
-                      </span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
+              <Accordion
+                multiple
+                appearance="flush"
+                size="sm"
+                value={keys.filter((key) => !folded.includes(key))}
+                onValueChange={(opened) =>
+                  onFolds({
+                    ...folds,
+                    [isFiltering ? 'filtering' : 'browsing']: [
+                      ...folded.filter((key) => !keys.includes(key)),
+                      ...keys.filter((key) => !opened.includes(key)),
+                    ],
+                  })
+                }
+                items={sections.map((section, index) => ({
+                  value: keys[index],
+                  title: section,
+                  content: (
+                    <ul className={styles.cards}>
+                      {group
+                        .filter((item) => item.category === section)
+                        .map((item) => (
+                          <li key={item.id}>
+                            <a
+                              href={urlWith({ ...withoutProps(selected), item: item.id })}
+                              aria-current={item.id === selected.id ? 'true' : undefined}
+                              className={styles.card}
+                              onClick={(e) => open(e, item)}
+                            >
+                              <span className={styles.cardName}>{item.name}</span>
+                              <Tag
+                                text={item.status}
+                                size="sm"
+                                variant={item.status === 'experimental' ? 'warning' : 'info'}
+                              />
+                            </a>
+                          </li>
+                        ))}
+                    </ul>
+                  ),
+                }))}
+              />
             </section>
           )
         })
@@ -445,24 +516,10 @@ function LiveView({
   theme: PreviewTheme
   storybookUrl: string
 }) {
-  const { width, label } = VIEWPORTS[vp]
-  const stage = useRef<HTMLDivElement>(null)
   const frame = useRef<HTMLIFrameElement>(null)
-  const [box, setBox] = useState({ w: 0, h: 0 })
   // Which src finished, and how. A src that has not finished is loading.
   const [done, setDone] = useState<{ src: string; ok: boolean } | null>(null)
 
-  useLayoutEffect(() => {
-    const observer = new ResizeObserver(([entry]) =>
-      setBox({ w: entry.contentRect.width, h: entry.contentRect.height }),
-    )
-    observer.observe(stage.current!)
-    return () => observer.disconnect()
-  }, [])
-
-  // The frame is the real width, so media and container queries inside it
-  // fire as they would on a device; it is scaled down when the column is narrower.
-  const scale = box.w ? Math.min(1, box.w / width) : 1
   // embed=true: Storybook skips play functions, so the item shows its starting
   // state, not where a story test left it.
   // Props and the Preview theme are not in the src: they go over Storybook's
@@ -470,7 +527,7 @@ function LiveView({
   // frame. The src only starts the frame on the default theme, so the common
   // case needs no update after the first render.
   const src = `${storybookUrl}iframe.html?${new URLSearchParams({ id: item.storyId, viewMode: 'story', embed: 'true', globals: `appearance:${DEFAULT_PREVIEW_THEME.appearance}` })}`
-  const storyLink = `${storybookUrl}?path=/story/${item.storyId}`
+  const storyLink = storyPage(storybookUrl, item)
   const state = done?.src === src ? (done.ok ? 'ready' : 'error') : 'loading'
 
   useEffect(() => {
@@ -524,26 +581,15 @@ function LiveView({
 
   return (
     <div className={styles.live}>
-      <p className={styles.size}>
-        {label} {width} px{scale < 1 && ` · shown at ${Math.round(scale * 100)}%`} ·{' '}
-        <a href={storyLink} className={styles.storyLink}>
-          Open in Storybook
-        </a>
-      </p>
-      <div ref={stage} className={styles.stage}>
-        {box.h > 0 && (
-          <div className={styles.frameBox} style={{ width: width * scale, height: box.h }}>
-            <iframe
-              key={src}
-              ref={frame}
-              title={`${item.name} live view`}
-              src={src}
-              className={styles.frame}
-              style={{ width, height: box.h / scale, transform: `scale(${scale})` }}
-              onLoad={() => setDone({ src, ok: true })}
-            />
-          </div>
-        )}
+      <PreviewWindow vp={vp}>
+        <iframe
+          key={src}
+          ref={frame}
+          title={`${item.name} live view`}
+          src={src}
+          className={styles.frame}
+          onLoad={() => setDone({ src, ok: true })}
+        />
         {state === 'loading' && (
           <div className={styles.overlay}>
             <Spinner label={`Loading ${item.name}`} />
@@ -564,7 +610,7 @@ function LiveView({
             />
           </div>
         )}
-      </div>
+      </PreviewWindow>
     </div>
   )
 }
