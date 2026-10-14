@@ -57,7 +57,7 @@ export function Iphone({ style, children }: { style?: CSSProperties; children: R
     <div
       data-testid="device"
       className={styles.device}
-      // The outline's corner, so the shadow follows the phone, not its box.
+      // The outline's corner (73 units, past the 2-unit buttons), so the shadow follows the phone, not its box.
       style={{ width: PHONE.width, height: PHONE.height, borderRadius: 74, ...style }}
     >
       <div

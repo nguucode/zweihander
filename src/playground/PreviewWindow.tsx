@@ -6,6 +6,12 @@ import { Iphone, PHONE } from './Iphone'
 import styles from './PreviewWindow.module.css'
 import { VIEWPORTS, type Viewport } from './viewports'
 
+/** Tablet and Mobile: the device drawn around the window, its outside size, and its status bar's kind. */
+const DEVICES = {
+  tablet: { Frame: Ipad, size: TABLET, chrome: 'tablet' },
+  mobile: { Frame: Iphone, size: PHONE, chrome: 'phone' },
+} as const
+
 /** What the Stage takes from the Preview theme: its colours and appearance, not its radius or scaling. */
 export type StageTheme = { accent: AccentColor; gray: GrayColor; appearance: 'light' | 'dark' }
 
@@ -54,8 +60,8 @@ export function PreviewWindow({
 
   // The window keeps the device size, so media and container queries in the
   // page fire as they would on that device; only the transform shrinks it.
-  const Device = vp === 'mobile' ? Iphone : vp === 'tablet' ? Ipad : null
-  const outer = vp === 'mobile' ? PHONE : vp === 'tablet' ? TABLET : { width, height }
+  const device = vp === 'desktop' ? null : DEVICES[vp]
+  const outer = device?.size ?? { width, height }
   const scale = Math.min(1, box.w / outer.width, box.h / outer.height)
 
   return (
@@ -70,17 +76,17 @@ export function PreviewWindow({
       <Wallpaper />
       {box.w > 0 && box.h > 0 && (
         <div
-          className={Device ? styles.deviceFit : styles.fit}
+          className={device ? styles.deviceFit : styles.fit}
           style={{ width: outer.width * scale, height: outer.height * scale }}
         >
-          {Device ? (
-            <Device style={{ transform: `scale(${scale})` }}>
+          {device ? (
+            <device.Frame style={{ transform: `scale(${scale})` }}>
               <div data-testid="preview-window" className={styles.window}>
                 <div className={styles.content}>{children}</div>
-                <StatusBar device={vp === 'mobile' ? 'phone' : 'tablet'} />
+                <StatusBar device={device.chrome} />
                 <HomeIndicator />
               </div>
-            </Device>
+            </device.Frame>
           ) : (
             <div
               data-testid="preview-window"

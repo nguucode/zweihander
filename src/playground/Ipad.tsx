@@ -42,7 +42,7 @@ export function Ipad({ style, children }: { style?: CSSProperties; children: Rea
       <svg aria-hidden className={styles.frame} viewBox={`0 0 ${w} ${h}`} fill="none">
         <g mask={`url(#${punch})`}>
           <rect className={styles.body} x={OFF} y={OFF} width={w - 2 * OFF} height={h - 2 * OFF} rx={BODY_RADIUS} />
-          {/* Top button, then the volume buttons down the right edge. */}
+          {/* Top button near the right corner, then the volume buttons down the right edge, iPad-like spots. */}
           <rect className={styles.body} x={w - 150} y={0} width={60} height={OFF + 1} rx={1} />
           <rect className={styles.body} x={w - OFF - 1} y={110} width={OFF + 1} height={50} rx={1} />
           <rect className={styles.body} x={w - OFF - 1} y={172} width={OFF + 1} height={50} rx={1} />
