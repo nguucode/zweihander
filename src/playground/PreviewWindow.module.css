@@ -96,12 +96,12 @@
   pointer-events: none;
 }
 
-/* On Mobile: the phone draws its own frame and shadow. */
-.phoneFit {
+/* On Tablet and Mobile: the device draws its own frame and shadow. */
+.deviceFit {
   position: relative;
 }
 
-/* The phone's status bar and Home indicator are positioned against it. */
+/* The device's status bar and Home indicator are positioned against it. */
 .window {
   position: relative;
   display: flex;

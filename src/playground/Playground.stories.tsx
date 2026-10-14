@@ -220,8 +220,9 @@ export const Default: Story = {
     await expect(param('vp')).toBe('mobile')
     await userEvent.click(viewportTab(canvas, 'Tablet'))
     await fitsDevice(canvas, 834, 1194)
-    // Tablet has the iPad's 86px bar (status bar included) above the page.
-    await expect((await frame(canvas)).offsetHeight).toBe(1108)
+    // Tablet is an iPad the same way: no Safari bar, the page fills the screen.
+    await expect((await frame(canvas)).offsetHeight).toBe(1194)
+    await expect(canvas.queryByRole('textbox', { name: 'Address' })).toBeNull()
     await expect(param('vp')).toBe('tablet')
 
     // Back steps to the entry before Tooltip: Button on Desktop, as the page opened.
@@ -712,55 +713,76 @@ export const BrowserBarFromUrl: Story = {
     const address = () => canvas.getByRole('textbox', { name: 'Address' })
     // A shared link opens on the same domain.
     await expect(address()).toHaveValue('acme.dev')
-    // Mobile has no address field, and leaves the address as it was.
-    await userEvent.click(viewportTab(canvas, 'Mobile'))
-    await expect(canvas.queryByRole('textbox', { name: 'Address' })).toBeNull()
-    await expect(param('address')).toBe('acme.dev')
-    // Both bars show it, and an edit in one carries to the other.
-    await userEvent.click(viewportTab(canvas, 'Tablet'))
-    await expect(address()).toHaveValue('acme.dev')
     await userEvent.clear(address())
     await userEvent.type(address(), 'shop.dev')
     await expect(param('address')).toBe('shop.dev')
+    // Tablet and Mobile have no address field, and leave the address as it was.
+    for (const vp of ['Tablet', 'Mobile']) {
+      await userEvent.click(viewportTab(canvas, vp))
+      await expect(canvas.queryByRole('textbox', { name: 'Address' })).toBeNull()
+      await expect(param('address')).toBe('shop.dev')
+    }
     await userEvent.click(viewportTab(canvas, 'Desktop'))
     await expect(address()).toHaveValue('shop.dev')
   },
 }
 
 /**
- * Mobile: an iPhone around the page. The frame, status bar and Home
- * indicator are decoration, hidden from assistive tech, and take the
- * Preview theme's appearance.
+ * The device around the page on Tablet and Mobile: its frame, status bar
+ * and Home indicator are decoration, hidden from assistive tech, and take
+ * the Preview theme's appearance. There is no Safari bar, so the shared
+ * address does not show.
  */
+const deviceFrame: NonNullable<Story['play']> = async ({ canvas, userEvent }) => {
+  // Found before the modal popover opens, which hides the page from queries.
+  // Found, not got: the window renders once the Stage has been measured.
+  const device = await canvas.findByTestId('device')
+  const status = canvas.getByTestId('status-bar')
+  const home = canvas.getByTestId('home-indicator')
+  // The frame is the device's own drawing, over the screen (the status bar has icons of its own).
+  const drawing = device.querySelector(':scope > svg')!
+  await expect(drawing).toHaveAttribute('aria-hidden', 'true')
+  await expect(status).toHaveAttribute('aria-hidden', 'true')
+  await expect(home).toHaveAttribute('aria-hidden', 'true')
+  await expect(canvas.queryByRole('textbox', { name: 'Address' })).toBeNull()
+  await expect(canvas.queryByText('acme.dev')).toBeNull()
+
+  // The status bar and the Home indicator sit over the page, inside it.
+  const page = (await frame(canvas)).getBoundingClientRect()
+  const top = status.getBoundingClientRect()
+  const bottom = home.getBoundingClientRect()
+  await expect(top.top).toBeCloseTo(page.top, 0)
+  await expect(bottom.top).toBeGreaterThan(page.top)
+  await expect(bottom.bottom).toBeLessThan(page.bottom)
+
+  const look = () => ({
+    status: getComputedStyle(status).color,
+    home: getComputedStyle(home).backgroundColor,
+    // The body: first in the drawing's masked group.
+    body: getComputedStyle(drawing.querySelector('g > :first-child')!).fill,
+  })
+  const light = look()
+  const dialog = await openTheme(canvas, userEvent)
+  await userEvent.click(dialog.getByRole('radio', { name: 'Dark' }))
+  await waitFor(() => expect(look().status).not.toBe(light.status))
+  await expect(look().home).not.toBe(light.home)
+  await expect(look().body).not.toBe(light.body)
+  await userEvent.keyboard('{Escape}')
+}
+
+/** Mobile: an iPhone around the page. */
 export const MobileFrame: Story = {
   beforeEach: [withUrl({ vp: 'mobile', address: 'acme.dev' }), withPrefersDark(false)],
-  play: async ({ canvas, userEvent }) => {
-    // Found before the modal popover opens, which hides the page from queries.
-    // Found, not got: the window renders once the Stage has been measured.
-    const phone = await canvas.findByTestId('device')
-    const status = canvas.getByTestId('status-bar')
-    const home = canvas.getByTestId('home-indicator')
-    // The frame is the phone's own drawing, over the screen (the status bar has icons of its own).
-    const drawing = phone.querySelector(':scope > svg')!
-    await expect(drawing).toHaveAttribute('aria-hidden', 'true')
-    await expect(status).toHaveAttribute('aria-hidden', 'true')
-    await expect(home).toHaveAttribute('aria-hidden', 'true')
-    // No Safari bar: the shared address does not show here.
-    await expect(canvas.queryByRole('textbox', { name: 'Address' })).toBeNull()
-    await expect(canvas.queryByText('acme.dev')).toBeNull()
+  play: deviceFrame,
+}
 
-    const look = () => ({
-      status: getComputedStyle(status).color,
-      home: getComputedStyle(home).backgroundColor,
-      body: getComputedStyle(drawing.querySelector('path')!).fill,
-    })
-    const light = look()
-    const dialog = await openTheme(canvas, userEvent)
-    await userEvent.click(dialog.getByRole('radio', { name: 'Dark' }))
-    await waitFor(() => expect(look().status).not.toBe(light.status))
-    await expect(look().home).not.toBe(light.home)
-    await expect(look().body).not.toBe(light.body)
-    await userEvent.keyboard('{Escape}')
+/** Tablet: an iPad around the page, in the iPhone's style, the page filling its 834×1194 screen. */
+export const TabletFrame: Story = {
+  beforeEach: [withUrl({ vp: 'tablet', address: 'acme.dev' }), withPrefersDark(false)],
+  play: async (context) => {
+    await fitsDevice(context.canvas, 834, 1194)
+    await expect((await frame(context.canvas)).offsetHeight).toBe(1194)
+    await deviceFrame(context)
   },
 }
 

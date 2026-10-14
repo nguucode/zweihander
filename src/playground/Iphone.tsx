@@ -27,7 +27,7 @@
  * SOFTWARE.
  */
 import { useId, type CSSProperties, type ReactNode } from 'react'
-import styles from './Iphone.module.css'
+import styles from './DeviceFrame.module.css'
 import { VIEWPORTS } from './viewports'
 
 // Magic UI's drawing, in its own units.
@@ -54,7 +54,12 @@ export const PHONE = { width: PHONE_W * SX, height: PHONE_H * SY }
 export function Iphone({ style, children }: { style?: CSSProperties; children: ReactNode }) {
   const punch = useId()
   return (
-    <div data-testid="device" className={styles.phone} style={{ width: PHONE.width, height: PHONE.height, ...style }}>
+    <div
+      data-testid="device"
+      className={styles.device}
+      // The outline's corner, so the shadow follows the phone, not its box.
+      style={{ width: PHONE.width, height: PHONE.height, borderRadius: 74, ...style }}
+    >
       <div
         className={styles.screen}
         style={{

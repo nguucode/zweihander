@@ -1,9 +1,5 @@
-/* Safari's chrome on Tablet (Desktop's is Safari.module.css). Positions
-   and sizes are the Figma frame's (Safari - Tablet 834×86);
-   the window around each never changes width, so they stay fixed. Colours
-   are the kit's tokens under the bar's own appearance scope. */
-
-/* --- The address field's input, in every bar ---------------------------- */
+/* The address field's input in Safari's Desktop bar (the bar itself is
+   Safari.module.css). */
 
 /* The hidden copy and the input share one cell, so the input is as wide as its text. */
 .sizer {
@@ -15,7 +11,7 @@
 .copy,
 .input {
   grid-area: 1 / 1;
-  /* The field around it sets the size: each bar has Safari's own. */
+  /* The field around it sets the size: Safari's own. */
   font: inherit;
 }
 
@@ -33,80 +29,4 @@
   color: inherit;
   text-align: center;
   outline: none;
-}
-
-/* --- Tablet: iPad toolbar, 834×86 ------------------------------------------- */
-
-.tablet {
-  position: relative;
-  flex: none;
-  block-size: 86px;
-  background: var(--background);
-  color: var(--secondary-foreground);
-  font-family: var(--font-sans);
-}
-
-.controls {
-  position: absolute;
-  display: flex;
-  justify-content: space-between;
-  inset-block-start: 32px;
-  inset-inline: 10px 8px;
-}
-
-.leading {
-  display: flex;
-  gap: var(--space-3);
-}
-
-/* A glass pill of Safari's toolbar: one or more 36px symbols. */
-.pill {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  block-size: 44px;
-  padding-inline: var(--space-1);
-  border-radius: var(--radius-pill);
-  background: var(--card);
-  box-shadow: var(--shadow-sm);
-}
-
-/* In dark the pills have an edge, as the Figma frame does; a ring, so it takes no room from the 44px pill. */
-.tablet:global(.dark) .pill {
-  box-shadow:
-    inset 0 0 0 1px var(--border),
-    var(--shadow-sm);
-}
-
-.symbol {
-  display: grid;
-  place-items: center;
-  inline-size: 36px;
-  block-size: 36px;
-}
-
-.tabletField {
-  position: absolute;
-  justify-content: center;
-  inset-block-start: 32px;
-  inset-inline-start: calc(50% - 0.5px);
-  inline-size: 387px;
-  padding-inline: var(--space-12);
-  transform: translateX(-50%);
-  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- Safari's address text size on iPad, not the kit's type scale */
-  font-size: 17px;
-  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- goes with Safari's 17px above */
-  line-height: 22px;
-  font-weight: 500;
-  cursor: text;
-}
-
-.tabletRefresh {
-  position: absolute;
-  inset-inline-end: 14px;
-}
-
-.tabletField:focus-within {
-  outline: var(--focus-width) solid var(--ring);
-  outline-offset: 0;
 }
