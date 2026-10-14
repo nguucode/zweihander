@@ -1,5 +1,5 @@
-/* Safari's chrome on Tablet and Mobile (Desktop's is Safari.module.css).
-   Positions and sizes are the Figma frames' (Safari - Tablet 834×86, Safari - Mobile 393);
+/* Safari's chrome on Tablet (Desktop's is Safari.module.css). Positions
+   and sizes are the Figma frame's (Safari - Tablet 834×86);
    the window around each never changes width, so they stay fixed. Colours
    are the kit's tokens under the bar's own appearance scope. */
 
@@ -33,37 +33,6 @@
   color: inherit;
   text-align: center;
   outline: none;
-}
-
-/* --- Status bar (Tablet, Mobile) -------------------------------------------- */
-
-.status {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  block-size: 30px;
-  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- the iPad status bar's own inset, off the kit's spacing scale */
-  padding-inline: 26px;
-  color: var(--foreground);
-  font-family: var(--font-sans);
-  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- iOS status bar text size, not the kit's type scale */
-  font-size: 12px;
-  font-weight: 500;
-  white-space: nowrap;
-}
-
-.clock,
-.signals {
-  display: flex;
-  align-items: center;
-}
-
-.clock {
-  gap: var(--space-2);
-}
-
-.signals {
-  gap: var(--space-1);
 }
 
 /* --- Tablet: iPad toolbar, 834×86 ------------------------------------------- */
@@ -137,66 +106,7 @@
   inset-inline-end: 14px;
 }
 
-.tabletField:focus-within,
-.mobileField:focus-within {
+.tabletField:focus-within {
   outline: var(--focus-width) solid var(--ring);
   outline-offset: 0;
-}
-
-/* --- Mobile: iPhone, status bar on top, bar floating at the bottom ---------- */
-
-.mobileStatus {
-  flex: none;
-  background: var(--background);
-}
-
-.mobile {
-  position: absolute;
-  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- above the page it floats over, its next sibling; no layer token fits a window's own parts */
-  z-index: 1;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  gap: var(--space-2);
-  inset-inline: 0;
-  inset-block-end: 0;
-  block-size: 82px;
-  color: var(--foreground);
-  font-family: var(--font-sans);
-}
-
-/* Frosted glass over the page: the page shows through, blurred. */
-.glass {
-  border: 1px solid var(--border);
-  border-radius: var(--radius-pill);
-  background: color-mix(in oklab, var(--card) 70%, transparent);
-  box-shadow: var(--shadow-md);
-  backdrop-filter: blur(8px);
-}
-
-.round {
-  display: grid;
-  place-items: center;
-  inline-size: 49px;
-  block-size: 49px;
-}
-
-.mobileField {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-2);
-  inline-size: 213px;
-  block-size: 48px;
-  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- Safari's own inset in the iPhone address pill, off the kit's spacing scale */
-  padding-inline: 10px;
-  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- Safari's address text size on iPhone, not the kit's type scale */
-  font-size: 17px;
-  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- goes with Safari's 17px above */
-  line-height: 22px;
-  cursor: text;
-}
-
-.mobileField > svg {
-  flex: none;
 }

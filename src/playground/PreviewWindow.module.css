@@ -96,11 +96,20 @@
   pointer-events: none;
 }
 
+/* On Mobile: the phone draws its own frame and shadow. */
+.phoneFit {
+  position: relative;
+}
+
+/* The phone's status bar and Home indicator are positioned against it. */
 .window {
-  /* The Mobile bar floats at the bottom, over the page. */
   position: relative;
   display: flex;
   flex-direction: column;
+  block-size: 100%;
+}
+
+.browser {
   overflow: hidden;
   border-radius: calc(var(--radius-panel) / var(--window-scale, 1));
   transform-origin: 0 0;
