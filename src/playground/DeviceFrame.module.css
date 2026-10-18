@@ -1,0 +1,52 @@
+/* The iPhone and iPad frames' colours: Magic UI's neutral greys as the
+   kit's semantic tokens, so a frame follows the appearance it sits in. The
+   camera departs from Magic UI's light grey: near black in both, as on the
+   device, so it reads as glass over any page. Each frame sets its own
+   corner radius. */
+
+.device {
+  --device-body: color-mix(in oklch, var(--foreground) 12%, var(--card));
+  /* Near black either way: the darkest token of each appearance. */
+  --device-island: var(--use-light, var(--foreground)) var(--use-dark, var(--background));
+
+  position: relative;
+  box-shadow: var(--elevation-2xl);
+  transform-origin: 0 0;
+}
+
+.screen {
+  position: absolute;
+  overflow: hidden;
+  background: var(--background);
+}
+
+/* Over the screen, lets every click through to the page under it. */
+.frame {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  pointer-events: none;
+}
+
+.body,
+.edge {
+  fill: var(--device-body);
+}
+
+.edge {
+  stroke: var(--device-body);
+  stroke-width: 0.5;
+}
+
+.bezel {
+  fill: var(--card);
+}
+
+.island {
+  fill: var(--device-island);
+}
+
+.lens {
+  fill: color-mix(in oklch, var(--device-island) 75%, var(--muted-foreground));
+}

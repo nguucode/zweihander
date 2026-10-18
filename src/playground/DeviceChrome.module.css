@@ -2,7 +2,11 @@
    previews. Sizes are iOS's own points; colours follow the appearance scope
    they sit in. */
 
+/* Over the page, along the top of the screen. */
 .status {
+  position: absolute;
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- above the page it floats over; no layer token fits a device's own parts */
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -10,6 +14,9 @@
   font-family: var(--font-sans);
   font-weight: 500;
   white-space: nowrap;
+  inset-block-start: 0;
+  inset-inline: 0;
+  pointer-events: none;
 }
 
 .clock,
@@ -26,7 +33,7 @@
   gap: var(--space-1);
 }
 
-/* iPad: a 30px strip along the top. */
+/* iPad: a 30px strip, time and date on the left, signals on the right. */
 .tablet {
   block-size: 30px;
   /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- the iPad status bar's own inset, off the kit's spacing scale */
@@ -38,19 +45,13 @@
 /* iPhone: over the page, the top safe area (59pt). Time and signals are each
    centred in the room either side of the camera pill, level with it. */
 .phone {
-  position: absolute;
-  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- above the page it floats over; no layer token fits a device's own parts */
-  z-index: 1;
   display: grid;
   grid-template-columns: 1fr 126px 1fr;
   justify-items: center;
-  inset-block-start: 0;
-  inset-inline: 0;
   block-size: 59px;
   /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- iOS status bar text size on iPhone, not the kit's type scale */
   font-size: 17px;
   font-weight: 600;
-  pointer-events: none;
 }
 
 .phone .signals {

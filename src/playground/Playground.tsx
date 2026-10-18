@@ -327,7 +327,6 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
             storybookUrl={storybookUrl}
             bar={
               <SafariBar
-                vp={state.vp}
                 // The bar wears the Preview theme's appearance, as the page in the frame does.
                 appearance={appearance}
                 address={state.address}

@@ -3,8 +3,9 @@ import styles from './DeviceChrome.module.css'
 /**
  * iOS status bar, drawn in HTML and SVG (not Apple's assets): 9:41 on the
  * left, signal, Wi-Fi and a full battery on the right. On a phone the two
- * sides sit either side of the camera pill, over the page; on a tablet they
- * run along the top with the date and the battery percentage. Decoration
+ * sides sit either side of the camera pill; on a tablet they run along the
+ * top with the date and the battery percentage. Over the page either way,
+ * which fills the screen under it. Decoration
  * only, hidden from assistive tech; its colour is the appearance's.
  */
 export function StatusBar({ device }: { device: 'phone' | 'tablet' }) {
