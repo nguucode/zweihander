@@ -17,7 +17,7 @@ export interface AvatarProps extends ComponentProps<'span'> {
 }
 
 export function Avatar({
-  size = 'sm',
+  size = 'md',
   imageSrc,
   imageAlt,
   initials,

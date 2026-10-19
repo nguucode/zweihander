@@ -96,6 +96,7 @@ Breaking change: fix `argTypes` (and `### Differences from the spec` if any) **f
 ## 2. Code
 
 - Follow the API conventions in the reference file: prop names, `variant`/`appearance`, `render` instead of `asChild`, no `forwardRef`.
+- **Size defaults to `md`.** A component whose `size` offers `md` uses it as the default, and its `argTypes` default says so; usage code (stories, templates, the Playground) leaves `size` out unless it needs another size on purpose. `npm run playground:check` goes red on a size default that is not `md`. Exceptions: Divider (its size is a line weight, 1px `sm` is the norm) and Link (no default, it inherits the surrounding text size).
 - Tokens only (`var(--…)`), no hard-coded values for color, spacing, radius or font.
 - A file with a hook or state: the first line is `'use client'`.
 - Comments explain *why*, they do not restate the code.

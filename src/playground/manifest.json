@@ -17,7 +17,7 @@
             "md",
             "lg"
           ],
-          "default": "sm",
+          "default": "md",
           "description": "24, 32, 40 or 48px across. Initials step up from 12px to 16px with it."
         },
         {
@@ -936,7 +936,7 @@
             "md",
             "lg"
           ],
-          "default": "sm",
+          "default": "md",
           "description": "Padding 12, 16, 24 or 32px; the gap between children scales with it."
         },
         {

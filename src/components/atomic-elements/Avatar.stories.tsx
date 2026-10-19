@@ -25,7 +25,7 @@ const meta = {
       description: '24, 32, 40 or 48px across. Initials step up from 12px to 16px with it.',
       control: 'inline-radio',
       options: ['xs', 'sm', 'md', 'lg'],
-      table: { type: { summary: "'xs' | 'sm' | 'md' | 'lg'" }, defaultValue: { summary: "'sm'" } },
+      table: { type: { summary: "'xs' | 'sm' | 'md' | 'lg'" }, defaultValue: { summary: "'md'" } },
     },
     imageSrc: {
       description: 'The picture, cropped to fill the circle. If it fails to load, the initials or the silhouette show instead.',
@@ -65,7 +65,10 @@ const row = { display: 'flex', gap: 'var(--space-4)', alignItems: 'center' }
 
 export const Default: Story = {
   play: async ({ canvas, canvasElement }) => {
-    await expect(canvas.getByRole('img', { name: 'Mary Thompson' })).toBeVisible()
+    const avatar = canvas.getByRole('img', { name: 'Mary Thompson' })
+    await expect(avatar).toBeVisible()
+    // No size given: md, the house default.
+    await expect(avatar.getBoundingClientRect().width).toBe(40)
     // The <img> itself is silent; the name is on the container.
     await expect(canvasElement.querySelector('img')).toHaveAttribute('alt', '')
   },
