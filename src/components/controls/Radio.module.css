@@ -1,4 +1,4 @@
-/* The circle is tier xs (see Foundations/Sizing). */
+/* The circle is --choice-box: 20px, 16px in Compact density. */
 .field {
   --choice-control: var(--choice-box);
   gap: var(--space-2);
@@ -50,7 +50,7 @@
   padding-inline-start: 0;
 }
 
-/* 20px circle, a --control-border outline (3:1 on the page). Selected fills
+/* --choice-box circle, a --control-border outline (3:1 on the page). Selected fills
    with the variant and shows a dot in its label colour. */
 .radio {
   --radio-fill: var(--foreground);
@@ -97,7 +97,7 @@ label:hover > .radio[data-checked]:not([data-disabled], [data-readonly]) {
   background: color-mix(in oklab, var(--radio-fill) 88%, var(--radio-dot));
 }
 
-/* 8px: a dot reads as "selected" at 20px without crowding the ring. */
+/* 8px (6px Compact): a dot reads as "selected" without crowding the ring. */
 .dot {
   inline-size: var(--radio-dot-size);
   block-size: var(--radio-dot-size);

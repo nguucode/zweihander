@@ -22,8 +22,8 @@
   white-space: nowrap;
 }
 
-/* 16px at sm; md is tier xs, 20px (see Foundations/Sizing). Both follow
-   the Theme's scaling. min-inline-size equal to the height keeps a single
+/* --badge-sm (16px) and --badge-md (20px), 14 and 16 in Compact. Both
+   follow the Theme's scaling. min-inline-size equal to the height keeps a single
    digit a circle rather than an oval. The tier's pad is not used: a count
    is one or two digits in a pill, and 6px either side would turn "9" into
    an oval. */
