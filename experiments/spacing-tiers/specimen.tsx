@@ -11,6 +11,10 @@ import { Calendar } from '@/components/data-display/Calendar'
 import { DatePicker } from '@/components/inputs/DatePicker'
 import { Popover } from '@/components/overlays/Popover'
 import { Tooltip } from '@/components/overlays/Tooltip'
+import { Checkbox } from '@/components/controls/Checkbox'
+import { RadioGroup } from '@/components/controls/Radio'
+import { Switch } from '@/components/controls/Switch'
+import { ProgressBar } from '@/components/loaders/ProgressBar'
 
 /** Shows its child and the child's rendered height. */
 function Measured({ children }: { children: ReactNode }) {
@@ -78,6 +82,34 @@ export function Specimen({ density, typeFixed }: { density: 'compact' | 'default
           </div>
         </div>
       ))}
+      <div className="specimenRow">
+        <span className="specimenSize">choice</span>
+        <div className="specimenItems">
+          <Checkbox label="Track inventory" defaultChecked />
+          <RadioGroup
+            aria-label={`Shipping, ${density}`}
+            orientation="horizontal"
+            defaultValue="std"
+            options={[
+              { value: 'std', label: 'Standard' },
+              { value: 'exp', label: 'Express' },
+            ]}
+          />
+          {(['sm', 'md', 'lg'] as const).map((s) => (
+            <Measured key={s}>
+              <Switch size={s} label={s} defaultChecked />
+            </Measured>
+          ))}
+        </div>
+      </div>
+      <div className="specimenRow">
+        <span className="specimenSize">progress</span>
+        <div className="specimenItems specimenStack">
+          {(['sm', 'md', 'lg'] as const).map((s) => (
+            <ProgressBar key={s} size={s} value={62} label={`Upload, ${s}`} showValueLabel />
+          ))}
+        </div>
+      </div>
       <div className="specimenRow">
         <span className="specimenSize">open</span>
         <div className="specimenItems">

@@ -46,9 +46,16 @@ export const CONTROLS: { size: Size; px: Record<Density, { h: number; pad: numbe
 ]
 
 const rem = (px: number) => `calc(${px / 16}rem * var(--scaling))`
+/* The size tokens those rows read, per density. */
+const SIZE_VARS: Record<Density, Record<string, number>> = {
+  default: { 'choice-box': 20, 'radio-dot': 8, 'switch-sm-w': 28, 'switch-sm-h': 16, 'switch-md-w': 36, 'switch-md-h': 20, 'switch-lg-w': 44, 'switch-lg-h': 24, 'progress-sm': 4, 'progress-md': 8, 'progress-lg': 12 },
+  compact: { 'choice-box': 16, 'radio-dot': 6, 'switch-sm-w': 24, 'switch-sm-h': 14, 'switch-md-w': 28, 'switch-md-h': 16, 'switch-lg-w': 36, 'switch-lg-h': 20, 'progress-sm': 4, 'progress-md': 6, 'progress-lg': 8 },
+}
 const tokenCss = DENSITIES.map(
   (d) =>
-    `[data-density='${d}'] {\n${ROLES.map((r) => `  --space-${r.role}: ${rem(r.px[d])};`).join('\n')}\n  --row-height: ${rem(ROW[d])};\n}`,
+    `[data-density='${d}'] {\n${ROLES.map((r) => `  --space-${r.role}: ${rem(r.px[d])};`).join('\n')}\n  --row-height: ${rem(ROW[d])};\n${Object.entries(SIZE_VARS[d])
+      .map(([k, v]) => `  --${k}: ${rem(v)};`)
+      .join('\n')}\n}`,
 ).join('\n')
 // The control tier tokens are declared on `*` in tokens.css, so the override
 // has to reach every element too, not just the scope.
@@ -225,18 +232,35 @@ export const MAP: Rule[] = [
   { part: 'File row padding', sel: m('FileUploader-module__item'), props: ['padding-inline-start'], role: 'inline', today: '8' },
   { part: '', sel: m('FileUploader-module__item'), props: ['padding-inline-end'], role: 'stack', today: '4' },
   { part: 'Table expand column', sel: m('Table-module__expand'), props: ['padding-inline-start'], role: 'inline', today: '8' },
+  { part: 'Toast padding', sel: m('Toast-module__toast'), props: ['padding-block'], role: 'cluster', today: '12' },
+  { part: '', sel: m('Toast-module__toast'), props: ['padding-inline'], role: 'group', today: '16' },
+  { part: 'Toast icon to text', sel: m('Toast-module__toast'), props: ['gap'], role: 'cluster', today: '12' },
+  { part: 'Toast title to description', sel: m('Toast-module__content'), props: ['gap'], role: 'stack', today: '4' },
+  { part: 'Toasts in a stack', sel: m('Toast-module__viewport'), props: ['gap'], role: 'inline', today: '8' },
   // An alignment offset: helper text lines up with the label, past the box and its gap.
   { part: 'Checkbox and radio helper indent', sel: m('ChoiceField-module__helper'), props: ['padding-inline-start'], role: 'inline', value: 'calc(var(--choice-control) + var(--space-inline))', today: '28' },
 ]
 
 /* Sizes inside overlays and the calendar that follow the control tier
    instead of a spacing token. Default is the same 32px as main. */
-export const SIZES: { part: string; sel: string; css: string; today: string }[] = [
-  { part: 'Calendar day', sel: m('Calendar-module__calendar'), css: '--calendar-day: var(--control-md);', today: '32 (--space-8)' },
-  { part: 'Calendar month buttons', sel: m('Calendar-module__nav'), css: 'inline-size: var(--control-md); block-size: var(--control-md);', today: '32 (--space-8)' },
-  { part: 'Calendar weekday row', sel: m('Calendar-module__weekday'), css: 'block-size: var(--control-md);', today: '32 (--space-8)' },
-  { part: 'Date preset row', sel: m('DatePicker-module__preset'), css: 'min-block-size: var(--control-md);', today: '32 (--space-8)' },
-  { part: 'Menu and list items', sel: '', css: '', today: 'already --control-md' },
+export const SIZES: { part: string; sel: string; css: string; reads: string; px: Record<Density, string>; today: string }[] = [
+  { part: 'Calendar day', sel: m('Calendar-module__calendar'), css: '--calendar-day: var(--control-md);', reads: '--control-md', px: { default: '32', compact: '28' }, today: '32 (--space-8)' },
+  { part: 'Calendar month buttons', sel: m('Calendar-module__nav'), css: 'inline-size: var(--control-md); block-size: var(--control-md);', reads: '--control-md', px: { default: '32', compact: '28' }, today: '32 (--space-8)' },
+  { part: 'Calendar weekday row', sel: m('Calendar-module__weekday'), css: 'block-size: var(--control-md);', reads: '--control-md', px: { default: '32', compact: '28' }, today: '32 (--space-8)' },
+  { part: 'Date preset row', sel: m('DatePicker-module__preset'), css: 'min-block-size: var(--control-md);', reads: '--control-md', px: { default: '32', compact: '28' }, today: '32 (--space-8)' },
+  { part: 'Menu and list items', sel: '', css: '', reads: '--control-md', px: { default: '32', compact: '28' }, today: 'already --control-md' },
+  // Choice controls and progress bars: every size exists in both densities;
+  // in Compact each takes the size below it. The smallest switch steps down
+  // to 24 × 14 so sm and md stay apart; the smallest progress bar stays.
+  { part: 'Checkbox and radio box', sel: `${m('Checkbox-module__field')}, ${m('Radio-module__field')}`, css: '--choice-control: var(--choice-box);', reads: '--choice-box', px: { default: '20', compact: '16' }, today: '20 (--control-xs)' },
+  { part: 'Radio dot', sel: m('Radio-module__dot'), css: 'inline-size: var(--radio-dot); block-size: var(--radio-dot);', reads: '--radio-dot', px: { default: '8', compact: '6' }, today: '8' },
+  { part: 'Switch sm (track)', sel: m('Switch-module__sm'), css: '--choice-control: var(--switch-sm-w); --choice-control-block: var(--switch-sm-h);', reads: '--switch-sm-*', px: { default: '28 × 16', compact: '24 × 14' }, today: '28 × 16' },
+  { part: 'Switch md (track)', sel: m('Switch-module__md'), css: '--choice-control: var(--switch-md-w); --choice-control-block: var(--switch-md-h);', reads: '--switch-md-*', px: { default: '36 × 20', compact: '28 × 16' }, today: '36 × 20' },
+  { part: 'Switch lg (track)', sel: m('Switch-module__lg'), css: '--choice-control: var(--switch-lg-w); --choice-control-block: var(--switch-lg-h);', reads: '--switch-lg-*', px: { default: '44 × 24', compact: '36 × 20' }, today: '44 × 24' },
+  { part: 'Progress bar (default md)', sel: m('ProgressBar-module__root'), css: '--progress-height: var(--progress-md);', reads: '--progress-md', px: { default: '8', compact: '6' }, today: '8' },
+  { part: 'Progress bar sm', sel: m('ProgressBar-module__sm'), css: '--progress-height: var(--progress-sm);', reads: '--progress-sm', px: { default: '4', compact: '4' }, today: '4' },
+  { part: 'Progress bar md', sel: m('ProgressBar-module__md'), css: '--progress-height: var(--progress-md);', reads: '--progress-md', px: { default: '8', compact: '6' }, today: '8' },
+  { part: 'Progress bar lg', sel: m('ProgressBar-module__lg'), css: '--progress-height: var(--progress-lg);', reads: '--progress-lg', px: { default: '12', compact: '8' }, today: '12' },
 ]
 const scope = (sel: string) =>
   sel

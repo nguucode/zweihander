@@ -269,6 +269,23 @@ Artifact riêng: https://claude.ai/artifact/S2yA7dBC8cp9mKjRzdJbRF (code `experi
 - DescriptionList dạng cột dùng 20px, không trùng role nào của Default: chờ chọn `group` hoặc `container`.
 - Gap dọc 8px giữa các option radio và giữa title→description đang map vào `inline` (đúng con số, sai tên role). Có thể cân nhắc đặt tên role theo cỡ thay vì theo hướng.
 
+### Checkbox, radio, switch, progress bar và Toast (sếp yêu cầu 2026-10-19)
+
+Các control này giờ cũng đổi size theo density. Mọi size vẫn có ở cả hai density; ở Compact, mỗi size lấy kích thước của size ngay dưới nó. Đã đo trong trình duyệt:
+
+| Phần | Default | Compact |
+|---|---|---|
+| Ô checkbox, radio (`--choice-box`) | 20 | 16 |
+| Chấm radio (`--radio-dot`) | 8 | 6 |
+| Switch sm | 28 × 16 | 24 × 14 |
+| Switch md | 36 × 20 | 28 × 16 |
+| Switch lg | 44 × 24 | 36 × 20 |
+| Progress bar sm / md / lg | 4 / 8 / 12 | 4 / 6 / 8 |
+
+- Switch sm ở Compact phải xuống 24 × 14 (thumb 10px). Nếu giữ 28 × 16 thì trùng với md và mất một size.
+- Progress bar sm giữ 4px ở cả hai density.
+- Toast trước đó chưa có trong map, và catalog cũng không thấy nó vì story `Variants` chỉ hiện các nút gọi toast. Catalog giờ dùng story `VariantsStatic`. Spacing của Toast đã map: padding `cluster`/`group`, icon→text `cluster`, title→description `stack`, khoảng giữa các toast `inline`. Một toast ở Compact cao 56px, ở Default 70px.
+
 ### Type theo density (thử nghiệm, chờ sếp duyệt)
 
 Base 14px ở Default, 13px ở Compact. Demo v5 cùng link, có công tắc "Compact type" để so Compact có và không đổi chữ.

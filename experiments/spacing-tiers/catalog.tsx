@@ -52,7 +52,7 @@ const STORIES: Record<string, { story: string; args?: Record<string, unknown> }>
   'navigation/Tabs': { story: 'Default' },
   'notifications/Alert': { story: 'Variants' },
   'notifications/InlineAlert': { story: 'Variants' },
-  'notifications/Toast': { story: 'Variants' },
+  'notifications/Toast': { story: 'VariantsStatic' },
   'overlays/Modal': { story: 'Anatomy' },
   'overlays/Popover': { story: 'Open' },
   'overlays/Tooltip': { story: 'Anatomy' },

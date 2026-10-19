@@ -457,8 +457,8 @@ function App() {
 
       <section className="section" aria-labelledby="sizes-h">
         <div className="sectionHead">
-          <h2 id="sizes-h">Sizes that follow the control tier</h2>
-          <p>Inside overlays and the calendar, some sizes were spacing tokens used as sizes. They now read the control height, so they shrink with Compact.</p>
+          <h2 id="sizes-h">Sizes that change with density</h2>
+          <p>Sizes outside the control tier that still move with density: calendar and date presets read the control height; checkboxes, radios, switches and progress bars get their own size tokens. Every size stays available in both densities; in Compact each takes the size below it. The smallest switch steps down to 24 × 14 so sm and md stay apart; the smallest progress bar stays at 4.</p>
         </div>
         <div className="tableWrap">
           <table className="spec">
@@ -480,10 +480,10 @@ function App() {
                 <tr key={x.part}>
                   <td>{x.part}</td>
                   <td>
-                    <code>--control-md</code>
+                    <code>{x.reads}</code>
                   </td>
-                  <td className="num">32</td>
-                  <td className="num">28</td>
+                  <td className="num">{x.px.default}</td>
+                  <td className="num">{x.px.compact}</td>
                   <td className="where">{x.today}</td>
                 </tr>
               ))}
