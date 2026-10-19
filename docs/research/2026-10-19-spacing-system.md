@@ -267,7 +267,7 @@ Luật: chữ 12px trở xuống không giảm (sàn đọc được); 13–16px
 Khả thi:
 - Component đặt cỡ chữ qua type token ở 88 chỗ. Literal còn lại chỉ là icon, cộng một chỗ 9px ở FileUploader. Thêm mode cho 11 cặp `--text-*`/`--leading-*` là đủ, không phải sửa component. Đã đo trong trình duyệt: cỡ chữ khớp bảng, không control nào bị cắt chữ.
 - Khác `scaling` 93%: scaling cho ra 12→11.2, 11→10.2, 32→29.8; type density chọn từng cỡ, giữ px nguyên và sàn 12.
-- Đánh đổi: leading Compact 13/18 rời lưới 4px; 13/20 giữ lưới nhưng mất phần lớn độ gọn. Row và control cao cố định nên chỉ text xuống dòng là thấy.
+- **Quyết định (sếp chốt 2026-10-19): giữ leading Compact 13/18** (cả `body` và `heading-xs`), chấp nhận rời lưới 4px. 13/20 giữ được lưới nhưng mất phần lớn độ gọn. Row và control cao cố định nên chỉ text xuống dòng là thấy.
 - Icon giữ 16px cạnh chữ 13px; có thể giảm `--icon-md` xuống 14 ở Compact nếu thấy nặng.
 
 Còn để ngỏ:
