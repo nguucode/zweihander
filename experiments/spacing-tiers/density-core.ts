@@ -48,8 +48,8 @@ export const CONTROLS: { size: Size; px: Record<Density, { h: number; pad: numbe
 const rem = (px: number) => `calc(${px / 16}rem * var(--scaling))`
 /* The size tokens those rows read, per density. */
 const SIZE_VARS: Record<Density, Record<string, number>> = {
-  default: { 'choice-box': 20, 'radio-dot': 8, 'switch-sm-w': 28, 'switch-sm-h': 16, 'switch-md-w': 36, 'switch-md-h': 20, 'switch-lg-w': 44, 'switch-lg-h': 24, 'progress-sm': 4, 'progress-md': 8, 'progress-lg': 12 },
-  compact: { 'choice-box': 16, 'radio-dot': 6, 'switch-sm-w': 24, 'switch-sm-h': 14, 'switch-md-w': 28, 'switch-md-h': 16, 'switch-lg-w': 36, 'switch-lg-h': 20, 'progress-sm': 4, 'progress-md': 6, 'progress-lg': 8 },
+  default: { 'avatar-xs': 24, 'avatar-sm': 32, 'avatar-md': 40, 'avatar-lg': 48, 'badge-sm': 16, 'badge-md': 20, 'badge-dot-sm': 6, 'badge-dot-md': 8, 'choice-box': 20, 'radio-dot': 8, 'switch-sm-w': 28, 'switch-sm-h': 16, 'switch-md-w': 36, 'switch-md-h': 20, 'switch-lg-w': 44, 'switch-lg-h': 24, 'progress-sm': 4, 'progress-md': 8, 'progress-lg': 12 },
+  compact: { 'avatar-xs': 20, 'avatar-sm': 24, 'avatar-md': 32, 'avatar-lg': 40, 'badge-sm': 14, 'badge-md': 16, 'badge-dot-sm': 4, 'badge-dot-md': 6, 'choice-box': 16, 'radio-dot': 6, 'switch-sm-w': 24, 'switch-sm-h': 14, 'switch-md-w': 28, 'switch-md-h': 16, 'switch-lg-w': 36, 'switch-lg-h': 20, 'progress-sm': 4, 'progress-md': 6, 'progress-lg': 8 },
 }
 const tokenCss = DENSITIES.map(
   (d) =>
@@ -250,8 +250,8 @@ export const SIZES: { part: string; sel: string; css: string; reads: string; px:
   { part: 'Date preset row', sel: m('DatePicker-module__preset'), css: 'min-block-size: var(--control-md);', reads: '--control-md', px: { default: '32', compact: '28' }, today: '32 (--space-8)' },
   { part: 'Menu and list items', sel: '', css: '', reads: '--control-md', px: { default: '32', compact: '28' }, today: 'already --control-md' },
   // Choice controls and progress bars: every size exists in both densities;
-  // in Compact each takes the size below it. The smallest switch steps down
-  // to 24 × 14 so sm and md stay apart; the smallest progress bar stays.
+  // in Compact each takes the size below it. The smallest switch, avatar and
+  // badge step down further so sizes stay apart; the smallest progress bar stays.
   { part: 'Checkbox and radio box', sel: `${m('Checkbox-module__field')}, ${m('Radio-module__field')}`, css: '--choice-control: var(--choice-box);', reads: '--choice-box', px: { default: '20', compact: '16' }, today: '20 (--control-xs)' },
   { part: 'Radio dot', sel: m('Radio-module__dot'), css: 'inline-size: var(--radio-dot); block-size: var(--radio-dot);', reads: '--radio-dot', px: { default: '8', compact: '6' }, today: '8' },
   { part: 'Switch sm (track)', sel: m('Switch-module__sm'), css: '--choice-control: var(--switch-sm-w); --choice-control-block: var(--switch-sm-h);', reads: '--switch-sm-*', px: { default: '28 × 16', compact: '24 × 14' }, today: '28 × 16' },
@@ -261,6 +261,14 @@ export const SIZES: { part: string; sel: string; css: string; reads: string; px:
   { part: 'Progress bar sm', sel: m('ProgressBar-module__sm'), css: '--progress-height: var(--progress-sm);', reads: '--progress-sm', px: { default: '4', compact: '4' }, today: '4' },
   { part: 'Progress bar md', sel: m('ProgressBar-module__md'), css: '--progress-height: var(--progress-md);', reads: '--progress-md', px: { default: '8', compact: '6' }, today: '8' },
   { part: 'Progress bar lg', sel: m('ProgressBar-module__lg'), css: '--progress-height: var(--progress-lg);', reads: '--progress-lg', px: { default: '12', compact: '8' }, today: '12' },
+  { part: 'Avatar xs', sel: m('Avatar-module__xs'), css: 'inline-size: var(--avatar-xs); block-size: var(--avatar-xs);', reads: '--avatar-xs', px: { default: '24', compact: '20' }, today: '24 (--space-6)' },
+  { part: 'Avatar sm', sel: m('Avatar-module__sm'), css: 'inline-size: var(--avatar-sm); block-size: var(--avatar-sm);', reads: '--avatar-sm', px: { default: '32', compact: '24' }, today: '32 (--space-8)' },
+  { part: 'Avatar md', sel: m('Avatar-module__md'), css: 'inline-size: var(--avatar-md); block-size: var(--avatar-md);', reads: '--avatar-md', px: { default: '40', compact: '32' }, today: '40 (--space-10)' },
+  { part: 'Avatar lg', sel: m('Avatar-module__lg'), css: 'inline-size: var(--avatar-lg); block-size: var(--avatar-lg);', reads: '--avatar-lg', px: { default: '48', compact: '40' }, today: '48 (--space-12)' },
+  { part: 'Badge sm', sel: `${m('Badge-module__sm')}:not(${m('Badge-module__dot')})`, css: 'block-size: var(--badge-sm); min-inline-size: var(--badge-sm);', reads: '--badge-sm', px: { default: '16', compact: '14' }, today: '16 (--space-4)' },
+  { part: 'Badge md', sel: `${m('Badge-module__md')}:not(${m('Badge-module__dot')})`, css: 'block-size: var(--badge-md); min-inline-size: var(--badge-md);', reads: '--badge-md', px: { default: '20', compact: '16' }, today: '20 (--control-xs)' },
+  { part: 'Badge dot sm, md', sel: `${m('Badge-module__dot')}${m('Badge-module__sm')}`, css: 'inline-size: var(--badge-dot-sm); block-size: var(--badge-dot-sm);', reads: '--badge-dot-sm', px: { default: '6', compact: '4' }, today: '6' },
+  { part: '', sel: `${m('Badge-module__dot')}${m('Badge-module__md')}`, css: 'inline-size: var(--badge-dot-md); block-size: var(--badge-dot-md);', reads: '--badge-dot-md', px: { default: '8', compact: '6' }, today: '8' },
 ]
 const scope = (sel: string) =>
   sel

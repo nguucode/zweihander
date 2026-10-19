@@ -458,7 +458,7 @@ function App() {
       <section className="section" aria-labelledby="sizes-h">
         <div className="sectionHead">
           <h2 id="sizes-h">Sizes that change with density</h2>
-          <p>Sizes outside the control tier that still move with density: calendar and date presets read the control height; checkboxes, radios, switches and progress bars get their own size tokens. Every size stays available in both densities; in Compact each takes the size below it. The smallest switch steps down to 24 × 14 so sm and md stay apart; the smallest progress bar stays at 4.</p>
+          <p>Sizes outside the control tier that still move with density: calendar and date presets read the control height; checkboxes, radios, switches, progress bars, avatars and badges get their own size tokens. Every size stays available in both densities; in Compact each takes the size below it. The smallest switch (24 × 14), avatar (20) and badge (14) step down further so sizes stay apart; the smallest progress bar stays at 4.</p>
         </div>
         <div className="tableWrap">
           <table className="spec">

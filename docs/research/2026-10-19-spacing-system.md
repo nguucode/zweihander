@@ -281,8 +281,12 @@ Các control này giờ cũng đổi size theo density. Mọi size vẫn có ở
 | Switch md | 36 × 20 | 28 × 16 |
 | Switch lg | 44 × 24 | 36 × 20 |
 | Progress bar sm / md / lg | 4 / 8 / 12 | 4 / 6 / 8 |
+| Avatar xs / sm / md / lg | 24 / 32 / 40 / 48 | 20 / 24 / 32 / 40 |
+| Badge sm / md (chiều cao) | 16 / 20 | 14 / 16 |
+| Badge dot sm / md | 6 / 8 | 4 / 6 |
 
 - Switch sm ở Compact phải xuống 24 × 14 (thumb 10px). Nếu giữ 28 × 16 thì trùng với md và mất một size.
+- Avatar và Badge thêm sau theo yêu cầu của sếp (2026-10-19). Avatar xs xuống 20 và Badge sm xuống 14 vì cùng lý do với switch sm (giữ các size tách nhau); badge 14px vẫn chứa vừa số hai chữ số. Cỡ chữ initials của Avatar đi theo type token nên cũng giảm ở Compact.
 - Progress bar sm giữ 4px ở cả hai density.
 - Toast trước đó chưa có trong map, và catalog cũng không thấy nó vì story `Variants` chỉ hiện các nút gọi toast. Catalog giờ dùng story `VariantsStatic`. Spacing của Toast đã map: padding `cluster`/`group`, icon→text `cluster`, title→description `stack`, khoảng giữa các toast `inline`. Một toast ở Compact cao 56px, ở Default 70px.
 

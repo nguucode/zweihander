@@ -1,6 +1,8 @@
 import { useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import { Icon } from '@/lib/icon'
 import { Tag } from '@/components/atomic-elements/Tag'
+import { Avatar } from '@/components/atomic-elements/Avatar'
+import { Badge } from '@/components/atomic-elements/Badge'
 import { Button } from '@/components/buttons/Button'
 import { Search } from '@/components/inputs/Search'
 import { Select } from '@/components/inputs/Select'
@@ -98,6 +100,26 @@ export function Specimen({ density, typeFixed }: { density: 'compact' | 'default
           {(['sm', 'md', 'lg'] as const).map((s) => (
             <Measured key={s}>
               <Switch size={s} label={s} defaultChecked />
+            </Measured>
+          ))}
+        </div>
+      </div>
+      <div className="specimenRow">
+        <span className="specimenSize">avatar</span>
+        <div className="specimenItems">
+          {(['xs', 'sm', 'md', 'lg'] as const).map((sz) => (
+            <Measured key={sz}>
+              <Avatar size={sz} initials="LT" imageAlt={`Linh Tran, ${sz}`} />
+            </Measured>
+          ))}
+          {(['sm', 'md'] as const).map((sz) => (
+            <Measured key={sz}>
+              <Badge size={sz} count={12} variant="primary" />
+            </Measured>
+          ))}
+          {(['sm', 'md'] as const).map((sz) => (
+            <Measured key={`dot-${sz}`}>
+              <Badge size={sz} isDot variant="destructive" />
             </Measured>
           ))}
         </div>
