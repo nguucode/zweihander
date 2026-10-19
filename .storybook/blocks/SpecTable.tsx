@@ -38,9 +38,9 @@ export function SpecTable({ rows, caption }: { rows: SpecRow[]; caption?: ReactN
   useLayoutEffect(() => {
     const read = () => setValues(rows.map((row) => resolve(probe.current!, row.token)))
     read()
-    // The theme toolbar and <Theme> switch tokens by class and data attributes.
+    // The theme and density toolbars and <Theme> switch tokens by class and data attributes.
     const observer = new MutationObserver(read)
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class', 'data-accent', 'data-gray'] })
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class', 'data-accent', 'data-gray', 'data-density'] })
     return () => observer.disconnect()
   }, [rows])
 

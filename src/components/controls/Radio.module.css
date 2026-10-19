@@ -1,6 +1,6 @@
 /* The circle is tier xs (see Foundations/Sizing). */
 .field {
-  --choice-control: var(--control-xs);
+  --choice-control: var(--choice-box);
   gap: var(--space-2);
 }
 
@@ -8,7 +8,7 @@
    positioned by the browser; reset them so the group lays out like a grid. */
 .group {
   display: flex;
-  gap: var(--space-2) var(--space-6);
+  gap: var(--space-inline) var(--space-6);
   min-inline-size: 0;
   margin: 0;
   padding: 0;
@@ -25,7 +25,7 @@
 
 .legend {
   flex-basis: 100%;
-  margin-block-end: var(--space-1);
+  margin-block-end: var(--space-stack);
   padding: 0;
   font-size: var(--text-body);
   line-height: var(--leading-body);
@@ -35,7 +35,7 @@
 
 .item {
   display: grid;
-  gap: var(--space-1);
+  gap: var(--space-stack);
 }
 
 /* An option's own helper describes the option, so it stays muted when the
@@ -99,8 +99,8 @@ label:hover > .radio[data-checked]:not([data-disabled], [data-readonly]) {
 
 /* 8px: a dot reads as "selected" at 20px without crowding the ring. */
 .dot {
-  inline-size: var(--space-2);
-  block-size: var(--space-2);
+  inline-size: var(--radio-dot);
+  block-size: var(--radio-dot);
   border-radius: var(--radius-pill);
   background: var(--radio-dot);
 }

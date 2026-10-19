@@ -15,7 +15,7 @@
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: var(--space-1);
+  gap: var(--space-stack);
   margin: 0;
   padding: 0;
   border: 0;
@@ -70,7 +70,7 @@
   block-size: 0;
 }
 .content {
-  padding-block-start: var(--space-2);
+  padding-block-start: var(--space-inline);
 }
 
 /* The 20px text button grows to a 44px target on coarse pointers. */

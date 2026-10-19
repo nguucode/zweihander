@@ -86,12 +86,12 @@ One size. The buttons inside are `sm` Buttons, 24px tall.
 <SpecTable
   caption="Drop zone"
   rows={[
-    { part: 'Drop zone', property: 'Block padding', token: '--space-6' },
-    { part: 'Drop zone', property: 'Inline padding', token: '--space-4' },
-    { part: 'Drop zone', property: 'Gap', token: '--space-2' },
+    { part: 'Drop zone', property: 'Block padding', token: '--space-container' },
+    { part: 'Drop zone', property: 'Inline padding', token: '--space-group' },
+    { part: 'Drop zone', property: 'Gap', token: '--space-inline' },
     { part: 'Drop zone', property: 'Corner radius', token: '--radius-panel' },
     { part: 'Icon', property: 'Size', token: '--space-6' },
-    { part: 'Icon', property: 'Padding', token: '--space-2' },
+    { part: 'Icon', property: 'Padding', token: '--space-inline' },
     { part: 'Choose button', property: 'Height', token: '--control-sm' },
     { part: 'Prompt', property: 'Font size', token: '--text-body' },
     { part: 'Helper text', property: 'Font size', token: '--text-body-sm' },
@@ -101,9 +101,9 @@ One size. The buttons inside are `sm` Buttons, 24px tall.
 <SpecTable
   caption="File list"
   rows={[
-    { part: 'Label, drop zone, errors, list', property: 'Gap', token: '--space-1-5' },
-    { part: 'File row', property: 'Padding', token: '--space-1' },
-    { part: 'File row', property: 'Gap', token: '--space-2' },
+    { part: 'Label, drop zone, errors, list', property: 'Gap', token: '--control-sm-gap' },
+    { part: 'File row', property: 'Padding', token: '--space-stack' },
+    { part: 'File row', property: 'Gap', token: '--space-inline' },
     { part: 'File row', property: 'Corner radius', token: '--radius-field' },
     { part: 'Name', property: 'Font size', token: '--text-body' },
     { part: 'Size, file error', property: 'Font size', token: '--text-body-sm' },

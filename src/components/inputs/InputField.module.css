@@ -2,7 +2,7 @@
 .field {
   --field-edge: var(--field-border);
   display: inline-grid;
-  gap: var(--space-1-5);
+  gap: var(--control-sm-gap);
   inline-size: 20rem;
   max-inline-size: 100%;
   font-family: var(--font-sans);
@@ -220,7 +220,7 @@
   min-block-size: var(--control-md);
   /* --field-inset is the field's own padding (popupInset), so the option's
      content starts where the field's text does. */
-  padding: var(--space-1-5) var(--field-inset, var(--control-md-pad));
+  padding: var(--space-stack) var(--field-inset, var(--control-md-pad));
   cursor: default;
   user-select: none;
   outline: none;

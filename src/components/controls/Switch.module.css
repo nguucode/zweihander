@@ -4,16 +4,16 @@
    tiers xs and sm (see Foundations/Sizing); widths are about one and three
    quarter heights, so the thumb travels most of a thumb-width. */
 .sm.sm {
-  --choice-control: calc(var(--space-6) + var(--space-1));
-  --choice-control-block: var(--space-4);
+  --choice-control: var(--switch-sm-w);
+  --choice-control-block: var(--switch-sm-h);
 }
 .md.md {
-  --choice-control: calc(var(--space-8) + var(--space-1));
-  --choice-control-block: var(--control-xs);
+  --choice-control: var(--switch-md-w);
+  --choice-control-block: var(--switch-md-h);
 }
 .lg.lg {
-  --choice-control: calc(var(--space-10) + var(--space-1));
-  --choice-control-block: var(--control-sm);
+  --choice-control: var(--switch-lg-w);
+  --choice-control-block: var(--switch-lg-h);
 }
 
 /* Off: a --control-border track (3:1 on the page, so the control is

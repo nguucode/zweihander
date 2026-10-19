@@ -5,7 +5,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-cluster);
   font-family: var(--font-sans);
   font-size: var(--text-body);
   line-height: var(--leading-body);
@@ -14,7 +14,7 @@
 
 .toolbar {
   min-block-size: var(--control-md);
-  margin-block-end: var(--space-4);
+  margin-block-end: var(--space-group);
 }
 
 /* The selection bar sits on the accent surface so the change of mode is
@@ -30,7 +30,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-cluster);
   flex: 1 1 16rem;
 }
 
@@ -48,7 +48,7 @@
 
 .footer {
   justify-content: space-between;
-  margin-block-start: var(--space-4);
+  margin-block-start: var(--space-group);
 }
 
 .summary {

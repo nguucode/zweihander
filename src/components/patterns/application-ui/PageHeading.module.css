@@ -1,7 +1,7 @@
 .pageHeading {
   display: grid;
-  gap: var(--space-3);
-  padding-block-end: var(--space-6);
+  gap: var(--space-cluster);
+  padding-block-end: var(--space-container);
   border-block-end: 1px solid var(--border);
   font-family: var(--font-sans);
   color: var(--foreground);
@@ -15,7 +15,7 @@
 }
 
 .breadcrumbs {
-  margin-block-end: var(--space-1);
+  margin-block-end: var(--space-stack);
 }
 
 /* Title and actions share a row while there is room; the actions drop
@@ -25,12 +25,12 @@
   flex-wrap: wrap;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--space-4);
+  gap: var(--space-group);
 }
 
 .text {
   display: grid;
-  gap: var(--space-2);
+  gap: var(--space-inline);
   flex: 1 1 20rem;
   min-inline-size: 0;
 }
@@ -55,7 +55,7 @@
 .meta {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-2) var(--space-6);
+  gap: var(--space-2) var(--space-container);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -78,5 +78,5 @@
 .actions {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-2);
+  gap: var(--space-inline);
 }

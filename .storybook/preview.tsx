@@ -22,6 +22,8 @@ configure({ asyncUtilTimeout: 3000 })
 // The Playground's Preview theme, sent as globals over the channel, wins over
 // the toolbar: a story shown in the Playground wears the theme picked there.
 const withTheme: Decorator = (Story, context) => {
+  // Density goes on <html>, so popups portalled to <body> follow it.
+  document.documentElement.dataset.density = context.globals.density === 'compact' ? 'compact' : 'default'
   const appearance = parsePreviewTheme('appearance', context.globals.appearance)
   if (appearance)
     return (
@@ -53,6 +55,19 @@ const preview: Preview = {
         items: [
           { value: 'light', icon: 'sun', title: 'Light' },
           { value: 'dark', icon: 'moon', title: 'Dark' },
+        ],
+        dynamicTitle: true,
+      },
+    },
+    density: {
+      name: 'Density',
+      description: 'Default or Compact: spacing roles, control tier, type and component sizes',
+      defaultValue: 'default',
+      toolbar: {
+        icon: 'component',
+        items: [
+          { value: 'default', title: 'Default' },
+          { value: 'compact', title: 'Compact' },
         ],
         dynamicTitle: true,
       },

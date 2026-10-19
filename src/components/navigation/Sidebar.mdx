@@ -66,12 +66,12 @@ marks a row, not a gap.
 <SpecTable
   caption="Sidebar"
   rows={[
-    { part: 'Sidebar', property: 'Padding', token: '--space-2' },
-    { part: 'Sidebar', property: 'Gap between groups', token: '--space-4' },
+    { part: 'Sidebar', property: 'Padding', token: '--space-inline' },
+    { part: 'Sidebar', property: 'Gap between groups', token: '--space-group' },
     { part: 'Header', property: 'Height', token: '--control-md' },
-    { part: 'Header', property: 'Space below', token: '--space-2' },
+    { part: 'Header', property: 'Space below', token: '--space-inline' },
     { part: 'Collapse button', property: 'Size', token: '--control-md' },
-    { part: 'Footer', property: 'Space and padding above', token: '--space-3' },
+    { part: 'Footer', property: 'Space and padding above', token: '--space-cluster' },
   ]}
 />
 
@@ -79,14 +79,14 @@ marks a row, not a gap.
   caption="Item"
   rows={[
     { part: 'Item', property: 'Height', token: '--control-md' },
-    { part: 'Item', property: 'Inline padding', token: '--space-2' },
-    { part: 'Item', property: 'Gap', token: '--space-2' },
+    { part: 'Item', property: 'Inline padding', token: '--space-inline' },
+    { part: 'Item', property: 'Gap', token: '--space-inline' },
     { part: 'Item', property: 'Corner radius', token: '--radius-control' },
     { part: 'Icon', property: 'Size', token: '--icon-md' },
     { part: 'Label', property: 'Font size', token: '--text-body' },
     { part: 'Label', property: 'Line height', token: '--leading-body' },
     { part: 'Group label, badge', property: 'Font size', token: '--text-body-sm' },
-    { part: 'Badge', property: 'Inline padding', token: '--space-1-5' },
+    { part: 'Badge', property: 'Inline padding', token: '--control-xs-pad' },
     { part: 'Badge', property: 'Corner radius', token: '--radius-pill' },
     { part: 'Hit area', property: 'Minimum on touch screens', token: '--target-coarse' },
   ]}

@@ -28,28 +28,28 @@
    is one or two digits in a pill, and 6px either side would turn "9" into
    an oval. */
 .sm {
-  block-size: var(--space-4);
-  min-inline-size: var(--space-4);
+  block-size: var(--badge-sm);
+  min-inline-size: var(--badge-sm);
   /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- 2px, below the spacing scale on purpose */
   padding-inline: 0.125rem;
 }
 
 .md {
-  block-size: var(--control-xs);
-  min-inline-size: var(--control-xs);
-  padding-inline: var(--space-1);
+  block-size: var(--badge-md);
+  min-inline-size: var(--badge-md);
+  padding-inline: var(--control-xs-gap);
 }
 
 .dot {
   min-inline-size: 0;
   padding: 0;
-  inline-size: var(--space-2);
-  block-size: var(--space-2);
+  inline-size: var(--badge-dot-md);
+  block-size: var(--badge-dot-md);
 }
 
 .dot.sm {
-  inline-size: var(--space-1-5);
-  block-size: var(--space-1-5);
+  inline-size: var(--badge-dot-sm);
+  block-size: var(--badge-dot-sm);
 }
 
 .primary {

@@ -1,11 +1,11 @@
 .calendar {
-  --calendar-day: var(--space-8);
+  --calendar-day: var(--control-md);
   /* Half the gap between days. Padding on the cell, not border-spacing, so
      a range's band runs unbroken under the gap. */
   --calendar-gap: calc(var(--space-1) / 2);
   display: inline-flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: var(--space-inline);
   font-family: var(--font-sans);
   font-size: var(--text-body);
   line-height: var(--leading-body);
@@ -16,13 +16,13 @@
 .header {
   display: flex;
   align-items: center;
-  gap: var(--space-1);
+  gap: var(--space-stack);
 }
 
 /* The month at the start, both arrows together at the end. */
 .title {
   flex: 1;
-  padding-inline-start: var(--space-2);
+  padding-inline-start: var(--space-inline);
   font-weight: 600;
 }
 
@@ -31,8 +31,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  inline-size: var(--space-8);
-  block-size: var(--space-8);
+  inline-size: var(--control-md);
+  block-size: var(--control-md);
   margin: 0;
   padding: 0;
   border: 0;
@@ -57,7 +57,7 @@
 
 .weekday {
   inline-size: var(--calendar-day);
-  block-size: var(--space-8);
+  block-size: var(--control-md);
   padding: 0 var(--calendar-gap);
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);

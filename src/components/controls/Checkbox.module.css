@@ -1,7 +1,7 @@
 /* Set on the field so the helper text indents by the box's width. The box
    is tier xs (see Foundations/Sizing). */
 .field {
-  --choice-control: var(--control-xs);
+  --choice-control: var(--choice-box);
 }
 
 /* 20px box, a --control-border outline (3:1 on the page). Checked and

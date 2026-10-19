@@ -10,11 +10,11 @@
   padding: 0;
 }
 .pad-sm {
-  --pad-block: var(--space-1-5);
+  --pad-block: var(--control-xs-pad);
   --pad-inline: var(--control-sm-pad);
 }
 .pad-md {
-  --pad-block: var(--space-2);
+  --pad-block: var(--control-sm-pad);
   --pad-inline: var(--control-md-pad);
 }
 

@@ -8,7 +8,7 @@
 }
 
 .table {
-  --table-row: var(--space-12);
+  --table-row: var(--row-height);
   inline-size: 100%;
   border-collapse: separate;
   border-spacing: 0;
@@ -19,7 +19,7 @@
   font-variant-numeric: tabular-nums;
 }
 .sm {
-  --table-row: var(--space-10);
+  --table-row: calc(var(--row-height) - var(--space-inline));
 }
 
 .caption {
@@ -35,7 +35,7 @@
 .expand {
   box-sizing: border-box;
   block-size: var(--table-row);
-  padding: 0 var(--space-4);
+  padding: 0 var(--space-group);
   border-block-end: 1px solid var(--border);
   text-align: start;
   vertical-align: middle;
@@ -78,8 +78,8 @@ tbody tr:last-child > * {
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);
-  margin: 0 calc(var(--space-2) * -1);
-  padding: var(--space-1) var(--space-2);
+  margin: 0 calc(var(--control-sm-pad) * -1);
+  padding: var(--control-xs-gap) var(--control-sm-pad);
   border: 0;
   border-radius: var(--radius-sm);
   background: transparent;
@@ -148,7 +148,7 @@ thead .expand {
 /* Just wide enough for the icon button. */
 .expand {
   inline-size: var(--space-10);
-  padding-inline: var(--space-2) 0;
+  padding-inline: var(--space-inline) 0;
 }
 .expandIcon {
   display: inline-flex;

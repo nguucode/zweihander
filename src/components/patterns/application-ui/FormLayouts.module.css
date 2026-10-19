@@ -6,13 +6,13 @@
 
 .layout {
   display: grid;
-  gap: var(--space-4) var(--space-8);
+  gap: var(--space-group) var(--space-8);
 }
 
 .intro {
   display: grid;
   align-content: start;
-  gap: var(--space-1);
+  gap: var(--space-stack);
 }
 
 .title {
@@ -39,7 +39,7 @@
 
 .fields {
   display: grid;
-  gap: var(--space-6);
+  gap: var(--space-container);
   min-inline-size: 0;
 }
 
@@ -74,7 +74,7 @@
   overflow: hidden;
 }
 .card > .fields {
-  padding: var(--space-6);
+  padding: var(--space-container);
 }
 .card > .footer {
   padding: var(--space-4) var(--space-6);
@@ -91,12 +91,12 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-end;
-  gap: var(--space-3);
+  gap: var(--space-cluster);
 }
 
 /* Consecutive sections of one form, a line between them. */
 .section + .section {
-  margin-block-start: var(--space-8);
-  padding-block-start: var(--space-8);
+  margin-block-start: var(--space-section);
+  padding-block-start: var(--space-section);
   border-block-start: 1px solid var(--border);
 }

@@ -711,6 +711,22 @@
   --use-dark: initial;
 }
 
+/* Density works like appearance: each scope sets two switches, and every
+   token with a Compact value picks its number from them. `initial` makes a
+   custom property invalid, so var(--density-default, X) gives X in a Default
+   scope and nothing in a Compact one. The switches inherit, so the nearest
+   [data-density] wins at any depth. */
+:root,
+[data-density='default'] {
+  --density-default: initial;
+  --density-compact: ;
+}
+
+[data-density='compact'] {
+  --density-default: ;
+  --density-compact: initial;
+}
+
 /* A custom property that reads another one is resolved where it is DECLARED
    and inherits as a finished value, so setting --accent-solid-* further down
    the tree cannot reach a --primary already computed at :root. Every element
@@ -797,7 +813,8 @@
   --font-heading: var(--font-sans);
   --font-prose: var(--font-sans);
 
-  /* Spacing — one multiplier over every gap and pad in the kit. */
+  /* Spacing — one multiplier over every gap and pad in the kit; the six
+     roles also follow density. */
   --space-1: calc(0.25rem * var(--scaling));
   --space-2: calc(0.5rem * var(--scaling));
   --space-3: calc(0.75rem * var(--scaling));
@@ -808,20 +825,48 @@
   --space-12: calc(3rem * var(--scaling));
   --space-1-5: calc(0.375rem * var(--scaling));
   --space-2-5: calc(0.625rem * var(--scaling));
+  --space-stack: calc(var(--density-default, 0.25rem) var(--density-compact, 0.125rem) * var(--scaling));
+  --space-inline: calc(var(--density-default, 0.5rem) var(--density-compact, 0.25rem) * var(--scaling));
+  --space-cluster: calc(var(--density-default, 0.75rem) var(--density-compact, 0.5rem) * var(--scaling));
+  --space-group: calc(var(--density-default, 1rem) var(--density-compact, 0.75rem) * var(--scaling));
+  --space-container: calc(var(--density-default, 1.5rem) var(--density-compact, 1rem) * var(--scaling));
+  --space-section: calc(var(--density-default, 1.5rem) var(--density-compact, 1.25rem) * var(--scaling));
 
   /* Control heights — one scale for every button, field, tab and row. */
   --control-xs: calc(1.25rem * var(--scaling));
-  --control-sm: calc(1.5rem * var(--scaling));
-  --control-md: calc(2rem * var(--scaling));
-  --control-xs-pad: calc(0.375rem * var(--scaling));
-  --control-sm-pad: calc(0.5rem * var(--scaling));
-  --control-md-pad: calc(0.625rem * var(--scaling));
-  --control-xs-pad-spacious: calc(0.375rem * var(--scaling));
-  --control-sm-pad-spacious: calc(0.5rem * var(--scaling));
-  --control-md-pad-spacious: calc(0.75rem * var(--scaling));
-  --control-xs-gap: calc(0.25rem * var(--scaling));
-  --control-sm-gap: calc(0.375rem * var(--scaling));
-  --control-md-gap: calc(0.5rem * var(--scaling));
+  --control-sm: calc(var(--density-default, 1.5rem) var(--density-compact, 1.375rem) * var(--scaling));
+  --control-md: calc(var(--density-default, 2rem) var(--density-compact, 1.75rem) * var(--scaling));
+  --control-xs-pad: calc(var(--density-default, 0.375rem) var(--density-compact, 0.25rem) * var(--scaling));
+  --control-sm-pad: calc(var(--density-default, 0.5rem) var(--density-compact, 0.375rem) * var(--scaling));
+  --control-md-pad: calc(var(--density-default, 0.625rem) var(--density-compact, 0.5rem) * var(--scaling));
+  --control-xs-pad-spacious: calc(var(--density-default, 0.375rem) var(--density-compact, 0.25rem) * var(--scaling));
+  --control-sm-pad-spacious: calc(var(--density-default, 0.5rem) var(--density-compact, 0.375rem) * var(--scaling));
+  --control-md-pad-spacious: calc(var(--density-default, 0.75rem) var(--density-compact, 0.5rem) * var(--scaling));
+  --control-xs-gap: calc(var(--density-default, 0.25rem) var(--density-compact, 0.125rem) * var(--scaling));
+  --control-sm-gap: calc(var(--density-default, 0.375rem) var(--density-compact, 0.25rem) * var(--scaling));
+  --control-md-gap: calc(var(--density-default, 0.5rem) var(--density-compact, 0.375rem) * var(--scaling));
+
+  /* Row height and the component sizes that follow density. */
+  --row-height: calc(var(--density-default, 3rem) var(--density-compact, 2.25rem) * var(--scaling));
+  --choice-box: calc(var(--density-default, 1.25rem) var(--density-compact, 1rem) * var(--scaling));
+  --radio-dot: calc(var(--density-default, 0.5rem) var(--density-compact, 0.375rem) * var(--scaling));
+  --switch-sm-w: calc(var(--density-default, 1.75rem) var(--density-compact, 1.5rem) * var(--scaling));
+  --switch-sm-h: calc(var(--density-default, 1rem) var(--density-compact, 0.875rem) * var(--scaling));
+  --switch-md-w: calc(var(--density-default, 2.25rem) var(--density-compact, 1.75rem) * var(--scaling));
+  --switch-md-h: calc(var(--density-default, 1.25rem) var(--density-compact, 1rem) * var(--scaling));
+  --switch-lg-w: calc(var(--density-default, 2.75rem) var(--density-compact, 2.25rem) * var(--scaling));
+  --switch-lg-h: calc(var(--density-default, 1.5rem) var(--density-compact, 1.25rem) * var(--scaling));
+  --progress-sm: calc(0.25rem * var(--scaling));
+  --progress-md: calc(var(--density-default, 0.5rem) var(--density-compact, 0.375rem) * var(--scaling));
+  --progress-lg: calc(var(--density-default, 0.75rem) var(--density-compact, 0.5rem) * var(--scaling));
+  --avatar-xs: calc(var(--density-default, 1.5rem) var(--density-compact, 1.25rem) * var(--scaling));
+  --avatar-sm: calc(var(--density-default, 2rem) var(--density-compact, 1.5rem) * var(--scaling));
+  --avatar-md: calc(var(--density-default, 2.5rem) var(--density-compact, 2rem) * var(--scaling));
+  --avatar-lg: calc(var(--density-default, 3rem) var(--density-compact, 2.5rem) * var(--scaling));
+  --badge-sm: calc(var(--density-default, 1rem) var(--density-compact, 0.875rem) * var(--scaling));
+  --badge-md: calc(var(--density-default, 1.25rem) var(--density-compact, 1rem) * var(--scaling));
+  --badge-dot-sm: calc(var(--density-default, 0.375rem) var(--density-compact, 0.25rem) * var(--scaling));
+  --badge-dot-md: calc(var(--density-default, 0.5rem) var(--density-compact, 0.375rem) * var(--scaling));
 
   /* Icon sizes — one per control tier. */
   --icon-xs: calc(0.75rem * var(--scaling));
@@ -829,27 +874,27 @@
   --icon-md: calc(1rem * var(--scaling));
 
   /* Type roles. Leading is a ratio, so it follows the size under --scaling. */
-  --text-heading-2xl: calc(2rem * var(--scaling));
-  --text-heading-xl: calc(1.75rem * var(--scaling));
-  --text-heading-lg: calc(1.5rem * var(--scaling));
-  --text-heading-md: calc(1.25rem * var(--scaling));
-  --text-heading-sm: calc(1rem * var(--scaling));
-  --text-heading-xs: calc(0.875rem * var(--scaling));
+  --text-heading-2xl: calc(var(--density-default, 2rem) var(--density-compact, 1.75rem) * var(--scaling));
+  --text-heading-xl: calc(var(--density-default, 1.75rem) var(--density-compact, 1.5rem) * var(--scaling));
+  --text-heading-lg: calc(var(--density-default, 1.5rem) var(--density-compact, 1.25rem) * var(--scaling));
+  --text-heading-md: calc(var(--density-default, 1.25rem) var(--density-compact, 1.125rem) * var(--scaling));
+  --text-heading-sm: calc(var(--density-default, 1rem) var(--density-compact, 0.9375rem) * var(--scaling));
+  --text-heading-xs: calc(var(--density-default, 0.875rem) var(--density-compact, 0.8125rem) * var(--scaling));
   --text-heading-2xs: calc(0.75rem * var(--scaling));
-  --text-body-lg: calc(1rem * var(--scaling));
-  --text-body: calc(0.875rem * var(--scaling));
+  --text-body-lg: calc(var(--density-default, 1rem) var(--density-compact, 0.9375rem) * var(--scaling));
+  --text-body: calc(var(--density-default, 0.875rem) var(--density-compact, 0.8125rem) * var(--scaling));
   --text-body-sm: calc(0.75rem * var(--scaling));
   --text-body-xs: calc(0.6875rem * var(--scaling));
 
-  --leading-heading-2xl: calc(36 / 32);
-  --leading-heading-xl: calc(32 / 28);
-  --leading-heading-lg: calc(28 / 24);
-  --leading-heading-md: calc(24 / 20);
-  --leading-heading-sm: calc(20 / 16);
-  --leading-heading-xs: calc(20 / 14);
+  --leading-heading-2xl: calc(var(--density-default, 36 / 32) var(--density-compact, (32 / 28)));
+  --leading-heading-xl: calc(var(--density-default, 32 / 28) var(--density-compact, (28 / 24)));
+  --leading-heading-lg: calc(var(--density-default, 28 / 24) var(--density-compact, (24 / 20)));
+  --leading-heading-md: calc(var(--density-default, 24 / 20) var(--density-compact, (24 / 18)));
+  --leading-heading-sm: calc(var(--density-default, 20 / 16) var(--density-compact, (20 / 15)));
+  --leading-heading-xs: calc(var(--density-default, 20 / 14) var(--density-compact, (18 / 13)));
   --leading-heading-2xs: calc(16 / 12);
-  --leading-body-lg: calc(24 / 16);
-  --leading-body: calc(20 / 14);
+  --leading-body-lg: calc(var(--density-default, 24 / 16) var(--density-compact, (22 / 15)));
+  --leading-body: calc(var(--density-default, 20 / 14) var(--density-compact, (18 / 13)));
   --leading-body-sm: calc(16 / 12);
   --leading-body-xs: calc(16 / 11);
 

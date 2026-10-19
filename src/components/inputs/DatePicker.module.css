@@ -25,7 +25,7 @@
 
 /* ------------------------------------------------------------- parts */
 .body {
-  padding: var(--space-3);
+  padding: var(--space-cluster);
 }
 
 /* ------------------------------------------------------------- range */
@@ -43,12 +43,12 @@
   flex-direction: column;
   /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- 2px between preset rows, below the spacing scale on purpose */
   gap: 2px;
-  padding: var(--space-2);
+  padding: var(--space-inline);
   border-inline-end: 1px solid var(--border);
 }
 .preset {
   min-inline-size: 7rem;
-  min-block-size: var(--space-8);
+  min-block-size: var(--control-md);
   margin: 0;
   padding: var(--space-1) var(--space-2);
   border: 0;

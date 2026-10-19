@@ -43,6 +43,8 @@ export interface ComboboxProps {
   required?: boolean
   autoFocus?: boolean
   id?: string
+  /** Where the popup renders instead of `<body>`, e.g. an element in fullscreen or a scope with its own density. */
+  container?: HTMLElement | null
   className?: string
   'aria-label'?: string
 }
@@ -82,6 +84,7 @@ export function Combobox({
   autoFocus,
   id,
   className,
+  container,
   'aria-label': ariaLabel,
 }: ComboboxProps) {
   const items: Item[] = options.map((o) => (typeof o === 'string' ? { value: o, label: o } : o))
@@ -157,7 +160,7 @@ export function Combobox({
             <Icon name="chevron-down" />
           </BaseCombobox.Trigger>
         </BaseCombobox.InputGroup>
-        <BaseCombobox.Portal>
+        <BaseCombobox.Portal container={container}>
           <BaseCombobox.Positioner className={s.positioner} sideOffset={4}>
             <BaseCombobox.Popup
               className={s.popup}

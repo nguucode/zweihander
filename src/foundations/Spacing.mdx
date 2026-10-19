@@ -5,68 +5,93 @@ import * as SpacingStories from './Spacing.stories'
 
 # Spacing
 
-{/* docs:check allow --spacing -- STALE: the kit has no --spacing; tokens are --space-* and --scaling. Page needs a rewrite (flow fix). */}
+Pick a spacing token by **what the gap does**, not by its size. Six roles
+cover every gap and pad in the kit; a **density**, Default or Compact,
+decides the number behind each one. A designer never chooses between 12
+and 16 pixels: they choose `--space-cluster` or `--space-group`, and the
+product's density does the rest.
 
-The entire spacing system is **one number**. `--spacing` is `0.25rem`
-(4px), and every spacing utility multiplies it: `p-4` is
-`calc(var(--spacing) * 4)` — 16px. There is no list of allowed values
-anywhere in `tokens.css`, because there is no list.
+<Canvas of={SpacingStories.Roles} />
 
-## The scale is computed, not enumerated
+## The six roles
 
-This is the part that differs from most design systems. Where a scale is
-a fixed map, `p-13` is an error because 13 is not in it. Here the value
-is computed, so `p-13` (52px), `p-4.5` (18px) and `p-[7px]` all work.
+| Token | Use for | Default | Compact |
+| --- | --- | --- | --- |
+| `--space-stack` | Lines of text under each other: title to description, label to value | 4 | 2 |
+| `--space-inline` | Small things side by side: icon to text, label to value on one line, sidebar items | 8 | 4 |
+| `--space-cluster` | Controls or parts that sit together: filters in a toolbar, an avatar to its content, the parts of a page heading, inside a small card | 12 | 8 |
+| `--space-group` | Items and blocks that belong together: cards in a row, toolbar to table, table cell sides | 16 | 12 |
+| `--space-container` | Inside the edge of a card, panel or page heading | 24 | 16 |
+| `--space-section` | Page edge and between page sections | 24 | 20 |
 
-That has a real consequence: **the scale cannot enforce itself.** Nothing
-will stop a component from using `gap-7` where the rest of the kit uses
-`gap-6`; there is no build error, no lint failure, and the result looks
-almost right. The steps shown below are a convention the team keeps, not a
-constraint the tooling applies.
+The scale is short on purpose: 2, 4, 8, 12, 16, 20, 24. In Compact each
+role takes the Default value of the role below it; only section steps
+24 to 20. Section and container share 24px in Default, so separate
+sections with a card edge or a rule, not with extra white space. AppShell
+applies `--space-section` to the page edge from 64rem up; below that the
+edge stays at its narrow value.
 
-<Canvas of={SpacingStories.Scale} />
+The numeric steps (`--space-1` to `--space-12`) still exist for the few
+places no role fits, such as the size of an icon disc. They do not follow
+density.
 
-Steps below `1` exist and are worth knowing: `0.5` (2px) and `1.5` (6px)
-are what you reach for between a label and its input, or an icon and its
-label — gaps where a full 4px reads as a break rather than a pairing.
+## Density
 
-## What the kit uses
+Density changes four things together, and keeps every size:
 
-Spacing steps lay out the space *between* things: a label and its input,
-cards in a grid, sections of a page.
+- **The six roles**, as in the table above.
+- **The control tier.** Every tier exists in both densities. Compact
+  gives each tier the padding and gap of the tier below it; md drops from
+  32 to 28px, sm from 24 to 22px, xs stays at 20px (the floor of its text).
+- **Type.** Body text is 14px in Default and 13px in Compact. Text of 12px
+  and below never shrinks; 13 to 16px drops 1px; headings from 20px up
+  drop one step. Compact body leading is 13/18, off the 4px grid on
+  purpose. See [Typography](?path=/docs/foundations-typography--docs).
+- **Component sizes**: the checkbox and radio box (`--choice-box`, 20 to
+  16), the radio dot, the three switch tracks, the progress bar heights,
+  avatars xs to lg (`--avatar-md`, 40 to 32), badge heights and dots, and
+  table rows (`--row-height`, 48 to 36). In Compact each size takes the
+  size below it; the smallest switch, avatar and badge step down further
+  so sizes stay apart.
 
-| Step | Used for |
-| --- | --- |
-| `1.5` (6px) | gap between a field label, its input and its helper text |
-| `4` (16px) | padding inside a popover; gap between tabs and their panel |
+| Control token | md (D / C) | sm (D / C) | xs (D / C) |
+| --- | --- | --- | --- |
+| `--control-{tier}` height | 32 / 28 | 24 / 22 | 20 / 20 |
+| `--control-{tier}-pad` (fields, rows) | 10 / 8 | 8 / 6 | 6 / 4 |
+| `--control-{tier}-pad-spacious` (buttons) | 12 / 8 | 8 / 6 | 6 / 4 |
+| `--control-{tier}-gap` (icon to label) | 8 / 6 | 6 / 4 | 4 / 2 |
 
-**Inside a control, padding and gaps are not spacing steps.** They belong
-to the control's size tier, with two pad variants:
+A small control inside a component (a table's sort button, a modal's
+close button, a badge, the number input's steppers) reads the control tier
+of its own size, like any other control, not a spacing role.
 
-| Token | `xs` | `sm` | `md` | Used by |
-| --- | --- | --- | --- | --- |
-| `--control-{tier}-pad` | 6px | 8px | 10px | fields and rows: text lines up with the label above it |
-| `--control-{tier}-pad-spacious` | 6px | 8px | 12px | buttons: a centred label needs room either side |
-| `--control-{tier}-gap` | 4px | 6px | 8px | between a control's icon and its label |
+## Setting it
 
-A field's option list is inset by the field's own pad, so an option's text
-starts where the field's value does.
+Density is set like appearance: on the root of the app, through `Theme`.
 
-**Control heights are tokens too**, `--control-xs`, `--control-sm` and
-`--control-md` at 20, 24 and 32px. One height per tier is what makes a
-button, a text input, a tab and a select line up without anything being
-nudged. See [Sizing](?path=/docs/foundations-sizing--docs) for the whole
-tier and which component reads which.
+```tsx
+<Theme density="compact">
+  <App />
+</Theme>
+```
 
-## Customization
+`Theme` writes `data-density` on its element, and every token picks its
+number from the nearest one. A nested `Theme density="default"` inside a
+compact app gets Default back. Popups portal to `<body>`, so set density
+at the root; for a compact panel inside a default page, pass the panel
+element as `container` to Popover, Menu, Tooltip, Modal, Select, Combobox
+and DatePicker so their popups render inside it.
 
-Change `--spacing` in `src/tokens.css` and the whole system rescales at
-once. Setting it to `0.2rem` makes every gap, pad and control height in
-the kit 20% tighter with no other edit.
+Density and `scaling` are independent. Scaling multiplies every size by
+one factor (12px becomes 11.2px at 93%); density picks each number,
+keeps whole pixels and holds the 12px floor. Both can be set at once.
 
-Two cautions. The visible controls are below the 44px touch minimum on
-purpose; on coarse pointers every control widens its hit area to 44px
-without growing the box, so density does not cost touch users. And
-because the base is in `rem`, every value inherits the user's root font
-size; that is the behaviour you want, but it means "32px" is only 32px at
-the default 16px root.
+In Storybook, the **Density** toolbar switches every story between the two.
+
+## Touch and rem
+
+Controls are below the 44px touch minimum in both densities on purpose:
+on coarse pointers every control widens its hit area to 44px without
+growing the box, so Compact does not cost touch users. Every value is in
+`rem`, so it follows the user's root font size; "32px" is 32px at the
+default 16px root.

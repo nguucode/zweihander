@@ -1,6 +1,6 @@
 .uploader {
   display: inline-grid;
-  gap: var(--space-1-5);
+  gap: var(--control-sm-gap);
   inline-size: 24rem;
   max-inline-size: 100%;
   font-family: var(--font-sans);
@@ -31,8 +31,8 @@
   position: relative;
   display: grid;
   justify-items: center;
-  gap: var(--space-2);
-  padding: var(--space-6) var(--space-4);
+  gap: var(--space-inline);
+  padding: var(--space-container) var(--space-group);
   border: 1px dashed var(--field-border);
   border-radius: var(--radius-panel);
   background: var(--surface-filled);
@@ -56,7 +56,7 @@
 
 .icon {
   display: inline-flex;
-  padding: var(--space-2);
+  padding: var(--space-inline);
   border-radius: var(--radius-pill);
   background: var(--background);
   color: var(--muted-foreground);
@@ -100,7 +100,7 @@
 .list {
   display: grid;
   margin: 0;
-  margin-block-start: var(--space-1);
+  margin-block-start: var(--space-stack);
   padding: 0;
   list-style: none;
 }
@@ -109,8 +109,8 @@
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto auto;
   align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-1) var(--space-1) var(--space-1) var(--space-2);
+  gap: var(--space-inline);
+  padding: var(--space-stack) var(--space-stack) var(--space-stack) var(--space-inline);
   border-radius: var(--radius-field);
 }
 .item:hover {
@@ -167,7 +167,7 @@
 .nameRow {
   display: flex;
   align-items: baseline;
-  gap: var(--space-2);
+  gap: var(--space-inline);
   min-inline-size: 0;
 }
 

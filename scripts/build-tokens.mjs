@@ -343,20 +343,27 @@ const TIER_RADIUS = [
   ['md', 'md', 'lg'],
 ]
 
-const spaceDecls = entries(semantic.space)
-  .map(([k, v]) => `  --space-${k}: calc(${v.$value} * var(--scaling));`)
-  .join('\n')
-const controlDecls = entries(semantic.control)
-  .map(([k, v]) => `  --control-${k}: calc(${v.$value} * var(--scaling));`)
-  .join('\n')
-const iconDecls = entries(semantic.icon)
-  .map(([k, v]) => `  --icon-${k}: calc(${v.$value} * var(--scaling));`)
-  .join('\n')
-const textDecls = entries(semantic.text)
-  .map(([k, v]) => `  --text-${k}: calc(${v.$value} * var(--scaling));`)
-  .join('\n')
+/* A token with a Compact value ($extensions.compact) reads both through the
+   density switches, the way [data-accent] reads --use-light / --use-dark:
+   exactly one of the two var()s resolves, the other is empty. */
+const byDensity = (def, compact) =>
+  compact === undefined ? def : `var(--density-default, ${def}) var(--density-compact, ${compact})`
+const scaled = (v) => `calc(${byDensity(v.$value, v.$extensions?.compact?.$value)} * var(--scaling))`
+const scaledDecls = (group, prefix) =>
+  entries(semantic[group])
+    .map(([k, v]) => `  --${prefix}${k}: ${scaled(v)};`)
+    .join('\n')
+const spaceDecls = scaledDecls('space', 'space-')
+const controlDecls = scaledDecls('control', 'control-')
+const rowDecls = scaledDecls('row', 'row-')
+const sizeDecls = scaledDecls('size', '')
+const iconDecls = scaledDecls('icon', 'icon-')
+const textDecls = scaledDecls('text', 'text-')
 const leadingDecls = entries(semantic.text)
-  .map(([k, v]) => `  --leading-${k}: calc(${v.$extensions.leading});`)
+  .map(([k, v]) => {
+    const c = v.$extensions.compact?.leading
+    return `  --leading-${k}: calc(${byDensity(v.$extensions.leading, c && `(${c})`)});`
+  })
   .join('\n')
 
 const css = `/*
@@ -441,6 +448,22 @@ ${shadowDecls('dark')}
   --use-dark: initial;
 }
 
+/* Density works like appearance: each scope sets two switches, and every
+   token with a Compact value picks its number from them. \`initial\` makes a
+   custom property invalid, so var(--density-default, X) gives X in a Default
+   scope and nothing in a Compact one. The switches inherit, so the nearest
+   [data-density] wins at any depth. */
+:root,
+[data-density='default'] {
+  --density-default: initial;
+  --density-compact: ;
+}
+
+[data-density='compact'] {
+  --density-default: ;
+  --density-compact: initial;
+}
+
 /* A custom property that reads another one is resolved where it is DECLARED
    and inherits as a finished value, so setting --accent-solid-* further down
    the tree cannot reach a --primary already computed at :root. Every element
@@ -508,11 +531,16 @@ ${TIER_RADIUS.map(
   /* Font roles, read from whichever faces the scope sets. */
 ${decls(rootDerived)}
 
-  /* Spacing — one multiplier over every gap and pad in the kit. */
+  /* Spacing — one multiplier over every gap and pad in the kit; the six
+     roles also follow density. */
 ${spaceDecls}
 
   /* Control heights — one scale for every button, field, tab and row. */
 ${controlDecls}
+
+  /* Row height and the component sizes that follow density. */
+${rowDecls}
+${sizeDecls}
 
   /* Icon sizes — one per control tier. */
 ${iconDecls}
@@ -617,6 +645,8 @@ const dtcg = {
   // belong in different collections, which a flat `dimension` bag prevents.
   space: semantic.space,
   control: semantic.control,
+  row: semantic.row,
+  size: semantic.size,
   icon: semantic.icon,
   text: semantic.text,
   radius: { radius: semantic.root.radius, pill: semantic.root['radius-pill'] },

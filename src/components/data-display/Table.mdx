@@ -81,34 +81,34 @@ Each density is a row height. Everything else is the same in both.
 <SpecTable
   caption="md"
   rows={[
-    { part: 'Row', property: 'Height', token: '--space-12' },
-    { part: 'Header row', property: 'Height', token: '--space-12' },
+    { part: 'Row', property: 'Height', token: '--row-height' },
+    { part: 'Header row', property: 'Height', token: '--row-height' },
   ]}
 />
 
 <SpecTable
   caption="sm"
   rows={[
-    { part: 'Row', property: 'Height', token: '--space-10' },
-    { part: 'Header row', property: 'Height', token: '--space-10' },
+    { part: 'Row', property: 'Height, minus --space-inline', token: '--row-height' },
+    { part: 'Header row', property: 'Height, minus --space-inline', token: '--row-height' },
   ]}
 />
 
 <SpecTable
   caption="Every density"
   rows={[
-    { part: 'Cell', property: 'Inline padding', token: '--space-4' },
+    { part: 'Cell', property: 'Inline padding', token: '--space-group' },
     { part: 'Cell', property: 'Font size', token: '--text-body' },
     { part: 'Cell', property: 'Line height', token: '--leading-body' },
     { part: 'Header cell', property: 'Font size', token: '--text-body-sm' },
     { part: 'Header cell', property: 'Line height', token: '--leading-body-sm' },
-    { part: 'Sort button', property: 'Block padding', token: '--space-1' },
-    { part: 'Sort button', property: 'Inline padding', token: '--space-2' },
+    { part: 'Sort button', property: 'Block padding', token: '--control-xs-gap' },
+    { part: 'Sort button', property: 'Inline padding', token: '--control-sm-pad' },
     { part: 'Sort button', property: 'Gap', token: '--space-1' },
     { part: 'Sort button', property: 'Corner radius', token: '--radius-sm' },
     { part: 'Sort icon', property: 'Size', token: '--icon-md' },
     { part: 'Selection and expand columns', property: 'Width', token: '--space-10' },
-    { part: 'Expand column', property: 'Inline start padding', token: '--space-2' },
+    { part: 'Expand column', property: 'Inline start padding', token: '--space-inline' },
     { part: 'Expand icon', property: 'Size', token: '--icon-md' },
     { part: 'Expanded row', property: 'Block start padding', token: '--space-2' },
     { part: 'Expanded row', property: 'Inline and block end padding', token: '--space-4' },

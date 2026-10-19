@@ -1,26 +1,32 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
+import { DENSITIES } from '@/theme/Theme'
 import docs from './docs.module.css'
 
-// Every step is `calc(0.25rem * n * var(--scaling))`, so the whole scale moves
-// with one multiplier.
-const STEPS = [0.5, 1, 1.5, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 24, 32, 40, 48, 64]
+const ROLES = ['stack', 'inline', 'cluster', 'group', 'container', 'section']
 
-function SpacingScale() {
+/* Each role as a bar, once per density. The bars read the tokens inside a
+   [data-density] scope, so they show what the stylesheet resolves. */
+function RoleBars() {
   return (
-    <div className={docs.stack}>
-      {STEPS.map((step) => (
-        <div key={step} className={docs.row}>
-          <span className={docs.caption} style={{ width: '2.5rem', flexShrink: 0 }}>
-            {step}
-          </span>
-          <div
-            style={{
-              height: '1rem',
-              borderRadius: 'var(--radius-sm)',
-              background: 'var(--primary)',
-              width: `calc(0.25rem * ${step} * var(--scaling))`,
-            }}
-          />
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(14rem, 1fr))', gap: 'var(--space-container)' }}>
+      {DENSITIES.map((density) => (
+        <div key={density} data-density={density} className={docs.stack}>
+          <strong className={docs.caption}>{density === 'default' ? 'Default' : 'Compact'}</strong>
+          {ROLES.map((role) => (
+            <div key={role} className={docs.row}>
+              <span className={docs.caption} style={{ width: '5rem', flexShrink: 0 }}>
+                {role}
+              </span>
+              <div
+                style={{
+                  height: '1rem',
+                  borderRadius: 'var(--radius-sm)',
+                  background: 'var(--primary)',
+                  width: `var(--space-${role})`,
+                }}
+              />
+            </div>
+          ))}
         </div>
       ))}
     </div>
@@ -30,11 +36,11 @@ function SpacingScale() {
 // Narrative and prose live in Spacing.mdx.
 const meta = {
   title: 'Foundations/Spacing',
-  render: () => <SpacingScale />,
+  render: () => <RoleBars />,
   parameters: { layout: 'padded' },
 } satisfies Meta
 
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Scale: Story = {}
+export const Roles: Story = {}

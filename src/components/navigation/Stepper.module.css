@@ -134,8 +134,8 @@ button.target:focus-visible {
 }
 .horizontal .target {
   flex-direction: column;
-  gap: var(--space-2);
-  padding-inline-end: var(--space-3);
+  gap: var(--space-inline);
+  padding-inline-end: var(--space-cluster);
 }
 .horizontal .text {
   padding-block-start: 0;
