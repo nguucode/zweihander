@@ -33,7 +33,7 @@ const meta = {
       description: 'Padding 12, 16, 24 or 32px; the gap between children scales with it.',
       control: 'inline-radio',
       options: ['xs', 'sm', 'md', 'lg'],
-      table: { type: { summary: "'xs' | 'sm' | 'md' | 'lg'" }, defaultValue: { summary: "'sm'" } },
+      table: { type: { summary: "'xs' | 'sm' | 'md' | 'lg'" }, defaultValue: { summary: "'md'" } },
     },
     appearance: {
       description: '`elevated`: the card surface with a faint shadow. `outline`: the surface and its edge, no shadow. `unstyled`: keeps the padding and layout, drops every visual.',
@@ -82,6 +82,8 @@ export const Default: Story = {
     const card = canvas.getByRole('heading', { name: 'Payment method' }).parentElement!
     await expect(card.tagName).toBe('DIV')
     await expect(card).not.toHaveAttribute('role')
+    // No size given: md, the house default.
+    await expect(getComputedStyle(card).paddingTop).toBe('24px')
     await expect(canvas.getAllByRole('heading')).toHaveLength(1)
     await userEvent.tab()
     await expect(document.body).toHaveFocus()
@@ -122,7 +124,7 @@ export const Horizontal: Story = {
     orientation: 'horizontal',
     children: (
       <>
-        <Avatar initials="MT" size="md" />
+        <Avatar initials="MT" />
         <div style={{ display: 'grid', gap: 'var(--space-1)', flex: 1 }}>
           <h3 style={title}>Mary Thompson</h3>
           <p style={muted}>Product designer</p>
@@ -258,7 +260,7 @@ export const DontNestButtons: Story = {
     orientation: 'horizontal',
     children: (
       <>
-        <Avatar initials="MT" size="md" />
+        <Avatar initials="MT" />
         <span style={{ display: 'grid', gap: 'var(--space-1)', flex: 1 }}>
           <span style={title}>Mary Thompson</span>
           <span style={muted}>Product designer</span>

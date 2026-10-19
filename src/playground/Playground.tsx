@@ -285,7 +285,7 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
                 onOpenChange={setDrawerOpen}
                 className={styles.drawer}
                 trigger={
-                  <Button size="sm" appearance="outlined" variant="secondary" startIcon={<Icon name="menu" />}>
+                  <Button appearance="outlined" variant="secondary" startIcon={<Icon name="menu" />}>
                     Browse
                   </Button>
                 }
@@ -297,7 +297,6 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
               <Tabs
                 aria-label="Viewport"
                 appearance="pills"
-                size="sm"
                 // Arrow keys switch at once: a viewport change does not reload the frame.
                 activateOnFocus
                 items={Object.entries(VIEWPORTS).map(([value, { label }]) => ({ value, label }))}
@@ -306,7 +305,6 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
               />
               <Tooltip content="Open in Storybook">
                 <Button
-                  size="sm"
                   appearance="ghost"
                   variant="secondary"
                   isIconOnly
@@ -373,7 +371,7 @@ function ThemePopover({ theme, onChange }: { theme: PreviewTheme; onChange: (the
       align="end"
       isModal
       trigger={
-        <Button size="sm" appearance="outlined" variant="secondary">
+        <Button appearance="outlined" variant="secondary">
           Theme
         </Button>
       }
@@ -433,10 +431,10 @@ function ThemePopover({ theme, onChange }: { theme: PreviewTheme; onChange: (the
           <span role="status" className={styles.themeCopied}>
             {copyStatus}
           </span>
-          <Button size="sm" appearance="ghost" variant="secondary" onClick={() => onChange(DEFAULT_PREVIEW_THEME)}>
+          <Button appearance="ghost" variant="secondary" onClick={() => onChange(DEFAULT_PREVIEW_THEME)}>
             Reset
           </Button>
-          <Button size="sm" appearance="outlined" variant="secondary" onClick={copy}>
+          <Button appearance="outlined" variant="secondary" onClick={copy}>
             Copy code
           </Button>
         </div>
@@ -585,13 +583,12 @@ function Browser({
 
       {visible.length === 0 ? (
         <EmptyState
-          size="sm"
           headingLevel={3}
           icon={<Icon name="search" />}
           title="Nothing matches"
           description="No item has that name in the chosen Category and status."
           action={
-            <Button size="sm" appearance="outlined" variant="secondary" onClick={() => setFilters(NO_FILTERS)}>
+            <Button appearance="outlined" variant="secondary" onClick={() => setFilters(NO_FILTERS)}>
               Clear search and filters
             </Button>
           }
@@ -611,7 +608,6 @@ function Browser({
               <Accordion
                 multiple
                 appearance="flush"
-                size="sm"
                 value={keys.filter((key) => !folded.includes(key))}
                 onValueChange={(opened) =>
                   onFolds({
@@ -638,6 +634,7 @@ function Browser({
                               onClick={(e) => open(e, item)}
                             >
                               <span className={styles.cardName}>{item.name}</span>
+                              {/* sm on purpose: at md "experimental" truncates in the two-column item grid. */}
                               <Tag
                                 text={item.status}
                                 size="sm"
@@ -784,12 +781,11 @@ function LiveView({
         {state === 'error' && (
           <div className={styles.overlay}>
             <ErrorState
-              size="sm"
               headingLevel={3}
               title="The live view did not load"
               description={`${item.name} could not be shown here. Storybook has the same story.`}
               action={
-                <Button size="sm" href={storyLink}>
+                <Button href={storyLink}>
                   Open in Storybook
                 </Button>
               }
@@ -820,7 +816,7 @@ function PropsPanel({
         <h2 id="pg-props" className={styles.groupTitle}>
           Props
         </h2>
-        <Button size="sm" appearance="ghost" variant="secondary" onClick={onReset}>
+        <Button appearance="ghost" variant="secondary" onClick={onReset}>
           Reset
         </Button>
       </div>
@@ -838,7 +834,7 @@ function PropsPanel({
 
 /** A choice is a Select, a boolean a Switch, a number a NumberInput, anything else a TextInput. */
 function PropControl({ prop, value, onChange }: { prop: Prop; value: unknown; onChange: (value: unknown) => void }) {
-  const field = { label: prop.name, helperText: prop.description, size: 'sm', isFullWidth: true } as const
+  const field = { label: prop.name, helperText: prop.description, isFullWidth: true } as const
   const { options } = prop
   if (options)
     return (
@@ -855,7 +851,6 @@ function PropControl({ prop, value, onChange }: { prop: Prop; value: unknown; on
       <Switch
         label={prop.name}
         helperText={prop.description}
-        size="sm"
         checked={value === true}
         onCheckedChange={onChange}
       />

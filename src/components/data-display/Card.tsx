@@ -21,7 +21,7 @@ export interface CardProps extends Omit<ComponentProps<'div'>, 'onClick'> {
 }
 
 export function Card({
-  size = 'sm',
+  size = 'md',
   appearance = 'elevated',
   orientation = 'vertical',
   isRounded = true,

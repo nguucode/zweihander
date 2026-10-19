@@ -46,7 +46,7 @@ export function Stats({ stats, title, headingLevel = 2, className, ...props }: S
         {stats.map((stat) => {
           const positive = stat.change ? (stat.change.isPositive ?? stat.change.direction === 'up') : undefined
           return (
-            <Card key={stat.label} appearance="outline" size="md" className={cn(styles.card, stat.icon !== undefined && styles.withIcon)}>
+            <Card key={stat.label} appearance="outline" className={cn(styles.card, stat.icon !== undefined && styles.withIcon)}>
               <dt className={styles.label}>
                 {/* Inside the dt: a dl's groups may hold only dt and dd. */}
                 {stat.icon && (

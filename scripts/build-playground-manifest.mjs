@@ -217,6 +217,20 @@ if (errors.length) {
   process.exit(1)
 }
 
+// House rule: a component that offers size md uses it as the default
+// (COMPONENTS.md, section 2, which lists the same exceptions). Divider's size
+// is a line weight, where 1px is the norm, so it keeps sm. Link has no default:
+// it inherits the surrounding text size.
+const SIZE_EXCEPTIONS = new Set(['components-atomic-elements-divider', 'components-navigation-link'])
+const offSize = items.filter((i) => {
+  const size = i.props.find((p) => p.name === 'size')
+  return size?.options?.includes('md') && size.default !== 'md' && !SIZE_EXCEPTIONS.has(i.id)
+})
+if (offSize.length) {
+  console.error(`size default must be 'md' when md exists:\n${offSize.map((i) => `  ${i.id}`).join('\n')}`)
+  process.exit(1)
+}
+
 const order = Object.values(KINDS)
 items.sort((a, b) => order.indexOf(a.kind) - order.indexOf(b.kind) || a.category.localeCompare(b.category) || a.name.localeCompare(b.name))
 const content = JSON.stringify({ items }, null, 2) + '\n'
