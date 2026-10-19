@@ -159,3 +159,17 @@
   color: var(--muted-foreground);
   font-variant-numeric: tabular-nums;
 }
+
+.typeTable td {
+  vertical-align: middle;
+}
+.typeTable td[data-density] {
+  inline-size: 38%;
+}
+.typeSample {
+  display: grid;
+  gap: var(--space-1);
+}
+.typeChanged {
+  background: color-mix(in oklab, var(--role-cluster) 25%, transparent);
+}

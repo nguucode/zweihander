@@ -126,7 +126,47 @@ const mapCss = MAP.map((r) => `${scope(r.sel)} {\n${r.props.map((p) => `  ${p}: 
 const rowCss = `${scope(m('Table-module__table'))} { --table-row: var(--row-height); }
 ${scope('.lyThumb')} { inline-size: calc(var(--row-height) - var(--space-inline)); block-size: calc(var(--row-height) - var(--space-inline)); }`
 const style = document.createElement('style')
-style.textContent = `${tokenCss}\n${controlCss}\n${mapCss}\n${rowCss}`
+/* Type per density. Text of 12px and below does not shrink: that is the
+   legibility floor. 13 to 16px drops 1px. Headings from 20px up drop one
+   step on the heading scale. Leading is written as px and kept as a ratio,
+   like tokens.css does. */
+const TYPE: { role: string; use: string; sample: string; px: Record<Density, [number, number]> }[] = [
+  { role: 'heading-2xl', use: 'Marketing and empty-state titles', sample: 'Revenue and cost', px: { default: [32, 36], compact: [28, 32] } },
+  { role: 'heading-xl', use: 'Page title', sample: 'Revenue and cost', px: { default: [28, 32], compact: [24, 28] } },
+  { role: 'heading-lg', use: 'Large section title', sample: 'Most profitable products', px: { default: [24, 28], compact: [20, 24] } },
+  { role: 'heading-md', use: 'Section title, modal title', sample: 'Where the cost went', px: { default: [20, 24], compact: [18, 24] } },
+  { role: 'heading-sm', use: 'Card title, stat value', sample: 'Daily revenue and cost', px: { default: [16, 20], compact: [15, 20] } },
+  { role: 'heading-xs', use: 'Small headings, table group titles', sample: 'Cost of goods', px: { default: [14, 20], compact: [13, 18] } },
+  { role: 'heading-2xs', use: 'Overlines, column labels', sample: 'FINANCE', px: { default: [12, 16], compact: [12, 16] } },
+  { role: 'body-lg', use: 'Lead paragraphs', sample: 'Sales against everything it cost to make them.', px: { default: [16, 24], compact: [15, 22] } },
+  { role: 'body', use: 'Default text: table cells, fields, buttons', sample: 'Ash glaze mug, 350 ml · 214 in stock', px: { default: [14, 20], compact: [13, 18] } },
+  { role: 'body-sm', use: 'Helper text, tags, small controls', sample: 'Share of $88,251 total cost.', px: { default: [12, 16], compact: [12, 16] } },
+  { role: 'body-xs', use: 'Captions, badges, chart labels', sample: 'MUG-ASH-350', px: { default: [11, 16], compact: [11, 16] } },
+]
+const typeCss = `[data-density='compact']:not([data-type='fixed']), [data-density='compact']:not([data-type='fixed']) * {\n${TYPE.map(
+  ({ role, px: { compact: [size, line] } }) => `  --text-${role}: ${rem(size)};\n  --leading-${role}: calc(${line} / ${size});`,
+).join('\n')}\n}`
+style.textContent = `${tokenCss}\n${controlCss}\n${typeCss}\n${mapCss}\n${rowCss}`
+
+/** A line of text in one type role, with its rendered size and leading. */
+function TypeSample({ role, text }: { role: string; text: string }) {
+  const ref = useRef<HTMLSpanElement>(null)
+  const [m, setM] = useState('')
+  useLayoutEffect(() => {
+    const cs = getComputedStyle(ref.current!)
+    const v = `${Math.round(parseFloat(cs.fontSize))}/${Math.round(parseFloat(cs.lineHeight))}`
+    setM((prev) => (prev === v ? prev : v))
+  })
+  const heading = role.startsWith('heading')
+  return (
+    <span className="typeSample">
+      <span ref={ref} style={{ fontSize: `var(--text-${role})`, lineHeight: `var(--leading-${role})`, fontWeight: heading ? 600 : 400 }}>
+        {text}
+      </span>
+      <span className="measuredPx">{m}</span>
+    </span>
+  )
+}
 document.head.append(style)
 
 /* ============================================================== overlay */
@@ -202,7 +242,7 @@ function measure(frame: HTMLElement, scale: number): Region[] {
   return out
 }
 
-function Stage({ density, overlay, children }: { density: Density | 'today'; overlay: boolean; children: ReactNode }) {
+function Stage({ density, overlay, typeFixed, children }: { density: Density | 'today'; overlay: boolean; typeFixed: boolean; children: ReactNode }) {
   const stageRef = useRef<HTMLDivElement>(null)
   const frameRef = useRef<HTMLDivElement>(null)
   const [scale, setScale] = useState(1)
@@ -231,12 +271,12 @@ function Stage({ density, overlay, children }: { density: Density | 'today'; ove
   }, [])
   useLayoutEffect(() => {
     setRegions(measure(frameRef.current!, scale))
-  }, [scale, tick, height, density])
+  }, [scale, tick, height, density, typeFixed])
 
   return (
     <div ref={stageRef} className="stage" style={{ blockSize: height * scale || undefined }}>
       <div className="scaler" style={{ transform: scale === 1 ? undefined : `scale(${scale})` }}>
-        <div ref={frameRef} className="frame" data-density={density}>
+        <div ref={frameRef} className="frame" data-density={density} data-type={typeFixed ? 'fixed' : undefined}>
           {children}
         </div>
         {overlay && (
@@ -267,6 +307,7 @@ function Stage({ density, overlay, children }: { density: Density | 'today'; ove
 function App() {
   const [density, setDensity] = useState<Density | 'today'>('default')
   const [overlay, setOverlay] = useState(true)
+  const [typeOn, setTypeOn] = useState(true)
   const roleRows = ROLES.map((r) => ({ ...r, parts: [...new Set(MAP.filter((x) => x.role === r.role && x.part).map((x) => x.part))] }))
   const maxPx = 24
   return (
@@ -404,6 +445,43 @@ function App() {
         </div>
       </section>
 
+      <section className="section" aria-labelledby="type-h">
+        <div className="sectionHead">
+          <h2 id="type-h">Type in each density</h2>
+          <p>
+            Base text is 14px in Default and 13px in Compact. Text of 12px and below keeps its size in both, since that is the floor for reading.
+            Sizes are measured from the page. Turn off <em>Compact type</em> in the bar below to compare Compact with and without it.
+          </p>
+        </div>
+        <div className="tableWrap">
+          <table className="spec typeTable">
+            <thead>
+              <tr>
+                <th scope="col">Token</th>
+                <th scope="col">Default</th>
+                <th scope="col">Compact</th>
+              </tr>
+            </thead>
+            <tbody>
+              {TYPE.map((t) => (
+                <tr key={t.role}>
+                  <td>
+                    <code>--text-{t.role}</code>
+                    <div className="where">{t.use}</div>
+                  </td>
+                  <td data-density="default">
+                    <TypeSample role={t.role} text={t.sample} />
+                  </td>
+                  <td data-density="compact" data-type={typeOn ? undefined : 'fixed'} className={t.px.default[0] !== t.px.compact[0] && typeOn ? 'typeChanged' : undefined}>
+                    <TypeSample key={String(typeOn)} role={t.role} text={t.sample} />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
       <section className="section" aria-labelledby="spec-h">
         <div className="sectionHead">
           <h2 id="spec-h">Every size, both densities</h2>
@@ -413,7 +491,7 @@ function App() {
           {DENSITIES.slice()
             .reverse()
             .map((d) => (
-              <Specimen key={d} density={d} />
+              <Specimen key={d} density={d} typeFixed={!typeOn} />
             ))}
         </div>
       </section>
@@ -435,6 +513,9 @@ function App() {
           />
         </div>
         <div className="controlGroup">
+          <ToggleButton size="sm" variant="secondary" appearance="outlined" pressed={typeOn} onPressedChange={setTypeOn}>
+            Compact type
+          </ToggleButton>
           <ToggleButton size="sm" variant="secondary" appearance="outlined" pressed={overlay} onPressedChange={setOverlay}>
             Show tokens
           </ToggleButton>
@@ -452,7 +533,7 @@ function App() {
           <h2 id="dash-h">Revenue and cost</h2>
           <p>Hover a coloured region for the part and the token. Solid is padding, hatched is gap.</p>
         </div>
-        <Stage density={density} overlay={overlay && density !== 'today'}>
+        <Stage density={density} overlay={overlay && density !== 'today'} typeFixed={!typeOn}>
           <Dashboard />
         </Stage>
       </section>
@@ -462,7 +543,7 @@ function App() {
           <h2 id="prod-h">Products</h2>
           <p>Compact fits more rows on the same screen: 36px rows and sm controls instead of 48 and md.</p>
         </div>
-        <Stage density={density} overlay={overlay && density !== 'today'}>
+        <Stage density={density} overlay={overlay && density !== 'today'} typeFixed={!typeOn}>
           <ProductsPage />
         </Stage>
       </section>
@@ -545,12 +626,27 @@ function App() {
             <code>md</code> pads <code>container</code> with a <code>group</code> gap.
           </li>
           <li>
-            <strong>Density is not scaling.</strong> <code>scaling</code> (90–110%) multiplies spacing and type; density changes spacing, row
-            and control height, and leaves type alone.
+            <strong>Type density is feasible with no component change.</strong> Components set font size through the type tokens in 88 places;
+            the only literal sizes left are icons and one 9px label in FileUploader. A Compact mode on the eleven <code>--text-*</code> and{' '}
+            <code>--leading-*</code> tokens reaches every component.
+          </li>
+          <li>
+            <strong>Why not just <code>scaling</code> at 93%?</strong> Scaling multiplies everything: 14 becomes 13.0, but 12 becomes 11.2, 11
+            becomes 10.2 and 32 becomes 29.8. Type density picks each size: whole pixels, a 12px floor, and headings that land on the existing
+            scale. Scaling stays for the reader's own preference.
+          </li>
+          <li>
+            <strong>Compact leading leaves the 4px grid.</strong> Body is 13/18 and heading-xs 13/18. 13/20 would keep the grid but gives back
+            most of the density. Rows and controls have fixed heights, so this only shows in wrapped text.
+          </li>
+          <li>
+            <strong>Icons stay 16px</strong> beside 13px text. It reads fine in the screens above; dropping <code>--icon-md</code> to 14px in
+            Compact is an option if it looks heavy.
           </li>
           <li>
             <strong>In the real code</strong> the six tokens and the control tier get a density mode in <code>tokens/semantic.json</code>, set by{' '}
-            <code>Theme</code> like <code>scaling</code>. Figma: six spacing variables and the control tier, two modes each.
+            <code>Theme</code> like <code>scaling</code>. Figma: six spacing variables, the control tier and the eleven type sizes and line heights, two modes each (Figma binds number
+            variables to font size and line height).
           </li>
         </ul>
       </section>

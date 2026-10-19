@@ -244,6 +244,32 @@ Quyết định (sếp chốt 2026-10-19):
 - `--space-section` = 24 Default, 20 Compact. Hệ quả: Default lệch main ở mép trang (AppShell padding và cạnh header 32→24), và section trùng giá trị với container (24), nên tách section phải dựa vào viền card/đường kẻ thay vì thêm khoảng trắng.
 - `--space-cluster` (12) giữ Default khớp main ở các chỗ 12px. Alert padding 10→12 có chủ đích.
 
+### Type theo density (thử nghiệm, chờ sếp duyệt)
+
+Base 14px ở Default, 13px ở Compact. Demo v5 cùng link, có công tắc "Compact type" để so Compact có và không đổi chữ.
+
+| Token | Default | Compact |
+|---|---|---|
+| `heading-2xl` | 32/36 | 28/32 |
+| `heading-xl` | 28/32 | 24/28 |
+| `heading-lg` | 24/28 | 20/24 |
+| `heading-md` | 20/24 | 18/24 |
+| `heading-sm` | 16/20 | 15/20 |
+| `heading-xs` | 14/20 | 13/18 |
+| `heading-2xs` | 12/16 | 12/16 |
+| `body-lg` | 16/24 | 15/22 |
+| `body` | 14/20 | 13/18 |
+| `body-sm` | 12/16 | 12/16 |
+| `body-xs` | 11/16 | 11/16 |
+
+Luật: chữ 12px trở xuống không giảm (sàn đọc được); 13–16px giảm 1px; heading từ 20px lên giảm một bậc trên thang heading.
+
+Khả thi:
+- Component đặt cỡ chữ qua type token ở 88 chỗ. Literal còn lại chỉ là icon, cộng một chỗ 9px ở FileUploader. Thêm mode cho 11 cặp `--text-*`/`--leading-*` là đủ, không phải sửa component. Đã đo trong trình duyệt: cỡ chữ khớp bảng, không control nào bị cắt chữ.
+- Khác `scaling` 93%: scaling cho ra 12→11.2, 11→10.2, 32→29.8; type density chọn từng cỡ, giữ px nguyên và sàn 12.
+- Đánh đổi: leading Compact 13/18 rời lưới 4px; 13/20 giữ lưới nhưng mất phần lớn độ gọn. Row và control cao cố định nên chỉ text xuống dòng là thấy.
+- Icon giữ 16px cạnh chữ 13px; có thể giảm `--icon-md` xuống 14 ở Compact nếu thấy nặng.
+
 Còn để ngỏ:
 - Gap trong Stats card và title→description của PageHeading (đều 8) không map, nên không theo density.
 - Size Card là density cục bộ (`sm` = padding `group` + gap `cluster`; `md` = padding `container` + gap `group`).

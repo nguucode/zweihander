@@ -27,9 +27,9 @@ function Measured({ children }: { children: ReactNode }) {
 
 const SIZES = ['md', 'sm'] as const
 
-export function Specimen({ density }: { density: 'compact' | 'default' }) {
+export function Specimen({ density, typeFixed }: { density: 'compact' | 'default'; typeFixed: boolean }) {
   return (
-    <div className="specimen" data-density={density}>
+    <div className="specimen" data-density={density} data-type={typeFixed ? 'fixed' : undefined} key={String(typeFixed)}>
       <h3 className="subHead">{density === 'default' ? 'Default' : 'Compact'}</h3>
       {SIZES.map((size) => (
         <div key={size} className="specimenRow">
