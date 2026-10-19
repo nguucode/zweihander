@@ -1,0 +1,161 @@
+/* Role colours for the density trial: one hue per token. */
+:root {
+  --role-cluster: oklch(74% 0.16 55 / 0.38);
+  --role-cluster-ink: oklch(50% 0.15 50);
+  --role-stack: oklch(72% 0.17 85 / 0.38);
+  --role-stack-ink: oklch(48% 0.12 80);
+  --role-inline: oklch(65% 0.25 350 / 0.32);
+  --role-inline-ink: oklch(48% 0.22 350);
+  --role-group: oklch(72% 0.17 160 / 0.32);
+  --role-group-ink: oklch(45% 0.13 160);
+  --role-container: oklch(68% 0.15 300 / 0.30);
+  --role-container-ink: oklch(45% 0.18 300);
+  --role-section: oklch(65% 0.17 255 / 0.30);
+  --role-section-ink: oklch(45% 0.18 260);
+}
+.dark {
+  --role-cluster: oklch(76% 0.14 55 / 0.42);
+  --role-cluster-ink: oklch(84% 0.12 60);
+  --role-stack: oklch(78% 0.15 85 / 0.4);
+  --role-stack-ink: oklch(85% 0.12 85);
+  --role-inline: oklch(70% 0.22 350 / 0.38);
+  --role-inline-ink: oklch(80% 0.14 350);
+  --role-group: oklch(75% 0.15 160 / 0.34);
+  --role-group-ink: oklch(82% 0.12 160);
+  --role-container: oklch(72% 0.14 300 / 0.36);
+  --role-container-ink: oklch(82% 0.1 300);
+  --role-section: oklch(70% 0.15 255 / 0.36);
+  --role-section-ink: oklch(80% 0.11 255);
+}
+[data-role='stack'] { --c: var(--role-stack); --ink: var(--role-stack-ink); }
+[data-role='inline'] { --c: var(--role-inline); --ink: var(--role-inline-ink); }
+[data-role='cluster'] { --c: var(--role-cluster); --ink: var(--role-cluster-ink); }
+[data-role='group'] { --c: var(--role-group); --ink: var(--role-group-ink); }
+[data-role='container'] { --c: var(--role-container); --ink: var(--role-container-ink); }
+[data-role='section'] { --c: var(--role-section); --ink: var(--role-section-ink); }
+
+.swatch[data-role] {
+  background: var(--c);
+  box-shadow: inset 0 0 0 1px var(--ink);
+}
+.valBar {
+  display: inline-block;
+  block-size: 0.5rem;
+  margin-inline-end: var(--space-2);
+  border-radius: 2px;
+  background: var(--c);
+  box-shadow: inset 0 0 0 1px var(--ink);
+  vertical-align: middle;
+}
+.spec.density {
+  min-inline-size: 44rem;
+}
+.spec.density td.num {
+  inline-size: 7.5rem;
+}
+.spec .isOn {
+  background: var(--accent);
+  font-weight: 600;
+}
+.isChanged {
+  color: var(--warning-text);
+  font-weight: 500;
+}
+.legendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  font-size: var(--text-body-sm);
+  color: var(--subtle-foreground);
+}
+
+.ladder {
+  display: grid;
+  gap: var(--space-2);
+  overflow-x: auto;
+}
+.ladderRow {
+  display: grid;
+  grid-template-columns: 5rem repeat(8, minmax(2.75rem, 1fr));
+  gap: var(--space-1);
+  align-items: center;
+  min-inline-size: 30rem;
+  font-variant-numeric: tabular-nums;
+}
+.ladderName {
+  font-size: var(--text-body-sm);
+  color: var(--muted-foreground);
+}
+.ladderRow.isOn .ladderName {
+  color: var(--foreground);
+  font-weight: 600;
+}
+.ladderStep {
+  padding-block: var(--space-1-5);
+  border-radius: var(--radius-sm);
+  border: 1px dashed var(--border);
+  text-align: center;
+  font-size: var(--text-body-sm);
+  color: var(--muted-foreground);
+}
+.ladderStep[data-used] {
+  border: 1px solid var(--ink);
+  background: var(--c);
+  color: var(--foreground);
+  font-weight: 600;
+}
+
+.subHead {
+  margin: 0;
+  font-size: var(--text-heading-xs);
+  line-height: var(--leading-heading-xs);
+  font-weight: 600;
+}
+.ladderStep small {
+  font-weight: 400;
+  color: var(--muted-foreground);
+}
+.specimens {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(30rem, 100%), 1fr));
+  gap: var(--space-4);
+}
+.specimen {
+  display: grid;
+  align-content: start;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-panel);
+  background: var(--card);
+  min-inline-size: 0;
+}
+.specimenRow {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  gap: var(--space-3);
+  align-items: start;
+}
+.specimenSize {
+  padding-block-start: var(--space-1);
+  font-family: var(--font-mono);
+  font-size: var(--text-body-sm);
+  color: var(--muted-foreground);
+}
+.specimenItems {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+.measured {
+  display: inline-grid;
+  justify-items: start;
+  gap: var(--space-1);
+}
+.measuredPx {
+  font-family: var(--font-mono);
+  font-size: var(--text-body-xs);
+  color: var(--muted-foreground);
+  font-variant-numeric: tabular-nums;
+}

@@ -1,0 +1,613 @@
+@import '../../src/index.css';
+
+/* ------------------------------------------------------------------ trial
+   The four steps the research proposed. On `*`, like the other space tokens,
+   so a scope that sets --scaling recomputes them. */
+* {
+  --space-0-5: calc(0.125rem * var(--scaling));
+  --space-5: calc(1.25rem * var(--scaling));
+  --space-16: calc(4rem * var(--scaling));
+  --space-20: calc(5rem * var(--scaling));
+}
+
+/* Overlay colours, one per tier. Translucent, so they read on both themes. */
+:root {
+  --tier-s: oklch(65% 0.25 350 / 0.32);
+  --tier-s-ink: oklch(48% 0.22 350);
+  --tier-m: oklch(72% 0.17 160 / 0.32);
+  --tier-m-ink: oklch(45% 0.13 160);
+  --tier-l: oklch(65% 0.17 255 / 0.30);
+  --tier-l-ink: oklch(45% 0.18 260);
+  --tier-x: oklch(70% 0.2 45 / 0.45);
+  --tier-x-ink: oklch(50% 0.19 40);
+  --chart-revenue: var(--primary);
+  --chart-cost: oklch(70% 0.16 55);
+  --thumb-l: 88%;
+}
+.dark {
+  --tier-s: oklch(70% 0.22 350 / 0.38);
+  --tier-s-ink: oklch(80% 0.14 350);
+  --tier-m: oklch(75% 0.15 160 / 0.34);
+  --tier-m-ink: oklch(82% 0.12 160);
+  --tier-l: oklch(70% 0.15 255 / 0.36);
+  --tier-l-ink: oklch(80% 0.11 255);
+  --tier-x: oklch(75% 0.17 50 / 0.5);
+  --tier-x-ink: oklch(82% 0.14 55);
+  --chart-cost: oklch(78% 0.14 60);
+  --thumb-l: 38%;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+/* =========================================================== page chrome
+   Report page around the two screens. It follows the same tiers it shows:
+   Large between sections, Medium inside a section, Small inside a row. */
+.doc {
+  display: grid;
+  gap: var(--space-12);
+  max-inline-size: 90rem;
+  margin-inline: auto;
+  padding-block: var(--space-10) var(--space-16);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.doc > * {
+  min-inline-size: 0;
+}
+
+.intro {
+  display: grid;
+  gap: var(--space-4);
+  max-inline-size: 68ch;
+}
+.eyebrow {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-body-sm);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+.intro h1 {
+  margin: 0;
+  font-size: var(--text-heading-2xl);
+  line-height: var(--leading-heading-2xl);
+  font-weight: 600;
+  text-wrap: balance;
+}
+.intro p {
+  margin: 0;
+  color: var(--subtle-foreground);
+}
+
+.section {
+  display: grid;
+  gap: var(--space-6);
+}
+.section > * {
+  min-inline-size: 0;
+}
+.sectionHead {
+  display: grid;
+  gap: var(--space-2);
+}
+.sectionHead h2 {
+  margin: 0;
+  font-size: var(--text-heading-md);
+  line-height: var(--leading-heading-md);
+  font-weight: 600;
+}
+.sectionHead p {
+  margin: 0;
+  max-inline-size: 72ch;
+  color: var(--muted-foreground);
+}
+
+/* ------------------------------------------------------------ the scale */
+.scaleWrap {
+  overflow-x: auto;
+}
+.scale {
+  display: grid;
+  grid-template-columns: repeat(15, minmax(5.75rem, 1fr));
+  min-inline-size: 86.25rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-panel);
+  background: var(--card);
+  overflow: hidden;
+}
+.step {
+  display: grid;
+  grid-template-rows: auto auto 1fr auto;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border-inline-start: 1px solid var(--border);
+  font-variant-numeric: tabular-nums;
+}
+.step:first-child {
+  border-inline-start: 0;
+}
+.step[data-tier='s'] { background: color-mix(in oklab, var(--tier-s) 35%, transparent); }
+.step[data-tier='m'] { background: color-mix(in oklab, var(--tier-m) 35%, transparent); }
+.step[data-tier='l'] { background: color-mix(in oklab, var(--tier-l) 35%, transparent); }
+.step[data-tier='x'] { background: repeating-linear-gradient(135deg, transparent 0 6px, color-mix(in oklab, var(--tier-x) 45%, transparent) 6px 8px); }
+.stepPx {
+  font-size: var(--text-heading-sm);
+  line-height: 1;
+  font-weight: 600;
+}
+.stepToken {
+  font-family: var(--font-mono);
+  font-size: var(--text-body-xs);
+  color: var(--subtle-foreground);
+  white-space: nowrap;
+}
+.stepBar {
+  align-self: end;
+  block-size: 4px;
+  inline-size: 100%;
+  border-radius: var(--radius-pill);
+  background: var(--border);
+  overflow: hidden;
+}
+.stepBar > span {
+  display: block;
+  block-size: 100%;
+  background: var(--foreground);
+}
+.stepCount {
+  font-size: var(--text-body-sm);
+  color: var(--muted-foreground);
+}
+.stepNew {
+  justify-self: start;
+  align-self: start;
+  padding: 0 var(--space-1);
+  border-radius: var(--radius-sm);
+  background: var(--foreground);
+  color: var(--background);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.tierRules {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr));
+  gap: var(--space-4);
+}
+.tierRule {
+  display: grid;
+  align-content: start;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border-radius: var(--radius-panel);
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+.tierRule h3 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+  font-size: var(--text-body);
+  font-weight: 600;
+}
+.tierRule p,
+.tierRule ul {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--subtle-foreground);
+}
+.tierRule ul {
+  padding-inline-start: var(--space-4);
+}
+.swatch {
+  inline-size: 0.75rem;
+  block-size: 0.75rem;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+.swatch[data-tier='s'] { background: var(--tier-s); box-shadow: inset 0 0 0 1px var(--tier-s-ink); }
+.swatch[data-tier='m'] { background: var(--tier-m); box-shadow: inset 0 0 0 1px var(--tier-m-ink); }
+.swatch[data-tier='l'] { background: var(--tier-l); box-shadow: inset 0 0 0 1px var(--tier-l-ink); }
+.swatch[data-tier='x'] { background: var(--tier-x); box-shadow: inset 0 0 0 1px var(--tier-x-ink); }
+
+/* ------------------------------------------------------------- toolbar */
+.controls {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 20;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-6);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-panel);
+  background: color-mix(in oklab, var(--card) 92%, transparent);
+  backdrop-filter: blur(8px);
+}
+.controlGroup {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+.controlLabel {
+  font-size: var(--text-body-sm);
+  color: var(--muted-foreground);
+}
+
+/* -------------------------------------------------------------- stages */
+.stage {
+  position: relative;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-panel);
+  overflow: hidden;
+  background: var(--background);
+}
+.stage.isActual {
+  overflow-x: auto;
+}
+.scaler {
+  position: relative;
+  inline-size: 1280px;
+  transform-origin: 0 0;
+}
+.frame {
+  inline-size: 1280px;
+}
+/* The shell normally fills the viewport and scrolls its column; here it
+   takes its content's height so the whole page can be measured at once. */
+.frame [class*='AppShell-module__shell'] {
+  block-size: auto;
+  overflow: visible;
+}
+.frame [class*='AppShell-module__column'] {
+  overflow: visible;
+}
+
+/* ------------------------------------------------------------- overlay */
+.overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.rg {
+  position: absolute;
+  pointer-events: auto;
+  box-sizing: border-box;
+}
+.rg[data-tier='s'] { --c: var(--tier-s); --ink: var(--tier-s-ink); }
+.rg[data-tier='m'] { --c: var(--tier-m); --ink: var(--tier-m-ink); }
+.rg[data-tier='l'] { --c: var(--tier-l); --ink: var(--tier-l-ink); }
+.rg[data-tier='x'] { --c: var(--tier-x); --ink: var(--tier-x-ink); }
+.rg[data-kind='padding'] { background: var(--c); }
+.rg[data-kind='gap'] {
+  background: repeating-linear-gradient(45deg, var(--c) 0 3px, transparent 3px 6px);
+  outline: 1px dashed var(--ink);
+  outline-offset: -1px;
+}
+.rg[data-kind='margin'] {
+  background: repeating-linear-gradient(-45deg, var(--c) 0 2px, transparent 2px 5px);
+}
+.overlay.hasFocus .rg {
+  opacity: 0.12;
+}
+.overlay.hasFocus .rg.isFocus {
+  opacity: 1;
+  outline: 2px solid var(--ink);
+  outline-offset: -1px;
+  z-index: 2;
+}
+.rgLabel {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  translate: -50% -50%;
+  padding: 0 3px;
+  border-radius: 3px;
+  background: var(--ink);
+  color: var(--card);
+  font: 600 10px/14px var(--font-mono);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------- specs */
+.specGrid {
+  display: grid;
+  gap: var(--space-8);
+}
+.specBlock {
+  display: grid;
+  gap: var(--space-3);
+}
+.specBlock h3 {
+  margin: 0;
+  font-size: var(--text-heading-xs);
+  font-weight: 600;
+}
+.tableWrap {
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-panel);
+  background: var(--card);
+}
+.spec {
+  inline-size: 100%;
+  min-inline-size: 52rem;
+  border-collapse: collapse;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  font-variant-numeric: tabular-nums;
+}
+.spec th,
+.spec td {
+  padding: var(--space-2) var(--space-3);
+  border-block-end: 1px solid var(--border);
+  text-align: start;
+  vertical-align: top;
+}
+.spec thead th {
+  font-weight: 500;
+  color: var(--muted-foreground);
+  background: var(--surface-filled);
+}
+.spec tbody tr:last-child td {
+  border-block-end: 0;
+}
+.spec tbody tr {
+  cursor: default;
+}
+.spec tbody tr:hover,
+.spec tbody tr.isFocus {
+  background: var(--accent);
+}
+.spec .num {
+  text-align: end;
+  white-space: nowrap;
+}
+.spec code {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+.tierCell {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1-5);
+  white-space: nowrap;
+}
+.where {
+  color: var(--subtle-foreground);
+}
+.where code {
+  color: var(--foreground);
+}
+
+.findings {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+  padding-inline-start: var(--space-6);
+  max-inline-size: 80ch;
+}
+.findings li::marker {
+  color: var(--muted-foreground);
+}
+
+/* ===================================================== screen layouts
+   Everything below is the trial itself: page-level spacing picked by tier.
+   Comments name the tier and the rule from the research. */
+.lyPage {
+  display: grid;
+  gap: var(--space-8); /* L: between page sections */
+}
+.lyPage > * {
+  min-inline-size: 0;
+}
+.lyBrand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2); /* S: logo to wordmark */
+  font-size: var(--text-heading-xs);
+}
+.lyLogo {
+  display: grid;
+  place-items: center;
+  inline-size: 1.75rem;
+  block-size: 1.75rem;
+  border-radius: var(--radius-md);
+  background: var(--primary);
+  color: var(--primary-foreground);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+.lySplit {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: var(--space-6); /* M: between cards in a row */
+}
+.lySection {
+  display: grid;
+  gap: var(--space-4); /* M: section title to its content */
+}
+.lyCardHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4); /* M: title block to legend */
+}
+.lyTitleBlock {
+  display: grid;
+  gap: var(--space-1); /* S: title to description */
+}
+.lyTitleBlock h2,
+.lyTitleBlock h3 {
+  margin: 0;
+  font-size: var(--text-heading-xs);
+  line-height: var(--leading-heading-xs);
+  font-weight: 600;
+}
+.lyTitleBlock p {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--muted-foreground);
+}
+.lyLegend {
+  display: flex;
+  gap: var(--space-4); /* M: between legend entries */
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--text-body-sm);
+  color: var(--subtle-foreground);
+}
+.lyLegend li {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1-5); /* S: swatch to text */
+}
+.lyKey {
+  inline-size: 0.625rem;
+  block-size: 0.625rem;
+  border-radius: 2px;
+}
+.lyChart {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+  overflow: visible;
+}
+.lyChart text {
+  fill: var(--muted-foreground);
+  font-size: 11px;
+  font-family: var(--font-sans);
+  font-variant-numeric: tabular-nums;
+}
+.lyBreakdown {
+  display: grid;
+  gap: var(--space-4); /* M: between breakdown rows */
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.lyBreakRow {
+  display: grid;
+  gap: var(--space-2); /* S: label row to bar */
+}
+.lyBreakLine {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-2); /* S: label to value */
+  font-size: var(--text-body-sm);
+}
+.lyBreakLine span:last-child {
+  font-variant-numeric: tabular-nums;
+  color: var(--subtle-foreground);
+}
+.lyTotal {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding-block-start: var(--space-4); /* M: list to total */
+  border-block-start: 1px solid var(--border);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Product page */
+.lyBody {
+  display: grid;
+  gap: var(--space-4); /* M: toolbar, tabs, table, footer belong together */
+}
+.lyBody > * {
+  min-inline-size: 0;
+}
+.lySummary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-4); /* M: between summary cards */
+}
+.lyMini {
+  display: grid;
+  gap: var(--space-1); /* S: label to figure */
+}
+.lyMini dt {
+  font-size: var(--text-body-sm);
+  color: var(--muted-foreground);
+}
+.lyMini dd {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2); /* S: figure to note */
+  margin: 0;
+  font-size: var(--text-heading-sm);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.lyMini dd small {
+  font-size: var(--text-body-sm);
+  font-weight: 400;
+  color: var(--muted-foreground);
+}
+.lyProduct {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3); /* M: thumbnail to content (like avatar to content) */
+  min-inline-size: 14rem;
+}
+.lyThumb {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  inline-size: 2.5rem; /* a size, not spacing: no space token */
+  block-size: 2.5rem;
+  border-radius: var(--radius-md);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--foreground);
+}
+.lyProductText {
+  display: grid;
+  gap: var(--space-0-5); /* S (new 2px): name to SKU */
+}
+.lyProductText strong {
+  font-weight: 500;
+}
+.lyProductText span {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+}
+.lyStock {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2); /* S: number to tag */
+  white-space: nowrap;
+}
+.lyMuted {
+  color: var(--muted-foreground);
+}
+.lyNowrap {
+  white-space: nowrap;
+}
+.lyHeaderSearch {
+  inline-size: 20rem;
+}
+
+.srOnly {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
