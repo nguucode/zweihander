@@ -62,7 +62,7 @@ const controlCss = `[data-density='compact'], [data-density='compact'] * {\n${CO
    Which spacing in the two screens each token drives. This list is the
    whole spec: it writes the CSS below and draws the overlay. `today` is the
    value on main, for comparing with Default. */
-type Prop = 'padding' | 'padding-inline' | 'padding-inline-start' | 'padding-inline-end' | 'padding-block' | 'padding-block-start' | 'padding-block-end' | 'gap' | 'row-gap' | 'column-gap' | 'margin-inline-start' | 'margin-block' | 'margin-block-start' | 'margin-block-end' | `--${string}`
+type Prop = 'padding' | 'padding-inline' | 'padding-inline-start' | 'padding-inline-end' | 'padding-block' | 'padding-block-start' | 'padding-block-end' | 'gap' | 'row-gap' | 'column-gap' | 'margin-inline' | 'margin-inline-start' | 'margin-block' | 'margin-block-start' | 'margin-block-end' | `--${string}`
 interface Rule {
   part: string
   sel: string
@@ -203,6 +203,30 @@ export const MAP: Rule[] = [
   { part: '', sel: m('EmptyState-module__description'), props: ['padding-block-start'], role: 'inline', today: '8' },
   { part: 'Toolbar rows', sel: m('DataTablePage-module__toolbar'), props: ['gap'], role: 'cluster', today: '12' },
   { part: 'Template page sections', sel: m('Projects-module__page'), props: ['row-gap'], role: 'section', today: '24' },
+  // Small controls inside components read the control tier of their size,
+  // like any other control, instead of a spacing role.
+  { part: 'Table sort button', sel: m('Table-module__sortButton'), props: ['padding-block'], role: 'stack', value: 'var(--control-xs-gap)', today: '4' },
+  { part: '', sel: m('Table-module__sortButton'), props: ['padding-inline'], role: 'inline', value: 'var(--control-sm-pad)', today: '8' },
+  { part: '', sel: m('Table-module__sortButton'), props: ['margin-inline'], role: 'inline', value: 'calc(var(--control-sm-pad) * -1)', today: '−8' },
+  { part: 'Badge (md)', sel: `${m('Badge-module__badge')}${m('Badge-module__md')}:not(${m('Badge-module__dot')})`, props: ['padding-inline'], role: 'stack', value: 'var(--control-xs-gap)', today: '4' },
+  { part: 'Sidebar count', sel: m('Sidebar-module__badge'), props: ['padding-inline'], role: 'stack', value: 'var(--control-xs-pad)', today: '6' },
+  { part: 'Number input steppers', sel: m('NumberInput-module__group'), props: ['padding-inline-end'], role: 'stack', value: 'var(--control-xs-gap)', today: '4' },
+  { part: 'Color picker channel fields', sel: `${m('ColorPicker-module__channel')}:not(${m('ColorPicker-module__alphaChannel')})`, props: ['padding-inline'], role: 'stack', value: 'var(--control-xs-gap)', today: '4' },
+  { part: '', sel: m('ColorPicker-module__unit'), props: ['padding-inline-end'], role: 'inline', value: 'var(--control-sm-pad)', today: '8' },
+  { part: 'Textarea top and bottom (sm, md)', sel: m('Textarea-module__pad-sm'), props: ['--pad-block'], role: 'stack', value: 'var(--control-xs-pad)', today: '6' },
+  { part: '', sel: m('Textarea-module__pad-md'), props: ['--pad-block'], role: 'inline', value: 'var(--control-sm-pad)', today: '8' },
+  { part: 'Menu group label', sel: m('Menu-module__groupLabel'), props: ['padding-block-start'], role: 'stack', value: 'var(--control-xs-pad)', today: '6' },
+  { part: '', sel: m('Menu-module__groupLabel'), props: ['padding-block-end'], role: 'stack', value: 'var(--control-xs-gap)', today: '4' },
+  { part: 'Modal close button', sel: m('Modal-module__close'), props: ['padding'], role: 'stack', value: 'var(--control-xs-gap)', today: '4' },
+  { part: '', sel: m('Modal-module__close'), props: ['margin-inline'], role: 'stack', value: 'calc(var(--control-xs-gap) * -1)', today: '−4' },
+  { part: 'Skip link', sel: m('AppShell-module__skip'), props: ['padding-block'], role: 'inline', value: 'var(--control-sm-pad)', today: '8' },
+  { part: '', sel: m('AppShell-module__skip'), props: ['padding-inline'], role: 'cluster', value: 'var(--control-md-pad-spacious)', today: '12' },
+  { part: 'Combobox clear and open buttons', sel: m('Combobox-module__group'), props: ['gap'], role: 'stack', value: 'var(--control-xs-gap)', today: '4' },
+  { part: 'File row padding', sel: m('FileUploader-module__item'), props: ['padding-inline-start'], role: 'inline', today: '8' },
+  { part: '', sel: m('FileUploader-module__item'), props: ['padding-inline-end'], role: 'stack', today: '4' },
+  { part: 'Table expand column', sel: m('Table-module__expand'), props: ['padding-inline-start'], role: 'inline', today: '8' },
+  // An alignment offset: helper text lines up with the label, past the box and its gap.
+  { part: 'Checkbox and radio helper indent', sel: m('ChoiceField-module__helper'), props: ['padding-inline-start'], role: 'inline', value: 'calc(var(--choice-control) + var(--space-inline))', today: '28' },
 ]
 
 /* Sizes inside overlays and the calendar that follow the control tier

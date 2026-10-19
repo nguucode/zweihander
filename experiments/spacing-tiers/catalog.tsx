@@ -371,7 +371,7 @@ function App() {
       <section className="section" aria-labelledby="stay-h">
         <div className="sectionHead">
           <h2 id="stay-h">What stays the same, and why</h2>
-          <p>Every orange value below falls into one of four groups. Only the second needs a decision before this becomes code.</p>
+          <p>Every value still orange belongs to one of these groups.</p>
         </div>
         <ul className="findings">
           <li>
@@ -380,14 +380,17 @@ function App() {
             already shrinks; these keep its parts aligned inside it.
           </li>
           <li>
-            <strong>Small controls inside components: decide.</strong> Table sort buttons (4/8 with a matching negative margin), Badge (4 and 2),
-            the Sidebar count (6), NumberInput steppers, ColorPicker channel fields, textarea padding (8 and 6), the menu group label, the modal
-            close button, the skip link. They are controls in all but name; the clean fix is to give each one the control tier of its size, not
-            a spacing role.
+            <strong>Small controls inside components: now on the control tier (decided 19 Oct).</strong> Table sort buttons, the md Badge, the
+            Sidebar count, NumberInput steppers, ColorPicker channel fields, textarea padding, the menu group label, the modal close button, the
+            Combobox buttons and the skip link read the control tier of their size, so they tighten with every other control. Negative margins
+            that cancel a padding follow the same token.
           </li>
           <li>
-            <strong>Alignment offsets: should follow, by formula.</strong> Checkbox and radio helper text is indented 28px, the box plus its gap.
-            It should be computed from those two, so it moves when the gap does.
+            <strong>Alignment offsets follow by formula.</strong> Checkbox and radio helper text is indented by the box plus the label gap, so it
+            moves when the gap does.
+          </li>
+          <li>
+            <strong>One gap varies by variant and stays for now:</strong> the choice field's label to helper is 4px in a form and 8px elsewhere.
           </li>
           <li>
             <strong>Story content, not the component.</strong> The carousel's sample slides, the sidebar story's header text, the modal story's

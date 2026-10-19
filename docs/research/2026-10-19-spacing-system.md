@@ -261,8 +261,10 @@ Artifact riêng: https://claude.ai/artifact/S2yA7dBC8cp9mKjRzdJbRF (code `experi
 - So computed style của Default với main trên cả 53 story: chỉ lệch ở các chỗ có chủ đích (mép trang và section của form 32→24, Alert 10→12, padding dọc của menu item 6→4 nhưng chiều cao không đổi). Một chỗ lệch ngoài ý muốn: cạnh header của AppShell ở màn hẹp 16→24, vì trial chỉ map một giá trị trong khi component có hai breakpoint.
 - Các giá trị đứng yên chia bốn nhóm:
   - Inset trong control cao cố định (1px của Button và Tag, 2px của track Switch, 2px giữa các ngày Calendar): đúng là nên đứng yên.
-  - Control nhỏ nằm trong component (nút sort của Table, Badge, số đếm trên Sidebar, nút tăng giảm của NumberInput, ô kênh của ColorPicker, padding Textarea, nút đóng Modal): cần quyết, đề xuất cho mỗi cái dùng control tier theo size của nó.
-  - Offset căn lề: helper text của checkbox/radio thụt 28px; nên tính theo công thức (cỡ ô + gap).
+  - Control nhỏ nằm trong component (nút sort của Table, Badge md, số đếm trên Sidebar, nút tăng giảm của NumberInput, ô kênh của ColorPicker, padding Textarea, label nhóm của Menu, nút đóng Modal, nút của Combobox, skip link). **Sếp chốt 2026-10-19: dùng control tier theo size của từng cái.** Đã đưa vào trial; margin âm dùng để bù padding đi theo cùng token đó.
+  - Offset căn lề: helper text của checkbox/radio thụt bằng `--choice-control` + `--space-inline`, nên di chuyển theo gap (đã áp dụng trong trial).
+  - Gap label→helper của ChoiceField là 4px trong form, 8px ở chỗ khác: tạm để đứng yên.
+- Sau đợt này: 1.294 trên 1.824 giá trị đo được chạy theo density; 21 component chạy theo toàn bộ, 18 phần lớn, 8 một phần (phần đứng yên chủ yếu là inset 1–2px), 5 không có spacing. Default chỉ lệch main ở các chỗ có chủ đích kể trên.
   - Nội dung riêng của story, không thuộc component.
 - DescriptionList dạng cột dùng 20px, không trùng role nào của Default: chờ chọn `group` hoặc `container`.
 - Gap dọc 8px giữa các option radio và giữa title→description đang map vào `inline` (đúng con số, sai tên role). Có thể cân nhắc đặt tên role theo cỡ thay vì theo hướng.
