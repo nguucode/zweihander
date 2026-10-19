@@ -124,7 +124,7 @@ export const Horizontal: Story = {
     orientation: 'horizontal',
     children: (
       <>
-        <Avatar initials="MT" size="md" />
+        <Avatar initials="MT" />
         <div style={{ display: 'grid', gap: 'var(--space-1)', flex: 1 }}>
           <h3 style={title}>Mary Thompson</h3>
           <p style={muted}>Product designer</p>
@@ -260,7 +260,7 @@ export const DontNestButtons: Story = {
     orientation: 'horizontal',
     children: (
       <>
-        <Avatar initials="MT" size="md" />
+        <Avatar initials="MT" />
         <span style={{ display: 'grid', gap: 'var(--space-1)', flex: 1 }}>
           <span style={title}>Mary Thompson</span>
           <span style={muted}>Product designer</span>
