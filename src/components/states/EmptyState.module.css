@@ -4,7 +4,7 @@
   flex-direction: column;
   align-items: center;
   box-sizing: border-box;
-  padding: var(--space-12) var(--space-6);
+  padding: calc(var(--space-section) * 2) var(--space-container);
   font-family: var(--font-sans);
   text-align: center;
   color: var(--foreground);
@@ -12,7 +12,7 @@
 
 .sm {
   --empty-icon: var(--space-10);
-  padding: var(--space-8) var(--space-4);
+  padding: calc(var(--space-group) * 2) var(--space-group);
 }
 
 /* A soft disc behind the icon: it gives an empty area a centre of gravity
@@ -23,7 +23,7 @@
   justify-content: center;
   inline-size: var(--empty-icon);
   block-size: var(--empty-icon);
-  margin-block-end: var(--space-4);
+  margin-block-end: var(--space-group);
   border-radius: var(--radius-pill);
   /* Error State and Success State set these to their own tone. */
   background: var(--empty-icon-bg, var(--muted));
@@ -49,7 +49,7 @@
      (`p, div { margin: 0 }` at class specificity) can zero a margin and put
      the button flush against the text. Padding survives it. */
   margin: 0;
-  padding-block-start: var(--space-2);
+  padding-block-start: var(--space-inline);
   font-size: var(--text-body);
   line-height: var(--leading-body);
   color: var(--muted-foreground);
@@ -59,9 +59,9 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: var(--space-2);
-  padding-block-start: var(--space-6);
+  gap: var(--space-inline);
+  padding-block-start: var(--space-container);
 }
 .sm .action {
-  padding-block-start: var(--space-4);
+  padding-block-start: var(--space-group);
 }

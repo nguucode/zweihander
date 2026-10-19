@@ -1,8 +1,8 @@
 .root {
-  --progress-height: var(--space-2);
+  --progress-height: var(--progress-md);
   --progress-fill: var(--primary-text);
   display: grid;
-  gap: var(--space-1-5);
+  gap: var(--control-sm-gap);
   inline-size: 100%;
   font-family: var(--font-sans);
   font-size: var(--text-body);
@@ -11,13 +11,13 @@
 }
 
 .sm {
-  --progress-height: var(--space-1);
+  --progress-height: var(--progress-sm);
 }
 .md {
-  --progress-height: var(--space-2);
+  --progress-height: var(--progress-md);
 }
 .lg {
-  --progress-height: var(--space-3);
+  --progress-height: var(--progress-lg);
 }
 
 /* The fill is what carries the value, so it must reach 3:1 against the
@@ -44,7 +44,7 @@
 .row {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-cluster);
 }
 
 .track {

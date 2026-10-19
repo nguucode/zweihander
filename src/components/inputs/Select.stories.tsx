@@ -117,6 +117,11 @@ const meta = {
       control: false,
       table: { type: { summary: 'string' } },
     },
+    container: {
+      description: 'Where the popup renders instead of `<body>`, e.g. an element in fullscreen or a scope with its own density.',
+      control: false,
+      table: { type: { summary: 'HTMLElement | null' } },
+    },
     className: {
       description: 'Added to the outer element, the field with its label and helper text.',
       control: false,

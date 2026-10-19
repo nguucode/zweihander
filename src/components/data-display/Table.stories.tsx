@@ -135,7 +135,7 @@ const meta = {
       table: { type: { summary: '(ids: string[]) => void' } },
     },
     density: {
-      description: 'Row height: 40px (`sm`) or 48px (`md`).',
+      description: 'Row height. `md` is `--row-height` (48px Default, 36px Compact density); `sm` is one `--space-inline` shorter (40, 32).',
       control: 'inline-radio',
       options: ['sm', 'md'],
       table: { type: { summary: "'sm' | 'md'" }, defaultValue: { summary: "'md'" } },

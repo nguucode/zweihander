@@ -1,6 +1,6 @@
 .page {
   display: grid;
-  gap: var(--space-6);
+  gap: var(--space-section);
 }
 
 /* Grid items keep their content's width by default; the table must scroll

@@ -41,6 +41,8 @@ export interface SelectProps {
   required?: boolean
   autoFocus?: boolean
   id?: string
+  /** Where the popup renders instead of `<body>`, e.g. an element in fullscreen or a scope with its own density. */
+  container?: HTMLElement | null
   className?: string
   'aria-label'?: string
 }
@@ -65,6 +67,7 @@ export function Select({
   autoFocus,
   id,
   className,
+  container,
   'aria-label': ariaLabel,
 }: SelectProps) {
   const items = normalizeOptions(options)
@@ -105,7 +108,7 @@ export function Select({
             </BaseSelect.Icon>
           )}
         </BaseSelect.Trigger>
-        <BaseSelect.Portal>
+        <BaseSelect.Portal container={container}>
           {/* Opens below the field like a list, rather than laid over it
               with the selected option aligned to the trigger. */}
           <BaseSelect.Positioner className={s.positioner} sideOffset={4} alignItemWithTrigger={false}>

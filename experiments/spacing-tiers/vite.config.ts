@@ -20,7 +20,7 @@ export default defineConfig({
   resolve: { alias: { '@': path.resolve(dirname, '../../src') } },
   build: {
     // One page per build (ENTRY=index|density), so each folds into one file.
-    rollupOptions: { input: path.join(dirname, `${process.env.ENTRY ?? 'index'}.html`) },
+    rollupOptions: { input: path.join(dirname, `${process.env.ENTRY ?? 'index'}.html`), output: { inlineDynamicImports: true } },
     outDir: path.join(dirname, 'dist', process.env.ENTRY ?? 'index'),
     emptyOutDir: true, assetsInlineLimit: 100_000_000, modulePreload: false },
 })

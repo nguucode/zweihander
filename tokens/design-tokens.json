@@ -2181,7 +2181,7 @@
       "$type": "dimension",
       "$value": "3rem"
     },
-    "$description": "Multiples of 0.25rem. The generator multiplies each by --scaling.",
+    "$description": "Two kinds. The six roles (stack to section) are what layout and component spacing read: pick by what the gap does, and density picks the number (Default in $value, Compact in $extensions). In Compact each role takes the Default value of the role below it; section goes 24 to 20. The numeric steps are raw multiples of 0.25rem for the few places no role fits. The generator multiplies each by --scaling.",
     "1-5": {
       "$type": "dimension",
       "$value": "0.375rem"
@@ -2189,57 +2189,353 @@
     "2-5": {
       "$type": "dimension",
       "$value": "0.625rem"
+    },
+    "stack": {
+      "$type": "dimension",
+      "$value": "0.25rem",
+      "$description": "Lines of text under each other: title to description, label to value.",
+      "$extensions": {
+        "compact": {
+          "$value": "0.125rem"
+        }
+      }
+    },
+    "inline": {
+      "$type": "dimension",
+      "$value": "0.5rem",
+      "$description": "Small things side by side: icon to text, label to value on one line, sidebar items.",
+      "$extensions": {
+        "compact": {
+          "$value": "0.25rem"
+        }
+      }
+    },
+    "cluster": {
+      "$type": "dimension",
+      "$value": "0.75rem",
+      "$description": "Controls or parts that sit together: filters in a toolbar, an avatar to its content, the parts of a page heading, inside a small card.",
+      "$extensions": {
+        "compact": {
+          "$value": "0.5rem"
+        }
+      }
+    },
+    "group": {
+      "$type": "dimension",
+      "$value": "1rem",
+      "$description": "Between items and blocks that belong together: cards in a row, toolbar to table, table cell sides.",
+      "$extensions": {
+        "compact": {
+          "$value": "0.75rem"
+        }
+      }
+    },
+    "container": {
+      "$type": "dimension",
+      "$value": "1.5rem",
+      "$description": "Inside the edge of a card, panel or page heading.",
+      "$extensions": {
+        "compact": {
+          "$value": "1rem"
+        }
+      }
+    },
+    "section": {
+      "$type": "dimension",
+      "$value": "1.5rem",
+      "$description": "Page edge and between page sections. AppShell applies it to the page edge from 64rem up.",
+      "$extensions": {
+        "compact": {
+          "$value": "1.25rem"
+        }
+      }
     }
   },
   "control": {
-    "$description": "Size tiers. One tier binds a control's height, inline padding and icon-to-label gap; its icon is --icon-{tier} and its radius --control-{tier}-radius (generated, see Radius). md (32px) is the default control, sm (24px) the small inline one, xs (20px) only for compact parts: Tag sm, Badge, the checkbox box, the slider thumb. Buttons and fields have no xs: below 24px is below WCAG 2.5.8. pad is for fields and rows, whose text lines up with a label; pad-spacious is for buttons, whose centred label needs room. The generator multiplies each by --scaling. On touch screens components widen the hit area to 44px without growing the visible box.",
+    "$description": "Size tiers. One tier binds a control's height, inline padding and icon-to-label gap; its icon is --icon-{tier} and its radius --control-{tier}-radius (generated, see Radius). md (32px) is the default control, sm (24px) the small inline one, xs (20px) only for compact parts: Tag sm, the slider thumb (the checkbox box, Badge, switch and Avatar have their own sizes, see size). Buttons and fields have no xs: below 24px is below WCAG 2.5.8. pad is for fields and rows, whose text lines up with a label; pad-spacious is for buttons, whose centred label needs room. The generator multiplies each by --scaling. On touch screens components widen the hit area to 44px without growing the visible box. Compact ($extensions) keeps every tier: each takes the padding and gap of the tier below it, md drops to 28px, sm to 22px, xs stays at 20px.",
     "xs": {
       "$type": "dimension",
       "$value": "1.25rem"
     },
     "sm": {
       "$type": "dimension",
-      "$value": "1.5rem"
+      "$value": "1.5rem",
+      "$extensions": {
+        "compact": {
+          "$value": "1.375rem"
+        }
+      }
     },
     "md": {
       "$type": "dimension",
-      "$value": "2rem"
+      "$value": "2rem",
+      "$extensions": {
+        "compact": {
+          "$value": "1.75rem"
+        }
+      }
     },
     "xs-pad": {
       "$type": "dimension",
-      "$value": "0.375rem"
+      "$value": "0.375rem",
+      "$extensions": {
+        "compact": {
+          "$value": "0.25rem"
+        }
+      }
     },
     "sm-pad": {
       "$type": "dimension",
-      "$value": "0.5rem"
+      "$value": "0.5rem",
+      "$extensions": {
+        "compact": {
+          "$value": "0.375rem"
+        }
+      }
     },
     "md-pad": {
       "$type": "dimension",
-      "$value": "0.625rem"
+      "$value": "0.625rem",
+      "$extensions": {
+        "compact": {
+          "$value": "0.5rem"
+        }
+      }
     },
     "xs-pad-spacious": {
       "$type": "dimension",
-      "$value": "0.375rem"
+      "$value": "0.375rem",
+      "$extensions": {
+        "compact": {
+          "$value": "0.25rem"
+        }
+      }
     },
     "sm-pad-spacious": {
       "$type": "dimension",
-      "$value": "0.5rem"
+      "$value": "0.5rem",
+      "$extensions": {
+        "compact": {
+          "$value": "0.375rem"
+        }
+      }
     },
     "md-pad-spacious": {
       "$type": "dimension",
-      "$value": "0.75rem"
+      "$value": "0.75rem",
+      "$extensions": {
+        "compact": {
+          "$value": "0.5rem"
+        }
+      }
     },
     "xs-gap": {
       "$type": "dimension",
-      "$value": "0.25rem"
+      "$value": "0.25rem",
+      "$extensions": {
+        "compact": {
+          "$value": "0.125rem"
+        }
+      }
     },
     "sm-gap": {
       "$type": "dimension",
-      "$value": "0.375rem"
+      "$value": "0.375rem",
+      "$extensions": {
+        "compact": {
+          "$value": "0.25rem"
+        }
+      }
     },
     "md-gap": {
       "$type": "dimension",
-      "$value": "0.5rem"
+      "$value": "0.5rem",
+      "$extensions": {
+        "compact": {
+          "$value": "0.375rem"
+        }
+      }
+    }
+  },
+  "row": {
+    "$description": "Row height for tables and lists, per density. The generator multiplies it by --scaling.",
+    "height": {
+      "$type": "dimension",
+      "$value": "3rem",
+      "$extensions": {
+        "compact": {
+          "$value": "2.25rem"
+        }
+      }
+    }
+  },
+  "size": {
+    "$description": "Component sizes that follow density, emitted unprefixed (--avatar-md). Every size exists in both densities; in Compact each takes the size below it, and the smallest steps further down so sizes stay apart. The generator multiplies each by --scaling.",
+    "choice-box": {
+      "$type": "dimension",
+      "$value": "1.25rem",
+      "$extensions": {
+        "compact": {
+          "$value": "1rem"
+        }
+      }
+    },
+    "radio-dot-size": {
+      "$type": "dimension",
+      "$value": "0.5rem",
+      "$extensions": {
+        "compact": {
+          "$value": "0.375rem"
+        }
+      }
+    },
+    "switch-sm-w": {
+      "$type": "dimension",
+      "$value": "1.75rem",
+      "$extensions": {
+        "compact": {
+          "$value": "1.5rem"
+        }
+      }
+    },
+    "switch-sm-h": {
+      "$type": "dimension",
+      "$value": "1rem",
+      "$extensions": {
+        "compact": {
+          "$value": "0.875rem"
+        }
+      }
+    },
+    "switch-md-w": {
+      "$type": "dimension",
+      "$value": "2.25rem",
+      "$extensions": {
+        "compact": {
+          "$value": "1.75rem"
+        }
+      }
+    },
+    "switch-md-h": {
+      "$type": "dimension",
+      "$value": "1.25rem",
+      "$extensions": {
+        "compact": {
+          "$value": "1rem"
+        }
+      }
+    },
+    "switch-lg-w": {
+      "$type": "dimension",
+      "$value": "2.75rem",
+      "$extensions": {
+        "compact": {
+          "$value": "2.25rem"
+        }
+      }
+    },
+    "switch-lg-h": {
+      "$type": "dimension",
+      "$value": "1.5rem",
+      "$extensions": {
+        "compact": {
+          "$value": "1.25rem"
+        }
+      }
+    },
+    "progress-sm": {
+      "$type": "dimension",
+      "$value": "0.25rem"
+    },
+    "progress-md": {
+      "$type": "dimension",
+      "$value": "0.5rem",
+      "$extensions": {
+        "compact": {
+          "$value": "0.375rem"
+        }
+      }
+    },
+    "progress-lg": {
+      "$type": "dimension",
+      "$value": "0.75rem",
+      "$extensions": {
+        "compact": {
+          "$value": "0.5rem"
+        }
+      }
+    },
+    "avatar-xs": {
+      "$type": "dimension",
+      "$value": "1.5rem",
+      "$extensions": {
+        "compact": {
+          "$value": "1.25rem"
+        }
+      }
+    },
+    "avatar-sm": {
+      "$type": "dimension",
+      "$value": "2rem",
+      "$extensions": {
+        "compact": {
+          "$value": "1.5rem"
+        }
+      }
+    },
+    "avatar-md": {
+      "$type": "dimension",
+      "$value": "2.5rem",
+      "$extensions": {
+        "compact": {
+          "$value": "2rem"
+        }
+      }
+    },
+    "avatar-lg": {
+      "$type": "dimension",
+      "$value": "3rem",
+      "$extensions": {
+        "compact": {
+          "$value": "2.5rem"
+        }
+      }
+    },
+    "badge-sm": {
+      "$type": "dimension",
+      "$value": "1rem",
+      "$extensions": {
+        "compact": {
+          "$value": "0.875rem"
+        }
+      }
+    },
+    "badge-md": {
+      "$type": "dimension",
+      "$value": "1.25rem",
+      "$extensions": {
+        "compact": {
+          "$value": "1rem"
+        }
+      }
+    },
+    "badge-dot-sm": {
+      "$type": "dimension",
+      "$value": "0.375rem",
+      "$extensions": {
+        "compact": {
+          "$value": "0.25rem"
+        }
+      }
+    },
+    "badge-dot-md": {
+      "$type": "dimension",
+      "$value": "0.5rem",
+      "$extensions": {
+        "compact": {
+          "$value": "0.375rem"
+        }
+      }
     }
   },
   "icon": {
@@ -2258,47 +2554,71 @@
     }
   },
   "text": {
-    "$description": "Type roles. Each size pairs with a leading ratio of the same name, so the line height follows the size under --scaling.",
+    "$description": "Type roles. Each size pairs with a leading ratio of the same name, so the line height follows the size under --scaling. Compact ($extensions): 12px and below stays (the legibility floor), 13 to 16px drops 1px, headings from 20px up drop one step.",
     "heading-2xl": {
       "$type": "dimension",
       "$value": "2rem",
       "$extensions": {
-        "leading": "36 / 32"
+        "leading": "36 / 32",
+        "compact": {
+          "$value": "1.75rem",
+          "leading": "32 / 28"
+        }
       }
     },
     "heading-xl": {
       "$type": "dimension",
       "$value": "1.75rem",
       "$extensions": {
-        "leading": "32 / 28"
+        "leading": "32 / 28",
+        "compact": {
+          "$value": "1.5rem",
+          "leading": "28 / 24"
+        }
       }
     },
     "heading-lg": {
       "$type": "dimension",
       "$value": "1.5rem",
       "$extensions": {
-        "leading": "28 / 24"
+        "leading": "28 / 24",
+        "compact": {
+          "$value": "1.25rem",
+          "leading": "24 / 20"
+        }
       }
     },
     "heading-md": {
       "$type": "dimension",
       "$value": "1.25rem",
       "$extensions": {
-        "leading": "24 / 20"
+        "leading": "24 / 20",
+        "compact": {
+          "$value": "1.125rem",
+          "leading": "24 / 18"
+        }
       }
     },
     "heading-sm": {
       "$type": "dimension",
       "$value": "1rem",
       "$extensions": {
-        "leading": "20 / 16"
+        "leading": "20 / 16",
+        "compact": {
+          "$value": "0.9375rem",
+          "leading": "20 / 15"
+        }
       }
     },
     "heading-xs": {
       "$type": "dimension",
       "$value": "0.875rem",
       "$extensions": {
-        "leading": "20 / 14"
+        "leading": "20 / 14",
+        "compact": {
+          "$value": "0.8125rem",
+          "leading": "18 / 13"
+        }
       }
     },
     "heading-2xs": {
@@ -2312,14 +2632,22 @@
       "$type": "dimension",
       "$value": "1rem",
       "$extensions": {
-        "leading": "24 / 16"
+        "leading": "24 / 16",
+        "compact": {
+          "$value": "0.9375rem",
+          "leading": "22 / 15"
+        }
       }
     },
     "body": {
       "$type": "dimension",
       "$value": "0.875rem",
       "$extensions": {
-        "leading": "20 / 14"
+        "leading": "20 / 14",
+        "compact": {
+          "$value": "0.8125rem",
+          "leading": "18 / 13"
+        }
       }
     },
     "body-sm": {

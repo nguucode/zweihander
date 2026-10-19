@@ -2,6 +2,7 @@ import { StrictMode, useEffect, useLayoutEffect, useMemo, useRef, useState, type
 import { createRoot } from 'react-dom/client'
 import { ToggleButton } from '@/components/buttons/ToggleButton'
 import { Dashboard, ProductsPage } from './screens'
+import { measureSpacing, type Kind, type Spacing } from './measure'
 import './tiers.css'
 
 /* ================================================================ theme
@@ -49,105 +50,10 @@ const TIER_NAME: Record<Tier, string> = { s: 'Small', m: 'Medium', l: 'Large', x
 const stepFor = (px: number): Step => SCALE.find((s) => Math.abs(s.px - px) < 0.3) ?? { px, token: 'off-scale', tier: 'x' }
 
 /* ============================================================== measure */
-type Kind = 'padding' | 'gap' | 'margin'
-interface Region {
-  id: number
-  kind: Kind
-  prop: string
-  px: number
-  step: Step
-  owner: string
-  isLayout: boolean
-  x: number
-  y: number
-  w: number
-  h: number
-}
+type Region = Spacing & { step: Step }
+const measure = (frame: HTMLElement, scale: number): Region[] =>
+  measureSpacing(frame, scale, (v) => stepFor(v).token !== 'off-scale').map((r) => ({ ...r, step: stepFor(r.px) }))
 
-const MOD = /^(.+?)-module__(.+)$/
-const ownName = (el: HTMLElement) => {
-  if (el.dataset.spec) return el.dataset.spec
-  const mods = [...el.classList].map((c) => c.match(MOD)).filter((m): m is RegExpMatchArray => !!m)
-  if (!mods.length) return null
-  return `${mods[0][1]} › ${mods
-    .map((m) => m[2])
-    .slice(0, 2)
-    .join('.')}`
-}
-const describe = (el: HTMLElement) => {
-  const own = ownName(el)
-  if (own) return own
-  let p = el.parentElement
-  while (p && !ownName(p)) p = p.parentElement
-  const tag = el.tagName.toLowerCase()
-  return p ? `${ownName(p)} › ${tag}` : tag
-}
-const num = (v: string) => (v === 'normal' ? 0 : parseFloat(v) || 0)
-const round = (v: number) => Math.round(v * 4) / 4
-
-function measure(frame: HTMLElement, scale: number): Region[] {
-  const fr = frame.getBoundingClientRect()
-  const out: Region[] = []
-  let id = 0
-  const add = (kind: Kind, prop: string, px: number, el: HTMLElement, x: number, y: number, w: number, h: number) => {
-    if (w < 0.5 || h < 0.5) return
-    const v = round(px)
-    out.push({ id: id++, kind, prop, px: v, step: stepFor(v), owner: describe(el), isLayout: !!el.dataset.spec, x, y, w, h })
-  }
-  const box = (r: DOMRect) => ({ x: (r.left - fr.left) / scale, y: (r.top - fr.top) / scale, w: r.width / scale, h: r.height / scale })
-
-  for (const node of frame.querySelectorAll('*')) {
-    if (!(node instanceof HTMLElement)) continue
-    const cs = getComputedStyle(node)
-    if (cs.display === 'none' || cs.display === 'contents' || cs.visibility === 'hidden') continue
-    const r = node.getBoundingClientRect()
-    if (r.width < 2 || r.height < 2) continue
-    const b = box(r)
-    const [bt, br, bb, bl] = [cs.borderTopWidth, cs.borderRightWidth, cs.borderBottomWidth, cs.borderLeftWidth].map(num)
-    const [pt, pr, pb, pl] = [cs.paddingTop, cs.paddingRight, cs.paddingBottom, cs.paddingLeft].map(num)
-    const innerW = b.w - bl - br
-    const innerH = b.h - bt - bb
-    if (pt > 0.5) add('padding', 'padding-top', pt, node, b.x + bl, b.y + bt, innerW, pt)
-    if (pb > 0.5) add('padding', 'padding-bottom', pb, node, b.x + bl, b.y + b.h - bb - pb, innerW, pb)
-    if (pl > 0.5) add('padding', 'padding-left', pl, node, b.x + bl, b.y + bt + pt, pl, innerH - pt - pb)
-    if (pr > 0.5) add('padding', 'padding-right', pr, node, b.x + b.w - br - pr, b.y + bt + pt, pr, innerH - pt - pb)
-
-    // Margins: auto margins compute to a used length, so only values that
-    // land on the scale are counted. An off-scale margin is almost always auto.
-    const [mt, mr, mb, ml] = [cs.marginTop, cs.marginRight, cs.marginBottom, cs.marginLeft].map(num)
-    const onScale = (v: number) => v > 0.5 && stepFor(round(v)).token !== 'off-scale'
-    if (onScale(mt)) add('margin', 'margin-top', mt, node, b.x, b.y - mt, b.w, mt)
-    if (onScale(mb)) add('margin', 'margin-bottom', mb, node, b.x, b.y + b.h, b.w, mb)
-    if (onScale(ml)) add('margin', 'margin-left', ml, node, b.x - ml, b.y, ml, b.h)
-    if (onScale(mr)) add('margin', 'margin-right', mr, node, b.x + b.w, b.y, mr, b.h)
-
-    if (!/flex|grid/.test(cs.display)) continue
-    const rowGap = num(cs.rowGap)
-    const colGap = num(cs.columnGap)
-    if (rowGap < 0.5 && colGap < 0.5) continue
-    const kids = [...node.children]
-      .filter((c): c is HTMLElement => c instanceof HTMLElement)
-      .filter((c) => {
-        const k = getComputedStyle(c)
-        if (k.display === 'none' || k.position === 'absolute' || k.position === 'fixed') return false
-        const kr = c.getBoundingClientRect()
-        return kr.width >= 2 && kr.height >= 2
-      })
-      .map((c) => box(c.getBoundingClientRect()))
-    for (let i = 1; i < kids.length; i++) {
-      const a = kids[i - 1]
-      const c = kids[i]
-      const sameRow = c.y < a.y + a.h - 1 && a.y < c.y + c.h - 1
-      if (sameRow && colGap > 0.5 && c.x - (a.x + a.w) >= colGap - 1.5) {
-        const top = Math.min(a.y, c.y)
-        add('gap', 'column-gap', colGap, node, a.x + a.w, top, colGap, Math.max(a.y + a.h, c.y + c.h) - top)
-      } else if (!sameRow && rowGap > 0.5 && c.y - (a.y + a.h) >= rowGap - 1.5) {
-        add('gap', 'row-gap', rowGap, node, b.x + bl + pl, a.y + a.h, innerW - pl - pr, rowGap)
-      }
-    }
-  }
-  return out
-}
 
 /* ================================================================ stage */
 interface Filters {

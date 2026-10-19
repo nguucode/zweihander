@@ -244,6 +244,78 @@ Quyết định (sếp chốt 2026-10-19):
 - `--space-section` = 24 Default, 20 Compact. Hệ quả: Default lệch main ở mép trang (AppShell padding và cạnh header 32→24), và section trùng giá trị với container (24), nên tách section phải dựa vào viền card/đường kẻ thay vì thêm khoảng trắng.
 - `--space-cluster` (12) giữ Default khớp main ở các chỗ 12px. Alert padding 10→12 có chủ đích.
 
+### Density áp dụng cho tất cả components và patterns (sếp chốt 2026-10-19)
+
+Áp dụng cho cả overlay: Menu, list của Select và Combobox, Popover, Tooltip, Modal, DatePicker, Calendar. Demo v6 có hàng "open" và "calendar" trong specimen ở cả hai density.
+
+- Spacing trong overlay map vào 6 token. Popover padding → `group`, title→body → `cluster`. Modal padding và header → `group`, nút ở footer → `inline`. Tooltip padding → `stack`/`inline`. Panel DatePicker → `cluster`, preset → `inline`. Header của Calendar → `inline`.
+- Các chỗ trước đây dùng `--space-8` làm size (ô ngày, nút tháng, hàng thứ của Calendar; hàng preset của DatePicker) chuyển sang đọc `--control-md`, nên ở Compact ngày trong lịch còn 28px. Default giữ 32 như main.
+- Item của Menu và option của Select có `min-block-size: --control-md` nhưng padding dọc cố định 6px, nên ở Compact cao 30 thay vì 28. Map padding dọc → `stack` thì Compact ra 28, Default vẫn 32. Đã đo trong trình duyệt.
+- Portal: Select, Combobox, DatePicker portal ra `<body>` và không nhận `container`; Popover, Menu, Tooltip, Modal thì có. Vì vậy density phải đặt ở root của app như appearance. Muốn density cục bộ cho một panel thì ba component kia cần nhận `container`. `scaling` của `Theme` hiện cũng hở đúng chỗ này. Demo tạm chép density của trigger sang popup mới mở.
+
+### Review từng component (2026-10-19)
+
+Artifact riêng: https://claude.ai/artifact/S2yA7dBC8cp9mKjRzdJbRF (code `experiments/spacing-tiers/catalog.tsx`). Mỗi component và pattern trong số 53 cái được render từ chính story của nó (cùng story mà visual test dùng; overlay dùng story mở sẵn tại chỗ). Mỗi story render hai lần, Default và Compact; mọi padding, gap, margin được đo ở cả hai và ghép cặp, cái nào đổi theo density tô xanh, cái nào đứng yên tô cam.
+
+- Bản map đầu tiên chỉ phủ các component có trong hai màn demo; khoảng 20 component còn đứng yên hoàn toàn. Đã map thêm khoảng 80 phần, nên giờ 1.164 trên 1.824 giá trị đo được chạy theo density. Phần còn lại phần lớn là inset 1–2px.
+- So computed style của Default với main trên cả 53 story: chỉ lệch ở các chỗ có chủ đích (mép trang và section của form 32→24, Alert 10→12, padding dọc của menu item 6→4 nhưng chiều cao không đổi). Một chỗ lệch ngoài ý muốn: cạnh header của AppShell ở màn hẹp 16→24, vì trial chỉ map một giá trị trong khi component có hai breakpoint.
+- Các giá trị đứng yên chia bốn nhóm:
+  - Inset trong control cao cố định (1px của Button và Tag, 2px của track Switch, 2px giữa các ngày Calendar): đúng là nên đứng yên.
+  - Control nhỏ nằm trong component (nút sort của Table, Badge md, số đếm trên Sidebar, nút tăng giảm của NumberInput, ô kênh của ColorPicker, padding Textarea, label nhóm của Menu, nút đóng Modal, nút của Combobox, skip link). **Sếp chốt 2026-10-19: dùng control tier theo size của từng cái.** Đã đưa vào trial; margin âm dùng để bù padding đi theo cùng token đó.
+  - Offset căn lề: helper text của checkbox/radio thụt bằng `--choice-control` + `--space-inline`, nên di chuyển theo gap (đã áp dụng trong trial).
+  - Gap label→helper của ChoiceField là 4px trong form, 8px ở chỗ khác: tạm để đứng yên.
+- Sau đợt này: 1.294 trên 1.824 giá trị đo được chạy theo density; 21 component chạy theo toàn bộ, 18 phần lớn, 8 một phần (phần đứng yên chủ yếu là inset 1–2px), 5 không có spacing. Default chỉ lệch main ở các chỗ có chủ đích kể trên.
+  - Nội dung riêng của story, không thuộc component.
+- DescriptionList dạng cột dùng 20px, không trùng role nào của Default: chờ chọn `group` hoặc `container`.
+- Gap dọc 8px giữa các option radio và giữa title→description đang map vào `inline` (đúng con số, sai tên role). Có thể cân nhắc đặt tên role theo cỡ thay vì theo hướng.
+
+### Checkbox, radio, switch, progress bar và Toast (sếp yêu cầu 2026-10-19)
+
+Các control này giờ cũng đổi size theo density. Mọi size vẫn có ở cả hai density; ở Compact, mỗi size lấy kích thước của size ngay dưới nó. Đã đo trong trình duyệt:
+
+| Phần | Default | Compact |
+|---|---|---|
+| Ô checkbox, radio (`--choice-box`) | 20 | 16 |
+| Chấm radio (`--radio-dot`) | 8 | 6 |
+| Switch sm | 28 × 16 | 24 × 14 |
+| Switch md | 36 × 20 | 28 × 16 |
+| Switch lg | 44 × 24 | 36 × 20 |
+| Progress bar sm / md / lg | 4 / 8 / 12 | 4 / 6 / 8 |
+| Avatar xs / sm / md / lg | 24 / 32 / 40 / 48 | 20 / 24 / 32 / 40 |
+| Badge sm / md (chiều cao) | 16 / 20 | 14 / 16 |
+| Badge dot sm / md | 6 / 8 | 4 / 6 |
+
+- Switch sm ở Compact phải xuống 24 × 14 (thumb 10px). Nếu giữ 28 × 16 thì trùng với md và mất một size.
+- Avatar và Badge thêm sau theo yêu cầu của sếp (2026-10-19). Avatar xs xuống 20 và Badge sm xuống 14 vì cùng lý do với switch sm (giữ các size tách nhau); badge 14px vẫn chứa vừa số hai chữ số. Cỡ chữ initials của Avatar đi theo type token nên cũng giảm ở Compact.
+- Progress bar sm giữ 4px ở cả hai density.
+- Toast trước đó chưa có trong map, và catalog cũng không thấy nó vì story `Variants` chỉ hiện các nút gọi toast. Catalog giờ dùng story `VariantsStatic`. Spacing của Toast đã map: padding `cluster`/`group`, icon→text `cluster`, title→description `stack`, khoảng giữa các toast `inline`. Một toast ở Compact cao 56px, ở Default 70px.
+
+### Type theo density (thử nghiệm, chờ sếp duyệt)
+
+Base 14px ở Default, 13px ở Compact. Demo v5 cùng link, có công tắc "Compact type" để so Compact có và không đổi chữ.
+
+| Token | Default | Compact |
+|---|---|---|
+| `heading-2xl` | 32/36 | 28/32 |
+| `heading-xl` | 28/32 | 24/28 |
+| `heading-lg` | 24/28 | 20/24 |
+| `heading-md` | 20/24 | 18/24 |
+| `heading-sm` | 16/20 | 15/20 |
+| `heading-xs` | 14/20 | 13/18 |
+| `heading-2xs` | 12/16 | 12/16 |
+| `body-lg` | 16/24 | 15/22 |
+| `body` | 14/20 | 13/18 |
+| `body-sm` | 12/16 | 12/16 |
+| `body-xs` | 11/16 | 11/16 |
+
+Luật: chữ 12px trở xuống không giảm (sàn đọc được); 13–16px giảm 1px; heading từ 20px lên giảm một bậc trên thang heading.
+
+Khả thi:
+- Component đặt cỡ chữ qua type token ở 88 chỗ. Literal còn lại chỉ là icon, cộng một chỗ 9px ở FileUploader. Thêm mode cho 11 cặp `--text-*`/`--leading-*` là đủ, không phải sửa component. Đã đo trong trình duyệt: cỡ chữ khớp bảng, không control nào bị cắt chữ.
+- Khác `scaling` 93%: scaling cho ra 12→11.2, 11→10.2, 32→29.8; type density chọn từng cỡ, giữ px nguyên và sàn 12.
+- **Quyết định (sếp chốt 2026-10-19): giữ leading Compact 13/18** (cả `body` và `heading-xs`), chấp nhận rời lưới 4px. 13/20 giữ được lưới nhưng mất phần lớn độ gọn. Row và control cao cố định nên chỉ text xuống dòng là thấy.
+- Icon giữ 16px cạnh chữ 13px; có thể giảm `--icon-md` xuống 14 ở Compact nếu thấy nặng.
+
 Còn để ngỏ:
 - Gap trong Stats card và title→description của PageHeading (đều 8) không map, nên không theo density.
 - Size Card là density cục bộ (`sm` = padding `group` + gap `cluster`; `md` = padding `container` + gap `group`).

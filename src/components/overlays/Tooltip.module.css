@@ -9,7 +9,7 @@
 .popup {
   box-sizing: border-box;
   max-inline-size: min(20rem, var(--available-width));
-  padding: var(--space-1) var(--space-2);
+  padding: var(--space-stack) var(--space-inline);
   border-radius: var(--radius-sm);
   background: var(--foreground);
   color: var(--background);

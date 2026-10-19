@@ -1,6 +1,6 @@
 .accordion {
-  --accordion-pad-inline: var(--space-4);
-  --accordion-pad-block: var(--space-3);
+  --accordion-pad-inline: var(--space-group);
+  --accordion-pad-block: var(--space-cluster);
   --accordion-row: var(--control-md);
   display: flex;
   flex-direction: column;
@@ -9,8 +9,8 @@
 }
 
 .sm {
-  --accordion-pad-inline: var(--space-3);
-  --accordion-pad-block: var(--space-2);
+  --accordion-pad-inline: var(--space-cluster);
+  --accordion-pad-block: var(--space-inline);
   --accordion-row: var(--control-sm);
 }
 
@@ -47,7 +47,7 @@
   inline-size: 100%;
   min-block-size: var(--accordion-row);
   margin: 0;
-  padding: var(--space-1) var(--accordion-pad-inline);
+  padding: var(--space-stack) var(--accordion-pad-inline);
   border: 0;
   background: transparent;
   color: inherit;

@@ -59,7 +59,7 @@ export interface TableProps<Row> {
   expandedIds?: string[]
   defaultExpandedIds?: string[]
   onExpandedChange?: (ids: string[]) => void
-  /** Row height: 40 (`sm`) or 48px (`md`). */
+  /** Row height. `md` is `--row-height` (48px Default, 36px Compact density); `sm` is one `--space-inline` shorter (40, 32). */
   density?: 'sm' | 'md'
   /** Keep the header row in view while the table scrolls inside its container. */
   hasStickyHeader?: boolean

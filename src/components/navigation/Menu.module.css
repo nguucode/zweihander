@@ -7,7 +7,7 @@
 /* The same surface as the Select list. --menu-inset is the gap between the
    popup's edge and its items; the item corner is derived from it below. */
 .popup {
-  --menu-inset: var(--space-1);
+  --menu-inset: var(--space-stack);
   box-sizing: border-box;
   min-inline-size: max(12rem, var(--anchor-width));
   max-block-size: var(--available-height);
@@ -42,7 +42,7 @@
   align-items: center;
   gap: var(--control-md-gap);
   min-block-size: var(--control-md);
-  padding: var(--space-1-5) var(--control-md-pad);
+  padding: var(--space-stack) var(--control-md-pad);
   border-radius: calc(var(--radius-field) - var(--menu-inset));
   color: inherit;
   text-decoration: none;
@@ -105,7 +105,7 @@
 }
 
 .shortcut {
-  margin-inline-start: var(--space-4);
+  margin-inline-start: var(--space-group);
   font-family: inherit;
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
@@ -121,7 +121,7 @@
 }
 
 .groupLabel {
-  padding: var(--space-1-5) var(--control-md-pad) var(--space-1);
+  padding: var(--control-xs-pad) var(--control-md-pad) var(--control-xs-gap);
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
   font-weight: 500;

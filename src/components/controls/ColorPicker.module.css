@@ -7,7 +7,7 @@
 
 .panel {
   display: grid;
-  gap: var(--space-3);
+  gap: var(--space-cluster);
   /* Eight 24px swatches and their gaps fit in one row. */
   inline-size: 16rem;
   font-family: var(--font-sans);
@@ -67,7 +67,7 @@
    Hue and opacity, stacked. */
 .strips {
   display: grid;
-  row-gap: var(--space-1);
+  row-gap: var(--space-stack);
 }
 .strip {
   inline-size: 100%;
@@ -129,7 +129,7 @@
    kit's own inputs. */
 .fields {
   display: flex;
-  gap: var(--space-2);
+  gap: var(--space-inline);
 }
 
 /* Two classes: beats the 20rem width InputField gives every field. */
@@ -149,9 +149,9 @@
   /* Not the input's default ~20ch: the fields share the box, but each keeps
      room for three digits ("255", "360", "100") and the caret, always. */
   inline-size: 0;
-  min-inline-size: calc(3ch + 2 * var(--space-1) + 2px);
+  min-inline-size: calc(3ch + 2 * var(--control-xs-gap) + 2px);
   align-self: stretch;
-  padding-inline: var(--space-1);
+  padding-inline: var(--control-xs-gap);
   font-variant-numeric: tabular-nums;
   text-align: center;
 }
@@ -173,16 +173,16 @@
   text-align: end;
 }
 .unit {
-  padding-inline-end: var(--space-2);
+  padding-inline-end: var(--control-sm-pad);
 }
 
 /* -------------------------------------------------------------- swatches */
 .swatches {
   display: grid;
-  padding-block-start: var(--space-3);
+  padding-block-start: var(--space-cluster);
   border-block-start: 1px solid var(--border);
   grid-template-columns: repeat(auto-fill, minmax(var(--space-6), 1fr));
-  gap: var(--space-2);
+  gap: var(--space-inline);
 }
 
 .swatch {

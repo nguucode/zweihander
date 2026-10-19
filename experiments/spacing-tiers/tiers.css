@@ -571,7 +571,7 @@ body {
   inline-size: 2.5rem; /* a size, not spacing: no space token */
   block-size: 2.5rem;
   border-radius: var(--radius-md);
-  font-size: 0.6875rem;
+  font-size: var(--text-body-xs);
   font-weight: 700;
   color: var(--foreground);
 }
@@ -584,7 +584,7 @@ body {
 }
 .lyProductText span {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--text-body-xs);
   color: var(--muted-foreground);
 }
 .lyStock {

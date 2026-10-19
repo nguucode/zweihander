@@ -19,11 +19,17 @@ radius included, is multiplied by `--scaling`.
 
 ## Who reads which tier
 
-| Tier | Height | Components |
+| Tier | Height (Default / Compact) | Components |
 | --- | --- | --- |
-| `md` | 32px | the default: Button, ToggleButton, every field (TextInput, Search, Select, Combobox, NumberInput, DatePicker, Textarea), Tabs, Pagination, Menu item |
-| `sm` | 24px | the small inline size of the same components, and Tag `size="md"` |
-| `xs` | 20px | compact parts only: Tag `size="sm"`, Badge, the checkbox and radio box, the switch track, the slider thumb |
+| `md` | 32 / 28px | the default: Button, ToggleButton, every field (TextInput, Search, Select, Combobox, NumberInput, DatePicker, Textarea), Tabs, Pagination, Menu item |
+| `sm` | 24 / 22px | the small inline size of the same components, and Tag `size="md"` |
+| `xs` | 20 / 20px | compact parts only: Tag `size="sm"`, the slider thumb |
+
+Density keeps every tier and tightens each; see
+[Spacing](?path=/docs/foundations-spacing--docs#density). The checkbox and
+radio box, the switch tracks, Badge and Avatar have their own size tokens
+(`--choice-box`, `--switch-md-w`, `--badge-md`, `--avatar-md`), which follow
+density too.
 
 A component's `size` prop points at a tier; the names need not match.
 Tag `size="md"` reads tier `sm`, because a tag sits in a line of text and

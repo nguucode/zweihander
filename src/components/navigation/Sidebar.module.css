@@ -5,7 +5,7 @@
   box-sizing: border-box;
   inline-size: var(--sidebar-width);
   block-size: 100%;
-  padding: var(--space-2);
+  padding: var(--space-inline);
   border-inline-end: 1px solid var(--border);
   background: var(--surface-filled);
   font-family: var(--font-sans);
@@ -17,7 +17,7 @@
 
 /* The rail: one square row plus the padding either side. */
 .collapsed {
-  --sidebar-width: calc(var(--control-md) + 2 * var(--space-2));
+  --sidebar-width: calc(var(--control-md) + 2 * var(--space-inline));
 }
 
 .header {
@@ -25,7 +25,7 @@
   align-items: center;
   gap: var(--space-2);
   min-block-size: var(--control-md);
-  margin-block-end: var(--space-2);
+  margin-block-end: var(--space-inline);
 }
 .headerContent {
   flex: 1;
@@ -64,7 +64,7 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: var(--space-group);
   min-block-size: 0;
   overflow-y: auto;
 }
@@ -72,12 +72,12 @@
 .group {
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
+  gap: var(--space-stack);
 }
 
 .groupLabel {
   margin: 0;
-  padding: 0 var(--space-2);
+  padding: 0 var(--space-inline);
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
   color: var(--muted-foreground);
@@ -114,10 +114,10 @@
 .item {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--space-inline);
   box-sizing: border-box;
   min-block-size: var(--control-md);
-  padding: 0 var(--space-2);
+  padding: 0 var(--space-inline);
   border-radius: var(--radius-control);
   /* A step quieter than body text, as in the Claude apps; hover and the
      current item come up to --foreground. */
@@ -166,7 +166,7 @@
 
 .badge {
   flex-shrink: 0;
-  padding: 0 var(--space-1-5);
+  padding: 0 var(--control-xs-pad);
   border-radius: var(--radius-pill);
   background: var(--secondary);
   color: var(--secondary-foreground);
@@ -185,8 +185,8 @@
 }
 
 .footer {
-  margin-block-start: var(--space-3);
-  padding-block-start: var(--space-3);
+  margin-block-start: var(--space-cluster);
+  padding-block-start: var(--space-cluster);
   border-block-start: 1px solid var(--border);
 }
 .collapsed .footer {

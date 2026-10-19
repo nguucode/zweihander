@@ -1,6 +1,6 @@
 /* The clear and open buttons sit at the end of the field, 4px apart. */
 .group.group {
-  gap: var(--space-1);
+  gap: var(--control-xs-gap);
 }
 
 /* The matched part of an option: heavier and underlined, in the option's

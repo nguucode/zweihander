@@ -32,6 +32,9 @@ const RADIUS_PRESETS: Record<Radius, Record<string, string>> = {
 export const SCALINGS = ['90%', '95%', '100%', '105%', '110%'] as const
 export type Scaling = (typeof SCALINGS)[number]
 
+export const DENSITIES = ['default', 'compact'] as const
+export type Density = (typeof DENSITIES)[number]
+
 export interface ThemeProps extends ComponentProps<'div'> {
   /** `inherit` (default) leaves the surrounding appearance alone. */
   appearance?: Appearance
@@ -44,6 +47,12 @@ export interface ThemeProps extends ComponentProps<'div'> {
   grayColor?: GrayColor
   /** Multiplies spacing and the type scale. */
   scaling?: Scaling
+  /**
+   * Picks the numbers behind the spacing roles, the control tier, the type
+   * scale and component sizes: `compact` tightens each, keeping every size.
+   * Inherits when omitted. Independent of `scaling`, which multiplies.
+   */
+  density?: Density
   /** Rescales rounding for this scope. Inherits when omitted. */
   radius?: Radius
   /**
@@ -61,6 +70,7 @@ export function Theme({
   accentColor,
   grayColor,
   scaling,
+  density,
   radius,
   tokens,
   render,
@@ -85,6 +95,7 @@ export function Theme({
         // instead of restating them on every scope.
         'data-accent': accentColor,
         'data-gray': grayColor,
+        'data-density': density,
         className: cn(appearance !== 'inherit' && appearance, className),
         style: { ...tokensToStyle(resolved), ...style } as CSSProperties,
       } as ComponentProps<'div'>,

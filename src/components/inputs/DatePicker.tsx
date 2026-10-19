@@ -48,6 +48,8 @@ export interface DatePickerProps {
   disabled?: boolean
   required?: boolean
   id?: string
+  /** Where the popup renders instead of `<body>`, e.g. an element in fullscreen or a scope with its own density. */
+  container?: HTMLElement | null
   className?: string
   'aria-label'?: string
 }
@@ -99,6 +101,7 @@ interface PickerFieldProps {
   triggerLabel: string
   popupLabel: string
   popupClassName?: string
+  container?: HTMLElement | null
   /** The hidden input that submits the value. */
   hidden?: ReactNode
   children: (popup: { autoFocus: boolean; close: () => void }) => ReactNode
@@ -128,6 +131,7 @@ function PickerField({
   triggerLabel,
   popupLabel,
   popupClassName,
+  container,
   hidden,
   children,
   label,
@@ -207,7 +211,7 @@ function PickerField({
           <Popover.Trigger className={inputStyles.iconButton} disabled={disabled} aria-label={triggerLabel}>
             <Icon name="calendar" />
           </Popover.Trigger>
-          <Popover.Portal>
+          <Popover.Portal container={container}>
             {/* Under the whole field, start-aligned and 4px clear of it; not the
                 calendar button, which sits inside the box. */}
             <Popover.Positioner
@@ -255,6 +259,7 @@ export function DatePicker({
   required,
   id,
   className,
+  container,
   'aria-label': ariaLabel,
 }: DatePickerProps) {
   const { format, parse, pattern } = useDateFormat(locale)
@@ -311,6 +316,7 @@ export function DatePicker({
       required={required}
       id={id}
       className={className}
+      container={container}
       aria-label={ariaLabel}
     >
       {({ autoFocus, close }) => (
@@ -405,6 +411,7 @@ export function DateRangePicker({
   required,
   id,
   className,
+  container,
   'aria-label': ariaLabel,
 }: DateRangePickerProps) {
   const { format, parse, pattern } = useDateFormat(locale)
@@ -479,6 +486,7 @@ export function DateRangePicker({
       required={required}
       id={id}
       className={className}
+      container={container}
       aria-label={ariaLabel}
     >
       {({ autoFocus, close }) => {

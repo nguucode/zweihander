@@ -1,8 +1,8 @@
 .carousel {
-  --carousel-gap: var(--space-4);
+  --carousel-gap: var(--space-group);
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--space-3);
+  gap: var(--space-cluster);
   font-family: var(--font-sans);
   color: var(--foreground);
 }
@@ -11,7 +11,7 @@
 .controls {
   display: flex;
   justify-content: flex-end;
-  gap: var(--space-1);
+  gap: var(--space-stack);
 }
 
 .button {
@@ -64,7 +64,7 @@
 .dots {
   display: flex;
   justify-content: center;
-  gap: var(--space-2);
+  gap: var(--space-inline);
 }
 
 /* 6px dots on a 24px target in a light gray; the current one is a longer
