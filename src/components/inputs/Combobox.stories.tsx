@@ -45,6 +45,11 @@ const meta = {
     required: { description: 'Marks the label with an asterisk and blocks an empty form submit.', control: 'boolean' },
     autoFocus: { description: 'Focuses the input on mount.', control: false },
     id: { description: 'For the input, e.g. to point an outside label at it.', control: false },
+    container: {
+      description: 'Where the popup renders instead of `<body>`, e.g. an element in fullscreen or a scope with its own density.',
+      control: false,
+      table: { type: { summary: 'HTMLElement | null' } },
+    },
     className: { description: 'On the field\'s outer element.', control: false },
     'aria-label': { description: 'Names the field and its list when there is no visible `label`.', control: 'text' },
     ref: { description: 'The input element.', control: false },

@@ -832,7 +832,7 @@
   --space-container: calc(var(--density-default, 1.5rem) var(--density-compact, 1rem) * var(--scaling));
   --space-section: calc(var(--density-default, 1.5rem) var(--density-compact, 1.25rem) * var(--scaling));
 
-  /* Control heights — one scale for every button, field, tab and row. */
+  /* Control heights — one scale for every button, field, tab and menu row. */
   --control-xs: calc(1.25rem * var(--scaling));
   --control-sm: calc(var(--density-default, 1.5rem) var(--density-compact, 1.375rem) * var(--scaling));
   --control-md: calc(var(--density-default, 2rem) var(--density-compact, 1.75rem) * var(--scaling));

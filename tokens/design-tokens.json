@@ -2243,7 +2243,7 @@
     "section": {
       "$type": "dimension",
       "$value": "1.5rem",
-      "$description": "Page edge and between page sections. Components apply it from 64rem up.",
+      "$description": "Page edge and between page sections. AppShell applies it to the page edge from 64rem up.",
       "$extensions": {
         "compact": {
           "$value": "1.25rem"
@@ -2252,7 +2252,7 @@
     }
   },
   "control": {
-    "$description": "Size tiers. One tier binds a control's height, inline padding and icon-to-label gap; its icon is --icon-{tier} and its radius --control-{tier}-radius (generated, see Radius). md (32px) is the default control, sm (24px) the small inline one, xs (20px) only for compact parts: Tag sm, Badge, the checkbox box, the slider thumb. Buttons and fields have no xs: below 24px is below WCAG 2.5.8. pad is for fields and rows, whose text lines up with a label; pad-spacious is for buttons, whose centred label needs room. The generator multiplies each by --scaling. On touch screens components widen the hit area to 44px without growing the visible box. Compact ($extensions) keeps every tier: each takes the padding and gap of the tier below it, md drops to 28px, sm to 22px, xs stays at 20px.",
+    "$description": "Size tiers. One tier binds a control's height, inline padding and icon-to-label gap; its icon is --icon-{tier} and its radius --control-{tier}-radius (generated, see Radius). md (32px) is the default control, sm (24px) the small inline one, xs (20px) only for compact parts: Tag sm, the slider thumb (the checkbox box, Badge, switch and Avatar have their own sizes, see size). Buttons and fields have no xs: below 24px is below WCAG 2.5.8. pad is for fields and rows, whose text lines up with a label; pad-spacious is for buttons, whose centred label needs room. The generator multiplies each by --scaling. On touch screens components widen the hit area to 44px without growing the visible box. Compact ($extensions) keeps every tier: each takes the padding and gap of the tier below it, md drops to 28px, sm to 22px, xs stays at 20px.",
     "xs": {
       "$type": "dimension",
       "$value": "1.25rem"

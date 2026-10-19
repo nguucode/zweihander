@@ -535,7 +535,7 @@ ${decls(rootDerived)}
      roles also follow density. */
 ${spaceDecls}
 
-  /* Control heights — one scale for every button, field, tab and row. */
+  /* Control heights — one scale for every button, field, tab and menu row. */
 ${controlDecls}
 
   /* Row height and the component sizes that follow density. */
