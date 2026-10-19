@@ -126,8 +126,8 @@ const meta = {
   title: 'Site/Playground',
   component: Playground,
   parameters: { layout: 'fullscreen' },
-  // A small static file stands in for Storybook: the test never loads real stories in the frame.
-  args: { manifest, storybookUrl: '/favicon.svg?', homeUrl: '#' },
+  // A sample page stands in for Storybook (.storybook/fixtures/playground): the test never loads real stories in the frame.
+  args: { manifest, storybookUrl: '/playground-fixture/', homeUrl: '#' },
   beforeEach: withUrl({}),
 } satisfies Meta<typeof Playground>
 
@@ -151,7 +151,7 @@ export const Default: Story = {
     await expect(canvas.queryByText(/1280 px/)).toBeNull()
     await expect(canvas.getByRole('link', { name: 'Open in Storybook' })).toHaveAttribute(
       'href',
-      `/favicon.svg??path=/story/${button.storyId}`,
+      `/playground-fixture/?path=/story/${button.storyId}`,
     )
 
     let items = await openItems(canvas, userEvent)
@@ -191,7 +191,7 @@ export const Default: Story = {
     await showing(canvas, 'Tooltip')
     await expect(canvas.getByRole('link', { name: 'Open in Storybook' })).toHaveAttribute(
       'href',
-      `/favicon.svg??path=/story/${tooltip.storyId}`,
+      `/playground-fixture/?path=/story/${tooltip.storyId}`,
     )
     await expect(param('item')).toBe(tooltip.id)
     // Tooltip has no props: no right column.

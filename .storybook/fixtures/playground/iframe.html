@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Sample page</title>
+    <!--
+      Stands in for Storybook's iframe.html in the Playground stories, so the
+      preview reads as a page during review. The tests never load real stories.
+    -->
+    <style>
+      body {
+        margin: 0;
+        padding: 32px 24px;
+        font: 16px/1.5 system-ui, sans-serif;
+        color: #1c1c1e;
+        background: #fff;
+      }
+      main { max-width: 640px; margin: 0 auto; }
+      h1 { margin: 0 0 8px; font-size: 28px; line-height: 1.2; }
+      p { margin: 0 0 24px; color: #636366; }
+      .card { padding: 20px; border: 1px solid #e5e5ea; border-radius: 12px; margin-bottom: 16px; }
+      .card h2 { margin: 0 0 4px; font-size: 18px; }
+      .card p { margin: 0; }
+      button { font: inherit; padding: 8px 16px; border: 0; border-radius: 8px; background: #0a84ff; color: #fff; }
+      @media (prefers-color-scheme: dark) {
+        body { color: #f2f2f7; background: #1c1c1e; }
+        p { color: #aeaeb2; }
+        .card { border-color: #3a3a3c; }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Sample page</h1>
+      <p>A stand-in for a story: the Playground stories load this page instead of Storybook.</p>
+      <div class="card">
+        <h2>Weekly report</h2>
+        <p>12 tasks done, 3 in review.</p>
+      </div>
+      <div class="card">
+        <h2>Next steps</h2>
+        <p>Ship the release notes on Friday.</p>
+      </div>
+      <button type="button">Continue</button>
+    </main>
+  </body>
+</html>
