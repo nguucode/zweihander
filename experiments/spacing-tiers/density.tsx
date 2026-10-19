@@ -4,196 +4,10 @@ import { ToggleButton } from '@/components/buttons/ToggleButton'
 import { Tabs } from '@/components/navigation/Tabs'
 import { Dashboard, ProductsPage } from './screens'
 import { Specimen } from './specimen'
+
+import { CONTROLS, DENSITIES, type Density, LADDER, MAP, ROLES, ROW, type Role, SIZES, TYPE } from './density-core'
 import './tiers.css'
 import './density.css'
-
-/* ================================================================ theme */
-const mq = matchMedia('(prefers-color-scheme: dark)')
-const applyTheme = () => {
-  const root = document.documentElement
-  const t = root.dataset.theme
-  const dark = t ? t === 'dark' : mq.matches
-  root.classList.toggle('dark', dark)
-  root.classList.toggle('light', !dark)
-}
-applyTheme()
-mq.addEventListener('change', applyTheme)
-new MutationObserver(applyTheme).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] })
-
-/* =============================================================== tokens
-   Six spacing roles and one row height, on the short scale
-   2 4 8 12 16 20 24. In Compact each role takes the Default value of the
-   role below it; section goes 24 to 20. Every control size exists in both
-   densities: Compact tightens each size's own height, padding and gap
-   instead of swapping md for sm. */
-type Density = 'compact' | 'default'
-type Role = 'stack' | 'inline' | 'cluster' | 'group' | 'container' | 'section'
-const DENSITIES: Density[] = ['compact', 'default']
-const LADDER = [2, 4, 8, 12, 16, 20, 24]
-
-const ROLES: { role: Role; use: string; px: Record<Density, number> }[] = [
-  { role: 'stack', use: 'Lines of text under each other: title to description, label to value.', px: { compact: 2, default: 4 } },
-  { role: 'inline', use: 'Small things side by side: icon to text, label to value on one line, sidebar items.', px: { compact: 4, default: 8 } },
-  { role: 'cluster', use: 'Controls or parts that sit together: filters in a toolbar, a thumbnail or avatar to its content, the parts of a page heading, inside a small card.', px: { compact: 8, default: 12 } },
-  { role: 'group', use: 'Between items and blocks that belong together: cards in a row, toolbar to table, table cell sides.', px: { compact: 12, default: 16 } },
-  { role: 'container', use: 'Inside the edge of a card, panel or page heading.', px: { compact: 16, default: 24 } },
-  { role: 'section', use: 'Page edge and between page sections.', px: { compact: 20, default: 24 } },
-]
-const ROW = { compact: 36, default: 48 }
-
-/* Control tier per density. Default is main. Compact: each size takes the
-   padding and gap of the size below it; md drops 4px in height, sm 2px, xs
-   stays (it is already the text's floor). */
-type Size = 'xs' | 'sm' | 'md'
-const CONTROLS: { size: Size; px: Record<Density, { h: number; pad: number; spacious: number; gap: number }> }[] = [
-  { size: 'md', px: { default: { h: 32, pad: 10, spacious: 12, gap: 8 }, compact: { h: 28, pad: 8, spacious: 8, gap: 6 } } },
-  { size: 'sm', px: { default: { h: 24, pad: 8, spacious: 8, gap: 6 }, compact: { h: 22, pad: 6, spacious: 6, gap: 4 } } },
-  { size: 'xs', px: { default: { h: 20, pad: 6, spacious: 6, gap: 4 }, compact: { h: 20, pad: 4, spacious: 4, gap: 2 } } },
-]
-
-const rem = (px: number) => `calc(${px / 16}rem * var(--scaling))`
-const tokenCss = DENSITIES.map(
-  (d) =>
-    `[data-density='${d}'] {\n${ROLES.map((r) => `  --space-${r.role}: ${rem(r.px[d])};`).join('\n')}\n  --row-height: ${rem(ROW[d])};\n}`,
-).join('\n')
-// The control tier tokens are declared on `*` in tokens.css, so the override
-// has to reach every element too, not just the scope.
-const controlCss = `[data-density='compact'], [data-density='compact'] * {\n${CONTROLS.map(({ size, px: { compact: c } }) =>
-  [`--control-${size}: ${rem(c.h)};`, `--control-${size}-pad: ${rem(c.pad)};`, `--control-${size}-pad-spacious: ${rem(c.spacious)};`, `--control-${size}-gap: ${rem(c.gap)};`]
-    .map((l) => `  ${l}`)
-    .join('\n'),
-).join('\n')}\n}`
-
-/* ============================================================= the map
-   Which spacing in the two screens each token drives. This list is the
-   whole spec: it writes the CSS below and draws the overlay. `today` is the
-   value on main, for comparing with Default. */
-type Prop = 'padding' | 'padding-inline' | 'padding-block' | 'padding-block-start' | 'padding-block-end' | 'gap' | 'margin-block-start' | 'margin-block-end'
-interface Rule {
-  part: string
-  sel: string
-  props: Prop[]
-  role: Role
-  /** The value on main. Omitted for the trial's own page layout, which has no "before". */
-  today?: string
-}
-const m = (name: string) => `[class~='${name}']`
-const MAP: Rule[] = [
-  // section
-  { part: 'Page padding', sel: m('AppShell-module__main'), props: ['padding'], role: 'section', today: '32' },
-  { part: 'Header sides', sel: m('AppShell-module__header'), props: ['padding-inline'], role: 'section', today: '32' },
-  { part: 'Between page sections', sel: '.lyPage', props: ['gap'], role: 'section' },
-  // container
-  { part: 'Card padding (md)', sel: m('Card-module__md'), props: ['padding'], role: 'container', today: '24' },
-  { part: 'Page heading bottom', sel: m('PageHeading-module__pageHeading'), props: ['padding-block-end'], role: 'container', today: '24' },
-  // group
-  { part: 'Card content gap (md)', sel: `${m('Card-module__md')}:not(${m('Stats-module__card')})`, props: ['gap'], role: 'group', today: '16' },
-  { part: 'Card padding (sm)', sel: m('Card-module__sm'), props: ['padding'], role: 'group', today: '16' },
-  { part: 'Cards in a row', sel: m('Stats-module__grid'), props: ['gap'], role: 'group', today: '16' },
-  { part: '', sel: '.lySplit, .lySummary', props: ['gap'], role: 'group' },
-  { part: 'Heading title to actions', sel: m('PageHeading-module__row'), props: ['gap'], role: 'group', today: '16' },
-  { part: 'Tabs to panel', sel: m('Tabs-module__tabs'), props: ['gap'], role: 'group', today: '16' },
-  { part: 'Toolbar and footer to table', sel: m('DataTablePage-module__toolbar'), props: ['margin-block-end'], role: 'group', today: '16' },
-  { part: '', sel: m('DataTablePage-module__footer'), props: ['margin-block-start'], role: 'group', today: '16' },
-  { part: 'Table cell sides', sel: `${m('Table-module__th')}, ${m('Table-module__td')}`, props: ['padding-inline'], role: 'group', today: '16' },
-  { part: 'Sidebar groups', sel: m('Sidebar-module__body'), props: ['gap'], role: 'group', today: '16' },
-  { part: 'Blocks in a group', sel: '.lyBody, .lySection, .lyCardHead, .lyBreakdown, .lyLegend', props: ['gap'], role: 'group' },
-  { part: 'Total row above', sel: '.lyTotal', props: ['padding-block-start'], role: 'group' },
-  // cluster
-  { part: 'Page heading parts', sel: m('PageHeading-module__pageHeading'), props: ['gap'], role: 'cluster', today: '12' },
-  { part: 'Card content gap (sm)', sel: m('Card-module__sm'), props: ['gap'], role: 'cluster', today: '12' },
-  { part: 'Toolbar filters, footer', sel: `${m('DataTablePage-module__group')}, ${m('DataTablePage-module__footer')}`, props: ['gap'], role: 'cluster', today: '12' },
-  { part: 'Alert padding', sel: m('Alert-module__alert'), props: ['padding'], role: 'cluster', today: '10' },
-  { part: 'Thumbnail to name', sel: '.lyProduct', props: ['gap'], role: 'cluster' },
-  // inline
-  { part: 'Sidebar edge and items', sel: m('Sidebar-module__sidebar'), props: ['padding'], role: 'inline', today: '8' },
-  { part: '', sel: m('Sidebar-module__item'), props: ['padding-inline', 'gap'], role: 'inline', today: '8' },
-  { part: 'Header actions', sel: m('AppShell-module__end'), props: ['gap'], role: 'inline', today: '8' },
-  { part: 'Alert icon to text', sel: m('Alert-module__alert'), props: ['gap'], role: 'inline', today: '8' },
-  { part: 'Label to value on a line', sel: '.lyBreakLine, .lyStock, .lyMini dd', props: ['gap'], role: 'inline' },
-  // stack
-  { part: 'Sidebar group label to items', sel: m('Sidebar-module__group'), props: ['gap'], role: 'stack', today: '4' },
-  { part: 'Alert title to message', sel: m('Alert-module__body'), props: ['gap'], role: 'stack', today: '4' },
-  { part: 'Text in a stack', sel: '.lyTitleBlock, .lyMini, .lyBreakRow, .lyProductText', props: ['gap'], role: 'stack' },
-  // Overlays and calendar. They render outside the screens, so the overlay
-  // does not draw them; see "Every size, both densities".
-  { part: 'Popover padding', sel: m('Popover-module__popup'), props: ['padding'], role: 'group', today: '16' },
-  { part: 'Popover title to body', sel: m('Popover-module__header'), props: ['gap'], role: 'cluster', today: '12' },
-  { part: 'Modal padding and header', sel: `${m('Modal-module__popup')}`, props: ['padding'], role: 'group', today: '16' },
-  { part: '', sel: m('Modal-module__header'), props: ['gap'], role: 'group', today: '16' },
-  { part: 'Modal footer buttons', sel: m('Modal-module__footer'), props: ['gap'], role: 'inline', today: '8' },
-  { part: 'Tooltip padding', sel: m('Tooltip-module__popup'), props: ['padding-block'], role: 'stack', today: '4' },
-  { part: '', sel: m('Tooltip-module__popup'), props: ['padding-inline'], role: 'inline', today: '8' },
-  { part: 'Date picker panel', sel: m('DatePicker-module__body'), props: ['padding'], role: 'cluster', today: '12' },
-  { part: 'Date picker presets', sel: m('DatePicker-module__presets'), props: ['padding'], role: 'inline', today: '8' },
-  { part: 'Menu and list item block padding', sel: `${m('Menu-module__item')}, ${m('InputField-module__option')}`, props: ['padding-block'], role: 'stack', today: '6 (with 32 min height)' },
-  { part: 'Calendar header to grid', sel: m('Calendar-module__calendar'), props: ['gap'], role: 'inline', today: '8' },
-]
-
-/* Sizes inside overlays and the calendar that follow the control tier
-   instead of a spacing token. Default is the same 32px as main. */
-const SIZES: { part: string; sel: string; css: string; today: string }[] = [
-  { part: 'Calendar day', sel: m('Calendar-module__calendar'), css: '--calendar-day: var(--control-md);', today: '32 (--space-8)' },
-  { part: 'Calendar month buttons', sel: m('Calendar-module__nav'), css: 'inline-size: var(--control-md); block-size: var(--control-md);', today: '32 (--space-8)' },
-  { part: 'Calendar weekday row', sel: m('Calendar-module__weekday'), css: 'block-size: var(--control-md);', today: '32 (--space-8)' },
-  { part: 'Date preset row', sel: m('DatePicker-module__preset'), css: 'min-block-size: var(--control-md);', today: '32 (--space-8)' },
-  { part: 'Menu and list items', sel: '', css: '', today: 'already --control-md' },
-]
-const scope = (sel: string) =>
-  sel
-    .split(',')
-    .map((s) => `[data-density]:not([data-density='today']) ${s.trim()}`)
-    .join(',\n')
-const mapCss = MAP.map((r) => `${scope(r.sel)} {\n${r.props.map((p) => `  ${p}: var(--space-${r.role});`).join('\n')}\n}`).join('\n')
-// Row height is a size, not spacing: the table reads it as --table-row.
-const rowCss = `${scope(m('Table-module__table'))} { --table-row: var(--row-height); }
-${scope('.lyThumb')} { inline-size: calc(var(--row-height) - var(--space-inline)); block-size: calc(var(--row-height) - var(--space-inline)); }`
-const sizeCss = SIZES.filter((x) => x.sel)
-  .map((x) => `${scope(x.sel)} { ${x.css} }`)
-  .join('\n')
-
-/* Overlays portal to <body>, outside any density scope. The trial copies the
-   scope of whatever the pointer or focus was last in onto each new portal.
-   In the product, density sits on the root like appearance, so this is not
-   needed there; see the note on Select, Combobox and DatePicker. */
-let lastScope: HTMLElement | null = null
-const remember = (e: Event) => {
-  const scope = (e.target as Element | null)?.closest?.<HTMLElement>('[data-density]')
-  if (scope) lastScope = scope
-}
-for (const type of ['pointerdown', 'pointerover', 'focusin']) document.addEventListener(type, remember, true)
-new MutationObserver((records) => {
-  for (const r of records)
-    for (const n of r.addedNodes) {
-      if (!(n instanceof HTMLElement) || n.id === 'root' || !lastScope) continue
-      n.dataset.density = lastScope.dataset.density
-      if (lastScope.dataset.type) n.dataset.type = lastScope.dataset.type
-      else delete n.dataset.type
-    }
-}).observe(document.body, { childList: true })
-
-const style = document.createElement('style')
-/* Type per density. Text of 12px and below does not shrink: that is the
-   legibility floor. 13 to 16px drops 1px. Headings from 20px up drop one
-   step on the heading scale. Leading is written as px and kept as a ratio,
-   like tokens.css does. */
-const TYPE: { role: string; use: string; sample: string; px: Record<Density, [number, number]> }[] = [
-  { role: 'heading-2xl', use: 'Marketing and empty-state titles', sample: 'Revenue and cost', px: { default: [32, 36], compact: [28, 32] } },
-  { role: 'heading-xl', use: 'Page title', sample: 'Revenue and cost', px: { default: [28, 32], compact: [24, 28] } },
-  { role: 'heading-lg', use: 'Large section title', sample: 'Most profitable products', px: { default: [24, 28], compact: [20, 24] } },
-  { role: 'heading-md', use: 'Section title, modal title', sample: 'Where the cost went', px: { default: [20, 24], compact: [18, 24] } },
-  { role: 'heading-sm', use: 'Card title, stat value', sample: 'Daily revenue and cost', px: { default: [16, 20], compact: [15, 20] } },
-  { role: 'heading-xs', use: 'Small headings, table group titles', sample: 'Cost of goods', px: { default: [14, 20], compact: [13, 18] } },
-  { role: 'heading-2xs', use: 'Overlines, column labels', sample: 'FINANCE', px: { default: [12, 16], compact: [12, 16] } },
-  { role: 'body-lg', use: 'Lead paragraphs', sample: 'Sales against everything it cost to make them.', px: { default: [16, 24], compact: [15, 22] } },
-  { role: 'body', use: 'Default text: table cells, fields, buttons', sample: 'Ash glaze mug, 350 ml · 214 in stock', px: { default: [14, 20], compact: [13, 18] } },
-  { role: 'body-sm', use: 'Helper text, tags, small controls', sample: 'Share of $88,251 total cost.', px: { default: [12, 16], compact: [12, 16] } },
-  { role: 'body-xs', use: 'Captions, badges, chart labels', sample: 'MUG-ASH-350', px: { default: [11, 16], compact: [11, 16] } },
-]
-const typeCss = `[data-density='compact']:not([data-type='fixed']), [data-density='compact']:not([data-type='fixed']) * {\n${TYPE.map(
-  ({ role, px: { compact: [size, line] } }) => `  --text-${role}: ${rem(size)};\n  --leading-${role}: calc(${line} / ${size});`,
-).join('\n')}\n}`
-style.textContent = `${tokenCss}\n${controlCss}\n${typeCss}\n${mapCss}\n${rowCss}\n${sizeCss}`
 
 /** A line of text in one type role, with its rendered size and leading. */
 function TypeSample({ role, text }: { role: string; text: string }) {
@@ -214,7 +28,6 @@ function TypeSample({ role, text }: { role: string; text: string }) {
     </span>
   )
 }
-document.head.append(style)
 
 /* ============================================================== overlay */
 interface Region {
@@ -260,7 +73,7 @@ function measure(frame: HTMLElement, scale: number): Region[] {
         }
         if (p === 'margin-block-start') add('margin-top', num(cs.marginTop), b.x, b.y - num(cs.marginTop), b.w, num(cs.marginTop))
         if (p === 'margin-block-end') add('margin-bottom', num(cs.marginBottom), b.x, b.y + b.h, b.w, num(cs.marginBottom))
-        if (p === 'gap') {
+        if (p === 'gap' || p === 'row-gap' || p === 'column-gap') {
           const rowGap = num(cs.rowGap)
           const colGap = num(cs.columnGap)
           const kids = [...el.children]
@@ -626,7 +439,7 @@ function App() {
                     <td>
                       <span className="tierCell">
                         <span className="swatch" data-role={r.role} />
-                        <code>--space-{r.role}</code>
+                        <code>{r.value ?? `--space-${r.role}`}</code>
                       </span>
                     </td>
                     <td>

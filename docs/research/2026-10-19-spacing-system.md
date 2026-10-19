@@ -253,6 +253,20 @@ Quyết định (sếp chốt 2026-10-19):
 - Item của Menu và option của Select có `min-block-size: --control-md` nhưng padding dọc cố định 6px, nên ở Compact cao 30 thay vì 28. Map padding dọc → `stack` thì Compact ra 28, Default vẫn 32. Đã đo trong trình duyệt.
 - Portal: Select, Combobox, DatePicker portal ra `<body>` và không nhận `container`; Popover, Menu, Tooltip, Modal thì có. Vì vậy density phải đặt ở root của app như appearance. Muốn density cục bộ cho một panel thì ba component kia cần nhận `container`. `scaling` của `Theme` hiện cũng hở đúng chỗ này. Demo tạm chép density của trigger sang popup mới mở.
 
+### Review từng component (2026-10-19)
+
+Artifact riêng: https://claude.ai/artifact/S2yA7dBC8cp9mKjRzdJbRF (code `experiments/spacing-tiers/catalog.tsx`). Mỗi component và pattern trong số 53 cái được render từ chính story của nó (cùng story mà visual test dùng; overlay dùng story mở sẵn tại chỗ). Mỗi story render hai lần, Default và Compact; mọi padding, gap, margin được đo ở cả hai và ghép cặp, cái nào đổi theo density tô xanh, cái nào đứng yên tô cam.
+
+- Bản map đầu tiên chỉ phủ các component có trong hai màn demo; khoảng 20 component còn đứng yên hoàn toàn. Đã map thêm khoảng 80 phần, nên giờ 1.164 trên 1.824 giá trị đo được chạy theo density. Phần còn lại phần lớn là inset 1–2px.
+- So computed style của Default với main trên cả 53 story: chỉ lệch ở các chỗ có chủ đích (mép trang và section của form 32→24, Alert 10→12, padding dọc của menu item 6→4 nhưng chiều cao không đổi). Một chỗ lệch ngoài ý muốn: cạnh header của AppShell ở màn hẹp 16→24, vì trial chỉ map một giá trị trong khi component có hai breakpoint.
+- Các giá trị đứng yên chia bốn nhóm:
+  - Inset trong control cao cố định (1px của Button và Tag, 2px của track Switch, 2px giữa các ngày Calendar): đúng là nên đứng yên.
+  - Control nhỏ nằm trong component (nút sort của Table, Badge, số đếm trên Sidebar, nút tăng giảm của NumberInput, ô kênh của ColorPicker, padding Textarea, nút đóng Modal): cần quyết, đề xuất cho mỗi cái dùng control tier theo size của nó.
+  - Offset căn lề: helper text của checkbox/radio thụt 28px; nên tính theo công thức (cỡ ô + gap).
+  - Nội dung riêng của story, không thuộc component.
+- DescriptionList dạng cột dùng 20px, không trùng role nào của Default: chờ chọn `group` hoặc `container`.
+- Gap dọc 8px giữa các option radio và giữa title→description đang map vào `inline` (đúng con số, sai tên role). Có thể cân nhắc đặt tên role theo cỡ thay vì theo hướng.
+
 ### Type theo density (thử nghiệm, chờ sếp duyệt)
 
 Base 14px ở Default, 13px ở Compact. Demo v5 cùng link, có công tắc "Compact type" để so Compact có và không đổi chữ.
