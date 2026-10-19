@@ -31,6 +31,10 @@ const config: StorybookConfig = {
     "storybook-addon-pseudo-states"
   ],
   "framework": "@storybook/react-vite",
-  "staticDirs": ["../public"]
+  "staticDirs": [
+    "../public",
+    // A sample page that stands in for Storybook in the Playground stories.
+    { from: "./fixtures/playground", to: "/playground-fixture" }
+  ]
 };
 export default config;
