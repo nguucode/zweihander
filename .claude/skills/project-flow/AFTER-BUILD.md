@@ -40,8 +40,8 @@ A review, QA or CI finding sends the work back to the build step to fix, then do
 
    1. `list_devices`, then `start_rc_session` on the user's Mac, folder `/Volumes/KAFKA/Code/zweihander`, with `instructions`:
       - `git fetch origin <branch>`, then `find .git -name '._*' -delete` (the exFAT drive leaves macOS `._*` files that break git).
-      - Check the branch out; use `git checkout -f` when it changes `.claude/` (the Mac sandbox blocks those writes otherwise; `-f` drops local edits in that checkout).
-      - `npm ci` if `node_modules` is missing or `package-lock.json` changed, then `npm run storybook`.
+      - Check the branch out. When it changes `.claude/`, the Mac sandbox blocks those writes even with `-f` (`unable to unlink ... Operation not permitted`) and they stay at `main`'s version; Storybook does not read them, so carry on and say so in the report.
+      - `npm ci` if `node_modules` is missing or `package-lock.json` changed, then `npm run storybook`; the sandbox cannot bind a local port (`NoFreePortError`), so start it through the `storybook` entry in `.claude/launch.json` with the preview tool.
       - Port 6006 taken: `git worktree add` the branch, `npm ci` in the worktree, and run `npx storybook dev -p 6007` there.
       - Report the localhost URL, with its port, back.
    2. Reply in the thread with the localhost links (with the port actually used) to each changed story or docs page and what to look at (states, widths, light and dark).
