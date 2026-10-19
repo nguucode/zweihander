@@ -244,6 +244,15 @@ Quyết định (sếp chốt 2026-10-19):
 - `--space-section` = 24 Default, 20 Compact. Hệ quả: Default lệch main ở mép trang (AppShell padding và cạnh header 32→24), và section trùng giá trị với container (24), nên tách section phải dựa vào viền card/đường kẻ thay vì thêm khoảng trắng.
 - `--space-cluster` (12) giữ Default khớp main ở các chỗ 12px. Alert padding 10→12 có chủ đích.
 
+### Density áp dụng cho tất cả components và patterns (sếp chốt 2026-10-19)
+
+Áp dụng cho cả overlay: Menu, list của Select và Combobox, Popover, Tooltip, Modal, DatePicker, Calendar. Demo v6 có hàng "open" và "calendar" trong specimen ở cả hai density.
+
+- Spacing trong overlay map vào 6 token. Popover padding → `group`, title→body → `cluster`. Modal padding và header → `group`, nút ở footer → `inline`. Tooltip padding → `stack`/`inline`. Panel DatePicker → `cluster`, preset → `inline`. Header của Calendar → `inline`.
+- Các chỗ trước đây dùng `--space-8` làm size (ô ngày, nút tháng, hàng thứ của Calendar; hàng preset của DatePicker) chuyển sang đọc `--control-md`, nên ở Compact ngày trong lịch còn 28px. Default giữ 32 như main.
+- Item của Menu và option của Select có `min-block-size: --control-md` nhưng padding dọc cố định 6px, nên ở Compact cao 30 thay vì 28. Map padding dọc → `stack` thì Compact ra 28, Default vẫn 32. Đã đo trong trình duyệt.
+- Portal: Select, Combobox, DatePicker portal ra `<body>` và không nhận `container`; Popover, Menu, Tooltip, Modal thì có. Vì vậy density phải đặt ở root của app như appearance. Muốn density cục bộ cho một panel thì ba component kia cần nhận `container`. `scaling` của `Theme` hiện cũng hở đúng chỗ này. Demo tạm chép density của trigger sang popup mới mở.
+
 ### Type theo density (thử nghiệm, chờ sếp duyệt)
 
 Base 14px ở Default, 13px ở Compact. Demo v5 cùng link, có công tắc "Compact type" để so Compact có và không đổi chữ.

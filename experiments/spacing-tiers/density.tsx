@@ -68,7 +68,7 @@ const controlCss = `[data-density='compact'], [data-density='compact'] * {\n${CO
    Which spacing in the two screens each token drives. This list is the
    whole spec: it writes the CSS below and draws the overlay. `today` is the
    value on main, for comparing with Default. */
-type Prop = 'padding' | 'padding-inline' | 'padding-block-start' | 'padding-block-end' | 'gap' | 'margin-block-start' | 'margin-block-end'
+type Prop = 'padding' | 'padding-inline' | 'padding-block' | 'padding-block-start' | 'padding-block-end' | 'gap' | 'margin-block-start' | 'margin-block-end'
 interface Rule {
   part: string
   sel: string
@@ -115,16 +115,63 @@ const MAP: Rule[] = [
   { part: 'Sidebar group label to items', sel: m('Sidebar-module__group'), props: ['gap'], role: 'stack', today: '4' },
   { part: 'Alert title to message', sel: m('Alert-module__body'), props: ['gap'], role: 'stack', today: '4' },
   { part: 'Text in a stack', sel: '.lyTitleBlock, .lyMini, .lyBreakRow, .lyProductText', props: ['gap'], role: 'stack' },
+  // Overlays and calendar. They render outside the screens, so the overlay
+  // does not draw them; see "Every size, both densities".
+  { part: 'Popover padding', sel: m('Popover-module__popup'), props: ['padding'], role: 'group', today: '16' },
+  { part: 'Popover title to body', sel: m('Popover-module__header'), props: ['gap'], role: 'cluster', today: '12' },
+  { part: 'Modal padding and header', sel: `${m('Modal-module__popup')}`, props: ['padding'], role: 'group', today: '16' },
+  { part: '', sel: m('Modal-module__header'), props: ['gap'], role: 'group', today: '16' },
+  { part: 'Modal footer buttons', sel: m('Modal-module__footer'), props: ['gap'], role: 'inline', today: '8' },
+  { part: 'Tooltip padding', sel: m('Tooltip-module__popup'), props: ['padding-block'], role: 'stack', today: '4' },
+  { part: '', sel: m('Tooltip-module__popup'), props: ['padding-inline'], role: 'inline', today: '8' },
+  { part: 'Date picker panel', sel: m('DatePicker-module__body'), props: ['padding'], role: 'cluster', today: '12' },
+  { part: 'Date picker presets', sel: m('DatePicker-module__presets'), props: ['padding'], role: 'inline', today: '8' },
+  { part: 'Menu and list item block padding', sel: `${m('Menu-module__item')}, ${m('InputField-module__option')}`, props: ['padding-block'], role: 'stack', today: '6 (with 32 min height)' },
+  { part: 'Calendar header to grid', sel: m('Calendar-module__calendar'), props: ['gap'], role: 'inline', today: '8' },
+]
+
+/* Sizes inside overlays and the calendar that follow the control tier
+   instead of a spacing token. Default is the same 32px as main. */
+const SIZES: { part: string; sel: string; css: string; today: string }[] = [
+  { part: 'Calendar day', sel: m('Calendar-module__calendar'), css: '--calendar-day: var(--control-md);', today: '32 (--space-8)' },
+  { part: 'Calendar month buttons', sel: m('Calendar-module__nav'), css: 'inline-size: var(--control-md); block-size: var(--control-md);', today: '32 (--space-8)' },
+  { part: 'Calendar weekday row', sel: m('Calendar-module__weekday'), css: 'block-size: var(--control-md);', today: '32 (--space-8)' },
+  { part: 'Date preset row', sel: m('DatePicker-module__preset'), css: 'min-block-size: var(--control-md);', today: '32 (--space-8)' },
+  { part: 'Menu and list items', sel: '', css: '', today: 'already --control-md' },
 ]
 const scope = (sel: string) =>
   sel
     .split(',')
-    .map((s) => `.frame[data-density]:not([data-density='today']) ${s.trim()}`)
+    .map((s) => `[data-density]:not([data-density='today']) ${s.trim()}`)
     .join(',\n')
 const mapCss = MAP.map((r) => `${scope(r.sel)} {\n${r.props.map((p) => `  ${p}: var(--space-${r.role});`).join('\n')}\n}`).join('\n')
 // Row height is a size, not spacing: the table reads it as --table-row.
 const rowCss = `${scope(m('Table-module__table'))} { --table-row: var(--row-height); }
 ${scope('.lyThumb')} { inline-size: calc(var(--row-height) - var(--space-inline)); block-size: calc(var(--row-height) - var(--space-inline)); }`
+const sizeCss = SIZES.filter((x) => x.sel)
+  .map((x) => `${scope(x.sel)} { ${x.css} }`)
+  .join('\n')
+
+/* Overlays portal to <body>, outside any density scope. The trial copies the
+   scope of whatever the pointer or focus was last in onto each new portal.
+   In the product, density sits on the root like appearance, so this is not
+   needed there; see the note on Select, Combobox and DatePicker. */
+let lastScope: HTMLElement | null = null
+const remember = (e: Event) => {
+  const scope = (e.target as Element | null)?.closest?.<HTMLElement>('[data-density]')
+  if (scope) lastScope = scope
+}
+for (const type of ['pointerdown', 'pointerover', 'focusin']) document.addEventListener(type, remember, true)
+new MutationObserver((records) => {
+  for (const r of records)
+    for (const n of r.addedNodes) {
+      if (!(n instanceof HTMLElement) || n.id === 'root' || !lastScope) continue
+      n.dataset.density = lastScope.dataset.density
+      if (lastScope.dataset.type) n.dataset.type = lastScope.dataset.type
+      else delete n.dataset.type
+    }
+}).observe(document.body, { childList: true })
+
 const style = document.createElement('style')
 /* Type per density. Text of 12px and below does not shrink: that is the
    legibility floor. 13 to 16px drops 1px. Headings from 20px up drop one
@@ -146,7 +193,7 @@ const TYPE: { role: string; use: string; sample: string; px: Record<Density, [nu
 const typeCss = `[data-density='compact']:not([data-type='fixed']), [data-density='compact']:not([data-type='fixed']) * {\n${TYPE.map(
   ({ role, px: { compact: [size, line] } }) => `  --text-${role}: ${rem(size)};\n  --leading-${role}: calc(${line} / ${size});`,
 ).join('\n')}\n}`
-style.textContent = `${tokenCss}\n${controlCss}\n${typeCss}\n${mapCss}\n${rowCss}`
+style.textContent = `${tokenCss}\n${controlCss}\n${typeCss}\n${mapCss}\n${rowCss}\n${sizeCss}`
 
 /** A line of text in one type role, with its rendered size and leading. */
 function TypeSample({ role, text }: { role: string; text: string }) {
@@ -205,8 +252,8 @@ function measure(frame: HTMLElement, scale: number): Region[] {
       const iw = b.w - bl - br
       const ih = b.h - bt - bb
       for (const p of rule.props) {
-        if (p === 'padding' || p === 'padding-block-start') add('padding-top', pt, b.x + bl, b.y + bt, iw, pt)
-        if (p === 'padding' || p === 'padding-block-end') add('padding-bottom', pb, b.x + bl, b.y + b.h - bb - pb, iw, pb)
+        if (p === 'padding' || p === 'padding-block' || p === 'padding-block-start') add('padding-top', pt, b.x + bl, b.y + bt, iw, pt)
+        if (p === 'padding' || p === 'padding-block' || p === 'padding-block-end') add('padding-bottom', pb, b.x + bl, b.y + b.h - bb - pb, iw, pb)
         if (p === 'padding' || p === 'padding-inline') {
           add('padding-left', pl, b.x + bl, b.y + bt + pt, pl, ih - pt - pb)
           add('padding-right', pr, b.x + b.w - br - pr, b.y + bt + pt, pr, ih - pt - pb)
@@ -595,11 +642,60 @@ function App() {
         </div>
       </section>
 
+      <section className="section" aria-labelledby="sizes-h">
+        <div className="sectionHead">
+          <h2 id="sizes-h">Sizes that follow the control tier</h2>
+          <p>Inside overlays and the calendar, some sizes were spacing tokens used as sizes. They now read the control height, so they shrink with Compact.</p>
+        </div>
+        <div className="tableWrap">
+          <table className="spec">
+            <thead>
+              <tr>
+                <th scope="col">Part</th>
+                <th scope="col">Reads</th>
+                <th scope="col" className="num">
+                  Default
+                </th>
+                <th scope="col" className="num">
+                  Compact
+                </th>
+                <th scope="col">Main today</th>
+              </tr>
+            </thead>
+            <tbody>
+              {SIZES.map((x) => (
+                <tr key={x.part}>
+                  <td>{x.part}</td>
+                  <td>
+                    <code>--control-md</code>
+                  </td>
+                  <td className="num">32</td>
+                  <td className="num">28</td>
+                  <td className="where">{x.today}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
       <section className="section" aria-labelledby="notes-h">
         <div className="sectionHead">
           <h2 id="notes-h">Decisions to make</h2>
         </div>
         <ul className="findings">
+          <li>
+            <strong>Every component and pattern follows density, overlays included.</strong> Menus, select and combobox lists, popovers,
+            tooltips, modals, the date picker and the calendar read the same six tokens and the control tier. Menu and list items were already
+            on <code>--control-md</code>; the calendar and date presets used <code>--space-8</code> as a size and now read{' '}
+            <code>--control-md</code>, so a Compact calendar has 28px days.
+          </li>
+          <li>
+            <strong>Overlays escape a scoped density.</strong> Select, Combobox and DatePicker portal to <code>&lt;body&gt;</code> and take no{' '}
+            <code>container</code>; Popover, Menu, Tooltip and Modal do. So density belongs on the app root, like appearance, and a density set on
+            one panel only reaches those three once they accept <code>container</code>. <code>Theme</code>'s scaling has the same gap today. The
+            trial copies the trigger's density onto each new popup to show both side by side.
+          </li>
           <li>
             <strong>Density reaches inside components, size stays the designer's.</strong> Compact no longer swaps md for sm. Each size keeps its
             name and gets tighter: md is 28px with 8px padding, sm 22px, xs stays 20. A designer can still put an sm tag next to an md button in
