@@ -99,8 +99,8 @@ label:hover > .radio[data-checked]:not([data-disabled], [data-readonly]) {
 
 /* 8px: a dot reads as "selected" at 20px without crowding the ring. */
 .dot {
-  inline-size: var(--radio-dot);
-  block-size: var(--radio-dot);
+  inline-size: var(--radio-dot-size);
+  block-size: var(--radio-dot-size);
   border-radius: var(--radius-pill);
   background: var(--radio-dot);
 }

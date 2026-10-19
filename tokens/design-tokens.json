@@ -2380,7 +2380,7 @@
         }
       }
     },
-    "radio-dot": {
+    "radio-dot-size": {
       "$type": "dimension",
       "$value": "0.5rem",
       "$extensions": {
