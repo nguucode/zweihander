@@ -634,8 +634,10 @@ function Browser({
                               onClick={(e) => open(e, item)}
                             >
                               <span className={styles.cardName}>{item.name}</span>
+                              {/* sm on purpose: at md "experimental" truncates in the two-column item grid. */}
                               <Tag
                                 text={item.status}
+                                size="sm"
                                 variant={item.status === 'experimental' ? 'warning' : 'info'}
                               />
                             </a>
