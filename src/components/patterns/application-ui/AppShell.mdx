@@ -65,7 +65,9 @@ Each piece of the shell is `solid` (the card colour, with an edge where it
 meets the page) or `transparent` (the canvas, its text in the canvas
 colours): `topBarSurface` (default `solid`) and `sidebarSurface` (default
 `transparent`). On a `plain` canvas a transparent piece keeps its edge,
-since nothing else marks it.
+since nothing else marks it. That edge keys off `canvas="plain"`: with a
+custom canvas from `tokens`, set `canvas` to the preset closest to it
+(`plain` for a white one) so the edges follow.
 
 <Canvas of={AppShellStories.TransparentOnPlain} />
 
@@ -134,6 +136,13 @@ no sidebar, so there is no empty column, no drawer and no menu button.
 - **The shell fills the viewport** (`block-size: 100dvh`) and only the
   page scrolls, so the sidebar and the header stay in place. Set
   `block-size` on it to put it in a smaller box.
+- **From 64rem** the sidebar sits beside the page; in `layout="sidebar"`
+  it runs the full height and the top bar is hidden, because the sidebar
+  holds what the bar would. Below 64rem the sidebar moves into the drawer
+  and the top bar comes back in both layouts, for the menu button and the
+  logo.
+- **Below 48rem** a flat page drops its 8px inset, edge and rounding and
+  goes flush, since a frame around it only costs width on a phone.
 - **Everything follows density**: the top bar is `--control-md` plus two
   `--space-cluster` tall, the sidebar is `--sidebar-width` wide, the page
   padding is `--space-section`. The 8px inset of a flat page does not

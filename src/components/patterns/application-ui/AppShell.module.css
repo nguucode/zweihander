@@ -14,6 +14,7 @@
   --shell-muted-foreground: var(--muted-foreground);
   --shell-subtle-foreground: var(--subtle-foreground);
   --shell-canvas-foreground: var(--canvas-foreground, var(--foreground));
+  --shell-canvas-subtle-foreground: var(--canvas-muted-foreground, var(--subtle-foreground));
   --shell-canvas-muted-foreground: var(
     --canvas-muted-foreground,
     var(--canvas-plain, var(--muted-foreground)) var(--canvas-neutral, var(--muted-foreground))
@@ -55,7 +56,7 @@
 }
 [data-surface='transparent'] {
   --muted-foreground: var(--shell-canvas-muted-foreground);
-  --subtle-foreground: var(--canvas-muted-foreground, var(--shell-subtle-foreground));
+  --subtle-foreground: var(--shell-canvas-subtle-foreground);
   color: var(--shell-canvas-foreground);
 }
 
@@ -136,11 +137,10 @@
   --background: var(--content-flat, var(--card)) var(--content-card, var(--shell-background));
   /* On the canvas (card), text reads the canvas colours, as a transparent piece does. */
   --muted-foreground: var(--content-flat, var(--shell-muted-foreground)) var(--content-card, var(--shell-canvas-muted-foreground));
-  --subtle-foreground: var(--content-flat, var(--shell-subtle-foreground))
-    var(--content-card, var(--canvas-muted-foreground, var(--shell-subtle-foreground)));
+  --subtle-foreground: var(--content-flat, var(--shell-subtle-foreground)) var(--content-card, var(--shell-canvas-subtle-foreground));
   min-block-size: 0;
   overflow: auto;
-  padding: var(--space-6);
+  padding: var(--space-container);
   border: 1px solid;
   border-color: var(--content-flat, var(--border)) var(--content-card, transparent);
   border-radius: var(--content-flat, var(--radius-panel)) var(--content-card, 0);

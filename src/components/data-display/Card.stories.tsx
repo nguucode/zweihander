@@ -93,7 +93,7 @@ export const Default: Story = {
 export const Appearances: Story = {
   render: (args) => (
     <div style={{ display: 'grid', gap: 'var(--space-4)' }}>
-      {(['elevated', 'outline', 'unstyled'] as const).map((appearance) => (
+      {(['elevated', 'outline', 'unstyled', 'surface'] as const).map((appearance) => (
         <Card key={appearance} {...args} appearance={appearance}>
           <h3 style={title}>{appearance}</h3>
           <p style={muted}>Change how you pay for your plan.</p>
@@ -195,7 +195,7 @@ export const Contrast: Story = {
           appearance={mode}
           style={{ display: 'grid', gap: 'var(--space-2)', background: 'var(--background)', padding: 'var(--space-2)' }}
         >
-          {(['elevated', 'outline', 'unstyled'] as const).map((appearance) => (
+          {(['elevated', 'outline', 'unstyled', 'surface'] as const).map((appearance) => (
             <Card key={appearance} appearance={appearance} onClick={() => {}} data-audit={`${mode} ${appearance}`}>
               <span style={muted}>Change how you pay for your plan.</span>
             </Card>

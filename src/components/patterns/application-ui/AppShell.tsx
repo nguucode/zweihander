@@ -7,8 +7,8 @@ import { cn } from '@/lib/utils'
 import { Button } from '../../buttons/Button'
 import styles from './AppShell.module.css'
 
-/** Whether the shell has a navigation drawer for narrow screens, how to open it, and the brand the header shows. */
-const DrawerContext = createContext<{ hasDrawer: boolean; isOpen: boolean; open: () => void; label: string; brand: ReactNode }>({
+/** What the header needs from its shell: the drawer (whether there is one, how to open it) and the brand. */
+const ShellContext = createContext<{ hasDrawer: boolean; isOpen: boolean; open: () => void; label: string; brand: ReactNode }>({
   hasDrawer: false,
   isOpen: false,
   open: () => {},
@@ -93,7 +93,7 @@ export function AppShell({
     if ((e.target as HTMLElement).closest('a[href]')) setOpen(false)
   }
   return (
-    <DrawerContext.Provider value={{ hasDrawer, isOpen: open, open: () => setOpen(true), label: navigationLabel, brand }}>
+    <ShellContext.Provider value={{ hasDrawer, isOpen: open, open: () => setOpen(true), label: navigationLabel, brand }}>
       <div
         className={cn(
           styles.shell,
@@ -152,7 +152,7 @@ export function AppShell({
           </Dialog.Portal>
         </Dialog.Root>
       )}
-    </DrawerContext.Provider>
+    </ShellContext.Provider>
   )
 }
 
@@ -166,7 +166,7 @@ export interface AppHeaderProps extends ComponentProps<'header'> {
 
 /** The bar above the content. Inside an AppShell with navigation it adds the drawer's menu button on narrow screens. */
 export function AppHeader({ start, end, children, className, ...props }: AppHeaderProps) {
-  const drawer = useContext(DrawerContext)
+  const drawer = useContext(ShellContext)
   return (
     <header className={cn(styles.header, className)} {...props}>
       {drawer.hasDrawer && (

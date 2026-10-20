@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { Icon } from '@/lib/icon'
-import { Theme, type Canvas, type ContentStyle, type Density } from '@/theme/Theme'
+import { CANVASES, CONTENT_STYLES, Theme, type Canvas, type ContentStyle, type Density } from '@/theme/Theme'
 import { Avatar } from '@/components/atomic-elements/Avatar'
 import { Button } from '@/components/buttons/Button'
 import { Card } from '@/components/data-display/Card'
@@ -75,6 +75,8 @@ const headerEnd = (
     />
   </>
 )
+
+const topBar = <AppHeader start={<Search aria-label="Search" placeholder="Search" />} end={headerEnd} />
 
 const content = (
   <div style={{ display: 'grid', gap: 'var(--space-8)' }}>
@@ -215,7 +217,7 @@ export const TopBar: Story = {
     sidebarSurface: 'solid',
     brand,
     sidebar: sidebar(false, false),
-    header: <AppHeader start={<Search aria-label="Search" placeholder="Search" />} end={headerEnd} />,
+    header: topBar,
   },
   decorators: box(1100),
   play: async ({ canvasElement }) => {
@@ -244,7 +246,7 @@ export const CardOnTint: Story = {
     layout: 'top-bar',
     brand,
     sidebar: sidebar(false, false),
-    header: <AppHeader start={<Search aria-label="Search" placeholder="Search" />} end={headerEnd} />,
+    header: topBar,
     children: blocks,
   },
   decorators: [themed({ canvas: 'tinted', contentStyle: 'card' }), ...box(1100)],
@@ -263,7 +265,7 @@ export const TransparentOnPlain: Story = {
     topBarSurface: 'transparent',
     brand,
     sidebar: sidebar(false, false),
-    header: <AppHeader start={<Search aria-label="Search" placeholder="Search" />} end={headerEnd} />,
+    header: topBar,
     children: blocks,
   },
   decorators: [themed({ canvas: 'plain', contentStyle: 'card' }), ...box(1100)],
@@ -290,8 +292,8 @@ const COMBOS: Combo[] = []
   const cut = new Set([2, 4, 6, 8, 14, 20, 26, 27, 28, 29, 30, 32])
   let id = 0
   for (const [layout, top, nav] of structures)
-    for (const canvas of ['plain', 'neutral', 'tinted'] as const)
-      for (const contentStyle of ['card', 'flat'] as const) {
+    for (const canvas of CANVASES)
+      for (const contentStyle of CONTENT_STYLES) {
         id += 1
         if (!cut.has(id)) COMBOS.push({ id, layout, top, nav, canvas, contentStyle })
       }
@@ -313,7 +315,7 @@ export const Combinations: Story = {
                 sidebarSurface={c.nav}
                 brand={<strong>Zweihänder</strong>}
                 sidebar={sidebar(false, c.layout === 'sidebar')}
-                header={c.layout === 'top-bar' ? <AppHeader start={<Search aria-label="Search" placeholder="Search" />} end={headerEnd} /> : undefined}
+                header={c.layout === 'top-bar' ? topBar : undefined}
                 style={{ blockSize: '100%' }}
               >
                 {blocks}
@@ -337,7 +339,7 @@ export const Combinations: Story = {
 export const CollapsedRail: Story = {
   args: {
     sidebar: sidebar(true),
-    header: <AppHeader start={<Search aria-label="Search" placeholder="Search" />} end={headerEnd} />,
+    header: topBar,
   },
   decorators: box(1100),
   play: async ({ canvas }) => {

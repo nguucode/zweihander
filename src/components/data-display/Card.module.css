@@ -49,11 +49,13 @@
 }
 
 .elevated {
+  --background: var(--card);
   background: var(--card);
   box-shadow: var(--shadow-sm);
 }
 
 .outline {
+  --background: var(--card);
   background: var(--card);
 }
 
