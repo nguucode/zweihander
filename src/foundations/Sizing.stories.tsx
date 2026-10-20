@@ -23,19 +23,27 @@ const ROWS = [
   { label: 'Radius, field', token: (t: string) => `--control-${t}-radius-field`, prop: 'borderTopLeftRadius' },
 ] as const
 
-function TierTable() {
+/* Reads every [data-probe] in the table once it is laid out, keyed by its
+   probe name. data-prop names the CSS property to read (inlineSize if unset). */
+function useProbes() {
   const ref = useRef<HTMLTableElement>(null)
   const [values, setValues] = useState<Record<string, string>>({})
 
   useLayoutEffect(() => {
     const read: Record<string, string> = {}
     for (const probe of ref.current!.querySelectorAll<HTMLElement>('[data-probe]')) {
-      const value = getComputedStyle(probe)[probe.dataset.prop as 'inlineSize']
+      const value = getComputedStyle(probe)[(probe.dataset.prop ?? 'inlineSize') as 'inlineSize']
       // A pill radius computes to 9999px; say what it means.
       read[probe.dataset.probe!] = Number.parseFloat(value) > 1000 ? 'pill' : value
     }
     setValues(read)
   }, [])
+
+  return { ref, values }
+}
+
+function TierTable() {
+  const { ref, values } = useProbes()
 
   return (
     <table ref={ref} className={docs.tokenTable}>
@@ -79,6 +87,51 @@ function TierTable() {
   )
 }
 
+const STEPS = ['2xs', 'xs', 'sm', 'md', 'lg', 'xl'] as const
+const DENSITIES = ['default', 'compact'] as const
+
+/* The ramp in both densities at once: each column's probes sit inside their
+   own [data-density], so the table never depends on the toolbar. */
+function BoxRampTable() {
+  const { ref, values } = useProbes()
+
+  return (
+    <table ref={ref} className={docs.tokenTable}>
+      <thead>
+        <tr>
+          <th>Step</th>
+          {DENSITIES.map((d) => (
+            <th key={d}>{d === 'default' ? 'Default' : 'Compact'}</th>
+          ))}
+          <th>Token</th>
+        </tr>
+      </thead>
+      <tbody>
+        {STEPS.map((step) => (
+          <tr key={step}>
+            <td>
+              <code>{step}</code>
+            </td>
+            {DENSITIES.map((d) => (
+              <td key={d} data-density={d} data-token={`--box-${step}@${d}`}>
+                <span
+                  data-probe={`--box-${step}@${d}`}
+                  aria-hidden="true"
+                  style={{ position: 'absolute', visibility: 'hidden', inlineSize: `var(--box-${step})` }}
+                />
+                <code>{values[`--box-${step}@${d}`]}</code>
+              </td>
+            ))}
+            <td>
+              <code>--box-{step}</code>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  )
+}
+
 function SmallControls() {
   return (
     <div className={docs.row} style={{ flexWrap: 'wrap' }}>
@@ -112,6 +165,16 @@ export const Tiers: Story = {
     await expect(value('--icon-md')).toBe('16px')
     await expect(value('--control-md-pad')).toBe('10px')
     await expect(value('--control-md-pad-spacious')).toBe('12px')
+  },
+}
+
+export const BoxRamp: Story = {
+  render: () => <BoxRampTable />,
+  play: async ({ canvasElement }) => {
+    const column = (d: string) =>
+      STEPS.map((step) => canvasElement.querySelector(`[data-token="--box-${step}@${d}"] code`)!.textContent)
+    await expect(column('default')).toEqual(['16px', '20px', '24px', '32px', '40px', '48px'])
+    await expect(column('compact')).toEqual(['16px', '20px', '22px', '28px', '36px', '44px'])
   },
 }
 
