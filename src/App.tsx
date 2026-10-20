@@ -248,6 +248,39 @@ const NAV = [
   { key: 'G', label: 'GitHub', href: REPO },
 ]
 
+const SECTIONS = [
+  { id: 'theme', label: 'Try the theme' },
+  { id: 'components', label: 'Components' },
+  { id: 'principles', label: 'How it is built' },
+  { id: 'install', label: 'Install' },
+]
+
+/* Marks the section nearest the top of the viewport. */
+function Toc() {
+  const [current, setCurrent] = useState(SECTIONS[0].id)
+  useEffect(() => {
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => e.isIntersecting && setCurrent(e.target.id)),
+      { rootMargin: '-20% 0px -70% 0px' },
+    )
+    SECTIONS.forEach(({ id }) => {
+      const el = document.getElementById(id)
+      if (el) io.observe(el)
+    })
+    return () => io.disconnect()
+  }, [])
+  return (
+    <nav aria-label="On this page" className={styles.toc}>
+      <p>On this page</p>
+      {SECTIONS.map((s) => (
+        <a key={s.id} href={`#${s.id}`} aria-current={current === s.id ? 'true' : undefined}>
+          {s.label}
+        </a>
+      ))}
+    </nav>
+  )
+}
+
 function Section({ id, label, aside, children }: { id: string; label: string; aside?: ReactNode; children: ReactNode }) {
   return (
     <section id={id} className={styles.section} aria-labelledby={`${id}-h`}>
@@ -378,6 +411,8 @@ import { Button } from 'zweihander/button'`}</pre>
             </p>
           </Section>
         </main>
+
+        <Toc />
       </div>
 
       <footer className={styles.footer}>

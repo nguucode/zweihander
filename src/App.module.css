@@ -8,7 +8,8 @@
   --font-mono: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
   --hair: 1px solid var(--border);
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
-  --gutter: max(16px, (100% - 1200px) / 2);
+  --gutter: 32px;
+  --col-gap: 32px;
 
   min-block-size: 100dvh;
   background: var(--background);
@@ -109,12 +110,13 @@
 
 .layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 2.2fr);
-  gap: 64px;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 48px var(--col-gap);
   padding: 48px var(--gutter) 96px;
 }
 
 .aside {
+  grid-column: 1 / span 3;
   position: sticky;
   inset-block-start: 96px;
   align-self: start;
@@ -153,9 +155,46 @@
 }
 
 .main {
+  grid-column: 4 / span 7;
   display: grid;
   gap: 80px;
   min-inline-size: 0;
+}
+
+/* Right rail: where you are on the page. */
+.toc {
+  grid-column: 11 / span 2;
+  position: sticky;
+  inset-block-start: 96px;
+  align-self: start;
+  display: grid;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+.toc p {
+  margin: 0 0 4px;
+  color: var(--muted-foreground);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.toc a {
+  padding-inline-start: 12px;
+  border-inline-start: var(--hair);
+  color: var(--muted-foreground);
+  text-decoration: none;
+  transition: color 0.2s var(--ease), border-color 0.2s var(--ease);
+}
+
+.toc a:hover {
+  color: var(--foreground);
+}
+
+.toc a[aria-current='true'] {
+  border-color: var(--primary);
+  color: var(--foreground);
 }
 
 /* ---------- intro (aside) ---------- */
@@ -561,8 +600,8 @@ a.row:hover .rowArrow {
 
 .footer {
   display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr);
-  gap: 32px;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 32px var(--col-gap);
   padding: 48px var(--gutter) 64px;
   border-block-start: var(--hair);
   font-size: 0.875rem;
@@ -573,6 +612,7 @@ a.row:hover .rowArrow {
 }
 
 .footerBrand {
+  grid-column: span 3;
   display: grid;
   justify-items: start;
   gap: 8px;
@@ -580,6 +620,7 @@ a.row:hover .rowArrow {
 }
 
 .footerCol {
+  grid-column: span 2;
   display: grid;
   align-content: start;
   gap: 8px;
@@ -604,11 +645,27 @@ a.row:hover .rowArrow {
 
 /* ---------- responsive ---------- */
 
+@media (width < 1200px) {
+  .main {
+    grid-column: 4 / -1;
+  }
+
+  .toc {
+    display: none;
+  }
+}
+
 @media (width < 960px) {
+  /* One column: twelve tracks' gaps alone would outgrow a phone. */
   .layout {
     grid-template-columns: minmax(0, 1fr);
     gap: 48px;
     padding-block-start: 24px;
+  }
+
+  .aside,
+  .main {
+    grid-column: auto;
   }
 
   .aside {
@@ -626,6 +683,10 @@ a.row:hover .rowArrow {
 }
 
 @media (width < 720px) {
+  .page {
+    --gutter: 16px;
+  }
+
   .header {
     gap: 16px;
   }
@@ -654,6 +715,10 @@ a.row:hover .rowArrow {
 
   .footerBrand {
     grid-column: 1 / -1;
+  }
+
+  .footerCol {
+    grid-column: auto;
   }
 }
 
