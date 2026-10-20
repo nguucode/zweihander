@@ -88,8 +88,10 @@ button.legendItem:focus-visible {
   outline-offset: var(--focus-offset-inset);
 }
 
-button.legendItem[aria-pressed='false'] {
-  color: var(--muted-foreground);
+/* Off: struck through, with a hollow swatch. Not a lighter grey: on the hover
+   fill --muted-foreground drops under 4.5:1. */
+button.legendItem[aria-pressed='false'] .legendLabel {
+  text-decoration: line-through;
 }
 
 button.legendItem[aria-pressed='false'] .swatch {

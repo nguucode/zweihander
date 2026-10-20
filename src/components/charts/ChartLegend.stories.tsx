@@ -39,6 +39,9 @@ export const Toggles: Story = {
     const miss = canvas.getByRole('button', { name: 'Miss 1.16K' })
     await userEvent.click(miss)
     await expect(miss).toHaveAttribute('aria-pressed', 'false')
+    // Off reads as struck through, not as a fainter grey that fails contrast on the hover fill.
+    await expect(getComputedStyle(miss.querySelector('span:nth-child(2)')!).textDecorationLine).toBe('line-through')
+    await expect(getComputedStyle(miss).color).toBe(getComputedStyle(canvas.getByRole('button', { name: /Revalidated/ })).color)
     // Focus reports the item, so the chart can fade the rest.
     await userEvent.tab()
     await expect(args.onFocusChange).toHaveBeenLastCalledWith('revalidated')
