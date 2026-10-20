@@ -48,5 +48,6 @@ Any `main` attribute; the App Shell passes the `id` its skip link targets.
 
 - The `main` landmark, focusable (`tabIndex={-1}`) so the shell's skip
   link can move focus to it.
-- On a canvas, text reads `--canvas-foreground` and
-  `--canvas-muted-foreground`; the kit checks them for its own canvases.
+- On a canvas, text takes the canvas text colours (the Theme's
+  `canvas-foreground` and `canvas-muted-foreground` tokens); the kit checks
+  them for its own canvases.
