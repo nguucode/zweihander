@@ -49,12 +49,14 @@
 }
 
 .elevated {
+  /* stylelint-disable-next-line zweihander/no-token-shadow -- what sits on the card reads its colour */
   --background: var(--card);
   background: var(--card);
   box-shadow: var(--shadow-sm);
 }
 
 .outline {
+  /* stylelint-disable-next-line zweihander/no-token-shadow -- what sits on the card reads its colour */
   --background: var(--card);
   background: var(--card);
 }
@@ -64,6 +66,7 @@
    the one flat surface, set off by a rule above (flat). It restates
    --background because it is what the components inside sit on. */
 .surface {
+  /* stylelint-disable-next-line zweihander/no-token-shadow -- what sits on the surface reads its colour */
   --background: var(--card);
   background: var(--content-card, var(--card)) var(--content-flat, transparent);
   box-shadow: var(--content-card, var(--shadow-sm)) var(--content-flat, none);

@@ -19,6 +19,7 @@
 
 /* The rail: one square row plus the padding either side. */
 .collapsed {
+  /* stylelint-disable-next-line zweihander/no-token-shadow -- the rail narrows the token, and the AppShell top bar reads it */
   --sidebar-width: calc(var(--control-md) + 2 * var(--space-inline));
 }
 
