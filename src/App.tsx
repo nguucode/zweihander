@@ -136,10 +136,13 @@ function Playground() {
           <div>
             <dt>Accent</dt>
             <dd>
-              <span className={styles.swatches} role="group" aria-label="Accent">
+              <span className={styles.segment} role="group" aria-label="Accent">
+                {/* Each toggle sits in its own accent, so pressed fills in that colour. */}
                 {ACCENTS.map((a) => (
                   <Theme key={a} accentColor={a} render={<span />}>
-                    <button type="button" className={styles.swatch} aria-pressed={accent === a} aria-label={a} onClick={() => setAccent(a)} />
+                    <ToggleButton pressed={accent === a} onPressedChange={() => setAccent(a)} startIcon={<span className={styles.dot} />}>
+                      {a}
+                    </ToggleButton>
                   </Theme>
                 ))}
               </span>
@@ -150,7 +153,7 @@ function Playground() {
             <dd>
               <span className={styles.segment} role="group" aria-label="Radius">
                 {RADII.map((r) => (
-                  <ToggleButton key={r} size="sm" pressed={radius === r} onPressedChange={() => setRadius(r)}>
+                  <ToggleButton key={r} pressed={radius === r} onPressedChange={() => setRadius(r)}>
                     {r}
                   </ToggleButton>
                 ))}
@@ -162,7 +165,7 @@ function Playground() {
             <dd>
               <span className={styles.segment} role="group" aria-label="Appearance">
                 {(['light', 'dark'] as const).map((m) => (
-                  <ToggleButton key={m} size="sm" pressed={dark === (m === 'dark')} onPressedChange={() => setDark(m === 'dark')}>
+                  <ToggleButton key={m} pressed={dark === (m === 'dark')} onPressedChange={() => setDark(m === 'dark')}>
                     {m}
                   </ToggleButton>
                 ))}

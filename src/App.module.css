@@ -422,44 +422,25 @@ a.sectionNote:hover {
   opacity: 0.6;
 }
 
-.swatches,
 .segment {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
 }
 
-.swatch {
-  display: grid;
-  inline-size: 28px;
-  block-size: 28px;
-  padding: 0;
-  border: 2px solid var(--background);
+/* Accent chip inside each accent toggle; on the pressed fill it takes the
+   label colour so it stays visible. */
+.dot {
+  display: block;
+  inline-size: 10px;
+  block-size: 10px;
   border-radius: 50%;
   background: var(--primary);
-  box-shadow: 0 0 0 1px var(--border);
-  cursor: pointer;
-  transition: transform 0.2s var(--ease);
+  box-shadow: 0 0 0 1px var(--primary-foreground);
 }
 
-.swatch:hover {
-  transform: scale(1.08);
-}
-
-/* Selected: a ring in ink plus a dot in the swatch's own contrast colour,
-   so the choice reads without relying on the ring alone. */
-.swatch[aria-pressed='true'] {
-  box-shadow: 0 0 0 2px var(--foreground);
-}
-
-.swatch[aria-pressed='true']::after {
-  content: '';
-  display: block;
-  inline-size: 8px;
-  block-size: 8px;
-  margin: auto;
-  border-radius: 50%;
-  background: var(--primary-foreground);
+[aria-pressed='true'] .dot {
+  background: currentcolor;
 }
 
 .preview {
