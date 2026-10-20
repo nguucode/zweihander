@@ -13,4 +13,5 @@ Breaking for AppShell (copy-source: copy `AppShell.tsx` and `AppShell.module.css
 
 - In the default `sidebar` layout there is no top bar on wide screens; the `header` only shows while the sidebar is in the drawer. Keep a top bar with `layout="top-bar"`, or move search and the account into the Sidebar's `header` and `footer`.
 - The page is now one card surface inset 8px from the shell's edges (`contentStyle="flat"`), the sidebar sits on the canvas with no fill (`sidebarSurface="transparent"`), and the top bar is `--control-md` plus two `--space-cluster` tall (56px) instead of 64px.
+- AppHeader no longer draws its own background, bottom edge or sticky position: the shell's top cell does. An AppHeader used outside an AppShell needs them set by its container.
 - Pass the logo as `brand` rather than inside the Sidebar's `header` or the AppHeader's `start`.

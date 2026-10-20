@@ -49,12 +49,14 @@
 
 /* A solid piece is the card colour and draws the edge it shares with the
    content; a transparent one shows the canvas and reads its text colours. */
-[data-surface='solid'] {
+/* Scoped to the shell's own cells: a bare attribute selector is not hashed by
+   CSS Modules and would match any element in the page. */
+:is(.top, .sidebar)[data-surface='solid'] {
   --background: var(--card);
   background: var(--card);
   color: var(--card-foreground);
 }
-[data-surface='transparent'] {
+:is(.top, .sidebar)[data-surface='transparent'] {
   --muted-foreground: var(--shell-canvas-muted-foreground);
   --subtle-foreground: var(--shell-canvas-subtle-foreground);
   color: var(--shell-canvas-foreground);
