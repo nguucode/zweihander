@@ -77,53 +77,10 @@ function Playground() {
     setDark(false)
   }
 
-  /* Laid out like claude.dev/mods: the demo in a browser frame, the title,
-     description and controls in the rail beside it. Side comes first in the
-     DOM so it reads first when the two stack. */
+  /* Laid out like a claude.dev/mods entry: the demo in a browser frame on
+     five tracks, title, description and controls on the three beside it. */
   return (
     <section id="theme" className={styles.showcase} aria-labelledby="theme-h">
-      <div className={styles.showcaseSide}>
-        <h2 id="theme-h" className={styles.showcaseTitle}>Try the theme</h2>
-        <p className={styles.showcaseBody}>One wrapper re-themes everything inside it. Every control here is a Zweihänder component.</p>
-
-        <fieldset className={styles.control}>
-          <legend>Accent</legend>
-          <div className={styles.swatches}>
-            {ACCENTS.map((a) => (
-              <Theme key={a} accentColor={a} render={<span />}>
-                <button type="button" className={styles.swatch} aria-pressed={accent === a} aria-label={a} onClick={() => setAccent(a)} />
-              </Theme>
-            ))}
-          </div>
-        </fieldset>
-        <fieldset className={styles.control}>
-          <legend>Radius</legend>
-          <div className={styles.segment}>
-            {RADII.map((r) => (
-              <ToggleButton key={r} size="sm" appearance="outlined" variant="secondary" pressed={radius === r} onPressedChange={() => setRadius(r)}>
-                {r}
-              </ToggleButton>
-            ))}
-          </div>
-        </fieldset>
-        <fieldset className={styles.control}>
-          <legend>Appearance</legend>
-          <Switch label="Dark" checked={dark} onCheckedChange={setDark} />
-        </fieldset>
-        <div className={styles.control}>
-          <p className={styles.controlLabel}>Props</p>
-          <p className={styles.chips} aria-label="The wrapper behind this preview">
-            <span aria-hidden>└</span>
-            <code>accentColor="{accent}"</code>
-            <code>radius="{radius}"</code>
-            <code>appearance="{dark ? 'dark' : 'light'}"</code>
-          </p>
-        </div>
-        <a href={docs('foundations-overview')} className={styles.more}>
-          Read the theme docs <Icon name="chevron-right" />
-        </a>
-      </div>
-
       <div className={styles.frame}>
         <div className={styles.frameBar}>
           <span className={styles.frameDots} aria-hidden>
@@ -132,8 +89,8 @@ function Playground() {
             <i />
           </span>
           <span className={styles.frameTitle}>Theme preview</span>
-          <button type="button" className={styles.frameAction} onClick={reset}>Reset</button>
         </div>
+        <button type="button" className={styles.frameAction} onClick={reset}>Reset</button>
       <Theme accentColor={accent} radius={radius} appearance={dark ? 'dark' : 'light'} className={styles.preview}>
         <div className={styles.previewHead}>
           <strong>Workspace settings</strong>
@@ -173,6 +130,56 @@ function Playground() {
           <Button size="sm">Save</Button>
         </div>
       </Theme>
+      </div>
+
+      <div className={styles.showcaseBody}>
+        <h2 id="theme-h">Try the theme</h2>
+        <p>One wrapper re-themes every component inside it.</p>
+        <dl className={styles.showcaseMeta}>
+          <div>
+            <dt>Accent</dt>
+            <dd>
+              <span className={styles.swatches} role="group" aria-label="Accent">
+                {ACCENTS.map((a) => (
+                  <Theme key={a} accentColor={a} render={<span />}>
+                    <button type="button" className={styles.swatch} aria-pressed={accent === a} aria-label={a} onClick={() => setAccent(a)} />
+                  </Theme>
+                ))}
+              </span>
+            </dd>
+          </div>
+          <div>
+            <dt>Radius</dt>
+            <dd>
+              <span className={styles.segment} role="group" aria-label="Radius">
+                {RADII.map((r) => (
+                  <ToggleButton key={r} size="sm" appearance="outlined" variant="secondary" pressed={radius === r} onPressedChange={() => setRadius(r)}>
+                    {r}
+                  </ToggleButton>
+                ))}
+              </span>
+            </dd>
+          </div>
+          <div>
+            <dt>Appearance</dt>
+            <dd>
+              <Switch label="Dark" checked={dark} onCheckedChange={setDark} />
+            </dd>
+          </div>
+          <div>
+            <dt>Props</dt>
+            <dd>
+              <span className={styles.chips}>
+                <code>accentColor="{accent}"</code>
+                <code>radius="{radius}"</code>
+                <code>appearance="{dark ? 'dark' : 'light'}"</code>
+              </span>
+            </dd>
+          </div>
+        </dl>
+        <a href={docs('foundations-overview')} className={styles.showcaseCta}>
+          Read the theme docs <span aria-hidden>→</span>
+        </a>
       </div>
     </section>
   )

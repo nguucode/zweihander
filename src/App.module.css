@@ -8,8 +8,7 @@
   --font-mono: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
   --hair: 1px solid var(--border);
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
-  --gutter: 32px;
-  --col-gap: 32px;
+  --gutter: 36px;
 
   min-block-size: 100dvh;
   background: var(--background);
@@ -108,15 +107,17 @@
 
 /* ---------- two-column layout ---------- */
 
+/* As claude.dev/mods: twelve tracks with no column gap (space comes from
+   padding), intro on 1–3, track 4 left empty, content on 5–12. */
 .layout {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: 48px var(--col-gap);
+  row-gap: 48px;
   padding: 48px var(--gutter) 96px;
 }
 
 .aside {
-  grid-column: 1 / span 3;
+  grid-column: 1 / 4;
   position: sticky;
   inset-block-start: 96px;
   align-self: start;
@@ -154,11 +155,10 @@
   text-align: end;
 }
 
-/* Main takes the layout's last nine tracks as a subgrid, so the theme
-   showcase can put its frame on seven and its rail on two, in line with
-   the page grid. Other sections keep to the seven. */
+/* Main is a subgrid of the layout's last eight tracks, so a showcase can
+   split them five and three in line with the page grid. */
 .main {
-  grid-column: 4 / -1;
+  grid-column: 5 / -1;
   display: grid;
   grid-template-columns: subgrid;
   row-gap: 80px;
@@ -166,10 +166,6 @@
 }
 
 .main > * {
-  grid-column: 1 / span 7;
-}
-
-.main > .showcase {
   grid-column: 1 / -1;
 }
 
@@ -212,6 +208,11 @@
   overflow-x: auto;
   white-space: nowrap;
   font-size: inherit;
+}
+
+/* The intro rail is three tracks: wrap there rather than scroll. */
+.aside .command code {
+  white-space: normal;
 }
 
 .prompt {
@@ -312,121 +313,150 @@ a.sectionNote:hover {
 .showcase {
   display: grid;
   grid-template-columns: subgrid;
+  padding-block-end: 36px;
+  border-block-end: var(--hair);
   scroll-margin-block-start: 96px;
 }
 
-.showcaseSide {
-  grid-row: 1;
-  grid-column: 8 / span 2;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  align-content: start;
-  gap: 20px;
-}
-
-.showcaseTitle {
-  margin: 0;
-  font-size: 1.75rem;
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  line-height: 1.15;
-}
-
-.showcaseBody {
-  margin: 0;
-  color: var(--muted-foreground);
-}
-
-.control {
-  display: grid;
-  gap: 8px;
-  margin: 0;
-  padding: 0;
-  border: 0;
-}
-
-.control legend,
-.controlLabel {
-  margin: 0 0 8px;
-  padding: 0;
-  color: var(--muted-foreground);
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.controlLabel {
-  margin: 0;
-}
-
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 4px 6px;
-  margin: 0;
-  color: var(--muted-foreground);
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-}
-
-.chips code {
-  padding: 1px 6px;
-  background: var(--muted);
-  color: var(--foreground);
-  font-size: inherit;
-}
-
-/* Browser window around the demo. */
+/* Browser window around the demo: five tracks, at least 4:3-ish tall and
+   stretched to the body so the body's link sits on the frame's bottom. */
 .frame {
-  grid-row: 1;
-  grid-column: 1 / span 7;
-  align-self: start;
+  position: relative;
+  grid-column: 1 / 6;
+  display: flex;
+  flex-direction: column;
+  min-block-size: 420px;
   border: var(--hair);
   background: var(--card);
 }
 
 .frameBar {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  display: flex;
+  flex: none;
   align-items: center;
-  padding: 8px 12px;
-  border-block-end: var(--hair);
+  gap: 7px;
+  block-size: 28px;
+  padding: 0 12px;
   background: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
 }
 
 .frameDots {
   display: flex;
-  gap: 6px;
+  gap: 7px;
 }
 
 .frameDots i {
-  inline-size: 10px;
-  block-size: 10px;
+  inline-size: 11px;
+  block-size: 11px;
   border-radius: 50%;
   background: var(--border);
 }
 
 .frameTitle {
+  flex: 1;
   color: var(--muted-foreground);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-align: center;
 }
 
 .frameAction {
-  justify-self: end;
-  padding: 0;
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-end: 0;
+  block-size: 28px;
+  padding: 0 12px;
   border: 0;
   background: none;
   color: var(--muted-foreground);
-  font: inherit;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
   cursor: pointer;
 }
 
 .frameAction:hover {
+  color: var(--foreground);
+}
+
+/* Title, description, controls: three tracks, gutter from padding. */
+.showcaseBody {
+  grid-column: 6 / 9;
+  display: flex;
+  flex-direction: column;
+  padding-inline-start: 36px;
+}
+
+.showcaseBody h2 {
+  margin: 0;
+  font-size: 2.125rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.showcaseBody > p {
+  margin: 14px 0 0;
+  color: var(--muted-foreground);
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+
+.showcaseMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  margin: 24px 0 0;
+}
+
+.showcaseMeta dt {
+  margin-block-end: 8px;
+  color: var(--muted-foreground);
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+/* Tree branch before each value, as claude.dev marks hooks. */
+.showcaseMeta dd {
+  display: flex;
+  gap: 8px;
+  margin: 0;
+}
+
+.showcaseMeta dd::before {
+  content: '└';
+  flex: none;
+  color: var(--muted-foreground);
+  opacity: 0.6;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.chips code {
+  padding: 0 4px;
+  border: var(--hair);
+  background: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.showcaseCta {
+  margin-block-start: auto;
+  padding-block-start: 27px;
+  color: var(--muted-foreground);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  text-underline-offset: 4px;
+}
+
+.showcaseCta:hover {
   color: var(--foreground);
 }
 
@@ -458,11 +488,13 @@ a.sectionNote:hover {
 }
 
 .preview {
+  flex: 1;
   display: grid;
   align-content: start;
   gap: 16px;
-  min-block-size: 400px;
-  padding: 32px;
+  min-block-size: 0;
+  overflow: auto;
+  padding: 24px;
   background: var(--background);
   color: var(--foreground);
   font-size: 0.875rem;
@@ -657,7 +689,7 @@ a.row:hover .rowArrow {
 .footer {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: 32px var(--col-gap);
+  row-gap: 32px;
   padding: 48px var(--gutter) 64px;
   border-block-start: var(--hair);
   font-size: 0.875rem;
@@ -701,51 +733,40 @@ a.row:hover .rowArrow {
 
 /* ---------- responsive ---------- */
 
-/* Below this the rail is too narrow for the controls: the showcase stacks,
-   rail (title first) above the frame, and sections take all nine tracks. */
+/* Below this the body is too narrow beside the frame: it drops under it. */
 @media (width < 1200px) {
-  .main > * {
+  .frame,
+  .showcaseBody {
     grid-column: 1 / -1;
   }
 
-  .showcase {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 24px;
-  }
-
-  .showcaseSide,
-  .frame {
-    grid-row: auto;
-    grid-column: auto;
+  .showcaseBody {
+    padding: 27px 0 0;
   }
 }
 
 @media (width < 960px) {
-  /* One column: twelve tracks' gaps alone would outgrow a phone. */
   .layout {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 48px;
     padding-block-start: 24px;
   }
 
   .aside,
   .main {
-    grid-column: auto;
-  }
-
-  .main {
-    grid-template-columns: minmax(0, 1fr);
+    grid-column: 1 / -1;
   }
 
   .aside {
     position: static;
   }
 
+  .frame {
+    min-block-size: 0;
+  }
 }
 
 @media (width < 720px) {
   .page {
-    --gutter: 16px;
+    --gutter: 24px;
   }
 
   .header {
