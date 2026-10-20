@@ -782,7 +782,7 @@
 
   /* Radius intent — what components actually use.
 
-     --radius-full is 0 except under radius="full", where it is 9999px. So
+     --radius-full is 0 except under radius="full-rounded", where it is 9999px. So
      max(step, --radius-full) resolves to the step normally and to a pill at
      full — that is --radius-control.
 
@@ -799,7 +799,7 @@
   );
 
   /* Radius by size tier. The tier picks the step (xs and sm the small one,
-     md the default) and the intent picks what happens at radius="full": a
+     md the default) and the intent picks what happens at radius="full-rounded": a
      control (Button, Tag, a tab) becomes a pill, a field stops one step up
      for the same reason --radius-field does. */
   --control-xs-radius: max(var(--radius-sm), var(--radius-full));

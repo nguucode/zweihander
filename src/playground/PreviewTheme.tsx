@@ -10,7 +10,7 @@ export const APPEARANCES = ['light', 'dark', 'system'] as const
 export type PreviewAppearance = (typeof APPEARANCES)[number]
 
 // A record, not a list, so a preset added to Theme fails here until it is listed.
-export const RADII = Object.keys({ none: 0, small: 0, medium: 0, large: 0, full: 0 } satisfies Record<Radius, 0>) as Radius[]
+export const RADII = Object.keys({ sharp: 0, rounded: 0, 'full-rounded': 0 } satisfies Record<Radius, 0>) as Radius[]
 
 /**
  * What each font puts in `--font-sans`; `--font-heading` and `--font-prose`
@@ -41,7 +41,7 @@ export interface PreviewTheme {
 export const DEFAULT_PREVIEW_THEME: PreviewTheme = {
   accent: 'blue',
   gray: 'gray',
-  radius: 'medium',
+  radius: 'rounded',
   font: 'system',
   scaling: '100%',
   appearance: 'system',

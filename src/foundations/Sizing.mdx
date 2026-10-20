@@ -9,7 +9,7 @@ Every control's geometry comes from two facts: its **size tier** and its
 **intent**. The tier binds height, inline padding, the gap between icon and
 label, the icon and the corner. The intent (control or field) decides two
 things only: which padding it takes, and whether it becomes a pill at
-`radius="full"`.
+`radius="full-rounded"`.
 
 <Canvas of={SizingStories.Tiers} />
 
@@ -50,7 +50,7 @@ spend.
 
 **Radius.** The tier picks the step (`--radius-sm` for `xs` and `sm`,
 `--radius-md` for `md`, so a short box does not read as a pill by
-accident). The intent picks what happens at `radius="full"`:
+accident). The intent picks what happens at `radius="full-rounded"`:
 `--control-{tier}-radius` becomes a pill, `--control-{tier}-radius-field`
 stops one step up. At `md` these are exactly `--radius-control` and
 `--radius-field`. See [Radius](?path=/docs/foundations-radius--docs).

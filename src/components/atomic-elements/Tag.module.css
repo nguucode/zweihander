@@ -13,7 +13,7 @@
 /* A tag sits in a line of text, so each size is the tier below its name
    (see Foundations/Sizing): md reads tier sm, sm reads tier xs. Pad, gap,
    icon and corner come from the tier; the corner follows the Theme's
-   radius preset like every control, a pill under radius="full".
+   radius preset like every control, a pill under radius="full-rounded".
 
    Height is line-height + 1px padding + 1px border each side, which lands
    on the tier's height: 24px at md, 20px at sm. The 1px is below the

@@ -471,19 +471,19 @@ export const ThemeColorRadius: Story = {
     await expect(gray.getAllByRole('radio')).toHaveLength(9)
     await expect(accent.getByRole('radio', { name: 'Blue' })).toBeChecked()
     await expect(gray.getByRole('radio', { name: 'Gray' })).toBeChecked()
-    await expect(dialog.getByRole('radio', { name: 'Medium' })).toBeChecked()
+    await expect(dialog.getByRole('radio', { name: 'Rounded' })).toBeChecked()
 
     await userEvent.click(accent.getByRole('radio', { name: 'Rose' }))
     await waitFor(() => expect(lastGlobals(received)).toEqual({ accent: 'rose' }))
     await userEvent.click(gray.getByRole('radio', { name: 'Slate' }))
     await waitFor(() => expect(lastGlobals(received)).toEqual({ gray: 'slate' }))
-    await userEvent.click(dialog.getByRole('radio', { name: 'Full' }))
-    await waitFor(() => expect(lastGlobals(received)).toEqual({ radius: 'full' }))
+    await userEvent.click(dialog.getByRole('radio', { name: 'Full rounded' }))
+    await waitFor(() => expect(lastGlobals(received)).toEqual({ radius: 'full-rounded' }))
     await userEvent.click(dialog.getByRole('radio', { name: 'Dark' }))
     await expect([param('theme-accent'), param('theme-gray'), param('theme-radius'), param('theme-appearance')]).toEqual([
       'rose',
       'slate',
-      'full',
+      'full-rounded',
       'dark',
     ])
 
@@ -494,7 +494,7 @@ export const ThemeColorRadius: Story = {
 
     // Reset puts every option back and empties the URL of them.
     await userEvent.click(dialog.getByRole('button', { name: 'Reset' }))
-    await waitFor(() => expect(lastGlobals(received)).toEqual({ gray: 'gray', radius: 'medium', appearance: 'system' }))
+    await waitFor(() => expect(lastGlobals(received)).toEqual({ gray: 'gray', radius: 'rounded', appearance: 'system' }))
     await expect(themeParams()).toEqual([])
     await expect(gray.getByRole('radio', { name: 'Gray' })).toBeChecked()
     await expect(dialog.getByRole('radio', { name: 'System' })).toBeChecked()
@@ -560,9 +560,9 @@ export const ThemeCopyCode: Story = {
 
     // Only what differs from the defaults, the font as a token.
     await userEvent.click(within(dialog.getByRole('radiogroup', { name: 'Accent' })).getByRole('radio', { name: 'Rose' }))
-    await userEvent.click(dialog.getByRole('radio', { name: 'Full' }))
+    await userEvent.click(dialog.getByRole('radio', { name: 'Full rounded' }))
     await userEvent.click(copy)
-    await waitFor(() => expect(clipboard.at(-1)).toBe('<Theme accentColor="rose" radius="full">'))
+    await waitFor(() => expect(clipboard.at(-1)).toBe('<Theme accentColor="rose" radius="full-rounded">'))
 
     await userEvent.click(within(dialog.getByRole('radiogroup', { name: 'Gray' })).getByRole('radio', { name: 'Slate' }))
     await userEvent.click(dialog.getByRole('combobox', { name: 'Scaling' }))
@@ -573,7 +573,7 @@ export const ThemeCopyCode: Story = {
     await userEvent.click(copy)
     await waitFor(() =>
       expect(clipboard.at(-1)).toBe(
-        '<Theme accentColor="rose" grayColor="slate" radius="full" scaling="90%" appearance="dark" tokens={{ \'font-sans\': "ui-serif, Georgia, serif" }}>',
+        '<Theme accentColor="rose" grayColor="slate" radius="full-rounded" scaling="90%" appearance="dark" tokens={{ \'font-sans\': "ui-serif, Georgia, serif" }}>',
       ),
     )
   },
@@ -591,7 +591,7 @@ export const ThemeCopyBlocked: Story = {
 export const ThemeFromUrl: Story = {
   beforeEach: withUrl({
     'theme-accent': 'rose',
-    'theme-radius': 'full',
+    'theme-radius': 'full-rounded',
     'theme-gray': 'foo',
     'theme-font': 'geist',
     'theme-scaling': '90%',
@@ -601,7 +601,7 @@ export const ThemeFromUrl: Story = {
     const received = await fakePreview(await frame(canvas))
     // Only what differs from the frame's start goes over; the unknown gray is dropped.
     await waitFor(() =>
-      expect(lastGlobals(received)).toEqual({ accent: 'rose', radius: 'full', font: 'geist', scaling: '90%' }),
+      expect(lastGlobals(received)).toEqual({ accent: 'rose', radius: 'full-rounded', font: 'geist', scaling: '90%' }),
     )
     // Button's own appearance prop is untouched by the theme's.
     await expect(propsPanel(canvas).getByRole('combobox', { name: 'appearance' })).toHaveTextContent('outlined')
@@ -612,7 +612,7 @@ export const ThemeFromUrl: Story = {
     const dialog = await openTheme(canvas, userEvent)
     await expect(within(dialog.getByRole('radiogroup', { name: 'Accent' })).getByRole('radio', { name: 'Rose' })).toBeChecked()
     await expect(within(dialog.getByRole('radiogroup', { name: 'Gray' })).getByRole('radio', { name: 'Gray' })).toBeChecked()
-    await expect(dialog.getByRole('radio', { name: 'Full' })).toBeChecked()
+    await expect(dialog.getByRole('radio', { name: 'Full rounded' })).toBeChecked()
     await expect(dialog.getByRole('combobox', { name: 'Font' })).toHaveTextContent('Geist')
     await expect(dialog.getByRole('combobox', { name: 'Scaling' })).toHaveTextContent('90%')
   },

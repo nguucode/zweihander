@@ -17,7 +17,7 @@
   block-size: var(--choice-control);
   border: 1px solid var(--control-border);
   /* The step, not --control-xs-radius: a box that turned round at
-     radius="full" would read as a radio. */
+     radius="full-rounded" would read as a radio. */
   border-radius: var(--radius-sm);
   background: var(--background);
   cursor: var(--cursor-button);

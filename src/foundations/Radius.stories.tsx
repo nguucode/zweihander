@@ -68,7 +68,7 @@ function Intents() {
   )
 }
 
-const PRESETS: RadiusPreset[] = ['none', 'small', 'medium', 'large', 'full']
+const PRESETS: RadiusPreset[] = ['sharp', 'rounded', 'full-rounded']
 
 function PresetRow({ preset }: { preset: RadiusPreset }) {
   return (
@@ -128,14 +128,14 @@ export const Presets: Story = {
       }
     }
 
-    // none flattens everything.
-    const none = parts('none')
-    await expect(none.control).toBe(0)
-    await expect(none.field).toBe(0)
-    await expect(none.panel).toBe(0)
+    // sharp flattens everything.
+    const sharp = parts('sharp')
+    await expect(sharp.control).toBe(0)
+    await expect(sharp.field).toBe(0)
+    await expect(sharp.panel).toBe(0)
 
-    const large = parts('large')
-    const full = parts('full')
+    const rounded = parts('rounded')
+    const full = parts('full-rounded')
 
     // full pills the control...
     await expect(full.control).toBeGreaterThan(1000)
@@ -143,10 +143,10 @@ export const Presets: Story = {
     // anything at or above 16px is one.
     await expect(full.field).toBeLessThan(16)
     await expect(full.panel).toBeLessThan(1000)
-    // ...and it still has to be a step up from large, or "full" would just
-    // be "large with a pill button".
-    await expect(full.field).toBeGreaterThan(large.field)
-    await expect(full.panel).toBeGreaterThan(large.panel)
+    // ...and it still has to be a step up from rounded, or "full-rounded"
+    // would just be "rounded with a pill button".
+    await expect(full.field).toBeGreaterThan(rounded.field)
+    await expect(full.panel).toBeGreaterThan(rounded.panel)
   },
 }
 
@@ -186,17 +186,3 @@ export const Scaling: Story = {
   },
 }
 
-/* The small preset is three quarters of the default, not half: at half the
-   24px controls' corner fell to 3px, which reads as a mistake rather than
-   a choice. */
-export const SmallPreset: Story = {
-  render: () => (
-    <Theme radius="small">
-      <Button size="sm">Small preset</Button>
-    </Theme>
-  ),
-  play: async ({ canvas }) => {
-    const radius = getComputedStyle(canvas.getByRole('button')).borderTopLeftRadius
-    await expect(Number.parseFloat(radius)).toBeCloseTo(4.5, 1)
-  },
-}
