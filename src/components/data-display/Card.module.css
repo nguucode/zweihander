@@ -49,12 +49,36 @@
 }
 
 .elevated {
+  --background: var(--card);
   background: var(--card);
   box-shadow: var(--shadow-sm);
 }
 
 .outline {
+  --background: var(--card);
   background: var(--card);
+}
+
+/* surface is a block of an AppShell page and takes the look the Theme's
+   contentStyle picks: a raised card on the canvas (card), or a section of
+   the one flat surface, set off by a rule above (flat). It restates
+   --background because it is what the components inside sit on. */
+.surface {
+  --background: var(--card);
+  background: var(--content-card, var(--card)) var(--content-flat, transparent);
+  box-shadow: var(--content-card, var(--shadow-sm)) var(--content-flat, none);
+}
+.surface.rounded {
+  border-radius: var(--content-card, var(--radius-panel)) var(--content-flat, 0);
+}
+.surface.bordered {
+  border-color: var(--content-card, var(--border)) var(--content-flat, transparent);
+  border-block-start-color: var(--border);
+}
+.surface.interactive:hover {
+  box-shadow: var(--content-card, var(--shadow-md)) var(--content-flat, none);
+  /* Flat has no shadow to lift: the rule above strengthens, as outline's edge does. */
+  border-block-start-color: var(--content-card, var(--border)) var(--content-flat, var(--control-border));
 }
 
 /* unstyled keeps its padding and layout, and drops everything you see. */

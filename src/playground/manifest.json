@@ -945,10 +945,11 @@
           "options": [
             "elevated",
             "outline",
-            "unstyled"
+            "unstyled",
+            "surface"
           ],
           "default": "elevated",
-          "description": "`elevated`: the card surface with a faint shadow. `outline`: the surface and its edge, no shadow. `unstyled`: keeps the padding and layout, drops every visual."
+          "description": "`elevated`: the card surface with a faint shadow. `outline`: the surface and its edge, no shadow. `unstyled`: keeps the padding and layout, drops every visual. `surface`: a block of an AppShell page, elevated when the Theme's `contentStyle` is `card`, a section with a rule above when it is `flat`."
         },
         {
           "name": "orientation",
@@ -2776,6 +2777,36 @@
       "status": "experimental",
       "storyId": "patterns-application-ui-app-shell--with-sidebar",
       "props": [
+        {
+          "name": "layout",
+          "control": "inline-radio",
+          "options": [
+            "sidebar",
+            "top-bar"
+          ],
+          "default": "sidebar",
+          "description": "`sidebar`: the sidebar runs the full height, no top bar on wide screens. `top-bar`: the header runs the full width above the sidebar and the content."
+        },
+        {
+          "name": "topBarSurface",
+          "control": "inline-radio",
+          "options": [
+            "solid",
+            "transparent"
+          ],
+          "default": "solid",
+          "description": "The header on the card colour (`solid`) or on the canvas (`transparent`)."
+        },
+        {
+          "name": "sidebarSurface",
+          "control": "inline-radio",
+          "options": [
+            "solid",
+            "transparent"
+          ],
+          "default": "transparent",
+          "description": "The sidebar on the card colour (`solid`) or on the canvas (`transparent`)."
+        },
         {
           "name": "navigationLabel",
           "control": "text",

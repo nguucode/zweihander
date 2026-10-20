@@ -2637,6 +2637,16 @@
           "$value": "0.375rem"
         }
       }
+    },
+    "sidebar-width": {
+      "$type": "dimension",
+      "$value": "16rem",
+      "$extensions": {
+        "compact": {
+          "$value": "14rem"
+        }
+      },
+      "$description": "An expanded Sidebar, and the brand cell above it in an AppShell's top bar, so the logo sits in the same place in either layout."
     }
   },
   "icon": {

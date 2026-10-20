@@ -2,12 +2,14 @@ import type { ReactNode } from 'react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { Icon } from '@/lib/icon'
+import { CANVASES, CONTENT_STYLES, Theme, type Canvas, type ContentStyle, type Density } from '@/theme/Theme'
 import { Avatar } from '@/components/atomic-elements/Avatar'
 import { Button } from '@/components/buttons/Button'
+import { Card } from '@/components/data-display/Card'
 import { Search } from '@/components/inputs/Search'
 import { Menu } from '@/components/navigation/Menu'
 import { Sidebar, type SidebarEntry } from '@/components/navigation/Sidebar'
-import { AppHeader, AppNav, AppShell } from './AppShell'
+import { AppHeader, AppNav, AppShell, type AppShellLayout, type AppShellSurface } from './AppShell'
 import { PageHeading } from './PageHeading'
 import { Stats } from './Stats'
 
@@ -26,13 +28,31 @@ const entries: SidebarEntry[] = [
   },
 ]
 
-const brand = <strong style={{ fontSize: 'var(--text-heading-xs)' }}>Zweihänder</strong>
+const brand = (
+  <strong data-testid="brand" style={{ fontSize: 'var(--text-heading-xs)' }}>
+    Zweihänder
+  </strong>
+)
 
-const sidebar = (collapsible = false) => (
+const account = (
+  <Menu
+    align="start"
+    trigger={
+      <Button variant="secondary" appearance="ghost" startIcon={<Avatar initials="AS" size="sm" />}>
+        Ana Silva
+      </Button>
+    }
+    items={[{ label: 'Your profile' }, { label: 'Settings' }, { type: 'separator' }, { label: 'Sign out' }]}
+  />
+)
+
+/** In the sidebar layout there is no top bar, so search sits in the sidebar's header and the account in its footer. */
+const sidebar = (collapsible = false, withTopBarItems = true) => (
   <Sidebar
     items={entries}
     currentHref="#dashboard"
-    header={brand}
+    header={withTopBarItems && !collapsible ? <Search aria-label="Search" placeholder="Search" /> : undefined}
+    footer={withTopBarItems && !collapsible ? account : undefined}
     isCollapsible={collapsible}
     defaultCollapsed={collapsible}
     style={{ blockSize: '100%' }}
@@ -56,6 +76,8 @@ const headerEnd = (
   </>
 )
 
+const topBar = <AppHeader start={<Search aria-label="Search" placeholder="Search" />} end={headerEnd} />
+
 const content = (
   <div style={{ display: 'grid', gap: 'var(--space-8)' }}>
     <PageHeading
@@ -73,6 +95,48 @@ const content = (
     />
   </div>
 )
+
+/** Page blocks as Cards with appearance="surface": raised on the canvas under contentStyle="card", ruled-off sections under "flat". */
+const blocks = (
+  <div style={{ display: 'grid', gap: 'var(--space-group)' }}>
+    <PageHeading title="Dashboard" description="What happened across your projects this month." />
+    <div style={{ display: 'grid', gap: 'var(--space-group)', gridTemplateColumns: 'repeat(auto-fit, minmax(10rem, 1fr))' }}>
+      {[
+        ['Active projects', '8'],
+        ['Open tasks', '134'],
+        ['Team members', '24'],
+      ].map(([label, value]) => (
+        <Card key={label} appearance="surface" size="sm" data-testid="block">
+          <span style={{ color: 'var(--muted-foreground)' }}>{label}</span>
+          <strong style={{ fontSize: 'var(--text-heading-sm)' }}>{value}</strong>
+        </Card>
+      ))}
+    </div>
+    <Card appearance="surface" size="sm">
+      <strong>Recent activity</strong>
+      <span style={{ color: 'var(--muted-foreground)' }}>Ledger import finished for 3 projects.</span>
+    </Card>
+  </div>
+)
+
+/** A Theme around the story, for the canvas, the content style and density. */
+const themed = (props: { canvas?: Canvas; contentStyle?: ContentStyle; density?: Density }) => (Story: () => ReactNode) => (
+  <Theme {...props} style={{ blockSize: '100%' }}>
+    {Story()}
+  </Theme>
+)
+
+/** The logo's left edge against the sidebar icons' left edge: they line up in either layout. */
+const logoOffset = (canvasElement: HTMLElement) => {
+  const icon = canvasElement.querySelector('nav[aria-label="Main"] a svg')!
+  return canvasElement.querySelector('[data-testid="brand"]')!.getBoundingClientRect().left - icon.getBoundingClientRect().left
+}
+/** The logo's centre line, from the shell's top: half a top bar (--control-md plus two --space-cluster) in either layout. */
+const logoMiddle = (canvasElement: HTMLElement) => {
+  const shell = canvasElement.querySelector('main')!.closest('[class*="shell"]')!
+  const logo = canvasElement.querySelector('[data-testid="brand"]')!.getBoundingClientRect()
+  return logo.top + logo.height / 2 - shell.getBoundingClientRect().top
+}
 
 /**
  * The shell in a box of the given size: it lays out by its own width. Link
@@ -96,24 +160,55 @@ const meta = {
   component: AppShell,
   parameters: { layout: 'padded' },
   args: { children: content, style: { blockSize: '100%' } },
-  argTypes: { children: { control: false }, sidebar: { control: false }, header: { control: false }, mobileNavigation: { control: false } },
+  argTypes: {
+    layout: {
+      description: '`sidebar`: the sidebar runs the full height, no top bar on wide screens. `top-bar`: the header runs the full width above the sidebar and the content.',
+      control: 'inline-radio',
+      options: ['sidebar', 'top-bar'],
+      table: { type: { summary: "'sidebar' | 'top-bar'" }, defaultValue: { summary: "'sidebar'" } },
+    },
+    topBarSurface: {
+      description: 'The header on the card colour (`solid`) or on the canvas (`transparent`).',
+      control: 'inline-radio',
+      options: ['solid', 'transparent'],
+      table: { type: { summary: "'solid' | 'transparent'" }, defaultValue: { summary: "'solid'" } },
+    },
+    sidebarSurface: {
+      description: 'The sidebar on the card colour (`solid`) or on the canvas (`transparent`).',
+      control: 'inline-radio',
+      options: ['solid', 'transparent'],
+      table: { type: { summary: "'solid' | 'transparent'" }, defaultValue: { summary: "'transparent'" } },
+    },
+    brand: { description: 'The logo. The shell places it in the same spot in either layout.', control: false },
+    children: { control: false },
+    sidebar: { control: false },
+    header: { control: false },
+    mobileNavigation: { control: false },
+  },
 } satisfies Meta<typeof AppShell>
 
 export default meta
 type Story = StoryObj<typeof meta>
 
-/** A sidebar beside the content, a header with search and the account menu. */
+/**
+ * The defaults: the sidebar runs the full height on the neutral canvas, with
+ * search and the account in it and no top bar; the page is one flat surface.
+ */
 export const WithSidebar: Story = {
-  args: {
-    sidebar: sidebar(),
-    header: <AppHeader start={<Search aria-label="Search" placeholder="Search" />} end={headerEnd} />,
-  },
+  args: { brand, sidebar: sidebar() },
   decorators: box(1100),
-  play: async ({ canvas }) => {
+  play: async ({ canvas, canvasElement }) => {
     const nav = canvas.getByRole('navigation', { name: 'Main' })
     await expect(within(nav).getByRole('link', { name: 'Dashboard' })).toHaveAttribute('aria-current', 'page')
-    // Wide: the sidebar is the navigation, so no menu button.
+    // Wide: the sidebar is the navigation, so no menu button and no top bar.
     await expect(canvas.queryByRole('button', { name: 'Open navigation' })).toBeNull()
+    // The shell's header is the first <header>; PageHeading inside the page is another.
+    await expect(canvasElement.querySelector('header')).not.toBeVisible()
+    // The logo lines up with the sidebar's icons: two --space-inline in.
+    await expect(logoOffset(canvasElement)).toBeCloseTo(0, 0)
+    // Rendered once, and on the same centre line in either layout.
+    await expect(canvasElement.querySelectorAll('[data-testid="brand"]')).toHaveLength(1)
+    await expect(logoMiddle(canvasElement)).toBeCloseTo(28, 0)
     // The skip link targets the shell's own main, and moves focus to it.
     const main = canvas.getByRole('main')
     const skip = canvas.getByRole('link', { name: 'Skip to content' })
@@ -123,17 +218,151 @@ export const WithSidebar: Story = {
   },
 }
 
+/** The header runs the full width above the sidebar; the logo stays where it was in the sidebar layout. */
+export const TopBar: Story = {
+  args: {
+    layout: 'top-bar',
+    sidebarSurface: 'solid',
+    brand,
+    sidebar: sidebar(false, false),
+    header: topBar,
+  },
+  decorators: box(1100),
+  play: async ({ canvasElement }) => {
+    const bar = canvasElement.querySelector('header')!
+    const shell = canvasElement.querySelector('main')!.closest('[class*="shell"]')!
+    await expect(bar.getBoundingClientRect().width).toBeCloseTo(shell.getBoundingClientRect().width, 0)
+    await expect(logoOffset(canvasElement)).toBeCloseTo(0, 0)
+    // Rendered once, and on the same centre line in either layout.
+    await expect(canvasElement.querySelectorAll('[data-testid="brand"]')).toHaveLength(1)
+    await expect(logoMiddle(canvasElement)).toBeCloseTo(28, 0)
+  },
+}
+
+/** Compact density: the bar, the sidebar's width and the logo's place all follow it. */
+export const Compact: Story = {
+  ...WithSidebar,
+  decorators: [themed({ density: 'compact' }), ...box(1100)],
+  play: async ({ canvasElement }) => {
+    await expect(logoOffset(canvasElement)).toBeCloseTo(0, 0)
+    // Rendered once, and on the same centre line in either layout.
+    await expect(canvasElement.querySelectorAll('[data-testid="brand"]')).toHaveLength(1)
+    await expect(logoMiddle(canvasElement)).toBeCloseTo(22, 0)
+  },
+}
+
+/**
+ * contentStyle="card" on a tinted canvas: the page sits on the canvas and its
+ * blocks are raised Cards; the sidebar is transparent on the tint.
+ */
+export const CardOnTint: Story = {
+  args: {
+    layout: 'top-bar',
+    brand,
+    sidebar: sidebar(false, false),
+    header: topBar,
+    children: blocks,
+  },
+  decorators: [themed({ canvas: 'tinted', contentStyle: 'card' }), ...box(1100)],
+  play: async ({ canvas }) => {
+    // No page surface: the main is see-through, each block carries the card colour.
+    await expect(getComputedStyle(canvas.getByRole('main')).backgroundColor).toBe('rgba(0, 0, 0, 0)')
+    const block = canvas.getAllByTestId('block')[0]
+    await expect(getComputedStyle(block).backgroundColor).not.toBe('rgba(0, 0, 0, 0)')
+  },
+}
+
+/** On a plain canvas a transparent piece keeps its edge, since no fill marks it. */
+export const TransparentOnPlain: Story = {
+  args: {
+    layout: 'top-bar',
+    topBarSurface: 'transparent',
+    brand,
+    sidebar: sidebar(false, false),
+    header: topBar,
+    children: blocks,
+  },
+  decorators: [themed({ canvas: 'plain', contentStyle: 'card' }), ...box(1100)],
+  play: async ({ canvas, canvasElement }) => {
+    const top = canvasElement.querySelector('header')!.parentElement!
+    await expect(getComputedStyle(top).borderBottomColor).not.toBe('rgba(0, 0, 0, 0)')
+    const side = canvas.getByRole('navigation', { name: 'Main' }).parentElement!
+    await expect(getComputedStyle(side).borderInlineEndColor).not.toBe('rgba(0, 0, 0, 0)')
+  },
+}
+
+type Combo = { id: number; layout: AppShellLayout; top?: AppShellSurface; nav: AppShellSurface; canvas: Canvas; contentStyle: ContentStyle }
+/** The 24 combinations in use, numbered as on the review sheet; the other 12 do not occur in real products. */
+const COMBOS: Combo[] = []
+{
+  const structures: [AppShellLayout, AppShellSurface | undefined, AppShellSurface][] = [
+    ['sidebar', undefined, 'solid'],
+    ['sidebar', undefined, 'transparent'],
+    ['top-bar', 'solid', 'solid'],
+    ['top-bar', 'solid', 'transparent'],
+    ['top-bar', 'transparent', 'solid'],
+    ['top-bar', 'transparent', 'transparent'],
+  ]
+  const cut = new Set([2, 4, 6, 8, 14, 20, 26, 27, 28, 29, 30, 32])
+  let id = 0
+  for (const [layout, top, nav] of structures)
+    for (const canvas of CANVASES)
+      for (const contentStyle of CONTENT_STYLES) {
+        id += 1
+        if (!cut.has(id)) COMBOS.push({ id, layout, top, nav, canvas, contentStyle })
+      }
+}
+
+/** Every combination in use, small. Rules: no plain canvas with flat content; no transparent top bar over a solid sidebar (except where it looks the same, #25); no solid full-height sidebar with flat content. */
+export const Combinations: Story = {
+  parameters: { layout: 'fullscreen' },
+  render: () => (
+    <div style={{ display: 'grid', gap: 'var(--space-group)', gridTemplateColumns: 'repeat(auto-fill, minmax(18rem, 1fr))', padding: 'var(--space-group)' }}>
+      {COMBOS.map((c) => (
+        <figure key={c.id} style={{ margin: 0, display: 'grid', gap: 'var(--space-inline)' }}>
+          {/* Laid out at 1100px so the shell is wide enough for its sidebar, then scaled down. */}
+          <div style={{ aspectRatio: '1100 / 700', overflow: 'hidden', border: '1px solid var(--border)', borderRadius: 'var(--radius-field)', containerType: 'inline-size' }} aria-hidden="true" inert>
+            <Theme canvas={c.canvas} contentStyle={c.contentStyle} style={{ inlineSize: 1100, blockSize: 700, transformOrigin: '0 0', transform: 'scale(calc(100cqi / 1100px))' }}>
+              <AppShell
+                layout={c.layout}
+                topBarSurface={c.top}
+                sidebarSurface={c.nav}
+                brand={<strong>Zweihänder</strong>}
+                sidebar={<Sidebar items={entries} currentHref="#dashboard" style={{ blockSize: '100%' }} />}
+                style={{ blockSize: '100%' }}
+              >
+                {blocks}
+              </AppShell>
+            </Theme>
+          </div>
+          <figcaption style={{ fontSize: 'var(--text-body-sm)', color: 'var(--muted-foreground)' }}>
+            <strong style={{ color: 'var(--foreground)' }}>#{String(c.id).padStart(2, '0')}</strong> {c.layout}
+            {c.top && ` · top ${c.top}`} · nav {c.nav} · {c.canvas} · {c.contentStyle}
+          </figcaption>
+        </figure>
+      ))}
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    await expect(canvasElement.querySelectorAll('figure')).toHaveLength(24)
+  },
+}
+
 /** The sidebar as an icon rail, with the labels one click away. */
 export const CollapsedRail: Story = {
   args: {
+    brand,
     sidebar: sidebar(true),
-    header: <AppHeader start={<Search aria-label="Search" placeholder="Search" />} end={headerEnd} />,
+    header: topBar,
   },
   decorators: box(1100),
-  play: async ({ canvas }) => {
+  play: async ({ canvas, canvasElement }) => {
     const nav = canvas.getByRole('navigation', { name: 'Main' })
     const narrow = nav.getBoundingClientRect().width
     await expect(narrow).toBeLessThan(100)
+    // The logo keeps its place in the rail, cut to the rail's width.
+    await expect(logoOffset(canvasElement)).toBeCloseTo(0, 0)
+    await expect(logoMiddle(canvasElement)).toBeCloseTo(28, 0)
     // Collapsed, the links keep their names.
     await expect(within(nav).getByRole('link', { name: 'Projects, 12' })).toBeVisible()
     await userEvent.click(within(nav).getByRole('button', { name: /Expand/ }))
@@ -151,8 +380,10 @@ const topLinks = [
 /** No sidebar: a logo and links in the header, which move into the drawer on a phone. */
 export const TopNavigation: Story = {
   args: {
-    header: <AppHeader start={<>{brand}<AppNav items={topLinks} currentHref="#dashboard" /></>} end={headerEnd} />,
-    mobileNavigation: <Sidebar items={entries.slice(0, 4)} currentHref="#dashboard" header={brand} style={{ blockSize: '100%' }} />,
+    layout: 'top-bar',
+    brand,
+    header: <AppHeader start={<AppNav items={topLinks} currentHref="#dashboard" />} end={headerEnd} />,
+    mobileNavigation: <Sidebar items={entries.slice(0, 4)} currentHref="#dashboard" style={{ blockSize: '100%' }} />,
     mainId: 'content',
   },
   decorators: box(1100),
@@ -211,7 +442,8 @@ export const WithoutNavigation: Story = {
   args: {
     sidebar: false,
     mobileNavigation: null,
-    header: <AppHeader start={brand} end={headerEnd} />,
+    brand,
+    header: <AppHeader end={headerEnd} />,
   },
   decorators: box(390),
   play: async ({ canvas }) => {

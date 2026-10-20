@@ -1,27 +1,106 @@
 /* The shell fills the viewport by default; set block-size on it to put it
-   in a smaller box, as the stories do. The content column scrolls, so the
-   sidebar and the header stay where they are. Breakpoints are the shell's
-   own width (a container), which in an app is the viewport's. */
+   in a smaller box, as the stories do. Breakpoints are the shell's own width
+   (a container), which in an app is the viewport's.
+
+   It is a grid with no padding and no gap: it only places the pieces. Its
+   background is the Theme's canvas, read through the [data-canvas] switches
+   here, against this element's own palette, unless the consumer set
+   --canvas (any colour or gradient) through Theme tokens. */
 .shell {
+  /* What the pieces inside need from the scope around the shell, captured
+     here because a piece cannot read its own custom property while
+     redefining it. */
+  --shell-muted-foreground: var(--muted-foreground);
+  --shell-subtle-foreground: var(--subtle-foreground);
+  --shell-canvas-foreground: var(--canvas-foreground, var(--foreground));
+  /* A solid colour standing for the canvas, for what components draw as
+     "the surface under me" (a Badge ring, a Checkbox fill). A gradient
+     canvas has none, so the consumer names one with --canvas-solid. */
+  --shell-canvas-solid: var(
+    --canvas-solid,
+    var(--canvas-plain, var(--card)) var(--canvas-neutral, var(--background))
+      var(--canvas-tinted, var(--primary-subtle))
+  );
+  --shell-canvas-subtle-foreground: var(--canvas-muted-foreground, var(--subtle-foreground));
+  --shell-canvas-muted-foreground: var(
+    --canvas-muted-foreground,
+    var(--canvas-plain, var(--muted-foreground)) var(--canvas-neutral, var(--muted-foreground))
+      var(--canvas-tinted, var(--subtle-foreground))
+  );
+  /* A transparent piece on a plain canvas has nothing else marking its edge. */
+  --shell-transparent-edge: var(--canvas-plain, var(--border)) var(--canvas-neutral, transparent)
+    var(--canvas-tinted, transparent);
+  --shell-bar: calc(var(--control-md) + 2 * var(--space-cluster));
+  /* The logo lines up with the sidebar's icons: its padding plus an item's. */
+  --shell-logo-x: calc(2 * var(--space-inline));
+
   position: relative;
   container-type: inline-size;
   block-size: 100dvh;
   overflow: hidden;
-  background: var(--background);
+  background: var(
+    --canvas,
+    var(--canvas-plain, var(--card)) var(--canvas-neutral, var(--background))
+      var(--canvas-tinted, var(--primary-subtle))
+  );
   color: var(--foreground);
   font-family: var(--font-sans);
 }
 
 .frame {
   display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
   grid-template-columns: minmax(0, 1fr);
   block-size: 100%;
 }
 
+/* A solid piece is the card colour and draws the edge it shares with the
+   content; a transparent one shows the canvas and reads its text colours. */
+/* Scoped to the shell's own cells: a bare attribute selector is not hashed by
+   CSS Modules and would match any element in the page. */
+:is(.top, .sidebar)[data-surface='solid'] {
+  --background: var(--card);
+  background: var(--card);
+  color: var(--card-foreground);
+}
+:is(.top, .sidebar)[data-surface='transparent'] {
+  --background: var(--shell-canvas-solid);
+  --muted-foreground: var(--shell-canvas-muted-foreground);
+  --subtle-foreground: var(--shell-canvas-subtle-foreground);
+  color: var(--shell-canvas-foreground);
+}
+
+.top {
+  grid-column: 1 / -1;
+  border-block-end: 1px solid var(--border);
+}
+.top[data-surface='transparent'] {
+  border-block-end-color: var(--shell-transparent-edge);
+}
+
 .sidebar {
   display: none;
+  grid-template-rows: auto minmax(0, 1fr);
   min-block-size: 0;
+  /* The Sidebar inside drops its own fill and edge; this cell draws them. */
+  --sidebar-background: transparent;
+  --sidebar-border: 0;
   border-inline-end: 1px solid var(--border);
+}
+.sidebar[data-surface='transparent'] {
+  border-inline-end-color: var(--shell-transparent-edge);
+}
+.sidebar > :last-child {
+  grid-row: -2;
+}
+/* In a collapsed rail the logo keeps its place and is cut to the rail's
+   width, so a logo should lead with its mark. */
+.sidebarBrand {
+  display: flex;
+  align-items: center;
+  block-size: var(--shell-bar);
+  padding-inline-start: var(--shell-logo-x);
+  overflow: hidden;
 }
 
 /* The sidebar from 64rem; below that it lives in the drawer. */
@@ -30,22 +109,62 @@
     grid-template-columns: auto minmax(0, 1fr);
   }
   .withSidebar .sidebar {
-    display: block;
+    display: grid;
+  }
+  /* sidebar layout: the sidebar runs the full height and there is no top bar. */
+  .sidebarLayout.withSidebar .top {
+    display: none;
+  }
+  .sidebarLayout.withSidebar .sidebar {
+    grid-row: 1 / -1;
+  }
+  /* top-bar layout: the logo is in the bar, over the sidebar column. */
+  .topBarLayout.withSidebar.withBrand .header {
+    padding-inline-start: 0;
+  }
+  .topBarLayout.withSidebar .brand {
+    box-sizing: border-box;
+    flex: none;
+    inline-size: var(--sidebar-width);
+    padding-inline-start: var(--shell-logo-x);
   }
 }
 
-.column {
-  display: flex;
-  flex-direction: column;
+/* The page. flat: one card surface, inset from the shell's edges and
+   flush below 48rem. card: no surface, the page sits on the canvas and its
+   blocks are Cards with appearance="surface". The surface restates
+   --background, which components read as "what I sit on". */
+.content {
+  display: grid;
+  grid-row: 2;
+  grid-column: -2;
+  min-block-size: 0;
   min-inline-size: 0;
+  padding: var(--content-flat, var(--space-2)) var(--content-card, 0);
+}
+.main {
+  --background: var(--content-flat, var(--card)) var(--content-card, var(--shell-canvas-solid));
+  /* On the canvas (card), text reads the canvas colours, as a transparent piece does. */
+  --muted-foreground: var(--content-flat, var(--shell-muted-foreground)) var(--content-card, var(--shell-canvas-muted-foreground));
+  --subtle-foreground: var(--content-flat, var(--shell-subtle-foreground)) var(--content-card, var(--shell-canvas-subtle-foreground));
   min-block-size: 0;
   overflow: auto;
-}
-
-.main {
-  flex: 1;
-  padding: var(--space-6);
+  padding: var(--space-container);
+  border: 1px solid;
+  border-color: var(--content-flat, var(--border)) var(--content-card, transparent);
+  border-radius: var(--content-flat, var(--radius-panel)) var(--content-card, 0);
+  background: var(--content-flat, var(--card)) var(--content-card, transparent);
+  color: var(--content-flat, var(--card-foreground)) var(--content-card, var(--shell-canvas-foreground));
   outline: none;
+}
+@container (max-width: 47.99rem) {
+  .content {
+    padding: 0;
+  }
+  .main {
+    border-color: transparent;
+    border-radius: 0;
+  }
 }
 @container (min-width: 64rem) {
   .main {
@@ -78,23 +197,26 @@
   outline-offset: var(--focus-offset);
 }
 
-/* -------------------------------------------------------------- header */
+/* -------------------------------------------------------------- header
+   The bar's fill and edge belong to the shell's top cell, so the header
+   itself is only the row. */
 .header {
-  position: sticky;
-  inset-block-start: 0;
-  z-index: var(--layer-sticky);
   display: flex;
   align-items: center;
   gap: var(--space-group);
-  min-block-size: calc(var(--space-8) * 2);
+  min-block-size: var(--shell-bar, calc(var(--control-md) + 2 * var(--space-cluster)));
   padding-inline: var(--space-4);
-  border-block-end: 1px solid var(--border);
-  background: var(--background);
 }
 @container (min-width: 64rem) {
   .header {
     padding-inline: var(--space-section);
   }
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  min-inline-size: 0;
 }
 
 .start {

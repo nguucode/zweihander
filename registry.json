@@ -1415,7 +1415,7 @@
       "name": "app-shell",
       "type": "registry:block",
       "title": "App Shell",
-      "description": "Application UI pattern: AppShell (sidebar or top navigation, sticky header, skip link, a navigation drawer on narrow screens), AppHeader and AppNav.",
+      "description": "Application UI pattern: AppShell (a frame on the Theme's canvas: full-height sidebar or full-width top bar, solid or transparent pieces, a brand slot, flat or card content, skip link, a navigation drawer on narrow screens), AppHeader and AppNav.",
       "dependencies": [
         "@base-ui/react"
       ],

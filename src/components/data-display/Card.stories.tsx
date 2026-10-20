@@ -36,10 +36,10 @@ const meta = {
       table: { type: { summary: "'xs' | 'sm' | 'md' | 'lg'" }, defaultValue: { summary: "'md'" } },
     },
     appearance: {
-      description: '`elevated`: the card surface with a faint shadow. `outline`: the surface and its edge, no shadow. `unstyled`: keeps the padding and layout, drops every visual.',
+      description: '`elevated`: the card surface with a faint shadow. `outline`: the surface and its edge, no shadow. `unstyled`: keeps the padding and layout, drops every visual. `surface`: a block of an AppShell page, elevated when the Theme\'s `contentStyle` is `card`, a section with a rule above when it is `flat`.',
       control: 'inline-radio',
-      options: ['elevated', 'outline', 'unstyled'],
-      table: { type: { summary: "'elevated' | 'outline' | 'unstyled'" }, defaultValue: { summary: "'elevated'" } },
+      options: ['elevated', 'outline', 'unstyled', 'surface'],
+      table: { type: { summary: "'elevated' | 'outline' | 'unstyled' | 'surface'" }, defaultValue: { summary: "'elevated'" } },
     },
     orientation: {
       description: 'How children flow: `vertical` stacks them, `horizontal` sets them side by side (media and text).',
@@ -93,7 +93,7 @@ export const Default: Story = {
 export const Appearances: Story = {
   render: (args) => (
     <div style={{ display: 'grid', gap: 'var(--space-4)' }}>
-      {(['elevated', 'outline', 'unstyled'] as const).map((appearance) => (
+      {(['elevated', 'outline', 'unstyled', 'surface'] as const).map((appearance) => (
         <Card key={appearance} {...args} appearance={appearance}>
           <h3 style={title}>{appearance}</h3>
           <p style={muted}>Change how you pay for your plan.</p>
@@ -195,7 +195,7 @@ export const Contrast: Story = {
           appearance={mode}
           style={{ display: 'grid', gap: 'var(--space-2)', background: 'var(--background)', padding: 'var(--space-2)' }}
         >
-          {(['elevated', 'outline', 'unstyled'] as const).map((appearance) => (
+          {(['elevated', 'outline', 'unstyled', 'surface'] as const).map((appearance) => (
             <Card key={appearance} appearance={appearance} onClick={() => {}} data-audit={`${mode} ${appearance}`}>
               <span style={muted}>Change how you pay for your plan.</span>
             </Card>

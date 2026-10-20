@@ -743,6 +743,41 @@
   --density-compact: initial;
 }
 
+/* Canvas and content style, set by Theme for an AppShell. Same switch idiom:
+   the nearest [data-canvas] / [data-content-style] wins at any depth. The
+   colours themselves are resolved where they are used (the shell, a surface
+   Card), against that element's own palette, so a nested appearance or
+   accent still reaches them. */
+:root,
+[data-canvas='neutral'] {
+  --canvas-plain: ;
+  --canvas-neutral: initial;
+  --canvas-tinted: ;
+}
+
+[data-canvas='plain'] {
+  --canvas-plain: initial;
+  --canvas-neutral: ;
+  --canvas-tinted: ;
+}
+
+[data-canvas='tinted'] {
+  --canvas-plain: ;
+  --canvas-neutral: ;
+  --canvas-tinted: initial;
+}
+
+:root,
+[data-content-style='flat'] {
+  --content-card: ;
+  --content-flat: initial;
+}
+
+[data-content-style='card'] {
+  --content-card: initial;
+  --content-flat: ;
+}
+
 /* A custom property that reads another one is resolved where it is DECLARED
    and inherits as a finished value, so setting --accent-solid-* further down
    the tree cannot reach a --primary already computed at :root. Every element
@@ -891,6 +926,7 @@
   --badge-md: calc(var(--density-default, 1.25rem) var(--density-compact, 1rem) * var(--scaling));
   --badge-dot-sm: calc(var(--density-default, 0.375rem) var(--density-compact, 0.25rem) * var(--scaling));
   --badge-dot-md: calc(var(--density-default, 0.5rem) var(--density-compact, 0.375rem) * var(--scaling));
+  --sidebar-width: calc(var(--density-default, 16rem) var(--density-compact, 14rem) * var(--scaling));
 
   /* Icon sizes — one per control tier. */
   --icon-xs: calc(0.75rem * var(--scaling));

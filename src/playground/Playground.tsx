@@ -118,6 +118,8 @@ function readTheme(): PreviewTheme {
     accent: read('accent'),
     gray: read('gray'),
     radius: read('radius'),
+    canvas: read('canvas'),
+    contentStyle: read('contentStyle'),
     font: read('font'),
     scaling: read('scaling'),
     appearance: read('appearance'),
@@ -419,6 +421,21 @@ function ThemePopover({ theme, onChange }: { theme: PreviewTheme; onChange: (the
           options={choices(PREVIEW_THEME_VALUES.radius)}
           value={theme.radius}
           onValueChange={(radius) => set({ radius: radius as PreviewTheme['radius'] })}
+        />
+        {/* What an AppShell sits on, and how its page meets that canvas. */}
+        <RadioGroup
+          label="Canvas"
+          orientation="horizontal"
+          options={choices(PREVIEW_THEME_VALUES.canvas)}
+          value={theme.canvas}
+          onValueChange={(canvas) => set({ canvas: canvas as PreviewTheme['canvas'] })}
+        />
+        <RadioGroup
+          label="Content"
+          orientation="horizontal"
+          options={choices(PREVIEW_THEME_VALUES.contentStyle)}
+          value={theme.contentStyle}
+          onValueChange={(contentStyle) => set({ contentStyle: contentStyle as PreviewTheme['contentStyle'] })}
         />
         <RadioGroup
           label="Theme"
