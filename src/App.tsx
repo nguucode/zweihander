@@ -279,7 +279,7 @@ export default function App() {
   }, [])
 
   return (
-    <Theme accentColor="blue" grayColor="gray" radius="rounded" appearance={dark ? 'dark' : 'light'} className={styles.page}>
+    <Theme accentColor="blue" grayColor="gray" radius="sharp" appearance={dark ? 'dark' : 'light'} className={styles.page}>
       <a href="#main" className={styles.skip}>Skip to content</a>
       <header className={styles.header}>
         <a href="./" className={styles.brand} aria-label="Zweihänder home">
