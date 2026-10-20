@@ -1,11 +1,11 @@
 'use client'
 
-import { useEffect, useId, useState } from 'react'
+import { useId, useState } from 'react'
 import { arc, pie } from 'd3-shape'
 import { cn } from '@/lib/utils'
-import { Button } from '../buttons/Button'
 import { Table } from '../data-display/Table'
 import { Skeleton } from '../loaders/Skeleton'
+import { ChartFrame, useEnterOnce } from './ChartFrame'
 import { ChartLegend } from './ChartLegend'
 import { colorVar, formatCompact, formatShare, groupSlices, type Slice } from './chart-utils'
 import styles from './Chart.module.css'
@@ -41,16 +41,12 @@ export function PieChart({
 }: PieChartProps) {
   const id = useId()
   const [focusKey, setFocusKey] = useState<string | null>(null)
-  const [showTable, setShowTable] = useState(false)
-  const [isEntering, setIsEntering] = useState(true)
-  const isReady = !isLoading && data.length > 0
-  useEffect(() => {
-    if (!isReady || !isEntering) return
-    const t = setTimeout(() => setIsEntering(false), 1000)
-    return () => clearTimeout(t)
-  }, [isReady, isEntering])
-
   const total = data.reduce((sum, d) => sum + d.value, 0)
+  // All zeros is no data: a pie of nothing has no parts to show.
+  const hasData = total > 0
+  const isEntering = useEnterOnce(!isLoading && hasData)
+  const shareOf = (value: number) => formatShare(value / total)
+
   const slices = groupSlices(data)
   const isDonut = appearance === 'donut'
   const radius = size / 2 - 2
@@ -64,42 +60,32 @@ export function PieChart({
     .cornerRadius(isDonut ? 2 : 0)
 
   return (
-    <figure className={cn(styles.chart, className)} aria-labelledby={`${id}-title`} aria-busy={isLoading || undefined}>
-      <div className={styles.header}>
-        <div id={`${id}-title`} className={styles.title}>
-          {title}
-        </div>
-        {isReady && (
-          <Button appearance="ghost" variant="secondary" size="sm" aria-expanded={showTable} aria-controls={`${id}-table`} onClick={() => setShowTable((v) => !v)}>
-            {showTable ? 'View as chart' : 'View as table'}
-          </Button>
-        )}
-      </div>
-      {isLoading ? (
-        <Skeleton appearance="circle" width={size} height={size} />
-      ) : showTable ? (
-        <div id={`${id}-table`} className={styles.tableWrap} role="region" aria-labelledby={`${id}-title`} tabIndex={0}>
-          <Table
-            caption={title}
-            density="sm"
-            rows={data}
-            getRowId={(_, i) => String(i)}
-            columns={[
-              { key: 'label', header: 'Label', isRowHeader: true },
-              { key: 'value', header: 'Value', align: 'end', cell: (d) => format(d.value) },
-              { key: 'share', header: 'Share', align: 'end', cell: (d) => formatShare(total ? d.value / total : 0) },
-            ]}
-          />
-        </div>
-      ) : !isReady ? (
-        <div className={styles.plot} style={{ blockSize: size }}>
-          <span className={styles.badge}>No data</span>
-        </div>
-      ) : (
+    <ChartFrame
+      title={title}
+      isLoading={isLoading}
+      loading={<Skeleton appearance="circle" width={size} height={size} />}
+      hasData={hasData}
+      emptyHeight={size}
+      className={className}
+      table={() => (
+        <Table
+          caption={title}
+          density="sm"
+          rows={data}
+          getRowId={(_, i) => String(i)}
+          columns={[
+            { key: 'label', header: 'Label', isRowHeader: true },
+            { key: 'value', header: 'Value', align: 'end', cell: (d) => format(d.value) },
+            { key: 'share', header: 'Share', align: 'end', cell: (d) => shareOf(d.value) },
+          ]}
+        />
+      )}
+    >
+      {(titleId) => (
         <div className={styles.pieBody}>
           <svg
             role="img"
-            aria-labelledby={`${id}-title ${id}-desc`}
+            aria-labelledby={`${titleId} ${id}-desc`}
             className={cn(isEntering && styles.entering)}
             width={size}
             height={size}
@@ -133,20 +119,15 @@ export function PieChart({
             )}
           </svg>
           <span id={`${id}-desc`} className={styles.srOnly}>
-            {slices.map((s) => `${s.label} ${formatShare(total ? s.value / total : 0)}`).join(', ')}
+            {slices.map((s) => `${s.label} ${shareOf(s.value)}`).join(', ')}
           </span>
           <ChartLegend
             orientation="vertical"
-            items={slices.map((s, i) => ({
-              key: String(i),
-              label: s.label,
-              color: colorVar(s.color),
-              value: `${format(s.value)} · ${formatShare(total ? s.value / total : 0)}`,
-            }))}
+            items={slices.map((s, i) => ({ key: String(i), label: s.label, color: colorVar(s.color), value: `${format(s.value)} · ${shareOf(s.value)}` }))}
             onFocusChange={setFocusKey}
           />
         </div>
       )}
-    </figure>
+    </ChartFrame>
   )
 }

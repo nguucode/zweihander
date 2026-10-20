@@ -1133,6 +1133,11 @@
           "target": "components/zweihander/charts/Chart.module.css"
         },
         {
+          "path": "src/components/charts/ChartFrame.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/charts/ChartFrame.tsx"
+        },
+        {
           "path": "src/components/charts/ChartLegend.tsx",
           "type": "registry:component",
           "target": "components/zweihander/charts/ChartLegend.tsx"

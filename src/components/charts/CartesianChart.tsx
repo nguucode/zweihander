@@ -1,14 +1,14 @@
 'use client'
 
-import { useCallback, useEffect, useId, useState, type CSSProperties } from 'react'
+import { useCallback, useId, useState, type CSSProperties } from 'react'
 import { scaleBand, scaleLinear, scaleTime, scaleUtc } from 'd3-scale'
 import { area, line, stack } from 'd3-shape'
 import { cn } from '@/lib/utils'
-import { Button } from '../buttons/Button'
 import { Table } from '../data-display/Table'
 import { Skeleton } from '../loaders/Skeleton'
+import { ChartFrame, useEnterOnce } from './ChartFrame'
 import { ChartLegend } from './ChartLegend'
-import { formatCompact, formatTime, seriesColor, type ChartSeries } from './chart-utils'
+import { colorVar, formatCompact, formatTime, paletteColor, type ChartSeries } from './chart-utils'
 import styles from './Chart.module.css'
 
 export type ChartRow = Record<string, unknown>
@@ -17,7 +17,7 @@ export type ChartRow = Record<string, unknown>
 export interface CartesianChartProps {
   /** Shown above the chart, and its accessible name. */
   title: string
-  /** Flat rows, one per bucket: `{ time, ok: 120, error: 4 }`. */
+  /** Flat rows, one per bucket: `{ time, ok: 120, error: 4 }`. A missing or null value is a gap, not a zero. */
   data: ChartRow[]
   series: ChartSeries[]
   /** The field holding each row's x value. Dates give a time axis, strings a category axis. */
@@ -33,6 +33,8 @@ export interface CartesianChartProps {
   timeZone?: 'UTC'
   /** The last bucket is still filling: drawn dashed (line) or faded (bar). */
   isIncomplete?: boolean
+  /** What the legend shows beside each series: its sum, or its latest value (for rates and latencies, where a sum means nothing). */
+  legendValue?: 'total' | 'latest'
   isLoading?: boolean
   className?: string
 }
@@ -40,11 +42,12 @@ export interface CartesianChartProps {
 interface Props extends CartesianChartProps {
   type: 'line' | 'area' | 'bar'
   isGrouped?: boolean
-  /** Line only: fit the y axis to the data instead of starting at zero. */
+  /** Fit the y axis to the data instead of starting at zero. */
   isAutoDomain?: boolean
 }
 
 const MARGIN = { top: 8, right: 8, bottom: 24 }
+const DASH = '–'
 
 /* A callback ref, so the observer follows the plot when it unmounts and comes
    back (loading, or the table view) instead of watching a detached node. */
@@ -61,6 +64,12 @@ function useWidth() {
   return [ref, width] as const
 }
 
+/** A number, or null for a gap (missing, null or not a number). */
+function read(row: ChartRow, key: string) {
+  const v = row[key]
+  return v === null || v === undefined || v === '' || Number.isNaN(Number(v)) ? null : Number(v)
+}
+
 export function CartesianChart({
   type,
   isGrouped = false,
@@ -73,6 +82,7 @@ export function CartesianChart({
   format = formatCompact,
   timeZone,
   isIncomplete = false,
+  legendValue = 'total',
   isLoading = false,
   className,
 }: Props) {
@@ -81,37 +91,44 @@ export function CartesianChart({
   const [hiddenKeys, setHiddenKeys] = useState<string[]>([])
   const [focusKey, setFocusKey] = useState<string | null>(null)
   const [hover, setHover] = useState<number | null>(null)
-  const [showTable, setShowTable] = useState(false)
-  // Animate in once, when there is something to draw; never again on new data.
-  const [isEntering, setIsEntering] = useState(true)
-  const isReady = width > 0 && !isLoading && data.length > 0
-  useEffect(() => {
-    if (!isReady || !isEntering) return
-    const t = setTimeout(() => setIsEntering(false), 1000)
-    return () => clearTimeout(t)
-  }, [isReady, isEntering])
+  const isEntering = useEnterOnce(width > 0 && !isLoading && data.length > 0)
 
-  const value = (row: ChartRow, key: string) => Number(row[key] ?? 0)
-  const colored = series.map((s, i) => ({ ...s, fill: seriesColor(s, i) }))
-  const visible = colored.filter((s) => !hiddenKeys.includes(s.key))
+  const colored = series.map((s, i) => ({ ...s, fill: colorVar(s.color ?? paletteColor(i)) }))
+  // Keys left over from a previous `series` are ignored, and hiding them all shows them all.
+  const hidden = hiddenKeys.filter((k) => series.some((s) => s.key === k))
+  const visible = hidden.length === series.length ? colored : colored.filter((s) => !hidden.includes(s.key))
   const keys = visible.map((s) => s.key)
-  const isTime = data.length > 1 && data[0][x] instanceof Date
-  const xLabel = (row: ChartRow) => (isTime ? formatTime(row[x] as Date, timeZone) : String(row[x]))
+  const focus = focusKey && keys.includes(focusKey) ? focusKey : null
+  const value = (row: ChartRow, key: string) => read(row, key) ?? 0
+  const show = (row: ChartRow, key: string) => {
+    const v = read(row, key)
+    return v === null ? DASH : format(v)
+  }
   const last = data.length - 1
+  // A time axis needs two dates in order; anything else is read as categories.
+  const isTime = data.length > 1 && data[0][x] instanceof Date && data[1][x] instanceof Date && +(data[1][x] as Date) > +(data[0][x] as Date)
+  const xLabel = (row: ChartRow) => (isTime ? formatTime(row[x] as Date, timeZone) : String(row[x]))
+  const isStacked = type === 'bar' && !isGrouped
+  const totals = data.map((r) => (isStacked ? keys.reduce((s, k) => s + value(r, k), 0) : Math.max(0, ...keys.map((k) => value(r, k)))))
 
-  let plot = null
-  if (isReady) {
-    const isStacked = type === 'bar' && !isGrouped
-    const totals = data.map((r) => (isStacked ? keys.reduce((s, k) => s + value(r, k), 0) : Math.max(...keys.map((k) => value(r, k)))))
-    const yMin = isAutoDomain ? Math.min(...data.flatMap((r) => keys.map((k) => value(r, k)))) : 0
+  const legendItems = colored.map((s) => {
+    const values = data.map((r) => read(r, s.key)).filter((v): v is number => v !== null)
+    const shown = legendValue === 'latest' ? values.at(-1) : values.reduce((sum, v) => sum + v, 0)
+    return { key: s.key, label: s.label, color: s.fill, value: shown === undefined ? DASH : format(shown) }
+  })
+
+  const plot = (titleId: string) => {
+    if (width === 0) return null
+    const present = data.flatMap((r) => keys.map((k) => read(r, k))).filter((v): v is number => v !== null)
+    const yMin = isAutoDomain && present.length ? Math.min(...present) : 0
     const tickCount = Math.max(3, Math.round((height - 40) / 50))
     const y = scaleLinear()
-      .domain([yMin, Math.max(...totals) || 1])
+      .domain([yMin, Math.max(...totals, yMin + 1)])
       .nice(tickCount)
     const yTicks = y.ticks(tickCount)
     // ponytail: label width guessed from character count; measure the text if long units start to clip.
     const left = Math.max(...yTicks.map((t) => format(t).length)) * 7 + 12
-    const innerW = Math.max(0, width - left - MARGIN.right)
+    const innerW = Math.max(1, width - left - MARGIN.right)
     const innerH = height - MARGIN.top - MARGIN.bottom
     y.range([MARGIN.top + innerH, MARGIN.top])
     const base = y(y.domain()[0])
@@ -147,19 +164,22 @@ export function CartesianChart({
         .paddingOuter(type === 'bar' ? 0.15 : 0)
       bucketW = xb.bandwidth()
       bucketLeft = (i) => xb(String(i)) ?? 0
-      xTicks = data.map((r, i) => ({ pos: bucketLeft(i) + bucketW / 2, label: String(r[x]) }))
+      // Every label that fits, at about 70px each; the rest are skipped evenly.
+      const every = Math.ceil(data.length / Math.max(1, Math.floor(innerW / 70)))
+      xTicks = data.flatMap((r, i) => (i % every ? [] : [{ pos: bucketLeft(i) + bucketW / 2, label: String(r[x]) }]))
       indexAt = (px) => Math.floor((px - left) / (innerW / data.length))
     }
     const center = (i: number) => bucketLeft(i) + bucketW / 2
     const gap = isTime ? Math.max(1, bucketW * 0.25) : 0
+    const dimmed = (key: string) => cn(styles.series, focus && focus !== key && styles.dim)
 
     let marks
-    if (type === 'bar' && isStacked) {
+    if (isStacked) {
       marks = stack<ChartRow>()
         .keys(keys)
         .value((r, k) => value(r, k))(data)
         .map((layer, li) => (
-          <g key={layer.key} className={cn(styles.series, focusKey && focusKey !== layer.key && styles.dim)} fill={visible[li].fill}>
+          <g key={layer.key} className={dimmed(layer.key)} fill={visible[li].fill}>
             {layer.map(([y0, y1], i) =>
               y(y0) - y(y1) < 0.5 ? null : (
                 <rect
@@ -181,7 +201,7 @@ export function CartesianChart({
         .range([gap / 2, bucketW - gap / 2])
         .padding(0.12)
       marks = visible.map((s) => (
-        <g key={s.key} className={cn(styles.series, focusKey && focusKey !== s.key && styles.dim)} fill={s.fill}>
+        <g key={s.key} className={dimmed(s.key)} fill={s.fill}>
           {data.map((r, i) => (
             <rect
               key={i}
@@ -197,19 +217,22 @@ export function CartesianChart({
       ))
     } else {
       marks = visible.map((s) => {
+        const isPresent = (r: ChartRow) => read(r, s.key) !== null
         const path = (from: number) =>
           line<ChartRow>()
+            .defined(isPresent)
             .x((_, i) => center(i + from))
             .y((r) => y(value(r, s.key)))
         const solid = isIncomplete ? data.slice(0, last) : data
         return (
-          <g key={s.key} className={cn(styles.series, focusKey && focusKey !== s.key && styles.dim)}>
+          <g key={s.key} className={dimmed(s.key)}>
             {type === 'area' && (
               <path
                 className={styles.area}
                 fill={s.fill}
                 d={
                   area<ChartRow>()
+                    .defined(isPresent)
                     .x((_, i) => center(i))
                     .y0(base)
                     .y1((r) => y(value(r, s.key)))(data) ?? ''
@@ -223,13 +246,14 @@ export function CartesianChart({
       })
     }
 
-    const h = hover === null ? null : Math.min(last, Math.max(0, hover))
+    // ponytail: a hover re-renders every mark; memoise them if charts grow past a few thousand points.
+    const h = hover !== null && Number.isFinite(hover) ? Math.min(last, Math.max(0, hover)) : null
     const cursorW = isTime ? bucketW : innerW / data.length
-    plot = (
+    return (
       <>
         <svg
           role="img"
-          aria-labelledby={`${id}-title ${id}-range`}
+          aria-labelledby={`${titleId} ${id}-range`}
           width={width}
           height={height}
           viewBox={`0 0 ${width} ${height}`}
@@ -260,9 +284,11 @@ export function CartesianChart({
           {h !== null && type !== 'bar' && (
             <g>
               <line className={styles.cursor} x1={center(h)} x2={center(h)} y1={MARGIN.top} y2={MARGIN.top + innerH} />
-              {visible.map((s) => (
-                <circle key={s.key} className={styles.dot} cx={center(h)} cy={y(value(data[h], s.key))} r={3.5} fill={s.fill} />
-              ))}
+              {visible.map((s) =>
+                read(data[h], s.key) === null ? null : (
+                  <circle key={s.key} className={styles.dot} cx={center(h)} cy={y(value(data[h], s.key))} r={3.5} fill={s.fill} />
+                ),
+              )}
             </g>
           )}
         </svg>
@@ -284,12 +310,12 @@ export function CartesianChart({
               <div key={s.key} className={styles.tooltipRow}>
                 <span className={styles.swatch} style={{ '--swatch': s.fill } as CSSProperties} />
                 {s.label}
-                <b>{format(value(data[h], s.key))}</b>
+                <b>{show(data[h], s.key)}</b>
               </div>
             ))}
             {isStacked && visible.length > 1 && (
               <div className={cn(styles.tooltipRow, styles.tooltipTotal)}>
-                Total<b>{format(keys.reduce((sum, k) => sum + value(data[h], k), 0))}</b>
+                Total<b>{format(totals[h])}</b>
               </div>
             )}
           </div>
@@ -299,48 +325,43 @@ export function CartesianChart({
   }
 
   return (
-    <figure className={cn(styles.chart, className)} aria-labelledby={`${id}-title`} aria-busy={isLoading || undefined}>
-      <div className={styles.header}>
-        <div id={`${id}-title`} className={styles.title}>
-          {title}
-        </div>
-        {data.length > 0 && !isLoading && (
-          <Button appearance="ghost" variant="secondary" size="sm" aria-expanded={showTable} aria-controls={`${id}-table`} onClick={() => setShowTable((v) => !v)}>
-            {showTable ? 'View as chart' : 'View as table'}
-          </Button>
-        )}
-      </div>
-      {isLoading ? (
-        <Skeleton isFullWidth height={height} />
-      ) : showTable ? (
-        <div id={`${id}-table`} className={styles.tableWrap} role="region" aria-labelledby={`${id}-title`} tabIndex={0}>
-          <Table
-            caption={title}
-            density="sm"
-            hasStickyHeader
-            rows={data}
-            getRowId={(_, i) => String(i)}
-            columns={[
-              { key: '__x', header: isTime ? 'Time' : 'Category', cell: xLabel, isRowHeader: true },
-              ...series.map((s) => ({ key: s.key, header: s.label, align: 'end' as const, cell: (r: ChartRow) => format(value(r, s.key)) })),
-            ]}
-          />
-        </div>
-      ) : (
+    <ChartFrame
+      title={title}
+      isLoading={isLoading}
+      loading={<Skeleton isFullWidth height={height} />}
+      hasData={data.length > 0}
+      emptyHeight={height}
+      className={className}
+      table={() => (
+        <Table
+          caption={title}
+          density="sm"
+          hasStickyHeader
+          rows={data}
+          getRowId={(_, i) => String(i)}
+          columns={[
+            { key: '__x', header: isTime ? 'Time' : 'Category', cell: xLabel, isRowHeader: true },
+            ...series.map((s) => ({ key: s.key, header: s.label, align: 'end' as const, cell: (r: ChartRow) => show(r, s.key) })),
+          ]}
+        />
+      )}
+    >
+      {(titleId) => (
         <>
-          {data.length > 0 && (
-            <ChartLegend
-              items={colored.map((s) => ({ key: s.key, label: s.label, color: s.fill, value: format(data.reduce((sum, r) => sum + value(r, s.key), 0)) }))}
-              hiddenKeys={hiddenKeys}
-              onToggle={(key) => setHiddenKeys((keys) => (keys.includes(key) ? keys.filter((k) => k !== key) : [...keys, key]))}
-              onFocusChange={setFocusKey}
-            />
-          )}
+          <ChartLegend
+            items={legendItems}
+            hiddenKeys={hidden.length === series.length ? [] : hidden}
+            onToggle={(key) => {
+              setFocusKey(null)
+              setHiddenKeys((current) => (current.includes(key) ? current.filter((k) => k !== key) : [...current, key]))
+            }}
+            onFocusChange={setFocusKey}
+          />
           <div ref={plotRef} className={cn(styles.plot, isEntering && styles.entering)} style={{ blockSize: height }}>
-            {data.length === 0 ? <span className={styles.badge}>No data</span> : plot}
+            {plot(titleId)}
           </div>
         </>
       )}
-    </figure>
+    </ChartFrame>
   )
 }

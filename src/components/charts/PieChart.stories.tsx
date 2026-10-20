@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { PieChart } from './PieChart'
+import { formatCompact, formatShare } from './chart-utils'
 import { contentTypes, countries } from './sample-data'
 
 const meta = {
@@ -30,9 +31,10 @@ export const Default: Story = {
     const legend = canvas.getByRole('list', { name: 'Legend' })
     const items = within(legend).getAllByRole('listitem')
     await expect(items).toHaveLength(5)
-    await expect(items[4]).toHaveTextContent(/Other \(3\)\s*50 · 1.6%/)
+    const total = countries.reduce((s, c) => s + c.value, 0)
+    await expect(items[4]).toHaveTextContent(`Other (3)50 · ${formatShare(50 / total)}`)
     // Each slice's share is in the image's description, not only in colour.
-    await expect(canvas.getByRole('img', { name: /United States 57.4%/ })).toBeVisible()
+    await expect(canvas.getByRole('img', { name: new RegExp(`United States ${formatShare(1850 / total)}`) })).toBeVisible()
     // Hovering a legend item fades the other slices.
     await userEvent.hover(items[1])
     await waitFor(() => expect(canvasElement.querySelectorAll('path[class*="dim"]')).toHaveLength(4))
@@ -44,7 +46,7 @@ export const Donut: Story = {
   args: { title: 'Requests by content type', data: contentTypes, appearance: 'donut', centerLabel: 'requests' },
   play: async ({ canvas }) => {
     const img = canvas.getByRole('img')
-    await expect(within(img as unknown as HTMLElement).getByText('3.15K')).toBeInTheDocument()
+    await expect(within(img as unknown as HTMLElement).getByText(formatCompact(3150))).toBeInTheDocument()
     await expect(within(img as unknown as HTMLElement).getByText('requests')).toBeInTheDocument()
   },
 }
@@ -56,6 +58,15 @@ export const TableView: Story = {
     const table = canvas.getByRole('table', { name: 'Requests by country' })
     await expect(within(table).getAllByRole('row')).toHaveLength(countries.length + 1)
     await expect(within(table).getByText('Japan')).toBeVisible()
+  },
+}
+
+/** Every slice is zero: there is nothing to divide, so it reads as no data. */
+export const AllZero: Story = {
+  args: { data: countries.map((c) => ({ ...c, value: 0 })) },
+  play: async ({ canvas }) => {
+    await expect(canvas.getByText('No data')).toBeVisible()
+    await expect(canvas.queryByRole('img')).toBeNull()
   },
 }
 

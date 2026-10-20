@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { LineChart } from './LineChart'
+import { formatTime } from './chart-utils'
 import { formatBytes, pointAtMiddle, requests, traffic, transfer } from './sample-data'
 
 const meta = {
@@ -25,6 +26,7 @@ const meta = {
     appearance: { control: 'inline-radio', options: ['line', 'area'], description: '`area` fills under each line and keeps the y axis at zero.' },
     isAutoDomain: { description: 'Fit the y axis to the data instead of starting at zero. Line appearance only.' },
     isIncomplete: { description: 'The last bucket is still filling: its segment is dashed.' },
+    legendValue: { control: 'inline-radio', options: ['total', 'latest'], description: 'Beside each series: its sum, or its latest value (for rates and latencies).' },
     isLoading: { description: 'Shows a skeleton the height of the plot.' },
     height: { description: 'Plot height in pixels. The width follows the container.' },
     format: { control: false, description: 'Formats values on the axis, legend, tooltip and table. Defaults to compact numbers.' },
@@ -39,7 +41,9 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {
   play: async ({ canvas, canvasElement }) => {
     // Named by its title, with the range the screen reader cannot see on the axis.
-    const img = await canvas.findByRole('img', { name: /Requests over time Oct 19, 09:00 to Oct 20, 08:45/ })
+    // Dates follow the viewer's locale, so the expected text is formatted the same way.
+    const range = `${formatTime(requests[0].time, 'UTC')} to ${formatTime(requests.at(-1)!.time, 'UTC')}`
+    const img = await canvas.findByRole('img', { name: new RegExp(`Requests over time ${range}`) })
     // The last segment is its own dashed path.
     await expect(canvasElement.querySelectorAll('path[class*="lineDashed"]')).toHaveLength(1)
     // Hovering shows the crosshair and a tooltip for the bucket under the pointer.
@@ -86,6 +90,8 @@ export const MultiSeries: Story = {
 
     // Click hides a series; the last one left cannot be hidden.
     await userEvent.click(api)
+    // The series that was pointed at is gone: nothing stays faded.
+    await expect(canvasElement.querySelectorAll('svg g[class*="dim"]')).toHaveLength(0)
     await expect(api).toHaveAttribute('aria-pressed', 'false')
     await expect(series()).toHaveLength(1)
     await expect(web).toHaveAttribute('aria-disabled', 'true')
@@ -107,11 +113,15 @@ export const AutoDomain: Story = {
     series: [{ key: 'p95', label: 'p95' }],
     isAutoDomain: true,
     isIncomplete: false,
+    // A sum of latencies means nothing: show the latest.
+    legendValue: 'latest',
     format: (v: number) => `${Math.round(v)} ms`,
   },
   play: async ({ canvas }) => {
     const img = await canvas.findByRole('img')
     await expect(within(img as unknown as HTMLElement).queryByText('0 ms')).toBeNull()
+    const latest = 120 + traffic.at(-1)!.api / 4
+    await expect(canvas.getByRole('button', { name: `p95 ${Math.round(latest)} ms` })).toBeVisible()
   },
 }
 
@@ -126,6 +136,23 @@ export const TableView: Story = {
     // A header row plus one row per bucket.
     await expect(within(table).getAllByRole('row')).toHaveLength(requests.length + 1)
     await expect(canvas.queryByRole('img')).toBeNull()
+  },
+}
+
+/** A missing value is a gap in the line, not a drop to zero. */
+export const Gaps: Story = {
+  args: {
+    title: 'Requests with an outage',
+    isIncomplete: false,
+    data: requests.slice(0, 24).map((d, i) => ({ ...d, requests: i >= 10 && i < 14 ? null : d.requests })),
+  },
+  play: async ({ canvas, canvasElement }) => {
+    await canvas.findByRole('img')
+    // Two runs of the line: before and after the gap.
+    const d = canvasElement.querySelector('path[class*="line"]')!.getAttribute('d')!
+    await expect(d.match(/M/g)).toHaveLength(2)
+    await userEvent.click(canvas.getByRole('button', { name: 'View as table' }))
+    await expect(canvas.getAllByRole('cell', { name: '–' })).toHaveLength(4)
   },
 }
 

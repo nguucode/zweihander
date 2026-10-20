@@ -105,15 +105,22 @@
 }
 
 /* The spark runs to the card's edges and sits on its bottom border, last in
-   the card so it can bleed into the padding; the card clips its corners. */
+   the card so it can bleed into the padding; the card clips its corners. As
+   a column, so a shorter card in a row still puts its spark at the bottom. */
 .card:has(> .chart) {
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
 }
 
 .chart {
   margin: 0;
+  margin-block: auto calc(-1 * var(--space-container));
   margin-inline: calc(-1 * var(--space-container));
-  margin-block-end: calc(-1 * var(--space-container));
+}
+
+.withIcon > .chart {
+  margin-inline-start: calc(-1 * (var(--space-container) + var(--space-12) + var(--space-group)));
 }
 
 .footer {

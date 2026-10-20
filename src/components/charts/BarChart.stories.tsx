@@ -94,6 +94,24 @@ export const Grouped: Story = {
   },
 }
 
+/** A month of days in a narrow card: labels that would overlap are skipped. */
+export const ManyCategories: Story = {
+  args: {
+    title: 'Invoices per day',
+    x: 'day',
+    isIncomplete: false,
+    data: Array.from({ length: 30 }, (_, i) => ({ day: `Oct ${i + 1}`, count: 40 + ((i * 37) % 60) })),
+    series: [{ key: 'count', label: 'Invoices' }],
+  },
+  decorators: [(Story) => <div style={{ inlineSize: 360 }}>{Story()}</div>],
+  play: async ({ canvas, canvasElement }) => {
+    await canvas.findByRole('img')
+    const labels = [...canvasElement.querySelectorAll('svg text[text-anchor="middle"]')]
+    await expect(labels.length).toBeLessThan(10)
+    await expect(labels[0]).toHaveTextContent('Oct 1')
+  },
+}
+
 /** No rows for the period. */
 export const Empty: Story = {
   args: { data: [] },
