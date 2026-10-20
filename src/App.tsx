@@ -303,12 +303,6 @@ export default function App() {
       <div className={styles.layout}>
         <aside className={styles.aside}>
           <h1 className={styles.wordmark}>zweihänder</h1>
-          <p className={styles.tags}>
-            <span className={styles.tagSolid}>React 19</span>
-            <span className={styles.tagLine}>CSS Modules</span>
-            <span className={styles.tagLine}>Base UI</span>
-          </p>
-          <p className={styles.headline}>Components you can read, theme and keep.</p>
           <p className={styles.lede}>
             Plain CSS over custom properties, keyboard handling from Base UI, and one <code>&lt;Theme&gt;</code> wrapper for accent, gray, radius and density.
           </p>

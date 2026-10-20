@@ -160,41 +160,6 @@
 
 /* ---------- intro (aside) ---------- */
 
-.tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 0;
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-}
-
-.tagSolid,
-.tagLine {
-  padding: 2px 8px;
-  border: var(--hair);
-}
-
-.tagSolid {
-  border-color: var(--foreground);
-  background: var(--foreground);
-  color: var(--background);
-}
-
-.tagLine {
-  color: var(--muted-foreground);
-}
-
-.headline {
-  margin: 0;
-  max-inline-size: 20ch;
-  font-size: 1.5rem;
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  line-height: 1.15;
-  text-wrap: balance;
-}
-
 .lede {
   margin: 0;
   max-inline-size: 48ch;
