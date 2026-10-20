@@ -57,6 +57,11 @@ export default defineConfig({
         'components/data-display/Carousel': 'src/components/data-display/Carousel.tsx',
         'components/controls/ColorPicker': 'src/components/controls/ColorPicker.tsx',
         'components/inputs/FileUploader': 'src/components/inputs/FileUploader.tsx',
+        'components/charts/LineChart': 'src/components/charts/LineChart.tsx',
+        'components/charts/BarChart': 'src/components/charts/BarChart.tsx',
+        'components/charts/PieChart': 'src/components/charts/PieChart.tsx',
+        'components/charts/Sparkline': 'src/components/charts/Sparkline.tsx',
+        'components/charts/ChartLegend': 'src/components/charts/ChartLegend.tsx',
         'theme/Theme': 'src/theme/Theme.tsx',
         'lib/utils': 'src/lib/utils.ts',
       },
@@ -64,7 +69,7 @@ export default defineConfig({
       cssFileName: 'styles',
     },
     rollupOptions: {
-      external: ['react', 'react/jsx-runtime', 'react-dom', 'clsx', /^@base-ui\/react/],
+      external: ['react', 'react/jsx-runtime', 'react-dom', 'clsx', /^@base-ui\/react/, /^d3-/],
     },
   },
 })

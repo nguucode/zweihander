@@ -104,6 +104,18 @@
   color: var(--danger-text);
 }
 
+/* The spark runs to the card's edges and sits on its bottom border, last in
+   the card so it can bleed into the padding; the card clips its corners. */
+.card:has(> .chart) {
+  overflow: hidden;
+}
+
+.chart {
+  margin: 0;
+  margin-inline: calc(-1 * var(--space-container));
+  margin-block-end: calc(-1 * var(--space-container));
+}
+
 .footer {
   margin: 0;
   margin-block-start: var(--space-2);

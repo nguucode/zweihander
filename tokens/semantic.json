@@ -118,7 +118,15 @@
       "rose": { "$type": "color", "$value": "{accent.rose.600}" },
       "rose-foreground": { "$type": "color", "$value": "{gray.neutral.50}" },
       "rose-subtle": { "$type": "color", "$value": "{accent.rose.100}" },
-      "rose-text": { "$type": "color", "$value": "{accent.rose.800}" }
+      "rose-text": { "$type": "color", "$value": "{accent.rose.800}" },
+      "chart-1": { "$type": "color", "$value": "{accent.blue.600}" },
+      "chart-2": { "$type": "color", "$value": "{accent.yellow.700}" },
+      "chart-3": { "$type": "color", "$value": "{accent.pink.600}" },
+      "chart-4": { "$type": "color", "$value": "{accent.teal.600}" },
+      "chart-5": { "$type": "color", "$value": "{accent.violet.600}" },
+      "chart-6": { "$type": "color", "$value": "{accent.orange.600}" },
+      "chart-7": { "$type": "color", "$value": "{accent.cyan.600}" },
+      "chart-8": { "$type": "color", "$value": "{accent.lime.700}" }
     },
     "dark": {
       "background": { "$type": "color", "$value": "{gray.950}" },
@@ -237,7 +245,15 @@
       "rose": { "$type": "color", "$value": "{accent.rose.600}" },
       "rose-foreground": { "$type": "color", "$value": "{gray.neutral.50}" },
       "rose-subtle": { "$type": "color", "$value": "{accent.rose.950}" },
-      "rose-text": { "$type": "color", "$value": "{accent.rose.300}" }
+      "rose-text": { "$type": "color", "$value": "{accent.rose.300}" },
+      "chart-1": { "$type": "color", "$value": "{accent.blue.400}" },
+      "chart-2": { "$type": "color", "$value": "{accent.yellow.400}" },
+      "chart-3": { "$type": "color", "$value": "{accent.pink.400}" },
+      "chart-4": { "$type": "color", "$value": "{accent.teal.500}" },
+      "chart-5": { "$type": "color", "$value": "{accent.violet.400}" },
+      "chart-6": { "$type": "color", "$value": "{accent.orange.500}" },
+      "chart-7": { "$type": "color", "$value": "{accent.cyan.500}" },
+      "chart-8": { "$type": "color", "$value": "{accent.lime.500}" }
     }
   },
 

@@ -33,6 +33,14 @@ card to where the figure comes from.
 
 <Canvas of={StatsStories.WithIconAndLink} />
 
+## With sparkline
+
+A trend at the foot of each card, edge to edge: pass a `Sparkline` as the
+stat's `chart`. Leave out the spark where the period has no data and the
+card would only say "No data" twice.
+
+<Canvas of={StatsStories.WithSparkline} />
+
 ## Props
 
 | Prop | Values | Default | |
@@ -42,8 +50,9 @@ card to where the figure comes from.
 | `headingLevel` | `2`, `3` | `2` | |
 
 Each `Stat` has `label`, `value`, and optionally `previous`, `change`
-(`{ value, direction: 'up' \| 'down', isPositive? }`), `icon`, `href` and
-`linkLabel` (default "View all").
+(`{ value, direction: 'up' \| 'down', isPositive? }`), `icon`, `href`,
+`linkLabel` (default "View all") and `chart` (a node at the foot of the card,
+usually a `Sparkline`).
 
 <Controls of={StatsStories.Simple} />
 
@@ -68,3 +77,5 @@ Each `Stat` has `label`, `value`, and optionally `previous`, `change`
   ("View all Avg. open rate"), so a list of links is not three identical
   entries.
 - The icon is decorative.
+- The sparkline is decorative too (`aria-hidden`): the change already says
+  the trend in words.

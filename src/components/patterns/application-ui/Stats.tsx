@@ -24,6 +24,8 @@ export interface Stat {
   /** A link at the foot of the card, to where the figure comes from. */
   href?: string
   linkLabel?: string
+  /** A trend under the figures, edge to edge at the foot of the card: usually a `Sparkline`. */
+  chart?: ReactNode
 }
 
 export interface StatsProps extends Omit<ComponentProps<'section'>, 'title'> {
@@ -76,6 +78,7 @@ export function Stats({ stats, title, headingLevel = 2, className, ...props }: S
                   </Link>
                 </dd>
               )}
+              {stat.chart && <dd className={styles.chart}>{stat.chart}</dd>}
             </Card>
           )
         })}
