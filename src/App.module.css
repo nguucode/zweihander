@@ -194,6 +194,8 @@
 /* The intro rail is three tracks: a tighter box, and wrap rather than
    scroll once even that does not fit. */
 .aside .command {
+  /* 16px rail gap + 20px = 36px, claude.dev's gap before the rail links. */
+  margin-block-start: 20px;
   gap: 8px;
   padding-inline-start: 12px;
   font-size: 0.8125rem;
