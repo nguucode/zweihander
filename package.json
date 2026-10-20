@@ -226,6 +226,7 @@
     "build:lib": "vite build --config vite.lib.config.ts && tsc -p tsconfig.build.json && cp src/tokens.css dist/tokens.css",
     "lint": "oxlint && npm run lint:css",
     "lint:css": "stylelint \"src/**/*.css\" \".storybook/**/*.css\"",
+    "verify": "changeset status --since=origin/main && npm run tokens:check && npm run registry:check && npm run docs:check && npm run skills:check && npm run playground:check && npm run lint && tsc -b && vitest --project storybook run && npm run build:lib",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
