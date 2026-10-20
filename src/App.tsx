@@ -140,7 +140,7 @@ function Playground() {
                 {/* Each toggle sits in its own accent, so pressed fills in that colour. */}
                 {ACCENTS.map((a) => (
                   <Theme key={a} accentColor={a} render={<span />}>
-                    <ToggleButton pressed={accent === a} onPressedChange={() => setAccent(a)} startIcon={<span className={styles.dot} />}>
+                    <ToggleButton pressed={accent === a} onPressedChange={() => setAccent(a)}>
                       {a}
                     </ToggleButton>
                   </Theme>
