@@ -24,6 +24,11 @@ const STORIES: Record<string, { story: string; args?: Record<string, unknown>; p
   'atomic-elements/Tag': { story: 'Matrix' },
   'buttons/Button': { story: 'Matrix' },
   'buttons/ToggleButton': { story: 'Matrix' },
+  'charts/BarChart': { story: 'Stacked' },
+  'charts/ChartLegend': { story: 'Toggles' },
+  'charts/LineChart': { story: 'MultiSeries' },
+  'charts/PieChart': { story: 'Default' },
+  'charts/Sparkline': { story: 'Default' },
   'controls/Checkbox': { story: 'Variants' },
   'controls/ColorPicker': { story: 'Panel' },
   'controls/Radio': { story: 'Variants' },
@@ -115,6 +120,15 @@ for (const theme of ['light', 'dark'] as const) {
         await act(async () => root!.render(<Story {...entry.args} />))
         if (entry.play) await Story.play!({ canvasElement: container, canvas: within(container) })
         await document.fonts.ready
+        // Charts draw in on mount, and the screenshot's animations option does not
+        // stop CSS animations here: wait for the finite ones so every run sees the
+        // finished frame. Infinite ones (spinner, shimmer) never finish; skip them.
+        await Promise.all(
+          document
+            .getAnimations()
+            .filter((a) => a.effect?.getTiming().iterations !== Infinity)
+            .map((a) => a.finished.catch(() => undefined)),
+        )
 
         await expect
           .element(page.elementLocator(document.body))

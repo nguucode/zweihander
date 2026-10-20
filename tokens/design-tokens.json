@@ -1675,6 +1675,38 @@
       "rose-text": {
         "$type": "color",
         "$value": "{primitive.accent.rose.800}"
+      },
+      "chart-1": {
+        "$type": "color",
+        "$value": "{primitive.accent.blue.600}"
+      },
+      "chart-2": {
+        "$type": "color",
+        "$value": "{primitive.accent.yellow.700}"
+      },
+      "chart-3": {
+        "$type": "color",
+        "$value": "{primitive.accent.pink.600}"
+      },
+      "chart-4": {
+        "$type": "color",
+        "$value": "{primitive.accent.teal.600}"
+      },
+      "chart-5": {
+        "$type": "color",
+        "$value": "{primitive.accent.violet.600}"
+      },
+      "chart-6": {
+        "$type": "color",
+        "$value": "{primitive.accent.orange.600}"
+      },
+      "chart-7": {
+        "$type": "color",
+        "$value": "{primitive.accent.cyan.600}"
+      },
+      "chart-8": {
+        "$type": "color",
+        "$value": "{primitive.accent.lime.700}"
       }
     },
     "dark": {
@@ -2145,6 +2177,38 @@
       "rose-text": {
         "$type": "color",
         "$value": "{primitive.accent.rose.300}"
+      },
+      "chart-1": {
+        "$type": "color",
+        "$value": "{primitive.accent.blue.400}"
+      },
+      "chart-2": {
+        "$type": "color",
+        "$value": "{primitive.accent.yellow.400}"
+      },
+      "chart-3": {
+        "$type": "color",
+        "$value": "{primitive.accent.pink.400}"
+      },
+      "chart-4": {
+        "$type": "color",
+        "$value": "{primitive.accent.teal.500}"
+      },
+      "chart-5": {
+        "$type": "color",
+        "$value": "{primitive.accent.violet.400}"
+      },
+      "chart-6": {
+        "$type": "color",
+        "$value": "{primitive.accent.orange.500}"
+      },
+      "chart-7": {
+        "$type": "color",
+        "$value": "{primitive.accent.cyan.500}"
+      },
+      "chart-8": {
+        "$type": "color",
+        "$value": "{primitive.accent.lime.500}"
       }
     }
   },

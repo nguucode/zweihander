@@ -84,6 +84,37 @@ export const Default: Story = {
   },
 }
 
+/**
+ * A top-N list ("Top paths", "Top countries") is not a chart: one bar per row,
+ * each measured against the largest, the count beside it.
+ */
+export const TopList: Story = {
+  render: () => {
+    const rows = [
+      ['/', 154],
+      ['/api/v1/invoices', 131],
+      ['/dashboard', 43],
+      ['/login', 21],
+    ] as const
+    return (
+      <ol style={{ display: 'grid', gap: 'var(--space-cluster)', margin: 0, padding: 0, listStyle: 'none' }}>
+        {rows.map(([path, count]) => (
+          <li key={path} style={{ display: 'grid', gridTemplateColumns: '1fr 8rem 3rem', gap: 'var(--space-cluster)', alignItems: 'center' }}>
+            <span>{path}</span>
+            <ProgressBar value={count} max={rows[0][1]} size="sm" isRounded aria-label={path} />
+            <span style={{ textAlign: 'end', fontVariantNumeric: 'tabular-nums' }}>{count}</span>
+          </li>
+        ))}
+      </ol>
+    )
+  },
+  play: async ({ canvas }) => {
+    // The largest row fills its bar; the rest are a share of it, not of the total.
+    await expect(canvas.getByRole('progressbar', { name: '/' })).toHaveAttribute('aria-valuenow', '154')
+    await expect(canvas.getByRole('progressbar', { name: '/login' })).toHaveAttribute('aria-valuemax', '154')
+  },
+}
+
 export const ValueLabel: Story = {
   args: { showValueLabel: true },
   play: async ({ canvas }) => {

@@ -1106,6 +1106,70 @@
       ]
     },
     {
+      "name": "charts",
+      "type": "registry:component",
+      "title": "Charts",
+      "description": "Line, area, bar (stacked or grouped) and pie or donut charts in SVG, plus Sparkline and ChartLegend. Coloured by the --chart tokens, with a crosshair tooltip, legend toggles and a table view.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/button.json",
+        "https://ontheshore.biz/zweihander/r/table.json",
+        "https://ontheshore.biz/zweihander/r/skeleton.json"
+      ],
+      "dependencies": [
+        "d3-scale",
+        "d3-shape"
+      ],
+      "files": [
+        {
+          "path": "src/components/charts/chart-utils.ts",
+          "type": "registry:component",
+          "target": "components/zweihander/charts/chart-utils.ts"
+        },
+        {
+          "path": "src/components/charts/Chart.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/charts/Chart.module.css"
+        },
+        {
+          "path": "src/components/charts/ChartFrame.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/charts/ChartFrame.tsx"
+        },
+        {
+          "path": "src/components/charts/ChartLegend.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/charts/ChartLegend.tsx"
+        },
+        {
+          "path": "src/components/charts/CartesianChart.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/charts/CartesianChart.tsx"
+        },
+        {
+          "path": "src/components/charts/LineChart.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/charts/LineChart.tsx"
+        },
+        {
+          "path": "src/components/charts/BarChart.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/charts/BarChart.tsx"
+        },
+        {
+          "path": "src/components/charts/PieChart.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/charts/PieChart.tsx"
+        },
+        {
+          "path": "src/components/charts/Sparkline.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/charts/Sparkline.tsx"
+        }
+      ]
+    },
+    {
       "name": "calendar",
       "type": "registry:component",
       "title": "Calendar",

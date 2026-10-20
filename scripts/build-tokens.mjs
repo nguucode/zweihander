@@ -177,6 +177,24 @@ for (const g of GRAYS) {
 }
 
 /**
+ * --chart-1…8 colour lines, bars and slices: the mark is the data, so WCAG
+ * 1.4.11 wants 3:1 against the card it sits on, on every gray ramp (the dark
+ * card is the ramp's 900). This is why yellow and lime take step 700 in light.
+ */
+for (const g of GRAYS) {
+  for (const mode of ['light', 'dark']) {
+    const c = semantic.color[mode]
+    const gray = Object.fromEntries(entries(primitives.gray[g]).map(([s, v]) => [s, v.$value]))
+    const val = (k) => alias(c[k].$value, { accent: {}, gray })
+    for (const k of Object.keys(c).filter((k) => /^chart-\d+$/.test(k))) {
+      const ratio = contrast(val(k), val('card'))
+      if (ratio < AA_NON_TEXT)
+        throw new Error(`${mode} --${k} on --card on the ${g} ramp is ${ratio.toFixed(2)}:1, below ${AA_NON_TEXT}:1.`)
+    }
+  }
+}
+
+/**
  * --neutral-solid is the gray counterpart of a hue's solid fill (a neutral
  * solid Avatar), so its label needs 4.5:1 on every gray ramp the Theme can
  * swap in, in both appearances.

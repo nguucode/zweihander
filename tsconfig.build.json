@@ -54,6 +54,11 @@
     "src/components/data-display/Carousel.tsx",
     "src/components/controls/ColorPicker.tsx",
     "src/components/inputs/FileUploader.tsx",
+    "src/components/charts/LineChart.tsx",
+    "src/components/charts/BarChart.tsx",
+    "src/components/charts/PieChart.tsx",
+    "src/components/charts/Sparkline.tsx",
+    "src/components/charts/ChartLegend.tsx",
     "src/theme/Theme.tsx",
     "src/lib/utils.ts"
   ]
