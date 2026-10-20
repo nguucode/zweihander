@@ -708,11 +708,6 @@ a.row:hover .rowArrow {
 }
 
 @media (width < 720px) {
-  /* 4:3 of a phone is shorter than the demo form; let it size to it. */
-  .frame {
-    aspect-ratio: auto;
-  }
-
   .page {
     --gutter: 24px;
   }
