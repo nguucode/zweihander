@@ -2251,8 +2251,12 @@
       }
     }
   },
-  "control": {
-    "$description": "Size tiers. One tier binds a control's height, inline padding and icon-to-label gap; its icon is --icon-{tier} and its radius --control-{tier}-radius (generated, see Radius). md (32px) is the default control, sm (24px) the small inline one, xs (20px) only for compact parts: Tag sm, the slider thumb (the checkbox box, Badge, switch and Avatar have their own sizes, see size). Buttons and fields have no xs: below 24px is below WCAG 2.5.8. pad is for fields and rows, whose text lines up with a label; pad-spacious is for buttons, whose centred label needs room. The generator multiplies each by --scaling. On touch screens components widen the hit area to 44px without growing the visible box. Compact ($extensions) keeps every tier: each takes the padding and gap of the tier below it, md drops to 28px, sm to 22px, xs stays at 20px.",
+  "box": {
+    "$description": "The box ramp: every fixed height and fixed square in the kit stands on one of these six steps, so one role always gets one size. md (32px) is the default. Density maps the whole ramp with one rule: 16 and 20 stay, 24 to 22, 32 to 28, 40 to 36, 48 to 44. Control heights alias xs, sm and md. Off the ramp, each with a reason: 1-2px strokes, dots and bars under 12px, switch track widths, region sizes, the 44px touch target, icons in text. The build checks that control, size and row values stand on the ramp of their density. The generator multiplies each by --scaling.",
+    "2xs": {
+      "$type": "dimension",
+      "$value": "1rem"
+    },
     "xs": {
       "$type": "dimension",
       "$value": "1.25rem"
@@ -2274,6 +2278,39 @@
           "$value": "1.75rem"
         }
       }
+    },
+    "lg": {
+      "$type": "dimension",
+      "$value": "2.5rem",
+      "$extensions": {
+        "compact": {
+          "$value": "2.25rem"
+        }
+      }
+    },
+    "xl": {
+      "$type": "dimension",
+      "$value": "3rem",
+      "$extensions": {
+        "compact": {
+          "$value": "2.75rem"
+        }
+      }
+    }
+  },
+  "control": {
+    "$description": "Size tiers. Heights alias the box ramp (box.xs, box.sm, box.md), so they follow its density. One tier binds a control's height, inline padding and icon-to-label gap; its icon is --icon-{tier} and its radius --control-{tier}-radius (generated, see Radius). md (32px) is the default control, sm (24px) the small inline one, xs (20px) only for compact parts: Tag sm, the slider thumb (the checkbox box, Badge, switch and Avatar have their own sizes, see size). Buttons and fields have no xs: a 20px button reads as a part, not a control. The 24px floor of WCAG 2.5.8 is for the hit area: a box drawn smaller widens its hit area to 24px. pad is for fields and rows, whose text lines up with a label; pad-spacious is for buttons, whose centred label needs room. The generator multiplies each by --scaling. On touch screens components widen the hit area to 44px without growing the visible box. Compact ($extensions) keeps every tier: each takes the padding and gap of the tier below it, md drops to 28px, sm to 22px, xs stays at 20px.",
+    "xs": {
+      "$type": "dimension",
+      "$value": "{box.xs}"
+    },
+    "sm": {
+      "$type": "dimension",
+      "$value": "{box.sm}"
+    },
+    "md": {
+      "$type": "dimension",
+      "$value": "{box.md}"
     },
     "xs-pad": {
       "$type": "dimension",
@@ -2358,7 +2395,7 @@
     }
   },
   "row": {
-    "$description": "Row height for tables and lists, per density. The generator multiplies it by --scaling.",
+    "$description": "Row height for tables and lists, per density: box-md plus space-inline above and below (48 Default, 36 Compact). The build checks the sum. The generator multiplies it by --scaling.",
     "height": {
       "$type": "dimension",
       "$value": "3rem",

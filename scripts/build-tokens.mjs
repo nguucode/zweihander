@@ -348,17 +348,82 @@ const TIER_RADIUS = [
    exactly one of the two var()s resolves, the other is empty. */
 const byDensity = (def, compact) =>
   compact === undefined ? def : `var(--density-default, ${def}) var(--density-compact, ${compact})`
-const scaled = (v) => `calc(${byDensity(v.$value, v.$extensions?.compact?.$value)} * var(--scaling))`
-const scaledDecls = (group, prefix) =>
+/* The CSS prefix of each scaled group. An alias such as {box.md} becomes
+   var(--box-md): the target already carries density and scaling. */
+const PREFIX = { space: 'space-', box: 'box-', control: 'control-', row: 'row-', size: '', icon: 'icon-', text: 'text-' }
+const aliasOf = (v) => v.$value.match(/^\{(\w+)\.([\w-]+)\}$/)
+const scaled = (v) => {
+  const ref = aliasOf(v)
+  if (ref) return `var(--${PREFIX[ref[1]]}${ref[2]})`
+  return `calc(${byDensity(v.$value, v.$extensions?.compact?.$value)} * var(--scaling))`
+}
+const scaledDecls = (group) =>
   entries(semantic[group])
-    .map(([k, v]) => `  --${prefix}${k}: ${scaled(v)};`)
+    .map(([k, v]) => `  --${PREFIX[group]}${k}: ${scaled(v)};`)
     .join('\n')
-const spaceDecls = scaledDecls('space', 'space-')
-const controlDecls = scaledDecls('control', 'control-')
-const rowDecls = scaledDecls('row', 'row-')
-const sizeDecls = scaledDecls('size', '')
-const iconDecls = scaledDecls('icon', 'icon-')
-const textDecls = scaledDecls('text', 'text-')
+const spaceDecls = scaledDecls('space')
+const boxDecls = scaledDecls('box')
+const controlDecls = scaledDecls('control')
+const rowDecls = scaledDecls('row')
+const sizeDecls = scaledDecls('size')
+const iconDecls = scaledDecls('icon')
+const textDecls = scaledDecls('text')
+
+/* The box ramp is the rule for fixed sizes: every control height, size token
+   and row height stands on the ramp of its density, or is listed here with
+   the reason it may not. A value off the ramp stops the build, the way an
+   unreadable label does. */
+const OFF_RAMP = {
+  'size.radio-dot-size': 'a dot inside the box, under 12px',
+  'size.switch-sm-w': 'a track width, set by the height plus the thumb travel',
+  'size.switch-md-w': 'a track width, set by the height plus the thumb travel',
+  'size.switch-lg-w': 'a track width, set by the height plus the thumb travel',
+  'size.progress-sm': 'a bar thickness, under 12px',
+  'size.progress-md': 'a bar thickness, under 12px',
+  'size.progress-lg': 'a bar thickness, under 12px',
+  'size.badge-dot-sm': 'a dot, under 12px',
+  'size.badge-dot-md': 'a dot, under 12px',
+  // ponytail: temporary. The size group still steps down a whole size in
+  // Compact; box-sizing ticket 03 moves it onto the ramp and deletes these.
+  'size.avatar-sm@compact': 'box-sizing ticket 03',
+  'size.avatar-md@compact': 'box-sizing ticket 03',
+  'size.avatar-lg@compact': 'box-sizing ticket 03',
+  'size.badge-sm@compact': 'box-sizing ticket 03',
+  'size.switch-sm-h@compact': 'box-sizing ticket 03',
+}
+const px = (rem) => {
+  const m = rem.match(/^([\d.]+)rem$/)
+  if (!m) throw new Error(`box ramp: expected a rem length, got "${rem}"`)
+  return Number(m[1]) * 16
+}
+const pxAt = (v, density) => {
+  const ref = aliasOf(v)
+  if (ref) return pxAt(semantic[ref[1]][ref[2]], density)
+  return px(density === 'compact' ? (v.$extensions?.compact?.$value ?? v.$value) : v.$value)
+}
+for (const density of ['default', 'compact']) {
+  const ramp = entries(semantic.box).map(([, v]) => pxAt(v, density))
+  const sizes = [
+    // Only the tier heights: pad and gap are spacing, not sizes.
+    ...['xs', 'sm', 'md'].map((k) => [`control.${k}`, semantic.control[k]]),
+    ...entries(semantic.size).map(([k, v]) => [`size.${k}`, v]),
+    ...entries(semantic.row).map(([k, v]) => [`row.${k}`, v]),
+  ]
+  for (const [name, v] of sizes) {
+    const value = pxAt(v, density)
+    if (OFF_RAMP[`${name}@${density}`] && ramp.includes(value))
+      throw new Error(`box ramp: ${name} is back on the ramp in ${density}; delete its OFF_RAMP entry.`)
+    if (OFF_RAMP[name] || OFF_RAMP[`${name}@${density}`]) continue
+    if (!ramp.includes(value))
+      throw new Error(
+        `box ramp: ${name} is ${value}px in ${density}, not on the ramp (${ramp.join(', ')}). Use a box step, or list it in OFF_RAMP with a reason.`,
+      )
+  }
+  const row = pxAt(semantic.row.height, density)
+  const derived = pxAt(semantic.box.md, density) + 2 * pxAt(semantic.space.inline, density)
+  if (row !== derived)
+    throw new Error(`box ramp: row.height is ${row}px in ${density}, but box-md + 2 × space-inline is ${derived}px.`)
+}
 const leadingDecls = entries(semantic.text)
   .map(([k, v]) => {
     const c = v.$extensions.compact?.leading
@@ -535,6 +600,9 @@ ${decls(rootDerived)}
      roles also follow density. */
 ${spaceDecls}
 
+  /* The box ramp — every fixed height and square stands on one of these. */
+${boxDecls}
+
   /* Control heights — one scale for every button, field, tab and menu row. */
 ${controlDecls}
 
@@ -644,6 +712,7 @@ const dtcg = {
   // Kept as separate groups: in Figma these are different variable types and
   // belong in different collections, which a flat `dimension` bag prevents.
   space: semantic.space,
+  box: semantic.box,
   control: semantic.control,
   row: semantic.row,
   size: semantic.size,

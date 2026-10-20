@@ -17,6 +17,56 @@ The table reads each token back from the page, so it shows what the
 current scaling and radius preset resolve to. Every length here, the
 radius included, is multiplied by `--scaling`.
 
+## The box ramp
+
+Every element is a box, and every box with a fixed height or a fixed
+square stands on a step of one ramp. The same role always takes the same
+step, so a close button is 24px in a Modal and in a Toast, and a nav
+item is as tall as the button beside it.
+
+<Canvas of={SizingStories.BoxRamp} />
+
+`md` (32px) is the default. Density maps the whole ramp with one rule:
+16 and 20 stay, every larger step drops one notch (24 to 22, 32 to 28,
+40 to 36, 48 to 44). The control tiers below are the ramp's `xs`, `sm`
+and `md` under another name.
+
+### Which step a role takes
+
+| Role | Step | Default |
+| --- | --- | --- |
+| The default control: field, button, tab, pagination and menu item, calendar day, an icon button in the app frame (sidebar toggle, drawer close, carousel arrows), a nav item | `md` | 32px |
+| A small inline control; a close button inside a surface (Modal, Popover, Toast, Alert); the small Stepper marker; the medium spinner | `sm` | 24px |
+| Small parts: Tag `size="sm"`, the slider thumb, the checkbox and radio box, Badge `md`, a file icon | `xs` | 20px |
+| A mark that sits with a glyph: Badge `sm`, the small slider thumb, the small spinner, a skeleton line | `2xs` | 16px |
+| A leading visual: Avatar `md`, the small EmptyState icon | `lg` | 40px |
+| A large visual: Avatar `lg`, the Stats icon, the EmptyState icon | `xl` | 48px |
+| A glyph inside a control | `--icon-{tier}` | 12 / 14 / 16px |
+| A line of text, and an icon beside it | `--leading-*` × `--text-*` | one line |
+| A table or list row | `box-md` + 2 × `--space-inline` | 48px |
+
+The rules that go with the table:
+
+- **A component picks the step by role.** Whoever uses the component
+  picks only its `size`, and `size` points at a step.
+- **Composite boxes take no free number.** A row, a Tag or a top bar is
+  the box inside it plus a spacing role on each side: `--row-height` is
+  `box-md` plus `--space-inline` above and below (48 / 36px). Text boxes
+  are a line tall (`--leading-*` × `--text-*`); an icon beside text sits
+  in a box one line tall.
+- **A box that grows with its content** uses `min-block-size` at a step,
+  never `block-size`.
+- **A box with a fixed size and padding or a border declares
+  `box-sizing: border-box` itself.** The kit ships no global reset, so
+  the app's own CSS decides the default.
+
+Off the ramp, each for a reason: 1–2px strokes, dots and bars under
+12px (radio dot, Badge dot, progress bar), switch track widths, region
+sizes (ColorPicker, a vertical Slider, overlay widths), the 44px touch
+target and icons sized in `em` inside text. `npm run tokens` stops when a
+control, size or row token leaves the ramp of its density without a
+listed reason, and when `--row-height` stops being the sum above.
+
 ## Who reads which tier
 
 | Tier | Height (Default / Compact) | Components |
@@ -35,10 +85,14 @@ A component's `size` prop points at a tier; the names need not match.
 Tag `size="md"` reads tier `sm`, because a tag sits in a line of text and
 a 32px tag would push it apart.
 
-**Buttons and fields have no `xs`.** 20px is below the 24px minimum
-target of WCAG 2.5.8, and a user cannot add the missing spacing back
-themselves. On touch screens every tier grows its hit area to
-`--target-coarse` (44px) without growing the visible box.
+**Buttons and fields have no `xs`.** A 20px button reads as a part,
+not a control.
+
+**The 24px floor is for the hit area, not the drawn box.** WCAG 2.5.8
+asks for a 24×24px target. A box drawn smaller (Compact `sm` is 22px, the
+checkbox 20px) keeps its look and widens its hit area to 24px with a
+`::before`. On touch screens every tier grows its hit area to
+`--target-coarse` (44px) the same way, without growing the visible box.
 
 ## Intent
 

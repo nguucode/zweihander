@@ -91,6 +91,7 @@ Breaking change: fix `argTypes` (and `### Differences from the spec` if any) **f
 - Follow the API conventions in the reference file: prop names, `variant`/`appearance`, `render` instead of `asChild`, no `forwardRef`.
 - **Size defaults to `md`.** A component whose `size` offers `md` uses it as the default, and its `argTypes` default says so; usage code (stories, templates, the Playground) leaves `size` out unless it needs another size on purpose. `npm run playground:check` goes red on a size default that is not `md`. Exceptions: Divider (its size is a line weight, 1px `sm` is the norm) and Link (no default, it inherits the surrounding text size).
 - Tokens only (`var(--…)`), no hard-coded values for color, spacing, radius or font.
+- Fixed sizes (`block-size`, `inline-size`) read `--box-*` or a role token (`--control-*`, `--icon-*`, `--row-height`, the `size` group), never `--space-*`. Pick the step by role from the table in `src/foundations/Sizing.mdx`.
 - A file with a hook or state: the first line is `'use client'`.
 - Comments explain *why*, they do not restate the code.
 - Update `registry.json`. The description **does not state counts** (do not write "four sizes"), because counts drift when the code changes.
