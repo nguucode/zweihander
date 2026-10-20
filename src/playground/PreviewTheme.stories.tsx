@@ -50,7 +50,7 @@ export const SystemOnLightOs: Story = {
 }
 
 export const ColorAndRadius: Story = {
-  globals: { appearance: 'light', accent: 'rose', gray: 'slate', radius: 'full' },
+  globals: { appearance: 'light', accent: 'rose', gray: 'slate', radius: 'full-rounded' },
   play: async ({ canvasElement }) => {
     const scope = wrapper(canvasElement) as HTMLElement
     await expect(scope).toHaveAttribute('data-accent', 'rose')

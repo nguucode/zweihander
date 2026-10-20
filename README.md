@@ -113,7 +113,7 @@ Customization is the point of the kit. `src/theme/Theme.tsx` scopes five
 independent settings to any subtree:
 
 ```tsx
-<Theme accentColor="violet" grayColor="slate" appearance="dark" radius="large" scaling="105%">
+<Theme accentColor="violet" grayColor="slate" appearance="dark" radius="full-rounded" scaling="105%">
 ```
 
 | Prop | Values |
@@ -121,7 +121,7 @@ independent settings to any subtree:
 | `accentColor` | 17 hues — drives `--primary` and `--ring` (default: **blue**) |
 | `grayColor` | 9 neutral ramps — surfaces, text, borders (default: gray) |
 | `appearance` | `light` / `dark` / `inherit` |
-| `radius` | `none` / `small` / `medium` / `large` / `full` |
+| `radius` | `sharp` / `rounded` / `full-rounded` |
 | `scaling` | `90%` … `110%` — spacing and type together |
 
 Every accent's solid step and label colour are **computed** so each one

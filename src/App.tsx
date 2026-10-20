@@ -51,7 +51,7 @@ function PixelLogo({ size = 24, animated = false, rows = 16 }: { size?: number; 
 /* The package's public entry points, so the hero count needs no network. */
 const COMPONENT_COUNT = Object.values(pkg.exports).filter((e) => typeof e === 'object' && e.import.includes('/components/')).length
 
-const RADII: Radius[] = ['none', 'small', 'medium', 'large', 'full']
+const RADII: Radius[] = ['sharp', 'rounded', 'full-rounded']
 
 const STATS = [
   { value: COMPONENT_COUNT, label: 'Components' },
@@ -353,7 +353,7 @@ const ACCENTS: AccentColor[] = ['blue', 'red', 'amber', 'green', 'teal']
 
 function Playground() {
   const [accent, setAccent] = useState<AccentColor>('blue')
-  const [radius, setRadius] = useState<Radius>('none')
+  const [radius, setRadius] = useState<Radius>('sharp')
   const [dark, setDark] = useState(false)
   const [heat, setHeat] = useState(64)
 
@@ -550,7 +550,7 @@ export default function App() {
   const [hi, setHi] = useState(readHi)
 
   return (
-    <Theme accentColor="blue" radius="none" appearance={dark ? 'dark' : 'light'} className={styles.page}>
+    <Theme accentColor="blue" radius="sharp" appearance={dark ? 'dark' : 'light'} className={styles.page}>
       <a href="#main" className={styles.skip}>Skip to content</a>
       <header className={styles.header}>
         <a href="./" className={styles.brand}>

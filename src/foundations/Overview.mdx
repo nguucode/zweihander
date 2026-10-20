@@ -111,7 +111,7 @@ against those values.
 ```tsx
 import { Theme } from 'zweihander/theme'
 
-<Theme accentColor="violet" grayColor="slate" appearance="dark" radius="large" scaling="105%">
+<Theme accentColor="violet" grayColor="slate" appearance="dark" radius="full-rounded" scaling="105%">
   <Button>Inside a violet, slate, dark, rounder, roomier scope</Button>
 </Theme>
 ```
@@ -123,7 +123,7 @@ Five settings, each independent:
 | `accentColor` | 17 hues — drives `--primary` and `--ring` |
 | `grayColor` | 9 neutral ramps — drives backgrounds, text, borders |
 | `appearance` | `light`, `dark`, `inherit` |
-| `radius` | `none`, `small`, `medium`, `large`, `full` |
+| `radius` | `sharp`, `rounded`, `full-rounded` |
 | `scaling` | `90%` … `110%` — spacing and type together |
 
 ### Accent color

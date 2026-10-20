@@ -344,7 +344,7 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
   )
 }
 
-const titleCase = (value: string) => value[0].toUpperCase() + value.slice(1)
+const titleCase = (value: string) => value[0].toUpperCase() + value.slice(1).replaceAll('-', ' ')
 const choices = (values: readonly string[]) => values.map((value) => ({ value, label: titleCase(value) }))
 
 /** The header's Theme button and its popover: what the item in the frame wears. */

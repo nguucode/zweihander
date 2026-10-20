@@ -14,19 +14,17 @@ export type { AccentColor, GrayColor }
 
 export type Appearance = 'light' | 'dark' | 'inherit'
 
-export type Radius = 'none' | 'small' | 'medium' | 'large' | 'full'
+export type Radius = 'sharp' | 'rounded' | 'full-rounded'
 
 /**
- * Each preset scales the whole radius scale. Only `full` raises
+ * Each preset scales the whole radius scale. Only `full-rounded` raises
  * `--radius-full`, which is what lets controls opt into a pill while fields
- * and panels keep their step.
+ * and panels keep their step. `rounded` is the default.
  */
 const RADIUS_PRESETS: Record<Radius, Record<string, string>> = {
-  none: { 'radius-factor': '0', 'radius-full': '0px' },
-  small: { 'radius-factor': '0.75', 'radius-full': '0px' },
-  medium: { 'radius-factor': '1', 'radius-full': '0px' },
-  large: { 'radius-factor': '1.5', 'radius-full': '0px' },
-  full: { 'radius-factor': '1.5', 'radius-full': '9999px' },
+  sharp: { 'radius-factor': '0', 'radius-full': '0px' },
+  rounded: { 'radius-factor': '1', 'radius-full': '0px' },
+  'full-rounded': { 'radius-factor': '1.5', 'radius-full': '9999px' },
 }
 
 export const SCALINGS = ['90%', '95%', '100%', '105%', '110%'] as const

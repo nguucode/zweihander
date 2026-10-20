@@ -335,7 +335,7 @@ const groupDecls = ROOT_GROUPS.map((g) =>
     .join('\n'),
 ).join('\n')
 
-/* [tier, radius step, field cap at radius="full"]. md's pair is exactly
+/* [tier, radius step, field cap at radius="full-rounded"]. md's pair is exactly
    --radius-control / --radius-field: the default tier is what those name. */
 const TIER_RADIUS = [
   ['xs', 'sm', 'md'],
@@ -503,7 +503,7 @@ ${grayScopeDecls()}
 
   /* Radius intent — what components actually use.
 
-     --radius-full is 0 except under radius="full", where it is 9999px. So
+     --radius-full is 0 except under radius="full-rounded", where it is 9999px. So
      max(step, --radius-full) resolves to the step normally and to a pill at
      full — that is --radius-control.
 
@@ -520,7 +520,7 @@ ${grayScopeDecls()}
   );
 
   /* Radius by size tier. The tier picks the step (xs and sm the small one,
-     md the default) and the intent picks what happens at radius="full": a
+     md the default) and the intent picks what happens at radius="full-rounded": a
      control (Button, Tag, a tab) becomes a pill, a field stops one step up
      for the same reason --radius-field does. */
 ${TIER_RADIUS.map(
