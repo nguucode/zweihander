@@ -3,6 +3,8 @@
    one content column. Colour comes from the Theme wrapper (neutral gray,
    blue accent), so the page dogfoods the kit's own tokens. */
 
+/* Body text is 16px everywhere (set once on .page); only mono labels,
+   metadata and headings step off it. */
 .page {
   --font-sans: 'Geist', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
@@ -269,7 +271,7 @@ a.sectionNote:hover {
 .note {
   margin: 0;
   color: var(--muted-foreground);
-  font-size: 0.875rem;
+  font-size: 1rem;
 }
 
 .muted {
@@ -283,8 +285,10 @@ a.sectionNote:hover {
   padding-block-start: 16px;
 }
 
+/* Tab panels set their own small size; prose in them stays body size. */
 .stack p {
   margin: 0;
+  font-size: 1rem;
 }
 
 .code {
@@ -388,7 +392,7 @@ a.sectionNote:hover {
 .showcaseBody > p {
   margin: 14px 0 0;
   color: var(--muted-foreground);
-  font-size: 1.125rem;
+  font-size: 1rem;
   line-height: 1.6;
 }
 
@@ -530,7 +534,7 @@ a.sectionNote:hover {
 }
 
 .rowTitle {
-  font-size: 1.0625rem;
+  font-size: 1rem;
 }
 
 .rowMeta {
@@ -633,7 +637,6 @@ a.row:hover .rowArrow {
   row-gap: 32px;
   padding: 48px var(--gutter) 64px;
   border-block-start: var(--hair);
-  font-size: 0.875rem;
 }
 
 .footer p {
