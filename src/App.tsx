@@ -40,9 +40,6 @@ function PixelLogo({ size = 24 }: { size?: number }) {
   )
 }
 
-/* The package's public entry points, so the count needs no network. */
-const COMPONENT_COUNT = Object.values(pkg.exports).filter((e) => typeof e === 'object' && e.import.includes('/components/')).length
-
 function CopyCommand({ command }: { command: string }) {
   const [state, setState] = useState<'idle' | 'copied' | 'failed'>('idle')
   const copy = () =>
@@ -346,16 +343,6 @@ export default function App() {
             Plain CSS over custom properties, keyboard handling from Base UI, and one <code>&lt;Theme&gt;</code> wrapper for accent, gray, radius and density.
           </p>
           <CopyCommand command="npm install zweihander" />
-          <dl className={styles.meta}>
-            <dt>Version</dt>
-            <dd>{pkg.version}</dd>
-            <dt>Components</dt>
-            <dd>{COMPONENT_COUNT}</dd>
-            <dt>License</dt>
-            <dd>MIT</dd>
-            <dt>Status</dt>
-            <dd>Early access</dd>
-          </dl>
         </aside>
 
         <main id="main" className={styles.main}>
