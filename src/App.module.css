@@ -1,7 +1,7 @@
-/* Docs home, after claude.dev: warm paper, sans for reading, mono for
+/* Docs home, after claude.dev: paper, sans for reading, mono for
    labels and metadata, hairlines instead of cards. One sticky intro column,
-   one content column. Colour comes from the Theme wrapper (stone gray,
-   orange accent), so the page dogfoods the kit's own tokens. */
+   one content column. Colour comes from the Theme wrapper (neutral gray,
+   blue accent), so the page dogfoods the kit's own tokens. */
 
 .page {
   --font-sans: 'Geist', system-ui, -apple-system, 'Segoe UI', sans-serif;

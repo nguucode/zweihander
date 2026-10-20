@@ -62,11 +62,11 @@ function CopyCommand({ command }: { command: string }) {
 
 /* ---------- theme playground ---------- */
 
-const ACCENTS: AccentColor[] = ['orange', 'blue', 'emerald', 'rose', 'amber']
+const ACCENTS: AccentColor[] = ['blue', 'orange', 'emerald', 'rose', 'amber']
 const RADII: Radius[] = ['sharp', 'rounded', 'full-rounded']
 
 function Playground() {
-  const [accent, setAccent] = useState<AccentColor>('orange')
+  const [accent, setAccent] = useState<AccentColor>('blue')
   const [radius, setRadius] = useState<Radius>('rounded')
   const [dark, setDark] = useState(false)
   const [heat, setHeat] = useState(64)
@@ -279,7 +279,7 @@ export default function App() {
   }, [])
 
   return (
-    <Theme accentColor="orange" grayColor="stone" radius="rounded" appearance={dark ? 'dark' : 'light'} className={styles.page}>
+    <Theme accentColor="blue" grayColor="gray" radius="rounded" appearance={dark ? 'dark' : 'light'} className={styles.page}>
       <a href="#main" className={styles.skip}>Skip to content</a>
       <header className={styles.header}>
         <a href="./" className={styles.brand} aria-label="Zweihänder home">
