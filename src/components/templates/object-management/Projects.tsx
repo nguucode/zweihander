@@ -309,7 +309,9 @@ export function Projects({ projects: initialProjects = sampleProjects, ...props 
                 {t.label} <Badge count={filtered.filter(t.matches).length} size="sm" variant="secondary" />
               </>
             ),
-            content: table,
+            // One table, in the selected tab's panel only. Base UI keeps a closing
+            // panel mounted for a frame, so the same table in every panel showed twice.
+            content: t.value === tab ? table : undefined,
           }))}
         />
       </div>
