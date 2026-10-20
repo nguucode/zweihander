@@ -6,7 +6,16 @@
     "SessionStart": [
       {
         "hooks": [
-          { "type": "command", "command": "sh \"$CLAUDE_PROJECT_DIR/.claude/hooks/cloud-browsers.sh\"", "timeout": 600 }
+          { "type": "command", "command": "sh \"$CLAUDE_PROJECT_DIR/.claude/hooks/cloud-browsers.sh\"", "timeout": 600 },
+          { "type": "command", "command": "sh \"$CLAUDE_PROJECT_DIR/.claude/hooks/exfat-worktree.sh\"", "timeout": 600 }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          { "type": "command", "command": "sh \"$CLAUDE_PROJECT_DIR/.claude/hooks/exfat-worktree.sh\" git", "timeout": 10 }
         ]
       }
     ]
