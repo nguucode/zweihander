@@ -19,8 +19,8 @@ const REPO = 'https://github.com/nguucode/zweihander'
 const NPM = 'https://www.npmjs.com/package/zweihander'
 const docs = (id: string) => `storybook/?path=/docs/${id}--docs`
 
-/* The 16×16 logo from public/favicon.svg, one rect per run so each row can
-   be drawn in on load. Keep in sync with that file. */
+/* The 16×16 logo from public/favicon.svg, one rect per run. Keep in sync
+   with that file. */
 const LOGO = {
   body: 'M3 0h10M2 1h12M1 2h14M0 3h6M10 3h6M0 4h7M9 4h7M0 5h7M9 5h7M0 6h4M12 6h4M0 7h7M9 7h7M0 8h5M6 8h1M9 8h1M11 8h5M0 9h7M9 9h7M0 10h7M9 10h7M0 11h7M9 11h7M0 12h7M8 12h8M1 13h14M2 14h12M3 15h10',
   blade: 'M6 3h4M7 4h2M7 5h2M4 6h8M7 7h2M7 8h2M7 9h2M7 10h2M7 11h2M7 12h1',
@@ -28,12 +28,12 @@ const LOGO = {
 }
 const runs = (d: string) => [...d.matchAll(/M(\d+) (\d+)h(\d+)/g)].map(([, x, y, w]) => ({ x: +x, y: +y, w: +w }))
 
-function PixelLogo({ size = 24, animated = false }: { size?: number; animated?: boolean }) {
+function PixelLogo({ size = 24 }: { size?: number }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 16 16" shapeRendering="crispEdges" aria-hidden className={animated ? styles.drawn : undefined}>
+    <svg width={size} height={size} viewBox="0 0 16 16" shapeRendering="crispEdges" aria-hidden>
       {(['body', 'blade', 'hooks'] as const).map((part) =>
         runs(LOGO[part]).map(({ x, y, w }) => (
-          <rect key={`${part}${x}-${y}`} x={x} y={y} width={w} height={1} className={styles[part]} style={{ '--row': y } as CSSProperties} />
+          <rect key={`${part}${x}-${y}`} x={x} y={y} width={w} height={1} className={styles[part]} />
         )),
       )}
     </svg>
@@ -303,7 +303,16 @@ export default function App() {
       <div className={styles.layout}>
         <aside className={styles.aside}>
           <h1 className={styles.wordmark}>zweihänder</h1>
-          <p className={styles.intro}>A React component kit built on one layer of design tokens. Copy the source, or install it from npm.</p>
+          <p className={styles.tags}>
+            <span className={styles.tagSolid}>React 19</span>
+            <span className={styles.tagLine}>CSS Modules</span>
+            <span className={styles.tagLine}>Base UI</span>
+          </p>
+          <p className={styles.headline}>Components you can read, theme and keep.</p>
+          <p className={styles.lede}>
+            Plain CSS over custom properties, keyboard handling from Base UI, and one <code>&lt;Theme&gt;</code> wrapper for accent, gray, radius and density.
+          </p>
+          <CopyCommand command="npm install zweihander" />
           <dl className={styles.meta}>
             <dt>Version</dt>
             <dd>{pkg.version}</dd>
@@ -317,24 +326,6 @@ export default function App() {
         </aside>
 
         <main id="main" className={styles.main}>
-          <article className={styles.featured}>
-            <div className={styles.featuredArt}>
-              <PixelLogo size={144} animated />
-            </div>
-            <div className={styles.featuredBody}>
-              <p className={styles.featuredTags}>
-                <span className={styles.tagSolid}>React 19</span>
-                <span className={styles.tagLine}>CSS Modules</span>
-                <span className={styles.tagLine}>Base UI</span>
-              </p>
-              <p className={styles.headline}>Components you can read, theme and keep.</p>
-              <p className={styles.lede}>
-                Plain CSS over custom properties, keyboard handling from Base UI, and one <code>&lt;Theme&gt;</code> wrapper for accent, gray, radius and density.
-              </p>
-              <CopyCommand command="npm install zweihander" />
-            </div>
-          </article>
-
           <Section id="theme" label="Try the theme" aside={<span className={styles.sectionNote}>Every control here is a Zweihänder component</span>}>
             <Playground />
           </Section>

@@ -109,7 +109,7 @@
 
 .layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 2.6fr);
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2.2fr);
   gap: 64px;
   padding: 48px var(--gutter) 96px;
 }
@@ -118,10 +118,13 @@
   position: sticky;
   inset-block-start: 96px;
   align-self: start;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
 }
 
 .wordmark {
-  margin: 0 0 16px;
+  margin: 0 0 8px;
   font-family: var(--font-mono);
   font-size: 1.75rem;
   font-weight: 400;
@@ -129,18 +132,11 @@
   line-height: 1.2;
 }
 
-.intro {
-  margin: 0;
-  max-inline-size: 28ch;
-  color: var(--muted-foreground);
-  font-size: 1.0625rem;
-}
-
 .meta {
   display: grid;
   grid-template-columns: auto 1fr;
   gap: 8px 16px;
-  margin: 32px 0 0;
+  margin: 16px 0 0;
   padding-block-start: 16px;
   border-block-start: var(--hair);
   font-family: var(--font-mono);
@@ -162,31 +158,9 @@
   min-inline-size: 0;
 }
 
-/* ---------- featured ---------- */
+/* ---------- intro (aside) ---------- */
 
-.featured {
-  display: grid;
-  grid-template-columns: 192px minmax(0, 1fr);
-  gap: 32px;
-  padding-block: 0 48px;
-  border-block-end: var(--hair);
-}
-
-.featuredArt {
-  display: grid;
-  place-items: center;
-  aspect-ratio: 1;
-  background: var(--primary);
-}
-
-.featuredBody {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  align-content: start;
-  gap: 16px;
-}
-
-.featuredTags {
+.tags {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
@@ -214,7 +188,7 @@
 .headline {
   margin: 0;
   max-inline-size: 20ch;
-  font-size: clamp(1.75rem, 1.2rem + 1.6vw, 2.25rem);
+  font-size: 1.5rem;
   font-weight: 500;
   letter-spacing: -0.02em;
   line-height: 1.15;
@@ -223,11 +197,11 @@
 
 .lede {
   margin: 0;
-  max-inline-size: 60ch;
+  max-inline-size: 48ch;
   color: var(--muted-foreground);
 }
 
-/* Pixel logo: ink body, paper blade, accent hooks. Rows draw in on load. */
+/* Pixel logo: ink body, paper blade, accent hooks. */
 .body {
   fill: var(--foreground);
 }
@@ -238,30 +212,6 @@
 
 .hooks {
   fill: var(--primary);
-}
-
-.featuredArt .body {
-  fill: var(--primary-foreground);
-}
-
-.featuredArt .blade {
-  fill: var(--primary);
-}
-
-.featuredArt .hooks {
-  fill: var(--foreground);
-}
-
-.drawn rect {
-  animation: row-in 0.5s var(--ease) backwards;
-  animation-delay: calc(var(--row) * 40ms);
-}
-
-@keyframes row-in {
-  from {
-    opacity: 0;
-    transform: translateY(-2px);
-  }
 }
 
 /* ---------- copy command ---------- */
@@ -323,6 +273,7 @@
 
 .sectionHead {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
   gap: 16px;
@@ -701,10 +652,6 @@ a.row:hover .rowArrow {
     position: static;
   }
 
-  .intro {
-    max-inline-size: 48ch;
-  }
-
   .playground {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -723,19 +670,6 @@ a.row:hover .rowArrow {
   .nav a:not(:first-child),
   .nav kbd {
     display: none;
-  }
-
-  .featured {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .featuredArt {
-    inline-size: 128px;
-  }
-
-  .featuredArt svg {
-    inline-size: 96px;
-    block-size: 96px;
   }
 
   .row {
