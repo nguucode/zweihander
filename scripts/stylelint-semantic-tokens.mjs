@@ -12,6 +12,13 @@
  * Anything else is a primitive (reported as such) or a name nothing sets,
  * usually a typo, which would silently fall back to the property's initial
  * value.
+ *
+ * zweihander/no-token-shadow: a component stylesheet never declares a name
+ * src/tokens.css emits. A local `--radio-dot` once collided with a new
+ * `--radio-dot` token and the dot silently changed colour (PR #138). An
+ * intended restatement (a surface setting --background for what sits on it)
+ * takes a `stylelint-disable-next-line zweihander/no-token-shadow -- <reason>`.
+ * A separate rule so that comment leaves the var() check on the line alone.
  */
 import { readFileSync, globSync } from 'node:fs'
 import { dirname, join } from 'node:path'
@@ -38,12 +45,16 @@ const DECLARED = /(--[A-Za-z0-9-]+)\s*:/g
 const QUOTED = /['"`](--[A-Za-z0-9-]+)['"`]/g
 const VAR = /var\(\s*(--[A-Za-z0-9-]+)/g
 
+let tokens
+function tokenNames() {
+  tokens ??= new Set([...readFileSync(join(root, 'src/tokens.css'), 'utf8').matchAll(DECLARED)].map((m) => m[1]))
+  return tokens
+}
+
 let known
 function knownNames() {
   if (known) return known
-  known = new Set()
-  for (const m of readFileSync(join(root, 'src/tokens.css'), 'utf8').matchAll(DECLARED))
-    if (!isPrimitive(m[1])) known.add(m[1])
+  known = new Set([...tokenNames()].filter((name) => !isPrimitive(name)))
   for (const file of globSync('src/**/*.css', { cwd: root })) {
     if (file.endsWith('tokens.css')) continue
     for (const m of readFileSync(join(root, file), 'utf8').matchAll(DECLARED)) known.add(m[1])
@@ -89,4 +100,21 @@ const ruleFunction = (primary, secondary) => (cssRoot, result) => {
 ruleFunction.ruleName = ruleName
 ruleFunction.messages = messages
 
-export default createPlugin(ruleName, ruleFunction)
+const shadowName = 'zweihander/no-token-shadow'
+const shadowMessages = ruleMessages(shadowName, {
+  shadow: (name) => `"${name}" is a token in src/tokens.css. Rename the local property, or mark an intended override with a reasoned disable comment.`,
+})
+
+const shadowFunction = (primary) => (cssRoot, result) => {
+  if (!validateOptions(result, shadowName, { actual: primary, possible: [true] })) return
+  const names = tokenNames()
+  cssRoot.walkDecls((decl) => {
+    if (names.has(decl.prop))
+      report({ result, ruleName: shadowName, node: decl, word: decl.prop, message: shadowMessages.shadow(decl.prop) })
+  })
+}
+
+shadowFunction.ruleName = shadowName
+shadowFunction.messages = shadowMessages
+
+export default [createPlugin(ruleName, ruleFunction), createPlugin(shadowName, shadowFunction)]

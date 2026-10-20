@@ -59,14 +59,17 @@
 /* Scoped to the shell's own cells: a bare attribute selector is not hashed by
    CSS Modules and would match any element in the page. */
 :is(.top, .sidebar)[data-surface='solid'] {
+  /* stylelint-disable-next-line zweihander/no-token-shadow -- what sits on the piece reads its colour */
   --background: var(--card);
   background: var(--card);
   color: var(--card-foreground);
 }
 :is(.top, .sidebar)[data-surface='transparent'] {
+  /* stylelint-disable zweihander/no-token-shadow -- what sits on the canvas reads the canvas colours */
   --background: var(--shell-canvas-solid);
   --muted-foreground: var(--shell-canvas-muted-foreground);
   --subtle-foreground: var(--shell-canvas-subtle-foreground);
+  /* stylelint-enable zweihander/no-token-shadow */
   color: var(--shell-canvas-foreground);
 }
 
@@ -143,10 +146,12 @@
   padding: var(--content-flat, var(--space-2)) var(--content-card, 0);
 }
 .main {
+  /* stylelint-disable zweihander/no-token-shadow -- content reads the colours of the surface it sits on */
   --background: var(--content-flat, var(--card)) var(--content-card, var(--shell-canvas-solid));
   /* On the canvas (card), text reads the canvas colours, as a transparent piece does. */
   --muted-foreground: var(--content-flat, var(--shell-muted-foreground)) var(--content-card, var(--shell-canvas-muted-foreground));
   --subtle-foreground: var(--content-flat, var(--shell-subtle-foreground)) var(--content-card, var(--shell-canvas-subtle-foreground));
+  /* stylelint-enable zweihander/no-token-shadow */
   min-block-size: 0;
   overflow: auto;
   padding: var(--space-container);
