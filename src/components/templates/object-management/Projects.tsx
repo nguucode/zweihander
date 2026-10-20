@@ -13,7 +13,7 @@ import { Menu } from '../../navigation/Menu'
 import { Sidebar, type SidebarEntry } from '../../navigation/Sidebar'
 import { Tabs } from '../../navigation/Tabs'
 import { EmptyState } from '../../states/EmptyState'
-import { AppHeader, AppShell } from '../../patterns/application-ui/AppShell'
+import { AppShell } from '../../patterns/application-ui/AppShell'
 import { TableToolbar, TableToolbarGroup } from '../../patterns/application-ui/DataTablePage'
 import { PageHeading } from '../../patterns/application-ui/PageHeading'
 import { sampleProjects, type Project, type ProjectActivity, type ProjectStatus } from './projects-data'
@@ -208,24 +208,28 @@ export function Projects({ projects: initialProjects = sampleProjects, ...props 
 
   return (
     <AppShell
-      sidebar={<Sidebar items={navigation(openCount)} currentHref="#projects" header={<strong className={styles.brand}>Zweihänder</strong>} className={styles.sidebar} />}
-      header={
-        <AppHeader
-          end={
-            <>
-              <Button variant="secondary" appearance="ghost" isIconOnly aria-label="Notifications">
-                <Icon name="info" />
-              </Button>
+      brand={<strong className={styles.brand}>Zweihänder</strong>}
+      sidebar={
+        <Sidebar
+          items={navigation(openCount)}
+          currentHref="#projects"
+          className={styles.sidebar}
+          footer={
+            // No top bar in the sidebar layout: the account and notifications live here.
+            <div className={styles.account}>
               <Menu
-                align="end"
+                align="start"
                 trigger={
-                  <Button variant="secondary" appearance="ghost" isIconOnly aria-label="Account">
-                    <Avatar initials="IO" size="sm" />
+                  <Button variant="secondary" appearance="ghost" startIcon={<Avatar initials="IO" size="sm" />}>
+                    Ines Okafor
                   </Button>
                 }
                 items={[{ label: 'Your profile' }, { label: 'Settings' }, { type: 'separator' }, { label: 'Sign out' }]}
               />
-            </>
+              <Button variant="secondary" appearance="ghost" isIconOnly aria-label="Notifications">
+                <Icon name="info" />
+              </Button>
+            </div>
           }
         />
       }

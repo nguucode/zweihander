@@ -5,19 +5,82 @@ import * as AppShellStories from './AppShell.stories'
 
 # App Shell
 
-The frame of an application: navigation, a header, and the page. The
-navigation stays put while the page scrolls, and on a phone it moves into
-a drawer that the header's menu button opens. Four pieces: `AppShell`,
-`AppHeader`, `AppNav` for top navigation, and the kit's
+The frame of an application. It only places three pieces, the top bar,
+the sidebar and the page, on the Theme's canvas, with no padding or gap of
+its own. The navigation stays put while the page scrolls, and on a phone
+it moves into a drawer that the header's menu button opens. Four pieces:
+`AppShell`, `AppHeader`, `AppNav` for top navigation, and the kit's
 [Sidebar](?path=/docs/components-navigation-sidebar--docs).
 
 ```sh
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/app-shell.json
 ```
 
-## With sidebar
+## Sidebar layout
+
+The default, `layout="sidebar"`: the sidebar runs the full height and
+there is **no top bar** on wide screens. What a top bar would hold goes in
+the Sidebar: search in its `header`, the account and notifications in its
+`footer`. The header only appears while the sidebar is in the drawer, to
+hold the menu button and the logo.
 
 <Canvas of={AppShellStories.WithSidebar} />
+
+## Top bar layout
+
+`layout="top-bar"`: the header runs the full width above the sidebar and
+the page.
+
+<Canvas of={AppShellStories.TopBar} />
+
+## The logo
+
+Pass the logo as `brand`, not inside the Sidebar or the AppHeader. The
+shell places it in the same spot in both layouts: its left edge on the
+sidebar icons' left edge, centred in a row as tall as the top bar. It does
+not move when the sidebar collapses, and it follows density.
+
+## Canvas and content style
+
+Two settings on the `Theme`, so a
+whole app takes them at once:
+
+- **`canvas`**: what the shell sits on. `plain` (the card colour),
+  `neutral` (the page gray, the default) or `tinted` (the accent's subtle
+  step). For any other colour or a gradient, pass
+  `tokens={{ canvas, 'canvas-foreground', 'canvas-muted-foreground' }}`.
+  The kit checks contrast for its own three canvases only; a custom canvas,
+  in light and in dark (use `var(--use-light, …) var(--use-dark, …)`), is
+  yours to check.
+- **`contentStyle`**: how the page meets the canvas. `flat` (the default)
+  puts it on one card surface, inset 8px from the edges at every density
+  and flush below 48rem. `card` leaves it on the canvas, and each block is
+  a [Card](?path=/docs/components-data-display-card--docs) with
+  `appearance="surface"`, which is raised under `card` and a ruled-off
+  section under `flat`.
+
+<Canvas of={AppShellStories.CardOnTint} />
+
+Each piece of the shell is `solid` (the card colour, with an edge where it
+meets the page) or `transparent` (the canvas, its text in the canvas
+colours): `topBarSurface` (default `solid`) and `sidebarSurface` (default
+`transparent`). On a `plain` canvas a transparent piece keeps its edge,
+since nothing else marks it.
+
+<Canvas of={AppShellStories.TransparentOnPlain} />
+
+## Combinations
+
+Of the 36 combinations of layout, the two surfaces, canvas and content
+style, 24 occur in real products. The other 12 render but should not be
+used:
+
+- no `plain` canvas with `flat` content;
+- no `transparent` top bar over a `solid` sidebar (on a `plain` canvas it
+  looks the same as a solid one, so that case is fine);
+- no `solid` full-height sidebar (`layout="sidebar"`) with `flat` content.
+
+<Canvas of={AppShellStories.Combinations} />
 
 ## Collapsed rail
 
@@ -47,8 +110,12 @@ pressing Escape closes it, and focus returns to the button.
 
 | Prop | Values | Default | |
 | --- | --- | --- | --- |
+| `layout` | `sidebar`, `top-bar` | `sidebar` | Full-height sidebar with no top bar, or a full-width top bar. |
+| `topBarSurface` | `solid`, `transparent` | `solid` | The header on the card colour or on the canvas. |
+| `sidebarSurface` | `solid`, `transparent` | `transparent` | The sidebar on the card colour or on the canvas. |
+| `brand` | node | – | The logo, placed by the shell. |
 | `sidebar` | node | – | A Sidebar. Beside the content from 64rem, in the drawer below. |
-| `header` | node | – | An AppHeader. |
+| `header` | node | – | An AppHeader. In `sidebar` it shows only while the sidebar is in the drawer; without one the shell adds a plain AppHeader there. |
 | `mobileNavigation` | node | `sidebar` | What the drawer holds. |
 | `navigationLabel` | string | `Navigation` | Names the drawer and its buttons. |
 | `mainId` | string | generated | The `id` of the `main` element, the skip link's target. |
@@ -64,9 +131,13 @@ no sidebar, so there is no empty column, no drawer and no menu button.
 
 ## Layout
 
-- **The shell fills the viewport** (`block-size: 100dvh`) and its content
-  column scrolls, so the sidebar and the sticky header stay in place. Set
+- **The shell fills the viewport** (`block-size: 100dvh`) and only the
+  page scrolls, so the sidebar and the header stay in place. Set
   `block-size` on it to put it in a smaller box.
+- **Everything follows density**: the top bar is `--control-md` plus two
+  `--space-cluster` tall, the sidebar is `--sidebar-width` wide, the page
+  padding is `--space-section`. The 8px inset of a flat page does not
+  change.
 - **Breakpoints are the shell's own width**, which in an app is the
   viewport's. That is also what lets the stories show the phone layout in
   a 390px box.

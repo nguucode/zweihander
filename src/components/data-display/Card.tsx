@@ -9,7 +9,8 @@ import styles from './Card.module.css'
 export interface CardProps extends Omit<ComponentProps<'div'>, 'onClick'> {
   /** Padding and the gap between children. */
   size?: 'xs' | 'sm' | 'md' | 'lg'
-  appearance?: 'elevated' | 'outline' | 'unstyled'
+  /** `surface` follows the Theme's `contentStyle`: elevated on a `card` canvas, a ruled-off section on a `flat` one. */
+  appearance?: 'elevated' | 'outline' | 'unstyled' | 'surface'
   /** How children flow: stacked, or side by side (e.g. media and text). */
   orientation?: 'vertical' | 'horizontal'
   isRounded?: boolean

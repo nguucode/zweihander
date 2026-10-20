@@ -17,6 +17,13 @@
   block-size: 100%;
 }
 
+.account {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-inline);
+}
+
 .title {
   display: inline-flex;
   align-items: center;

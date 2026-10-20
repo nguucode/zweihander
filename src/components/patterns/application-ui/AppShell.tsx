@@ -7,21 +7,41 @@ import { cn } from '@/lib/utils'
 import { Button } from '../../buttons/Button'
 import styles from './AppShell.module.css'
 
-/** Whether the shell has a navigation drawer for narrow screens, and how to open it. */
-const DrawerContext = createContext<{ hasDrawer: boolean; isOpen: boolean; open: () => void; label: string }>({
+/** Whether the shell has a navigation drawer for narrow screens, how to open it, and the brand the header shows. */
+const DrawerContext = createContext<{ hasDrawer: boolean; isOpen: boolean; open: () => void; label: string; brand: ReactNode }>({
   hasDrawer: false,
   isOpen: false,
   open: () => {},
   label: 'Navigation',
+  brand: null,
 })
+
+export type AppShellLayout = 'sidebar' | 'top-bar'
+export type AppShellSurface = 'solid' | 'transparent'
 
 /** `null`, `false` and `undefined` render nothing, so they are no navigation either. */
 const given = (node: ReactNode) => node != null && node !== false
 
 export interface AppShellProps extends ComponentProps<'div'> {
+  /**
+   * `sidebar`: the sidebar runs the full height and there is no top bar on
+   * wide screens, so search and the account go in the Sidebar's header and
+   * footer. `top-bar`: the header runs the full width above the sidebar and
+   * the content.
+   */
+  layout?: AppShellLayout
+  /** The header: `solid` on the card colour, or `transparent` on the canvas. */
+  topBarSurface?: AppShellSurface
+  /** The sidebar: `solid` on the card colour, or `transparent` on the canvas. */
+  sidebarSurface?: AppShellSurface
+  /** The logo. The shell places it, in the same spot in either layout. */
+  brand?: ReactNode
   /** A Sidebar. Beside the content from 64rem; in the drawer below that. */
   sidebar?: ReactNode
-  /** An AppHeader, above the content. */
+  /**
+   * An AppHeader. Above the content in `top-bar`; in `sidebar` only while the
+   * sidebar is in the drawer, for the menu button.
+   */
   header?: ReactNode
   /**
    * What the drawer holds on narrow screens. Defaults to `sidebar`; pass it
@@ -36,11 +56,18 @@ export interface AppShellProps extends ComponentProps<'div'> {
 }
 
 /**
- * The frame of an application: navigation, a header, and the page. The
- * sidebar stays put while the content scrolls; on narrow screens the
- * navigation moves into a drawer that the header's menu button opens.
+ * The frame of an application. It only places the pieces, the header, the
+ * sidebar and the page, on the Theme's canvas, with no padding or gap of its
+ * own; the Theme's `contentStyle` decides whether the page is one flat
+ * surface or blocks on the canvas. The sidebar stays put while the content
+ * scrolls; on narrow screens the navigation moves into a drawer that the
+ * header's menu button opens.
  */
 export function AppShell({
+  layout = 'sidebar',
+  topBarSurface = 'solid',
+  sidebarSurface = 'transparent',
+  brand,
   sidebar,
   header,
   mobileNavigation,
@@ -58,13 +85,26 @@ export function AppShell({
   const hasMobileNavigation = given(mobileNavigation)
   const drawerContent = hasMobileNavigation ? mobileNavigation : hasSidebar ? sidebar : null
   const hasDrawer = drawerContent !== null
+  const hasBrand = given(brand)
+  // The sidebar layout still needs a bar for the menu button while the sidebar is in the drawer.
+  const top = given(header) ? header : hasDrawer || hasBrand ? <AppHeader /> : null
   // A link chosen in the drawer navigates; the drawer should not stay over the new page.
   const closeOnLink = (e: MouseEvent) => {
     if ((e.target as HTMLElement).closest('a[href]')) setOpen(false)
   }
   return (
-    <DrawerContext.Provider value={{ hasDrawer, isOpen: open, open: () => setOpen(true), label: navigationLabel }}>
-      <div className={cn(styles.shell, hasSidebar && styles.withSidebar, hasMobileNavigation && styles.withMobileNavigation, className)} {...props}>
+    <DrawerContext.Provider value={{ hasDrawer, isOpen: open, open: () => setOpen(true), label: navigationLabel, brand }}>
+      <div
+        className={cn(
+          styles.shell,
+          layout === 'top-bar' ? styles.topBarLayout : styles.sidebarLayout,
+          hasSidebar && styles.withSidebar,
+          hasMobileNavigation && styles.withMobileNavigation,
+          hasBrand && styles.withBrand,
+          className,
+        )}
+        {...props}
+      >
         {/* Focus is moved by hand: the browser's own jump would also scroll
             the window, and a generated id is not a tidy URL fragment. */}
         <a
@@ -80,9 +120,18 @@ export function AppShell({
         {/* The shell is the size container and the frame its grid, so the
             layout follows the shell's own width: an element cannot query itself. */}
         <div className={styles.frame}>
-          {hasSidebar && <div className={styles.sidebar}>{sidebar}</div>}
-          <div className={styles.column}>
-            {header}
+          {top && (
+            <div className={styles.top} data-surface={topBarSurface}>
+              {top}
+            </div>
+          )}
+          {hasSidebar && (
+            <div className={styles.sidebar} data-surface={sidebarSurface}>
+              {hasBrand && <div className={styles.sidebarBrand}>{brand}</div>}
+              {sidebar}
+            </div>
+          )}
+          <div className={styles.content}>
             <main ref={mainRef} id={id} tabIndex={-1} className={styles.main}>
               {children}
             </main>
@@ -134,6 +183,7 @@ export function AppHeader({ start, end, children, className, ...props }: AppHead
           <Icon name="menu" />
         </Button>
       )}
+      {given(drawer.brand) && <div className={styles.brand}>{drawer.brand}</div>}
       {start && <div className={styles.start}>{start}</div>}
       {children && <div className={styles.center}>{children}</div>}
       {end && <div className={styles.end}>{end}</div>}

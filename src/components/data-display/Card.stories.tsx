@@ -36,10 +36,10 @@ const meta = {
       table: { type: { summary: "'xs' | 'sm' | 'md' | 'lg'" }, defaultValue: { summary: "'md'" } },
     },
     appearance: {
-      description: '`elevated`: the card surface with a faint shadow. `outline`: the surface and its edge, no shadow. `unstyled`: keeps the padding and layout, drops every visual.',
+      description: '`elevated`: the card surface with a faint shadow. `outline`: the surface and its edge, no shadow. `unstyled`: keeps the padding and layout, drops every visual. `surface`: a block of an AppShell page, elevated when the Theme\'s `contentStyle` is `card`, a section with a rule above when it is `flat`.',
       control: 'inline-radio',
-      options: ['elevated', 'outline', 'unstyled'],
-      table: { type: { summary: "'elevated' | 'outline' | 'unstyled'" }, defaultValue: { summary: "'elevated'" } },
+      options: ['elevated', 'outline', 'unstyled', 'surface'],
+      table: { type: { summary: "'elevated' | 'outline' | 'unstyled' | 'surface'" }, defaultValue: { summary: "'elevated'" } },
     },
     orientation: {
       description: 'How children flow: `vertical` stacks them, `horizontal` sets them side by side (media and text).',

@@ -1,13 +1,15 @@
+/* --sidebar-width is a token (it follows density, and an AppShell sizes the
+   logo's cell in its top bar by it). An AppShell sets --sidebar-background
+   and --sidebar-border to draw the fill and edge itself. */
 .sidebar {
-  --sidebar-width: 16rem;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
   inline-size: var(--sidebar-width);
   block-size: 100%;
   padding: var(--space-inline);
-  border-inline-end: 1px solid var(--border);
-  background: var(--surface-filled);
+  border-inline-end: var(--sidebar-border, 1px solid var(--border));
+  background: var(--sidebar-background, var(--surface-filled));
   font-family: var(--font-sans);
   font-size: var(--text-body);
   line-height: var(--leading-body);
