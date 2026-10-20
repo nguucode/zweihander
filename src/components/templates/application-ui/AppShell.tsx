@@ -1,20 +1,12 @@
 'use client'
 
-import { createContext, useContext, useId, useLayoutEffect, useRef, useState, type ComponentProps, type MouseEvent, type ReactNode, type RefObject } from 'react'
+import { useId, useLayoutEffect, useRef, useState, type ComponentProps, type MouseEvent, type ReactNode, type RefObject } from 'react'
 import { Dialog } from '@base-ui/react/dialog'
 import { Icon } from '@/lib/icon'
 import { cn } from '@/lib/utils'
-import { Button } from '../../buttons/Button'
+import { AppContent } from '../../patterns/application-ui/AppContent'
+import { ShellContext, TopBar } from '../../patterns/application-ui/TopBar'
 import styles from './AppShell.module.css'
-
-/** What the header needs from its shell: the drawer (whether there is one, how to open it) and the brand. */
-const ShellContext = createContext<{ hasDrawer: boolean; isOpen: boolean; open: () => void; label: string; brand: ReactNode }>({
-  hasDrawer: false,
-  isOpen: false,
-  open: () => {},
-  label: 'Navigation',
-  brand: null,
-})
 
 export type AppShellLayout = 'sidebar' | 'top-bar'
 export type AppShellSurface = 'solid' | 'transparent'
@@ -25,8 +17,8 @@ const given = (node: ReactNode) => node != null && node !== false
 export interface AppShellProps extends ComponentProps<'div'> {
   /**
    * `sidebar`: the sidebar runs the full height and there is no top bar on
-   * wide screens, so search and the account go in the Sidebar's header and
-   * footer. `top-bar`: the header runs the full width above the sidebar and
+   * wide screens, so search and the account go in the NavSidebar's header
+   * and footer. `top-bar`: the header runs the full width above the sidebar and
    * the content.
    */
   layout?: AppShellLayout
@@ -36,10 +28,10 @@ export interface AppShellProps extends ComponentProps<'div'> {
   sidebarSurface?: AppShellSurface
   /** The logo. The shell places it, in the same spot in either layout. */
   brand?: ReactNode
-  /** A Sidebar. Beside the content from 64rem; in the drawer below that. */
+  /** A NavSidebar. Beside the page from 64rem; in the drawer below that. */
   sidebar?: ReactNode
   /**
-   * An AppHeader. Above the content in `top-bar`; in `sidebar` only while the
+   * A TopBar. Above the page in `top-bar`; in `sidebar` only while the
    * sidebar is in the drawer, for the menu button.
    */
   header?: ReactNode
@@ -56,8 +48,8 @@ export interface AppShellProps extends ComponentProps<'div'> {
 }
 
 /**
- * The frame of an application. It only places the pieces, the header, the
- * sidebar and the page, on the Theme's canvas, with no padding or gap of its
+ * The frame of an application, a template. It only places three patterns,
+ * the TopBar, the NavSidebar and the AppContent, on the Theme's canvas, with no padding or gap of its
  * own; the Theme's `contentStyle` decides whether the page is one flat
  * surface or blocks on the canvas. The sidebar stays put while the content
  * scrolls; on narrow screens the navigation moves into a drawer that the
@@ -93,13 +85,23 @@ export function AppShell({
   const isWide = useIsWide(frameRef)
   const brandInSidebar = hasBrand && layout === 'sidebar' && hasSidebar && isWide
   // The sidebar layout still needs a bar for the menu button while the sidebar is in the drawer.
-  const top = given(header) ? header : hasDrawer || hasBrand ? <AppHeader /> : null
+  const top = given(header) ? header : hasDrawer || hasBrand ? <TopBar /> : null
   // A link chosen in the drawer navigates; the drawer should not stay over the new page.
   const closeOnLink = (e: MouseEvent) => {
     if ((e.target as HTMLElement).closest('a[href]')) setOpen(false)
   }
   return (
-    <ShellContext.Provider value={{ hasDrawer, isOpen: open, open: () => setOpen(true), label: navigationLabel, brand: brandInSidebar ? null : brand }}>
+    <ShellContext.Provider
+      value={{
+        hasDrawer,
+        drawerHolds: hasSidebar ? 'sidebar' : 'links',
+        isOpen: open,
+        open: () => setOpen(true),
+        label: navigationLabel,
+        brand: brandInSidebar ? null : brand,
+        brandCell: layout === 'top-bar' && hasSidebar,
+      }}
+    >
       <div
         className={cn(
           styles.shell,
@@ -137,11 +139,9 @@ export function AppShell({
               {sidebar}
             </div>
           )}
-          <div className={styles.content}>
-            <main ref={mainRef} id={id} tabIndex={-1} className={styles.main}>
-              {children}
-            </main>
-          </div>
+          <AppContent ref={mainRef} id={id}>
+            {children}
+          </AppContent>
         </div>
       </div>
       {hasDrawer && (
@@ -174,68 +174,4 @@ function useIsWide(ref: RefObject<HTMLElement | null>) {
     return () => observer.disconnect()
   }, [ref])
   return isWide
-}
-
-export interface AppHeaderProps extends ComponentProps<'header'> {
-  /** Breadcrumbs, or a logo and AppNav. */
-  start?: ReactNode
-  /** Search, notifications, the account menu. */
-  end?: ReactNode
-  children?: ReactNode
-}
-
-/** The bar above the content. Inside an AppShell with navigation it adds the drawer's menu button on narrow screens. */
-export function AppHeader({ start, end, children, className, ...props }: AppHeaderProps) {
-  const drawer = useContext(ShellContext)
-  return (
-    <header className={cn(styles.header, className)} {...props}>
-      {drawer.hasDrawer && (
-        <Button
-          variant="secondary"
-          appearance="ghost"
-          isIconOnly
-          aria-label={`Open ${drawer.label.toLowerCase()}`}
-          aria-haspopup="dialog"
-          aria-expanded={drawer.isOpen}
-          className={styles.menuButton}
-          onClick={drawer.open}
-        >
-          <Icon name="menu" />
-        </Button>
-      )}
-      {given(drawer.brand) && <div className={styles.brand}>{drawer.brand}</div>}
-      {start && <div className={styles.start}>{start}</div>}
-      {children && <div className={styles.center}>{children}</div>}
-      {end && <div className={styles.end}>{end}</div>}
-    </header>
-  )
-}
-
-export interface AppNavItem {
-  label: string
-  href: string
-}
-
-export interface AppNavProps extends Omit<ComponentProps<'nav'>, 'children'> {
-  items: AppNavItem[]
-  /** The href of the page you are on. */
-  currentHref?: string
-  'aria-label'?: string
-}
-
-/** Top navigation links for a header. Hidden below 48rem, where the drawer holds them. */
-export function AppNav({ items, currentHref, className, 'aria-label': ariaLabel = 'Main', ...props }: AppNavProps) {
-  return (
-    <nav aria-label={ariaLabel} className={cn(styles.nav, className)} {...props}>
-      <ul>
-        {items.map((item) => (
-          <li key={item.href}>
-            <a href={item.href} className={styles.navLink} aria-current={item.href === currentHref ? 'page' : undefined}>
-              {item.label}
-            </a>
-          </li>
-        ))}
-      </ul>
-    </nav>
-  )
 }

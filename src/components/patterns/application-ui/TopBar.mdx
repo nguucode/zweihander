@@ -1,0 +1,55 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks'
+import * as TopBarStories from './TopBar.stories'
+
+<Meta of={TopBarStories} />
+
+# Top Bar
+
+The bar above the page: `start`, a middle and `end` slots, and `TopBarNav`
+for navigation links across it. One of the three pieces the
+[App Shell](?path=/docs/templates-application-ui-app-shell--docs) template places; inside
+one it also shows the shell's `brand` and, on narrow screens, the menu
+button that opens the navigation drawer. It was `AppHeader` (and
+`TopBarNav` was `AppNav`).
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/top-bar.json
+```
+
+## Search and actions
+
+<Canvas of={TopBarStories.Default} />
+
+## Top navigation
+
+`TopBarNav` takes `items` (`{ label, href }[]`) and `currentHref`. Below
+48rem the links hide; the App Shell's drawer holds them instead (its
+`mobileNavigation`).
+
+<Canvas of={TopBarStories.WithNavigation} />
+
+## Props
+
+| Prop | Values | Default | |
+| --- | --- | --- | --- |
+| `start` | node | – | Breadcrumbs, or TopBarNav links. |
+| `children` | node | – | The middle, e.g. a wide search field. |
+| `end` | node | – | Search, notifications, the account menu. |
+
+## Layout
+
+- The bar is one row, `--control-md` plus two `--space-cluster` tall, so
+  it follows density. Its fill and edge come from the App Shell's top cell
+  (solid or transparent), not from the bar.
+- In the shell's top-bar layout with a sidebar, the brand takes a cell as
+  wide as the sidebar (`--sidebar-width`), so the logo sits where it sits
+  in the sidebar layout.
+- Breakpoints read the container, which in an app is the shell.
+
+## Accessibility
+
+- The bar is a `header`; inside an App Shell it is the page's banner.
+- `TopBarNav` is a `nav` named "Main"; the current page has
+  `aria-current="page"` and is shown by more than colour.
+- The menu button says what it opens with `aria-haspopup="dialog"` and
+  `aria-expanded`.

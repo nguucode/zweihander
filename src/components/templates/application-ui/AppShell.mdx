@@ -5,12 +5,16 @@ import * as AppShellStories from './AppShell.stories'
 
 # App Shell
 
-The frame of an application. It only places three pieces, the top bar,
-the sidebar and the page, on the Theme's canvas, with no padding or gap of
-its own. The navigation stays put while the page scrolls, and on a phone
-it moves into a drawer that the header's menu button opens. Four pieces:
-`AppShell`, `AppHeader`, `AppNav` for top navigation, and the kit's
-[Sidebar](?path=/docs/components-navigation-sidebar--docs).
+A template: the frame of an application. It only places three patterns,
+the [Top Bar](?path=/docs/patterns-application-ui-top-bar--docs) (`TopBar`,
+with `TopBarNav` for links across it), the
+[Nav Sidebar](?path=/docs/patterns-application-ui-nav-sidebar--docs)
+(`NavSidebar`) and the
+[App Content](?path=/docs/patterns-application-ui-app-content--docs)
+(`AppContent`, which the shell puts around its children), on the Theme's
+canvas, with no padding or gap of its own. The navigation stays put while
+the page scrolls, and on a phone it moves into a drawer that the top bar's
+menu button opens.
 
 ```sh
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/app-shell.json
@@ -20,7 +24,7 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/app-shell.json
 
 The default, `layout="sidebar"`: the sidebar runs the full height and
 there is **no top bar** on wide screens. What a top bar would hold goes in
-the Sidebar: search in its `header`, the account and notifications in its
+the NavSidebar: search in its `header`, the account and notifications in its
 `footer`. The header only appears while the sidebar is in the drawer, to
 hold the menu button and the logo.
 
@@ -31,11 +35,11 @@ hold the menu button and the logo.
 `layout="top-bar"`: the header runs the full width above the sidebar and
 the page.
 
-<Canvas of={AppShellStories.TopBar} />
+<Canvas of={AppShellStories.TopBarLayout} />
 
 ## The logo
 
-Pass the logo as `brand`, not inside the Sidebar or the AppHeader. The
+Pass the logo as `brand`, not inside the NavSidebar or the TopBar. The
 shell places it in the same spot in both layouts: its left edge on the
 sidebar icons' left edge, centred in a row as tall as the top bar. It does
 not move when the sidebar collapses, and it follows density. In the
@@ -91,14 +95,14 @@ used:
 
 ## Collapsed rail
 
-Sidebar's `isCollapsible` turns it into an icon rail that the reader can
+NavSidebar's `isCollapsible` turns it into an icon rail that the reader can
 expand. The links keep their names, and show them as tooltips.
 
 <Canvas of={AppShellStories.CollapsedRail} />
 
 ## Top navigation
 
-No sidebar: a logo and `AppNav` links in the header. `mobileNavigation`
+No sidebar: a logo and `TopBarNav` links in the header. `mobileNavigation`
 says what the drawer holds on a phone, where the links move.
 
 <Canvas of={AppShellStories.TopNavigation} />
@@ -121,20 +125,20 @@ pressing Escape closes it, and focus returns to the button.
 | `topBarSurface` | `solid`, `transparent` | `solid` | The header on the card colour or on the canvas. |
 | `sidebarSurface` | `solid`, `transparent` | `transparent` | The sidebar on the card colour or on the canvas. |
 | `brand` | node | – | The logo, placed by the shell. |
-| `sidebar` | node | – | A Sidebar. Beside the content from 64rem, in the drawer below. |
-| `header` | node | – | An AppHeader. In `sidebar` it shows only while the sidebar is in the drawer; without one the shell adds a plain AppHeader there. |
+| `sidebar` | node | – | A NavSidebar. Beside the content from 64rem, in the drawer below. |
+| `header` | node | – | An TopBar. In `sidebar` it shows only while the sidebar is in the drawer; without one the shell adds a plain TopBar there. |
 | `mobileNavigation` | node | `sidebar` | What the drawer holds. |
 | `navigationLabel` | string | `Navigation` | Names the drawer and its buttons. |
 | `mainId` | string | generated | The `id` of the `main` element, the skip link's target. |
 | `children` | node | – | The page, inside `<main>`. |
 
-`sidebar={isAdmin && <Sidebar … />}` works: `false` and `null` count as
+`sidebar={isAdmin && <NavSidebar … />}` works: `false` and `null` count as
 no sidebar, so there is no empty column, no drawer and no menu button.
 
-**AppHeader** takes `start` (breadcrumbs, or a logo and AppNav), `end`
+**TopBar** takes `start` (breadcrumbs, or a logo and TopBarNav), `end`
 (search, notifications, the account menu) and `children` for the middle.
 
-**AppNav** takes `items` (`{ label, href }[]`) and `currentHref`.
+**TopBarNav** takes `items` (`{ label, href }[]`) and `currentHref`.
 
 ## Layout
 
@@ -160,9 +164,9 @@ no sidebar, so there is no empty column, no drawer and no menu button.
   block it fills the line as usual; as a flex or grid item that would
   otherwise shrink to fit, give it a width (`inline-size: 100%` or
   `flex: 1`), or it collapses.
-- **The drawer holds the same Sidebar.** A collapsible one opens there
+- **The drawer holds the same NavSidebar.** A collapsible one opens there
   as the icon rail if it is collapsed, so for a collapsed rail pass a
-  plain Sidebar as `mobileNavigation`.
+  plain NavSidebar as `mobileNavigation`.
 
 ## Accessibility
 
@@ -170,7 +174,7 @@ no sidebar, so there is no empty column, no drawer and no menu button.
   focused. It moves focus past the navigation to the `main` element. Give
   `mainId` when something else should link there too; otherwise the id is
   generated, so two shells in one page (as in these docs) never share it.
-- The page is the `main` landmark; the sidebar and AppNav are `nav`
+- The page is the `main` landmark; the sidebar and TopBarNav are `nav`
   landmarks named "Main". Only one is in the page at a time: the hidden
   one is `display: none`, so it is out of the accessibility tree too.
 - The drawer is a modal dialog named "Navigation": focus moves into it,

@@ -1,20 +1,23 @@
 import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
-import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
-import * as SidebarStories from './Sidebar.stories'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../../.storybook/blocks'
+import * as NavSidebarStories from './NavSidebar.stories'
 
-<Meta of={SidebarStories} />
+<Meta of={NavSidebarStories} />
 
-# Sidebar
+# Nav Sidebar
 
 <DocTabs>
 <DocTab value="overview">
 
 The app's main navigation, down the side of the screen: a header, links
-in named groups, and a footer. It can collapse to an icon rail.
+in named groups, and a footer. It can collapse to an icon rail. A pattern,
+one of the three pieces the [App Shell](?path=/docs/templates-application-ui-app-shell--docs)
+template places (with the Top Bar and App Content); it was the
+Navigation/Sidebar component.
 
-<Status of={SidebarStories} />
+<Status of={NavSidebarStories} />
 
-<Canvas of={SidebarStories.Default} />
+<Canvas of={NavSidebarStories.Default} />
 
 ## Variants
 
@@ -25,23 +28,20 @@ in named groups, and a footer. It can collapse to an icon rail.
 | Rail (`isCollapsed` or `defaultCollapsed`) | Icons only, labels in tooltips. For tools the reader knows well. Every item needs an icon. |
 | Plain | No header or footer: a section's own navigation inside a larger layout. |
 
-<Canvas of={SidebarStories.Collapsible} />
+<Canvas of={NavSidebarStories.Collapsible} />
 
-<Canvas of={SidebarStories.Plain} />
+<Canvas of={NavSidebarStories.Plain} />
 
 ## Resources
 
-From npm, or copied into your project through the registry:
-
-```js
-import { Sidebar } from 'zweihander/sidebar'
-```
+Copied into your project through the registry, like every pattern (not in
+the npm package):
 
 ```sh
-npx shadcn@latest add https://ontheshore.biz/zweihander/r/sidebar.json
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/nav-sidebar.json
 ```
 
-- Source: [src/components/navigation/Sidebar.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/navigation/Sidebar.tsx)
+- Source: [src/components/patterns/application-ui/NavSidebar.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/patterns/application-ui/NavSidebar.tsx)
 - Spec: our own; uiguideline.com has no page for it
 - Behaviour: a plain `<nav>`; the rail's labels use [Tooltip](?path=/docs/components-overlays-tooltip--docs)
 - Figma: not in the library yet
@@ -51,8 +51,8 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/sidebar.json
 
 ## Anatomy
 
-<Anatomy parts={SidebarStories.anatomyParts}>
-  <Story of={SidebarStories.Anatomy} />
+<Anatomy parts={NavSidebarStories.anatomyParts}>
+  <Story of={NavSidebarStories.Anatomy} />
 </Anatomy>
 
 In the rail, the header, the labels, the badges and the footer are hidden;
@@ -66,8 +66,8 @@ marks a row, not a gap.
 <SpecTable
   caption="Sidebar"
   rows={[
-    { part: 'Sidebar', property: 'Padding', token: '--space-inline' },
-    { part: 'Sidebar', property: 'Gap between groups', token: '--space-group' },
+    { part: 'NavSidebar', property: 'Padding', token: '--space-inline' },
+    { part: 'NavSidebar', property: 'Gap between groups', token: '--space-group' },
     { part: 'Header', property: 'Height', token: '--control-md' },
     { part: 'Header', property: 'Space below', token: '--space-inline' },
     { part: 'Collapse button', property: 'Size', token: '--control-md' },
@@ -110,8 +110,8 @@ scrolls when the items do not fit.
 <SpecTable
   caption="Sidebar"
   rows={[
-    { part: 'Sidebar', property: 'Background', token: '--surface-filled' },
-    { part: 'Sidebar', property: 'Edge', token: '--border' },
+    { part: 'NavSidebar', property: 'Background', token: '--surface-filled' },
+    { part: 'NavSidebar', property: 'Edge', token: '--border' },
     { part: 'Group label', property: 'Colour', token: '--muted-foreground' },
     { part: 'Footer', property: 'Rule', token: '--border' },
   ]}
@@ -142,10 +142,10 @@ is the same grey as `--accent`, so an opaque hover fill would vanish.
     { label: 'Enabled' },
     { label: 'Hover', pseudo: 'hover' },
     { label: 'Focus', pseudo: 'focus-visible' },
-    { label: 'Current', content: <Story of={SidebarStories.CurrentItem} /> },
+    { label: 'Current', content: <Story of={NavSidebarStories.CurrentItem} /> },
   ]}
 >
-  <Story of={SidebarStories.Item} />
+  <Story of={NavSidebarStories.Item} />
 </States>
 
 - **Current** is a `--selected` fill, a step past the hover fill so the
@@ -160,7 +160,7 @@ is the same grey as `--accent`, so an opaque hover fill would vanish.
 
 {/* Storybook's table does not scroll by itself on a phone. */}
 <div style={{ overflowX: 'auto' }}>
-  <ArgTypes of={SidebarStories} />
+  <ArgTypes of={NavSidebarStories} />
 </div>
 
 Every other `<nav>` attribute passes through.
@@ -170,15 +170,15 @@ Every other `<nav>` attribute passes through.
 
 ## When to use
 
-Use a Sidebar for an app's main navigation when it has more than five or
+Use a NavSidebar for an app's main navigation when it has more than five or
 so destinations, or will grow: the list runs down and does not wrap. Name
 groups by what is in them, keep labels to a word or two, and give every
 item an icon if the sidebar can collapse.
 
 <DoDont
-  do={<Story of={SidebarStories.DoGroupWithIcons} />}
+  do={<Story of={NavSidebarStories.DoGroupWithIcons} />}
   doCaption="Short labels, an icon on each, grouped under a few names."
-  dont={<Story of={SidebarStories.DontLongLabelsNoIcons} />}
+  dont={<Story of={NavSidebarStories.DontLongLabelsNoIcons} />}
   dontCaption="Long labels get cut, and with no icons there is nothing to show in the rail."
 />
 
@@ -190,7 +190,7 @@ item an icon if the sidebar can collapse.
   [Buttons](?path=/docs/components-buttons-button--docs) or a
   [Menu](?path=/docs/components-navigation-menu--docs).
 - **On a phone, as is.** 16rem is most of a phone's width. Put it in a
-  drawer, as the [App Shell](?path=/docs/patterns-application-ui-app-shell--docs)
+  drawer, as the [App Shell](?path=/docs/templates-application-ui-app-shell--docs)
   does.
 
 ## Accessibility

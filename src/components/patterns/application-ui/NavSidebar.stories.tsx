@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test'
-import { expectAnatomy } from '../../../.storybook/blocks'
+import { expectAnatomy } from '../../../../.storybook/blocks'
 import { Icon } from '@/lib/icon'
-import { Sidebar, type SidebarEntry } from './Sidebar'
+import { NavSidebar, type NavSidebarEntry } from './NavSidebar'
 
-const items: SidebarEntry[] = [
+const items: NavSidebarEntry[] = [
   { label: 'Search', href: '#search', icon: <Icon name="search" /> },
   { label: 'Inbox', href: '#inbox', icon: <Icon name="info" />, badge: 12 },
   {
@@ -20,9 +20,9 @@ const items: SidebarEntry[] = [
 ]
 
 const meta = {
-  title: 'Components/Navigation/Sidebar',
+  title: 'Patterns/Application UI/Nav Sidebar',
   tags: ['beta'],
-  component: Sidebar,
+  component: NavSidebar,
   parameters: { layout: 'fullscreen' },
   args: {
     items,
@@ -38,7 +38,7 @@ const meta = {
       description:
         "The links, as data. An item is `{ label, href, icon?, badge?, render? }`; a group is `{ type: 'group', label, items }`. `render` replaces the `<a>`, e.g. with a router's `<Link />`.",
       control: false,
-      table: { type: { summary: 'SidebarEntry[]' } },
+      table: { type: { summary: 'NavSidebarEntry[]' } },
     },
     currentHref: {
       description: 'The `href` of the page the reader is on. That item gets the selected fill and `aria-current="page"`.',
@@ -87,7 +87,7 @@ const meta = {
     (Story, { parameters }) =>
       parameters.bare ? Story() : <div style={{ blockSize: '32rem', display: 'flex' }}>{Story()}</div>,
   ],
-} satisfies Meta<typeof Sidebar>
+} satisfies Meta<typeof NavSidebar>
 
 export default meta
 type Story = StoryObj<typeof meta>

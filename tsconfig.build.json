@@ -46,7 +46,6 @@
     "src/components/data-display/Collapse.tsx",
     "src/components/controls/Slider.tsx",
     "src/components/navigation/Stepper.tsx",
-    "src/components/navigation/Sidebar.tsx",
     "src/components/controls/Rating.tsx",
     "src/components/data-display/Table.tsx",
     "src/components/data-display/Calendar.tsx",

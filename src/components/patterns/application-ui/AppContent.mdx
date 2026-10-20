@@ -1,0 +1,52 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks'
+import * as AppContentStories from './AppContent.stories'
+
+<Meta of={AppContentStories} />
+
+# App Content
+
+The page region of an app: the `main` landmark. One of the three pieces
+the [App Shell](?path=/docs/templates-application-ui-app-shell--docs) template places;
+the shell puts it around its children, so you rarely render it yourself.
+It reads the shell's grid and canvas, so it is not used on its own.
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/app-content.json
+```
+
+## Flat
+
+The Theme's `contentStyle="flat"` (the default): one card surface, inset
+8px from the shell's edges at every density. Blocks inside are
+[Cards](?path=/docs/components-data-display-card--docs) with
+`appearance="surface"`, which become sections ruled off at the top.
+
+<Canvas of={AppContentStories.Flat} />
+
+## On the canvas
+
+`contentStyle="card"`: no surface; the page sits on the canvas and each
+surface Card is raised.
+
+<Canvas of={AppContentStories.OnCanvas} />
+
+## Props
+
+Any `main` attribute; the App Shell passes the `id` its skip link targets.
+
+## Layout
+
+- Below 48rem the flat surface drops its inset, edge and rounding and goes
+  flush.
+- The page padding is `--space-container`, `--space-section` from 64rem.
+- Only the page scrolls; the shell's other pieces stay put.
+- The surface restates `--background` as `--card` (flat) or as the
+  canvas's solid colour (card), so components that draw "the surface under
+  me" match it.
+
+## Accessibility
+
+- The `main` landmark, focusable (`tabIndex={-1}`) so the shell's skip
+  link can move focus to it.
+- On a canvas, text reads `--canvas-foreground` and
+  `--canvas-muted-foreground`; the kit checks them for its own canvases.

@@ -10,10 +10,10 @@ import { ToggleButton } from '../../buttons/ToggleButton'
 import { Table, type TableColumn } from '../../data-display/Table'
 import { Search } from '../../inputs/Search'
 import { Menu } from '../../navigation/Menu'
-import { Sidebar, type SidebarEntry } from '../../navigation/Sidebar'
+import { NavSidebar, type NavSidebarEntry } from '../../patterns/application-ui/NavSidebar'
 import { Tabs } from '../../navigation/Tabs'
 import { EmptyState } from '../../states/EmptyState'
-import { AppShell } from '../../patterns/application-ui/AppShell'
+import { AppShell } from '../application-ui/AppShell'
 import { TableToolbar, TableToolbarGroup } from '../../patterns/application-ui/DataTablePage'
 import { PageHeading } from '../../patterns/application-ui/PageHeading'
 import { sampleProjects, type Project, type ProjectActivity, type ProjectStatus } from './projects-data'
@@ -134,7 +134,7 @@ function ActivityTimeline({ project }: { project: Project }) {
   )
 }
 
-const navigation = (count: number): SidebarEntry[] => [
+const navigation = (count: number): NavSidebarEntry[] => [
   { label: 'Dashboard', href: '#dashboard', icon: <Icon name="star" /> },
   { label: 'Projects', href: '#projects', icon: <Icon name="file" />, badge: String(count) },
   { label: 'Team', href: '#team', icon: <Icon name="user" /> },
@@ -210,7 +210,7 @@ export function Projects({ projects: initialProjects = sampleProjects, ...props 
     <AppShell
       brand={<strong className={styles.brand}>Zweihänder</strong>}
       sidebar={
-        <Sidebar
+        <NavSidebar
           items={navigation(openCount)}
           currentHref="#projects"
           className={styles.sidebar}

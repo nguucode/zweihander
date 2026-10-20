@@ -4,10 +4,10 @@ import { useId, useState, type ComponentProps, type ReactElement, type ReactNode
 import { useRender } from '@base-ui/react/use-render'
 import { Icon } from '@/lib/icon'
 import { cn } from '@/lib/utils'
-import { Tooltip } from '../overlays/Tooltip'
-import styles from './Sidebar.module.css'
+import { Tooltip } from '../../overlays/Tooltip'
+import styles from './NavSidebar.module.css'
 
-export interface SidebarItem {
+export interface NavSidebarItem {
   type?: 'item'
   label: string
   href?: string
@@ -17,15 +17,15 @@ export interface SidebarItem {
   /** Replaces the `<a>`, e.g. a router's `<Link to="…" />`. */
   render?: ReactElement
 }
-export interface SidebarGroup {
+export interface NavSidebarGroup {
   type: 'group'
   label: string
-  items: SidebarItem[]
+  items: NavSidebarItem[]
 }
-export type SidebarEntry = SidebarItem | SidebarGroup
+export type NavSidebarEntry = NavSidebarItem | NavSidebarGroup
 
-export interface SidebarProps extends Omit<ComponentProps<'nav'>, 'children'> {
-  items: SidebarEntry[]
+export interface NavSidebarProps extends Omit<ComponentProps<'nav'>, 'children'> {
+  items: NavSidebarEntry[]
   /** The href of the page the reader is on: that item gets aria-current="page". */
   currentHref?: string
   /** Above the items, e.g. the product name or a workspace switcher. */
@@ -42,7 +42,7 @@ export interface SidebarProps extends Omit<ComponentProps<'nav'>, 'children'> {
   'aria-label'?: string
 }
 
-function ItemLink({ item, current, collapsed }: { item: SidebarItem; current: boolean; collapsed: boolean }) {
+function ItemLink({ item, current, collapsed }: { item: NavSidebarItem; current: boolean; collapsed: boolean }) {
   // Collapsed hides the badge too, so a count or short tag joins the name.
   const name =
     typeof item.badge === 'string' || typeof item.badge === 'number' ? `${item.label}, ${item.badge}` : item.label
@@ -78,17 +78,17 @@ function ItemLink({ item, current, collapsed }: { item: SidebarItem; current: bo
 }
 
 /** Runs of ungrouped items become one list; groups stay as they are. */
-function sections(items: SidebarEntry[]) {
-  const out: (SidebarItem[] | SidebarGroup)[] = []
+function sections(items: NavSidebarEntry[]) {
+  const out: (NavSidebarItem[] | NavSidebarGroup)[] = []
   for (const entry of items) {
     if (entry.type === 'group') out.push(entry)
-    else if (Array.isArray(out.at(-1))) (out.at(-1) as SidebarItem[]).push(entry)
+    else if (Array.isArray(out.at(-1))) (out.at(-1) as NavSidebarItem[]).push(entry)
     else out.push([entry])
   }
   return out
 }
 
-export function Sidebar({
+export function NavSidebar({
   items,
   currentHref,
   header,
@@ -100,7 +100,7 @@ export function Sidebar({
   'aria-label': ariaLabel = 'Main',
   className,
   ...props
-}: SidebarProps) {
+}: NavSidebarProps) {
   const [collapsedState, setCollapsedState] = useState(defaultCollapsed)
   const collapsed = isCollapsed ?? collapsedState
   const toggle = () => {
@@ -108,7 +108,7 @@ export function Sidebar({
     onCollapsedChange?.(!collapsed)
   }
   const id = useId()
-  const list = (entries: SidebarItem[], labelledBy?: string) => (
+  const list = (entries: NavSidebarItem[], labelledBy?: string) => (
     <ul className={styles.list} aria-labelledby={labelledBy}>
       {entries.map((item) => (
         <li key={item.href ?? item.label}>

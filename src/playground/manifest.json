@@ -2155,34 +2155,6 @@
     },
     {
       "kind": "component",
-      "id": "components-navigation-sidebar",
-      "name": "Sidebar",
-      "category": "Navigation",
-      "status": "beta",
-      "storyId": "components-navigation-sidebar--default",
-      "props": [
-        {
-          "name": "currentHref",
-          "control": "text",
-          "default": "#atlas",
-          "description": "The `href` of the page the reader is on. That item gets the selected fill and `aria-current=\"page\"`."
-        },
-        {
-          "name": "defaultCollapsed",
-          "control": "boolean",
-          "default": false,
-          "description": "Starts as the icon rail, uncontrolled."
-        },
-        {
-          "name": "isCollapsible",
-          "control": "boolean",
-          "default": false,
-          "description": "Shows a button in the header that collapses and expands the sidebar."
-        }
-      ]
-    },
-    {
-      "kind": "component",
       "id": "components-navigation-stepper",
       "name": "Stepper",
       "category": "Navigation",
@@ -2771,54 +2743,12 @@
     },
     {
       "kind": "pattern",
-      "id": "patterns-application-ui-app-shell",
-      "name": "App Shell",
+      "id": "patterns-application-ui-app-content",
+      "name": "App Content",
       "category": "Application UI",
       "status": "experimental",
-      "storyId": "patterns-application-ui-app-shell--with-sidebar",
-      "props": [
-        {
-          "name": "layout",
-          "control": "inline-radio",
-          "options": [
-            "sidebar",
-            "top-bar"
-          ],
-          "default": "sidebar",
-          "description": "`sidebar`: the sidebar runs the full height, no top bar on wide screens. `top-bar`: the header runs the full width above the sidebar and the content."
-        },
-        {
-          "name": "topBarSurface",
-          "control": "inline-radio",
-          "options": [
-            "solid",
-            "transparent"
-          ],
-          "default": "solid",
-          "description": "The header on the card colour (`solid`) or on the canvas (`transparent`)."
-        },
-        {
-          "name": "sidebarSurface",
-          "control": "inline-radio",
-          "options": [
-            "solid",
-            "transparent"
-          ],
-          "default": "transparent",
-          "description": "The sidebar on the card colour (`solid`) or on the canvas (`transparent`)."
-        },
-        {
-          "name": "navigationLabel",
-          "control": "text",
-          "default": "Navigation",
-          "description": "Names the drawer and its button."
-        },
-        {
-          "name": "mainId",
-          "control": "text",
-          "description": "The `id` of the `main` element, which the skip link targets. Generated if not given."
-        }
-      ]
+      "storyId": "patterns-application-ui-app-content--flat",
+      "props": []
     },
     {
       "kind": "pattern",
@@ -2876,6 +2806,34 @@
     },
     {
       "kind": "pattern",
+      "id": "patterns-application-ui-nav-sidebar",
+      "name": "Nav Sidebar",
+      "category": "Application UI",
+      "status": "beta",
+      "storyId": "patterns-application-ui-nav-sidebar--default",
+      "props": [
+        {
+          "name": "currentHref",
+          "control": "text",
+          "default": "#atlas",
+          "description": "The `href` of the page the reader is on. That item gets the selected fill and `aria-current=\"page\"`."
+        },
+        {
+          "name": "defaultCollapsed",
+          "control": "boolean",
+          "default": false,
+          "description": "Starts as the icon rail, uncontrolled."
+        },
+        {
+          "name": "isCollapsible",
+          "control": "boolean",
+          "default": false,
+          "description": "Shows a button in the header that collapses and expands the sidebar."
+        }
+      ]
+    },
+    {
+      "kind": "pattern",
       "id": "patterns-application-ui-page-heading",
       "name": "Page Heading",
       "category": "Application UI",
@@ -2910,6 +2868,66 @@
             3
           ],
           "default": 2
+        }
+      ]
+    },
+    {
+      "kind": "pattern",
+      "id": "patterns-application-ui-top-bar",
+      "name": "Top Bar",
+      "category": "Application UI",
+      "status": "experimental",
+      "storyId": "patterns-application-ui-top-bar--default",
+      "props": []
+    },
+    {
+      "kind": "template",
+      "id": "templates-application-ui-app-shell",
+      "name": "App Shell",
+      "category": "Application UI",
+      "status": "experimental",
+      "storyId": "templates-application-ui-app-shell--with-sidebar",
+      "props": [
+        {
+          "name": "layout",
+          "control": "inline-radio",
+          "options": [
+            "sidebar",
+            "top-bar"
+          ],
+          "default": "sidebar",
+          "description": "`sidebar`: the sidebar runs the full height, no top bar on wide screens. `top-bar`: the header runs the full width above the sidebar and the content."
+        },
+        {
+          "name": "topBarSurface",
+          "control": "inline-radio",
+          "options": [
+            "solid",
+            "transparent"
+          ],
+          "default": "solid",
+          "description": "The header on the card colour (`solid`) or on the canvas (`transparent`)."
+        },
+        {
+          "name": "sidebarSurface",
+          "control": "inline-radio",
+          "options": [
+            "solid",
+            "transparent"
+          ],
+          "default": "transparent",
+          "description": "The sidebar on the card colour (`solid`) or on the canvas (`transparent`)."
+        },
+        {
+          "name": "navigationLabel",
+          "control": "text",
+          "default": "Navigation",
+          "description": "Names the drawer and its button."
+        },
+        {
+          "name": "mainId",
+          "control": "text",
+          "description": "The `id` of the `main` element, which the skip link targets. Generated if not given."
         }
       ]
     },
