@@ -10,8 +10,8 @@ Project info (decisions, tickets, roadmap, Figma links) lives in the Obsidian va
 - Story tests in a cloud container (one prebuilt Chromium, no Firefox/WebKit): `npx vitest run --project=storybook <path>`. A SessionStart hook (`.claude/hooks/cloud-browsers.sh`) sets `PW_CHROMIUM_PATH=/opt/pw-browsers/chromium VITEST_BROWSERS=chromium`, runs `git fetch origin main` (the clone's `origin/main` can be stale) and `npm ci` when `node_modules` is missing or half-installed; if any of these did not happen, do it by hand. No hand-made config; CI sets neither and runs all three engines.
 - Drive is exFAT: use `npm`, not `pnpm` (no hardlinks).
 - Research (`/research`): save to `docs/research/YYYY-MM-DD-<topic>.md` in this repo, then copy it to the vault mirror `10-projects/zweihander/repo/docs/research/` (same place the `flow` mod copies repo Markdown; on the Mac `/flow:vault` does it) and add a line to `_context.md`.
-- Skills: when a skill in `.claude/skills/` overlaps a built-in or plugin skill, use the one in `.claude/skills/` (`matt-code-review` for standards + spec review). The flow's bug-hunt step still uses the built-in `/code-review` on purpose.
-- Workflow: every implementation (new work, fix, behaviour change) follows `.claude/skills/project-flow/` by default: `flow idea`, `flow fix` or `flow change`. It is the only implementation process; component conventions (API, MDX docs page, tests, status) live in `.claude/skills/project-flow/COMPONENTS.md`. After `to-tickets`, each ticket runs in its own thread. Skip it only when the user says so.
+- Skills: when a skill in `.claude/skills/` overlaps a built-in or plugin skill, use the one in `.claude/skills/` (`matt-code-review` for standards + spec review).
+- Component conventions (API, MDX docs page, tests, status) for any change under `src/components/**`: `docs/agents/components.md`.
 
 ## Agent skills
 

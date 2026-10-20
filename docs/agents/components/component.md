@@ -37,4 +37,4 @@ After 1.0: breaking → major, additions → minor, fixes → patch.
 
 ## Status
 
-Components use all four statuses: `experimental`, `beta`, `stable`, `deprecated`. The conditions for each level are in [COMPONENTS.md](../COMPONENTS.md), section 5.
+Components use all four statuses: `experimental`, `beta`, `stable`, `deprecated`. The conditions for each level are in [components.md](../components.md), section 5.

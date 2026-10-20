@@ -218,7 +218,7 @@ if (errors.length) {
 }
 
 // House rule: a component that offers size md uses it as the default
-// (COMPONENTS.md, section 2, which lists the same exceptions). Divider's size
+// (docs/agents/components.md, section 2, which lists the same exceptions). Divider's size
 // is a line weight, where 1px is the norm, so it keeps sm. Link has no default:
 // it inherits the surrounding text size.
 const SIZE_EXCEPTIONS = new Set(['components-atomic-elements-divider', 'components-navigation-link'])
