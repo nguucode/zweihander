@@ -422,34 +422,6 @@ a.sectionNote:hover {
   opacity: 0.6;
 }
 
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-}
-
-.chips code {
-  padding: 0 4px;
-  border: var(--hair);
-  background: var(--muted);
-  font-size: 0.8125rem;
-}
-
-.showcaseCta {
-  margin-block-start: auto;
-  padding-block-start: 27px;
-  color: var(--muted-foreground);
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-  text-underline-offset: 4px;
-}
-
-.showcaseCta:hover {
-  color: var(--foreground);
-}
-
 .swatches,
 .segment {
   display: flex;
@@ -458,6 +430,7 @@ a.sectionNote:hover {
 }
 
 .swatch {
+  display: grid;
   inline-size: 28px;
   block-size: 28px;
   padding: 0;
@@ -473,8 +446,20 @@ a.sectionNote:hover {
   transform: scale(1.08);
 }
 
+/* Selected: a ring in ink plus a dot in the swatch's own contrast colour,
+   so the choice reads without relying on the ring alone. */
 .swatch[aria-pressed='true'] {
   box-shadow: 0 0 0 2px var(--foreground);
+}
+
+.swatch[aria-pressed='true']::after {
+  content: '';
+  display: block;
+  inline-size: 8px;
+  block-size: 8px;
+  margin: auto;
+  border-radius: 50%;
+  background: var(--primary-foreground);
 }
 
 .preview {

@@ -150,7 +150,7 @@ function Playground() {
             <dd>
               <span className={styles.segment} role="group" aria-label="Radius">
                 {RADII.map((r) => (
-                  <ToggleButton key={r} size="sm" appearance="outlined" variant="secondary" pressed={radius === r} onPressedChange={() => setRadius(r)}>
+                  <ToggleButton key={r} size="sm" pressed={radius === r} onPressedChange={() => setRadius(r)}>
                     {r}
                   </ToggleButton>
                 ))}
@@ -160,23 +160,16 @@ function Playground() {
           <div>
             <dt>Appearance</dt>
             <dd>
-              <Switch label="Dark" checked={dark} onCheckedChange={setDark} />
-            </dd>
-          </div>
-          <div>
-            <dt>Props</dt>
-            <dd>
-              <span className={styles.chips}>
-                <code>accentColor="{accent}"</code>
-                <code>radius="{radius}"</code>
-                <code>appearance="{dark ? 'dark' : 'light'}"</code>
+              <span className={styles.segment} role="group" aria-label="Appearance">
+                {(['light', 'dark'] as const).map((m) => (
+                  <ToggleButton key={m} size="sm" pressed={dark === (m === 'dark')} onPressedChange={() => setDark(m === 'dark')}>
+                    {m}
+                  </ToggleButton>
+                ))}
               </span>
             </dd>
           </div>
         </dl>
-        <a href={docs('foundations-overview')} className={styles.showcaseCta}>
-          Read the theme docs <span aria-hidden>→</span>
-        </a>
       </div>
     </section>
   )
