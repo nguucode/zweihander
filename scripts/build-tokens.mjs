@@ -401,6 +401,7 @@ const OFF_RAMP = {
   'size.progress-lg': 'a bar thickness, under 12px',
   'size.badge-dot-sm': 'a dot, under 12px',
   'size.badge-dot-md': 'a dot, under 12px',
+  'size.sidebar-width': 'a layout column width, not a box',
   // ponytail: temporary. The size group still steps down a whole size in
   // Compact; box-sizing ticket 03 moves it onto the ramp and deletes these.
   'size.avatar-sm@compact': 'box-sizing ticket 03',
