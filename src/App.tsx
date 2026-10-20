@@ -71,10 +71,22 @@ function Playground() {
   const [dark, setDark] = useState(false)
   const [heat, setHeat] = useState(64)
 
+  const reset = () => {
+    setAccent('blue')
+    setRadius('rounded')
+    setDark(false)
+  }
+
+  /* Laid out like claude.dev/mods: the demo in a browser frame, the title,
+     description and controls in the rail beside it. Side comes first in the
+     DOM so it reads first when the two stack. */
   return (
-    <div className={styles.playground}>
-      <div className={styles.controls}>
-        <fieldset>
+    <section id="theme" className={styles.showcase} aria-labelledby="theme-h">
+      <div className={styles.showcaseSide}>
+        <h2 id="theme-h" className={styles.showcaseTitle}>Try the theme</h2>
+        <p className={styles.showcaseBody}>One wrapper re-themes everything inside it. Every control here is a Zweihänder component.</p>
+
+        <fieldset className={styles.control}>
           <legend>Accent</legend>
           <div className={styles.swatches}>
             {ACCENTS.map((a) => (
@@ -84,7 +96,7 @@ function Playground() {
             ))}
           </div>
         </fieldset>
-        <fieldset>
+        <fieldset className={styles.control}>
           <legend>Radius</legend>
           <div className={styles.segment}>
             {RADII.map((r) => (
@@ -94,15 +106,34 @@ function Playground() {
             ))}
           </div>
         </fieldset>
-        <fieldset>
+        <fieldset className={styles.control}>
           <legend>Appearance</legend>
           <Switch label="Dark" checked={dark} onCheckedChange={setDark} />
         </fieldset>
-        <pre className={styles.snippet} aria-label="The wrapper behind this preview">
-          {`<Theme\n  accentColor="${accent}"\n  radius="${radius}"\n  appearance="${dark ? 'dark' : 'light'}"\n>`}
-        </pre>
+        <div className={styles.control}>
+          <p className={styles.controlLabel}>Props</p>
+          <p className={styles.chips} aria-label="The wrapper behind this preview">
+            <span aria-hidden>└</span>
+            <code>accentColor="{accent}"</code>
+            <code>radius="{radius}"</code>
+            <code>appearance="{dark ? 'dark' : 'light'}"</code>
+          </p>
+        </div>
+        <a href={docs('foundations-overview')} className={styles.more}>
+          Read the theme docs <Icon name="chevron-right" />
+        </a>
       </div>
 
+      <div className={styles.frame}>
+        <div className={styles.frameBar}>
+          <span className={styles.frameDots} aria-hidden>
+            <i />
+            <i />
+            <i />
+          </span>
+          <span className={styles.frameTitle}>Theme preview</span>
+          <button type="button" className={styles.frameAction} onClick={reset}>Reset</button>
+        </div>
       <Theme accentColor={accent} radius={radius} appearance={dark ? 'dark' : 'light'} className={styles.preview}>
         <div className={styles.previewHead}>
           <strong>Workspace settings</strong>
@@ -142,7 +173,8 @@ function Playground() {
           <Button size="sm">Save</Button>
         </div>
       </Theme>
-    </div>
+      </div>
+    </section>
   )
 }
 
@@ -248,39 +280,6 @@ const NAV = [
   { key: 'G', label: 'GitHub', href: REPO },
 ]
 
-const SECTIONS = [
-  { id: 'theme', label: 'Try the theme' },
-  { id: 'components', label: 'Components' },
-  { id: 'principles', label: 'How it is built' },
-  { id: 'install', label: 'Install' },
-]
-
-/* Marks the section nearest the top of the viewport. */
-function Toc() {
-  const [current, setCurrent] = useState(SECTIONS[0].id)
-  useEffect(() => {
-    const io = new IntersectionObserver(
-      (entries) => entries.forEach((e) => e.isIntersecting && setCurrent(e.target.id)),
-      { rootMargin: '-20% 0px -70% 0px' },
-    )
-    SECTIONS.forEach(({ id }) => {
-      const el = document.getElementById(id)
-      if (el) io.observe(el)
-    })
-    return () => io.disconnect()
-  }, [])
-  return (
-    <nav aria-label="On this page" className={styles.toc}>
-      <p>On this page</p>
-      {SECTIONS.map((s) => (
-        <a key={s.id} href={`#${s.id}`} aria-current={current === s.id ? 'true' : undefined}>
-          {s.label}
-        </a>
-      ))}
-    </nav>
-  )
-}
-
 function Section({ id, label, aside, children }: { id: string; label: string; aside?: ReactNode; children: ReactNode }) {
   return (
     <section id={id} className={styles.section} aria-labelledby={`${id}-h`}>
@@ -353,9 +352,7 @@ export default function App() {
         </aside>
 
         <main id="main" className={styles.main}>
-          <Section id="theme" label="Try the theme" aside={<span className={styles.sectionNote}>Every control here is a Zweihänder component</span>}>
-            <Playground />
-          </Section>
+          <Playground />
 
           <Section id="components" label="Components" aside={<a className={styles.sectionNote} href="storybook/">Storybook ↗</a>}>
             <ComponentIndex />
@@ -411,8 +408,6 @@ import { Button } from 'zweihander/button'`}</pre>
             </p>
           </Section>
         </main>
-
-        <Toc />
       </div>
 
       <footer className={styles.footer}>

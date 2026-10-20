@@ -154,47 +154,23 @@
   text-align: end;
 }
 
+/* Main takes the layout's last nine tracks as a subgrid, so the theme
+   showcase can put its frame on seven and its rail on two, in line with
+   the page grid. Other sections keep to the seven. */
 .main {
-  grid-column: 4 / span 7;
+  grid-column: 4 / -1;
   display: grid;
-  gap: 80px;
+  grid-template-columns: subgrid;
+  row-gap: 80px;
   min-inline-size: 0;
 }
 
-/* Right rail: where you are on the page. */
-.toc {
-  grid-column: 11 / span 2;
-  position: sticky;
-  inset-block-start: 96px;
-  align-self: start;
-  display: grid;
-  gap: 8px;
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
+.main > * {
+  grid-column: 1 / span 7;
 }
 
-.toc p {
-  margin: 0 0 4px;
-  color: var(--muted-foreground);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.toc a {
-  padding-inline-start: 12px;
-  border-inline-start: var(--hair);
-  color: var(--muted-foreground);
-  text-decoration: none;
-  transition: color 0.2s var(--ease), border-color 0.2s var(--ease);
-}
-
-.toc a:hover {
-  color: var(--foreground);
-}
-
-.toc a[aria-current='true'] {
-  border-color: var(--primary);
-  color: var(--foreground);
+.main > .showcase {
+  grid-column: 1 / -1;
 }
 
 /* ---------- intro (aside) ---------- */
@@ -331,23 +307,37 @@ a.sectionNote:hover {
   overflow-x: auto;
 }
 
-/* ---------- playground ---------- */
+/* ---------- theme showcase ---------- */
 
-.playground {
+.showcase {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
-  border: var(--hair);
+  grid-template-columns: subgrid;
+  scroll-margin-block-start: 96px;
 }
 
-.controls {
+.showcaseSide {
+  grid-row: 1;
+  grid-column: 8 / span 2;
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   align-content: start;
-  gap: 24px;
-  padding: 24px;
-  border-inline-end: var(--hair);
+  gap: 20px;
 }
 
-.controls fieldset {
+.showcaseTitle {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.showcaseBody {
+  margin: 0;
+  color: var(--muted-foreground);
+}
+
+.control {
   display: grid;
   gap: 8px;
   margin: 0;
@@ -355,14 +345,89 @@ a.sectionNote:hover {
   border: 0;
 }
 
-.controls legend {
-  margin-block-end: 8px;
+.control legend,
+.controlLabel {
+  margin: 0 0 8px;
   padding: 0;
   color: var(--muted-foreground);
   font-family: var(--font-mono);
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
+}
+
+.controlLabel {
+  margin: 0;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+  margin: 0;
+  color: var(--muted-foreground);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+.chips code {
+  padding: 1px 6px;
+  background: var(--muted);
+  color: var(--foreground);
+  font-size: inherit;
+}
+
+/* Browser window around the demo. */
+.frame {
+  grid-row: 1;
+  grid-column: 1 / span 7;
+  align-self: start;
+  border: var(--hair);
+  background: var(--card);
+}
+
+.frameBar {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 8px 12px;
+  border-block-end: var(--hair);
+  background: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+.frameDots {
+  display: flex;
+  gap: 6px;
+}
+
+.frameDots i {
+  inline-size: 10px;
+  block-size: 10px;
+  border-radius: 50%;
+  background: var(--border);
+}
+
+.frameTitle {
+  color: var(--muted-foreground);
+}
+
+.frameAction {
+  justify-self: end;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--muted-foreground);
+  font: inherit;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+}
+
+.frameAction:hover {
+  color: var(--foreground);
 }
 
 .swatches,
@@ -392,21 +457,12 @@ a.sectionNote:hover {
   box-shadow: 0 0 0 2px var(--foreground);
 }
 
-.snippet {
-  margin: 0;
-  padding: 12px;
-  background: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  line-height: 1.6;
-  overflow-x: auto;
-}
-
 .preview {
   display: grid;
   align-content: start;
   gap: 16px;
-  padding: 24px;
+  min-block-size: 400px;
+  padding: 32px;
   background: var(--background);
   color: var(--foreground);
   font-size: 0.875rem;
@@ -645,13 +701,22 @@ a.row:hover .rowArrow {
 
 /* ---------- responsive ---------- */
 
+/* Below this the rail is too narrow for the controls: the showcase stacks,
+   rail (title first) above the frame, and sections take all nine tracks. */
 @media (width < 1200px) {
-  .main {
-    grid-column: 4 / -1;
+  .main > * {
+    grid-column: 1 / -1;
   }
 
-  .toc {
-    display: none;
+  .showcase {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+
+  .showcaseSide,
+  .frame {
+    grid-row: auto;
+    grid-column: auto;
   }
 }
 
@@ -668,18 +733,14 @@ a.row:hover .rowArrow {
     grid-column: auto;
   }
 
+  .main {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
   .aside {
     position: static;
   }
 
-  .playground {
-    grid-template-columns: minmax(0, 1fr);
-  }
-
-  .controls {
-    border-inline-end: 0;
-    border-block-end: var(--hair);
-  }
 }
 
 @media (width < 720px) {
