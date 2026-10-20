@@ -1,6 +1,6 @@
 # Third-party skills
 
-Skill folders in `.claude/skills/` copied from upstream. `project-flow` is ours (it absorbed the former `zw-build` skill as `COMPONENTS.md` and `components/`).
+Skill folders in `.claude/skills/` copied from upstream.
 
 Local edits: mattpocock `code-review` renamed to `matt-code-review` (folder and `name:`) because Claude Code's built-in `/code-review` shadows it; references in `ask-matt`, `implement`, `implement-spec` and `tdd` updated to match. Everything else is verbatim.
 

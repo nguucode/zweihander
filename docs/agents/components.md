@@ -1,15 +1,8 @@
 # Component conventions
 
-Conventions for every change under `src/components/**` (component or pattern, new or enhanced). This is not a separate process: the only process is project-flow ([SKILL.md](SKILL.md)). This file says what the flow's steps must achieve when they touch a component. It used to be the `zw-build` skill.
+Conventions for every change under `src/components/**` (component or pattern, new or enhanced). It used to be the `zw-build` skill.
 
-Each section below hooks into a flow step and ends with a **gate**. The build step counts as done only when gates 0 to 3 are green; gates 4 and 5 are checked at ship.
-
-| Section | Hooks into flow step |
-|---|---|
-| 0. Classify, 1. Spec | `flow idea`: grill and spec. `flow fix`, `flow change`, ticket thread: start of the build step, before editing code |
-| 2. Code, 3. Test | Build step (`implement`, `tdd`, `diagnosing-bugs`) |
-| 4. Release | Ship (changeset) |
-| 5. Status, Wrap-up | Ship and after merge |
+Work through the sections in order; each ends with a **gate**. The code is done only when gates 0 to 3 are green; gates 4 and 5 are checked before merge.
 
 A breaking change found midway sends you back to section 1 (fix `argTypes` and the MDX first), then the code.
 
@@ -160,7 +153,7 @@ Do not raise a status before the conditions are met. Do not write "tested with a
 1. Add one line to `zweihander-build-log.md` in the vault: decisions, spec deviations, items waiting on the user's approval.
 2. Update the card in `zweihander-kanban.md`.
 3. If a token or a prop that exists in Figma changed: note the Figma sync in the project's `_context.md`.
-4. Add one line to `/Volumes/KAFKA/Vault/_system/agent-log.md`, written after the last commit (the same line [SKILL.md](SKILL.md#vault) asks for, not written twice).
+4. Add one line to `/Volumes/KAFKA/Vault/_system/agent-log.md`, written after the last commit.
 
 Checklist to paste into the PR description:
 

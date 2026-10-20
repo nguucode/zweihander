@@ -7,7 +7,7 @@ Use for `src/components/patterns/**`. A pattern is a section composed of several
 | | Component | Pattern |
 |---|---|---|
 | Behaviour | From Base UI, per APG | No behaviour of its own. Every interaction comes from the components inside |
-| MDX | Three tabs Overview / Specs / Guidelines ([COMPONENTS.md](../COMPONENTS.md), section 1) | Single page, no tabs: one section per variant with a `<Canvas>`, then Props / Layout / Accessibility. Add the `npx shadcn add` line at the top |
+| MDX | Three tabs Overview / Specs / Guidelines ([components.md](../components.md), section 1) | Single page, no tabs: one section per variant with a `<Canvas>`, then Props / Layout / Accessibility. Add the `npx shadcn add` line at the top |
 | A11y | Keyboard, role, state | Landmarks (`header`, `nav`, `main`), heading order, focus order when the layout changes, reflow at 320px |
 | API | Flat props | Mostly slots taking nodes: `actions`, `meta`, `tabs`, `breadcrumbs`. A pattern owns no data |
 | Test | One interactive `play` per Accessibility sentence | Structure (role, landmark, heading level), layout at breakpoints, and hard content: empty, very long, error |

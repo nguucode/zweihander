@@ -86,7 +86,7 @@ Ba lỗ trong lint:
 
 ### 1.4 Docs
 
-`src/foundations/Spacing.mdx:8-25` vẫn mô tả hệ `--spacing` kiểu Tailwind ("there is no list of allowed values… the scale cannot enforce itself"). Cả hai câu đều sai với code hiện tại, và chính file đó đã tự đánh dấu `STALE`. Phần control tier (`Spacing.mdx:43-59`) và `Sizing.mdx` thì đúng. `.claude/skills/project-flow/COMPONENTS.md:100` chỉ ghi "Tokens only… no hard-coded values for… spacing" và không có hướng dẫn chọn bậc.
+`src/foundations/Spacing.mdx:8-25` vẫn mô tả hệ `--spacing` kiểu Tailwind ("there is no list of allowed values… the scale cannot enforce itself"). Cả hai câu đều sai với code hiện tại, và chính file đó đã tự đánh dấu `STALE`. Phần control tier (`Spacing.mdx:43-59`) và `Sizing.mdx` thì đúng. `docs/agents/components.md (khi đó là .claude/skills/project-flow/COMPONENTS.md:100)` chỉ ghi "Tokens only… no hard-coded values for… spacing" và không có hướng dẫn chọn bậc.
 
 ## 2. Atlassian
 
