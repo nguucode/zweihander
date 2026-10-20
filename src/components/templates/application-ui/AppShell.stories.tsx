@@ -8,12 +8,13 @@ import { Button } from '@/components/buttons/Button'
 import { Card } from '@/components/data-display/Card'
 import { Search } from '@/components/inputs/Search'
 import { Menu } from '@/components/navigation/Menu'
-import { Sidebar, type SidebarEntry } from '@/components/navigation/Sidebar'
-import { AppHeader, AppNav, AppShell, type AppShellLayout, type AppShellSurface } from './AppShell'
-import { PageHeading } from './PageHeading'
-import { Stats } from './Stats'
+import { NavSidebar, type NavSidebarEntry } from '@/components/patterns/application-ui/NavSidebar'
+import { TopBar, TopBarNav } from '@/components/patterns/application-ui/TopBar'
+import { AppShell, type AppShellLayout, type AppShellSurface } from './AppShell'
+import { PageHeading } from '@/components/patterns/application-ui/PageHeading'
+import { Stats } from '@/components/patterns/application-ui/Stats'
 
-const entries: SidebarEntry[] = [
+const entries: NavSidebarEntry[] = [
   { label: 'Dashboard', href: '#dashboard', icon: <Icon name="star" /> },
   { label: 'Projects', href: '#projects', icon: <Icon name="file" />, badge: '12' },
   { label: 'Team', href: '#team', icon: <Icon name="user" /> },
@@ -48,7 +49,7 @@ const account = (
 
 /** In the sidebar layout there is no top bar, so search sits in the sidebar's header and the account in its footer. */
 const sidebar = (collapsible = false, withTopBarItems = true) => (
-  <Sidebar
+  <NavSidebar
     items={entries}
     currentHref="#dashboard"
     header={withTopBarItems && !collapsible ? <Search aria-label="Search" placeholder="Search" /> : undefined}
@@ -76,7 +77,7 @@ const headerEnd = (
   </>
 )
 
-const topBar = <AppHeader start={<Search aria-label="Search" placeholder="Search" />} end={headerEnd} />
+const topBar = <TopBar start={<Search aria-label="Search" placeholder="Search" />} end={headerEnd} />
 
 const content = (
   <div style={{ display: 'grid', gap: 'var(--space-8)' }}>
@@ -155,7 +156,7 @@ const box = (inlineSize: number) => [
 ]
 
 const meta = {
-  title: 'Patterns/Application UI/App Shell',
+  title: 'Templates/Application UI/App Shell',
   tags: ['experimental'],
   component: AppShell,
   parameters: { layout: 'padded' },
@@ -219,7 +220,7 @@ export const WithSidebar: Story = {
 }
 
 /** The header runs the full width above the sidebar; the logo stays where it was in the sidebar layout. */
-export const TopBar: Story = {
+export const TopBarLayout: Story = {
   args: {
     layout: 'top-bar',
     sidebarSurface: 'solid',
@@ -328,7 +329,7 @@ export const Combinations: Story = {
                 topBarSurface={c.top}
                 sidebarSurface={c.nav}
                 brand={<strong>Zweihänder</strong>}
-                sidebar={<Sidebar items={entries} currentHref="#dashboard" style={{ blockSize: '100%' }} />}
+                sidebar={<NavSidebar items={entries} currentHref="#dashboard" style={{ blockSize: '100%' }} />}
                 style={{ blockSize: '100%' }}
               >
                 {blocks}
@@ -382,8 +383,8 @@ export const TopNavigation: Story = {
   args: {
     layout: 'top-bar',
     brand,
-    header: <AppHeader start={<AppNav items={topLinks} currentHref="#dashboard" />} end={headerEnd} />,
-    mobileNavigation: <Sidebar items={entries.slice(0, 4)} currentHref="#dashboard" style={{ blockSize: '100%' }} />,
+    header: <TopBar start={<TopBarNav items={topLinks} currentHref="#dashboard" />} end={headerEnd} />,
+    mobileNavigation: <NavSidebar items={entries.slice(0, 4)} currentHref="#dashboard" style={{ blockSize: '100%' }} />,
     mainId: 'content',
   },
   decorators: box(1100),
@@ -400,7 +401,7 @@ export const TopNavigation: Story = {
 export const Mobile: Story = {
   args: {
     sidebar: sidebar(),
-    header: <AppHeader end={headerEnd} />,
+    header: <TopBar end={headerEnd} />,
   },
   decorators: box(390),
   play: async ({ canvas }) => {
@@ -435,7 +436,7 @@ export const TopNavigationMobile: Story = {
 }
 
 /**
- * A sidebar that is switched off, e.g. `sidebar={isAdmin && <Sidebar />}`:
+ * A sidebar that is switched off, e.g. `sidebar={isAdmin && <NavSidebar />}`:
  * no sidebar column, no drawer and no menu button, as with no sidebar at all.
  */
 export const WithoutNavigation: Story = {
@@ -443,7 +444,7 @@ export const WithoutNavigation: Story = {
     sidebar: false,
     mobileNavigation: null,
     brand,
-    header: <AppHeader end={headerEnd} />,
+    header: <TopBar end={headerEnd} />,
   },
   decorators: box(390),
   play: async ({ canvas }) => {

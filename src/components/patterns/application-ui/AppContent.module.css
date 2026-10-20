@@ -1,0 +1,46 @@
+/* The App Content pattern: the page region of an App Shell. It reads the
+   shell's --shell-* values and its container width, so it lives inside one. */
+/* The page. flat: one card surface, inset from the shell's edges and
+   flush below 48rem. card: no surface, the page sits on the canvas and its
+   blocks are Cards with appearance="surface". The surface restates
+   --background, which components read as "what I sit on". */
+.content {
+  display: grid;
+  grid-row: 2;
+  grid-column: -2;
+  min-block-size: 0;
+  min-inline-size: 0;
+  padding: var(--content-flat, var(--space-2)) var(--content-card, 0);
+}
+.main {
+  /* stylelint-disable zweihander/no-token-shadow -- content reads the colours of the surface it sits on */
+  --background: var(--content-flat, var(--card)) var(--content-card, var(--shell-canvas-solid));
+  /* On the canvas (card), text reads the canvas colours, as a transparent piece does. */
+  --muted-foreground: var(--content-flat, var(--shell-muted-foreground)) var(--content-card, var(--shell-canvas-muted-foreground));
+  --subtle-foreground: var(--content-flat, var(--shell-subtle-foreground)) var(--content-card, var(--shell-canvas-subtle-foreground));
+  /* stylelint-enable zweihander/no-token-shadow */
+  min-block-size: 0;
+  overflow: auto;
+  padding: var(--space-container);
+  border: 1px solid;
+  border-color: var(--content-flat, var(--border)) var(--content-card, transparent);
+  border-radius: var(--content-flat, var(--radius-panel)) var(--content-card, 0);
+  background: var(--content-flat, var(--card)) var(--content-card, transparent);
+  color: var(--content-flat, var(--card-foreground)) var(--content-card, var(--shell-canvas-foreground));
+  outline: none;
+}
+@container (max-width: 47.99rem) {
+  .content {
+    padding: 0;
+  }
+  .main {
+    border-color: transparent;
+    border-radius: 0;
+  }
+}
+@container (min-width: 64rem) {
+  .main {
+    padding: var(--space-section);
+  }
+}
+

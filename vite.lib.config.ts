@@ -49,7 +49,6 @@ export default defineConfig({
         'components/data-display/Collapse': 'src/components/data-display/Collapse.tsx',
         'components/controls/Slider': 'src/components/controls/Slider.tsx',
         'components/navigation/Stepper': 'src/components/navigation/Stepper.tsx',
-        'components/navigation/Sidebar': 'src/components/navigation/Sidebar.tsx',
         'components/controls/Rating': 'src/components/controls/Rating.tsx',
         'components/data-display/Table': 'src/components/data-display/Table.tsx',
         'components/data-display/Calendar': 'src/components/data-display/Calendar.tsx',

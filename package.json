@@ -164,10 +164,6 @@
       "types": "./dist/components/navigation/Stepper.d.ts",
       "import": "./dist/components/navigation/Stepper.js"
     },
-    "./sidebar": {
-      "types": "./dist/components/navigation/Sidebar.d.ts",
-      "import": "./dist/components/navigation/Sidebar.js"
-    },
     "./rating": {
       "types": "./dist/components/controls/Rating.d.ts",
       "import": "./dist/components/controls/Rating.js"

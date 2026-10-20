@@ -1,0 +1,105 @@
+/* The Top Bar pattern: the row only. Its fill and edge belong to the App
+   Shell's top cell, which also is the size container its queries read. */
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-group);
+  min-block-size: var(--shell-bar, calc(var(--control-md) + 2 * var(--space-cluster)));
+  padding-inline: var(--space-4);
+}
+@container (min-width: 64rem) {
+  .header {
+    padding-inline: var(--space-section);
+  }
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  min-inline-size: 0;
+}
+
+.start {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  min-inline-size: 0;
+}
+.center {
+  flex: 1;
+  min-inline-size: 0;
+}
+.end {
+  display: flex;
+  align-items: center;
+  gap: var(--space-inline);
+  margin-inline-start: auto;
+}
+
+/* The menu button only where the drawer is the navigation: below 64rem
+   when the drawer holds the sidebar, below 48rem when it holds top links.
+   The shell says which through data-drawer; its width is the container. */
+@container (min-width: 64rem) {
+  .header[data-drawer='sidebar'] .menuButton {
+    display: none;
+  }
+}
+@container (min-width: 48rem) {
+  .header[data-drawer='links'] .menuButton {
+    display: none;
+  }
+}
+
+/* Over a sidebar (the shell's top-bar layout), the logo takes a cell as wide
+   as the sidebar, so it sits where it sits in the sidebar layout. */
+@container (min-width: 64rem) {
+  .header[data-brand-cell] {
+    padding-inline-start: 0;
+  }
+  .header[data-brand-cell] .brand {
+    box-sizing: border-box;
+    flex: none;
+    inline-size: var(--sidebar-width);
+    padding-inline-start: var(--shell-logo-x, calc(2 * var(--space-inline)));
+  }
+}
+
+/* ----------------------------------------------------------------- nav */
+.nav ul {
+  display: flex;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+@container (max-width: 47.99rem) {
+  .nav {
+    display: none;
+  }
+}
+
+.navLink {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: calc(var(--space-8) + var(--space-1));
+  padding-inline: var(--space-3);
+  border-radius: var(--radius-field);
+  color: var(--muted-foreground);
+  font-size: var(--text-body);
+  font-weight: 500;
+  text-decoration: none;
+}
+.navLink:hover {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+.navLink:focus-visible {
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: var(--focus-offset);
+}
+/* The current page: foreground text on the subtle surface, not colour alone. */
+.navLink[aria-current='page'] {
+  background: var(--accent);
+  color: var(--foreground);
+}
+
