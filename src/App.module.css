@@ -201,17 +201,15 @@
   color: var(--muted-foreground);
 }
 
-/* Pixel logo: ink body, paper blade, accent hooks. */
+/* Pixel logo: accent body, white blade and hooks. Ink read as a dark blob
+   at header size; the accent is the recognisable part. */
 .body {
-  fill: var(--foreground);
-}
-
-.blade {
-  fill: var(--background);
-}
-
-.hooks {
   fill: var(--primary);
+}
+
+.blade,
+.hooks {
+  fill: var(--primary-foreground);
 }
 
 /* ---------- copy command ---------- */

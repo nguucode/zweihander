@@ -283,7 +283,7 @@ export default function App() {
       <a href="#main" className={styles.skip}>Skip to content</a>
       <header className={styles.header}>
         <a href="./" className={styles.brand} aria-label="Zweihänder home">
-          <PixelLogo size={28} />
+          <PixelLogo size={40} />
         </a>
         <nav aria-label="Main" className={styles.nav}>
           {NAV.map((n) => (
