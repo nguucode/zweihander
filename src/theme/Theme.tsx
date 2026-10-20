@@ -62,8 +62,9 @@ export interface ThemeProps extends ComponentProps<'div'> {
   /**
    * What an AppShell sits on: `plain` (the card colour), `neutral` (the page
    * gray) or `tinted` (the accent's subtle step). For any other colour or a
-   * gradient, pass `tokens={{ canvas, 'canvas-foreground',
-   * 'canvas-muted-foreground' }}`; contrast is then yours to check, in both
+   * gradient, pass `tokens={{ canvas, 'canvas-solid', 'canvas-foreground',
+   * 'canvas-muted-foreground' }}` (`canvas-solid`: one colour standing for
+   * it, for rings and fills); contrast is then yours to check, in both
    * appearances. Inherits when omitted; the default is `neutral`.
    */
   canvas?: Canvas

@@ -10,10 +10,17 @@
   /* What the pieces inside need from the scope around the shell, captured
      here because a piece cannot read its own custom property while
      redefining it. */
-  --shell-background: var(--background);
   --shell-muted-foreground: var(--muted-foreground);
   --shell-subtle-foreground: var(--subtle-foreground);
   --shell-canvas-foreground: var(--canvas-foreground, var(--foreground));
+  /* A solid colour standing for the canvas, for what components draw as
+     "the surface under me" (a Badge ring, a Checkbox fill). A gradient
+     canvas has none, so the consumer names one with --canvas-solid. */
+  --shell-canvas-solid: var(
+    --canvas-solid,
+    var(--canvas-plain, var(--card)) var(--canvas-neutral, var(--background))
+      var(--canvas-tinted, var(--primary-subtle))
+  );
   --shell-canvas-subtle-foreground: var(--canvas-muted-foreground, var(--subtle-foreground));
   --shell-canvas-muted-foreground: var(
     --canvas-muted-foreground,
@@ -57,6 +64,7 @@
   color: var(--card-foreground);
 }
 :is(.top, .sidebar)[data-surface='transparent'] {
+  --background: var(--shell-canvas-solid);
   --muted-foreground: var(--shell-canvas-muted-foreground);
   --subtle-foreground: var(--shell-canvas-subtle-foreground);
   color: var(--shell-canvas-foreground);
@@ -85,6 +93,8 @@
 .sidebar > :last-child {
   grid-row: -2;
 }
+/* In a collapsed rail the logo keeps its place and is cut to the rail's
+   width, so a logo should lead with its mark. */
 .sidebarBrand {
   display: flex;
   align-items: center;
@@ -109,9 +119,6 @@
     grid-row: 1 / -1;
   }
   /* top-bar layout: the logo is in the bar, over the sidebar column. */
-  .topBarLayout .sidebarBrand {
-    display: none;
-  }
   .topBarLayout.withSidebar.withBrand .header {
     padding-inline-start: 0;
   }
@@ -136,7 +143,7 @@
   padding: var(--content-flat, var(--space-2)) var(--content-card, 0);
 }
 .main {
-  --background: var(--content-flat, var(--card)) var(--content-card, var(--shell-background));
+  --background: var(--content-flat, var(--card)) var(--content-card, var(--shell-canvas-solid));
   /* On the canvas (card), text reads the canvas colours, as a transparent piece does. */
   --muted-foreground: var(--content-flat, var(--shell-muted-foreground)) var(--content-card, var(--shell-canvas-muted-foreground));
   --subtle-foreground: var(--content-flat, var(--shell-subtle-foreground)) var(--content-card, var(--shell-canvas-subtle-foreground));

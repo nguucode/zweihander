@@ -4,7 +4,7 @@
 
 AppShell becomes a frame that only places its pieces, on a canvas set by the Theme.
 
-- **Theme** takes `canvas` (`plain`, `neutral` default, `tinted`) and `contentStyle` (`flat` default, `card`). A custom canvas colour or gradient goes through `tokens={{ canvas, 'canvas-foreground', 'canvas-muted-foreground' }}`; its contrast is yours to check.
+- **Theme** takes `canvas` (`plain`, `neutral` default, `tinted`) and `contentStyle` (`flat` default, `card`). A custom canvas colour or gradient goes through `tokens={{ canvas, 'canvas-solid', 'canvas-foreground', 'canvas-muted-foreground' }}`; its contrast is yours to check.
 - **AppShell** takes `layout` (`sidebar` default, `top-bar`), `topBarSurface` and `sidebarSurface` (`solid` or `transparent`), and a `brand` slot for the logo, which it places in the same spot in both layouts.
 - **Card** takes `appearance="surface"`: raised under `contentStyle="card"`, a section ruled off at the top under `flat`.
 - New token `--sidebar-width` (16rem, 14rem in Compact); Sidebar reads it.

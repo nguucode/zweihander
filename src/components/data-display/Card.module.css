@@ -77,6 +77,8 @@
 }
 .surface.interactive:hover {
   box-shadow: var(--content-card, var(--shadow-md)) var(--content-flat, none);
+  /* Flat has no shadow to lift: the rule above strengthens, as outline's edge does. */
+  border-block-start-color: var(--content-card, var(--border)) var(--content-flat, var(--control-border));
 }
 
 /* unstyled keeps its padding and layout, and drops everything you see. */

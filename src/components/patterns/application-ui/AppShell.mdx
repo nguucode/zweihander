@@ -38,7 +38,9 @@ the page.
 Pass the logo as `brand`, not inside the Sidebar or the AppHeader. The
 shell places it in the same spot in both layouts: its left edge on the
 sidebar icons' left edge, centred in a row as tall as the top bar. It does
-not move when the sidebar collapses, and it follows density.
+not move when the sidebar collapses, and it follows density. In the
+sidebar layout a collapsed rail cuts the logo to the rail's width, so lead
+the logo with its mark. It is rendered once, wherever it shows.
 
 ## Canvas and content style
 
@@ -48,7 +50,10 @@ whole app takes them at once:
 - **`canvas`**: what the shell sits on. `plain` (the card colour),
   `neutral` (the page gray, the default) or `tinted` (the accent's subtle
   step). For any other colour or a gradient, pass
-  `tokens={{ canvas, 'canvas-foreground', 'canvas-muted-foreground' }}`.
+  `tokens={{ canvas, 'canvas-solid', 'canvas-foreground', 'canvas-muted-foreground' }}`,
+  where `canvas-solid` is one colour standing for the canvas (for a
+  gradient, a colour from its middle): components on the canvas use it as
+  the surface under them, for a Badge's ring or a Checkbox's fill.
   The kit checks contrast for its own three canvases only; a custom canvas,
   in light and in dark (use `var(--use-light, …) var(--use-dark, …)`), is
   yours to check.

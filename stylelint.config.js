@@ -88,6 +88,6 @@ export default {
     // var() reads a semantic token, never a primitive or a name nothing sets.
     // The canvas ones are set only by the consumer, through Theme tokens, to
     // paint an AppShell's canvas their own colour or gradient.
-    'zweihander/semantic-tokens': [true, { external: [...baseUiVars, '--canvas', '--canvas-foreground', '--canvas-muted-foreground'] }],
+    'zweihander/semantic-tokens': [true, { external: [...baseUiVars, '--canvas', '--canvas-solid', '--canvas-foreground', '--canvas-muted-foreground'] }],
   },
 }

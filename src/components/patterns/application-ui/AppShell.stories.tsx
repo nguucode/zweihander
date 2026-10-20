@@ -128,9 +128,14 @@ const themed = (props: { canvas?: Canvas; contentStyle?: ContentStyle; density?:
 
 /** The logo's left edge against the sidebar icons' left edge: they line up in either layout. */
 const logoOffset = (canvasElement: HTMLElement) => {
-  const logo = [...canvasElement.querySelectorAll<HTMLElement>('[data-testid="brand"]')].find((el) => el.offsetParent !== null)!
   const icon = canvasElement.querySelector('nav[aria-label="Main"] a svg')!
-  return logo.getBoundingClientRect().left - icon.getBoundingClientRect().left
+  return canvasElement.querySelector('[data-testid="brand"]')!.getBoundingClientRect().left - icon.getBoundingClientRect().left
+}
+/** The logo's centre line, from the shell's top: half a top bar (--control-md plus two --space-cluster) in either layout. */
+const logoMiddle = (canvasElement: HTMLElement) => {
+  const shell = canvasElement.querySelector('main')!.closest('[class*="shell"]')!
+  const logo = canvasElement.querySelector('[data-testid="brand"]')!.getBoundingClientRect()
+  return logo.top + logo.height / 2 - shell.getBoundingClientRect().top
 }
 
 /**
@@ -201,6 +206,9 @@ export const WithSidebar: Story = {
     await expect(canvasElement.querySelector('header')).not.toBeVisible()
     // The logo lines up with the sidebar's icons: two --space-inline in.
     await expect(logoOffset(canvasElement)).toBeCloseTo(0, 0)
+    // Rendered once, and on the same centre line in either layout.
+    await expect(canvasElement.querySelectorAll('[data-testid="brand"]')).toHaveLength(1)
+    await expect(logoMiddle(canvasElement)).toBeCloseTo(28, 0)
     // The skip link targets the shell's own main, and moves focus to it.
     const main = canvas.getByRole('main')
     const skip = canvas.getByRole('link', { name: 'Skip to content' })
@@ -225,6 +233,9 @@ export const TopBar: Story = {
     const shell = canvasElement.querySelector('main')!.closest('[class*="shell"]')!
     await expect(bar.getBoundingClientRect().width).toBeCloseTo(shell.getBoundingClientRect().width, 0)
     await expect(logoOffset(canvasElement)).toBeCloseTo(0, 0)
+    // Rendered once, and on the same centre line in either layout.
+    await expect(canvasElement.querySelectorAll('[data-testid="brand"]')).toHaveLength(1)
+    await expect(logoMiddle(canvasElement)).toBeCloseTo(28, 0)
   },
 }
 
@@ -234,6 +245,9 @@ export const Compact: Story = {
   decorators: [themed({ density: 'compact' }), ...box(1100)],
   play: async ({ canvasElement }) => {
     await expect(logoOffset(canvasElement)).toBeCloseTo(0, 0)
+    // Rendered once, and on the same centre line in either layout.
+    await expect(canvasElement.querySelectorAll('[data-testid="brand"]')).toHaveLength(1)
+    await expect(logoMiddle(canvasElement)).toBeCloseTo(22, 0)
   },
 }
 
@@ -314,8 +328,7 @@ export const Combinations: Story = {
                 topBarSurface={c.top}
                 sidebarSurface={c.nav}
                 brand={<strong>Zweihänder</strong>}
-                sidebar={sidebar(false, c.layout === 'sidebar')}
-                header={c.layout === 'top-bar' ? topBar : undefined}
+                sidebar={<Sidebar items={entries} currentHref="#dashboard" style={{ blockSize: '100%' }} />}
                 style={{ blockSize: '100%' }}
               >
                 {blocks}
@@ -338,14 +351,18 @@ export const Combinations: Story = {
 /** The sidebar as an icon rail, with the labels one click away. */
 export const CollapsedRail: Story = {
   args: {
+    brand,
     sidebar: sidebar(true),
     header: topBar,
   },
   decorators: box(1100),
-  play: async ({ canvas }) => {
+  play: async ({ canvas, canvasElement }) => {
     const nav = canvas.getByRole('navigation', { name: 'Main' })
     const narrow = nav.getBoundingClientRect().width
     await expect(narrow).toBeLessThan(100)
+    // The logo keeps its place in the rail, cut to the rail's width.
+    await expect(logoOffset(canvasElement)).toBeCloseTo(0, 0)
+    await expect(logoMiddle(canvasElement)).toBeCloseTo(28, 0)
     // Collapsed, the links keep their names.
     await expect(within(nav).getByRole('link', { name: 'Projects, 12' })).toBeVisible()
     await userEvent.click(within(nav).getByRole('button', { name: /Expand/ }))

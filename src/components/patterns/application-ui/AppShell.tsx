@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useId, useRef, useState, type ComponentProps, type MouseEvent, type ReactNode } from 'react'
+import { createContext, useContext, useId, useLayoutEffect, useRef, useState, type ComponentProps, type MouseEvent, type ReactNode, type RefObject } from 'react'
 import { Dialog } from '@base-ui/react/dialog'
 import { Icon } from '@/lib/icon'
 import { cn } from '@/lib/utils'
@@ -86,6 +86,12 @@ export function AppShell({
   const drawerContent = hasMobileNavigation ? mobileNavigation : hasSidebar ? sidebar : null
   const hasDrawer = drawerContent !== null
   const hasBrand = given(brand)
+  // The logo is rendered once, in the place it shows: in the sidebar for the
+  // sidebar layout while the sidebar is beside the page, else in the header.
+  // CSS alone would need two copies, and a logo can hold an id or a menu.
+  const frameRef = useRef<HTMLDivElement>(null)
+  const isWide = useIsWide(frameRef)
+  const brandInSidebar = hasBrand && layout === 'sidebar' && hasSidebar && isWide
   // The sidebar layout still needs a bar for the menu button while the sidebar is in the drawer.
   const top = given(header) ? header : hasDrawer || hasBrand ? <AppHeader /> : null
   // A link chosen in the drawer navigates; the drawer should not stay over the new page.
@@ -93,7 +99,7 @@ export function AppShell({
     if ((e.target as HTMLElement).closest('a[href]')) setOpen(false)
   }
   return (
-    <ShellContext.Provider value={{ hasDrawer, isOpen: open, open: () => setOpen(true), label: navigationLabel, brand }}>
+    <ShellContext.Provider value={{ hasDrawer, isOpen: open, open: () => setOpen(true), label: navigationLabel, brand: brandInSidebar ? null : brand }}>
       <div
         className={cn(
           styles.shell,
@@ -119,7 +125,7 @@ export function AppShell({
         </a>
         {/* The shell is the size container and the frame its grid, so the
             layout follows the shell's own width: an element cannot query itself. */}
-        <div className={styles.frame}>
+        <div ref={frameRef} className={styles.frame}>
           {top && (
             <div className={styles.top} data-surface={topBarSurface}>
               {top}
@@ -127,7 +133,7 @@ export function AppShell({
           )}
           {hasSidebar && (
             <div className={styles.sidebar} data-surface={sidebarSurface}>
-              {hasBrand && <div className={styles.sidebarBrand}>{brand}</div>}
+              {brandInSidebar && <div className={styles.sidebarBrand}>{brand}</div>}
               {sidebar}
             </div>
           )}
@@ -154,6 +160,20 @@ export function AppShell({
       )}
     </ShellContext.Provider>
   )
+}
+
+/** Whether the element is at least 64rem wide, the width where the sidebar sits beside the page (the CSS container query's twin). */
+function useIsWide(ref: RefObject<HTMLElement | null>) {
+  const [isWide, setIsWide] = useState(true)
+  useLayoutEffect(() => {
+    const element = ref.current
+    if (!element) return
+    const rem = Number.parseFloat(getComputedStyle(document.documentElement).fontSize)
+    const observer = new ResizeObserver(([entry]) => setIsWide(entry.contentRect.width >= 64 * rem))
+    observer.observe(element)
+    return () => observer.disconnect()
+  }, [ref])
+  return isWide
 }
 
 export interface AppHeaderProps extends ComponentProps<'header'> {

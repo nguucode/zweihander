@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef, useSyncExternalStore, type ReactNode } from 'react'
-import { ACCENT_COLORS, GRAY_COLORS, SCALINGS, Theme, type AccentColor, type GrayColor, type Radius, type Scaling } from '@/theme/Theme'
+import { ACCENT_COLORS, CANVASES, CONTENT_STYLES, GRAY_COLORS, SCALINGS, Theme, type AccentColor, type Canvas, type ContentStyle, type GrayColor, type Radius, type Scaling } from '@/theme/Theme'
 
 /**
  * The Preview theme: how the Playground dresses the item in its frame. It
@@ -32,6 +32,8 @@ export interface PreviewTheme {
   accent: AccentColor
   gray: GrayColor
   radius: Radius
+  canvas: Canvas
+  contentStyle: ContentStyle
   font: PreviewFont
   scaling: Scaling
   appearance: PreviewAppearance
@@ -42,6 +44,8 @@ export const DEFAULT_PREVIEW_THEME: PreviewTheme = {
   accent: 'blue',
   gray: 'gray',
   radius: 'rounded',
+  canvas: 'neutral',
+  contentStyle: 'flat',
   font: 'system',
   scaling: '100%',
   appearance: 'system',
@@ -52,6 +56,8 @@ export const PREVIEW_THEME_VALUES: { [K in keyof PreviewTheme]: readonly Preview
   accent: ACCENT_COLORS,
   gray: GRAY_COLORS,
   radius: RADII,
+  canvas: CANVASES,
+  contentStyle: CONTENT_STYLES,
   font: FONTS,
   scaling: SCALINGS,
   appearance: APPEARANCES,
@@ -72,6 +78,8 @@ export function themeCode(theme: PreviewTheme) {
     changed('accent') && `accentColor="${theme.accent}"`,
     changed('gray') && `grayColor="${theme.gray}"`,
     changed('radius') && `radius="${theme.radius}"`,
+    changed('canvas') && `canvas="${theme.canvas}"`,
+    changed('contentStyle') && `contentStyle="${theme.contentStyle}"`,
     changed('scaling') && `scaling="${theme.scaling}"`,
     changed('appearance') && `appearance="${theme.appearance}"`,
     FONT_STACKS[theme.font] && `tokens={{ 'font-sans': ${JSON.stringify(FONT_STACKS[theme.font])} }}`,
@@ -105,6 +113,8 @@ export function PreviewThemeScope({
   accent,
   gray,
   radius,
+  canvas,
+  contentStyle,
   font,
   scaling,
   appearance,
@@ -139,6 +149,8 @@ export function PreviewThemeScope({
       accentColor={accent}
       grayColor={gray}
       radius={radius}
+      canvas={canvas}
+      contentStyle={contentStyle}
       scaling={scaling}
       tokens={stack ? { 'font-sans': stack } : undefined}
       data-preview-theme=""
