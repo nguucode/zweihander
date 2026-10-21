@@ -8,7 +8,7 @@ import { Button } from '@/components/buttons/Button'
 import { Card } from '@/components/data-display/Card'
 import { Search } from '@/components/inputs/Search'
 import { Menu } from '@/components/navigation/Menu'
-import { NavSidebar, type NavSidebarEntry } from '@/components/patterns/application-ui/NavSidebar'
+import { NavSidebar, NavSidebarButton, type NavSidebarEntry } from '@/components/patterns/application-ui/NavSidebar'
 import { TopBar, TopBarNav } from '@/components/patterns/application-ui/TopBar'
 import { AppShell, type AppShellLayout, type AppShellSurface } from './AppShell'
 import { PageHeading } from '@/components/patterns/application-ui/PageHeading'
@@ -37,23 +37,46 @@ const brand = (
 
 const account = (
   <Menu
+    side="top"
     align="start"
     trigger={
-      <Button variant="secondary" appearance="ghost" startIcon={<Avatar initials="AS" size="sm" />}>
-        Ana Silva
-      </Button>
+      <NavSidebarButton
+        icon={<Avatar initials="AS" size="xs" />}
+        label="Ana Silva"
+        description="Admin"
+        end={<Icon name="chevrons-up-down" />}
+      />
     }
     items={[{ label: 'Your profile' }, { label: 'Settings' }, { type: 'separator' }, { label: 'Sign out' }]}
   />
 )
 
-/** In the sidebar layout there is no top bar, so search sits in the sidebar's header and the account in its footer. */
+const sidebarFooter = (
+  <>
+    {account}
+    <Button variant="secondary" appearance="ghost" isIconOnly aria-label="Notifications">
+      <Icon name="notifications" />
+    </Button>
+    <Button variant="secondary" appearance="ghost" isIconOnly aria-label="Help and support">
+      <Icon name="help" />
+    </Button>
+  </>
+)
+
+const sidebarHeader = (
+  <>
+    <NavSidebarButton icon={<Avatar initials="AC" size="xs" />} label="Acme Corp" end={<Icon name="chevrons-up-down" />} />
+    <NavSidebarButton appearance="field" icon={<Icon name="search" />} label="Search" end="⌘K" />
+  </>
+)
+
+/** In the sidebar layout there is no top bar, so the tenant and search sit in the sidebar's header, the account in its footer. */
 const sidebar = (collapsible = false, withTopBarItems = true) => (
   <NavSidebar
     items={entries}
     currentHref="#dashboard"
-    header={withTopBarItems && !collapsible ? <Search aria-label="Search" placeholder="Search" /> : undefined}
-    footer={withTopBarItems && !collapsible ? account : undefined}
+    header={withTopBarItems ? sidebarHeader : undefined}
+    footer={withTopBarItems ? sidebarFooter : undefined}
     isCollapsible={collapsible}
     defaultCollapsed={collapsible}
     style={{ blockSize: '100%' }}

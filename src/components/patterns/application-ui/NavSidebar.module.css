@@ -23,20 +23,58 @@
   --sidebar-width: calc(var(--control-md) + 2 * var(--space-inline));
 }
 
-.header {
+/* The top row: the logo and the collapse button. As tall as the AppShell's
+   top bar from the very top (it cancels the sidebar's padding), with the
+   logo two --space-inline in, so the logo sits where it would in the
+   top-bar layout and lines up with the nav icons. */
+.brandRow {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: var(--space-2);
-  min-block-size: var(--control-md);
   margin-block-end: var(--space-inline);
 }
-.headerContent {
+.withBrand {
+  justify-content: space-between;
+  margin-block: calc(-1 * var(--space-inline)) 0;
+  block-size: calc(var(--control-md) + 2 * var(--space-cluster));
+}
+.brand {
+  display: flex;
   flex: 1;
+  align-items: center;
   min-inline-size: 0;
+  padding-inline-start: var(--space-inline);
   overflow: hidden;
 }
-.collapsed .headerContent {
-  display: none;
+/* In the rail the logo keeps its place, cut to the rail's width (so a logo
+   should lead with its mark), and the expand button takes its spot on hover
+   or focus, as in the Claude apps. */
+.collapsed .withBrand {
+  display: grid;
+}
+.collapsed .withBrand > * {
+  grid-area: 1 / 1;
+}
+.collapsed .withBrand .toggle {
+  justify-self: center;
+  opacity: 0;
+}
+.collapsed .withBrand:hover .toggle,
+.collapsed .withBrand .toggle:focus-visible {
+  opacity: 1;
+}
+.collapsed .withBrand:hover .brand,
+.collapsed .withBrand:has(.toggle:focus-visible) .brand {
+  visibility: hidden;
+}
+
+/* Under the logo: a tenant switcher, search. */
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-inline);
+  margin-block-end: var(--space-group);
 }
 
 .toggle {
@@ -78,7 +116,18 @@
   gap: var(--space-stack);
 }
 
+.groupHead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-block-size: var(--box-sm);
+}
 .groupLabel {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--space-1);
+  min-inline-size: 0;
   margin: 0;
   padding: 0 var(--space-inline);
   font-size: var(--text-body-sm);
@@ -86,15 +135,52 @@
   color: var(--muted-foreground);
   white-space: nowrap;
 }
-/* Collapsed, the name is hidden from view but still names the list, and
+.groupToggle {
+  align-self: stretch;
+  border: 0;
+  border-radius: var(--radius-control);
+  background: transparent;
+  font-family: inherit;
+  text-align: start;
+  cursor: var(--cursor-button);
+}
+.groupToggle:hover {
+  color: var(--accent-foreground);
+}
+/* The chevron shows on hover and focus only, as in the Claude apps; the
+   state is still aria-expanded. */
+.groupChevron {
+  font-size: var(--icon-sm);
+  opacity: 0;
+}
+.groupToggle:hover .groupChevron,
+.groupToggle:focus-visible .groupChevron,
+.groupToggle[aria-expanded='false'] .groupChevron {
+  opacity: 1;
+}
+/* The action (add an item) shows while the category is hovered or focused. */
+.groupAction {
+  display: flex;
+  flex-shrink: 0;
+  opacity: 0;
+}
+.group:hover .groupAction,
+.groupAction:focus-within,
+.groupAction:has([aria-expanded='true']) {
+  opacity: 1;
+}
+/* In the rail the head is gone, but the label still names the list, and
    a rule marks where the group starts. */
-.collapsed .groupLabel {
+.collapsed .groupHead {
   position: absolute;
   inline-size: 1px;
   block-size: 1px;
   padding: 0;
   overflow: hidden;
   clip-path: inset(50%);
+}
+.collapsed .groupAction {
+  display: none;
 }
 .collapsed .group + .group::before,
 .collapsed .body > * + .group::before {
@@ -134,7 +220,8 @@
   color: var(--accent-foreground);
 }
 .item:focus-visible,
-.toggle:focus-visible {
+.toggle:focus-visible,
+.groupToggle:focus-visible {
   outline: var(--focus-width) solid var(--ring);
   outline-offset: var(--focus-offset-inset);
 }
@@ -178,26 +265,95 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* NavSidebarButton: an item that is a button, with an optional second line. */
+.button {
+  inline-size: 100%;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  text-align: start;
+  cursor: var(--cursor-button);
+}
+.text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-inline-size: 0;
+}
+.text .label {
+  flex: none;
+}
+.description {
+  overflow: hidden;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--muted-foreground);
+  text-overflow: ellipsis;
+}
+.end {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  font-size: var(--text-body-sm);
+  color: var(--muted-foreground);
+}
+.end :where(svg) {
+  font-size: var(--icon-md);
+}
+/* As an input: a search button that opens a command palette. */
+.field {
+  border: 1px solid var(--input);
+  border-radius: var(--radius-field);
+  background: var(--card);
+  color: var(--muted-foreground);
+}
+.field:hover {
+  border-color: var(--field-border);
+  background: var(--card);
+}
+.more {
+  color: var(--muted-foreground);
+}
+
 .collapsed .item {
   justify-content: center;
   padding: 0;
 }
 .collapsed .label,
-.collapsed .badge {
+.collapsed .badge,
+.collapsed .text,
+.collapsed .end {
   display: none;
+}
+.collapsed .field {
+  border-color: transparent;
+  background: transparent;
 }
 
+/* No rule above it, as in the Claude apps: the body scrolls under it. In a
+   row (the account takes the room, icon buttons after it); stacked in the rail. */
 .footer {
-  margin-block-start: var(--space-cluster);
-  padding-block-start: var(--space-cluster);
-  border-block-start: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-block-start: var(--space-inline);
+}
+.footer > .button {
+  flex: 1;
+  min-inline-size: 0;
 }
 .collapsed .footer {
-  display: none;
+  flex-direction: column;
 }
 
 @media (pointer: coarse) {
   .item {
     min-block-size: var(--target-coarse);
+  }
+  /* No hover to reveal them on touch. */
+  .groupAction,
+  .groupChevron {
+    opacity: 1;
   }
 }
