@@ -1,0 +1,10 @@
+---
+"zweihander": minor
+---
+
+The Page Heading pattern is removed. The Projects template now renders its own `h1` with the open-project count, without the rule under it (the tabs below already draw one).
+
+Breaking:
+
+- The `page-heading` registry item is gone, and `projects-template` no longer depends on it. A page that installed it keeps its copy of `PageHeading.tsx`, which still works but gets no updates. To drop it, write the page's `h1`, description and buttons inline.
+- The npm package never shipped `PageHeading`, so imports from `zweihander` are unaffected.
