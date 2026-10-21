@@ -165,7 +165,12 @@ export function NavSidebarButton({
         {description && <span className={styles.description}>{description}</span>}
       </span>
       {badge !== undefined && <span className={styles.badge}>{badge}</span>}
-      {end && <span className={styles.end}>{end}</span>}
+      {/* A chevron or a shortcut hint: shown, not part of the name ("Search", not "Search⌘K"). */}
+      {end && (
+        <span className={styles.end} aria-hidden="true">
+          {end}
+        </span>
+      )}
     </button>
   )
   return collapsed ? (

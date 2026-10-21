@@ -189,8 +189,11 @@
   outline: none;
   transition: translate var(--duration-slow);
 }
-/* The navigation inside (a Sidebar) takes the drawer's width, not its own. */
-.drawer > :not(.drawerClose) {
+/* The navigation inside (a NavSidebar) takes the drawer's width, not its own. */
+/* A NavSidebar's <nav> sits in a display: contents slot, so the rule
+   reaches it too. */
+.drawer > :not(.drawerClose),
+.drawer > :not(.drawerClose) > nav {
   flex: 1;
   min-block-size: 0;
   inline-size: 100%;

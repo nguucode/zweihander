@@ -211,7 +211,8 @@ export const Default: Story = {
     await expect(within(nav).queryByRole('button', { name: 'Add to Pinned' })).toBeNull()
     // The header and footer rows are buttons named by their text.
     await expect(within(nav).getByRole('button', { name: 'Kafka Trading Co.' })).toBeVisible()
-    await expect(within(nav).getByRole('button', { name: /Search/ })).toBeVisible()
+    // The shortcut hint is shown but kept out of the name.
+    await expect(within(nav).getByRole('button', { name: 'Search' })).toBeVisible()
     await expect(within(nav).getByRole('button', { name: 'Notifications, 3' })).toBeVisible()
     await expect(within(nav).getByRole('button', { name: 'Help and support' })).toBeVisible()
     await expect(within(nav).getByRole('button', { name: 'Nguu Nguyen' })).toBeVisible()

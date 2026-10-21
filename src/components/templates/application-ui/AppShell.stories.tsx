@@ -428,6 +428,9 @@ export const Mobile: Story = {
     await userEvent.click(menu)
     const drawer = await within(document.body).findByRole('dialog', { name: 'Navigation' })
     await expect(menu).toHaveAttribute('aria-expanded', 'true')
+    // The sidebar fills the drawer's width, not its own 16rem.
+    const nav = within(drawer).getByRole('navigation', { name: 'Main' })
+    await waitFor(() => expect(nav.getBoundingClientRect().width).toBeCloseTo(drawer.getBoundingClientRect().width, 0))
     await userEvent.click(within(drawer).getByRole('link', { name: 'Team' }))
     await waitFor(() => expect(within(document.body).queryByRole('dialog')).toBeNull())
     // Focus is back on the button that opened it.
