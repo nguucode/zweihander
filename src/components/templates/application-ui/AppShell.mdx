@@ -83,6 +83,25 @@ custom canvas from `tokens`, set `canvas` to the preset closest to it
 
 <Canvas of={AppShellStories.TransparentOnPlain} />
 
+### Sidebar surfaces
+
+The NavSidebar takes each surface's colours from the shell:
+
+- **Gray**: `transparent` on the `neutral` canvas, the sidebar's own look.
+- **White**: `solid`. The current item takes the brand's light tint
+  (`--primary-subtle`), since a gray fill on white reads as hover.
+- **Transparent on a deep canvas of your own**: a colour or gradient dark
+  enough for white text. Beside `canvas`, `canvas-solid`, `canvas-foreground`
+  and `canvas-muted-foreground`, the Theme tokens `canvas-hover`,
+  `canvas-selected`, `canvas-field`, `canvas-field-border`, `canvas-badge`
+  and `canvas-badge-foreground` set the sidebar's fills on it. Dark veils
+  (black at 12–24%) for hover, the current item and the search field deepen
+  the canvas under white text; a white badge with red text stands out on
+  any hue, a red canvas included. On a canvas of the brand's own hue, give
+  a brand avatar the `subtle` variant, or it vanishes.
+
+<Canvas of={AppShellStories.SidebarSurfaces} />
+
 ## Combinations
 
 Of the 36 combinations of layout, the two surfaces, canvas and content

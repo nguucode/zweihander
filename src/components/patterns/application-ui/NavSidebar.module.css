@@ -1,6 +1,8 @@
 /* --sidebar-width is a token (it follows density, and an AppShell sizes the
    logo's cell in its top bar by it). An AppShell sets --sidebar-background
-   and --sidebar-border to draw the fill and edge itself. */
+   and --sidebar-border to draw the fill and edge itself, and the
+   --sidebar-* colours below for its surfaces (white: a brand-tint current
+   item; transparent: whatever the canvas needs). */
 .sidebar {
   display: flex;
   flex-direction: column;
@@ -15,6 +17,41 @@
   line-height: var(--leading-body);
   color: var(--foreground);
   transition: inline-size var(--duration-base);
+}
+
+/* Expanded, the slot lays out nothing. As the rail it holds the rail's width
+   in the layout, so the hover preview can float over the page. */
+.slot {
+  display: contents;
+}
+.railSlot {
+  position: relative;
+  display: flex;
+  flex-shrink: 0;
+  inline-size: calc(var(--control-md) + 2 * var(--space-inline));
+}
+
+/* The hover preview: the full sidebar over the page, on an opaque fill (the
+   AppShell names one for a transparent sidebar) with a shadow. */
+.peek {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  z-index: var(--layer-sticky);
+  background: var(--sidebar-peek-background, var(--sidebar-background, var(--surface-filled)));
+  box-shadow: var(--shadow-lg);
+  animation: peek-in var(--duration-base) ease-out;
+}
+@keyframes peek-in {
+  from {
+    opacity: 0;
+    translate: calc(-1 * var(--space-2)) 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .peek {
+    animation: none;
+  }
 }
 
 /* The rail: one square row plus the padding either side. */
@@ -69,12 +106,13 @@
   visibility: hidden;
 }
 
-/* Under the logo: a tenant switcher, search. */
+/* Under the logo: a tenant switcher, search. The first item follows at the
+   header's own row gap, so header and nav read as one column. */
 .header {
   display: flex;
   flex-direction: column;
   gap: var(--space-inline);
-  margin-block-end: var(--space-group);
+  margin-block-end: var(--space-inline);
 }
 
 .toggle {
@@ -97,7 +135,7 @@
 .toggle:hover {
   /* An overlay, not --accent: in dark the sidebar's own --surface-filled is
      the same gray-800 as --accent, so an opaque hover fill vanished. */
-  background: var(--hover-overlay);
+  background: var(--sidebar-hover, var(--hover-overlay));
   color: var(--accent-foreground);
 }
 
@@ -107,7 +145,50 @@
   flex-direction: column;
   gap: var(--space-group);
   min-block-size: 0;
+  /* The body reaches through the sidebar's end padding, so its scrollbar
+     sits against the sidebar's edge as in the Claude apps; the gutter is
+     always kept, so rows keep their width whether or not the list scrolls. */
+  margin-inline-end: calc(-1 * var(--space-inline));
   overflow-y: auto;
+  scrollbar-gutter: stable;
+  --thumb: transparent;
+}
+/* No track, a 6px rounded thumb (an 8px bar less a 1px clipped border),
+   shown while the sidebar is hovered or holds focus. */
+.sidebar:hover .body,
+.body:focus-within {
+  --thumb: color-mix(in oklch, var(--foreground) 22%, transparent);
+}
+.body::-webkit-scrollbar {
+  inline-size: calc(var(--space-2));
+}
+.body::-webkit-scrollbar-track {
+  background: transparent;
+}
+.body::-webkit-scrollbar-thumb {
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  background: var(--thumb) padding-box;
+}
+.body::-webkit-scrollbar-thumb:hover {
+  background-color: color-mix(in oklch, var(--foreground) 38%, transparent);
+}
+/* Firefox has no ::-webkit-scrollbar; Chrome would drop the rules above once
+   scrollbar-color is set, so this is kept to browsers without them. */
+@supports not selector(::-webkit-scrollbar) {
+  .body {
+    scrollbar-width: thin;
+    scrollbar-color: var(--thumb) transparent;
+  }
+}
+/* The rail is too narrow to give up a gutter: it scrolls with no bar. */
+.collapsed .body {
+  margin-inline-end: 0;
+  scrollbar-gutter: auto;
+  scrollbar-width: none;
+}
+.collapsed .body::-webkit-scrollbar {
+  display: none;
 }
 
 .group {
@@ -193,8 +274,8 @@
 .list {
   display: flex;
   flex-direction: column;
-  /* Rows sit flush, as in the Claude apps: a fill marks a row, not a gap. */
-  gap: 0;
+  /* 2px in every density, so hover and current fills never touch. */
+  gap: var(--space-0-5);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -216,7 +297,7 @@
   cursor: var(--cursor-link);
 }
 .item:hover {
-  background: var(--hover-overlay);
+  background: var(--sidebar-hover, var(--hover-overlay));
   color: var(--accent-foreground);
 }
 .item:focus-visible,
@@ -231,16 +312,30 @@
    no edge: selection is a place in the list, not a call to action. */
 .current,
 .current:hover {
-  background: var(--selected);
-  color: var(--foreground);
+  background: var(--sidebar-selected, var(--selected));
+  color: var(--sidebar-selected-foreground, var(--foreground));
   font-weight: 500;
 }
 
+/* Every leading visual (a nav icon, the tenant's and the account's avatar)
+   sits in an --icon-md wide slot after the row's padding, so their centres
+   share one vertical line; a bigger one overflows the slot evenly. */
 .icon {
   display: inline-flex;
   flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--icon-md);
   font-size: var(--icon-md);
   color: var(--muted-foreground);
+}
+/* An Avatar in a NavSidebarButton is 20px in every density: a row like the
+   others, not a profile card. Avatar xs is 24px at Default. */
+.button .icon > * {
+  flex-shrink: 0;
+  inline-size: var(--box-xs);
+  block-size: var(--box-xs);
+  font-size: var(--text-body-xs);
 }
 .current .icon,
 .item:hover .icon {
@@ -254,12 +349,17 @@
   text-overflow: ellipsis;
 }
 
+/* A count right after its label, in red: it needs attention. */
+.label:has(+ .badge),
+.text:has(+ .badge) {
+  flex: 0 1 auto;
+}
 .badge {
   flex-shrink: 0;
   padding: 0 var(--control-xs-pad);
   border-radius: var(--radius-pill);
-  background: var(--secondary);
-  color: var(--secondary-foreground);
+  background: var(--sidebar-badge, var(--destructive));
+  color: var(--sidebar-badge-foreground, var(--destructive-foreground));
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
   font-variant-numeric: tabular-nums;
@@ -301,19 +401,39 @@
 .end :where(svg) {
   font-size: var(--icon-md);
 }
-/* As an input: a search button that opens a command palette. */
+/* A tenant switcher: the name in medium weight, its chevron right after it. */
+.switcher {
+  color: var(--foreground);
+  font-weight: 500;
+}
+.switcher .text {
+  flex: 0 1 auto;
+}
+.switcher .end {
+  margin-inline-start: calc(var(--space-1) - var(--space-inline));
+}
+/* A company, not a person: a rounded square rather than a circle. */
+.switcher .icon > * {
+  border-radius: var(--radius-sm);
+}
+/* As an input: a search button that opens a command palette. Its padding
+   gives back the border's pixel, so the icon stays on the column. */
 .field {
-  border: 1px solid var(--input);
+  padding-inline: calc(var(--space-inline) - 1px);
+  border: 1px solid var(--sidebar-field-border, var(--input));
   border-radius: var(--radius-field);
-  background: var(--card);
+  background: var(--sidebar-field, var(--card));
   color: var(--muted-foreground);
 }
 .field:hover {
   border-color: var(--field-border);
-  background: var(--card);
+  background: var(--sidebar-field, var(--card));
 }
+/* Show more is a quiet control, at the category label's size. */
 .more {
   color: var(--muted-foreground);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
 }
 
 .collapsed .item {
@@ -327,24 +447,19 @@
   display: none;
 }
 .collapsed .field {
+  padding: 0;
   border-color: transparent;
   background: transparent;
 }
 
-/* No rule above it, as in the Claude apps: the body scrolls under it. In a
-   row (the account takes the room, icon buttons after it); stacked in the rail. */
+/* No rule above it, as in the Claude apps: the body scrolls under it. Rows
+   (notifications, help, the account) under each other, 2px apart like the
+   items. */
 .footer {
   display: flex;
-  align-items: center;
-  gap: var(--space-1);
-  margin-block-start: var(--space-inline);
-}
-.footer > .button {
-  flex: 1;
-  min-inline-size: 0;
-}
-.collapsed .footer {
   flex-direction: column;
+  gap: var(--space-0-5);
+  margin-block-start: var(--space-inline);
 }
 
 @media (pointer: coarse) {

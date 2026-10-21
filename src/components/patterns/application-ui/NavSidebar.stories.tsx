@@ -1,10 +1,8 @@
-import type { CSSProperties } from 'react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test'
 import { expectAnatomy } from '../../../../.storybook/blocks'
 import { Icon } from '@/lib/icon'
 import { Avatar } from '@/components/atomic-elements/Avatar'
-import { Badge } from '@/components/atomic-elements/Badge'
 import { Button } from '@/components/buttons/Button'
 import { Menu } from '@/components/navigation/Menu'
 import { Popover } from '@/components/overlays/Popover'
@@ -24,7 +22,6 @@ const items: NavSidebarEntry[] = [
   {
     type: 'group',
     label: 'Pinned',
-    action: add('Add to Pinned'),
     isCollapsible: true,
     items: [
       { label: 'Q3 VAT return', href: '#vat', icon: <Icon name="star" /> },
@@ -47,7 +44,13 @@ const items: NavSidebarEntry[] = [
   },
 ]
 
-// Leads with its mark, so the rail (which cuts the logo to its width) still shows one.
+/** The same items with an add action on Pinned: a category's action is opt-in. */
+const itemsWithAction = items.map((entry) =>
+  entry.type === 'group' && entry.label === 'Pinned' ? { ...entry, action: add('Add to Pinned') } : entry,
+)
+
+// Leads with its mark, so the rail (which cuts the logo to its width) still
+// shows one; the mark is --icon-md wide, so it lines up with the nav icons.
 const brand = (
   <strong data-testid="brand" style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-2)' }}>
     <img src="logo.svg" alt="" width={16} height={16} style={{ imageRendering: 'pixelated' }} />
@@ -60,7 +63,8 @@ const tenant = (
     align="start"
     trigger={
       <NavSidebarButton
-        icon={<Avatar size="xs" initials="KT" />}
+        appearance="switcher"
+        icon={<Avatar size="xs" initials="KT" variant="solid" color="blue" />}
         label="Kafka Trading Co."
         end={<Icon name="chevrons-up-down" />}
       />
@@ -91,41 +95,25 @@ const header = (
 
 const footer = (
   <>
-    <Menu
-      side="top"
-      align="start"
-      trigger={
-        <NavSidebarButton
-          icon={<Avatar size="xs" initials="NN" variant="solid" />}
-          label="Nguu Nguyen"
-          description="Admin"
-          end={<Icon name="chevrons-up-down" />}
-        />
-      }
-      items={[{ label: 'Profile' }, { label: 'Settings' }, { type: 'separator' }, { label: 'Sign out' }]}
-    />
     <Popover
-      side="top"
+      side="right"
+      align="end"
       title="Notifications"
-      trigger={
-        <Button variant="secondary" appearance="ghost" isIconOnly aria-label="Notifications, 3 unread">
-          <Badge isDot isFloating>
-            <Icon name="notifications" />
-          </Badge>
-        </Button>
-      }
+      trigger={<NavSidebarButton icon={<Icon name="notifications" />} label="Notifications" badge={3} />}
     >
       INV-2039 is 14 days overdue. Linh approved PO-118. September close is ready to review.
     </Popover>
     <Menu
-      side="top"
+      side="right"
       align="end"
-      trigger={
-        <Button variant="secondary" appearance="ghost" isIconOnly aria-label="Help and support">
-          <Icon name="help" />
-        </Button>
-      }
+      trigger={<NavSidebarButton icon={<Icon name="help" />} label="Help and support" />}
       items={[{ label: 'Help center' }, { label: 'Keyboard shortcuts' }, { type: 'separator' }, { label: 'Contact support' }]}
+    />
+    <Menu
+      side="right"
+      align="end"
+      trigger={<NavSidebarButton icon={<Avatar size="xs" initials="NN" variant="solid" />} label="Nguu Nguyen" />}
+      items={[{ label: 'Profile' }, { label: 'Settings' }, { type: 'separator' }, { label: 'Sign out' }]}
     />
   </>
 )
@@ -215,16 +203,32 @@ export const Default: Story = {
   play: async ({ canvas }) => {
     const nav = canvas.getByRole('navigation', { name: 'Main' })
     await expect(within(nav).getByRole('link', { name: 'Invoices' })).toHaveAttribute('aria-current', 'page')
-    await expect(within(nav).getByRole('link', { name: /Inbox/ })).not.toHaveAttribute('aria-current')
+    // A badge joins the name with a comma.
+    await expect(within(nav).getByRole('link', { name: 'Inbox, 12' })).not.toHaveAttribute('aria-current')
     await expect(within(nav).getByTestId('brand')).toBeVisible()
-    // A category's name names its list.
+    // A category's name names its list; its add action is opt-in, off here.
     await expect(within(nav).getByRole('list', { name: 'Pinned' })).toBeVisible()
-    await expect(within(nav).getByRole('button', { name: 'Add to Pinned' })).toBeInTheDocument()
+    await expect(within(nav).queryByRole('button', { name: 'Add to Pinned' })).toBeNull()
     // The header and footer rows are buttons named by their text.
     await expect(within(nav).getByRole('button', { name: 'Kafka Trading Co.' })).toBeVisible()
     await expect(within(nav).getByRole('button', { name: /Search/ })).toBeVisible()
-    await expect(within(nav).getByRole('button', { name: /Nguu Nguyen/ })).toBeVisible()
-    await expect(within(nav).getByRole('button', { name: 'Notifications, 3 unread' })).toBeVisible()
+    await expect(within(nav).getByRole('button', { name: 'Notifications, 3' })).toBeVisible()
+    await expect(within(nav).getByRole('button', { name: 'Help and support' })).toBeVisible()
+    await expect(within(nav).getByRole('button', { name: 'Nguu Nguyen' })).toBeVisible()
+    // Logo, tenant avatar, search icon, nav icon and account avatar share one centre line.
+    const centre = (el: Element) => {
+      const r = el.getBoundingClientRect()
+      return r.left + r.width / 2
+    }
+    const icon = (name: RegExp) => within(nav).getByRole('button', { name }).querySelector('span')!
+    const line = centre(within(nav).getByRole('link', { name: 'Invoices' }).querySelector('span')!)
+    for (const el of [
+      within(nav).getByTestId('brand').querySelector('img')!,
+      icon(/Kafka Trading/),
+      icon(/Search/),
+      icon(/Nguu Nguyen/),
+    ])
+      await expect(centre(el)).toBeCloseTo(line, 0)
     // The tenant switcher is a Menu trigger.
     await userEvent.click(within(nav).getByRole('button', { name: 'Kafka Trading Co.' }))
     const body = within(document.body)
@@ -236,8 +240,10 @@ export const Default: Story = {
 
 /** Categories open and close from their label, and a long one shows its first items with "Show more". */
 export const Categories: Story = {
-  args: { header: undefined, footer: undefined },
+  args: { header: undefined, footer: undefined, items: itemsWithAction },
   play: async ({ canvas }) => {
+    // The add action, opted into on Pinned, is a named button in the label row.
+    await expect(canvas.getByRole('button', { name: 'Add to Pinned' })).toBeInTheDocument()
     const toggle = canvas.getByRole('button', { name: 'Recent' })
     await expect(toggle).toHaveAttribute('aria-expanded', 'true')
     const recent = canvas.getByRole('list', { name: 'Recent' })
@@ -282,7 +288,6 @@ export const Collapsible: Story = {
     await expect(canvas.getByRole('list', { name: 'Pinned' })).toBeInTheDocument()
     // Items without an icon, and the category they made up, are left out.
     await expect(canvas.queryByRole('list', { name: 'Recent' })).toBeNull()
-    await expect(canvas.queryByRole('button', { name: 'Add to Pinned' })).toBeNull()
     // The badge is hidden in the rail, so the count joins the name.
     await expect(canvas.getByRole('link', { name: 'Inbox, 12' })).toBeInTheDocument()
     // The header and footer rows keep their names, now that only the icon shows.
@@ -290,11 +295,13 @@ export const Collapsible: Story = {
     await expect(canvas.getByRole('button', { name: 'Search' })).toBeVisible()
     await expect(canvas.getByRole('button', { name: 'Nguu Nguyen' })).toBeVisible()
     await expect(canvas.getByRole('button', { name: 'Help and support' })).toBeVisible()
-    // Hover shows the label as a tooltip (after the hover delay).
+    await expect(canvas.getByRole('button', { name: 'Notifications, 3' })).toBeVisible()
+    // Keyboard focus shows the label as a tooltip. (Hovering the rail opens
+    // the preview instead; see RailPreview.)
     const body = within(document.body)
-    await userEvent.hover(invoices)
+    invoices.focus()
     await waitFor(() => expect(body.getByRole('tooltip')).toHaveTextContent('Invoices'))
-    await userEvent.unhover(invoices)
+    invoices.blur()
     await waitFor(() => expect(body.queryByRole('tooltip')).toBeNull())
     // Keyboard focus on the expand button shows it over the logo.
     expand.focus()
@@ -307,48 +314,27 @@ export const Collapsible: Story = {
 export const Collapsed: Story = { args: { defaultCollapsed: true } }
 
 /**
- * On each background the sidebar sits on: gray (its own `--surface-filled`),
- * white (`--card`, an App Shell's solid sidebar) and transparent on the
- * canvas, here a tinted one. An App Shell sets `--sidebar-background` for the last two.
+ * Hovering the rail floats the full sidebar over the page, as in the Claude
+ * apps, while the rail keeps its place in the layout; the preview's button
+ * docks it.
  */
-export const Backgrounds: Story = {
-  parameters: { bare: true },
-  render: (args) => (
-    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-4)', padding: 'var(--space-4)', background: 'var(--background)' }}>
-      {(
-        [
-          ['Gray', undefined, 'var(--background)'],
-          ['White', 'var(--card)', 'var(--background)'],
-          // On a tinted canvas, or it would look the same as gray.
-          ['Transparent', 'transparent', 'var(--primary-subtle)'],
-        ] as const
-      ).map(([name, background, canvas]) => (
-        <figure key={name} style={{ margin: 0, display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
-          <figcaption style={{ color: 'var(--muted-foreground)', fontSize: 'var(--text-body-sm)' }}>{name}</figcaption>
-          <div
-            style={{
-              blockSize: '36rem',
-              display: 'flex',
-              border: '1px solid var(--border)',
-              background: canvas,
-              // What an App Shell does on a tinted canvas: muted text steps up to stay readable.
-              ...(name === 'Transparent' && { '--muted-foreground': 'var(--subtle-foreground)' }),
-            } as CSSProperties}
-          >
-            <NavSidebar
-              {...args}
-              aria-label={name}
-              style={background ? ({ '--sidebar-background': background } as CSSProperties) : undefined}
-            />
-          </div>
-        </figure>
-      ))}
-    </div>
-  ),
-  play: async ({ canvas }) => {
-    const fill = (name: string) => getComputedStyle(canvas.getByRole('navigation', { name })).backgroundColor
-    await expect(fill('Transparent')).toBe('rgba(0, 0, 0, 0)')
-    await expect(fill('White')).not.toBe(fill('Gray'))
+export const RailPreview: Story = {
+  args: { defaultCollapsed: true },
+  play: async ({ args, canvas }) => {
+    const nav = canvas.getByRole('navigation', { name: 'Main' })
+    const slot = nav.parentElement!
+    const rail = slot.getBoundingClientRect().width
+    await expect(rail).toBeLessThan(100)
+    await userEvent.hover(canvas.getByRole('link', { name: 'Invoices' }))
+    // After the hover delay the full sidebar shows, floating: the slot keeps the rail's width.
+    await waitFor(() => expect(nav.getBoundingClientRect().width).toBeGreaterThan(200))
+    await expect(slot.getBoundingClientRect().width).toBeCloseTo(rail, 0)
+    await expect(getComputedStyle(nav).position).toBe('absolute')
+    const keep = canvas.getByRole('button', { name: 'Keep sidebar open' })
+    await userEvent.click(keep)
+    await expect(args.onCollapsedChange).toHaveBeenLastCalledWith(false)
+    await waitFor(() => expect(getComputedStyle(nav).position).not.toBe('absolute'))
+    await expect(canvas.getByRole('button', { name: 'Collapse sidebar' })).toHaveAttribute('aria-expanded', 'true')
   },
 }
 
@@ -398,7 +384,7 @@ export const anatomyParts = [
 /** Every part present. */
 export const Anatomy: Story = {
   tags: ['!dev'],
-  args: { currentHref: '#vat' },
+  args: { currentHref: '#vat', items: itemsWithAction },
   play: async ({ canvasElement }) => {
     const found = await expectAnatomy(canvasElement, anatomyParts)
     await expect(found[0]).toHaveTextContent('Zweihänder')

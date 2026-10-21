@@ -1388,7 +1388,7 @@
       "name": "nav-sidebar",
       "type": "registry:block",
       "title": "Nav Sidebar",
-      "description": "Application UI pattern: the app's side navigation, as in the Claude apps: a logo row with the collapse button, a header for the tenant switcher and search, links in categories that open, close, show more and take an add action, badges, the current page, a footer for the account, notifications and help, NavSidebarButton rows for those, and a collapsible icon rail with tooltips. One of the pieces an App Shell places.",
+      "description": "Application UI pattern: the app's side navigation, as in the Claude apps: a logo row with the collapse button, a header for the tenant switcher and search, links in categories that open, close, show more and take an add action, badges, the current page, a footer for notifications, help and the account, NavSidebarButton rows (ghost, switcher, field) for those, and a collapsible icon rail with tooltips that previews the full sidebar on hover. One of the pieces an App Shell places.",
       "registryDependencies": [
         "https://ontheshore.biz/zweihander/r/utils.json",
         "https://ontheshore.biz/zweihander/r/tokens.json",
