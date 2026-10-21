@@ -429,6 +429,8 @@ body {
 .lyHeadingText {
   display: grid;
   gap: var(--space-inline);
+  flex: 1 1 20rem;
+  min-inline-size: 0;
 }
 
 .lyHeadingText h1 {
@@ -440,6 +442,7 @@ body {
   font-size: var(--text-heading-xl);
   line-height: var(--leading-heading-xl);
   font-weight: 500;
+  overflow-wrap: anywhere;
 }
 
 .lyHeadingText p {

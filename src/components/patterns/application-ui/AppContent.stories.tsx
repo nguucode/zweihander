@@ -7,7 +7,7 @@ import { AppContent } from './AppContent'
 
 const heading = (
   <div style={{ display: 'grid', gap: 'var(--space-inline)' }}>
-    <h1 style={{ margin: 0, fontSize: 'var(--text-heading-xl)', lineHeight: 'var(--leading-heading-xl)', fontWeight: 500 }}>Dashboard</h1>
+    <h1 style={{ margin: 0, fontFamily: 'var(--font-heading)', fontSize: 'var(--text-heading-xl)', lineHeight: 'var(--leading-heading-xl)', fontWeight: 500 }}>Dashboard</h1>
     <p style={{ margin: 0, color: 'var(--muted-foreground)' }}>What happened across your projects this month.</p>
   </div>
 )

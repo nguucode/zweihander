@@ -527,8 +527,8 @@ function App() {
             <strong>Two densities, not three.</strong> Wide was dropped.
           </li>
           <li>
-            <strong>One value moves on purpose:</strong> Alert padding goes from 10 to 12; 10px is control padding only. The Stats card gap and
-            the page heading's title to description (both 8) stay with their component.
+            <strong>One value moves on purpose:</strong> Alert padding goes from 10 to 12; 10px is control padding only. The Stats card gap (8)
+            stays with its component.
           </li>
           <li>
             <strong>Card sizes are a local density.</strong> <code>sm</code> pads <code>group</code> with a <code>cluster</code> gap;{' '}
