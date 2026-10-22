@@ -2834,26 +2834,6 @@
     },
     {
       "kind": "pattern",
-      "id": "patterns-application-ui-page-heading",
-      "name": "Page Heading",
-      "category": "Application UI",
-      "status": "experimental",
-      "storyId": "patterns-application-ui-page-heading--simple",
-      "props": [
-        {
-          "name": "headingLevel",
-          "control": "radio",
-          "options": [
-            1,
-            2
-          ],
-          "default": 1,
-          "description": "The page's own heading is h1; use 2 when the heading sits inside a larger page."
-        }
-      ]
-    },
-    {
-      "kind": "pattern",
       "id": "patterns-application-ui-stats",
       "name": "Stats",
       "category": "Application UI",

@@ -11,7 +11,6 @@ import { Menu } from '@/components/navigation/Menu'
 import { NavSidebar, type NavSidebarEntry } from '@/components/patterns/application-ui/NavSidebar'
 import { TopBar, TopBarNav } from '@/components/patterns/application-ui/TopBar'
 import { AppShell, type AppShellLayout, type AppShellSurface } from './AppShell'
-import { PageHeading } from '@/components/patterns/application-ui/PageHeading'
 import { Stats } from '@/components/patterns/application-ui/Stats'
 
 const entries: NavSidebarEntry[] = [
@@ -79,13 +78,20 @@ const headerEnd = (
 
 const topBar = <TopBar start={<Search aria-label="Search" placeholder="Search" />} end={headerEnd} />
 
+/** The page's own title; the shell has no heading of its own. */
+const heading = (
+  <div style={{ display: 'grid', gap: 'var(--space-inline)' }}>
+    <h1 style={{ margin: 0, fontFamily: 'var(--font-heading)', fontSize: 'var(--text-heading-xl)', lineHeight: 'var(--leading-heading-xl)', fontWeight: 500 }}>Dashboard</h1>
+    <p style={{ margin: 0, color: 'var(--muted-foreground)' }}>What happened across your projects this month.</p>
+  </div>
+)
+
 const content = (
   <div style={{ display: 'grid', gap: 'var(--space-8)' }}>
-    <PageHeading
-      title="Dashboard"
-      description="What happened across your projects this month."
-      actions={<Button startIcon={<Icon name="plus" />}>New project</Button>}
-    />
+    <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-start', justifyContent: 'space-between', gap: 'var(--space-group)' }}>
+      {heading}
+      <Button startIcon={<Icon name="plus" />}>New project</Button>
+    </div>
     <Stats
       title="Last 30 days"
       stats={[
@@ -100,7 +106,7 @@ const content = (
 /** Page blocks as Cards with appearance="surface": raised on the canvas under contentStyle="card", ruled-off sections under "flat". */
 const blocks = (
   <div style={{ display: 'grid', gap: 'var(--space-group)' }}>
-    <PageHeading title="Dashboard" description="What happened across your projects this month." />
+    {heading}
     <div style={{ display: 'grid', gap: 'var(--space-group)', gridTemplateColumns: 'repeat(auto-fit, minmax(10rem, 1fr))' }}>
       {[
         ['Active projects', '8'],
@@ -203,7 +209,7 @@ export const WithSidebar: Story = {
     await expect(within(nav).getByRole('link', { name: 'Dashboard' })).toHaveAttribute('aria-current', 'page')
     // Wide: the sidebar is the navigation, so no menu button and no top bar.
     await expect(canvas.queryByRole('button', { name: 'Open navigation' })).toBeNull()
-    // The shell's header is the first <header>; PageHeading inside the page is another.
+    // The shell's header is the only <header>, hidden in this layout.
     await expect(canvasElement.querySelector('header')).not.toBeVisible()
     // The logo lines up with the sidebar's icons: two --space-inline in.
     await expect(logoOffset(canvasElement)).toBeCloseTo(0, 0)

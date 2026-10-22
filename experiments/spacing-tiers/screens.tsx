@@ -9,6 +9,7 @@ import { Table, type TableColumn } from '@/components/data-display/Table'
 import { Search } from '@/components/inputs/Search'
 import { Select } from '@/components/inputs/Select'
 import { ProgressBar } from '@/components/loaders/ProgressBar'
+import { Breadcrumbs } from '@/components/navigation/Breadcrumbs'
 import { Menu } from '@/components/navigation/Menu'
 import { Pagination } from '@/components/navigation/Pagination'
 import { NavSidebar as Sidebar, type NavSidebarEntry as SidebarEntry } from '@/components/patterns/application-ui/NavSidebar'
@@ -17,7 +18,6 @@ import { Alert } from '@/components/notifications/Alert'
 import { AppShell } from '@/components/templates/application-ui/AppShell'
 import { TopBar as AppHeader } from '@/components/patterns/application-ui/TopBar'
 import { TableFooter, TableToolbar, TableToolbarGroup } from '@/components/patterns/application-ui/DataTablePage'
-import { PageHeading } from '@/components/patterns/application-ui/PageHeading'
 import { Stats } from '@/components/patterns/application-ui/Stats'
 import { costBreakdown, days, money, money2, pct, previous, products, totals, type Product, type ProductStatus } from './data'
 
@@ -155,19 +155,21 @@ export function Dashboard() {
   return (
     <Shell current="#finance">
       <div className="lyPage" data-spec="Page (sections)">
-        <PageHeading
-          breadcrumbs={[{ label: 'Finance', href: '#finance' }, { label: 'Revenue and cost' }]}
-          title="Revenue and cost"
-          description="Sales against everything it cost to make them, for the last 30 days. Figures are before tax."
-          actions={
-            <>
+        <header className="lyHeading">
+          <Breadcrumbs items={[{ label: 'Finance', href: '#finance' }, { label: 'Revenue and cost' }]} size="sm" />
+          <div className="lyHeadingRow">
+            <div className="lyHeadingText">
+              <h1>Revenue and cost</h1>
+              <p>Sales against everything it cost to make them, for the last 30 days. Figures are before tax.</p>
+            </div>
+            <div className="lyHeadingActions">
               <Select aria-label="Period" defaultValue="30" options={[{ value: '30', label: 'Last 30 days' }, { value: '90', label: 'Last 90 days' }]} />
               <Button variant="secondary" appearance="outlined" startIcon={<Icon name="upload" />}>
                 Export
               </Button>
-            </>
-          }
-        />
+            </div>
+          </div>
+        </header>
         <Stats
           stats={[
             { label: 'Revenue', value: money.format(totals.revenue), previous: `from ${money.format(previous.revenue)}`, change: { value: change(totals.revenue, previous.revenue), direction: 'up' } },
@@ -300,23 +302,23 @@ export function ProductsPage() {
   return (
     <Shell current="#products">
       <div className="lyPage" data-spec="Page (sections)">
-        <PageHeading
-          breadcrumbs={[{ label: 'Store', href: '#store' }, { label: 'Products' }]}
-          title={
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 'var(--space-2)' }}>
-              Products <Badge count={CATALOGUE.All} variant="secondary" />
-            </span>
-          }
-          description="Prices, unit costs and stock for everything the shop sells."
-          actions={
-            <>
+        <header className="lyHeading">
+          <Breadcrumbs items={[{ label: 'Store', href: '#store' }, { label: 'Products' }]} size="sm" />
+          <div className="lyHeadingRow">
+            <div className="lyHeadingText">
+              <h1>
+                Products <Badge count={CATALOGUE.All} variant="secondary" />
+              </h1>
+              <p>Prices, unit costs and stock for everything the shop sells.</p>
+            </div>
+            <div className="lyHeadingActions">
               <Button variant="secondary" appearance="outlined" startIcon={<Icon name="upload" />}>
                 Import CSV
               </Button>
               <Button startIcon={<Icon name="plus" />}>Add product</Button>
-            </>
-          }
-        />
+            </div>
+          </div>
+        </header>
         <dl className="lySummary" data-spec="Summary row" style={{ margin: 0 }}>
           {[
             { label: 'Active products', value: String(CATALOGUE.Active), note: `of ${CATALOGUE.All}` },
