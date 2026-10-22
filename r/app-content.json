@@ -1,0 +1,25 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "app-content",
+  "title": "App Content",
+  "description": "Application UI pattern: AppContent, the page region of an App Shell, flat on one card surface or as blocks on the canvas, following the Theme's contentStyle.",
+  "registryDependencies": [
+    "https://ontheshore.biz/zweihander/r/utils.json",
+    "https://ontheshore.biz/zweihander/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/patterns/application-ui/AppContent.tsx",
+      "content": "import type { ComponentProps } from 'react'\nimport { cn } from '@/lib/utils'\nimport styles from './AppContent.module.css'\n\n/**\n * The page region of an App Shell: the `main` landmark, as one flat card\n * surface or as blocks on the canvas, whichever the Theme's `contentStyle`\n * picks. The shell renders it around its children; it reads the shell's\n * grid and canvas values, so it is not used on its own.\n */\nexport function AppContent({ className, children, ...props }: ComponentProps<'main'>) {\n  return (\n    <div className={styles.content}>\n      <main tabIndex={-1} className={cn(styles.main, className)} {...props}>\n        {children}\n      </main>\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/patterns/application-ui/AppContent.tsx"
+    },
+    {
+      "path": "src/components/patterns/application-ui/AppContent.module.css",
+      "content": "/* The App Content pattern: the page region of an App Shell. It reads the\n   shell's --shell-* values and its container width, so it lives inside one. */\n/* The page. flat: one card surface, inset from the shell's edges and\n   flush below 48rem. card: no surface, the page sits on the canvas and its\n   blocks are Cards with appearance=\"surface\". The surface restates\n   --background, which components read as \"what I sit on\". */\n.content {\n  display: grid;\n  grid-row: 2;\n  grid-column: -2;\n  min-block-size: 0;\n  min-inline-size: 0;\n  padding: var(--content-flat, var(--space-2)) var(--content-card, 0);\n}\n.main {\n  /* stylelint-disable zweihander/no-token-shadow -- content reads the colours of the surface it sits on */\n  --background: var(--content-flat, var(--card)) var(--content-card, var(--shell-canvas-solid));\n  /* On the canvas (card), text reads the canvas colours, as a transparent piece does. */\n  --muted-foreground: var(--content-flat, var(--shell-muted-foreground)) var(--content-card, var(--shell-canvas-muted-foreground));\n  --subtle-foreground: var(--content-flat, var(--shell-subtle-foreground)) var(--content-card, var(--shell-canvas-subtle-foreground));\n  /* stylelint-enable zweihander/no-token-shadow */\n  min-block-size: 0;\n  overflow: auto;\n  padding: var(--space-container);\n  border: 1px solid;\n  border-color: var(--content-flat, var(--border)) var(--content-card, transparent);\n  border-radius: var(--content-flat, var(--radius-panel)) var(--content-card, 0);\n  background: var(--content-flat, var(--card)) var(--content-card, transparent);\n  color: var(--content-flat, var(--card-foreground)) var(--content-card, var(--shell-canvas-foreground));\n  outline: none;\n}\n@container (max-width: 47.99rem) {\n  .content {\n    padding: 0;\n  }\n  .main {\n    border-color: transparent;\n    border-radius: 0;\n  }\n}\n@container (min-width: 64rem) {\n  .main {\n    padding: var(--space-section);\n  }\n}\n\n",
+      "type": "registry:component",
+      "target": "components/zweihander/patterns/application-ui/AppContent.module.css"
+    }
+  ],
+  "type": "registry:block"
+}

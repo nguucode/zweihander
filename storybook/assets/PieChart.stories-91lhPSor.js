@@ -1,0 +1,71 @@
+import{n as e}from"./rolldown-runtime-DkW27tQK.js";import{t}from"./react-Q1GcV6wX.js";import{n,t as r}from"./utils-CUvRSo4U.js";import{t as i}from"./jsx-runtime-DeHZSEgm.js";import{a,c as o,i as s,n as c,o as l,r as u,s as d,t as f}from"./ChartFrame-BuP4UfZL.js";import{n as p,t as m}from"./Table-DSoZnO0H.js";import{n as h,t as g}from"./Skeleton-DaxWbZcD.js";import{a as _,c as v,l as y,n as b,o as x,r as S,t as C}from"./chart-utils-DFuv4Pns.js";import{n as w,t as T}from"./ChartLegend-CaV2h1Wf.js";import{i as E,n as D,t as O}from"./sample-data-BFlXvA0M.js";function ee(e){return e>1?0:e<-1?F:Math.acos(e)}function te(e){return e>=1?re:e<=-1?-re:Math.asin(e)}var k,A,j,M,ne,N,P,F,re,ie;function I(){return(I=e((()=>{k=Math.abs,A=Math.atan2,j=Math.cos,M=Math.max,ne=Math.min,N=Math.sin,P=Math.sqrt,F=Math.PI,re=F/2,ie=2*F})))()}function ae(e){return e.innerRadius}function L(e){return e.outerRadius}function R(e){return e.startAngle}function oe(e){return e.endAngle}function z(e){return e&&e.padAngle}function se(e,t,n,r,i,a,o,s){var c=n-e,l=r-t,u=o-i,d=s-a,f=d*c-u*l;if(!(f*f<1e-12))return f=(u*(t-a)-d*(e-i))/f,[e+f*c,t+f*l]}function ce(e,t,n,r,i,a,o){var s=e-n,c=t-r,l=(o?a:-a)/P(s*s+c*c),u=l*c,d=-l*s,f=e+u,p=t+d,m=n+u,h=r+d,g=(f+m)/2,_=(p+h)/2,v=m-f,y=h-p,b=v*v+y*y,x=i-a,S=f*h-m*p,C=(y<0?-1:1)*P(M(0,x*x*b-S*S)),w=(S*y-v*C)/b,T=(-S*v-y*C)/b,E=(S*y+v*C)/b,D=(-S*v+y*C)/b,O=w-g,ee=T-_,te=E-g,k=D-_;return O*O+ee*ee>te*te+k*k&&(w=E,T=D),{cx:w,cy:T,x01:-u,y01:-d,x11:w*(i/x-1),y11:T*(i/x-1)}}function B(){var e=ae,t=L,n=o(0),r=null,i=R,a=oe,s=z,c=null,l=d(u);function u(){var o,u,d=+e.apply(this,arguments),f=+t.apply(this,arguments),p=i.apply(this,arguments)-re,m=a.apply(this,arguments)-re,h=k(m-p),g=m>p;if(c||=o=l(),f<d&&(u=f,f=d,d=u),!(f>1e-12))c.moveTo(0,0);else if(h>ie-1e-12)c.moveTo(f*j(p),f*N(p)),c.arc(0,0,f,p,m,!g),d>1e-12&&(c.moveTo(d*j(m),d*N(m)),c.arc(0,0,d,m,p,g));else{var _=p,v=m,y=p,b=m,x=h,S=h,C=s.apply(this,arguments)/2,w=C>1e-12&&(r?+r.apply(this,arguments):P(d*d+f*f)),T=ne(k(f-d)/2,+n.apply(this,arguments)),E=T,D=T,O,M;if(w>1e-12){var I=te(w/d*N(C)),ae=te(w/f*N(C));(x-=I*2)>1e-12?(I*=g?1:-1,y+=I,b-=I):(x=0,y=b=(p+m)/2),(S-=ae*2)>1e-12?(ae*=g?1:-1,_+=ae,v-=ae):(S=0,_=v=(p+m)/2)}var L=f*j(_),R=f*N(_),oe=d*j(b),z=d*N(b);if(T>1e-12){var B=f*j(v),V=f*N(v),le=d*j(y),ue=d*N(y),H;if(h<F){if(H=se(L,R,le,ue,B,V,oe,z)){var U=L-H[0],W=R-H[1],G=B-H[0],K=V-H[1],de=1/N(ee((U*G+W*K)/(P(U*U+W*W)*P(G*G+K*K)))/2),fe=P(H[0]*H[0]+H[1]*H[1]);E=ne(T,(d-fe)/(de-1)),D=ne(T,(f-fe)/(de+1))}else E=D=0}}S>1e-12?D>1e-12?(O=ce(le,ue,L,R,f,D,g),M=ce(B,V,oe,z,f,D,g),c.moveTo(O.cx+O.x01,O.cy+O.y01),D<T?c.arc(O.cx,O.cy,D,A(O.y01,O.x01),A(M.y01,M.x01),!g):(c.arc(O.cx,O.cy,D,A(O.y01,O.x01),A(O.y11,O.x11),!g),c.arc(0,0,f,A(O.cy+O.y11,O.cx+O.x11),A(M.cy+M.y11,M.cx+M.x11),!g),c.arc(M.cx,M.cy,D,A(M.y11,M.x11),A(M.y01,M.x01),!g))):(c.moveTo(L,R),c.arc(0,0,f,_,v,!g)):c.moveTo(L,R),!(d>1e-12)||!(x>1e-12)?c.lineTo(oe,z):E>1e-12?(O=ce(oe,z,B,V,d,-E,g),M=ce(L,R,le,ue,d,-E,g),c.lineTo(O.cx+O.x01,O.cy+O.y01),E<T?c.arc(O.cx,O.cy,E,A(O.y01,O.x01),A(M.y01,M.x01),!g):(c.arc(O.cx,O.cy,E,A(O.y01,O.x01),A(O.y11,O.x11),!g),c.arc(0,0,d,A(O.cy+O.y11,O.cx+O.x11),A(M.cy+M.y11,M.cx+M.x11),g),c.arc(M.cx,M.cy,E,A(M.y11,M.x11),A(M.y01,M.x01),!g))):c.arc(0,0,d,b,y,g)}if(c.closePath(),o)return c=null,o+``||null}return u.centroid=function(){var n=(+e.apply(this,arguments)+ +t.apply(this,arguments))/2,r=(+i.apply(this,arguments)+ +a.apply(this,arguments))/2-F/2;return[j(r)*n,N(r)*n]},u.innerRadius=function(t){return arguments.length?(e=typeof t==`function`?t:o(+t),u):e},u.outerRadius=function(e){return arguments.length?(t=typeof e==`function`?e:o(+e),u):t},u.cornerRadius=function(e){return arguments.length?(n=typeof e==`function`?e:o(+e),u):n},u.padRadius=function(e){return arguments.length?(r=e==null?null:typeof e==`function`?e:o(+e),u):r},u.startAngle=function(e){return arguments.length?(i=typeof e==`function`?e:o(+e),u):i},u.endAngle=function(e){return arguments.length?(a=typeof e==`function`?e:o(+e),u):a},u.padAngle=function(e){return arguments.length?(s=typeof e==`function`?e:o(+e),u):s},u.context=function(e){return arguments.length?(c=e??null,u):c},u}function V(){return(V=e((()=>{I(),l()})))()}function le(e,t){return t<e?-1:t>e?1:t>=e?0:NaN}function ue(e){return e}function H(){var e=ue,t=le,n=null,r=o(0),i=o(ie),a=o(0);function c(o){var c,l=(o=s(o)).length,u,d,f=0,p=Array(l),m=Array(l),h=+r.apply(this,arguments),g=Math.min(ie,Math.max(-ie,i.apply(this,arguments)-h)),_,v=Math.min(Math.abs(g)/l,a.apply(this,arguments)),y=v*(g<0?-1:1),b;for(c=0;c<l;++c)(b=m[p[c]=c]=+e(o[c],c,o))>0&&(f+=b);for(t==null?n!=null&&p.sort(function(e,t){return n(o[e],o[t])}):p.sort(function(e,n){return t(m[e],m[n])}),c=0,d=f?(g-l*y)/f:0;c<l;++c,h=_)u=p[c],b=m[u],_=h+(b>0?b*d:0)+y,m[u]={data:o[u],index:c,value:b,startAngle:h,endAngle:_,padAngle:v};return m}return c.value=function(t){return arguments.length?(e=typeof t==`function`?t:o(+t),c):e},c.sortValues=function(e){return arguments.length?(t=e,n=null,c):t},c.sort=function(e){return arguments.length?(n=e,t=null,c):n},c.startAngle=function(e){return arguments.length?(r=typeof e==`function`?e:o(+e),c):r},c.endAngle=function(e){return arguments.length?(i=typeof e==`function`?e:o(+e),c):i},c.padAngle=function(e){return arguments.length?(a=typeof e==`function`?e:o(+e),c):a},c}function U(){return(U=e((()=>{a(),I()})))()}function W({title:e,data:t,appearance:n=`pie`,centerLabel:i=`Total`,size:a=200,format:o=b,isLoading:s=!1,className:c}){let l=(0,G.useId)(),[d,p]=(0,G.useState)(null),h=t.reduce((e,t)=>e+t.value,0),y=h>0,x=u(!s&&y),w=e=>S(e/h),E=_(t),D=n===`donut`,O=a/2-2,ee=H().sort(null).value(e=>e.value)(E),te=B().innerRadius(D?O*.64:0).outerRadius(O).padAngle(D?.015:0).cornerRadius(D?2:0);return(0,K.jsx)(f,{title:e,isLoading:s,loading:(0,K.jsx)(g,{appearance:`circle`,width:a,height:a}),hasData:y,emptyHeight:a,className:c,table:()=>(0,K.jsx)(m,{caption:e,density:`sm`,rows:t,getRowId:(e,t)=>String(t),columns:[{key:`label`,header:`Label`,isRowHeader:!0},{key:`value`,header:`Value`,align:`end`,cell:e=>o(e.value)},{key:`share`,header:`Share`,align:`end`,cell:e=>w(e.value)}]}),children:e=>(0,K.jsxs)(`div`,{className:v.pieBody,children:[(0,K.jsxs)(`svg`,{role:`img`,"aria-labelledby":`${e} ${l}-desc`,className:r(x&&v.entering),width:a,height:a,viewBox:`${-a/2} ${-a/2} ${a} ${a}`,children:[(0,K.jsx)(`mask`,{id:`${l}-sweep`,children:(0,K.jsx)(`circle`,{className:v.sweep,r:O/2,fill:`none`,stroke:`white`,strokeWidth:O+4,pathLength:1,transform:`rotate(-90)`})}),(0,K.jsx)(`g`,{mask:x?`url(#${l}-sweep)`:void 0,children:ee.map((e,t)=>(0,K.jsx)(`path`,{className:r(v.slice,d&&d!==String(t)&&v.dim),d:te(e)??``,fill:C(e.data.color),onPointerEnter:()=>p(String(t)),onPointerLeave:()=>p(null)},t))}),D&&(0,K.jsxs)(K.Fragment,{children:[(0,K.jsx)(`text`,{className:v.centerTotal,textAnchor:`middle`,dy:`-0.05em`,children:o(h)}),(0,K.jsx)(`text`,{className:v.centerLabel,textAnchor:`middle`,dy:`1.5em`,children:i})]})]}),(0,K.jsx)(`span`,{id:`${l}-desc`,className:v.srOnly,children:E.map(e=>`${e.label} ${w(e.value)}`).join(`, `)}),(0,K.jsx)(T,{orientation:`vertical`,items:E.map((e,t)=>({key:String(t),label:e.label,color:C(e.color),value:`${o(e.value)} · ${w(e.value)}`})),onFocusChange:p})]})})}var G,K;function de(){return(de=e((()=>{G=t(),V(),U(),n(),p(),h(),c(),w(),x(),y(),K=i(),W.__docgenInfo={description:`Parts of one whole. No labels on the slices: the legend beside it carries
+value and share. Past six slices, or under 3%, slices merge into "Other".`,methods:[],displayName:`PieChart`,props:{title:{required:!0,tsType:{name:`string`},description:`Shown above the chart, and its accessible name.`},data:{required:!0,tsType:{name:`Array`,elements:[{name:`Slice`}],raw:`Slice[]`},description:``},appearance:{required:!1,tsType:{name:`union`,raw:`'pie' | 'donut'`,elements:[{name:`literal`,value:`'pie'`},{name:`literal`,value:`'donut'`}]},description:"`donut` leaves a hole with the total in it.",defaultValue:{value:`'pie'`,computed:!1}},centerLabel:{required:!1,tsType:{name:`string`},description:`Under the total in a donut, e.g. "requests".`,defaultValue:{value:`'Total'`,computed:!1}},size:{required:!1,tsType:{name:`number`},description:`Diameter in pixels.`,defaultValue:{value:`200`,computed:!1}},format:{required:!1,tsType:{name:`signature`,type:`function`,raw:`(value: number) => string`,signature:{arguments:[{type:{name:`number`},name:`value`}],return:{name:`string`}}},description:``,defaultValue:{value:`(value: number) => compact.format(value)`,computed:!1}},isLoading:{required:!1,tsType:{name:`boolean`},description:``,defaultValue:{value:`false`,computed:!1}},className:{required:!1,tsType:{name:`string`},description:``}}}})))()}var fe,q,pe,me,J,he,Y,X,Z,Q,$,ge;function _e(){return(_e=e((()=>{de(),x(),E(),fe=i(),{expect:q,userEvent:pe,waitFor:me,within:J}=__STORYBOOK_MODULE_TEST__,he={title:`Charts/PieChart`,tags:[`experimental`],component:W,parameters:{layout:`padded`},decorators:[e=>(0,fe.jsx)(`div`,{style:{maxInlineSize:560},children:e()})],args:{title:`Requests by country`,data:D},argTypes:{data:{control:!1,description:"Slices: `label`, `value`, optional `color` token name."},title:{description:`Shown above the chart, and its accessible name.`},appearance:{control:`inline-radio`,options:[`pie`,`donut`],description:"`donut` leaves a hole with the total in it."},centerLabel:{description:`Under the total in a donut.`},size:{description:`Diameter in pixels.`},isLoading:{description:`Shows a round skeleton.`},format:{control:!1,description:`Formats values in the legend, centre and table. Defaults to compact numbers.`}}},Y={play:async({canvas:e,canvasElement:t})=>{let n=e.getByRole(`list`,{name:`Legend`}),r=J(n).getAllByRole(`listitem`);await q(r).toHaveLength(5);let i=D.reduce((e,t)=>e+t.value,0);await q(r[4]).toHaveTextContent(`Other (3)50 · ${S(50/i)}`),await q(e.getByRole(`img`,{name:RegExp(`United States ${S(1850/i)}`)})).toBeVisible(),await pe.hover(r[1]),await me(()=>q(t.querySelectorAll(`path[class*="dim"]`)).toHaveLength(4))}},X={args:{title:`Requests by content type`,data:O,appearance:`donut`,centerLabel:`requests`},play:async({canvas:e})=>{let t=e.getByRole(`img`);await q(J(t).getByText(b(3150))).toBeInTheDocument(),await q(J(t).getByText(`requests`)).toBeInTheDocument()}},Z={play:async({canvas:e})=>{await pe.click(e.getByRole(`button`,{name:`View as table`}));let t=e.getByRole(`table`,{name:`Requests by country`});await q(J(t).getAllByRole(`row`)).toHaveLength(D.length+1),await q(J(t).getByText(`Japan`)).toBeVisible()}},Q={args:{data:D.map(e=>({...e,value:0}))},play:async({canvas:e})=>{await q(e.getByText(`No data`)).toBeVisible(),await q(e.queryByRole(`img`)).toBeNull()}},$={args:{data:[]},play:async({canvas:e})=>{await q(e.getByText(`No data`)).toBeVisible()}},ge=[`Default`,`Donut`,`TableView`,`AllZero`,`Empty`],Y.parameters={...Y.parameters,docs:{...Y.parameters?.docs,source:{originalSource:`{
+  play: async ({
+    canvas,
+    canvasElement
+  }) => {
+    const legend = canvas.getByRole('list', {
+      name: 'Legend'
+    });
+    const items = within(legend).getAllByRole('listitem');
+    await expect(items).toHaveLength(5);
+    const total = countries.reduce((s, c) => s + c.value, 0);
+    await expect(items[4]).toHaveTextContent(\`Other (3)50 · \${formatShare(50 / total)}\`);
+    // Each slice's share is in the image's description, not only in colour.
+    await expect(canvas.getByRole('img', {
+      name: new RegExp(\`United States \${formatShare(1850 / total)}\`)
+    })).toBeVisible();
+    // Hovering a legend item fades the other slices.
+    await userEvent.hover(items[1]);
+    await waitFor(() => expect(canvasElement.querySelectorAll('path[class*="dim"]')).toHaveLength(4));
+  }
+}`,...Y.parameters?.docs?.source},description:{story:`Seven countries: the three under 3% merge into "Other".`,...Y.parameters?.docs?.description}}},X.parameters={...X.parameters,docs:{...X.parameters?.docs,source:{originalSource:`{
+  args: {
+    title: 'Requests by content type',
+    data: contentTypes,
+    appearance: 'donut',
+    centerLabel: 'requests'
+  },
+  play: async ({
+    canvas
+  }) => {
+    const img = canvas.getByRole('img');
+    await expect(within(img as unknown as HTMLElement).getByText(formatCompact(3150))).toBeInTheDocument();
+    await expect(within(img as unknown as HTMLElement).getByText('requests')).toBeInTheDocument();
+  }
+}`,...X.parameters?.docs?.source},description:{story:`A hole with the total in it.`,...X.parameters?.docs?.description}}},Z.parameters={...Z.parameters,docs:{...Z.parameters?.docs,source:{originalSource:`{
+  play: async ({
+    canvas
+  }) => {
+    await userEvent.click(canvas.getByRole('button', {
+      name: 'View as table'
+    }));
+    const table = canvas.getByRole('table', {
+      name: 'Requests by country'
+    });
+    await expect(within(table).getAllByRole('row')).toHaveLength(countries.length + 1);
+    await expect(within(table).getByText('Japan')).toBeVisible();
+  }
+}`,...Z.parameters?.docs?.source},description:{story:`The table lists every slice, the merged ones too.`,...Z.parameters?.docs?.description}}},Q.parameters={...Q.parameters,docs:{...Q.parameters?.docs,source:{originalSource:`{
+  args: {
+    data: countries.map(c => ({
+      ...c,
+      value: 0
+    }))
+  },
+  play: async ({
+    canvas
+  }) => {
+    await expect(canvas.getByText('No data')).toBeVisible();
+    await expect(canvas.queryByRole('img')).toBeNull();
+  }
+}`,...Q.parameters?.docs?.source},description:{story:`Every slice is zero: there is nothing to divide, so it reads as no data.`,...Q.parameters?.docs?.description}}},$.parameters={...$.parameters,docs:{...$.parameters?.docs,source:{originalSource:`{
+  args: {
+    data: []
+  },
+  play: async ({
+    canvas
+  }) => {
+    await expect(canvas.getByText('No data')).toBeVisible();
+  }
+}`,...$.parameters?.docs?.source},description:{story:`No slices.`,...$.parameters?.docs?.description}}}})))()}_e();export{Q as AllZero,Y as Default,X as Donut,$ as Empty,Z as TableView,ge as __namedExportsOrder,he as default};

@@ -1,0 +1,44 @@
+import{n as e}from"./rolldown-runtime-DkW27tQK.js";import{t}from"./jsx-runtime-DeHZSEgm.js";import{i as n,r}from"./react-BXJ34t_g.js";import{c as i,l as a,n as o,r as s,u as c}from"./blocks-5QHvYkjw.js";import{a as l,c as u,d,i as f,l as p,n as m,o as h,r as g,s as _,t as v,u as y}from"./States-DOZWi2yR.js";import{n as b,t as x}from"./Status-CsQCr1NL.js";import{a as S,c as C,d as w,f as T,i as E,l as D,n as O,o as k,p as A,r as j,s as M,t as N,u as P}from"./Divider.stories-d2KLCJQC.js";function F(e){let t={a:`a`,code:`code`,h1:`h1`,h2:`h2`,h3:`h3`,li:`li`,p:`p`,pre:`pre`,strong:`strong`,table:`table`,tbody:`tbody`,td:`td`,th:`th`,thead:`thead`,tr:`tr`,ul:`ul`,...n(),...e.components};return(0,L.jsxs)(L.Fragment,{children:[(0,L.jsx)(i,{of:E}),`
+`,(0,L.jsx)(t.h1,{id:`divider`,children:`Divider`}),`
+`,(0,L.jsxs)(u,{children:[(0,L.jsxs)(_,{value:`overview`,children:[(0,L.jsx)(t.p,{children:`A thin line that separates content into groups: sections of a card, items
+in a toolbar, blocks of a page.`}),(0,L.jsx)(x,{of:E}),(0,L.jsx)(s,{of:j}),(0,L.jsx)(t.h2,{id:`variants`,children:`Variants`}),(0,L.jsxs)(t.table,{children:[(0,L.jsx)(t.thead,{children:(0,L.jsxs)(t.tr,{children:[(0,L.jsx)(t.th,{children:`Appearance`}),(0,L.jsx)(t.th,{children:`Use for`})]})}),(0,L.jsxs)(t.tbody,{children:[(0,L.jsxs)(t.tr,{children:[(0,L.jsx)(t.td,{children:(0,L.jsx)(t.code,{children:`solid`})}),(0,L.jsx)(t.td,{children:`Almost everywhere: the quiet default.`})]}),(0,L.jsxs)(t.tr,{children:[(0,L.jsx)(t.td,{children:(0,L.jsx)(t.code,{children:`dashed`})}),(0,L.jsx)(t.td,{children:`A boundary that is softer or provisional: a drop zone, a "more below" break, a draft section.`})]})]})]}),(0,L.jsx)(s,{of:O}),(0,L.jsxs)(t.p,{children:[`A `,(0,L.jsx)(t.strong,{children:`vertical`}),` divider separates items in a row: toolbar groups, links in
+a footer. It has no fixed height and stretches to its flex row.`]}),(0,L.jsx)(s,{of:D}),(0,L.jsxs)(t.p,{children:[(0,L.jsx)(t.strong,{children:`Inset`}),` stops the line short of the container's edges, so it aligns with
+the text in a padded list rather than running edge to edge.`]}),(0,L.jsx)(s,{of:M}),(0,L.jsx)(s,{of:C}),(0,L.jsx)(t.h2,{id:`resources`,children:`Resources`}),(0,L.jsx)(t.p,{children:`From npm, or copied into your project through the registry:`}),(0,L.jsx)(t.pre,{children:(0,L.jsx)(t.code,{className:`language-js`,children:`import { Divider } from 'zweihander/divider'
+`})}),(0,L.jsx)(t.pre,{children:(0,L.jsx)(t.code,{className:`language-sh`,children:`npx shadcn@latest add https://ontheshore.biz/zweihander/r/divider.json
+`})}),(0,L.jsxs)(t.ul,{children:[`
+`,(0,L.jsxs)(t.li,{children:[`Source: `,(0,L.jsx)(t.a,{href:`https://github.com/nguucode/zweihander/blob/main/src/components/atomic-elements/Divider.tsx`,rel:`nofollow`,children:`src/components/atomic-elements/Divider.tsx`})]}),`
+`,(0,L.jsxs)(t.li,{children:[`Spec: `,(0,L.jsx)(t.a,{href:`https://www.uiguideline.com/components/divider`,rel:`nofollow`,children:`uiguideline.com/components/divider`})]}),`
+`,(0,L.jsx)(t.li,{children:`Figma: not in the library yet`}),`
+`]})]}),(0,L.jsxs)(_,{value:`specs`,children:[(0,L.jsx)(t.h2,{id:`anatomy`,children:`Anatomy`}),(0,L.jsx)(y,{parts:P,children:(0,L.jsx)(a,{of:N})}),(0,L.jsx)(t.p,{children:`One part. The line is a border, top for horizontal and start for
+vertical, and the box shrinks to it: a vertical divider is exactly as
+wide as its line.`}),(0,L.jsx)(t.h2,{id:`measurements`,children:`Measurements`}),(0,L.jsxs)(t.p,{children:[`Thickness is whole pixels, not a token: the token layer has no
+border-width scale, and a rule should stay a crisp pixel at every
+`,(0,L.jsx)(t.code,{children:`--scaling`}),`.`]}),(0,L.jsxs)(t.table,{children:[(0,L.jsx)(t.thead,{children:(0,L.jsxs)(t.tr,{children:[(0,L.jsx)(t.th,{children:`Size`}),(0,L.jsx)(t.th,{children:`Thickness`})]})}),(0,L.jsxs)(t.tbody,{children:[(0,L.jsxs)(t.tr,{children:[(0,L.jsx)(t.td,{children:(0,L.jsx)(t.code,{children:`sm`})}),(0,L.jsx)(t.td,{children:`1px`})]}),(0,L.jsxs)(t.tr,{children:[(0,L.jsx)(t.td,{children:(0,L.jsx)(t.code,{children:`md`})}),(0,L.jsx)(t.td,{children:`2px`})]}),(0,L.jsxs)(t.tr,{children:[(0,L.jsx)(t.td,{children:(0,L.jsx)(t.code,{children:`lg`})}),(0,L.jsx)(t.td,{children:`4px`})]})]})]}),(0,L.jsx)(g,{caption:`inset, every size`,rows:[{part:`Horizontal line`,property:`Inline margin`,token:`--space-4`},{part:`Vertical line`,property:`Block margin`,token:`--space-2`}]}),(0,L.jsx)(t.h2,{id:`color`,children:`Color`}),(0,L.jsx)(t.p,{children:`Every size and appearance uses the same colour.`}),(0,L.jsx)(g,{caption:`Every appearance`,rows:[{part:`Line`,property:`Colour`,token:`--border`}]}),(0,L.jsx)(t.h2,{id:`states`,children:`States`}),(0,L.jsx)(t.p,{children:`A divider is not interactive: no hover, focus or pressed. It looks the same
+whether it is announced or decorative; only a screen reader tells them
+apart.`}),(0,L.jsx)(v,{states:[{label:`Solid`,content:(0,L.jsx)(R,{children:(0,L.jsx)(T,{})})},{label:`Dashed`,content:(0,L.jsx)(R,{children:(0,L.jsx)(T,{appearance:`dashed`,size:`md`})})},{label:`Inset`,content:(0,L.jsx)(R,{children:(0,L.jsx)(T,{inset:!0})})},{label:`Decorative`,content:(0,L.jsx)(R,{children:(0,L.jsx)(T,{"aria-hidden":!0})})}]}),(0,L.jsx)(t.h2,{id:`api`,children:`API`}),(0,L.jsx)(`div`,{style:{overflowX:`auto`},children:(0,L.jsx)(o,{of:E})}),(0,L.jsxs)(t.p,{children:[`Every other `,(0,L.jsx)(t.code,{children:`<hr>`}),` attribute passes through, including `,(0,L.jsx)(t.code,{children:`ref`}),` and
+`,(0,L.jsx)(t.code,{children:`aria-hidden`}),`.`]}),(0,L.jsx)(t.h3,{id:`differences-from-the-spec`,children:`Differences from the spec`}),(0,L.jsxs)(t.ul,{children:[`
+`,(0,L.jsxs)(t.li,{children:[(0,L.jsxs)(t.strong,{children:[(0,L.jsx)(t.code,{children:`appearance`}),`, not `,(0,L.jsx)(t.code,{children:`variant`}),`.`]}),` In this kit `,(0,L.jsx)(t.code,{children:`variant`}),` always means a
+colour by intent (primary, destructive…) and `,(0,L.jsx)(t.code,{children:`appearance`}),` means a style.
+Solid versus dashed is a style.`]}),`
+`,(0,L.jsxs)(t.li,{children:[(0,L.jsx)(t.strong,{children:`Thickness is raw px.`}),` The token layer has no border-width scale, and
+a divider is the only component that needs three.`]}),`
+`]})]}),(0,L.jsxs)(_,{value:`guidelines`,children:[(0,L.jsx)(t.h2,{id:`when-to-use`,children:`When to use`}),(0,L.jsx)(t.p,{children:`Use a Divider between groups that spacing alone does not separate: the
+sections of a menu, the blocks of a settings page, groups in a toolbar.
+Divide groups, not every item: a line after each row turns a list into
+stripes and makes the real breaks harder to see.`}),(0,L.jsx)(l,{do:(0,L.jsx)(a,{of:S}),doCaption:`One line between two groups: the break carries meaning.`,dont:(0,L.jsx)(a,{of:k}),dontCaption:`A line after every item: nothing stands out as a group.`}),(0,L.jsx)(t.h2,{id:`when-not-to-use`,children:`When not to use`}),(0,L.jsxs)(t.ul,{children:[`
+`,(0,L.jsxs)(t.li,{children:[(0,L.jsx)(t.strong,{children:`Where space already separates.`}),` Cards, list items with padding and
+headed sections are grouped by their own whitespace; a line adds noise.`]}),`
+`,(0,L.jsxs)(t.li,{children:[(0,L.jsx)(t.strong,{children:`As the only thing that tells groups apart.`}),` The line is faint on
+purpose (see Accessibility). Pair it with a heading or space.`]}),`
+`,(0,L.jsxs)(t.li,{children:[(0,L.jsx)(t.strong,{children:`For a border of a component.`}),` Draw that with the component's own
+border, not a Divider beside it.`]}),`
+`]}),(0,L.jsx)(t.h2,{id:`accessibility`,children:`Accessibility`}),(0,L.jsxs)(t.ul,{children:[`
+`,(0,L.jsxs)(t.li,{children:[(0,L.jsx)(t.code,{children:`<hr>`}),` is announced as a separator. Vertical dividers add
+`,(0,L.jsx)(t.code,{children:`aria-orientation="vertical"`}),`; horizontal ones don't, because that is
+already the default.`]}),`
+`,(0,L.jsxs)(t.li,{children:[`If the line is purely decorative, e.g. between two icons that are
+already grouped, pass `,(0,L.jsx)(t.code,{children:`aria-hidden`}),` so it isn't announced at all.`]}),`
+`,(0,L.jsxs)(t.li,{children:[`The `,(0,L.jsx)(t.code,{children:`--border`}),` colour is below 3:1 against the background on purpose: a
+divider is decoration and is not required to meet the non-text contrast
+ratio. Never let a divider be the only thing that tells groups apart.`]}),`
+`]})]})]})]})}function I(e={}){let{wrapper:t}={...n(),...e.components};return t?(0,L.jsx)(t,{...e,children:(0,L.jsx)(F,{...e})}):F(e)}var L,R;function z(){return(z=e((()=>{L=t(),r(),c(),d(),p(),h(),f(),m(),b(),A(),w(),R=({children:e})=>(0,L.jsxs)(`div`,{style:{display:`grid`,gap:`var(--space-3)`,inlineSize:`8rem`},children:[(0,L.jsx)(`span`,{children:`Above`}),e,(0,L.jsx)(`span`,{children:`Below`})]})})))()}z();export{R as Stack,I as default};
