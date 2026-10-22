@@ -8,7 +8,7 @@ import { Button } from '@/components/buttons/Button'
 import { Card } from '@/components/data-display/Card'
 import { Search } from '@/components/inputs/Search'
 import { Menu } from '@/components/navigation/Menu'
-import { NavSidebar, type NavSidebarEntry } from '@/components/patterns/application-ui/NavSidebar'
+import { NavSidebar, NavSidebarButton, type NavSidebarEntry } from '@/components/patterns/application-ui/NavSidebar'
 import { TopBar, TopBarNav } from '@/components/patterns/application-ui/TopBar'
 import { AppShell, type AppShellLayout, type AppShellSurface } from './AppShell'
 import { PageHeading } from '@/components/patterns/application-ui/PageHeading'
@@ -35,25 +35,40 @@ const brand = (
   </strong>
 )
 
-const account = (
-  <Menu
-    align="start"
-    trigger={
-      <Button variant="secondary" appearance="ghost" startIcon={<Avatar initials="AS" size="sm" />}>
-        Ana Silva
-      </Button>
-    }
-    items={[{ label: 'Your profile' }, { label: 'Settings' }, { type: 'separator' }, { label: 'Sign out' }]}
-  />
+const sidebarFooter = (
+  <>
+    <NavSidebarButton icon={<Icon name="notifications" />} label="Notifications" badge={3} />
+    <NavSidebarButton icon={<Icon name="help" />} label="Help and support" />
+    <Menu
+      side="right"
+      align="end"
+      trigger={<NavSidebarButton icon={<Avatar initials="AS" size="xs" variant="solid" />} label="Ana Silva" />}
+      items={[{ label: 'Your profile' }, { label: 'Settings' }, { type: 'separator' }, { label: 'Sign out' }]}
+    />
+  </>
 )
 
-/** In the sidebar layout there is no top bar, so search sits in the sidebar's header and the account in its footer. */
-const sidebar = (collapsible = false, withTopBarItems = true) => (
+// On a canvas of the brand's own hue a solid brand avatar vanishes, so the
+// deep canvas takes the subtle one.
+const sidebarHeader = (onDeepCanvas = false) => (
+  <>
+    <NavSidebarButton
+      appearance="switcher"
+      icon={<Avatar initials="AC" size="xs" variant={onDeepCanvas ? 'subtle' : 'solid'} color="blue" />}
+      label="Acme Corp"
+      end={<Icon name="chevrons-up-down" />}
+    />
+    <NavSidebarButton appearance="field" icon={<Icon name="search" />} label="Search" end="⌘K" />
+  </>
+)
+
+/** In the sidebar layout there is no top bar, so the tenant and search sit in the sidebar's header; notifications, help and the account in its footer. */
+const sidebar = (collapsible = false, withTopBarItems = true, onDeepCanvas = false) => (
   <NavSidebar
     items={entries}
     currentHref="#dashboard"
-    header={withTopBarItems && !collapsible ? <Search aria-label="Search" placeholder="Search" /> : undefined}
-    footer={withTopBarItems && !collapsible ? account : undefined}
+    header={withTopBarItems ? sidebarHeader(onDeepCanvas) : undefined}
+    footer={withTopBarItems ? sidebarFooter : undefined}
     isCollapsible={collapsible}
     defaultCollapsed={collapsible}
     style={{ blockSize: '100%' }}
@@ -413,6 +428,9 @@ export const Mobile: Story = {
     await userEvent.click(menu)
     const drawer = await within(document.body).findByRole('dialog', { name: 'Navigation' })
     await expect(menu).toHaveAttribute('aria-expanded', 'true')
+    // The sidebar fills the drawer's width, not its own 16rem.
+    const nav = within(drawer).getByRole('navigation', { name: 'Main' })
+    await waitFor(() => expect(nav.getBoundingClientRect().width).toBeCloseTo(drawer.getBoundingClientRect().width, 0))
     await userEvent.click(within(drawer).getByRole('link', { name: 'Team' }))
     await waitFor(() => expect(within(document.body).queryByRole('dialog')).toBeNull())
     // Focus is back on the button that opened it.
@@ -451,5 +469,74 @@ export const WithoutNavigation: Story = {
     // A menu button here would open nothing.
     await expect(canvas.queryByRole('button', { name: 'Open navigation' })).toBeNull()
     await expect(canvas.getByRole('main')).toBeVisible()
+  },
+}
+
+/**
+ * A consumer's own deep canvas: a blue-to-sky gradient (kit steps blue and
+ * sky accent-solid-light, deep enough for white text), with the Theme tokens
+ * that set the sidebar's text and fills on it.
+ */
+const deepCanvas = {
+  canvas: 'linear-gradient(to top, oklch(50.0% 0.134 242.749), oklch(54.6% 0.245 262.881))',
+  'canvas-solid': 'oklch(54.6% 0.245 262.881)',
+  'canvas-foreground': 'oklch(100% 0 0)',
+  'canvas-muted-foreground': 'oklch(100% 0 0 / 92%)',
+  // Dark veils deepen the tint under white text instead of washing it out.
+  'canvas-hover': 'oklch(0% 0 0 / 12%)',
+  'canvas-selected': 'oklch(0% 0 0 / 24%)',
+  'canvas-field': 'oklch(0% 0 0 / 16%)',
+  'canvas-field-border': 'oklch(100% 0 0 / 22%)',
+  // White with red text stands out on any canvas hue, a red one included.
+  'canvas-badge': 'oklch(100% 0 0)',
+  'canvas-badge-foreground': 'oklch(57.7% 0.245 27.325)',
+}
+
+/**
+ * The NavSidebar on each surface: gray (transparent on the neutral canvas),
+ * white (solid: the current item takes the brand tint; card content, as a
+ * solid full-height sidebar wants) and transparent on a deep canvas of the
+ * consumer's own.
+ */
+export const SidebarSurfaces: Story = {
+  args: { brand, sidebar: sidebar(), children: blocks },
+  render: (args) => (
+    <div style={{ display: 'grid', gap: 'var(--space-6)' }}>
+      {(
+        [
+          ['Gray', 'transparent', undefined],
+          ['White', 'solid', undefined],
+          ['Transparent', 'transparent', deepCanvas],
+        ] as const
+      ).map(([name, surface, tokens]) => (
+        <figure key={name} style={{ margin: 0, display: 'grid', gap: 'var(--space-2)' }}>
+          <figcaption style={{ color: 'var(--muted-foreground)', fontSize: 'var(--text-body-sm)' }}>{name}</figcaption>
+          {/* Only the first is live; the others are pictures, as in Combinations, so the page has one main and one Main nav. */}
+          <div
+            data-surface-demo={name}
+            style={{ inlineSize: 1100, blockSize: 560, border: '1px solid var(--border)' }}
+            aria-hidden={name === 'Gray' ? undefined : true}
+            inert={name !== 'Gray'}
+          >
+            {/* A solid full-height sidebar does not go with flat content (see Combinations), so White takes card. */}
+            <Theme tokens={tokens} contentStyle={surface === 'solid' ? 'card' : undefined} style={{ blockSize: '100%' }}>
+              <AppShell {...args} sidebarSurface={surface} sidebar={tokens ? sidebar(false, true, true) : args.sidebar} />
+            </Theme>
+          </div>
+        </figure>
+      ))}
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const part = (name: string, selector: string) =>
+      canvasElement.querySelector(`[data-surface-demo="${name}"] nav[aria-label="Main"] ${selector}`)!
+    const style = (name: string, selector: string) => getComputedStyle(part(name, selector))
+    // White marks the current item with the brand tint, not the gray fill.
+    await expect(style('White', 'a[aria-current="page"]').backgroundColor).not.toBe(
+      style('Gray', 'a[aria-current="page"]').backgroundColor,
+    )
+    // On the deep canvas the text is the canvas's white and the badge is white.
+    await expect(style('Transparent', 'a[aria-current="page"]').color).toBe('oklch(1 0 0)')
+    await expect(style('Transparent', '[class*="badge"]').backgroundColor).toBe('oklch(1 0 0)')
   },
 }

@@ -7,9 +7,10 @@ import { Button } from '../../buttons/Button'
 import styles from './TopBar.module.css'
 
 /**
- * What the Top Bar needs from the App Shell around it: the drawer (whether
- * there is one, what it holds, how to open it), the brand, and whether the
- * brand takes a sidebar-wide cell. Outside a shell, none of it applies.
+ * What the Top Bar and Nav Sidebar need from the App Shell around them: the
+ * drawer (whether there is one, what it holds, how to open it), the brand and
+ * where it goes, and whether it takes a sidebar-wide cell. Outside a shell,
+ * none of it applies.
  */
 export const ShellContext = createContext<{
   hasDrawer: boolean
@@ -19,6 +20,8 @@ export const ShellContext = createContext<{
   label: string
   brand: ReactNode
   brandCell: boolean
+  /** The logo for a NavSidebar's top row: the sidebar layout, while the sidebar is beside the page. */
+  sidebarBrand: ReactNode
 }>({
   hasDrawer: false,
   drawerHolds: 'sidebar',
@@ -27,6 +30,7 @@ export const ShellContext = createContext<{
   label: 'Navigation',
   brand: null,
   brandCell: false,
+  sidebarBrand: null,
 })
 
 /** `null`, `false` and `undefined` render nothing. */

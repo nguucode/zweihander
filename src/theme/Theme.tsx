@@ -64,8 +64,10 @@ export interface ThemeProps extends ComponentProps<'div'> {
    * gray) or `tinted` (the accent's subtle step). For any other colour or a
    * gradient, pass `tokens={{ canvas, 'canvas-solid', 'canvas-foreground',
    * 'canvas-muted-foreground' }}` (`canvas-solid`: one colour standing for
-   * it, for rings and fills); contrast is then yours to check, in both
-   * appearances. Inherits when omitted; the default is `neutral`.
+   * it, for rings and fills), and for a transparent NavSidebar on it
+   * `canvas-hover`, `canvas-selected`, `canvas-field`, `canvas-field-border`,
+   * `canvas-badge`, `canvas-badge-foreground`; contrast is then yours to
+   * check, in both appearances. Inherits when omitted; the default is `neutral`.
    */
   canvas?: Canvas
   /**

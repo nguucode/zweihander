@@ -78,8 +78,9 @@ export function AppShell({
   const drawerContent = hasMobileNavigation ? mobileNavigation : hasSidebar ? sidebar : null
   const hasDrawer = drawerContent !== null
   const hasBrand = given(brand)
-  // The logo is rendered once, in the place it shows: in the sidebar for the
-  // sidebar layout while the sidebar is beside the page, else in the header.
+  // The logo is rendered once, in the place it shows: in the NavSidebar's top
+  // row for the sidebar layout while the sidebar is beside the page, else in
+  // the header.
   // CSS alone would need two copies, and a logo can hold an id or a menu.
   const frameRef = useRef<HTMLDivElement>(null)
   const isWide = useIsWide(frameRef)
@@ -100,6 +101,7 @@ export function AppShell({
         label: navigationLabel,
         brand: brandInSidebar ? null : brand,
         brandCell: layout === 'top-bar' && hasSidebar,
+        sidebarBrand: brandInSidebar ? brand : null,
       }}
     >
       <div
@@ -135,7 +137,6 @@ export function AppShell({
           )}
           {hasSidebar && (
             <div className={styles.sidebar} data-surface={sidebarSurface}>
-              {brandInSidebar && <div className={styles.sidebarBrand}>{brand}</div>}
               {sidebar}
             </div>
           )}
