@@ -206,6 +206,28 @@
       ]
     },
     {
+      "name": "kbd",
+      "type": "registry:component",
+      "title": "Kbd",
+      "description": "Key cap that shows which key to press, alone or as a combination.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/atomic-elements/Kbd.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/atomic-elements/Kbd.tsx"
+        },
+        {
+          "path": "src/components/atomic-elements/Kbd.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/atomic-elements/Kbd.module.css"
+        }
+      ]
+    },
+    {
       "name": "avatar",
       "type": "registry:component",
       "title": "Avatar",

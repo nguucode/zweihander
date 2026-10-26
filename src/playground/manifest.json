@@ -167,6 +167,32 @@
     },
     {
       "kind": "component",
+      "id": "components-atomic-elements-kbd",
+      "name": "Kbd",
+      "category": "Atomic Elements",
+      "status": "experimental",
+      "storyId": "components-atomic-elements-kbd--default",
+      "props": [
+        {
+          "name": "children",
+          "control": "text",
+          "default": "Esc",
+          "description": "One key: a glyph (`⌘`, `⇧`, `↵`) or a short word (`Esc`, `Tab`). Ignored when `keys` is set."
+        },
+        {
+          "name": "size",
+          "control": "inline-radio",
+          "options": [
+            "sm",
+            "md"
+          ],
+          "default": "md",
+          "description": "20px (`md`) or 16px (`sm`) tall. `sm` fits inside a small control or a dense row."
+        }
+      ]
+    },
+    {
+      "kind": "component",
       "id": "components-atomic-elements-tag",
       "name": "Tag",
       "category": "Atomic Elements",

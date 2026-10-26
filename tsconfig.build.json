@@ -14,6 +14,7 @@
     "src/components/inputs/PasswordInput.tsx",
     "src/components/inputs/Field.tsx",
     "src/components/atomic-elements/Badge.tsx",
+    "src/components/atomic-elements/Kbd.tsx",
     "src/lib/icon.tsx",
     "src/components/atomic-elements/Avatar.tsx",
     "src/components/atomic-elements/Tag.tsx",

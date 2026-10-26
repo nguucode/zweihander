@@ -17,6 +17,7 @@ export default defineConfig({
         'components/inputs/PasswordInput': 'src/components/inputs/PasswordInput.tsx',
         'components/inputs/Field': 'src/components/inputs/Field.tsx',
         'components/atomic-elements/Badge': 'src/components/atomic-elements/Badge.tsx',
+        'components/atomic-elements/Kbd': 'src/components/atomic-elements/Kbd.tsx',
         'lib/icon': 'src/lib/icon.tsx',
         'components/atomic-elements/Avatar': 'src/components/atomic-elements/Avatar.tsx',
         'components/atomic-elements/Tag': 'src/components/atomic-elements/Tag.tsx',
