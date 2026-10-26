@@ -1,0 +1,96 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks'
+import * as ProjectDetailStories from './ProjectDetail.stories'
+
+<Meta of={ProjectDetailStories} />
+
+# Project Detail
+
+An object page: one project, with a breadcrumb back to the list, a header
+with its name, status, key facts and actions, tabs for its sections, and
+an aside with its summary and activity. After Tailwind UI's detail
+screens, Polaris' details page and Fiori's object page. Built from
+[App Shell](?path=/docs/templates-application-ui-app-shell--docs) (its
+`aside` column), [Description List](?path=/docs/patterns-application-ui-description-list--docs)
+and the kit's Breadcrumbs, Tabs, Table, Menu, Drawer, Tag and Button. It
+is the record behind a row of [Projects](?path=/docs/templates-object-management-projects--docs).
+The data is made up.
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/project-detail-template.json
+```
+
+<Canvas of={ProjectDetailStories.Default} />
+
+## What works
+
+- **Breadcrumb**: Projects, then this project as the current page.
+- **Header**: the name as the `h1`, the status tag beside it, and the key
+  facts under it: PM, timeline, and the team's head count. Edit and a "More actions" menu
+  (Archive or Restore) sit at its end.
+- **Tabs**: Overview (PM, timeline, estimation) and Team (who works on it, in
+  a table).
+- **Aside**: the summary (status, health, last update) and
+  the activity, newest first, the same list a Projects row expands to.
+- **Edit** opens a Drawer with the name, status and estimation. Save
+  updates the page, and a status or estimation change joins the top of
+  the activity. Cancel, Escape or the close button drops the edit; a
+  press on the backdrop does nothing, so a stray click loses nothing. An
+  empty name is refused.
+
+<Canvas of={ProjectDetailStories.Edit} />
+
+## Make it yours
+
+`ProjectDetail` takes `project` (a `Project`, see `projects-data.ts`) and
+`team` (`TeamMember[]`), and keeps the project in state. Replace the
+samples with your data, and the `setProject` calls (Save, Archive) with
+calls to your API. Add a tab per section of your record; a long record that reads top
+to bottom can drop the tabs and stack its sections instead.
+
+There is no save bar: the page is for reading, and editing happens in the
+drawer, which owns its Save and Cancel. A record edited in place, field
+by field, is the job of inline edit, not this page.
+
+## Props
+
+| Prop | Values | Default | |
+| --- | --- | --- | --- |
+| `project` | `Project` | the first sample project | The record. Read once; later changes are local. |
+| `team` | `TeamMember[]` | `sampleTeam` | The Team tab's rows. Empty shows an empty state. |
+
+Any other prop goes to the App Shell's root, e.g. `style` to set its
+`block-size` when the page is not the whole viewport.
+
+## Layout
+
+- From 80rem of shell width the aside sits right of the page and each
+  scrolls on its own, so the summary stays in view; under 80rem it
+  follows the page and the two scroll as one (App Shell). Keep what the
+  reader needs first in the page, not the aside.
+
+<Canvas of={ProjectDetailStories.Stacked} />
+
+- The header's actions share the name's row while there is room and drop
+  under it when there is not. The status tag wraps under a long name, and
+  the key facts wrap one by one.
+- A long name with no spaces wraps, in the header and the breadcrumb;
+  the page never scrolls sideways. The Team table scrolls inside its own
+  frame.
+
+<Canvas of={ProjectDetailStories.Sparse} />
+
+## Accessibility
+
+- One `h1`, the project's name; the Details, Summary and Activity
+  headings are `h2`. The breadcrumb is the "Breadcrumb" navigation, its
+  last item the current page (`aria-current="page"`).
+- The key facts are a list named "Key facts"; a missing PM reads
+  "Unassigned" and missing dates "Not scheduled", not an empty slot.
+- The aside is a `complementary` landmark named "Project summary", after
+  the page in reading and focus order. The activity is a region named
+  after the project ("Harbor Lights activity").
+- The tab list is named "Project sections"; the Team table's caption is
+  "Team", and each member's name is the row header.
+- The icon-only menu button is named "More actions". The edit drawer is
+  a dialog named "Edit project"; on close, focus returns to Edit. An
+  empty name marks the field invalid with the message "Enter a name."

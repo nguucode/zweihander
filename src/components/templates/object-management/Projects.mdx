@@ -40,8 +40,9 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/projects-template.json
 `Projects` takes `projects` (an array of `Project`, see
 `projects-data.ts`) and keeps a copy in state. Replace `sampleProjects`
 with your data, and the `setProjects` calls (Archive) with calls to your
-API. The activity list is local to the file on purpose: it becomes a
-`Timeline` component once a second screen needs one.
+API. The activity list lives in `ProjectActivity.tsx`, shared with
+[Project Detail](?path=/docs/templates-object-management-project-detail--docs),
+until the Feed pattern replaces it.
 
 ## Props
 

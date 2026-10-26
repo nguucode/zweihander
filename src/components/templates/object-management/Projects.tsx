@@ -1,10 +1,9 @@
 'use client'
 
 import { useMemo, useState, type ComponentProps } from 'react'
-import { Icon, type IconName } from '@/lib/icon'
+import { Icon } from '@/lib/icon'
 import { Avatar } from '../../atomic-elements/Avatar'
 import { Badge } from '../../atomic-elements/Badge'
-import { Tag, type TagVariant } from '../../atomic-elements/Tag'
 import { Button } from '../../buttons/Button'
 import { ToggleButton } from '../../buttons/ToggleButton'
 import { Table, type TableColumn } from '../../data-display/Table'
@@ -16,17 +15,10 @@ import { EmptyState } from '../../states/EmptyState'
 import { AppShell } from '../application-ui/AppShell'
 import { TableToolbar, TableToolbarGroup } from '../../patterns/application-ui/DataTablePage'
 import { TopBar } from '../../patterns/application-ui/TopBar'
-import { sampleProjects, type Project, type ProjectActivity, type ProjectStatus } from './projects-data'
+import { ActivityTimeline, fullMoment, money, STATUSES, statusTag } from './ProjectActivity'
+import { sampleProjects, type Project } from './projects-data'
 import styles from './Projects.module.css'
 
-const STATUSES: ProjectStatus[] = ['Active', 'On hold', 'Expired', 'Inactive', 'On grace period']
-const statusTone: Record<ProjectStatus, TagVariant> = {
-  Active: 'success',
-  'On hold': 'neutral',
-  Expired: 'danger',
-  Inactive: 'neutral',
-  'On grace period': 'warning',
-}
 
 /** Each tab is a saved filter; every tab but Archived leaves archived projects out. */
 const TABS: { value: string; label: string; matches: (p: Project) => boolean }[] = [
@@ -41,12 +33,8 @@ const TABS: { value: string; label: string; matches: (p: Project) => boolean }[]
 // Short on purpose: seven columns have to fit a laptop without the table scrolling.
 const day = new Intl.DateTimeFormat('en', { day: 'numeric', month: 'short' })
 const fullDay = new Intl.DateTimeFormat('en', { day: 'numeric', month: 'short', year: 'numeric' })
-const fullMoment = new Intl.DateTimeFormat('en', { dateStyle: 'medium', timeStyle: 'short' })
 /** Within one year the year is left out; the activity and the tooltip carry it. */
 const sameYear = (a: Date, b: Date) => a.getFullYear() === b.getFullYear()
-const money = new Intl.NumberFormat('en', { style: 'currency', currency: 'USD', notation: 'compact', maximumFractionDigits: 1 })
-
-const statusTag = (status: ProjectStatus) => <Tag size="sm" variant={statusTone[status]} text={status} />
 
 const columns: TableColumn<Project>[] = [
   { key: 'name', header: 'Project name', sortable: true, isRowHeader: true },
@@ -90,49 +78,6 @@ const columns: TableColumn<Project>[] = [
   },
   { key: 'estimation', header: 'Estimation', sortable: true, align: 'end', cell: (p) => money.format(p.estimation) },
 ]
-
-const activityIcon: Record<ProjectActivity['type'], IconName> = { created: 'plus', status: 'info', estimation: 'file' }
-
-/**
- * What happened to a project, newest first. Local to this template on
- * purpose: it becomes a Timeline component once a second screen needs one.
- */
-function ActivityTimeline({ project }: { project: Project }) {
-  return (
-    <section className={styles.activity} aria-label={`${project.name} activity`}>
-      <ol className={styles.events}>
-        {project.activity.map((event, i) => (
-          <li key={i} className={styles.event}>
-            <span className={styles.eventIcon} aria-hidden="true">
-              <Icon name={activityIcon[event.type]} />
-            </span>
-            <div className={styles.eventBody}>
-              <p className={styles.eventText}>
-                <strong>{event.by}</strong>{' '}
-                {event.type === 'created' && 'created the project'}
-                {event.type === 'estimation' && (
-                  <>
-                    changed the estimation from <strong>{money.format(event.from)}</strong> to{' '}
-                    <strong>{money.format(event.to)}</strong>
-                  </>
-                )}
-                {event.type === 'status' && (
-                  <>
-                    changed the status from {statusTag(event.from)} to {statusTag(event.to)}
-                  </>
-                )}{' '}
-                <time className={styles.muted} dateTime={event.at.toISOString()}>
-                  {fullMoment.format(event.at)}
-                </time>
-              </p>
-              {event.type === 'status' && event.note && <p className={styles.note}>{event.note}</p>}
-            </div>
-          </li>
-        ))}
-      </ol>
-    </section>
-  )
-}
 
 const navigation = (count: number): NavSidebarEntry[] => [
   { label: 'Dashboard', href: '#dashboard', icon: <Icon name="star" /> },
