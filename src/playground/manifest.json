@@ -2121,7 +2121,18 @@
           "name": "totalPages",
           "control": "number",
           "default": 10,
-          "description": "How many pages there are. Below 1 counts as 1."
+          "description": "How many pages there are. Below 1 counts as 1. Leave it out when `totalItems` is set: the count then comes from `totalItems` and `pageSize`."
+        },
+        {
+          "name": "totalItems",
+          "control": "number",
+          "description": "How many rows there are in all. Shows the summary (\"21–40 of 340\") and, without `totalPages`, sets the page count from `pageSize`."
+        },
+        {
+          "name": "defaultPageSize",
+          "control": "number",
+          "default": 20,
+          "description": "Rows per page at first, when Pagination keeps its own state."
         },
         {
           "name": "defaultPage",
