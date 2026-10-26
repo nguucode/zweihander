@@ -60,6 +60,12 @@
   color: var(--muted-foreground);
 }
 
+/* --muted-foreground on the hover overlay is 4.3:1, under 4.5:1 for body
+   text: the hovered placeholder takes the full text colour. */
+.value:hover .placeholder {
+  color: var(--foreground);
+}
+
 /* The pencil shows on hover and focus; with no hover to reveal it (touch),
    it is always there. */
 .pencil {
