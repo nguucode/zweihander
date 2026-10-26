@@ -1,0 +1,121 @@
+.page {
+  display: grid;
+  gap: var(--space-section);
+}
+
+/* Grid items keep their content's width by default; the table must scroll
+   inside its own frame instead of widening the page. */
+.page > * {
+  min-inline-size: 0;
+}
+
+.brand {
+  font-size: var(--text-heading-xs);
+}
+
+.sidebar {
+  block-size: 100%;
+}
+
+.account {
+  display: flex;
+  align-items: center;
+}
+
+/* Name and actions share a row while there is room; the actions drop under
+   the name when there is not, rather than squeezing it. */
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-cluster) var(--space-group);
+}
+
+.heading {
+  display: grid;
+  gap: var(--space-2);
+  flex: 1 1 20rem;
+  min-inline-size: 0;
+}
+
+.titleRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-cluster);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: var(--text-heading-xl);
+  line-height: var(--leading-heading-xl);
+  font-weight: 500;
+  color: var(--foreground);
+  overflow-wrap: anywhere;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-group);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--muted-foreground);
+}
+
+.meta li {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-cluster);
+}
+
+.tabs [role='tabpanel'] {
+  padding-block-start: var(--space-group);
+}
+
+.person {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  white-space: nowrap;
+}
+
+.aside {
+  display: grid;
+  gap: var(--space-section);
+}
+
+.asideSection {
+  display: grid;
+  gap: var(--space-group);
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: var(--text-heading-sm);
+  line-height: var(--leading-heading-sm);
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+/* In the aside the list starts at the column's edge; in the Projects table
+   it is indented under the row. */
+.activity {
+  padding: 0;
+}
+
+.form {
+  display: grid;
+  gap: var(--space-group);
+}

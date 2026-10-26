@@ -1,0 +1,66 @@
+/* A project's activity. A vertical line joins the events; each icon sits on it. */
+.activity {
+  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-10);
+}
+
+.events {
+  display: grid;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.event {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-3);
+}
+
+.event:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  inset-block: var(--box-sm) calc(-1 * var(--space-4));
+  inset-inline-start: calc(var(--box-sm) / 2);
+  border-inline-start: 1px solid var(--border);
+}
+
+.eventIcon {
+  display: grid;
+  place-items: center;
+  inline-size: var(--box-sm);
+  block-size: var(--box-sm);
+  border-radius: var(--radius-full);
+  background: var(--surface-filled);
+  color: var(--muted-foreground);
+}
+
+.eventBody {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.eventText {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+}
+
+.eventText strong {
+  font-weight: 500;
+}
+
+.note {
+  margin: 0;
+  padding-inline-start: var(--space-3);
+  border-inline-start: 2px solid var(--border);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  font-style: italic;
+  color: var(--muted-foreground);
+}
+
+.muted {
+  color: var(--muted-foreground);
+}

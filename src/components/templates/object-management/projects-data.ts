@@ -129,3 +129,19 @@ export const sampleProjects: Project[] = rows.map(
     activity,
   }),
 )
+
+export interface TeamMember {
+  person: Person
+  role: string
+  /** Share of the person's week on this project, 0 to 100. */
+  allocation: number
+}
+
+/** The people on Harbor Lights, for the Project Detail template. */
+export const sampleTeam: TeamMember[] = [
+  { person: people.ines, role: 'Project manager', allocation: 50 },
+  { person: people.tomas, role: 'Tech lead', allocation: 100 },
+  { person: people.mei, role: 'Product designer', allocation: 80 },
+  { person: people.rafa, role: 'Front-end developer', allocation: 100 },
+  { person: people.noor, role: 'QA engineer', allocation: 40 },
+]

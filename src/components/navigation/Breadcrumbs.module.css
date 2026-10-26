@@ -28,6 +28,14 @@
   min-inline-size: 0;
 }
 
+/* A crumb is a record's name more often than not: a long one wraps
+   instead of pushing the page sideways. */
+.link,
+.current {
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+
 /* The trail is a list of links, so the context already says "links":
    muted, underlined on hover, like Link's underline="hover". */
 .link {

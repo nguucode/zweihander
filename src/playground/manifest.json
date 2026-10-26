@@ -3025,6 +3025,15 @@
     },
     {
       "kind": "template",
+      "id": "templates-object-management-project-detail",
+      "name": "Project Detail",
+      "category": "Object Management",
+      "status": "experimental",
+      "storyId": "templates-object-management-project-detail--default",
+      "props": []
+    },
+    {
+      "kind": "template",
       "id": "templates-object-management-projects",
       "name": "Projects",
       "category": "Object Management",
