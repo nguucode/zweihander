@@ -80,6 +80,18 @@ export function AuthLayout({
   )
 }
 
+/**
+ * Moves focus to the page's title. For a screen whose form gave way to the
+ * next step ("Check your email"): the button that was pressed is gone, and
+ * focus would fall to the page.
+ */
+export function focusTitle(page: HTMLElement | null) {
+  const title = page?.querySelector('h1')
+  if (!title) return
+  title.tabIndex = -1
+  title.focus()
+}
+
 /** The "or" line between the single sign-on buttons and the form. */
 export function AuthDivider({ children = 'or' }: { children?: ReactNode }) {
   return <div className={styles.divider}>{children}</div>

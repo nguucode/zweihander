@@ -7,7 +7,7 @@ import { TextInput } from '../../inputs/TextInput'
 import { Link } from '../../navigation/Link'
 import { Alert } from '../../notifications/Alert'
 import { AuthLayout, AuthProviders, type AuthLayoutProps, type AuthProvider } from './AuthLayout'
-import { PasswordInput, type PasswordRule } from './PasswordInput'
+import { PasswordInput, defaultPasswordRules, type PasswordRule } from './PasswordInput'
 import styles from './SignUp.module.css'
 
 export interface SignUpValues {
@@ -45,9 +45,6 @@ export interface SignUpProps extends Omit<AuthLayoutProps, 'title' | 'children'>
   signInHref?: string
 }
 
-/** Long enough to resist guessing, with no rules about character kinds (NIST SP 800-63B). */
-const defaultRules: PasswordRule[] = [{ label: 'At least 12 characters', test: (password) => password.length >= 12 }]
-
 type Errors = Partial<Record<'name' | 'email' | 'password' | 'terms', string>>
 
 /**
@@ -60,7 +57,7 @@ export function SignUp({
   title = 'Create your account',
   providers = [],
   onProviderSelect,
-  passwordRules = defaultRules,
+  passwordRules = defaultPasswordRules,
   terms,
   onSignUp,
   signInHref = '#sign-in',

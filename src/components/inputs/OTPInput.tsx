@@ -1,8 +1,8 @@
 'use client'
 
-import { Fragment, useEffect, useRef, useState, type ReactNode, type Ref } from 'react'
+import { Fragment, useRef, type ReactNode, type Ref } from 'react'
 import { OTPField } from '@base-ui/react/otp-field'
-import { Button } from '../buttons/Button'
+import { ResendButton } from '../buttons/ResendButton'
 import { cn } from '@/lib/utils'
 import { InputField, assignRef, type InputSize, type ValidationState } from './InputField'
 import styles from './OTPInput.module.css'
@@ -51,9 +51,6 @@ export interface OTPInputProps {
 
 const defaultSlotLabel = (position: number, length: number) => `Character ${position} of ${length}`
 
-/** 75 → "1:15". */
-const formatSeconds = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`
-
 export function OTPInput({
   ref,
   length = 6,
@@ -74,30 +71,10 @@ export function OTPInput({
   className,
   ...props
 }: OTPInputProps) {
-  // The cooldown starts on mount: the screen appears because a code was just sent.
-  const [secondsLeft, setSecondsLeft] = useState(resendCooldown)
-  const [isSending, setIsSending] = useState(false)
   const firstCell = useRef<HTMLInputElement>(null)
-  // Keyed to whether there is a resend, not the callback: an inline arrow is
-  // new on every render, and re-arming the timer on each would stall it.
-  const hasResend = onResend !== undefined
-  useEffect(() => {
-    if (!hasResend || secondsLeft <= 0) return
-    const timer = setTimeout(() => setSecondsLeft(secondsLeft - 1), 1000)
-    return () => clearTimeout(timer)
-  }, [hasResend, secondsLeft])
 
   async function resend() {
-    setIsSending(true)
-    try {
-      await onResend?.()
-    } catch {
-      // The caller shows the error; the button stays ready for a retry.
-      return
-    } finally {
-      setIsSending(false)
-    }
-    setSecondsLeft(resendCooldown)
+    await onResend?.()
     // The button is about to be disabled: move focus to where the new code goes.
     firstCell.current?.focus()
   }
@@ -113,17 +90,13 @@ export function OTPInput({
       className={className}
       footer={
         onResend && (
-          <Button
-            variant="secondary"
-            appearance="ghost"
-            size="sm"
+          <ResendButton
             className={styles.resend}
-            disabled={disabled || secondsLeft > 0}
-            isLoading={isSending}
-            onClick={resend}
-          >
-            {secondsLeft > 0 ? `${resendLabel} (${formatSeconds(secondsLeft)})` : resendLabel}
-          </Button>
+            cooldown={resendCooldown}
+            label={resendLabel}
+            disabled={disabled}
+            onResend={resend}
+          />
         )
       }
     >

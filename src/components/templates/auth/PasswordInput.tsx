@@ -11,6 +11,11 @@ export interface PasswordRule {
   test: (password: string) => boolean
 }
 
+/** Long enough to resist guessing, with no rules about character kinds (NIST SP 800-63B). */
+export const defaultPasswordRules: PasswordRule[] = [
+  { label: 'At least 12 characters', test: (password) => password.length >= 12 },
+]
+
 export interface PasswordInputProps extends Omit<TextInputProps, 'type' | 'endAddon'> {
   /**
    * What a new password needs, listed under the field and ticked off as the
