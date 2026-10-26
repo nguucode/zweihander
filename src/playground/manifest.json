@@ -3201,6 +3201,61 @@
     },
     {
       "kind": "pattern",
+      "id": "patterns-application-ui-session",
+      "name": "Session",
+      "category": "Application UI",
+      "status": "experimental",
+      "storyId": "patterns-application-ui-session--signed-out-page",
+      "props": [
+        {
+          "name": "reason",
+          "control": "inline-radio",
+          "options": [
+            "signed-out",
+            "inactive",
+            "expired"
+          ],
+          "default": "signed-out",
+          "description": "Why the session ended: picks the title and the line under it."
+        },
+        {
+          "name": "title",
+          "control": "text",
+          "description": "Replaces the reason's title."
+        },
+        {
+          "name": "account",
+          "control": "text",
+          "description": "The remembered account (an email or a username, masked if need be), shown above Sign in again."
+        },
+        {
+          "name": "signInHref",
+          "control": "text",
+          "default": "#sign-in",
+          "description": "Where Sign in again goes. Carry the remembered account there."
+        },
+        {
+          "name": "otherAccountHref",
+          "control": "text",
+          "description": "Shows \"Use another account\" under Sign in again, when `account` is set."
+        },
+        {
+          "name": "appearance",
+          "control": "inline-radio",
+          "options": [
+            "card",
+            "plain"
+          ]
+        },
+        {
+          "name": "description",
+          "control": "text",
+          "description": "Replaces the reason's line under the title."
+        }
+      ]
+    },
+    {
+      "kind": "pattern",
       "id": "patterns-application-ui-stats",
       "name": "Stats",
       "category": "Application UI",
