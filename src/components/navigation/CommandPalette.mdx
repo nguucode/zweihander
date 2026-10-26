@@ -1,0 +1,215 @@
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
+import * as CommandPaletteStories from './CommandPalette.stories'
+
+<Meta of={CommandPaletteStories} />
+
+# Command Palette
+
+<DocTabs>
+<DocTab value="overview">
+
+A search box over the page that finds a command or a record by typing and
+runs it with Enter, without a mouse. Opened by its trigger or by ⌘K
+(Ctrl+K).
+
+<Status of={CommandPaletteStories} />
+
+<Canvas of={CommandPaletteStories.Default} />
+
+## Variants
+
+There is one palette; what changes is what you put in its groups.
+
+| Content | Use for |
+| --- | --- |
+| Commands | Actions a power user repeats: New invoice, Export ledger. Give each its `shortcut` when it has one, so the palette teaches the key. |
+| Records | Objects to jump to, grouped by type: Customers, Invoices. Load them from your search as the user types, or pass the few that matter. |
+| Recent | What the user opened last, as the first group. The palette does not remember it for you: pass it from your app's history. |
+
+Typing matches the label and `keywords`, ignoring case and accents, so
+"bill" finds New invoice and "hoa binh" finds Hòa Bình Trading.
+
+<Canvas of={CommandPaletteStories.Matching} />
+
+## Resources
+
+From npm, or copied into your project through the registry:
+
+```js
+import { CommandPalette } from 'zweihander/command-palette'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/command-palette.json
+```
+
+- Source: [src/components/navigation/CommandPalette.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/navigation/CommandPalette.tsx)
+- Spec: uiguideline.com has no command palette; anatomy from Tailwind UI Command Palettes and shadcn/ui Command
+- Behaviour: [Base UI Autocomplete](https://base-ui.com/react/components/autocomplete) (inline, inside a [Dialog](https://base-ui.com/react/components/dialog))
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
+## Anatomy
+
+<Anatomy parts={CommandPaletteStories.anatomyParts}>
+  <Story of={CommandPaletteStories.Anatomy} />
+</Anatomy>
+
+The open palettes on this tab and the next are pictures: real palettes
+rendered in a frame with `container`, not modal (`isModal={false}`) and
+inert, so they do not lock this page or take its focus.
+
+## Measurements
+
+<SpecTable
+  caption="Container"
+  rows={[
+    { part: 'Container', property: 'Corner radius', token: '--radius-panel' },
+    { part: 'Container', property: 'Shadow', token: '--shadow-xl' },
+    { part: 'Container', property: 'Margin to the screen edge', token: '--space-group' },
+    { part: 'Search row', property: 'Height', token: '--box-xl' },
+    { part: 'Search row', property: 'Gap, icon to input', token: '--control-md-gap' },
+    { part: 'Search icon', property: 'Size', token: '--icon-md' },
+    { part: 'Search input', property: 'Font size', token: '--text-body-lg' },
+    { part: 'List', property: 'Inset from the container', token: '--space-stack' },
+    { part: 'Empty text', property: 'Block padding', token: '--space-6' },
+    { part: 'Key hints', property: 'Gap between hints', token: '--space-group' },
+    { part: 'Key hints', property: 'Font size', token: '--text-body-xs' },
+  ]}
+/>
+
+<SpecTable
+  caption="Item and group label"
+  rows={[
+    { part: 'Item', property: 'Height', token: '--control-md' },
+    { part: 'Item', property: 'Inline padding', token: '--control-md-pad' },
+    { part: 'Item', property: 'Gap', token: '--control-md-gap' },
+    { part: 'Icon', property: 'Size', token: '--icon-md' },
+    { part: 'Group label', property: 'Font size', token: '--text-body-sm' },
+    { part: 'Group label', property: 'Padding above', token: '--control-xs-pad' },
+    { part: 'Item', property: 'Minimum height on touch screens', token: '--target-coarse' },
+  ]}
+/>
+
+The container is at most 40rem wide and never wider than the screen. It
+sits near the top, at 12% of the screen height, not centred: the list
+grows and shrinks as you type, and the input stays where the eye is. The
+list shows about ten rows (24rem) and then scrolls; the search row and the
+key hints stay. The search icon lines up with the item icons. Items are
+the [Menu](?path=/docs/components-navigation-menu--docs)'s rows; shortcuts
+are [Kbd](?path=/docs/components-atomic-elements-kbd--docs) `sm`.
+
+## Color
+
+<SpecTable
+  caption="Every palette"
+  rows={[
+    { part: 'Backdrop', property: 'Background', token: '--scrim' },
+    { part: 'Container', property: 'Background', token: '--popover' },
+    { part: 'Container, rules', property: 'Border', token: '--border' },
+    { part: 'Input, items', property: 'Colour', token: '--popover-foreground' },
+    { part: 'Placeholder, icons, group labels, hints', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Highlighted item', property: 'Background', token: '--accent' },
+    { part: 'Highlighted item', property: 'Colour', token: '--accent-foreground' },
+  ]}
+/>
+
+## States
+
+<States
+  states={[
+    { label: 'Results', content: <Story of={CommandPaletteStories.Results} /> },
+    { label: 'No results', content: <Story of={CommandPaletteStories.NoResults} /> },
+  ]}
+/>
+
+- **Highlighted** is where the arrow keys or the pointer are: an `--accent`
+  fill, the icon taking the text colour. The first match is always
+  highlighted, so Enter always does something. Focus stays in the input;
+  the highlight is the list's `aria-activedescendant`.
+- **Disabled** items are muted at 60% opacity. The arrow keys still reach
+  them, so a screen reader hears that they exist, but Enter and a click do
+  nothing.
+- **No results** shows `emptyText` and no group labels.
+- The input has no focus ring of its own: it is the palette's only field,
+  and the caret shows where typing goes.
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={CommandPaletteStories} />
+</div>
+
+### Differences from the spec
+
+The queue's anatomy lists the open shortcut, an empty state and recent
+results as parts. Here the shortcut is behaviour (`hotkey`, and a Kbd on the
+trigger), the empty state is a state (under States), and Recent is a group
+you pass: the palette does not store history.
+
+</DocTab>
+<DocTab value="guidelines">
+
+## When to use
+
+In an app with many pages and actions, as a fast way around for people who
+use it every day: jump to a record, run a command, without going through
+the navigation. Open it from a search button in the sidebar
+(`NavSidebarButton appearance="field"`) and from ⌘K.
+
+<DoDont
+  do={<Story of={CommandPaletteStories.DoGroup} />}
+  doCaption="Group the results, start each command with a verb, and put records under their type. Recent first."
+  dont={<Story of={CommandPaletteStories.DontMix} />}
+  dontCaption="One list of bare nouns: Invoice could mean open one, create one or list them all."
+/>
+
+Keep the palette a shortcut, not the only way: everything in it must also
+be reachable from the navigation or a button on the page.
+
+## When not to use
+
+- **To search inside one list or table.** Use a search field above it,
+  which filters what is on the page.
+- **To pick a value in a form.** Use a
+  [Combobox](?path=/docs/components-inputs-combobox--docs): it fills a
+  field, the palette runs something.
+- **For a handful of actions on one object.** Use a
+  [Menu](?path=/docs/components-navigation-menu--docs) on that object.
+
+## Accessibility
+
+- The container is a `role="dialog"` named "Command palette" (`label`).
+  Opening moves focus to the search input and traps it inside; closing
+  returns focus to the trigger.
+- The input is a `role="combobox"` named "Search commands" (`inputLabel`), its
+  description the key hints: "Arrow keys to move, Enter to choose, Escape to
+  close". The drawn hints are hidden, so they are read once.
+- Each group is a `role="group"` named by its label; each item is a
+  `role="option"`. A shortcut is drawn, not read: the item's name is its
+  label.
+- Up and Down move the highlight and the first match is highlighted; Enter
+  chooses it, as does a click. A disabled item is reachable but Enter does
+  nothing on it. The choice runs once the palette has closed and focus is
+  back on the trigger.
+
+  <Canvas of={CommandPaletteStories.Keyboard} />
+
+- Escape closes it, as does a press outside.
+
+  <Canvas of={CommandPaletteStories.Empty} />
+
+- ⌘K or Ctrl+K toggles it from anywhere on the page; one palette per page
+  should own that key, and the others set `hotkey={false}`.
+
+  <Canvas of={CommandPaletteStories.Hotkey} />
+
+Give the trigger `aria-keyshortcuts="Meta+K Control+K"` when the palette
+owns the key, as the trigger in these examples does.
+
+</DocTab>
+</DocTabs>

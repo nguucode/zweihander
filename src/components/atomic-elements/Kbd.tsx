@@ -9,10 +9,10 @@ export type KbdProps = Omit<ComponentProps<'kbd'>, 'children'> & { size?: 'sm' |
   )
 
 export function Kbd({ keys, size = 'md', className, children, ...props }: KbdProps) {
-  const key = cn(styles.key, styles[size])
+  const cap = cn(styles.key, styles[size])
   if (!keys) {
     return (
-      <kbd className={cn(key, className)} {...props}>
+      <kbd className={cn(cap, className)} {...props}>
         {children}
       </kbd>
     )
@@ -21,7 +21,7 @@ export function Kbd({ keys, size = 'md', className, children, ...props }: KbdPro
   return (
     <kbd className={cn(styles.group, className)} {...props}>
       {keys.map((key, i) => (
-        <kbd key={i} className={key}>
+        <kbd key={i} className={cap}>
           {key}
         </kbd>
       ))}

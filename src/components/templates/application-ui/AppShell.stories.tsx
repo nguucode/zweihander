@@ -3,6 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { Icon } from '@/lib/icon'
 import { CANVASES, CONTENT_STYLES, Theme, type Canvas, type ContentStyle, type Density } from '@/theme/Theme'
+import { Kbd } from '@/components/atomic-elements/Kbd'
 import { Avatar } from '@/components/atomic-elements/Avatar'
 import { Button } from '@/components/buttons/Button'
 import { Card } from '@/components/data-display/Card'
@@ -58,7 +59,7 @@ const sidebarHeader = (onDeepCanvas = false) => (
       label="Acme Corp"
       end={<Icon name="chevrons-up-down" />}
     />
-    <NavSidebarButton appearance="field" icon={<Icon name="search" />} label="Search" end="⌘K" />
+    <NavSidebarButton appearance="field" icon={<Icon name="search" />} label="Search" end={<Kbd size="sm" keys={['⌘', 'K']} />} />
   </>
 )
 

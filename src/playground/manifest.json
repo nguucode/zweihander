@@ -2329,6 +2329,58 @@
     },
     {
       "kind": "component",
+      "id": "components-navigation-command-palette",
+      "name": "Command Palette",
+      "category": "Navigation",
+      "status": "beta",
+      "storyId": "components-navigation-command-palette--default",
+      "props": [
+        {
+          "name": "hotkey",
+          "control": "text",
+          "default": false,
+          "description": "The letter that toggles it with ⌘ or Ctrl, anywhere on the page. `false` binds nothing: only one palette on a page should own the key."
+        },
+        {
+          "name": "placeholder",
+          "control": "text",
+          "default": "Search commands…",
+          "description": "In the empty input."
+        },
+        {
+          "name": "inputLabel",
+          "control": "text",
+          "default": "Search commands",
+          "description": "Accessible name of the search input."
+        },
+        {
+          "name": "emptyText",
+          "control": "text",
+          "default": "No results",
+          "description": "Shown when nothing matches."
+        },
+        {
+          "name": "label",
+          "control": "text",
+          "default": "Command palette",
+          "description": "Names the dialog."
+        },
+        {
+          "name": "defaultOpen",
+          "control": "boolean",
+          "default": false,
+          "description": "Open on first render, uncontrolled."
+        },
+        {
+          "name": "isModal",
+          "control": "boolean",
+          "default": true,
+          "description": "While open, traps focus, locks page scroll and makes the rest of the page inert. `false` is for pictures of it."
+        }
+      ]
+    },
+    {
+      "kind": "component",
       "id": "components-navigation-link",
       "name": "Link",
       "category": "Navigation",

@@ -923,6 +923,33 @@
       ]
     },
     {
+      "name": "command-palette",
+      "type": "registry:component",
+      "title": "Command Palette",
+      "description": "Dialog that finds a command or a record by typing and runs it with Enter, in groups, with shortcuts as key caps and a ⌘K hotkey, on Base UI Autocomplete and Dialog.",
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/icon.json",
+        "https://ontheshore.biz/zweihander/r/kbd.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/navigation/CommandPalette.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/navigation/CommandPalette.tsx"
+        },
+        {
+          "path": "src/components/navigation/CommandPalette.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/navigation/CommandPalette.module.css"
+        }
+      ]
+    },
+    {
       "name": "menu",
       "type": "registry:component",
       "title": "Menu",

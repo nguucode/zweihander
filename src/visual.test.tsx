@@ -60,6 +60,7 @@ const STORIES: Record<string, { story: string; args?: Record<string, unknown>; p
   'loaders/Spinner': { story: 'Variants' },
   'navigation/Breadcrumbs': { story: 'Default' },
   'navigation/Link': { story: 'Variants' },
+  'navigation/CommandPalette': { story: 'Default', args: { defaultOpen: true } },
   'navigation/Menu': { story: 'Default', args: { defaultOpen: true } },
   'navigation/Pagination': { story: 'WithSummary' },
   'navigation/Stepper': { story: 'Default' },

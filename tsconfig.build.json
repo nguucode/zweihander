@@ -42,6 +42,7 @@
     "src/components/overlays/Drawer.tsx",
     "src/components/overlays/ConfirmDialog.tsx",
     "src/components/navigation/Menu.tsx",
+    "src/components/navigation/CommandPalette.tsx",
     "src/components/navigation/Breadcrumbs.tsx",
     "src/components/navigation/Pagination.tsx",
     "src/components/navigation/Tabs.tsx",
