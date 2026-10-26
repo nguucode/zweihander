@@ -1,7 +1,7 @@
 import { Icon, type IconName } from '@/lib/icon'
 import { cn } from '@/lib/utils'
 import { Tag, type TagVariant } from '../../atomic-elements/Tag'
-import type { Project, ProjectActivity, ProjectStatus } from './projects-data'
+import type { Project, ProjectActivity, ProjectHealth, ProjectStatus } from './projects-data'
 import styles from './ProjectActivity.module.css'
 
 /* Shared by the Projects and Project Detail templates: a project's status
@@ -17,6 +17,10 @@ export const statusTone: Record<ProjectStatus, TagVariant> = {
 
 /** Every status, in the order a picker lists them. */
 export const STATUSES = Object.keys(statusTone) as ProjectStatus[]
+
+export const healthLabel: Record<ProjectHealth, string> = { risk: 'Risk', 'potential-risk': 'Potential risk', 'on-track': 'On track' }
+/** Every health, worst first, in the order a picker lists them. */
+export const HEALTHS = Object.keys(healthLabel) as ProjectHealth[]
 
 export const statusTag = (status: ProjectStatus) => <Tag size="sm" variant={statusTone[status]} text={status} />
 

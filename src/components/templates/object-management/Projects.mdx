@@ -5,13 +5,17 @@ import * as ProjectsStories from './Projects.stories'
 
 # Projects
 
-An object-management page: every project in a table, sliced by tabs with
-counts, narrowed by search and a status filter, sortable, selectable for
-a bulk archive, and expandable to each project's activity. Built from
+An index page, or list report: every project in saved views, narrowed by
+search and filters, as a table with pages or as a chart. The table sorts,
+hides columns, selects rows for a bulk archive and expands to each
+project's activity. Built from
 [App Shell](?path=/docs/templates-application-ui-app-shell--docs),
+[Saved Views](?path=/docs/patterns-application-ui-saved-views--docs),
+[Filter Bar](?path=/docs/patterns-application-ui-filter-bar--docs),
+[Table Chart Switch](?path=/docs/patterns-application-ui-table-chart-switch--docs),
 [Data Table Page](?path=/docs/patterns-application-ui-data-table-page--docs)'s
-toolbar and the kit's Table, Tabs, Search, Menu, Tag, Badge, Avatar and
-Button. The data is made up.
+toolbar and footer, and the kit's Table, Column Chooser, Pagination,
+BarChart, Search, Menu, Tag, Badge, Avatar and Button. The data is made up.
 
 ```sh
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/projects-template.json
@@ -19,28 +23,54 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/projects-template.json
 
 <Canvas of={ProjectsStories.Default} />
 
+## Anatomy
+
+From the top: the heading (title, the open count and the primary action,
+Add project), the views, the toolbar (search, the Status and Health
+filters with their chips, compact rows and Columns), the summary with the
+Table / Chart switch, the table, and the footer with the pages.
+
 ## What works
 
-- **Tabs** are saved filters: All, Risk, On hold, Potential risk, On
-  track, Archived. Each count is the number of rows its tab shows, so the
-  counts follow the search and the status filter.
+- **Views** are predefined (All, Risk, On hold, Potential risk, On track,
+  Archived) or saved. A view holds the filters, the columns and the sort;
+  the search is not part of it. Each count is the rows the view shows
+  with the current search; the view in force counts its unsaved changes
+  too, so its count always matches the table.
+- **Modified**: a filter, a column or a sort that differs from the view
+  marks it modified. Discard puts it back; Save writes it into a saved
+  view; on a predefined view, Save as new view keeps it under a new name.
+  Manage views deletes saved views.
 - **Search** matches the project name and the PM.
-- **Status filter** is a radio Menu; its trigger shows the current choice.
+- **Filters** are checkbox menus, Status and Health; each choice shows as
+  a chip that removes on its own, and Clear all removes them all.
 - **Sort** by name, PM, last update, resources, timeline or estimation.
+  The sort covers every page, not only the one shown.
+- **Pages** of 10, 25 or 50. Any change to what is listed goes back to
+  the first page.
+- **Chart** shows the estimation of the same projects by status, under
+  the same view, search and filters.
 - **Selection** turns the toolbar into an Archive action; archived
-  projects move to the Archived tab. Changing tab clears the selection,
-  so you never act on rows you cannot see.
+  projects move to the Archived view. Changing the page, the view, the
+  search or a filter clears it, so you never act on rows you cannot see.
+- **Clear filters**, in the empty state, clears the search and puts the
+  view's own filters back; it does not leave the view.
 - **Expand** a row to see its activity: status changes with their note,
   estimation changes, and when it was created.
-- **Compact rows** (the toggle at the start of the toolbar) switches the
-  table to its small density.
+- **Compact rows** switches the table to its small density, and
+  **Columns** hides the ones you do not need.
+
+<Canvas of={ProjectsStories.FilterAndSaveView} />
 
 ## Make it yours
 
 `Projects` takes `projects` (an array of `Project`, see
 `projects-data.ts`) and keeps a copy in state. Replace `sampleProjects`
-with your data, and the `setProjects` calls (Archive) with calls to your
-API. The activity list lives in `ProjectActivity.tsx`, shared with
+with your data, the `setProjects` calls (Archive) with calls to your API,
+and the `views` state with the views you store per user. With many rows,
+filter, sort and page on the server: the page slices locally only because
+the sample is small. The activity list lives in `ProjectActivity.tsx`,
+shared with
 [Project Detail](?path=/docs/templates-object-management-project-detail--docs),
 until the Feed pattern replaces it.
 
@@ -59,10 +89,12 @@ Any other prop goes to the App Shell's root, e.g. `style` to set its
 
 - The sidebar sits beside the page; below 64rem it is the icon rail, and
   the header comes back with the account (App Shell).
+- The heading wraps: Add project drops under the title when there is no
+  room beside it.
 - The toolbar wraps: on a phone the search takes its own line, and the
-  status filter and "Add project" flow under it.
-- The tab list scrolls sideways when the six tabs do not fit, instead of
-  wrapping onto a second line.
+  filters and the table settings flow under it.
+- The views scroll sideways when they do not fit, instead of wrapping
+  onto a second line.
 - The table keeps its columns and scrolls inside its own frame; the page
   never scrolls sideways.
 
@@ -72,15 +104,22 @@ Any other prop goes to the App Shell's root, e.g. `style` to set its
 
 - One `h1` ("Projects" and the count), a `main` landmark with a skip link,
   and the sidebar as the "Main" navigation (App Shell).
-- The tab list is named "Project views"; each tab's name includes its
-  count ("Risk 3"), and the table is in the selected tab's panel.
+- The views are a tab list named "Project views"; each tab's name
+  includes its count ("Risk 3"). "Modified" is a status, announced when
+  it appears (Saved Views).
+- The filters are a search landmark, "Project filters"; the chips are a
+  list, "Applied filters", and removing one moves focus to the next
+  (Filter Bar).
+- The Table / Chart switch is a second tab list, "Show projects as"; the
+  count beside it ("16 projects") is a status, announced as it changes
+  (Table Chart Switch).
 - The table's caption names the current view ("Risk projects"); the
   project name is each row's header, so the checkbox and the expand button
   are named after it ("Select Harbor Lights", "Expand Harbor Lights").
+- The pages are a navigation, "Project pages".
 - An expanded row's activity is a region named after the project
-  ("Harbor Lights activity"),
-  holding an ordered list, newest first. The arrow between a timeline's
-  dates is hidden and read as "to".
+  ("Harbor Lights activity"), holding an ordered list, newest first. The
+  arrow between a timeline's dates is hidden and read as "to".
 - A PM without a name says "Unassigned", and a project without dates says
   "Not scheduled", instead of an empty cell.
 - The selection count is announced as it changes (Data Table Page).

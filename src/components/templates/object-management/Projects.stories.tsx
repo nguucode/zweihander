@@ -32,44 +32,42 @@ type Story = StoryObj<typeof meta>
 const rowNames = (canvas: ReturnType<typeof within>) => canvas.getAllByRole('rowheader').map((c: HTMLElement) => c.textContent)
 const body = () => within(document.body)
 
-/** The whole page at the width of its frame: tabs, search, status filter, sort, selection and the activity of a row. */
+/** The whole page at the width of its frame: views, search, sort across pages, the activity of a row and a bulk archive. */
 export const Default: Story = {
   play: async ({ canvas }) => {
     await expect(canvas.getByRole('heading', { level: 1, name: 'Projects 16' })).toBeVisible()
-    await expect(rowNames(canvas)).toHaveLength(16)
+    await expect(canvas.getByRole('button', { name: 'Add project' })).toBeVisible()
+    // Sixteen open projects, ten to a page.
+    await expect(rowNames(canvas)).toHaveLength(10)
+    await expect(canvas.getByRole('navigation', { name: 'Project pages' })).toHaveTextContent('1–10 of 16')
+    await userEvent.click(canvas.getByRole('button', { name: 'Page 2' }))
+    await expect(rowNames(canvas)).toHaveLength(6)
 
-    // A tab is a saved filter, and its count is the rows it shows.
+    // A view is a saved filter, and its count is the rows it shows.
     await userEvent.click(canvas.getByRole('tab', { name: 'Risk 3' }))
     await expect(rowNames(canvas)).toEqual(['Saltmarsh Analytics', 'Lanternfish Search', 'Orchard Help Center'])
+    await expect(canvas.getByRole('table', { name: 'Risk projects' })).toBeVisible()
     await userEvent.click(canvas.getByRole('tab', { name: 'Archived 2' }))
     await expect(rowNames(canvas)).toEqual(['Foxglove Pricing', 'Tidewater Export'])
     await userEvent.click(canvas.getByRole('tab', { name: /^All/ }))
 
-    // Search narrows the rows and every tab's count; it matches the PM too.
+    // Search narrows the rows and every view's count; it matches the PM too.
     const search = canvas.getByRole('searchbox', { name: 'Search projects' })
     await userEvent.type(search, 'priya')
     await expect(rowNames(canvas)).toEqual(['Ember Mobile'])
     await expect(canvas.getByRole('tab', { name: 'Archived 1' })).toBeVisible()
     await userEvent.clear(search)
 
-    // The status filter. A radio menu stays open after a choice, so Escape closes it.
-    const pickStatus = async (trigger: string, option: string) => {
-      await userEvent.click(canvas.getByRole('button', { name: trigger }))
-      await userEvent.click(await body().findByRole('menuitemradio', { name: option }))
-      await userEvent.keyboard('{Escape}')
-      await waitFor(() => expect(body().queryByRole('menu')).toBeNull())
-    }
-    await pickStatus('All statuses', 'Expired')
-    await expect(rowNames(canvas)).toEqual(['Saltmarsh Analytics'])
-    await pickStatus('Expired', 'All statuses')
-    await expect(rowNames(canvas)).toHaveLength(16)
-
-    // Sort by estimation, cheapest first, then the most expensive.
+    // The sort covers every page: the cheapest project was on page 2.
     const estimation = canvas.getByRole('button', { name: 'Estimation' })
     await userEvent.click(estimation)
     await expect(rowNames(canvas)[0]).toBe('Cobalt Audit Log')
     await userEvent.click(estimation)
     await expect(rowNames(canvas)[0]).toBe('Lanternfish Search')
+    // A sort changes the view: it can be saved, or dropped.
+    await expect(canvas.getByText('Modified')).toBeVisible()
+    await userEvent.click(canvas.getByRole('button', { name: 'Discard' }))
+    await expect(rowNames(canvas)[0]).toBe('Harbor Lights')
 
     // A row opens to its activity: the status change with its note, the estimation change, the creation.
     const expand = canvas.getByRole('button', { name: 'Expand Harbor Lights' })
@@ -78,15 +76,52 @@ export const Default: Story = {
     const activity = canvas.getByRole('region', { name: 'Harbor Lights activity' })
     await expect(within(activity).getAllByRole('listitem')).toHaveLength(3)
     await expect(within(activity).getByText(/Budget approved/)).toBeVisible()
-    await expect(within(activity).getByText(/created the project/)).toBeVisible()
 
-    // Selected rows can be archived; they move to the Archived tab.
+    // Selected rows can be archived; they move to the Archived view.
     await userEvent.click(canvas.getByRole('checkbox', { name: 'Select Harbor Lights' }))
-    await userEvent.click(canvas.getByRole('checkbox', { name: 'Select Meridian SSO' }))
-    await expect(canvas.getByRole('status')).toHaveTextContent('2 selected')
+    await userEvent.click(canvas.getByRole('checkbox', { name: 'Select Copperleaf CRM' }))
+    await expect(canvas.getByText('2 selected')).toBeVisible()
     await userEvent.click(canvas.getByRole('button', { name: 'Archive' }))
     await expect(canvas.getByRole('tab', { name: 'Archived 4' })).toBeVisible()
     await expect(canvas.getByRole('heading', { level: 1, name: 'Projects 14' })).toBeVisible()
+  },
+}
+
+/** A filter shows as a chip and marks the view modified; Save as new view keeps it as a view of its own. */
+export const FilterAndSaveView: Story = {
+  play: async ({ canvas }) => {
+    // A checkbox menu stays open after a choice, so Escape closes it.
+    await userEvent.click(canvas.getByRole('button', { name: 'Status' }))
+    await userEvent.click(await body().findByRole('menuitemcheckbox', { name: 'Expired' }))
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(body().queryByRole('menu')).toBeNull())
+    await expect(rowNames(canvas)).toEqual(['Saltmarsh Analytics'])
+    const chips = canvas.getByRole('list', { name: 'Applied filters' })
+    await expect(within(chips).getByText('Status: Expired')).toBeVisible()
+    await expect(canvas.getByText('Modified')).toBeVisible()
+
+    // All is predefined: no Save, only Save as new view.
+    await expect(canvas.queryByRole('button', { name: 'Save' })).toBeNull()
+    await userEvent.click(canvas.getByRole('button', { name: 'Save as new view' }))
+    await userEvent.type(await body().findByRole('textbox', { name: /View name/ }), 'Expired')
+    await userEvent.click(body().getByRole('button', { name: 'Save view' }))
+    await expect(await canvas.findByRole('tab', { name: 'Expired 1' })).toHaveAttribute('aria-selected', 'true')
+    await expect(canvas.queryByText('Modified')).toBeNull()
+
+    // Back to All: the filter goes with the view.
+    await userEvent.click(canvas.getByRole('tab', { name: /^All/ }))
+    await expect(canvas.queryByRole('list', { name: 'Applied filters' })).toBeNull()
+    await expect(rowNames(canvas)).toHaveLength(10)
+  },
+}
+
+/** The same projects as a chart of their estimation by status, under the same views and filters. */
+export const Chart: Story = {
+  play: async ({ canvas }) => {
+    await userEvent.click(canvas.getByRole('tab', { name: 'Chart' }))
+    await expect(await canvas.findByRole('img', { name: /Estimation by status/ })).toBeVisible()
+    await userEvent.click(canvas.getByRole('tab', { name: 'Risk 3' }))
+    await expect(canvas.getByText('3 projects')).toBeVisible()
   },
 }
 
@@ -101,7 +136,7 @@ export const Tablet: Story = {
   },
 }
 
-/** On a phone the toolbar wraps, the tabs scroll sideways and the table scrolls inside its frame, not the page. */
+/** On a phone the toolbar wraps, the views scroll sideways and the table scrolls inside its frame, not the page. */
 export const Mobile: Story = {
   decorators: box(375),
   play: async ({ canvas }) => {

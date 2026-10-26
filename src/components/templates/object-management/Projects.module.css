@@ -24,6 +24,14 @@
   gap: var(--space-inline);
 }
 
+.heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-cluster);
+}
+
 .title {
   display: flex;
   align-items: center;
@@ -41,10 +49,16 @@
   min-inline-size: 0;
 }
 
-/* Six tabs with counts do not fit a phone: the tab list scrolls sideways
-   instead of wrapping, so the underline stays one line. */
-.tabs [role='tablist'] {
-  overflow-x: auto;
+/* The table settings stay at the top of the toolbar when the applied
+   filters add a row under the search. */
+.toolbar {
+  align-items: flex-start;
+  margin-block-end: 0;
+}
+
+.tableSettings {
+  display: flex;
+  gap: var(--space-2);
 }
 
 .timeline {
