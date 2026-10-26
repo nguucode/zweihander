@@ -5,7 +5,7 @@ import { Button } from '../../buttons/Button'
 import { Link } from '../../navigation/Link'
 import { Alert } from '../../notifications/Alert'
 import { AuthLayout, focusTitle, type AuthLayoutProps } from './AuthLayout'
-import { PasswordInput, defaultPasswordRules, type PasswordRule } from './PasswordInput'
+import { PasswordInput, defaultPasswordRules, type PasswordRule } from '../../inputs/PasswordInput'
 import styles from './PasswordReset.module.css'
 
 export interface ResetPasswordValues {

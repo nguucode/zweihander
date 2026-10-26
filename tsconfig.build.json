@@ -11,6 +11,7 @@
     "src/components/buttons/Button.tsx",
     "src/components/atomic-elements/Divider.tsx",
     "src/components/inputs/TextInput.tsx",
+    "src/components/inputs/PasswordInput.tsx",
     "src/components/inputs/Field.tsx",
     "src/components/atomic-elements/Badge.tsx",
     "src/lib/icon.tsx",

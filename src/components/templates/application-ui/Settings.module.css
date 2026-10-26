@@ -1,0 +1,108 @@
+/* The page is the container: the nav sits beside the sections when the
+   page is wide enough, whatever the viewport or the shell around it. */
+.page {
+  display: grid;
+  gap: var(--space-section);
+  container-type: inline-size;
+}
+
+.brand {
+  font-size: var(--text-heading-xs);
+}
+
+.sidebar {
+  block-size: 100%;
+}
+
+.account {
+  display: flex;
+  align-items: center;
+}
+
+.heading {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: var(--text-heading-xl);
+  line-height: var(--leading-heading-xl);
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+.description {
+  margin: 0;
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--muted-foreground);
+}
+
+/* Narrow: the nav stacks above the section. A settings nav is a handful of
+   links, so the whole list stays visible rather than folding into a menu
+   that hides where else to go. */
+.body {
+  display: grid;
+  gap: var(--space-section);
+  align-items: start;
+}
+
+/* Wide: the nav is a column as wide as the app's sidebar, and stays in view
+   while a long section scrolls. 48rem is where Form Section splits too. */
+@container (min-width: 48rem) {
+  .body {
+    grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
+  }
+  .nav {
+    position: sticky;
+    inset-block-start: 0;
+  }
+}
+
+.panels,
+.panel {
+  display: grid;
+  gap: var(--space-section);
+  min-inline-size: 0;
+}
+/* display: grid would otherwise beat the hidden attribute. */
+.panel[hidden] {
+  display: none;
+}
+
+/* The save bar sticks to the bottom of the scrolling page while its form
+   runs past the fold, on the page's own surface so fields slide under it. */
+.saveBar {
+  position: sticky;
+  inset-block-end: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-cluster);
+  padding-block: var(--space-stack);
+  border-block-start: 1px solid var(--border);
+  background: var(--background);
+}
+
+.status {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--muted-foreground);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-cluster);
+  margin-inline-start: auto;
+}
+
+/* The danger zone: last, set off by a rule like the line between sections. */
+.danger {
+  padding-block-start: var(--space-section);
+  border-block-start: 1px solid var(--border);
+}

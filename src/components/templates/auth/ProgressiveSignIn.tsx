@@ -8,7 +8,7 @@ import { Spinner } from '../../loaders/Spinner'
 import { Link } from '../../navigation/Link'
 import { Alert } from '../../notifications/Alert'
 import { AuthLayout, AuthProviders, focusTitle, type AuthLayoutProps, type AuthProvider } from './AuthLayout'
-import { PasswordInput } from './PasswordInput'
+import { PasswordInput } from '../../inputs/PasswordInput'
 import styles from './ProgressiveSignIn.module.css'
 
 export interface ProgressiveSignInIdentity {

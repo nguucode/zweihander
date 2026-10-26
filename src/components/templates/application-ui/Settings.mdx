@@ -1,0 +1,95 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks'
+import * as SettingsStories from './Settings.stories'
+
+<Meta of={SettingsStories} />
+
+# Settings
+
+The signed-in user's settings: a heading, a
+[Vertical Nav](?path=/docs/patterns-application-ui-vertical-nav--docs) of
+sections beside the one shown, each section a form of
+[Form Sections](?path=/docs/patterns-application-ui-form-layouts--docs)
+with a save bar at its end, and a danger zone last. After Tailwind UI's
+settings screens and Polaris' settings page. Built from
+[App Shell](?path=/docs/templates-application-ui-app-shell--docs) and the
+kit's Text Input, Textarea,
+[Password Input](?path=/docs/components-inputs-passwordinput--docs),
+Checkbox, Radio, Modal and Button. The data is made up.
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/settings-template.json
+```
+
+<Canvas of={SettingsStories.Default} />
+
+## What works
+
+- **Nav**: Profile, Account and Notifications. A link swaps the section in
+  place and becomes the current page. Every section stays mounted while
+  hidden, so a half-done edit survives a look at another section.
+- **Save bar**: at the end of each section's form, Discard and Save, with
+  a status line. It sticks to the bottom of the view while a long form
+  runs past the fold. Save stores what the form sends and says "Saved.";
+  Discard puts the fields back to what was last saved. Both are always
+  there: a disabled Save cannot say why it is disabled.
+- **Account**: change password asks for the current password, to prove
+  it is you, and a new one with its rules. Both are checked on send, focus
+  goes to the first one to fix, and the fields empty once it changes.
+- **Read-only**: the email is managed by the organisation's sign-in, so
+  it is a read-only field that says who can change it, not a disabled one:
+  it stays readable, focusable and sent with the form.
+- **Danger zone**: Delete account, last on the Account section and set
+  off by a rule, opens an alert dialog with Cancel focused. Cancel or
+  Escape keeps everything.
+
+<Canvas of={SettingsStories.Account} />
+
+## Make it yours
+
+`Settings` keeps the saved values in state and hands each save to
+`onSave(section, values)`, the form's fields by name. Call your API there,
+and load your values in place of the samples. Add a section by adding it
+to `SECTIONS` and a `SectionForm` for it; past seven or so sections, group
+them in the nav.
+
+Settings are edited as forms with one Save per section, not field by
+field with [Inline Edit](?path=/docs/patterns-application-ui-inline-edit--docs):
+a reader changes several related values at once and expects to review them
+before they apply. Inline edit suits a record read more than edited.
+[Form Layouts' Settings Sections](?path=/docs/patterns-application-ui-form-layouts--docs)
+shows the sections alone; this template is the whole page around them.
+
+The sample swaps sections in place. In an app with a router, give each nav
+item its own URL (a `render` link), and render the section the URL names.
+
+## Props
+
+<ArgTypes of={SettingsStories} />
+
+Any other prop goes to the App Shell's root, e.g. `style` to set its
+`block-size` when the page is not the whole viewport.
+
+## Layout
+
+- From 48rem of page width the nav is a column as wide as the app's
+  sidebar and stays in view while the section scrolls. Below that it
+  stacks above the section, every link still showing: a settings nav is a
+  handful of links, and folding it into a menu would hide where else to go.
+- Form Sections split (title and description beside the fields) from
+  48rem of their own width, and stack below.
+
+<Canvas of={SettingsStories.Narrow} />
+
+## Accessibility
+
+- One `h1`, "Settings"; each Form Section's title is an `h2`.
+- The nav is a navigation landmark named "Settings", the shown section's
+  link `aria-current="page"`. Focus stays on the link; the section follows
+  it in reading order.
+- Each section is a form named after it ("Profile", "Change password").
+  The save bar's status line is a `status` live region, so "Saved." is
+  announced without moving focus.
+- A field that fails is marked `aria-invalid`, its message part of its
+  description, and gets focus.
+- Delete account opens an `alertdialog` named "Delete your account?",
+  with focus on Cancel; on close focus returns to the button.
