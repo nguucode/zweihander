@@ -1,0 +1,115 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks'
+import * as MFAChallengeStories from './MFAChallenge.stories'
+
+<Meta of={MFAChallengeStories} />
+
+# MFA Challenge
+
+The second step of signing in: the reader enters a one-time code from
+their authenticator app, or the one sent to their phone or email. **Try
+another way** switches method, and a **backup code** gets them in when
+none is at hand. After Carbon's login pattern and shadcn's Input OTP.
+Built on the **Auth Layout** (see
+[Sign In](?path=/docs/templates-auth-sign-in--docs#auth-layout)), **OTP
+Input** with its Resend code, and the kit's TextInput, Checkbox, Link,
+Alert and Button.
+
+Show it after the password, from **Sign In** or **Progressive Sign In**,
+when the account has a second factor. Setting one up (the QR code, the
+first backup codes) is a separate screen.
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/mfa-challenge-template.json
+```
+
+<Canvas of={MFAChallengeStories.Default} />
+
+## What works
+
+- **The code**: six cells by default (`codeLength`). Typing or pasting the
+  last digit sends the form; **Verify** does too, and with cells empty it
+  marks the field and says what is missing. `onVerify` gets the method's
+  `id`, the code and **Remember this device**.
+- **Where the code went**: the line under the title follows the method.
+  An authenticator app: "Enter the 6-digit code from your authenticator
+  app." A text message or an email: "We sent a 6-digit code to •••• 4821",
+  with the destination as you pass it (mask it yourself), and **Resend
+  code** under the cells, counting down from `resendCooldown` seconds,
+  calling `onResend` and saying the new code went out.
+- **Try another way**, when the account has more than one method: the
+  other methods ("Authenticator app", "Text message to •••• 4821", "Email
+  to a•••@example.com") and **Back**. Picking one calls `onMethodSelect`,
+  where you send its code, then shows its code step. A resend still on its
+  way when the reader moves on is ignored.
+- **Use a backup code**: a plain text field, since backup codes are longer
+  and often have letters and a dash. `onVerify` gets it as method
+  `'backup'`, trimmed. **Use a verification code instead** goes back.
+- **Remember this device for 30 days**: the template stores nothing. When
+  `rememberDevice` is true, set your trusted-device cookie for
+  `rememberDeviceDays`, and skip this page next time.
+- **When it fails**: every handler returns (or resolves to) a message. It
+  shows above the form and is announced; a wrong code is cleared and the
+  first cell focused. If a handler throws or rejects, the page says
+  "Something went wrong. Try again."
+
+<Canvas of={MFAChallengeStories.TextMessage} />
+
+<Canvas of={MFAChallengeStories.TryAnotherWay} />
+
+<Canvas of={MFAChallengeStories.BackupCode} />
+
+## Variants
+
+**Card** (default) and **plain**, and **with a panel** through `aside`,
+exactly as on Sign In: they are the Auth Layout's. With one method and
+`hasBackupCode={false}`, there are no other ways in to offer.
+
+<Canvas of={MFAChallengeStories.OnlyOneWay} />
+
+## Make it yours
+
+Pass the account's methods in the order you want, the default (the one
+the reader set up first, or used last) first. Rate-limit `onVerify`,
+`onResend` and `onMethodSelect` on the server and return the message
+("Too many attempts. Try again in 15 minutes."): the page shows it as it
+is. After `onVerify` succeeds, navigate on.
+
+## Props
+
+| Prop | Values | Default | |
+| --- | --- | --- | --- |
+| `methods` | `{ id, kind: 'app' }` or `{ id, kind: 'sms' \| 'email', destination }`, in an array | | The account's second factors; the first shows first. |
+| `onVerify` | `(values) => string \| void \| Promise<…>` | | Gets `{ method, code, rememberDevice }`; `method` is an `id` or `'backup'`. A returned message shows above the form. |
+| `onResend` | `(method) => string \| void \| Promise<…>` | | Resend code, for `sms` and `email`. |
+| `onMethodSelect` | `(method) => string \| void \| Promise<…>` | | A method picked under Try another way. A returned message keeps the list. |
+| `codeLength` | `number` | `6` | Digits in a code. |
+| `resendCooldown` | `number` | `30` | Seconds before Resend code is allowed. |
+| `hasRememberDevice` | `boolean` | `true` | Shows Remember this device. |
+| `rememberDeviceDays` | `number` | `30` | The days in its label. |
+| `hasBackupCode` | `boolean` | `true` | Shows Use a backup code. |
+| `signInHref` | `string` | `"#sign-in"` | Back to sign in, under the form. |
+| `footer` | `ReactNode` | | Under Back to sign in, outside the card. |
+
+Every other Auth Layout prop passes through.
+
+## Layout
+
+The Auth Layout's, as on [Sign In](?path=/docs/templates-auth-sign-in--docs#layout).
+On a phone the six cells fit the column, and Try another way and Use a
+backup code wrap onto two lines when they must.
+
+<Canvas of={MFAChallengeStories.Phone} />
+
+## Accessibility
+
+- The form is in a `main` landmark, and its one heading is the `h1`.
+- The cells are a group named "Verification code"; the first cell has
+  `autocomplete="one-time-code"`, so the phone offers a code from a text
+  message.
+- An incomplete code marks the cells `aria-invalid="true"`, describes the
+  group with the message and focuses the first cell; an empty backup code
+  does the same on its field.
+- Each step replaces the last, so focus moves on: to the first cell, to
+  the backup code field, or to the new `h1` on the list of methods.
+- A message from a handler is an `alert`, the "new code sent" note a
+  `status`, and Verify is `aria-busy` while it waits.

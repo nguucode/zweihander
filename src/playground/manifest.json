@@ -3318,6 +3318,60 @@
     },
     {
       "kind": "template",
+      "id": "templates-auth-mfa-challenge",
+      "name": "MFA Challenge",
+      "category": "Auth",
+      "status": "experimental",
+      "storyId": "templates-auth-mfa-challenge--default",
+      "props": [
+        {
+          "name": "codeLength",
+          "control": "number",
+          "default": 6,
+          "description": "Digits in a code from a method."
+        },
+        {
+          "name": "resendCooldown",
+          "control": "number",
+          "default": 30,
+          "description": "Seconds before Resend code is allowed, from when the code was sent and after each resend."
+        },
+        {
+          "name": "hasRememberDevice",
+          "control": "boolean",
+          "default": true,
+          "description": "Shows \"Remember this device for N days\"."
+        },
+        {
+          "name": "rememberDeviceDays",
+          "control": "number",
+          "default": 30,
+          "description": "The N in \"Remember this device for N days\": how long your server trusts the device."
+        },
+        {
+          "name": "hasBackupCode",
+          "control": "boolean",
+          "default": true,
+          "description": "Shows Use a backup code."
+        },
+        {
+          "name": "signInHref",
+          "control": "text",
+          "default": "#sign-in",
+          "description": "Where \"Back to sign in\" goes."
+        },
+        {
+          "name": "appearance",
+          "control": "inline-radio",
+          "options": [
+            "card",
+            "plain"
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "template",
       "id": "templates-auth-progressive-sign-in",
       "name": "Progressive Sign In",
       "category": "Auth",

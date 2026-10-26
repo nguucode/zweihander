@@ -1,0 +1,22 @@
+.form {
+  display: grid;
+  gap: var(--space-group);
+}
+
+.text {
+  margin: 0;
+}
+
+.destination {
+  font-weight: 500;
+  color: var(--foreground);
+  overflow-wrap: anywhere;
+}
+
+/* Try another way and Use a backup code: ghost buttons on one row while they fit. */
+.others {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-inline);
+}
