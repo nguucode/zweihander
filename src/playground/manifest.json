@@ -2973,6 +2973,15 @@
     },
     {
       "kind": "pattern",
+      "id": "patterns-application-ui-inline-edit",
+      "name": "Inline Edit",
+      "category": "Application UI",
+      "status": "experimental",
+      "storyId": "patterns-application-ui-inline-edit--default",
+      "props": []
+    },
+    {
+      "kind": "pattern",
       "id": "patterns-application-ui-nav-sidebar",
       "name": "Nav Sidebar",
       "category": "Application UI",

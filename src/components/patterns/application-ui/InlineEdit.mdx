@@ -1,0 +1,105 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks'
+import * as InlineEditStories from './InlineEdit.stories'
+
+<Meta of={InlineEditStories} />
+
+# Inline Edit
+
+A value that edits where it stands, in a table cell or a description list
+row, so changing one field does not take a trip to a form. After the inline
+edit of enterprise SaaS and ERP tools (Salesforce, Airtable, SAP Fiori's
+editable tables).
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/inline-edit.json
+```
+
+The pattern owns no data. It shows `value`, calls `onSave` with the new
+one, and shows the message you return when the save fails.
+
+## Description list
+
+Each detail of a record edits in its row. Hover or focus a value and a
+pencil shows that it can change; click it, or press Enter on it, and it
+becomes a text input with the whole value selected. Enter or Save keeps the
+change, Escape or Cancel drops it.
+
+<Canvas of={InlineEditStories.Default} />
+
+## Table cell
+
+Put it in a column's `cell`. Use `size="sm"` in a table row, and name each
+one by its row in `label` ("PO reference for INV-1041"), since every cell in
+the column says the same thing otherwise.
+
+<Canvas of={InlineEditStories.InTable} />
+
+## Error
+
+Return a message from `onSave` (or throw one) and it shows under the field,
+which stays open with what was typed. Typing again clears it. Check the
+format here: the input is always `type="text"`, so `inputMode` only picks
+the on-screen keyboard.
+
+<Canvas of={InlineEditStories.Invalid} />
+
+## Saving
+
+Return a promise and the field is saving until it settles: the input is
+read-only, Save spins, and Cancel and Escape wait. A rejection shows its
+message as an error.
+
+<Canvas of={InlineEditStories.Saving} />
+
+## Leaving the field
+
+Tab or click away and the change is saved, not lost. Focus goes where the
+viewer sent it, and a slow save does not pull it back. A save that fails
+leaves the field open with its error. An unchanged value closes without calling `onSave`.
+
+<Canvas of={InlineEditStories.SaveOnBlur} />
+
+## Empty and long values
+
+An empty value shows `placeholder`, muted, so there is still something to
+click. A long value wraps, even with no spaces, instead of widening the
+cell.
+
+<Canvas of={InlineEditStories.EmptyAndLong} />
+
+## Props
+
+<ArgTypes of={InlineEditStories} />
+
+Every other `<div>` attribute passes through to the root.
+
+## Layout
+
+- **The value lines up with the text around it.** The root pulls back by
+  the field's inline padding, so the value's text starts where a plain
+  cell's text does, and the input's text starts in the same place: entering
+  edit mode does not shift it. It pulls back by the extra height too, so the
+  value sits on the same line as the term or the cells beside it.
+- **Save and Cancel sit at the end of the input**, aligned to its box; an
+  error goes under the box and pushes the row taller, not the buttons down.
+- **The pencil does not take space away from the value** on hover: it has
+  its place from the start, hidden until hover or focus. On a touch screen,
+  where nothing hovers, it always shows.
+- **On a touch screen** the value's hit area grows to 44px without the value
+  growing.
+
+## Accessibility
+
+- The value is a button named "Edit {label}: {value}", so a screen reader
+  says what it edits and what it holds. Enter or Space on it opens the
+  input, focused, with the value selected.
+- The input is named by `label`. Enter saves; Escape cancels and does not
+  close a Drawer or Modal around it.
+- After Enter, Save, Escape or Cancel, focus returns to the value.
+- An error marks the input invalid and becomes its description, so it is
+  read with the field; a status announces it too, since after a blur save
+  focus has already left.
+- While saving, a status says "Saving" and Save is busy. Escape waits,
+  and still does not reach the overlay.
+
+<Canvas of={InlineEditStories.Keyboard} />

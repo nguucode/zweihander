@@ -1,0 +1,113 @@
+/* The value sits where the input's text will: the root pulls back by the
+   field's padding, inline and block, so in a table cell or a description
+   list the value lines up with the text around it (start and baseline),
+   the row is no taller than a line of text, and edit mode does not shift
+   it. */
+.inlineEdit {
+  --inline-edit-pad: var(--control-md-pad);
+  --inline-edit-size: var(--control-md);
+  --inline-edit-radius: var(--control-md-radius-field);
+  margin-inline: calc(-1 * var(--inline-edit-pad));
+  margin-block: calc((1lh - var(--inline-edit-size)) / 2);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--foreground);
+}
+
+.sm {
+  --inline-edit-pad: var(--control-sm-pad);
+  --inline-edit-size: var(--control-sm);
+  --inline-edit-radius: var(--control-sm-radius-field);
+}
+
+.value {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  box-sizing: border-box;
+  inline-size: 100%;
+  min-block-size: var(--inline-edit-size);
+  margin: 0;
+  padding-inline: var(--inline-edit-pad);
+  border: 1px solid transparent;
+  border-radius: var(--inline-edit-radius);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: start;
+  cursor: text;
+}
+
+.value:hover {
+  background: var(--hover-overlay);
+}
+
+.value:focus-visible {
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: var(--focus-offset);
+}
+
+.text,
+.placeholder {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+
+.placeholder {
+  color: var(--muted-foreground);
+}
+
+/* The pencil shows on hover and focus; with no hover to reveal it (touch),
+   it is always there. */
+.pencil {
+  flex: none;
+  color: var(--muted-foreground);
+  opacity: 0;
+}
+
+.value:hover .pencil,
+.value:focus-visible .pencil {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .pencil {
+    opacity: 1;
+  }
+}
+
+@media (pointer: coarse) {
+  .value::after {
+    content: '';
+    position: absolute;
+    inset: 50% auto auto 50%;
+    inline-size: max(100%, var(--target-coarse));
+    block-size: max(100%, var(--target-coarse));
+    translate: -50% -50%;
+  }
+}
+
+/* Save and Cancel sit beside the field's box, not beside its error. */
+.editor {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-1);
+}
+
+.field {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+}
+
+.srOnly {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  margin: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
