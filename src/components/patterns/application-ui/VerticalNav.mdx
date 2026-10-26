@@ -1,0 +1,64 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks'
+import * as VerticalNavStories from './VerticalNav.stories'
+
+<Meta of={VerticalNavStories} />
+
+# Vertical Nav
+
+Secondary navigation inside a page: the sections of Settings, or the
+parts of a long record, as a column of links beside the content. The
+app's own navigation is the [Nav Sidebar](?path=/docs/patterns-application-ui-nav-sidebar--docs);
+this one has no rail, no collapse and no fill, and sits on the page.
+After Tailwind UI Application UI, Navigation: Vertical navigation.
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/vertical-nav.json
+```
+
+## With icons
+
+An icon before each label helps when the reader comes back often and
+scans by shape. Use icons on every item or on none. A count after the
+label is information (how many members), so it is a secondary
+[Badge](?path=/docs/atomic-elements-badge--docs), not the Nav Sidebar's
+red one for unread items.
+
+<Canvas of={VerticalNavStories.WithIcons} />
+
+## Grouped
+
+Past seven or so sections, name groups of them. Ungrouped items before
+the first group form a list of their own.
+
+<Canvas of={VerticalNavStories.Grouped} />
+
+## Props
+
+<ArgTypes of={VerticalNavStories} />
+
+Every other `<nav>` attribute passes through.
+
+## Layout
+
+- **No width of its own.** It fills the column the page gives it; the
+  page decides the column's width and what happens on a narrow screen
+  (the Settings template stacks it above the content).
+- **Long labels wrap** rather than truncate: a cut-off section name hides
+  which section it is. A word with no spaces breaks anywhere.
+- Rows are `--control-md` tall at least, as in the Nav Sidebar, and
+  `--target-coarse` under a coarse pointer.
+
+<Canvas of={VerticalNavStories.LongLabels} />
+
+## Accessibility
+
+- It is a `nav` landmark and needs an `aria-label` ("Settings"): the
+  app's own navigation is already a navigation landmark, so the two need
+  different names.
+- The current section has `aria-current="page"` as well as the selected
+  fill and medium weight, so it is not shown by color alone.
+- A group label names its list ("Workspace, list, 4 items") and is not a
+  heading, so it cannot break the page's heading outline.
+- A count joins the link's name after a comma ("Members, 12").
+  Icons are decorative and hidden from assistive tech.
+- Tab moves down the links in order; there are no other stops.

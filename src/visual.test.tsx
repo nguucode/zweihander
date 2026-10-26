@@ -83,6 +83,7 @@ const STORIES: Record<string, { story: string; args?: Record<string, unknown>; p
   'patterns/application-ui/TableChartSwitch': { story: 'Default' },
   'patterns/application-ui/InlineEdit': { story: 'Default' },
   'patterns/application-ui/Session': { story: 'Inactive' },
+  'patterns/application-ui/VerticalNav': { story: 'Grouped' },
   'states/EmptyState': { story: 'Default' },
   'states/ErrorState': { story: 'Default' },
   'states/SuccessState': { story: 'Default' },

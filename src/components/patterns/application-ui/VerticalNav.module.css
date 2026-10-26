@@ -1,0 +1,92 @@
+/* No fill, border or width of its own: it sits on the page, in whatever
+   column the page gives it. Rows match NavSidebar's so the two navs read
+   as one family. */
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-group);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--foreground);
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-stack);
+}
+.groupLabel {
+  padding: 0 var(--space-inline);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--muted-foreground);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  /* 2px in every density, so hover and current fills never touch. */
+  gap: var(--space-0-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-inline);
+  box-sizing: border-box;
+  min-block-size: var(--control-md);
+  padding: var(--space-1) var(--space-inline);
+  border-radius: var(--radius-control);
+  color: var(--subtle-foreground);
+  text-decoration: none;
+  cursor: var(--cursor-link);
+}
+.item:hover {
+  background: var(--hover-overlay);
+  color: var(--accent-foreground);
+}
+.item:focus-visible {
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: var(--focus-offset-inset);
+}
+
+/* The current section: the same --selected fill and medium weight as
+   NavSidebar's current page. */
+.current,
+.current:hover {
+  background: var(--selected);
+  color: var(--foreground);
+  font-weight: 500;
+}
+
+.icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--icon-md);
+  font-size: var(--icon-md);
+  color: var(--muted-foreground);
+}
+.current .icon,
+.item:hover .icon {
+  color: inherit;
+}
+
+/* A long label wraps rather than truncates: in a page there is no rail to
+   fit, and a cut-off section name hides which section it is. */
+.label {
+  flex: 1;
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+
+@media (pointer: coarse) {
+  .item {
+    min-block-size: var(--target-coarse);
+  }
+}
