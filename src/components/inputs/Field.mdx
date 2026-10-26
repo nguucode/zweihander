@@ -1,0 +1,222 @@
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
+import { Field, FieldControl } from './Field'
+import { boxClass, inputStyles } from './InputField'
+import * as FieldStories from './Field.stories'
+
+<Meta of={FieldStories} />
+
+# Field
+
+<DocTabs>
+<DocTab value="overview">
+
+The label, required mark, info note and helper text for a control
+that has none of its own.
+
+<Status of={FieldStories} />
+
+Every Zweihänder control (Text Input, Select, Checkbox and the rest)
+already carries this anatomy. Field is for the control that does not: a
+native element the kit has no component for, a Base UI primitive, or one
+of your own. It wires the label, description and invalid state to it
+through Base UI Field.
+
+<Canvas of={FieldStories.Default} />
+
+## Variants
+
+There is one appearance. What changes is which optional parts are there.
+
+<Canvas of={FieldStories.Validation} />
+
+| Part | Use for |
+| --- | --- |
+| `helperText` | The format, limits or purpose, in a line; the error message when invalid. |
+| `labelInfo` | A longer rule or explanation most people do not need every time: behind an info button, so the form stays short. |
+| `validationState` | `error` when the value cannot be accepted: the helper text says what to change, and it and the edge turn red. `success` for a value checked and accepted. |
+| `required` | An asterisk after the label. |
+
+## Resources
+
+From npm, or copied into your project through the registry:
+
+```js
+import { Field } from 'zweihander/field'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/field.json
+```
+
+- Source: [src/components/inputs/Field.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/inputs/Field.tsx)
+- Spec: [uiguideline.com/components/text-input](https://www.uiguideline.com/components/text-input) (the label and helper parts)
+- Behaviour: [Base UI Field](https://base-ui.com/react/components/field)
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
+## Anatomy
+
+<Anatomy parts={FieldStories.anatomyParts}>
+  <Story of={FieldStories.Anatomy} />
+</Anatomy>
+
+The control is whatever you put inside; in these stories it is a native
+time input in the same box as Text Input.
+
+## Measurements
+
+<SpecTable
+  caption="Every field"
+  rows={[
+    { part: 'Label and helper text', property: 'Font size', token: '--text-body' },
+    { part: 'Label and helper text', property: 'Line height', token: '--leading-body' },
+    { part: 'Label, control, helper', property: 'Gap between', token: '--control-sm-gap' },
+    { part: 'Label and info button', property: 'Gap', token: '--space-1' },
+    { part: 'Info button', property: 'Icon size', token: '--icon-sm' },
+    { part: 'Info button', property: 'Touch target', token: '--target-coarse' },
+    { part: 'Info note', property: 'Block padding', token: '--space-2' },
+    { part: 'Info note', property: 'Inline padding', token: '--space-3' },
+    { part: 'Info note', property: 'Corner radius', token: '--radius-field' },
+  ]}
+/>
+
+The field is 20rem wide, capped at its container; with `isFullWidth` it
+fills the container. The info note is at most 22rem wide and opens above
+the button.
+
+## Color
+
+<SpecTable
+  caption="default"
+  rows={[
+    { part: 'Label', property: 'Colour', token: '--foreground' },
+    { part: 'Required asterisk', property: 'Colour', token: '--danger-text' },
+    { part: 'Info button', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Helper text', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Info note', property: 'Background', token: '--popover' },
+    { part: 'Info note', property: 'Border', token: '--border' },
+    { part: 'Info note', property: 'Shadow', token: '--shadow-md' },
+  ]}
+/>
+
+<SpecTable
+  caption="error"
+  rows={[
+    { part: 'Helper text', property: 'Colour', token: '--danger-text' },
+    { part: 'Field box edge', property: 'Colour', token: '--danger-text' },
+  ]}
+/>
+
+## States
+
+<States
+  states={[
+    { label: 'Enabled' },
+    {
+      label: 'Error',
+      content: (
+        <Field label="Start time" validationState="error" helperText="Enter a time between 06:00 and 22:00.">
+          <span className={boxClass('md')}>
+            <FieldControl type="time" className={inputStyles.control} />
+          </span>
+        </Field>
+      ),
+    },
+    {
+      label: 'Disabled',
+      content: (
+        <Field label="Start time" helperText="Set by the rota." disabled>
+          <span className={boxClass('md')}>
+            <FieldControl type="time" className={inputStyles.control} />
+          </span>
+        </Field>
+      ),
+    },
+  ]}
+>
+  <Field label="Start time" labelInfo="When the shift starts." helperText="HH:MM">
+    <span className={boxClass('md')}>
+      <FieldControl type="time" className={inputStyles.control} />
+    </span>
+  </Field>
+</States>
+
+- **Hover** and **focus** belong to the control. The info button turns
+  `--foreground` on hover and draws the `--ring` outline on keyboard focus.
+- **Error** colours the helper text, which then says what to change, and
+  the edge of a field box inside.
+- **Disabled** disables the control; how it dims is the control's own. The
+  info button stays active: the note may say why the field is disabled.
+
+## API
+
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={FieldStories} />
+</div>
+
+`FieldControl` is Base UI's `Field.Control`: an `<input>` by default, any
+element through `render`, with the label, description and invalid state
+wired to it. A Base UI control (Slider, Number Field, Checkbox) inside a
+Field wires itself.
+
+### Differences from the spec
+
+- **No separate error part.** As in every Zweihänder control, the error
+  is the helper text in the error state (the kit's API convention), so a
+  field never shows a hint and an error at once.
+- **The info note is a toggletip**, opened by press or Enter, not a
+  hover tooltip: tooltips do not open on touch.
+
+</DocTab>
+<DocTab value="guidelines">
+
+## When to use
+
+Use a Field round a control that has no label of its own. Keep the helper
+text to a line; put a longer rule behind `labelInfo`.
+
+<DoDont
+  do={<Story of={FieldStories.DoLongNoteInInfo} />}
+  doCaption="The format in a line under the control; the full rule behind the info button."
+  dont={<Story of={FieldStories.DontLongHelper} />}
+  dontCaption="A paragraph of helper text pushes every field below it down, on every visit."
+/>
+
+An **error** says what to change, not only that something is wrong.
+
+<DoDont
+  do={<Story of={FieldStories.DoSayWhatToFix} />}
+  doCaption="The error names the allowed range."
+  dont={<Story of={FieldStories.DontVagueError} />}
+  dontCaption="'Invalid value' leaves people guessing what to change."
+/>
+
+## When not to use
+
+- **Round a Zweihänder control.** Text Input, Textarea, Number Input,
+  Select, Combobox, Date Picker, Checkbox, Switch and Radio have their own
+  label, helper text and validation; a Field round one gives it two labels.
+- **For a group of controls** under one name, use a `<fieldset>` and
+  `<legend>`, as Radio does.
+
+## Accessibility
+
+- The label is a real `<label>` for the control: it is the control's
+  accessible name, and clicking it focuses the control.
+- `helperText` is the control's description (`aria-describedby`), read
+  after its name.
+- `validationState="error"` sets `aria-invalid="true"` on the control.
+  Colour is never the only signal: the helper text says what is wrong.
+- The required asterisk is `aria-hidden`; put `required` on the control so
+  screen readers announce it.
+- The info button is named by `infoLabel` ("More information") and
+  described by the label, so a list of buttons tells which field each is
+  for. It sits outside the `<label>`: pressing it opens the note without
+  focusing the control. Enter or a press opens the note, a dialog named by
+  the label; Escape closes it and returns focus to the button.
+
+</DocTab>
+</DocTabs>

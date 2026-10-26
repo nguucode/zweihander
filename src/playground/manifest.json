@@ -1387,6 +1387,67 @@
     },
     {
       "kind": "component",
+      "id": "components-inputs-field",
+      "name": "Field",
+      "category": "Inputs",
+      "status": "experimental",
+      "storyId": "components-inputs-field--default",
+      "props": [
+        {
+          "name": "label",
+          "control": "text",
+          "default": "Start time",
+          "description": "Names the control: a real `<label>`, so clicking it focuses the control."
+        },
+        {
+          "name": "labelInfo",
+          "control": "text",
+          "description": "A longer note about the label, behind an info button after it. Opens on press or Enter, not hover, so it works on touch; Escape closes it."
+        },
+        {
+          "name": "infoLabel",
+          "control": "text",
+          "default": "More information",
+          "description": "The info button's accessible name. The label is read after it, as its description."
+        },
+        {
+          "name": "helperText",
+          "control": "text",
+          "description": "Under the control, read as its description: format, limits, what the value is for. The error message when `validationState` is `error`."
+        },
+        {
+          "name": "validationState",
+          "control": "inline-radio",
+          "options": [
+            "default",
+            "success",
+            "error"
+          ],
+          "default": "default",
+          "description": "Colours the helper text and the edge of a field box inside. `error` also sets `aria-invalid` on the control."
+        },
+        {
+          "name": "required",
+          "control": "boolean",
+          "default": false,
+          "description": "Adds an asterisk after the label, hidden from screen readers. Put `required` on the control too: that is what they announce."
+        },
+        {
+          "name": "disabled",
+          "control": "boolean",
+          "default": false,
+          "description": "Disables the control inside it."
+        },
+        {
+          "name": "isFullWidth",
+          "control": "boolean",
+          "default": false,
+          "description": "Fills the width of its container. Otherwise 20rem, capped at the container."
+        }
+      ]
+    },
+    {
+      "kind": "component",
       "id": "components-inputs-file-uploader",
       "name": "File Uploader",
       "category": "Inputs",

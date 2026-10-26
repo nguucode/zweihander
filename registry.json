@@ -97,13 +97,14 @@
       "name": "input-field",
       "type": "registry:component",
       "title": "Input field",
-      "description": "Internal: the label, helper text, validation and field box shared by Text Input, Textarea, Search and Number Input.",
+      "description": "Internal: the label (with an optional info note), helper text, validation and field box shared by Field, Text Input, Textarea, Search, Number Input, Select and Combobox.",
       "dependencies": [
         "@base-ui/react"
       ],
       "registryDependencies": [
         "https://ontheshore.biz/zweihander/r/utils.json",
-        "https://ontheshore.biz/zweihander/r/tokens.json"
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/icon.json"
       ],
       "files": [
         {
@@ -133,6 +134,27 @@
           "path": "src/components/inputs/TextInput.tsx",
           "type": "registry:component",
           "target": "components/zweihander/inputs/TextInput.tsx"
+        }
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ]
+    },
+    {
+      "name": "field",
+      "type": "registry:component",
+      "title": "Field",
+      "description": "Label, required mark, info note and helper text with validation for a control that has none of its own, on Base UI Field.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/input-field.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/inputs/Field.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/inputs/Field.tsx"
         }
       ],
       "dependencies": [

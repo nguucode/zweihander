@@ -1,7 +1,9 @@
 'use client'
 
-import type { CSSProperties, MouseEvent, ReactNode, Ref } from 'react'
+import { useId, type CSSProperties, type MouseEvent, type ReactNode, type Ref } from 'react'
 import { Field } from '@base-ui/react/field'
+import { Popover } from '@base-ui/react/popover'
+import { Icon } from '@/lib/icon'
 import { cn } from '@/lib/utils'
 import styles from './InputField.module.css'
 
@@ -53,6 +55,10 @@ export interface InputFieldProps {
   /** The field box, carrying `boxClass()`, with a Field.Control inside. */
   children: ReactNode
   label?: ReactNode
+  /** More about the label, behind an info button after it. */
+  labelInfo?: ReactNode
+  /** The info button's accessible name; the label is read after it. */
+  infoLabel?: string
   helperText?: ReactNode
   validationState?: ValidationState
   required?: boolean
@@ -78,6 +84,8 @@ export interface InputFieldProps {
 export function InputField({
   children,
   label,
+  labelInfo,
+  infoLabel = 'More information',
   helperText,
   validationState = 'default',
   required,
@@ -88,6 +96,22 @@ export function InputField({
   labelId,
   className,
 }: InputFieldProps) {
+  const ownLabelId = useId()
+  const resolvedLabelId = labelId ?? ownLabelId
+  const labelNode = label && (
+    <Field.Label
+      id={resolvedLabelId}
+      className={styles.label}
+      {...(hasButtonControl && { nativeLabel: false, render: <div /> })}
+    >
+      {label}
+      {required && (
+        <span aria-hidden="true" className={styles.required}>
+          *
+        </span>
+      )}
+    </Field.Label>
+  )
   return (
     <Field.Root
       name={name}
@@ -95,19 +119,25 @@ export function InputField({
       invalid={validationState === 'error'}
       className={cn(styles.field, styles[`state-${validationState}`], isFullWidth && styles.fullWidth, className)}
     >
-      {label && (
-        <Field.Label
-          id={labelId}
-          className={styles.label}
-          {...(hasButtonControl && { nativeLabel: false, render: <div /> })}
-        >
-          {label}
-          {required && (
-            <span aria-hidden="true" className={styles.required}>
-              *
-            </span>
-          )}
-        </Field.Label>
+      {labelInfo && labelNode ? (
+        <div className={styles.labelRow}>
+          {labelNode}
+          {/* A toggletip, not a tooltip: it opens on tap and stays open to be
+              read, and the button sits outside the <label> so pressing it does
+              not also focus the control. */}
+          <Popover.Root>
+            <Popover.Trigger className={styles.iconButton} aria-label={infoLabel} aria-describedby={resolvedLabelId}>
+              <Icon name="info" />
+            </Popover.Trigger>
+            <Popover.Portal>
+              <Popover.Positioner className={styles.positioner} side="top" sideOffset={6}>
+                <Popover.Popup className={styles.info} aria-labelledby={resolvedLabelId}>{labelInfo}</Popover.Popup>
+              </Popover.Positioner>
+            </Popover.Portal>
+          </Popover.Root>
+        </div>
+      ) : (
+        labelNode
       )}
       {children}
       {helperText && <Field.Description className={styles.helper}>{helperText}</Field.Description>}
