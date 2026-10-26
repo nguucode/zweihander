@@ -1,0 +1,38 @@
+/* A step at a time, top to bottom: the stepper, the step's content, its error. */
+.body {
+  display: grid;
+  gap: var(--space-group);
+  min-inline-size: 0;
+}
+
+.note {
+  margin: 0;
+  color: var(--muted-foreground);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  overflow-wrap: anywhere;
+}
+
+/* A sample or an imported value can be one long word: it breaks rather than widens the table. */
+.sample {
+  color: var(--muted-foreground);
+  overflow-wrap: anywhere;
+}
+
+.value {
+  overflow-wrap: anywhere;
+}
+
+/* The review scrolls inside the dialog under its sticky heading row, so the summary above and the buttons below stay put. */
+.preview {
+  max-block-size: 20rem;
+  overflow: auto;
+}
+
+.columns {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-cluster);
+}

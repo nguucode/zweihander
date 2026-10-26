@@ -17,6 +17,7 @@ import { EmptyState } from '../../states/EmptyState'
 import { AppShell } from '../application-ui/AppShell'
 import { TableFooter, TableToolbar } from '../../patterns/application-ui/DataTablePage'
 import { FilterBar } from '../../patterns/application-ui/FilterBar'
+import { downloadCsv, ExportDialog, ImportDialog, type ImportField, type ImportRow } from '../../patterns/application-ui/ImportExport'
 import { SavedViews, type SavedView } from '../../patterns/application-ui/SavedViews'
 import { TableChartSwitch } from '../../patterns/application-ui/TableChartSwitch'
 import { TopBar } from '../../patterns/application-ui/TopBar'
@@ -74,6 +75,48 @@ const columns: TableColumn<Project>[] = [
   },
   { key: 'estimation', header: 'Estimation', sortable: true, align: 'end', cell: (p) => money.format(p.estimation) },
 ]
+
+/** A column as plain text for the export file: names, ISO dates and bare numbers a spreadsheet can read. */
+const isoDay = (d: Date) => d.toISOString().slice(0, 10)
+const exportValue: Record<string, (p: Project) => string | number | undefined> = {
+  name: (p) => p.name,
+  pm: (p) => p.pm?.name,
+  status: (p) => p.status,
+  updatedAt: (p) => isoDay(p.updatedAt),
+  resources: (p) => p.resources,
+  timeline: (p) => (p.start && p.end ? `${isoDay(p.start)} to ${isoDay(p.end)}` : ''),
+  estimation: (p) => p.estimation,
+}
+
+const importFields: ImportField[] = [
+  { key: 'name', label: 'Project name', isRequired: true, aliases: ['Name', 'Project'] },
+  { key: 'pm', label: 'PM', aliases: ['Project manager'] },
+  { key: 'status', label: 'Status' },
+  { key: 'estimation', label: 'Estimation', aliases: ['Budget'] },
+]
+const validateImport = (row: ImportRow) => {
+  const errors: Record<string, string> = {}
+  if (row.status && !STATUSES.includes(row.status as ProjectStatus)) errors.status = `“${row.status}” is not a status: use ${STATUSES.join(', ')}.`
+  if (row.estimation && Number.isNaN(Number(row.estimation.replace(/[$,]/g, '')))) errors.estimation = 'Estimation is not a number.'
+  return errors
+}
+/** An imported row as a new project: on track, unscheduled, with no activity but its creation. */
+const importedProject = (row: ImportRow, i: number): Project => {
+  const now = new Date()
+  const pm = row.pm ? { name: row.pm, initials: row.pm.split(/\s+/).map((w) => w[0]).join('').slice(0, 2).toUpperCase() } : undefined
+  return {
+    id: `import-${now.getTime()}-${i}`,
+    name: row.name,
+    pm,
+    status: (row.status as ProjectStatus) || 'Active',
+    health: 'on-track',
+    isArchived: false,
+    updatedAt: now,
+    resources: 0,
+    estimation: Number((row.estimation ?? '0').replace(/[$,]/g, '')) || 0,
+    activity: [{ type: 'created', by: 'Ines Okafor', at: now }],
+  }
+}
 
 /** What a view saves: which projects (archived or not, the filters), the columns and the sort. The search is not saved. */
 interface ViewState {
@@ -284,7 +327,42 @@ export function Projects({ projects: initialProjects = sampleProjects, ...props 
           <h1 className={styles.title}>
             Projects <Badge count={openCount} variant="secondary" />
           </h1>
-          <Button startIcon={<Icon name="plus" />}>Add project</Button>
+          <div className={styles.headingActions}>
+            <ImportDialog
+              title="Import projects"
+              noun={['project', 'projects']}
+              fields={importFields}
+              validate={validateImport}
+              onImport={(rows) => setProjects((all) => [...rows.map(importedProject), ...all])}
+              trigger={
+                <Button variant="secondary" appearance="outlined">
+                  Import
+                </Button>
+              }
+            />
+            <ExportDialog
+              title="Export projects"
+              scopes={[
+                { value: 'view', label: `${active.label} view (${rows.length})`, helperText: 'With the search and filters applied now.' },
+                { value: 'selected', label: `Selected (${shownSelected.length})`, disabled: shownSelected.length === 0 },
+                { value: 'all', label: `All projects (${projects.length})`, helperText: 'Archived ones too.' },
+              ]}
+              defaultScope={shownSelected.length > 0 ? 'selected' : 'view'}
+              columns={columns}
+              defaultColumnKeys={state.columns}
+              onExport={({ scope, columns: keys }) => {
+                const list = scope === 'all' ? projects : scope === 'selected' ? rows.filter((p) => shownSelected.includes(p.id)) : rows
+                const shown = columns.filter((c) => keys.includes(c.key))
+                downloadCsv('projects.csv', [shown.map((c) => String(c.header)), ...list.map((p) => shown.map((c) => exportValue[c.key](p)))])
+              }}
+              trigger={
+                <Button variant="secondary" appearance="outlined">
+                  Export
+                </Button>
+              }
+            />
+            <Button startIcon={<Icon name="plus" />}>Add project</Button>
+          </div>
         </div>
         <SavedViews
           aria-label="Project views"

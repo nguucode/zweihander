@@ -1785,6 +1785,40 @@
       ]
     },
     {
+      "name": "import-export",
+      "type": "registry:block",
+      "title": "Import Export",
+      "description": "Application UI pattern: ImportDialog brings a CSV (or Excel, with your own reader) into a list in three steps in a Modal: upload with the File Uploader, map each column to a field, review every row with its problems beside it and import the rows without any, ending on the result with the skipped rows to download. ExportDialog takes rows out: which rows, which columns (Column Chooser) and, when there is a choice, which format. Ships parseCsv, toCsv (formula-safe) and downloadCsv.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/button.json",
+        "https://ontheshore.biz/zweihander/r/radio.json",
+        "https://ontheshore.biz/zweihander/r/switch.json",
+        "https://ontheshore.biz/zweihander/r/column-chooser.json",
+        "https://ontheshore.biz/zweihander/r/table.json",
+        "https://ontheshore.biz/zweihander/r/file-uploader.json",
+        "https://ontheshore.biz/zweihander/r/select.json",
+        "https://ontheshore.biz/zweihander/r/link.json",
+        "https://ontheshore.biz/zweihander/r/stepper.json",
+        "https://ontheshore.biz/zweihander/r/inline-alert.json",
+        "https://ontheshore.biz/zweihander/r/modal.json",
+        "https://ontheshore.biz/zweihander/r/success-state.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/patterns/application-ui/ImportExport.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/patterns/application-ui/ImportExport.tsx"
+        },
+        {
+          "path": "src/components/patterns/application-ui/ImportExport.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/patterns/application-ui/ImportExport.module.css"
+        }
+      ]
+    },
+    {
       "name": "notification-center",
       "type": "registry:block",
       "title": "Notification Center",
@@ -2004,7 +2038,8 @@
         "https://ontheshore.biz/zweihander/r/filter-bar.json",
         "https://ontheshore.biz/zweihander/r/saved-views.json",
         "https://ontheshore.biz/zweihander/r/table-chart.json",
-        "https://ontheshore.biz/zweihander/r/feed.json"
+        "https://ontheshore.biz/zweihander/r/feed.json",
+        "https://ontheshore.biz/zweihander/r/import-export.json"
       ],
       "files": [
         {

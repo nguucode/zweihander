@@ -1,0 +1,132 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks'
+import * as ImportExportStories from './ImportExport.stories'
+
+<Meta of={ImportExportStories} />
+
+# Import Export
+
+Getting rows into a list from a file, and out of it into one: the
+spreadsheet round trip every ERP and back-office list needs. No outside
+block covers it (Catalyst Blocks has none); the anatomy is the
+Application UI catalogue's own. Two dialogs,
+`ImportDialog` and `ExportDialog`, built from the [File
+Uploader](?path=/docs/components-inputs-file-uploader--docs),
+[Stepper](?path=/docs/components-navigation-stepper--docs),
+[Table](?path=/docs/components-data-display-table--docs) and [Column
+Chooser](?path=/docs/components-data-display-column-chooser--docs) in a
+[Modal](?path=/docs/components-overlays-modal--docs). The
+[Projects](?path=/docs/templates-object-management-projects--docs) index
+page uses both.
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/import-export.json
+```
+
+## Import
+
+Three steps, then the result.
+
+1. **Upload**: one file, CSV by default. `templateHref` links a blank
+   file with the right headings.
+2. **Map columns**: each column of the file goes into one of your
+   `fields`, or is not imported. A heading that matches a field's key,
+   label or one of its `aliases` is mapped already, so a file made from
+   the template needs no work here. A field takes one column; Next waits
+   until every required field has one.
+3. **Review**: every row with its problems beside it, from `validate`
+   and from required fields left empty. A row with a problem is skipped,
+   not fixed here: the file is the place to fix it. The button says how
+   many rows it imports.
+
+The result says how many were imported and how many skipped, and offers
+the skipped rows as a CSV, with their problems in a last column, to fix
+and upload again.
+
+<Canvas of={ImportExportStories.Default} />
+
+## Mapping
+
+No heading matches a required field: the step names it and Next waits.
+Choosing a field already taken moves it to this column.
+
+<Canvas of={ImportExportStories.MapColumns} />
+
+## Errors
+
+A file that cannot be read, or has no rows, says so on the upload step.
+An `onImport` that throws keeps you on the review step with its message:
+nothing is lost, and Import can be tried again.
+
+<Canvas of={ImportExportStories.Errors} />
+
+## Export
+
+Which rows (`scopes`: all, the current view, the selection, each with its
+count), which format when there is more than one, and which columns,
+ticked from the ones on screen. Each opening starts from those defaults,
+since the view or the selection may have changed. Export calls
+`onExport` and closes. A long export returns at once and says when the
+file is ready with a [Toast](?path=/docs/components-notifications-toast--docs)
+and a Download action, as the story does.
+
+<Canvas of={ImportExportStories.Export} />
+
+## Props
+
+<ArgTypes of={ImportExportStories} />
+
+`ExportDialog` takes `scopes` (radio options), `defaultScope`, `formats`
+(radio options; one format hides the choice, CSV by default), `columns`
+and `defaultColumnKeys` (as the Column Chooser's), `onExport`, which gets
+`{ format, scope, columns }` and may return a promise, and the same
+`trigger`, `title`, `open`, `defaultOpen`, `onOpenChange` and `container`.
+
+The pattern owns no data. Reading the file is `readFile` (CSV text by
+default; for Excel, read it with your spreadsheet library into `{ columns,
+rows }` and widen `accept`), checking a row is `validate`, saving is
+`onImport`, and writing the export is `onExport`. Three helpers come
+with it: `parseCsv`, `toCsv` and `downloadCsv`. `toCsv` puts a `'` before
+a cell that starts with `=`, `+`, `-` or `@` and is not a number, so a
+spreadsheet shows it instead of running it as a formula.
+
+## Layout
+
+- The import is a large Modal (48rem), never wider than the window; the
+  export a medium one.
+- The review scrolls inside the dialog under its sticky heading row,
+  so the summary above it and the buttons under it stay in view. It
+  lists the first 100 rows and says how many more there are; the import
+  still takes them all.
+- Long values with no spaces break rather than widen the table.
+
+<Canvas of={ImportExportStories.LongFile} />
+
+## Differences from the spec
+
+The catalogue lists Confirm as a step of its own. Here the review is the
+confirmation: its button says how many rows it imports and the summary
+above it how many it skips, so a fourth step would only repeat them.
+Formats beyond CSV, and reading Excel, are the app's: the pattern adds no
+spreadsheet library. The notice when an export is done is the app's
+too, a Toast, since only the app knows when its file is ready. Both
+dialogs are Modals rather than Drawers: each is a task that blocks the
+list until it is done, not a side panel to keep open beside it.
+
+## Accessibility
+
+- Each dialog is named by its title. The import closes on Escape or its
+  close button, not on a click outside, so a stray click does not throw
+  away a mapped file.
+- The steps are a navigation landmark, "Import steps", with the current
+  step marked and each step's state said.
+- Rows are numbered as a spreadsheet numbers them, the heading row
+  being 1, so a problem can be found in the file. Blank rows keep their
+  number and are not imported.
+- Each mapping Select is named after its column: "Field for Budget".
+- The review is a scrollable region the keyboard can reach and scroll.
+  Each row's problems are text in its row, under a Problems heading, not
+  colour alone.
+- A failed read or import is announced as an alert; the result is
+  announced as a status.
+- The skipped rows and the template are real downloads, a button and a
+  link.

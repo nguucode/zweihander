@@ -3350,6 +3350,51 @@
     },
     {
       "kind": "pattern",
+      "id": "patterns-application-ui-import-export",
+      "name": "Import Export",
+      "category": "Application UI",
+      "status": "experimental",
+      "storyId": "patterns-application-ui-import-export--default",
+      "props": [
+        {
+          "name": "accept",
+          "control": "text",
+          "default": ".csv",
+          "description": "File types, as the native attribute. Widen it with `readFile`."
+        },
+        {
+          "name": "maxSize",
+          "control": "number",
+          "description": "The largest file, in bytes. A larger one is refused by the File Uploader."
+        },
+        {
+          "name": "helperText",
+          "control": "text",
+          "default": "A CSV file with a heading row.",
+          "description": "Inside the drop zone, under its button."
+        },
+        {
+          "name": "templateHref",
+          "control": "text",
+          "default": "data:text/csv;charset=utf-8,Name%2CStatus%2CPM%2CEstimation%0D%0A",
+          "description": "A blank file with the right headings, linked from the upload step."
+        },
+        {
+          "name": "title",
+          "control": "text",
+          "default": "Import projects",
+          "description": "The dialog's title."
+        },
+        {
+          "name": "defaultOpen",
+          "control": "boolean",
+          "default": false,
+          "description": "Open on first render."
+        }
+      ]
+    },
+    {
+      "kind": "pattern",
       "id": "patterns-application-ui-inline-edit",
       "name": "Inline Edit",
       "category": "Application UI",
@@ -3832,7 +3877,7 @@
       "name": "Projects",
       "category": "Object Management",
       "status": "experimental",
-      "storyId": "templates-object-management-projects--default",
+      "storyId": "templates-object-management-projects--import-and-export",
       "props": []
     }
   ]

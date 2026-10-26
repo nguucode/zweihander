@@ -25,8 +25,8 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/projects-template.json
 
 ## Anatomy
 
-From the top: the heading (title, the open count and the primary action,
-Add project), the views, the toolbar (search, the Status and Health
+From the top: the heading (title, the open count, Import, Export and the
+primary action, Add project), the views, the toolbar (search, the Status and Health
 filters with their chips, compact rows and Columns), the summary with the
 Table / Chart switch, the table, and the footer with the pages.
 
@@ -57,6 +57,14 @@ Table / Chart switch, the table, and the footer with the pages.
   view's own filters back; it does not leave the view.
 - **Expand** a row to see its activity: status changes with their note,
   estimation changes, and when it was created.
+- **Import** reads a CSV of projects through the [Import
+  Export](?path=/docs/patterns-application-ui-import-export--docs) dialog:
+  the headings map to Project name, PM, Status and Estimation, an unknown
+  status or an estimation that is not a number skips its row, and the
+  rest join the list on track and unscheduled.
+- **Export** downloads a CSV of the current view, the selected projects
+  or all of them, with the columns on screen ticked; dates are ISO and
+  money a bare number, for a spreadsheet to read.
 - **Compact rows** switches the table to its small density, and
   **Columns** hides the ones you do not need.
 
