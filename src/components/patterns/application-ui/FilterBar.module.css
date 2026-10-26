@@ -1,0 +1,43 @@
+/* Sits in a TableToolbar like TableToolbarGroup: it takes the free space and
+   wraps first. Outside a flex row the flex has no effect. */
+.bar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  flex: 1 1 16rem;
+  min-inline-size: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--foreground);
+}
+
+/* On a phone the search takes its own line and the field buttons flow
+   under it, instead of anything shrinking below use. */
+.controls,
+.applied,
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-cluster);
+}
+
+.applied {
+  gap: var(--space-2);
+}
+
+.chips {
+  gap: var(--space-2);
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* A long value truncates inside its chip rather than widen the bar. */
+.chips > li {
+  display: flex;
+  min-inline-size: 0;
+  max-inline-size: 100%;
+}

@@ -2955,6 +2955,15 @@
     },
     {
       "kind": "pattern",
+      "id": "patterns-application-ui-filter-bar",
+      "name": "Filter Bar",
+      "category": "Application UI",
+      "status": "experimental",
+      "storyId": "patterns-application-ui-filter-bar--default",
+      "props": []
+    },
+    {
+      "kind": "pattern",
       "id": "patterns-application-ui-form-layouts",
       "name": "Form Layouts",
       "category": "Application UI",

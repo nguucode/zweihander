@@ -41,6 +41,8 @@
 }
 
 .text {
+  /* Lets a long text shrink and ellipsize once the tag hits max-inline-size. */
+  min-inline-size: 0;
   overflow: hidden;
   text-overflow: ellipsis;
 }
