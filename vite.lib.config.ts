@@ -28,6 +28,7 @@ export default defineConfig({
         'components/inputs/Textarea': 'src/components/inputs/Textarea.tsx',
         'components/inputs/Search': 'src/components/inputs/Search.tsx',
         'components/inputs/NumberInput': 'src/components/inputs/NumberInput.tsx',
+        'components/inputs/OTPInput': 'src/components/inputs/OTPInput.tsx',
         'components/inputs/Select': 'src/components/inputs/Select.tsx',
         'components/inputs/Combobox': 'src/components/inputs/Combobox.tsx',
         'components/loaders/Spinner': 'src/components/loaders/Spinner.tsx',

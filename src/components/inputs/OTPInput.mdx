@@ -1,0 +1,233 @@
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
+import { OTPInput } from './OTPInput'
+import * as OTPInputStories from './OTPInput.stories'
+
+<Meta of={OTPInputStories} />
+
+# OTP Input
+
+<DocTabs>
+<DocTab value="overview">
+
+A short one-time code, typed or pasted into a row of single-character
+cells: the code from a text message, an email or an authenticator app.
+
+<Status of={OTPInputStories} />
+
+<Canvas of={OTPInputStories.Default} />
+
+## Variants
+
+One appearance, a row of small outlined boxes. What changes is the size,
+whether the cells are grouped, and whether there is a resend button.
+
+<Canvas of={OTPInputStories.Sizes} />
+
+| Size | Use for |
+| --- | --- |
+| `md` | Sign-in, verification and confirmation screens: the default. |
+| `sm` | A code asked for inside a dense panel or a table row. |
+
+<Canvas of={OTPInputStories.Resend} />
+
+| Setting | Use for |
+| --- | --- |
+| `groupSize` | A code people read in chunks: `3` shows six digits as 3 – 3, `4` an eight-character backup code as 4 – 4. |
+| `onResend` | A code that was sent and may not arrive. The button waits `resendCooldown` seconds, showing the time left. Return a promise: a failed send starts no cooldown. |
+| `validationType` | `numeric` for codes from texts and apps; `alphanumeric` for backup and recovery codes. |
+| `mask` | A code that should not be read over someone's shoulder. |
+
+## Resources
+
+From npm, or copied into your project through the registry:
+
+```js
+import { OTPInput } from 'zweihander/otp-input'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/otp-input.json
+```
+
+- Source: [src/components/inputs/OTPInput.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/inputs/OTPInput.tsx)
+- Spec: none on uiguideline.com; the reference is [shadcn/ui Input OTP](https://ui.shadcn.com/docs/components/input-otp)
+- Behaviour: [Base UI OTP Field](https://base-ui.com/react/components/otp-field)
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
+## Anatomy
+
+<Anatomy parts={OTPInputStories.anatomyParts}>
+  <Story of={OTPInputStories.Anatomy} />
+</Anatomy>
+
+Each cell is its own box with the field's edge, fill and radius, so the
+row reads as several small fields that belong together. The label and
+helper text are Text Input's.
+
+## Measurements
+
+Each size is a control tier, as on Text Input, and a cell is a square of
+that tier.
+
+<SpecTable
+  caption="sm"
+  rows={[
+    { part: 'Cell', property: 'Width and height', token: '--control-sm' },
+    { part: 'Cell', property: 'Corner radius', token: '--control-sm-radius-field' },
+    { part: 'Cell', property: 'Font size', token: '--text-body-sm' },
+  ]}
+/>
+
+<SpecTable
+  caption="md"
+  rows={[
+    { part: 'Cell', property: 'Width and height', token: '--control-md' },
+    { part: 'Cell', property: 'Corner radius', token: '--control-md-radius-field' },
+    { part: 'Cell', property: 'Font size', token: '--text-body' },
+  ]}
+/>
+
+<SpecTable
+  caption="Every size"
+  rows={[
+    { part: 'Cells and separator', property: 'Gap', token: '--space-2' },
+    { part: 'Resend button', property: 'Pulled back to line up with the cells', token: '--control-sm-pad' },
+    { part: 'Focus ring', property: 'Width', token: '--focus-width' },
+    { part: 'Focus ring', property: 'Offset', token: '--focus-offset' },
+    { part: 'Cell', property: 'Height on touch screens', token: '--target-coarse' },
+  ]}
+/>
+
+The characters use tabular figures, centred in the cell. The resend
+button is a small ghost [Button](?path=/docs/components-buttons-button--docs).
+
+## Color
+
+<SpecTable
+  caption="default"
+  rows={[
+    { part: 'Cell', property: 'Background', token: '--card' },
+    { part: 'Cell', property: 'Border', token: '--field-edge' },
+    { part: 'Cell', property: 'Shadow', token: '--shadow-2xs' },
+    { part: 'Character', property: 'Colour', token: '--foreground' },
+    { part: 'Caret', property: 'Colour', token: '--ring' },
+    { part: 'Group separator', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+  ]}
+/>
+
+<SpecTable
+  caption="error"
+  rows={[
+    { part: 'Focus ring', property: 'Colour', token: '--danger-text' },
+  ]}
+/>
+
+<SpecTable caption="Read-only" rows={[{ part: 'Cell', property: 'Background', token: '--surface-filled' }]} />
+
+`--field-edge` is the shared field's edge colour: `--field-border` by
+default, `--danger-text` on error and `--success-text` on success, so every
+cell and the helper text change together.
+
+## States
+
+<States
+  states={[
+    { label: 'Enabled' },
+    { label: 'Focus', pseudo: 'focus' },
+    { label: 'Filled', content: <OTPInput label="Code" length={4} defaultValue="4821" /> },
+    { label: 'Error', content: <OTPInput label="Code" length={4} defaultValue="4821" validationState="error" helperText="That code is wrong." /> },
+    { label: 'Disabled', content: <OTPInput label="Code" length={4} defaultValue="48" disabled /> },
+  ]}
+>
+  <OTPInput label="Code" length={4} />
+</States>
+
+- **Hover** changes nothing: a cell is a text field, and the caret shows
+  where typing goes.
+- **Focus** rings only the cell being typed into, in `--danger-text` when
+  invalid.
+- **Error** turns every cell's edge and the helper text `--danger-text`.
+- **Read-only** fills the cells with `--surface-filled`; typing does
+  nothing.
+- **Disabled** dims the cells to 50% and disables the resend button.
+- **Cooling down**, the resend button is disabled and shows the time left
+  as `m:ss`.
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={OTPInputStories} />
+</div>
+
+`ref` goes to the first cell. `id` and `className` are passed through too;
+no other attributes are.
+
+### Differences from the spec
+
+There is no uiguideline.com spec for this component; the reference is shadcn/ui Input OTP.
+
+- **One component, flat props.** shadcn composes `InputOTP`, `InputOTPGroup`,
+  `InputOTPSlot` and `InputOTPSeparator`; Zweihänder takes `length` and
+  `groupSize`, as the API conventions ask for flat props before 1.0.
+- **Resend is built in.** shadcn leaves it to the page. Every screen that
+  sends a code needs the same button and countdown, so it lives here.
+- **Real inputs, one per cell**, from Base UI, not one hidden input under
+  drawn slots: each cell is focusable and named.
+- **`label`, `helperText`, `validationState`** are added from the shared field.
+
+</DocTab>
+<DocTab value="guidelines">
+
+## When to use
+
+Use an OTP Input for a short code someone copies from another place: a
+text message, an email, an authenticator app. Say where the code was sent
+in `helperText`, and give a way to send another.
+
+<DoDont
+  do={<Story of={OTPInputStories.DoOneField} />}
+  doCaption="Six digits, labelled, with where the code went and a way to resend it."
+  dont={<Story of={OTPInputStories.DontLongCode} />}
+  dontCaption="Sixteen cells are too many to scan or correct. A long key is one Text Input."
+/>
+
+## When not to use
+
+- **For codes longer than about 8 characters**, licence keys or recovery
+  phrases. Use a [Text Input](?path=/docs/components-inputs-textinput--docs).
+- **For a PIN or password people make up themselves.** Use a
+  [Text Input](?path=/docs/components-inputs-textinput--docs) with
+  `type="password"`: cells suggest a code that was sent.
+- **For a number people adjust.** Use a
+  [Number Input](?path=/docs/components-inputs-numberinput--docs).
+
+## Accessibility
+
+- The cells sit in a `group` named by the label; the label also names the
+  first cell, and each later cell is named by `slotLabel`, "Character 2 of 6"
+  by default.
+- **Keyboard:** the group is one tab stop: only the cell to type into is in
+  the tab order. Typing a character fills the cell and moves to the next;
+  Backspace clears the cell before and moves back; Left and Right move
+  between cells.
+- Characters `validationType` does not allow are dropped, so letters cannot
+  enter a numeric code.
+- Pasting the whole code into any cell fills every cell; spaces are ignored.
+- The first cell has `autocomplete="one-time-code"`, so phones offer the code
+  from a text message.
+- `helperText` is the group's description and `validationState="error"` sets
+  `aria-invalid` on every cell.
+- The resend button is disabled during the cooldown and its name carries the
+  time left. After a send, focus moves to the first cell, so it is not lost
+  with the disabled button; while a send is pending the button stays
+  focusable and is marked `aria-busy`. The countdown is not a live region, so it does not interrupt
+  every second.
+
+</DocTab>
+</DocTabs>

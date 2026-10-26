@@ -486,6 +486,33 @@
       ]
     },
     {
+      "name": "otp-input",
+      "type": "registry:component",
+      "title": "OTP Input",
+      "description": "One-time code entry, one cell per character, with optional grouping and a resend button with cooldown, on Base UI OTP Field.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/input-field.json",
+        "https://ontheshore.biz/zweihander/r/button.json"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "files": [
+        {
+          "path": "src/components/inputs/OTPInput.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/inputs/OTPInput.tsx"
+        },
+        {
+          "path": "src/components/inputs/OTPInput.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/inputs/OTPInput.module.css"
+        }
+      ]
+    },
+    {
       "name": "number-input",
       "type": "registry:component",
       "title": "Number Input",

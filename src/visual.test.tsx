@@ -48,6 +48,7 @@ const STORIES: Record<string, { story: string; args?: Record<string, unknown>; p
   'inputs/Field': { story: 'Validation' },
   'inputs/FileUploader': { story: 'WithStatus' },
   'inputs/NumberInput': { story: 'Sizes' },
+  'inputs/OTPInput': { story: 'Sizes' },
   'inputs/Search': { story: 'Sizes' },
   'inputs/Select': { story: 'Sizes' },
   'inputs/TextInput': { story: 'Sizes' },
