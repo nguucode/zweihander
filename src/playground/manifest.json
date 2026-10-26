@@ -2826,7 +2826,7 @@
         {
           "name": "asideLabel",
           "control": "text",
-          "description": "The aside's accessible name. Give one when the page has more than one `aside`."
+          "description": "The aside's accessible name."
         }
       ]
     },

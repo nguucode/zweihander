@@ -597,6 +597,7 @@ export const WithAside: Story = {
     canvas.getByRole('button', { name: 'New invoice' }).focus()
     await userEvent.tab()
     await expect(aside).toHaveFocus()
+    await expect(getComputedStyle(aside).outlineStyle).toBe('solid')
   },
 }
 

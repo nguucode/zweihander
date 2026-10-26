@@ -32,8 +32,9 @@
 }
 
 /* The aside: a second column of the same surface, beside the page from
-   80rem (the sidebar, the page at 48rem and the aside fit there), else
-   below it. Long words wrap: the column is narrow. */
+   80rem (Tailwind's xl: with the sidebar and the aside both expanded the
+   page keeps about 46rem), else below it. Long words wrap: the column is
+   narrow. */
 .aside {
   overflow-wrap: anywhere;
 }
@@ -62,6 +63,7 @@
 @container (max-width: 47.99rem) {
   .content {
     padding: 0;
+    gap: 0;
   }
   .main,
   .aside {
@@ -74,7 +76,8 @@
   }
 }
 @container (min-width: 64rem) {
-  .main {
+  .main,
+  .aside {
     padding: var(--space-section);
   }
 }

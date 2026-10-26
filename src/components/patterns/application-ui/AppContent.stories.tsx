@@ -30,7 +30,11 @@ const meta = {
   tags: ['experimental'],
   component: AppContent,
   parameters: { layout: 'padded' },
-  argTypes: { children: { control: false } },
+  argTypes: {
+    children: { control: false },
+    aside: { description: 'A column beside the page, in an `aside` landmark: right of the page from 80rem of shell width, below it under 80rem.', control: false },
+    asideLabel: { description: "The aside's accessible name.", control: 'text' },
+  },
   // AppContent reads the App Shell's grid and canvas, so it is shown in one.
   render: (_args, { parameters }) => (
     <Theme canvas="neutral" contentStyle={parameters.contentStyle} style={{ blockSize: 480, border: '1px solid var(--border)' }}>
