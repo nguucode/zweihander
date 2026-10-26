@@ -119,3 +119,8 @@
   flex: 1;
   border-block-start: 1px solid var(--border);
 }
+
+.providers {
+  display: grid;
+  gap: var(--space-stack);
+}

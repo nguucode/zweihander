@@ -1,0 +1,104 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks'
+import * as SignUpStories from './SignUp.stories'
+
+<Meta of={SignUpStories} />
+
+# Sign Up
+
+A sign-up page: the logo and the title, single sign-on buttons if you have
+them, then full name, email and a new password with its rules, the terms
+and a link back to sign in. After shadcn/ui's sign-up blocks and Carbon's
+login pattern. Built on the **Auth Layout** (see
+[Sign In](?path=/docs/templates-auth-sign-in--docs#auth-layout)) and the
+kit's TextInput, Checkbox, Link, Alert and Button.
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/sign-up-template.json
+```
+
+<Canvas of={SignUpStories.Default} />
+
+## What works
+
+- **Single sign-on**: as on Sign In, a full-width button per provider,
+  then an "or" line, then the form. `onProviderSelect` gets the `id`.
+- **One name field**, "Full name", not first and last: names do not split
+  the same way everywhere. `autocomplete="name"` and `"email"` let the
+  browser fill them.
+- **A new password with its rules**: the rules are listed under the field
+  from the start and ticked off as the reader types. The default is one
+  rule, at least 12 characters, with no rules about kinds of characters
+  (after NIST SP 800-63B); pass your own `passwordRules`. There is no
+  "confirm password" field: Show lets the reader check what they typed.
+  `autocomplete="new-password"` lets a password manager suggest one.
+- **Terms**: pass `terms`, the label with its links, and a checkbox the
+  reader must tick appears above the button. Leave it out and there is
+  none; put a line in `footer` instead if your terms need no consent.
+- **Checks before sending**: an empty field, an email with no `@`, an unmet
+  rule or unticked terms is marked with a message saying what to do, and
+  the first one gets focus. Typing clears a field's message. Valid values
+  go to `onSignUp`.
+- **The account cannot be made**: `onSignUp` returns (or resolves to) a
+  message. It shows above the form and is announced; what was typed stays.
+  If `onSignUp` throws or rejects, the page says "Something went wrong. Try
+  again."
+
+<Canvas of={SignUpStories.EmailTaken} />
+
+## Variants
+
+**Card** (default) and **plain**, and **with a panel** through `aside`,
+exactly as on Sign In: they are the Auth Layout's. Plain here is also
+without single sign-on or terms, the fewest parts.
+
+<Canvas of={SignUpStories.Plain} />
+
+## Make it yours
+
+Replace `onSignUp` with a call to your API and return its error message;
+on success, send the reader on (to verify their email, or into the app).
+Whether to say "An account with this email already exists" is your call:
+it tells anyone which emails have accounts. Where that matters, accept
+the sign-up and email the address instead.
+
+## Props
+
+| Prop | Values | Default | |
+| --- | --- | --- | --- |
+| `title` | `ReactNode` | "Create your account" | The page's `h1`. |
+| `providers` | `{ id, label, icon? }[]` | none | Single sign-on and social buttons above the form. |
+| `onProviderSelect` | `(id) => void` | | A provider's button was pressed. |
+| `passwordRules` | `{ label, test(password) }[]` | at least 12 characters | Listed under the password and ticked off; all must pass to send. |
+| `terms` | `ReactNode` | none | The label of a checkbox the reader must tick. |
+| `onSignUp` | `(values) => string \| void \| Promise<…>` | | Gets `{ name, email, password, acceptedTerms }` once the fields pass. A returned message shows above the form; the button is busy while a promise is pending. |
+| `signInHref` | `string` | `"#sign-in"` | Where "Already have an account? Sign in" goes. |
+| `footer` | `ReactNode` | | Under the sign-in line, outside the card. |
+
+Every other Auth Layout prop passes through. The rules come from
+`PasswordInput`'s `rules` prop, so a reset-password page can list the same
+ones.
+
+## Layout
+
+The Auth Layout's, as on [Sign In](?path=/docs/templates-auth-sign-in--docs#layout):
+a column about 25rem wide in the middle of the page, the full width less
+the padding on a phone, and a panel beside it from 64rem with `aside`. A
+long title, rule or terms label wraps; nothing scrolls sideways.
+
+<Canvas of={SignUpStories.Phone} />
+
+## Accessibility
+
+- The form is in a `main` landmark, and its one heading is the `h1`.
+- Every field has a visible label. An invalid field has
+  `aria-invalid="true"` and its message as its description, and the first
+  invalid field gets focus.
+- The password rules are the field's description, each followed by
+  "(met)" or "(not met)" for a screen reader, so they are read with the
+  field. Ticking one off is not announced as you type; the tick and the
+  colour show it on screen.
+- The message from `onSignUp` is an `alert`, so it is announced. The
+  Create account button is `aria-busy` while it waits, a second press
+  sends nothing, and the single sign-on buttons are disabled.
+- The terms checkbox's links are inside its label; pressing a link opens
+  it, pressing the rest of the label ticks the box.

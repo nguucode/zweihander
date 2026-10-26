@@ -1803,10 +1803,12 @@
       "name": "auth-layout",
       "type": "registry:block",
       "title": "Auth Layout (template)",
-      "description": "Template: AuthLayout, the frame every auth screen shares. The logo, the title and the form in one narrow column on the Theme's canvas, in a card or plain, or beside a panel from 64rem; with AuthDivider (the \"or\" line under single sign-on) and PasswordInput (a password field with Show / Hide).",
+      "description": "Template: AuthLayout, the frame every auth screen shares. The logo, the title and the form in one narrow column on the Theme's canvas, in a card or plain, or beside a panel from 64rem; with AuthProviders (single sign-on buttons and the \"or\" line, AuthDivider) and PasswordInput (a password field with Show / Hide and, for a new password, its rules ticked off as the reader types).",
       "registryDependencies": [
         "https://ontheshore.biz/zweihander/r/utils.json",
         "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/icon.json",
+        "https://ontheshore.biz/zweihander/r/button.json",
         "https://ontheshore.biz/zweihander/r/card.json",
         "https://ontheshore.biz/zweihander/r/text-input.json"
       ],
@@ -1825,6 +1827,11 @@
           "path": "src/components/templates/auth/PasswordInput.tsx",
           "type": "registry:component",
           "target": "components/zweihander/templates/auth/PasswordInput.tsx"
+        },
+        {
+          "path": "src/components/templates/auth/PasswordInput.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/templates/auth/PasswordInput.module.css"
         }
       ]
     },
@@ -1853,6 +1860,34 @@
           "path": "src/components/templates/auth/SignIn.module.css",
           "type": "registry:component",
           "target": "components/zweihander/templates/auth/SignIn.module.css"
+        }
+      ]
+    },
+    {
+      "name": "sign-up-template",
+      "type": "registry:block",
+      "title": "Sign Up (template)",
+      "description": "Sign-up page template inside the Auth Layout: optional single sign-on buttons and an \"or\" line, full name, email and a new password with its rules ticked off as the reader types, an optional terms checkbox, and a Sign in link; it checks the fields, then hands valid values to onSignUp and shows the message it returns.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/button.json",
+        "https://ontheshore.biz/zweihander/r/checkbox.json",
+        "https://ontheshore.biz/zweihander/r/text-input.json",
+        "https://ontheshore.biz/zweihander/r/link.json",
+        "https://ontheshore.biz/zweihander/r/alert.json",
+        "https://ontheshore.biz/zweihander/r/auth-layout.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/templates/auth/SignUp.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/templates/auth/SignUp.tsx"
+        },
+        {
+          "path": "src/components/templates/auth/SignUp.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/templates/auth/SignUp.module.css"
         }
       ]
     }

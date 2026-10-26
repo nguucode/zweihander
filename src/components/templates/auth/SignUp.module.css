@@ -1,0 +1,8 @@
+.form {
+  display: grid;
+  gap: var(--space-group);
+}
+
+.signIn {
+  margin: 0;
+}

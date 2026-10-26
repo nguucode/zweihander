@@ -3323,6 +3323,30 @@
     },
     {
       "kind": "template",
+      "id": "templates-auth-sign-up",
+      "name": "Sign Up",
+      "category": "Auth",
+      "status": "experimental",
+      "storyId": "templates-auth-sign-up--default",
+      "props": [
+        {
+          "name": "signInHref",
+          "control": "text",
+          "default": "#sign-in",
+          "description": "Where \"Already have an account? Sign in\" goes."
+        },
+        {
+          "name": "appearance",
+          "control": "inline-radio",
+          "options": [
+            "card",
+            "plain"
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "template",
       "id": "templates-object-management-project-detail",
       "name": "Project Detail",
       "category": "Object Management",
