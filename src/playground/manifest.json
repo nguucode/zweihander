@@ -3318,6 +3318,47 @@
     },
     {
       "kind": "template",
+      "id": "templates-auth-progressive-sign-in",
+      "name": "Progressive Sign In",
+      "category": "Auth",
+      "status": "experimental",
+      "storyId": "templates-auth-progressive-sign-in--default",
+      "props": [
+        {
+          "name": "defaultEmail",
+          "control": "text",
+          "default": "",
+          "description": "The email to start with: one the reader asked to remember. Ticks \"Remember my email\"."
+        },
+        {
+          "name": "hasRememberEmail",
+          "control": "boolean",
+          "default": true,
+          "description": "Shows \"Remember my email\" in step 1."
+        },
+        {
+          "name": "forgotPasswordHref",
+          "control": "text",
+          "default": "#forgot-password"
+        },
+        {
+          "name": "signUpHref",
+          "control": "text",
+          "default": "#sign-up",
+          "description": "Shows \"No account? Sign up\" under the form. Leave it out where accounts are by invitation."
+        },
+        {
+          "name": "appearance",
+          "control": "inline-radio",
+          "options": [
+            "card",
+            "plain"
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "template",
       "id": "templates-auth-reset-password",
       "name": "Reset Password",
       "category": "Auth",
