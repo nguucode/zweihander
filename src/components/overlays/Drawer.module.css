@@ -126,6 +126,10 @@
   padding: var(--space-group);
   overflow-y: auto;
 }
+.body:focus-visible {
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: var(--focus-offset-inset);
+}
 
 .footer {
   display: flex;

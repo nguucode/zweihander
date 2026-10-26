@@ -88,8 +88,13 @@ export function Drawer({
                 <BaseDrawer.Description className={styles.description}>{description}</BaseDrawer.Description>
               )}
             </div>
-            {/* Content lets a mouse select text without starting a swipe. */}
-            {children && <BaseDrawer.Content className={styles.body}>{children}</BaseDrawer.Content>}
+            {/* Content lets a mouse select text without starting a swipe. A tab
+                stop, so a keyboard can scroll a body that holds only text. */}
+            {children && (
+              <BaseDrawer.Content tabIndex={0} className={styles.body}>
+                {children}
+              </BaseDrawer.Content>
+            )}
             {footer && <div className={styles.footer}>{footer}</div>}
           </BaseDrawer.Popup>
         </BaseDrawer.Viewport>
