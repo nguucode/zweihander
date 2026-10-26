@@ -33,13 +33,18 @@ surface Card is raised.
 ## Props
 
 Any `main` attribute; the App Shell passes the `id` its skip link targets.
+`aside` takes a column for beside the page, in an `aside` landmark named by
+`asideLabel`; the App Shell passes both through
+([With an aside](?path=/docs/templates-application-ui-app-shell--docs)).
 
 ## Layout
 
 - Below 48rem the flat surface drops its inset, edge and rounding and goes
   flush.
 - The page padding is `--space-container`, `--space-section` from 64rem.
-- Only the page scrolls; the shell's other pieces stay put.
+- Only the page scrolls; the shell's other pieces stay put. With an aside,
+  from 80rem the page and the aside scroll on their own, side by side;
+  under 80rem the aside follows the page and they scroll as one.
 - The surface restates `--background` as `--card` (flat) or as the
   canvas's solid colour (card), so components that draw "the surface under
   me" match it.
@@ -48,6 +53,8 @@ Any `main` attribute; the App Shell passes the `id` its skip link targets.
 
 - The `main` landmark, focusable (`tabIndex={-1}`) so the shell's skip
   link can move focus to it.
+- An aside is a `complementary` landmark after `main`, focusable so a
+  keyboard can scroll it.
 - On a canvas, text takes the canvas text colours (the Theme's
   `canvas-foreground` and `canvas-muted-foreground` tokens); the kit checks
   them for its own canvases.

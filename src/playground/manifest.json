@@ -2822,7 +2822,13 @@
       "category": "Application UI",
       "status": "experimental",
       "storyId": "patterns-application-ui-app-content--flat",
-      "props": []
+      "props": [
+        {
+          "name": "asideLabel",
+          "control": "text",
+          "description": "The aside's accessible name."
+        }
+      ]
     },
     {
       "kind": "pattern",
@@ -2971,6 +2977,11 @@
           ],
           "default": "transparent",
           "description": "The sidebar on the card colour (`solid`) or on the canvas (`transparent`)."
+        },
+        {
+          "name": "asideLabel",
+          "control": "text",
+          "description": "The aside's accessible name. Give one when the page has more than one `aside`."
         },
         {
           "name": "mainId",
