@@ -1,4 +1,5 @@
 import type { ComponentProps, ReactNode } from 'react'
+import { Button } from '../../buttons/Button'
 import { Card } from '../../data-display/Card'
 import { cn } from '@/lib/utils'
 import styles from './AuthLayout.module.css'
@@ -82,4 +83,49 @@ export function AuthLayout({
 /** The "or" line between the single sign-on buttons and the form. */
 export function AuthDivider({ children = 'or' }: { children?: ReactNode }) {
   return <div className={styles.divider}>{children}</div>
+}
+
+export interface AuthProvider {
+  id: string
+  /** The whole button text: "Continue with Google", "Sign in with SSO". */
+  label: string
+  /** The provider's mark, before the label. */
+  icon?: ReactNode
+}
+
+/**
+ * Single sign-on and social buttons, one full-width button each, then the
+ * "or" line. Renders nothing without providers.
+ */
+export function AuthProviders({
+  providers,
+  onSelect,
+  disabled,
+}: {
+  providers: AuthProvider[]
+  onSelect?: (id: string) => void
+  /** While the form is being sent. */
+  disabled?: boolean
+}) {
+  if (providers.length === 0) return null
+  return (
+    <>
+      <div className={styles.providers}>
+        {providers.map((provider) => (
+          <Button
+            key={provider.id}
+            variant="secondary"
+            appearance="outlined"
+            isFullWidth
+            startIcon={provider.icon}
+            disabled={disabled}
+            onClick={() => onSelect?.(provider.id)}
+          >
+            {provider.label}
+          </Button>
+        ))}
+      </div>
+      <AuthDivider />
+    </>
+  )
 }

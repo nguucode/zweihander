@@ -6,7 +6,7 @@ import { Checkbox } from '../../controls/Checkbox'
 import { TextInput } from '../../inputs/TextInput'
 import { Link } from '../../navigation/Link'
 import { Alert } from '../../notifications/Alert'
-import { AuthDivider, AuthLayout, type AuthLayoutProps } from './AuthLayout'
+import { AuthLayout, AuthProviders, type AuthLayoutProps, type AuthProvider } from './AuthLayout'
 import { PasswordInput } from './PasswordInput'
 import styles from './SignIn.module.css'
 
@@ -16,13 +16,8 @@ export interface SignInValues {
   remember: boolean
 }
 
-export interface SignInProvider {
-  id: string
-  /** The whole button text: "Continue with Google", "Sign in with SSO". */
-  label: string
-  /** The provider's mark, before the label. */
-  icon?: ReactNode
-}
+/** The same as `AuthProvider`; kept so code that imports this name still compiles. */
+export type SignInProvider = AuthProvider
 
 export interface SignInProps extends Omit<AuthLayoutProps, 'title' | 'children'> {
   title?: ReactNode
@@ -124,26 +119,7 @@ export function SignIn({
       }
       {...props}
     >
-      {providers.length > 0 && (
-        <>
-          <div className={styles.providers}>
-            {providers.map((provider) => (
-              <Button
-                key={provider.id}
-                variant="secondary"
-                appearance="outlined"
-                isFullWidth
-                startIcon={provider.icon}
-                disabled={isPending}
-                onClick={() => onProviderSelect?.(provider.id)}
-              >
-                {provider.label}
-              </Button>
-            ))}
-          </div>
-          <AuthDivider />
-        </>
-      )}
+      <AuthProviders providers={providers} onSelect={onProviderSelect} disabled={isPending} />
       {failure && (
         <Alert variant="danger" isLive>
           {failure}
