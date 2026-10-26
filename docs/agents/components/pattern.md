@@ -1,6 +1,6 @@
 # Reference: pattern
 
-Use for `src/components/patterns/**`. A pattern is a section composed of several components (the "organisms" tier), for example PageHeading, AppShell, FormLayouts. The cycle is the same as for a component, differing only in the points below.
+Use for `src/components/patterns/**`. A pattern is a section composed of several components (the "organisms" tier), for example Stats, NavSidebar, FormLayouts. The cycle is the same as for a component, differing only in the points below.
 
 ## How it differs from a component
 

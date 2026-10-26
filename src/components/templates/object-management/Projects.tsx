@@ -15,7 +15,6 @@ import { Tabs } from '../../navigation/Tabs'
 import { EmptyState } from '../../states/EmptyState'
 import { AppShell } from '../application-ui/AppShell'
 import { TableToolbar, TableToolbarGroup } from '../../patterns/application-ui/DataTablePage'
-import { PageHeading } from '../../patterns/application-ui/PageHeading'
 import { sampleProjects, type Project, type ProjectActivity, type ProjectStatus } from './projects-data'
 import styles from './Projects.module.css'
 
@@ -236,13 +235,9 @@ export function Projects({ projects: initialProjects = sampleProjects, ...props 
       {...props}
     >
       <div className={styles.page}>
-        <PageHeading
-          title={
-            <span className={styles.title}>
-              Projects <Badge count={openCount} variant="secondary" />
-            </span>
-          }
-        />
+        <h1 className={styles.title}>
+          Projects <Badge count={openCount} variant="secondary" />
+        </h1>
         <TableToolbar
           selectedCount={selected.length}
           onClearSelection={() => setSelected([])}
