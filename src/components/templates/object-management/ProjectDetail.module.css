@@ -109,12 +109,6 @@
   color: var(--foreground);
 }
 
-/* In the aside the list starts at the column's edge; in the Projects table
-   it is indented under the row. */
-.activity {
-  padding: 0;
-}
-
 .form {
   display: grid;
   gap: var(--space-group);

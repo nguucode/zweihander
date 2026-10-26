@@ -85,3 +85,8 @@
   clip-path: inset(50%);
   white-space: nowrap;
 }
+
+/* A row's activity, indented under the row it opens from. */
+.activity {
+  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-10);
+}

@@ -209,7 +209,7 @@ export function Projects({ projects: initialProjects = sampleProjects, ...props 
         isSelectable
         selectedIds={shownSelected}
         onSelectionChange={setSelected}
-        expandedContent={(p) => p.activity.length > 0 && <ActivityTimeline project={p} />}
+        expandedContent={(p) => p.activity.length > 0 && <ActivityTimeline project={p} className={styles.activity} />}
         emptyState={
           <EmptyState
             size="sm"

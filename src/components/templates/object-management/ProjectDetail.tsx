@@ -93,7 +93,7 @@ export function ProjectDetail({ project: initialProject = sampleProjects[0], tea
       {/* A div, not a section: the timeline is already the region. */}
       <div className={styles.asideSection}>
         <h2 className={styles.sectionTitle}>Activity</h2>
-        <ActivityTimeline project={project} className={styles.activity} />
+        <ActivityTimeline project={project} />
       </div>
     </div>
   )

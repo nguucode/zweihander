@@ -1,8 +1,8 @@
 import { Icon, type IconName } from '@/lib/icon'
-import { cn } from '@/lib/utils'
+import type { ReactNode } from 'react'
 import { Tag, type TagVariant } from '../../atomic-elements/Tag'
 import type { Project, ProjectActivity, ProjectHealth, ProjectStatus } from './projects-data'
-import styles from './ProjectActivity.module.css'
+import { Feed } from '../../patterns/application-ui/Feed'
 
 /* Shared by the Projects and Project Detail templates: a project's status
    tag and its activity read the same on the list and on the record. */
@@ -38,61 +38,58 @@ type ActivityTimelineProps = { className?: string } & (
   | { events: ActivityEvent[] }
 )
 
+/** What one event says after its author's name. */
+function action(event: ActivityEvent): ReactNode {
+  const of = event.project && (
+    <>
+      {' '}
+      of <strong>{event.project}</strong>
+    </>
+  )
+  switch (event.type) {
+    case 'created':
+      return event.project ? (
+        <>
+          created <strong>{event.project}</strong>
+        </>
+      ) : (
+        'created the project'
+      )
+    case 'estimation':
+      return (
+        <>
+          changed the estimation{of} from <strong>{money.format(event.from)}</strong> to <strong>{money.format(event.to)}</strong>
+        </>
+      )
+    case 'status':
+      return (
+        <>
+          changed the status{of} from {statusTag(event.from)} to {statusTag(event.to)}
+        </>
+      )
+  }
+}
+
 /**
- * What happened, newest first: one project's activity, as the Projects row
- * and the Project Detail aside show it, or events across projects, as Home
- * shows them. It stays with these templates, which ship it, until the Feed
- * pattern (Application UI queue item 33) replaces it.
+ * What happened, newest first, on the Feed pattern: one project's activity,
+ * as the Projects row and the Project Detail aside show it (a region named
+ * after the project), or events across projects, as Home shows them.
  */
 export function ActivityTimeline({ className, ...props }: ActivityTimelineProps) {
-  const [events, label]: [ActivityEvent[], string | undefined] = 'project' in props ? [props.project.activity, `${props.project.name} activity`] : [props.events, undefined]
+  const [events, label]: [ActivityEvent[], string | undefined] =
+    'project' in props ? [props.project.activity, `${props.project.name} activity`] : [props.events, undefined]
   return (
-    <section className={cn(styles.activity, className)} aria-label={label}>
-      <ol className={styles.events}>
-        {events.map((event, i) => {
-          const of = event.project && (
-            <>
-              {' '}
-              of <strong>{event.project}</strong>
-            </>
-          )
-          return (
-            <li key={i} className={styles.event}>
-              <span className={styles.eventIcon} aria-hidden="true">
-                <Icon name={activityIcon[event.type]} />
-              </span>
-              <div className={styles.eventBody}>
-                <p className={styles.eventText}>
-                  <strong>{event.by}</strong>{' '}
-                  {event.type === 'created' &&
-                    (event.project ? (
-                      <>
-                        created <strong>{event.project}</strong>
-                      </>
-                    ) : (
-                      'created the project'
-                    ))}
-                  {event.type === 'estimation' && (
-                    <>
-                      changed the estimation{of} from <strong>{money.format(event.from)}</strong> to{' '}
-                      <strong>{money.format(event.to)}</strong>
-                    </>
-                  )}
-                  {event.type === 'status' && (
-                    <>
-                      changed the status{of} from {statusTag(event.from)} to {statusTag(event.to)}
-                    </>
-                  )}{' '}
-                  <time className={styles.muted} dateTime={event.at.toISOString()}>
-                    {fullMoment.format(event.at)}
-                  </time>
-                </p>
-                {event.type === 'status' && event.note && <p className={styles.note}>{event.note}</p>}
-              </div>
-            </li>
-          )
-        })}
-      </ol>
-    </section>
+    <Feed
+      role={label ? 'region' : undefined}
+      aria-label={label}
+      className={className}
+      items={events.map((event) => ({
+        media: <Icon name={activityIcon[event.type]} />,
+        actor: event.by,
+        action: action(event),
+        at: event.at,
+        comment: event.type === 'status' ? event.note : undefined,
+      }))}
+    />
   )
 }

@@ -1,0 +1,89 @@
+/* One event a row: a round media column, the sentence beside it. With the
+   connector, a line runs from each media to the next one, down the centre
+   of the column. */
+.feed {
+  display: grid;
+  gap: var(--space-4);
+  min-inline-size: 0;
+}
+
+.items {
+  display: grid;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  position: relative;
+  display: grid;
+  grid-template-columns: var(--avatar-sm) minmax(0, 1fr);
+  gap: var(--space-3);
+}
+
+.connected .item:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  inset-block: var(--avatar-sm) calc(-1 * var(--space-4));
+  inset-inline-start: calc(var(--avatar-sm) / 2);
+  border-inline-start: 1px solid var(--border);
+}
+
+/* An Icon sits in a filled circle; an Avatar of the same size covers it. */
+.media {
+  display: grid;
+  place-items: center;
+  inline-size: var(--avatar-sm);
+  block-size: var(--avatar-sm);
+  border-radius: var(--radius-full);
+  background: var(--surface-filled);
+  color: var(--muted-foreground);
+}
+
+.body {
+  display: grid;
+  gap: var(--space-2);
+  min-inline-size: 0;
+  /* Centres a one-line sentence on the media. */
+  padding-block-start: calc((var(--avatar-sm) - var(--leading-body-sm)) / 2);
+}
+
+.sentence {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--foreground);
+  overflow-wrap: anywhere;
+}
+
+.sentence strong {
+  font-weight: 500;
+}
+
+.time {
+  color: var(--muted-foreground);
+  white-space: nowrap;
+}
+
+.comment {
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--foreground);
+  overflow-wrap: anywhere;
+}
+
+.empty {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--muted-foreground);
+}
+
+/* Lined up with the sentences, past the media column. */
+.composer {
+  margin-inline-start: calc(var(--avatar-sm) + var(--space-3));
+}

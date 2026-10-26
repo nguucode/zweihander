@@ -1,0 +1,99 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks'
+import * as FeedStories from './Feed.stories'
+
+<Meta of={FeedStories} />
+
+# Feed
+
+What happened to a record, or across many, as a list of sentences: who
+did what to what, and when, with what they wrote under it. For a
+record's history, a comment thread, or recent activity on a home page.
+After Tailwind UI Application UI, Lists: Feeds.
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/feed.json
+```
+
+## Simple
+
+An Icon per kind of event, joined by a line. Each event is one
+sentence: `actor` in bold, then `action`, the rest of it, then the time.
+Build the sentence so it reads whole: "changed the status of Harbor
+Lights from Active to On hold", not "Status: Active → On hold".
+
+<Canvas of={FeedStories.Simple} />
+
+## With comments
+
+An Avatar for an event a person made, an Icon for one the system made,
+and what they wrote in a box under the sentence. The [Project
+Detail](?path=/docs/templates-object-management-project-detail--docs)
+template puts a status change's note there.
+
+<Canvas of={FeedStories.WithComments} />
+
+## Without the line
+
+`hasConnector={false}` drops the line, for a short list where each event
+stands alone.
+
+<Canvas of={FeedStories.WithoutConnector} />
+
+## With a comment box
+
+`composer` takes a form and puts it after the last event, lined up with
+the sentences. The form is yours: a labelled
+[Textarea](?path=/docs/components-inputs-textarea--docs) and a Button,
+adding to the items you pass. A thread with a box lists oldest first,
+so the newest sits by the box.
+
+<Canvas of={FeedStories.WithComposer} />
+
+## Empty
+
+No items shows `empty`, "No activity yet." by default, in place of the
+list. The composer still shows, so the first comment can be written.
+
+<Canvas of={FeedStories.Empty} />
+
+## Props
+
+<ArgTypes of={FeedStories} />
+
+Every `<div>` attribute passes through to the root, so a page names the
+feed with `role="region"` and `aria-label` when it has no heading of its
+own.
+
+## Layout
+
+- The media column is as wide as a small Avatar; an Icon sits in a
+  filled circle of that size, and an Avatar covers it.
+- The line runs down the centre of that column, from one media to the
+  next, and stops at the last.
+- The time follows the sentence instead of taking a column at the end,
+  so the feed fits a narrow aside: it wraps whole, never mid-date.
+- Long names, links and comments break anywhere rather than overflow.
+
+<Canvas of={FeedStories.LongContent} />
+
+## Differences from the spec
+
+- **Time** follows the sentence instead of sitting at the end of the
+  row: the feed lives in asides and expanded rows as often as on a page.
+- **Comment** is a slot of the event, not a separate event type, so any
+  event can carry text: a status change keeps its reason.
+- **Composer**: Tailwind draws the box with the user's avatar beside it.
+  Here it lines up with the sentences and the form is yours.
+
+## Accessibility
+
+- The events are an ordered list, so a screen reader announces how many
+  there are and where each one sits.
+- The media is hidden from assistive tech: the sentence names the
+  person and the event, so the avatar or icon adds nothing to hear.
+- Each time is a `<time>` element with the full ISO moment, whatever
+  `formatTime` shows.
+- The feed has no landmark or heading of its own. Put it under a
+  heading, or pass `role="region"` and an `aria-label` when it stands
+  alone, as the Projects row does ("Harbor Lights activity").
+- The composer's field needs a visible label, such as "Add a comment".
