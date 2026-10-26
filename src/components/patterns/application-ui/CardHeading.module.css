@@ -3,7 +3,7 @@
 .cardHeading {
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   gap: var(--space-cluster) var(--space-group);
   font-family: var(--font-sans);

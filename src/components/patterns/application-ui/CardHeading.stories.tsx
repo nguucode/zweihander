@@ -17,7 +17,7 @@ const meta = {
   argTypes: {
     title: { description: "The card's name. Required.", control: 'text' },
     description: { description: 'One line of context under the title, in muted text.', control: 'text' },
-    media: { description: 'An Avatar or an Icon before the title, e.g. who the card is about.', control: false },
+    media: { description: 'An Avatar or an Icon before the title. Decorative and hidden from assistive tech, so it must not be interactive or say anything the title does not.', control: false },
     actions: {
       description: 'Buttons or a Menu at the end of the row. They wrap under the title on a narrow card.',
       control: false,
@@ -93,7 +93,7 @@ export const WithAvatarAndMenu: Story = {
 }
 
 /** Every slot at once, a Divider under the heading, and the title one level down. */
-export const Complete: Story = {
+export const WithIconAndRule: Story = {
   args: {
     title: 'Billing contact',
     description: 'Invoices and receipts go to this address.',

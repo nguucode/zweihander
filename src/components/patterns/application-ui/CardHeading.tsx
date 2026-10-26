@@ -4,11 +4,8 @@ import styles from './CardHeading.module.css'
 
 export interface CardHeadingProps extends Omit<ComponentProps<'div'>, 'title'> {
   title: ReactNode
-  /** One line of context under the title. */
   description?: ReactNode
-  /** An Avatar or an Icon before the title. */
   media?: ReactNode
-  /** Buttons or a Menu at the end of the row. They wrap under the title on a narrow card. */
   actions?: ReactNode
   headingLevel?: 2 | 3 | 4
 }
