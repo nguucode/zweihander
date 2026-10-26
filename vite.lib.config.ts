@@ -38,6 +38,7 @@ export default defineConfig({
         'components/overlays/Tooltip': 'src/components/overlays/Tooltip.tsx',
         'components/overlays/Popover': 'src/components/overlays/Popover.tsx',
         'components/overlays/Modal': 'src/components/overlays/Modal.tsx',
+        'components/overlays/Drawer': 'src/components/overlays/Drawer.tsx',
         'components/navigation/Menu': 'src/components/navigation/Menu.tsx',
         'components/navigation/Breadcrumbs': 'src/components/navigation/Breadcrumbs.tsx',
         'components/navigation/Pagination': 'src/components/navigation/Pagination.tsx',

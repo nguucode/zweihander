@@ -1,0 +1,172 @@
+/* The same layer as Modal and the popups: the one opened last is on top,
+   so a Select opened inside a drawer lists its options above it. */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: var(--layer-overlay);
+  background: var(--scrim);
+  /* Fades as a swipe pulls the drawer away. */
+  opacity: calc(1 - var(--drawer-swipe-progress, 0));
+  transition: opacity var(--duration-base);
+}
+.backdrop[data-swiping] {
+  transition: none;
+}
+.backdrop[data-starting-style],
+.backdrop[data-ending-style] {
+  opacity: 0;
+}
+
+.viewport {
+  position: fixed;
+  inset: 0;
+  z-index: var(--layer-overlay);
+  display: flex;
+}
+
+.popup {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  inline-size: 100%;
+  background: var(--popover);
+  box-shadow: var(--shadow-xl);
+  color: var(--popover-foreground);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  outline: none;
+  overscroll-behavior: contain;
+  transition: transform var(--duration-base);
+}
+.popup[data-swiping] {
+  transition: none;
+  user-select: none;
+}
+
+/* Keyed on Base UI's swipe direction, which is physical like `side`, the
+   swipe and the slide, so right stays right on a right-to-left page.
+   A side drawer runs the full height against its edge. It always leaves a
+   touch target's width of backdrop, so a phone can still tap out. */
+.popup[data-swipe-direction='right'],
+.popup[data-swipe-direction='left'] {
+  block-size: 100%;
+  transform: translateX(var(--drawer-swipe-movement-x, 0));
+}
+.popup[data-swipe-direction='right'] {
+  margin-left: auto;
+  border-left: 1px solid var(--border);
+}
+.popup[data-swipe-direction='left'] {
+  border-right: 1px solid var(--border);
+}
+.popup[data-swipe-direction='right'][data-starting-style],
+.popup[data-swipe-direction='right'][data-ending-style] {
+  transform: translateX(100%);
+}
+.popup[data-swipe-direction='left'][data-starting-style],
+.popup[data-swipe-direction='left'][data-ending-style] {
+  transform: translateX(-100%);
+}
+.sm {
+  max-inline-size: min(20rem, 100% - var(--target-coarse));
+}
+.md {
+  max-inline-size: min(28rem, 100% - var(--target-coarse));
+}
+.lg {
+  max-inline-size: min(40rem, 100% - var(--target-coarse));
+}
+
+/* A bottom sheet is as tall as its content, up to the screen less a
+   touch target, and rounds only the corners that face the page. */
+.popup[data-swipe-direction='down'] {
+  margin-top: auto;
+  max-block-size: calc(100% - var(--target-coarse));
+  /* Clear of an iPhone's home indicator. */
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- the inset is the device's, not a token */
+  padding-block-end: env(safe-area-inset-bottom, 0);
+  border-block-start: 1px solid var(--border);
+  border-start-start-radius: var(--radius-panel);
+  border-start-end-radius: var(--radius-panel);
+  transform: translateY(var(--drawer-swipe-movement-y, 0));
+}
+.popup[data-swipe-direction='down'][data-starting-style],
+.popup[data-swipe-direction='down'][data-ending-style] {
+  transform: translateY(100%);
+}
+
+.header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: start;
+  column-gap: var(--space-group);
+  padding: var(--space-group);
+  border-block-end: 1px solid var(--border);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--text-heading-sm);
+  line-height: var(--leading-heading-sm);
+  font-family: var(--font-heading);
+  font-weight: 500;
+}
+
+.description {
+  grid-column: 1 / -1;
+  margin: var(--space-inline) 0 0;
+  color: var(--muted-foreground);
+}
+
+/* The body scrolls; header and footer stay in view. */
+.body {
+  flex: 1;
+  min-block-size: 0;
+  padding: var(--space-group);
+  overflow-y: auto;
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-inline);
+  margin-block-start: auto;
+  padding: var(--space-group);
+  border-block-start: 1px solid var(--border);
+}
+
+.close {
+  position: relative;
+  display: inline-flex;
+  /* 4px around a 16px icon, centred on the title's 20px line: see Modal. */
+  padding: var(--control-xs-gap);
+  margin: calc(var(--control-xs-gap) * -1);
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- see above */
+  margin-block-start: -2px;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--muted-foreground);
+  font-size: var(--icon-md);
+  cursor: var(--cursor-button);
+}
+.close:hover {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+.close:focus-visible {
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: var(--focus-offset-inset);
+}
+@media (pointer: coarse) {
+  .close::before {
+    content: '';
+    position: absolute;
+    inset: 50% auto auto 50%;
+    inline-size: var(--target-coarse);
+    block-size: var(--target-coarse);
+    translate: -50% -50%;
+  }
+}

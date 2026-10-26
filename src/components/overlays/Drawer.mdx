@@ -1,0 +1,236 @@
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
+import * as DrawerStories from './Drawer.stories'
+
+<Meta of={DrawerStories} />
+
+# Drawer
+
+<DocTabs>
+<DocTab value="overview">
+
+A panel that slides in from an edge of the screen, over the page, for work
+that sits beside what the reader was doing: filters, a quick look at a
+record, a short form.
+
+<Status of={DrawerStories} />
+
+<Canvas of={DrawerStories.Default} />
+
+## Variants
+
+| Side | Use for |
+| --- | --- |
+| Right (default) | Details and editing: a quick look at a record from its list, a create or edit form, notifications. |
+| Left | Content tied to the left of the page, such as a panel for the list or tree beside it. |
+| Bottom | A short sheet as tall as its content: share, a few actions, a picker. Works best on a phone. |
+
+<Canvas of={DrawerStories.Sides} />
+
+`size` sets the width of a side drawer: `sm` (20rem) for filters, `md`
+(28rem) for a form, `lg` (40rem) for a record with a lot to show. A side
+drawer always leaves a touch target's width of backdrop, so on a phone it
+is nearly full width and can still be tapped away. For short content on
+a phone, pick `bottom` yourself: the side does not change with the
+screen. Taller than the
+screen, the body scrolls and the header and footer stay in view.
+
+<Canvas of={DrawerStories.Long} />
+
+On a touch screen it can also be swiped back towards its edge.
+
+## Resources
+
+From npm, or copied into your project through the registry:
+
+```js
+import { Drawer, DrawerClose } from 'zweihander/drawer'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/drawer.json
+```
+
+- Source: [src/components/overlays/Drawer.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/overlays/Drawer.tsx)
+- Spec: [uiguideline.com/components/drawer](https://www.uiguideline.com/components/drawer)
+- Behaviour: [Base UI Drawer](https://base-ui.com/react/components/drawer)
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
+## Anatomy
+
+<Anatomy parts={DrawerStories.anatomyParts}>
+  <Story of={DrawerStories.Anatomy} />
+</Anatomy>
+
+The open drawers on this tab and the next are pictures: real drawers
+rendered in a frame with `container`, not modal (`isModal={false}`) and
+inert, so they do not lock this page or take its focus.
+
+## Measurements
+
+<SpecTable
+  caption="Container"
+  rows={[
+    { part: 'Header, body, footer', property: 'Padding', token: '--space-group' },
+    { part: 'Container', property: 'Shadow', token: '--shadow-xl' },
+    { part: 'Bottom sheet', property: 'Top corner radius', token: '--radius-panel' },
+    { part: 'Backdrop left beside it', property: 'Minimum', token: '--target-coarse' },
+    { part: 'Title', property: 'Font size', token: '--text-heading-sm' },
+    { part: 'Title', property: 'Line height', token: '--leading-heading-sm' },
+    { part: 'Title to close button', property: 'Gap', token: '--space-group' },
+    { part: 'Title to description', property: 'Gap', token: '--space-inline' },
+    { part: 'Footer', property: 'Gap between actions', token: '--space-inline' },
+  ]}
+/>
+
+<SpecTable
+  caption="Close button"
+  rows={[
+    { part: 'Close button', property: 'Padding', token: '--control-xs-gap' },
+    { part: 'Close button', property: 'Corner radius', token: '--radius-sm' },
+    { part: 'Icon', property: 'Size', token: '--icon-md' },
+    { part: 'Focus ring', property: 'Width', token: '--focus-width' },
+    { part: 'Focus ring', property: 'Offset', token: '--focus-offset-inset' },
+    { part: 'Hit area', property: 'Minimum on touch screens', token: '--target-coarse' },
+  ]}
+/>
+
+A side drawer is full height and at most 20rem (`sm`), 28rem (`md`) or
+40rem (`lg`) wide. A bottom sheet is full width and as tall as its content,
+up to the screen less `--target-coarse`. Borders are 1px: on the edge that
+faces the page, under the header and over the footer. Backdrop and drawer
+sit on the `--layer-overlay` layer and slide in over `--duration-base`.
+
+## Color
+
+<SpecTable
+  caption="Every drawer"
+  rows={[
+    { part: 'Backdrop', property: 'Background', token: '--scrim' },
+    { part: 'Container', property: 'Background', token: '--popover' },
+    { part: 'Container, header, footer', property: 'Border', token: '--border' },
+    { part: 'Title, body', property: 'Colour', token: '--popover-foreground' },
+    { part: 'Description', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Close button', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Close button, hover', property: 'Background', token: '--accent' },
+    { part: 'Close button, hover', property: 'Colour', token: '--accent-foreground' },
+    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+  ]}
+/>
+
+Buttons in the footer keep their own colours: see Button.
+
+## States
+
+The drawer is open or closed. Opening fades the backdrop in and slides the
+container in from its edge; closing reverses it. During a swipe the
+container follows the finger and the backdrop fades with it. The close
+button is the only part with states of its own:
+
+<States
+  states={[
+    { label: 'Enabled' },
+    { label: 'Hover', pseudo: 'hover' },
+    { label: 'Focus', pseudo: 'focus-visible' },
+  ]}
+>
+  <Story of={DrawerStories.CloseButton} />
+</States>
+
+- **Hover** fills the button with `--accent`.
+- **Focus** is a 2px `--ring` outline drawn inside the button.
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={DrawerStories} />
+</div>
+
+`DrawerClose` closes the drawer it is in. Give it your own button with
+`render`: `<DrawerClose render={<Button variant="secondary" />}>Cancel</DrawerClose>`.
+
+### Differences from the spec
+
+- **No push mode.** A drawer always covers the page with a scrim. A panel
+  that pushes the page aside is part of the page's layout, not an overlay:
+  build it into the page.
+- **No top side.** Nothing in a business app slides down from the top
+  that a Menu or a Toast does not already cover.
+
+</DocTab>
+<DocTab value="guidelines">
+
+## When to use
+
+Use a drawer when the reader needs the context behind it: a record looked
+at from its list, filters for the table they are reading, a form that
+fills in something on the page. The page stays visible, dimmed, at its
+place.
+
+<DoDont
+  do={<Story of={DrawerStories.DoQuickView} />}
+  doCaption="Show a record from its list in a drawer: the list stays in place behind it, where the reader left it."
+  dont={<Story of={DrawerStories.DontConfirm} />}
+  dontCaption="Do not ask a yes-or-no question at the edge of the screen. A decision belongs in a Modal with isAlert."
+/>
+
+Put the main action last in the footer, and dismiss actions (Cancel,
+Clear) in the `secondary` variant. A form that would lose its input sets
+`closeOnBackdropClick={false}`.
+
+## When not to use
+
+- **For a decision or a confirmation.** Use a
+  [Modal](?path=/docs/components-overlays-modal--docs) with `isAlert`: it
+  sits in the middle, where the reader is looking.
+- **For a small form tied to one button.** Use a
+  [Popover](?path=/docs/components-overlays-popover--docs): it opens beside
+  the button and leaves the page usable.
+- **For site navigation.** Keep it in the sidebar; on a phone the sidebar
+  folds to its icon rail.
+- **For a long or many-step task.** Give it a page of its own.
+- **Over another drawer or a modal.** Close the first, or move the second
+  step into it.
+
+## Accessibility
+
+- `role="dialog"`, named by the title and described by the description.
+- Opening moves focus to the drawer itself, so its title and description
+  are read first and a phone does not pop up its keyboard; Tab then
+  reaches the close button. Focus is trapped inside. The page behind is `aria-hidden` and its scroll is
+  locked. Closing returns focus to the trigger.
+
+  <Canvas of={DrawerStories.Default} />
+
+- `initialFocus` sends focus to another element on open, such as the
+  first field of a form.
+
+  <Canvas of={DrawerStories.InitialFocus} />
+
+- Escape, a press outside the drawer and the close button each close it.
+  The close button is named `Close` (`closeLabel`). Swiping is never the
+  only way out.
+
+  <Canvas of={DrawerStories.Dismissing} />
+
+- With `closeOnBackdropClick={false}`, a press outside does nothing;
+  Escape still closes it.
+
+  <Canvas of={DrawerStories.KeepInput} />
+
+- A Select opened inside a drawer lists its options above it: both sit at
+  `--layer-overlay`, and the one opened last is on top.
+
+  <Canvas of={DrawerStories.Left} />
+
+- `side` is physical: on a right-to-left page a right drawer is still on
+  the right, and swipes right to close.
+
+  <Canvas of={DrawerStories.RightToLeft} />
+
+</DocTab>
+</DocTabs>
