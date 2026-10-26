@@ -143,10 +143,15 @@ export const Required: Story = {
   },
 }
 
+/** Disabled while it does not apply yet; the helper text says what turns it on. */
 export const Disabled: Story = {
-  args: { disabled: true, helperText: 'Set by the rota.' },
-  play: async ({ canvas }) => {
-    await expect(canvas.getByLabelText('Start time')).toBeDisabled()
+  args: { disabled: true, helperText: 'Pick a shift first.' },
+  play: async ({ canvas, userEvent }) => {
+    const control = canvas.getByLabelText('Start time')
+    await expect(control).toBeDisabled()
+    await userEvent.tab()
+    await expect(control).not.toHaveFocus()
+    await expect(control).toHaveAccessibleDescription('Pick a shift first.')
   },
 }
 
@@ -266,4 +271,15 @@ export const DontDisableToLock: Story = {
     disabled: true,
     children: startAt(false),
   },
+}
+
+/** Guidelines, Do: disabled for now, and the helper text says what turns it on. */
+export const DoDisableWithReason: Story = {
+  args: { disabled: true, helperText: 'Pick a shift first.' },
+}
+
+/** Guidelines, Don't: disabled with nothing saying why or how to turn it on. */
+export const DontDisableWithoutReason: Story = {
+  tags: ['!dev'],
+  args: { disabled: true },
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, type ComponentProps, type ReactNode } from "react";
+import { Fieldset } from "@base-ui/react/fieldset";
 import { cn } from "@/lib/utils";
 import styles from "./FormLayouts.module.css";
 
@@ -88,8 +89,11 @@ export interface FormFieldGroupProps extends ComponentProps<"fieldset"> {
 
 /**
  * Related fields inside a FormSection, under a legend: an address, a set of
- * checkboxes. A `<fieldset>`, so `disabled` turns off every field in it. It
- * takes a whole row of a two-column section and lays out its own columns.
+ * checkboxes. It takes a whole row of a two-column section and lays out its
+ * own columns. `disabled` turns off every field in it: it is Base UI's
+ * Fieldset, whose context disables every Base UI Field inside, because a bare
+ * disabled `<fieldset>` only reaches native controls and would leave
+ * Checkbox, Switch and Radio (`<span>`s) clickable and undimmed.
  */
 export function FormFieldGroup({
   legend,
@@ -102,7 +106,7 @@ export function FormFieldGroup({
 }: FormFieldGroupProps) {
   const descriptionId = useId();
   return (
-    <fieldset
+    <Fieldset.Root
       {...props}
       className={cn(styles.group, className)}
       aria-describedby={
@@ -118,7 +122,7 @@ export function FormFieldGroup({
       <div className={cn(styles.fields, columns === 2 && styles.twoColumns)}>
         {children}
       </div>
-    </fieldset>
+    </Fieldset.Root>
   );
 }
 

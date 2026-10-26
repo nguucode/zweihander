@@ -143,7 +143,7 @@ the button.
     {
       label: 'Disabled',
       content: (
-        <Field label="Start time" helperText="Set by the rota." disabled>
+        <Field label="Start time" helperText="Pick a shift first." disabled>
           <span className={boxClass('md')}>
             <FieldControl type="time" className={inputStyles.control} />
           </span>
@@ -230,8 +230,8 @@ their look, since their mark is the value, and only stop changing.
   dontCaption="Disabled: dimmed below readable contrast, skipped by Tab, not submitted."
 />
 
-- **Disabled is for an option that does not apply yet**, not for a value
-  that is locked. A disabled field leaves the tab order and the form data.
+- **Not disabled.** A locked value is still read and copied; a disabled
+  one is not (Disabled, below, is for "not yet").
 - **No lock icon by default.** The fill already marks the state, and an
   icon would need its own name for screen readers; the helper text says
   more than a lock.
@@ -239,13 +239,44 @@ their look, since their mark is the value, and only stop changing.
   fields: show it as a [Description List](?path=/docs/patterns-application-ui-description-list--docs),
   label and value with no box.
 
+### Disabled
+
+Disable a control only while it does not apply yet, and people can change
+that on the same screen: a choice earlier in the form, a step not done.
+Say what turns it on, in `helperText` or in the control that does it.
+
+<DoDont
+  do={<Story of={FieldStories.DoDisableWithReason} />}
+  doCaption="Disabled for now, and the helper text says what turns it on."
+  dont={<Story of={FieldStories.DontDisableWithoutReason} />}
+  dontCaption="Nothing says why it is off or how to turn it on."
+/>
+
+- **Disable for "not yet", hide for "not you", read-only for "not
+  changeable here".** An action or a field people's role never lets them
+  use, and that they do not need to read, is left out, not shown disabled:
+  a control they can never turn on is noise and a support ticket. A value
+  they need to see but may not change is read-only.
+- **No tooltip for the reason.** A disabled control leaves the tab order,
+  so a tooltip on it never opens by keyboard or on touch. Put the reason
+  in text people can see; `labelInfo` stays active on a disabled Field.
+- **Dimmed on purpose.** Disabled controls are exempt from contrast
+  rules and drop below readable contrast, one more reason not to disable
+  a value people need to read.
+- **Fields that turn off together** go in a disabled
+  [`FormFieldGroup`](?path=/docs/patterns-application-ui-form-layouts--docs#field-groups):
+  every control inside is disabled and dimmed, Checkbox, Switch and Radio
+  included, and none is submitted. Slider and File Uploader do not read
+  the group: give them `disabled` too.
+
 ## When not to use
 
 - **Round a Zweihänder control.** Text Input, Textarea, Number Input,
   Select, Combobox, Date Picker, Checkbox, Switch and Radio have their own
   label, helper text and validation; a Field round one gives it two labels.
-- **For a group of controls** under one name, use a `<fieldset>` and
-  `<legend>`, as Radio does.
+- **For a group of controls** under one name, use a
+  [`FormFieldGroup`](?path=/docs/patterns-application-ui-form-layouts--docs#field-groups)
+  (a `<fieldset>` and `<legend>`), or Radio's own group.
 
 ## Accessibility
 
@@ -257,6 +288,8 @@ their look, since their mark is the value, and only stop changing.
   `readonly` attribute, so screen readers announce it as read-only;
   typing does not change the value, and the reason in `helperText` is read
   as its description.
+- A disabled control is left out of the tab order; its helper text is still its description, so a screen reader browsing to it
+  hears why.
 - `validationState="error"` sets `aria-invalid="true"` on the control.
   Colour is never the only signal: the helper text says what is wrong.
 - The required asterisk is `aria-hidden`; put `required` on the control so

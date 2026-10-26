@@ -1,4 +1,4 @@
-import type { FormEvent } from 'react'
+import { useState, type FormEvent } from 'react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test'
 import { Avatar } from '@/components/atomic-elements/Avatar'
@@ -169,13 +169,9 @@ export const InModal: Story = {
   },
 }
 
-/**
- * Field groups: related fields under a legend inside one section. A group
- * takes a whole row and lays out its own columns; `disabled` turns off
- * every field in it.
- */
-export const FieldGroups: Story = {
-  render: () => (
+function FieldGroupsForm() {
+  const [sameAddress, setSameAddress] = useState(true)
+  return (
     <form aria-label="Billing" onSubmit={submit} style={{ maxInlineSize: '48rem' }}>
       <FormSection layout="stacked" columns={2} title="Billing">
         <TextInput label="Company" name="company" isFullWidth defaultValue="Ontheshore" />
@@ -187,16 +183,30 @@ export const FieldGroups: Story = {
           <TextInput label="City" name="billingCity" autoComplete="address-level2" isFullWidth />
           <TextInput label="Postal code" name="postalCode" autoComplete="postal-code" isFullWidth />
         </FormFieldGroup>
-        <FormFieldGroup legend="Shipping address, managed by your organisation's administrator" disabled>
+        <FormFullWidth>
+          <Checkbox name="sameAddress" label="Ship to the billing address" checked={sameAddress} onCheckedChange={setSameAddress} />
+        </FormFullWidth>
+        {/* Disabled while it does not apply: the checkbox above says why and turns it back on. */}
+        <FormFieldGroup legend="Shipping address" disabled={sameAddress}>
           <TextInput label="Street address" name="shippingStreet" isFullWidth defaultValue="12 Tran Phu" />
           <Select label="Country" name="shippingCountry" options={countries} defaultValue="Vietnam" isFullWidth />
+          <Checkbox name="leaveAtReception" label="Leave at reception" defaultChecked />
         </FormFieldGroup>
       </FormSection>
       <FormActions style={{ paddingBlockStart: 'var(--space-6)' }}>
         <Button type="submit">Save</Button>
       </FormActions>
     </form>
-  ),
+  )
+}
+
+/**
+ * Field groups: related fields under a legend inside one section. A group
+ * takes a whole row and lays out its own columns; `disabled` turns off
+ * every field in it, Checkbox, Switch and Radio included.
+ */
+export const FieldGroups: Story = {
+  render: () => <FieldGroupsForm />,
   play: async ({ canvas }) => {
     const billing = canvas.getByRole('group', { name: 'Billing address' })
     await expect(billing).toHaveAccessibleDescription('Printed on every invoice.')
@@ -211,14 +221,30 @@ export const FieldGroups: Story = {
       expect(Math.abs(city.top - postal.top)).toBeLessThan(2)
     })
     // A disabled group disables its fields, and they are left out of the submit.
-    const shipping = canvas.getByRole('group', { name: /Shipping address/ })
+    const shipping = canvas.getByRole('group', { name: 'Shipping address' })
     await expect(within(shipping).getByRole('textbox', { name: 'Street address' })).toBeDisabled()
     // Select's trigger is its own box; it dims like the text field does.
     await expect(Number(getComputedStyle(within(shipping).getByRole('combobox', { name: 'Country' })).opacity)).toBeLessThan(1)
+    // So does a Checkbox, whose box is a <span> the fieldset cannot reach: the
+    // group passes `disabled` down to it, so it leaves the tab order and
+    // clicking it changes nothing.
+    const reception = within(shipping).getByRole('checkbox', { name: 'Leave at reception' })
+    await expect(reception).toHaveAttribute('aria-disabled', 'true')
+    await expect(reception).not.toHaveAttribute('tabindex', '0')
+    await expect(Number(getComputedStyle(reception.closest('label')!).opacity)).toBeLessThan(1)
+    await userEvent.click(reception, { pointerEventsCheck: 0 })
+    await expect(reception).toBeChecked()
     await userEvent.type(within(billing).getByRole('textbox', { name: 'City' }), 'Hanoi')
     await userEvent.click(canvas.getByRole('button', { name: 'Save' }))
     await expect(onSubmit).toHaveBeenCalledWith(expect.objectContaining({ company: 'Ontheshore', billingCity: 'Hanoi' }))
     await expect(onSubmit.mock.lastCall?.[0]).not.toHaveProperty('shippingStreet')
+    await expect(onSubmit.mock.lastCall?.[0]).not.toHaveProperty('leaveAtReception')
+    // Unchecking the precondition turns the whole group back on.
+    await userEvent.click(canvas.getByRole('checkbox', { name: 'Ship to the billing address' }))
+    await expect(within(shipping).getByRole('textbox', { name: 'Street address' })).toBeEnabled()
+    await expect(reception).not.toHaveAttribute('aria-disabled')
+    await userEvent.click(reception)
+    await expect(reception).not.toBeChecked()
   },
 }
 
