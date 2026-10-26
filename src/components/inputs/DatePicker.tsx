@@ -46,6 +46,8 @@ export interface DatePickerProps {
   /** Submitted as `yyyy-mm-dd`, whatever the display format. */
   name?: string
   disabled?: boolean
+  /** Shown and submitted but locked: still focusable and copyable; the calendar does not open. */
+  readOnly?: boolean
   required?: boolean
   id?: string
   /** Where the popup renders instead of `<body>`, e.g. an element in fullscreen or a scope with its own density. */
@@ -112,6 +114,7 @@ interface PickerFieldProps {
   placeholder: string
   isFullWidth?: boolean
   disabled?: boolean
+  readOnly?: boolean
   required?: boolean
   id?: string
   className?: string
@@ -141,6 +144,7 @@ function PickerField({
   placeholder,
   isFullWidth,
   disabled,
+  readOnly,
   required,
   id,
   className,
@@ -155,6 +159,7 @@ function PickerField({
   // Escape returns focus to where it came from, so keyboard users stay put.
   const byPointer = useRef(false)
   const show = (byInput: boolean) => {
+    if (readOnly) return
     onShow()
     byPointer.current = false
     setFromInput(byInput)
@@ -189,6 +194,7 @@ function PickerField({
           autoComplete="off"
           aria-label={ariaLabel}
           required={required}
+          readOnly={readOnly}
           className={inputStyles.control}
           onChange={(e) => onTextChange(e.target.value)}
           onBlur={onCommit}
@@ -208,9 +214,17 @@ function PickerField({
             setOpen(false)
           }}
         >
-          <Popover.Trigger className={inputStyles.iconButton} disabled={disabled} aria-label={triggerLabel}>
-            <Icon name="calendar" />
-          </Popover.Trigger>
+          {/* Read-only keeps the icon, so the field still reads as a date, but
+              not the button: a calendar that cannot pick is a dead end. */}
+          {readOnly ? (
+            <span className={inputStyles.icon} aria-hidden="true">
+              <Icon name="calendar" />
+            </span>
+          ) : (
+            <Popover.Trigger className={inputStyles.iconButton} disabled={disabled} aria-label={triggerLabel}>
+              <Icon name="calendar" />
+            </Popover.Trigger>
+          )}
           <Popover.Portal container={container}>
             {/* Under the whole field, start-aligned and 4px clear of it; not the
                 calendar button, which sits inside the box. */}
@@ -256,6 +270,7 @@ export function DatePicker({
   isFullWidth,
   name,
   disabled,
+  readOnly,
   required,
   id,
   className,
@@ -313,6 +328,7 @@ export function DatePicker({
       placeholder={placeholder ?? pattern}
       isFullWidth={isFullWidth}
       disabled={disabled}
+      readOnly={readOnly}
       required={required}
       id={id}
       className={className}
@@ -408,6 +424,7 @@ export function DateRangePicker({
   isFullWidth,
   name,
   disabled,
+  readOnly,
   required,
   id,
   className,
@@ -483,6 +500,7 @@ export function DateRangePicker({
       placeholder={placeholder ?? `${pattern} – ${pattern}`}
       isFullWidth={isFullWidth}
       disabled={disabled}
+      readOnly={readOnly}
       required={required}
       id={id}
       className={className}

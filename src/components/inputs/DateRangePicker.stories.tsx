@@ -65,6 +65,10 @@ const meta = {
     isFullWidth: { description: 'Fills the width of its container instead of 20rem.', control: 'boolean' },
     name: { description: 'Submitted as `yyyy-mm-dd/yyyy-mm-dd`, an ISO 8601 interval.', control: 'text' },
     disabled: { description: 'Dimmed, out of the tab order, not submitted.', control: 'boolean' },
+    readOnly: {
+      description: 'Shown and submitted but locked: filled, still focusable and copyable, no calendars. Say why in `helperText`.',
+      control: 'boolean',
+    },
     required: { description: 'Marks the label with an asterisk and blocks an empty form submit.', control: 'boolean' },
     id: { description: 'For the input, e.g. to point an outside label at it.', control: false },
     container: {
@@ -168,6 +172,22 @@ export const Presets: Story = {
 export const InAForm: Story = {
   args: { name: 'period' },
   play: async ({ canvasElement }) => {
+    await expect(canvasElement.querySelector<HTMLInputElement>('input[name="period"]')!.value).toBe('2026-09-07/2026-09-13')
+  },
+}
+
+/** Locked: no calendars open, the typed text is ignored. */
+export const ReadOnly: Story = {
+  args: { readOnly: true, name: 'period', helperText: 'The pay period is set by payroll.' },
+  play: async ({ args, canvasElement }) => {
+    const input = within(canvasElement).getByRole('textbox')
+    await expect(input).toHaveAttribute('readonly')
+    await expect(input).toHaveAccessibleDescription('The pay period is set by payroll.')
+    await expect(within(canvasElement).queryByRole('button')).toBeNull()
+    await userEvent.click(input)
+    await userEvent.keyboard('{Alt>}{ArrowDown}{/Alt}01/10/2026 – 31/10/2026{Enter}')
+    await expect(within(document.body).queryByRole('dialog')).toBeNull()
+    await expect(args.onValueChange).not.toHaveBeenCalled()
     await expect(canvasElement.querySelector<HTMLInputElement>('input[name="period"]')!.value).toBe('2026-09-07/2026-09-13')
   },
 }

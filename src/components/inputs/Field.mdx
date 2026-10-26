@@ -103,6 +103,11 @@ the button.
 />
 
 <SpecTable
+  caption="read-only"
+  rows={[{ part: 'Field box', property: 'Background', token: '--surface-filled' }]}
+/>
+
+<SpecTable
   caption="error"
   rows={[
     { part: 'Helper text', property: 'Colour', token: '--danger-text' },
@@ -121,6 +126,16 @@ the button.
         <Field label="Start time" validationState="error" helperText="Enter a time between 06:00 and 22:00.">
           <span className={boxClass('md')}>
             <FieldControl type="time" className={inputStyles.control} />
+          </span>
+        </Field>
+      ),
+    },
+    {
+      label: 'Read-only',
+      content: (
+        <Field label="Start time" helperText="Set by the rota.">
+          <span className={boxClass('md')}>
+            <FieldControl defaultValue="09:00" readOnly className={inputStyles.control} />
           </span>
         </Field>
       ),
@@ -148,6 +163,9 @@ the button.
   `--foreground` on hover and draws the `--ring` outline on keyboard focus.
 - **Error** colours the helper text, which then says what to change, and
   the edge of a field box inside.
+- **Read-only** is set on the control (`readOnly`), not on the Field.
+  A field box with a read-only control inside is filled with
+  `--surface-filled`; the edge, label and helper stay as they are.
 - **Disabled** disables the control; how it dims is the control's own. The
   info button stays active: the note may say why the field is disabled.
 
@@ -194,6 +212,33 @@ An **error** says what to change, not only that something is wrong.
   dontCaption="'Invalid value' leaves people guessing what to change."
 />
 
+### Read-only
+
+A value people need to see but cannot change here (set by a rule,
+another team or their role) stays a field: put `readOnly` on the control
+and say in `helperText` why, and who can change it. Every Zweihänder
+control takes `readOnly`. The boxed fields (Text Input, Textarea,
+Search, Number Input, Select, Combobox, Date Picker, Date Range Picker)
+all look the same: a filled box, still focusable, the value selectable
+and submitted with the form. Checkbox, Radio, Switch and Rating keep
+their look, since their mark is the value, and only stop changing.
+
+<DoDont
+  do={<Story of={FieldStories.DoReadOnlyWithReason} />}
+  doCaption="Read-only: readable, focusable, copyable, and it says who can change it."
+  dont={<Story of={FieldStories.DontDisableToLock} />}
+  dontCaption="Disabled: dimmed below readable contrast, skipped by Tab, not submitted."
+/>
+
+- **Disabled is for an option that does not apply yet**, not for a value
+  that is locked. A disabled field leaves the tab order and the form data.
+- **No lock icon by default.** The fill already marks the state, and an
+  icon would need its own name for screen readers; the helper text says
+  more than a lock.
+- **A whole record that cannot be edited** is not a form of read-only
+  fields: show it as a [Description List](?path=/docs/patterns-application-ui-description-list--docs),
+  label and value with no box.
+
 ## When not to use
 
 - **Round a Zweihänder control.** Text Input, Textarea, Number Input,
@@ -208,6 +253,10 @@ An **error** says what to change, not only that something is wrong.
   accessible name, and clicking it focuses the control.
 - `helperText` is the control's description (`aria-describedby`), read
   after its name.
+- A read-only control keeps its place in the tab order and has the
+  `readonly` attribute, so screen readers announce it as read-only;
+  typing does not change the value, and the reason in `helperText` is read
+  as its description.
 - `validationState="error"` sets `aria-invalid="true"` on the control.
   Colour is never the only signal: the helper text says what is wrong.
 - The required asterisk is `aria-hidden`; put `required` on the control so

@@ -59,6 +59,10 @@ const meta = {
     isFullWidth: { description: 'Fills the width of its container instead of 20rem.', control: 'boolean' },
     name: { description: 'Submitted as `yyyy-mm-dd`, whatever the display order.', control: 'text' },
     disabled: { description: 'Dimmed, out of the tab order, not submitted.', control: 'boolean' },
+    readOnly: {
+      description: 'Shown and submitted but locked: filled, still focusable and copyable, no calendar. Say why in `helperText`.',
+      control: 'boolean',
+    },
     required: { description: 'Marks the label with an asterisk and blocks an empty form submit.', control: 'boolean' },
     id: { description: 'For the input, e.g. to point an outside label at it.', control: false },
     container: {
@@ -213,6 +217,24 @@ export const InAForm: Story = {
 }
 
 export const Disabled: Story = { args: { disabled: true } }
+
+/** Focusable and copyable, but typing, a click and Alt+Down change nothing. */
+export const ReadOnly: Story = {
+  args: { readOnly: true, name: 'start', helperText: 'Set by HR when the contract was signed.' },
+  play: async ({ args, canvasElement }) => {
+    const input = within(canvasElement).getByRole('textbox', { name: 'Start date' })
+    await expect(input).toHaveAttribute('readonly')
+    await expect(input).toHaveAccessibleDescription('Set by HR when the contract was signed.')
+    await expect(within(canvasElement).queryByRole('button')).toBeNull()
+    await userEvent.click(input)
+    await expect(input).toHaveFocus()
+    await userEvent.keyboard('{Alt>}{ArrowDown}{/Alt}01/01/2027{Enter}')
+    await expect(body().queryByRole('dialog')).toBeNull()
+    await expect(input).toHaveValue('18/09/2026')
+    await expect(canvasElement.querySelector<HTMLInputElement>('input[name="start"]')!.value).toBe('2026-09-18')
+    await expect(args.onValueChange).not.toHaveBeenCalled()
+  },
+}
 
 /** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
 export const anatomyParts = [
