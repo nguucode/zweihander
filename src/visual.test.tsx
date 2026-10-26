@@ -62,6 +62,7 @@ const STORIES: Record<string, { story: string; args?: Record<string, unknown>; p
   'notifications/Alert': { story: 'Variants' },
   'notifications/InlineAlert': { story: 'Variants' },
   'notifications/Toast': { story: 'Variants', play: true },
+  'overlays/Drawer': { story: 'Default', args: { defaultOpen: true } },
   'overlays/Modal': { story: 'Default', args: { defaultOpen: true } },
   'overlays/Popover': { story: 'Open' },
   'overlays/Tooltip': { story: 'LongContent' },

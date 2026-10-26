@@ -2385,6 +2385,80 @@
     },
     {
       "kind": "component",
+      "id": "components-overlays-drawer",
+      "name": "Drawer",
+      "category": "Overlays",
+      "status": "beta",
+      "storyId": "components-overlays-drawer--default",
+      "props": [
+        {
+          "name": "title",
+          "control": "text",
+          "default": "Edit customer",
+          "description": "Required: it names the dialog. Say what the drawer holds: \"Filters\", \"Invoice INV-0042\"."
+        },
+        {
+          "name": "description",
+          "control": "text",
+          "default": "Changes apply to every open invoice for this customer.",
+          "description": "Optional, under the title in `--muted-foreground`. Read as the dialog's description."
+        },
+        {
+          "name": "side",
+          "control": "inline-radio",
+          "options": [
+            "right",
+            "left",
+            "bottom"
+          ],
+          "default": "right",
+          "description": "The edge it slides in from, and the way a swipe dismisses it. `bottom` is a sheet as tall as its content."
+        },
+        {
+          "name": "size",
+          "control": "inline-radio",
+          "options": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "default": "md",
+          "description": "Width of a side drawer: 20rem (`sm`), 28rem (`md`) or 40rem (`lg`), always leaving a touch target of backdrop. Ignored at the bottom."
+        },
+        {
+          "name": "hasCloseButton",
+          "control": "boolean",
+          "default": true,
+          "description": "The close button in the corner."
+        },
+        {
+          "name": "closeLabel",
+          "control": "text",
+          "default": "Close",
+          "description": "Accessible name of the close button."
+        },
+        {
+          "name": "closeOnBackdropClick",
+          "control": "boolean",
+          "default": true,
+          "description": "Close on a press on the backdrop. Turn it off for a form that would lose its input."
+        },
+        {
+          "name": "isModal",
+          "control": "boolean",
+          "default": true,
+          "description": "While open, traps focus, locks page scroll and makes the rest of the page inert. `false` drops those three, for pictures of a drawer; the backdrop still covers the page."
+        },
+        {
+          "name": "defaultOpen",
+          "control": "boolean",
+          "default": false,
+          "description": "Open on first render, uncontrolled."
+        }
+      ]
+    },
+    {
+      "kind": "component",
       "id": "components-overlays-modal",
       "name": "Modal",
       "category": "Overlays",

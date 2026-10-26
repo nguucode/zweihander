@@ -757,6 +757,32 @@
       ]
     },
     {
+      "name": "drawer",
+      "type": "registry:component",
+      "title": "Drawer",
+      "description": "Panel that slides in from the right, left or bottom edge over a scrim, with title, description, scrolling body and pinned footer, and swipe to dismiss, on Base UI Drawer.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/icon.json"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "files": [
+        {
+          "path": "src/components/overlays/Drawer.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/overlays/Drawer.tsx"
+        },
+        {
+          "path": "src/components/overlays/Drawer.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/overlays/Drawer.module.css"
+        }
+      ]
+    },
+    {
       "name": "menu",
       "type": "registry:component",
       "title": "Menu",
