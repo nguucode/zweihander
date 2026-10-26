@@ -3288,6 +3288,66 @@
     },
     {
       "kind": "template",
+      "id": "templates-auth-forgot-password",
+      "name": "Forgot Password",
+      "category": "Auth",
+      "status": "experimental",
+      "storyId": "templates-auth-forgot-password--default",
+      "props": [
+        {
+          "name": "resendCooldown",
+          "control": "number",
+          "default": 30,
+          "description": "Seconds before Resend link is allowed, from when the link was sent and after each resend."
+        },
+        {
+          "name": "signInHref",
+          "control": "text",
+          "default": "#sign-in",
+          "description": "Where \"Back to sign in\" goes."
+        },
+        {
+          "name": "appearance",
+          "control": "inline-radio",
+          "options": [
+            "card",
+            "plain"
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "template",
+      "id": "templates-auth-reset-password",
+      "name": "Reset Password",
+      "category": "Auth",
+      "status": "experimental",
+      "storyId": "templates-auth-reset-password--default",
+      "props": [
+        {
+          "name": "email",
+          "control": "text",
+          "default": "ana@acme.com",
+          "description": "The account's email, from the link. Named in the description, and given\nto password managers so they save the new password under it."
+        },
+        {
+          "name": "signInHref",
+          "control": "text",
+          "default": "#sign-in",
+          "description": "Where \"Back to sign in\" and, once changed, \"Sign in\" go."
+        },
+        {
+          "name": "appearance",
+          "control": "inline-radio",
+          "options": [
+            "card",
+            "plain"
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "template",
       "id": "templates-auth-sign-in",
       "name": "Sign In",
       "category": "Auth",

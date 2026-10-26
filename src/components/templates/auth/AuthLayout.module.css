@@ -55,6 +55,11 @@
   overflow-wrap: anywhere;
 }
 
+/* Focused from code only (focusTitle), to start reading there: it is not a control. */
+.title:focus {
+  outline: none;
+}
+
 .description {
   margin: 0;
   color: var(--muted-foreground);

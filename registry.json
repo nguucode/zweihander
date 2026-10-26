@@ -486,6 +486,24 @@
       ]
     },
     {
+      "name": "resend-button",
+      "type": "registry:component",
+      "title": "Resend button",
+      "description": "Internal: the small Resend code / Resend link button shared by OTP Input and the auth templates, disabled with a countdown while it cools down; a failed send starts no cooldown.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/button.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/buttons/ResendButton.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/buttons/ResendButton.tsx"
+        }
+      ]
+    },
+    {
       "name": "otp-input",
       "type": "registry:component",
       "title": "OTP Input",
@@ -494,7 +512,7 @@
         "https://ontheshore.biz/zweihander/r/utils.json",
         "https://ontheshore.biz/zweihander/r/tokens.json",
         "https://ontheshore.biz/zweihander/r/input-field.json",
-        "https://ontheshore.biz/zweihander/r/button.json"
+        "https://ontheshore.biz/zweihander/r/resend-button.json"
       ],
       "dependencies": [
         "@base-ui/react"
@@ -1888,6 +1906,39 @@
           "path": "src/components/templates/auth/SignUp.module.css",
           "type": "registry:component",
           "target": "components/zweihander/templates/auth/SignUp.module.css"
+        }
+      ]
+    },
+    {
+      "name": "forgot-password-template",
+      "type": "registry:block",
+      "title": "Forgot Password (template)",
+      "description": "Forgot- and reset-password page templates inside the Auth Layout. ForgotPassword: the email, then \"Check your email\" without saying whether an account exists, with Resend link after a cooldown and Use a different email. ResetPassword, the page the link opens: a new password with its rules ticked off as the reader types, then \"Password changed\" and Sign in. Each hands valid values to its handler and shows the message it returns.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/button.json",
+        "https://ontheshore.biz/zweihander/r/resend-button.json",
+        "https://ontheshore.biz/zweihander/r/text-input.json",
+        "https://ontheshore.biz/zweihander/r/link.json",
+        "https://ontheshore.biz/zweihander/r/alert.json",
+        "https://ontheshore.biz/zweihander/r/auth-layout.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/templates/auth/ForgotPassword.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/templates/auth/ForgotPassword.tsx"
+        },
+        {
+          "path": "src/components/templates/auth/PasswordReset.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/templates/auth/PasswordReset.module.css"
+        },
+        {
+          "path": "src/components/templates/auth/ResetPassword.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/templates/auth/ResetPassword.tsx"
         }
       ]
     }
