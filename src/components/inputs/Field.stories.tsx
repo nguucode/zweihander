@@ -150,6 +150,35 @@ export const Disabled: Story = {
   },
 }
 
+/**
+ * A control with a value that cannot change here: `readOnly` on the control,
+ * the reason as helper text. A text input, not a time one: Firefox takes a
+ * read-only date or time input out of the tab order.
+ */
+const startAt = (readOnly: boolean) => (
+  <span className={boxClass('md')}>
+    <FieldControl defaultValue="09:00" readOnly={readOnly} className={inputStyles.control} />
+  </span>
+)
+const lockedTime = startAt(true)
+
+/** Shown, focusable and copyable; the box is filled and typing changes nothing. */
+export const ReadOnly: Story = {
+  args: { children: lockedTime, helperText: 'Set by the rota. Ask your manager to change it.' },
+  play: async ({ canvas, userEvent }) => {
+    const control = canvas.getByLabelText('Start time')
+    await userEvent.tab()
+    await expect(control).toHaveFocus()
+    await expect(control).toHaveAttribute('readonly')
+    await expect(control).toHaveAccessibleDescription('Set by the rota. Ask your manager to change it.')
+    await userEvent.keyboard('1')
+    await expect(control).toHaveValue('09:00')
+    await expect(getComputedStyle(control.parentElement!).backgroundColor).not.toBe(
+      getComputedStyle(canvas.getByText('Start time')).backgroundColor,
+    )
+  },
+}
+
 /** Every part together, in both states: for the visual baseline. */
 export const Validation: Story = {
   render: (args) => (
@@ -222,5 +251,19 @@ export const DontLongHelper: Story = {
   args: {
     helperText:
       'HH:MM. The shift starts at this time. Clocking in earlier is not paid unless a manager approves overtime.',
+  },
+}
+
+/** Guidelines, Do: a locked value stays readable and says who can change it. */
+export const DoReadOnlyWithReason: Story = {
+  args: { children: lockedTime, helperText: 'Set by the rota. Ask your manager to change it.' },
+}
+
+/** Guidelines, Don't: disabled to lock a value people still need to read and copy. */
+export const DontDisableToLock: Story = {
+  tags: ['!dev'],
+  args: {
+    disabled: true,
+    children: startAt(false),
   },
 }

@@ -164,6 +164,7 @@ its page.
       label: 'Error',
       content: <DatePicker label="Start date" locale="en-GB" validationState="error" helperText="Enter a date as dd/mm/yyyy." />,
     },
+    { label: 'Read-only', content: <DatePicker label="Start date" locale="en-GB" defaultValue={new Date(2026, 8, 18)} readOnly /> },
     { label: 'Disabled', content: <DatePicker label="Start date" locale="en-GB" defaultValue={new Date(2026, 8, 18)} disabled /> },
   ]}
 >
@@ -178,6 +179,10 @@ its page.
   `min` and `max`: the helper then gives the expected pattern.
 - **Hover** changes nothing on the field; the calendar icon darkens from
   `--muted-foreground` to `--foreground`.
+- **Read-only** fills the box with `--surface-filled`, as every
+  Zweihänder field does. The input stays focusable and copyable and its
+  value is submitted; the calendar icon stays but is not a button, so the
+  calendar never opens. Say why in `helperText`.
 - **Disabled** is the enabled look at 50% opacity; the calendar button is
   disabled with it.
 
@@ -239,6 +244,9 @@ be used cannot be chosen, rather than refusing it after submit.
   `aria-invalid` and the helper explains the format.
 - The calendar button is named "Choose date", with the current date when
   there is one. Alt+Down in the input opens it too.
+- `readOnly` puts `readonly` on the input: screen readers announce it,
+  it stays in the tab order, and there is no calendar button; a click or
+  Alt+Down opens nothing.
 - The calendar opens as a dialog named "Choose date" with focus on the
   selected day; Escape closes it without a change.
 - **After a pick the field goes back to rest.** Picked with the pointer,

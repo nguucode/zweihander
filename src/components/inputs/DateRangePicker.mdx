@@ -157,6 +157,10 @@ The days and the band between the range's ends are the
       content: <DateRangePicker label="Period" locale="en-GB" validationState="error" helperText="Choose both ends." />,
     },
     {
+      label: 'Read-only',
+      content: <DateRangePicker label="Period" locale="en-GB" defaultValue={{ start: new Date(2026, 8, 7), end: new Date(2026, 8, 13) }} readOnly />,
+    },
+    {
       label: 'Disabled',
       content: <DateRangePicker label="Period" locale="en-GB" defaultValue={{ start: new Date(2026, 8, 7), end: new Date(2026, 8, 13) }} disabled />,
     },
@@ -167,7 +171,8 @@ The days and the band between the range's ends are the
 
 The field's states are Date Picker's: a `--ring` outline while the input
 has focus, `--danger-text` in error (also while the typed text is not a
-range), 50% opacity when disabled. A preset matching the picked range
+range), `--surface-filled` and no calendar button when read-only, 50%
+opacity when disabled. A preset matching the picked range
 stays in its pressed look.
 
 ## API
@@ -220,6 +225,8 @@ end, and the value is complete or `null`.
   pattern, and the calendars in a dialog named "Choose dates".
 - The calendar button is named "Choose dates", with the current range
   when there is one.
+- `readOnly` works as on Date Picker: `readonly` on the input, no
+  calendar button, and a click or Alt+Down opens nothing.
 - Every day in the range has `aria-selected`, so the span is announced,
   not only its ends.
 - A day of the month either side is decoration: hidden from assistive

@@ -1300,6 +1300,11 @@
           "description": "Dimmed, out of the tab order, not submitted."
         },
         {
+          "name": "readOnly",
+          "control": "boolean",
+          "description": "Shown and submitted but locked: filled, still focusable and copyable, no calendar. Say why in `helperText`."
+        },
+        {
           "name": "required",
           "control": "boolean",
           "description": "Marks the label with an asterisk and blocks an empty form submit."
@@ -1377,6 +1382,11 @@
           "name": "disabled",
           "control": "boolean",
           "description": "Dimmed, out of the tab order, not submitted."
+        },
+        {
+          "name": "readOnly",
+          "control": "boolean",
+          "description": "Shown and submitted but locked: filled, still focusable and copyable, no calendars. Say why in `helperText`."
         },
         {
           "name": "required",
