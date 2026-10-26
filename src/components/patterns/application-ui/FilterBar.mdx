@@ -1,0 +1,80 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks'
+import * as FilterBarStories from './FilterBar.stories'
+
+<Meta of={FilterBarStories} />
+
+# Filter Bar
+
+Search and filters above a list or table, with the filters in force shown
+as chips that each remove on their own, and Clear all. After SAP Fiori List
+Report (filter bar), Carbon Filtering and Polaris Index table.
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/filter-bar.json
+```
+
+The pattern owns no data: it lays out the controls you pass and renders the
+`applied` list you keep. Choose how each filter applies with the component
+you put in `filters`.
+
+## Applied at once
+
+A button per field opens a [Menu](?path=/docs/navigation-menu--docs) of
+checkbox items; each tick applies straight away and adds a chip. Use it for
+the few fields people filter by most, with short lists of values.
+
+<Canvas of={FilterBarStories.Default} />
+
+## Applied in a batch
+
+More filters opens a [Drawer](?path=/docs/overlays-drawer--docs) holding a
+draft: nothing changes until Apply, and Cancel drops the draft. Use it for
+the long tail of fields, or when each change is slow to run (a server query
+over a large ledger).
+
+<Canvas of={FilterBarStories.AppliedInABatch} />
+
+## Empty
+
+With nothing applied there is no chip row and no Clear all.
+
+<Canvas of={FilterBarStories.Empty} />
+
+## In a table toolbar
+
+Put it first inside a [TableToolbar](?path=/docs/patterns-application-ui-data-table-page--docs):
+it takes the free space, the page's main action stays at the end, and the
+toolbar swaps it for the selection's actions while rows are selected.
+
+<Canvas of={FilterBarStories.InTableToolbar} />
+
+## Props
+
+<ArgTypes of={FilterBarStories} />
+
+Every other `<div>` attribute passes through.
+
+## Layout
+
+- **Two rows.** The controls on top; the chips and Clear all under them,
+  only while something is applied.
+- **Everything wraps, nothing squeezes.** On a phone the search takes its
+  own line and the field buttons flow under it; chips wrap onto more lines.
+- **A long value truncates inside its chip** with an ellipsis, rather than
+  widen the page. The remove button keeps the full name.
+
+<Canvas of={FilterBarStories.Narrow} />
+
+## Accessibility
+
+- The bar is a `search` landmark named "Filters"; pass `aria-label` to
+  name it after what it filters, e.g. "Invoice filters", when a page has
+  more than one.
+- The chips are a list named "Applied filters", so a screen reader says how
+  many are in force. Each remove button is named after its chip, e.g.
+  "Remove Status: Overdue".
+- Removing a chip moves focus to the chip that takes its place, or the one
+  before; removing the last one, or Clear all, moves it to the first
+  control, usually the search. Focus never drops to the page.
+- Field buttons say only the field ("Status"); what is chosen is read from
+  the chips and from the checked items in the menu.
