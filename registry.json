@@ -1970,6 +1970,35 @@
           "target": "components/zweihander/templates/auth/ProgressiveSignIn.module.css"
         }
       ]
+    },
+    {
+      "name": "mfa-challenge-template",
+      "type": "registry:block",
+      "title": "MFA Challenge (template)",
+      "description": "Two-step verification page template inside the Auth Layout: a one-time code from an authenticator app, a text message or an email (with Resend code), Remember this device, Try another way to switch method, and Use a backup code. It checks the code is complete and shows the message each handler returns.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/button.json",
+        "https://ontheshore.biz/zweihander/r/checkbox.json",
+        "https://ontheshore.biz/zweihander/r/otp-input.json",
+        "https://ontheshore.biz/zweihander/r/text-input.json",
+        "https://ontheshore.biz/zweihander/r/link.json",
+        "https://ontheshore.biz/zweihander/r/alert.json",
+        "https://ontheshore.biz/zweihander/r/auth-layout.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/templates/auth/MFAChallenge.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/templates/auth/MFAChallenge.tsx"
+        },
+        {
+          "path": "src/components/templates/auth/MFAChallenge.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/templates/auth/MFAChallenge.module.css"
+        }
+      ]
     }
   ]
 }
