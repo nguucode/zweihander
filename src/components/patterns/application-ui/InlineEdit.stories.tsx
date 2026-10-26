@@ -119,6 +119,8 @@ export const Default: Story = {
     // The input's text starts where the value's did: edit mode does not shift it.
     const box = input.getBoundingClientRect()
     await expect(Math.abs(box.left + parseFloat(getComputedStyle(input).paddingInlineStart) - before.left)).toBeLessThan(2)
+    // And on the term's line: the value's text shares its top with the term's.
+    await expect(Math.abs(before.top - canvas.getByText('Company').getBoundingClientRect().top)).toBeLessThan(2)
     // The whole value is selected, so typing replaces it.
     await expect([(input as HTMLInputElement).selectionStart, (input as HTMLInputElement).selectionEnd]).toEqual([0, 9])
     await userEvent.keyboard('Acme Corporation{Enter}')

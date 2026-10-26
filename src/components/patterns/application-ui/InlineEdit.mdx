@@ -78,7 +78,8 @@ Every other `<div>` attribute passes through to the root.
 - **The value lines up with the text around it.** The root pulls back by
   the field's inline padding, so the value's text starts where a plain
   cell's text does, and the input's text starts in the same place: entering
-  edit mode does not shift it.
+  edit mode does not shift it. It pulls back by the extra height too, so the
+  value sits on the same line as the term or the cells beside it.
 - **Save and Cancel sit at the end of the input**, aligned to its box; an
   error goes under the box and pushes the row taller, not the buttons down.
 - **The pencil does not take space away from the value** on hover: it has

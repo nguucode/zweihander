@@ -1,11 +1,14 @@
 /* The value sits where the input's text will: the root pulls back by the
-   field's padding, so in a table cell or a description list the value lines
-   up with the text around it, and edit mode does not shift it. */
+   field's padding, inline and block, so in a table cell or a description
+   list the value lines up with the text around it (start and baseline),
+   the row is no taller than a line of text, and edit mode does not shift
+   it. */
 .inlineEdit {
   --inline-edit-pad: var(--control-md-pad);
   --inline-edit-size: var(--control-md);
   --inline-edit-radius: var(--control-md-radius-field);
   margin-inline: calc(-1 * var(--inline-edit-pad));
+  margin-block: calc((1lh - var(--inline-edit-size)) / 2);
   font-family: var(--font-sans);
   font-size: var(--text-body);
   line-height: var(--leading-body);
