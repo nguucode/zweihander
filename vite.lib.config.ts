@@ -52,6 +52,7 @@ export default defineConfig({
         'components/navigation/Stepper': 'src/components/navigation/Stepper.tsx',
         'components/controls/Rating': 'src/components/controls/Rating.tsx',
         'components/data-display/Table': 'src/components/data-display/Table.tsx',
+        'components/data-display/ColumnChooser': 'src/components/data-display/ColumnChooser.tsx',
         'components/data-display/Calendar': 'src/components/data-display/Calendar.tsx',
         'components/inputs/DatePicker': 'src/components/inputs/DatePicker.tsx',
         'components/data-display/Carousel': 'src/components/data-display/Carousel.tsx',

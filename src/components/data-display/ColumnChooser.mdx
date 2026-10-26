@@ -1,0 +1,154 @@
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
+import * as ColumnChooserStories from './ColumnChooser.stories'
+
+<Meta of={ColumnChooserStories} />
+
+# Column Chooser
+
+<DocTabs>
+<DocTab value="overview">
+
+A button above a table that opens a list of its columns, each with a
+checkbox to show or hide it, and a Reset that brings back the default set.
+
+<Status of={ColumnChooserStories} />
+
+<Canvas of={ColumnChooserStories.Open} />
+
+## Variants
+
+| Variant | Use for |
+| --- | --- |
+| Every column shown (default) | Tables whose columns all matter at first, where people hide what they do not need. |
+| `defaultVisibleKeys` | Tables with more columns than fit: show the essentials, let people add the rest. Reset goes back to this set. |
+
+The chooser does not touch the table: it reports the shown keys and you
+filter the Table's `columns` with them. That keeps the choice yours to
+store, per user or per view. With a resizable Table, pass `onReset` to put
+the widths back too:
+
+<Canvas of={ColumnChooserStories.Default} />
+
+<Canvas of={ColumnChooserStories.SomeHiddenByDefault} />
+
+## Resources
+
+From npm, or copied into your project through the registry:
+
+```js
+import { ColumnChooser } from 'zweihander/column-chooser'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/column-chooser.json
+```
+
+- Source: [src/components/data-display/ColumnChooser.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/data-display/ColumnChooser.tsx)
+- Spec: none on uiguideline.com; built from the Application UI catalogue, whose source for widths is shadcn's Resizable. Widths are Table's `isResizable` instead, a handle in each header rather than resizable panels
+- Behaviour: the kit's [Popover](?path=/docs/components-overlays-popover--docs), [Checkbox](?path=/docs/components-controls-checkbox--docs) and [Button](?path=/docs/components-buttons-button--docs)
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
+## Anatomy
+
+<Anatomy parts={ColumnChooserStories.anatomyParts}>
+  <Story of={ColumnChooserStories.Anatomy} />
+</Anatomy>
+
+The open popovers on this tab and the next are pictures: real choosers
+rendered in place with `container` and inert, the popup laid out under the
+button where it opens.
+
+## Measurements
+
+<SpecTable
+  caption="Every chooser"
+  rows={[
+    { part: 'Checkbox list', property: 'Gap', token: '--space-2' },
+    { part: 'Reset', property: 'Gap above', token: '--space-3' },
+  ]}
+/>
+
+The button is a medium Button and Reset a small one; the popover, its
+padding and title are Popover's. Checkboxes keep their own sizes.
+
+## Color
+
+The chooser adds no colour of its own: the button is an outlined secondary
+Button, Reset a ghost secondary Button, and the surface is Popover's
+`--popover`. See those pages for their tokens.
+
+## States
+
+The chooser is open or closed. The button keeps Button's states; each box
+keeps Checkbox's, and a locked column shows Checkbox's disabled look:
+
+<States
+  states={[
+    { label: 'Enabled' },
+    { label: 'Hover', pseudo: 'hover' },
+    { label: 'Focus', pseudo: 'focus-visible' },
+    { label: 'Pressed', pseudo: 'active' },
+  ]}
+>
+  <Story of={ColumnChooserStories.StateButton} />
+</States>
+
+- **Locked**: the row header column, and the last column left, are ticked
+  and disabled: a table needs a name per row and at least one column.
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={ColumnChooserStories} />
+</div>
+
+### Differences from the spec
+
+There is no uiguideline spec. The catalogue's anatomy lists drag to
+reorder as optional; it is left out until a table needs it, because it
+needs a keyboard way to move as well.
+
+</DocTab>
+<DocTab value="guidelines">
+
+## When to use
+
+Use a Column Chooser on a table with more columns than most people need at
+once, typically six or more, where different people read different ones.
+
+<DoDont
+  do={<Story of={ColumnChooserStories.DoFewColumns} />}
+  doCaption="A few optional columns beside a locked name column."
+  dont={<Story of={ColumnChooserStories.DontTwoColumns} />}
+  dontCaption="A chooser for two columns: one is locked, so there is nothing to choose."
+/>
+
+## When not to use
+
+- **To switch between whole layouts** (a summary and a detailed set): use
+  saved views, so one choice changes several columns at once.
+- **To filter rows.** Hiding a column does not hide rows; use filters in
+  the table's toolbar.
+- **For a table that fits.** If every column fits on the screens it is
+  used on, leave them all shown.
+
+## Accessibility
+
+- The button reports `aria-haspopup="dialog"` and `aria-expanded`. The
+  popup is a `role="dialog"` named by the label, "Columns".
+- Opening moves focus into the dialog; Escape closes it and returns focus
+  to the button.
+- Each column is a checkbox named by its header, in table order; Space
+  toggles it, and the shown keys are reported in column order, the row
+  header always among them.
+- The row header column's checkbox, and the last checked one, are
+  `aria-disabled`: ticked and unchangeable.
+- Reset is a button named "Reset" that brings back the default columns.
+
+</DocTab>
+</DocTabs>

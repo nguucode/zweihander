@@ -1,6 +1,6 @@
 'use client'
 
-import { Fragment, useId, useMemo, useState, type ReactNode } from 'react'
+import { Fragment, useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type KeyboardEvent, type PointerEvent, type ReactNode } from 'react'
 import { Icon } from '@/lib/icon'
 import { cn } from '@/lib/utils'
 import { Button } from '../buttons/Button'
@@ -73,7 +73,86 @@ export interface TableProps<Row> {
   hasStickyHeader?: boolean
   /** Shown in place of the rows when there are none, e.g. an Empty State. */
   emptyState?: ReactNode
+  /**
+   * A handle at the end of each column header that drags (or arrow-keys) the
+   * column wider or narrower. Lays the table out by the header widths
+   * (`table-layout: fixed`): columns without a `width` share what is left.
+   */
+  isResizable?: boolean
+  /** Column widths in px, by key. Pair with `onColumnWidthsChange`; uncontrolled, the table keeps its own. */
+  columnWidths?: Record<string, number>
+  /** Called with every resized column's width in px while a handle moves. */
+  onColumnWidthsChange?: (widths: Record<string, number>) => void
   className?: string
+}
+
+const MIN_WIDTH = 48
+// ponytail: a fixed ceiling so the separator has a range to announce; read the container's width if 1200px proves short.
+const MAX_WIDTH = 1200
+const KEY_STEP = 16
+const clampWidth = (w: number) => Math.round(Math.min(MAX_WIDTH, Math.max(MIN_WIDTH, w)))
+
+/** The drag handle at a header's end: a focusable vertical separator, after the APG window splitter. */
+function ResizeHandle({ label, width, onResize }: { label: string; width?: number; onResize: (width: number) => void }) {
+  const ref = useRef<HTMLDivElement>(null)
+  const [measured, setMeasured] = useState(MIN_WIDTH)
+  const stopDrag = useRef<(() => void) | null>(null)
+  const header = () => ref.current!.parentElement!
+  const liveWidth = () => clampWidth(header().getBoundingClientRect().width)
+  // An unresized column has no width of its own to announce: read it off the
+  // page after every render, since resizing or hiding another column moves it.
+  // An unchanged value bails out, so this does not loop.
+  // oxlint-disable-next-line react-hooks/exhaustive-deps
+  useLayoutEffect(() => {
+    if (width === undefined) setMeasured(liveWidth())
+  })
+  useEffect(() => () => stopDrag.current?.(), [])
+  const now = width ?? measured
+  // The handle sits at the inline end, so in RTL dragging left widens.
+  const sign = () => (getComputedStyle(ref.current!).direction === 'rtl' ? -1 : 1)
+  // Window listeners, not pointer capture: the move keeps tracking past
+  // the handle, and synthetic test pointers need no active pointer id.
+  const onPointerDown = (e: PointerEvent<HTMLDivElement>) => {
+    if (e.button !== 0) return
+    e.preventDefault()
+    const x = e.clientX
+    const from = header().getBoundingClientRect().width
+    const s = sign()
+    const move = (m: globalThis.PointerEvent) => onResize(clampWidth(from + s * (m.clientX - x)))
+    const end = () => {
+      window.removeEventListener('pointermove', move)
+      window.removeEventListener('pointerup', end)
+      window.removeEventListener('pointercancel', end)
+      stopDrag.current = null
+    }
+    stopDrag.current = end
+    window.addEventListener('pointermove', move)
+    window.addEventListener('pointerup', end)
+    window.addEventListener('pointercancel', end)
+  }
+  const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+    const step = { ArrowRight: KEY_STEP, ArrowLeft: -KEY_STEP }[e.key]
+    // From the width on screen, not the last one announced: the window may have changed it since.
+    const next = step !== undefined ? (width ?? liveWidth()) + sign() * step : e.key === 'Home' ? MIN_WIDTH : e.key === 'End' ? MAX_WIDTH : undefined
+    if (next === undefined) return
+    e.preventDefault()
+    onResize(clampWidth(next))
+  }
+  return (
+    <div
+      ref={ref}
+      role="separator"
+      aria-orientation="vertical"
+      aria-label={label}
+      aria-valuenow={now}
+      aria-valuemin={MIN_WIDTH}
+      aria-valuemax={MAX_WIDTH}
+      tabIndex={0}
+      className={styles.resizeHandle}
+      onPointerDown={onPointerDown}
+      onKeyDown={onKeyDown}
+    />
+  )
 }
 
 const compare = (a: unknown, b: unknown) => {
@@ -105,6 +184,9 @@ export function Table<Row>({
   density = 'md',
   hasStickyHeader = false,
   emptyState,
+  isResizable = false,
+  columnWidths: widthsProp,
+  onColumnWidthsChange,
   className,
 }: TableProps<Row>) {
   const [sortState, setSortState] = useState(defaultSort)
@@ -113,6 +195,8 @@ export function Table<Row>({
   const selected = new Set(selectedProp ?? selectedState)
   const [expandedState, setExpandedState] = useState(defaultExpandedIds)
   const expanded = new Set(expandedProp ?? expandedState)
+  const [widthsState, setWidthsState] = useState<Record<string, number>>({})
+  const widths = widthsProp ?? widthsState
   const baseId = useId()
 
   // Uncontrolled sort is done here; a controlled one is the caller's job.
@@ -147,6 +231,11 @@ export function Table<Row>({
     setExpandedState(ids)
     onExpandedChange?.(ids)
   }
+  const resize = (key: string, width: number) => {
+    const next = { ...widths, [key]: width }
+    setWidthsState(next)
+    onColumnWidthsChange?.(next)
+  }
   const isExpandable = expandedContent !== undefined
   const columnCount = columns.length + (isSelectable ? 1 : 0) + (isExpandable ? 1 : 0) + (rowActions ? 1 : 0)
   // A total of no rows is noise next to an empty state.
@@ -180,7 +269,7 @@ export function Table<Row>({
 
   return (
     <div className={cn(styles.container, hasStickyHeader && styles.sticky, className)}>
-      <table className={cn(styles.table, styles[density])}>
+      <table className={cn(styles.table, styles[density], isResizable && styles.resizable)}>
         <caption className={showCaption ? styles.caption : styles.srOnly}>{caption}</caption>
         <thead>
           <tr>
@@ -209,7 +298,7 @@ export function Table<Row>({
                 <th
                   key={col.key}
                   scope="col"
-                  style={{ inlineSize: col.width, textAlign: col.align }}
+                  style={{ inlineSize: widths[col.key] ?? col.width, textAlign: col.align }}
                   aria-sort={col.sortable ? (active ? sort!.direction : 'none') : undefined}
                   className={cn(styles.th, styles[col.align ?? 'start'])}
                 >
@@ -222,6 +311,13 @@ export function Table<Row>({
                     </button>
                   ) : (
                     col.header
+                  )}
+                  {isResizable && (
+                    <ResizeHandle
+                      label={`Resize ${typeof col.header === 'string' ? col.header : col.key}`}
+                      width={widths[col.key]}
+                      onResize={(w) => resize(col.key, w)}
+                    />
                   )}
                 </th>
               )

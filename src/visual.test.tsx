@@ -40,6 +40,7 @@ const STORIES: Record<string, { story: string; args?: Record<string, unknown>; p
   'data-display/Card': { story: 'Appearances' },
   'data-display/Carousel': { story: 'Default' },
   'data-display/Collapse': { story: 'Open' },
+  'data-display/ColumnChooser': { story: 'Open' },
   'data-display/Table': { story: 'Selectable' },
   'inputs/Combobox': { story: 'Sizes' },
   'inputs/DatePicker': { story: 'Default' },
