@@ -1,0 +1,33 @@
+.form,
+.sso {
+  display: grid;
+  gap: var(--space-group);
+}
+
+.text {
+  margin: 0;
+}
+
+.email {
+  font-weight: 500;
+  color: var(--foreground);
+  overflow-wrap: anywhere;
+}
+
+/* The email and Change share a row while they fit; Change drops under a long email. */
+.identity {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-inline) var(--space-group);
+  min-inline-size: 0;
+}
+
+.identity > .text {
+  min-inline-size: 0;
+}
+
+.forgot {
+  justify-self: end;
+}

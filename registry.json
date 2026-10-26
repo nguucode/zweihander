@@ -1941,6 +1941,35 @@
           "target": "components/zweihander/templates/auth/ResetPassword.tsx"
         }
       ]
+    },
+    {
+      "name": "progressive-sign-in-template",
+      "type": "registry:block",
+      "title": "Progressive Sign In (template)",
+      "description": "Email-first sign-in page template inside the Auth Layout: the email with Remember my email and Continue; onContinue routes the account to a password step (the email with Change, the password, Forgot password) or to its single sign-on provider, with a spinner while the redirect loads. It checks the fields and shows the message each handler returns.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/button.json",
+        "https://ontheshore.biz/zweihander/r/checkbox.json",
+        "https://ontheshore.biz/zweihander/r/text-input.json",
+        "https://ontheshore.biz/zweihander/r/spinner.json",
+        "https://ontheshore.biz/zweihander/r/link.json",
+        "https://ontheshore.biz/zweihander/r/alert.json",
+        "https://ontheshore.biz/zweihander/r/auth-layout.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/templates/auth/ProgressiveSignIn.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/templates/auth/ProgressiveSignIn.tsx"
+        },
+        {
+          "path": "src/components/templates/auth/ProgressiveSignIn.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/templates/auth/ProgressiveSignIn.module.css"
+        }
+      ]
     }
   ]
 }

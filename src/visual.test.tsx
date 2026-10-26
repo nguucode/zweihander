@@ -86,6 +86,7 @@ const STORIES: Record<string, { story: string; args?: Record<string, unknown>; p
   'states/ErrorState': { story: 'Default' },
   'states/SuccessState': { story: 'Default' },
   'templates/auth/ForgotPassword': { story: 'Default' },
+  'templates/auth/ProgressiveSignIn': { story: 'Default' },
   'templates/auth/ResetPassword': { story: 'Default' },
   'templates/auth/SignIn': { story: 'Default' },
   'templates/auth/SignUp': { story: 'Default' },
