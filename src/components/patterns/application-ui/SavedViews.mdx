@@ -1,0 +1,99 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks'
+import * as SavedViewsStories from './SavedViews.stories'
+
+<Meta of={SavedViewsStories} />
+
+# Saved Views
+
+The views of a list or table, the ones that ship with the product and the
+ones people save, with a mark when the view in force has changed, Save,
+Save as new view and Manage views. After SAP Fiori variant management
+(List Report, Worklist) and Polaris Index filters.
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/saved-views.json
+```
+
+The pattern owns no views: it renders the `views` you keep and calls you
+back. What a view holds (filters, sort, columns) is yours to store; compare
+it with what is on screen and pass `isModified`. Picking another view puts
+that view's saved state in force and drops unsaved changes, as in Fiori:
+Modified, beside the views, is the warning.
+
+## Tabs
+
+For a handful of views. Each tab can carry a count. Put it above a
+[Filter Bar](?path=/docs/patterns-application-ui-filter-bar--docs): picking
+a view puts its filters in force there.
+
+<Canvas of={SavedViewsStories.Default} />
+
+## Modified
+
+Change a filter and the view says Modified, with Discard and Save. Save
+writes the change into the view in force.
+
+<Canvas of={SavedViewsStories.Modified} />
+
+## Save as new view
+
+A predefined view cannot be saved over, so a change offers Save as new view
+in place of Save; it is also always in View actions. The dialog asks for a
+name, refuses an empty or taken one, and with `isShareable` offers to share
+the view.
+
+<Canvas of={SavedViewsStories.SaveAsNewView} />
+
+## Manage views
+
+In View actions when you pass `onDelete`. It lists every view, marks the
+predefined and shared ones, and deletes saved ones at once: pair it with an
+Undo toast if a view is costly to rebuild. Deleting the view in force is
+yours to handle: put another view in force, usually the first. There is no
+rename or unshare yet: save a copy under the new name, then delete the old
+one.
+
+<Canvas of={SavedViewsStories.ManageViews} />
+
+## Menu
+
+For more views than fit on one line: a button names the view in force and
+opens the views as a menu.
+
+<Canvas of={SavedViewsStories.AsMenu} />
+
+## Props
+
+<ArgTypes of={SavedViewsStories} />
+
+Every other `<div>` attribute passes through.
+
+## Layout
+
+- **One row** while there is room: the views take the free space, the
+  actions sit at the end.
+- **The actions drop under the views** when the row is too narrow, rather
+  than squeeze the tabs.
+- **More tabs than fit scroll sideways** inside the bar; nothing widens the
+  page. Past five or six views, use `display="menu"`.
+- In menu display a long view name truncates with an ellipsis.
+
+<Canvas of={SavedViewsStories.Narrow} />
+
+## Accessibility
+
+- In tabs display the views are a tab list named "Views" (Manage views'
+  list takes the same name); pass
+  `aria-label` to say what they list, e.g. "Invoice views". Each tab's name
+  includes its count.
+- In menu display the button's name says the list and the view in force,
+  e.g. "Invoice views: All"; the views are radio items in the menu.
+- Modified sits in a `status` region, so a screen reader announces it when
+  a change makes the view differ from what is saved.
+- Save as new view moves focus to the name field. A missing or taken name
+  marks the field invalid and names the problem in its description.
+- Manage views: each delete button is named after its view, e.g. "Delete
+  To chase". Deleting one moves focus to the next delete button, or the one
+  before, or to Done when none is left.
+- Save, Discard and Save as new view take away the button that was
+  pressed; focus moves to the view in force.

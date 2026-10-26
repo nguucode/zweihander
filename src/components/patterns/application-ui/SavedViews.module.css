@@ -1,0 +1,95 @@
+/* The views and the actions share a row while there is room; the actions
+   drop under the views when there is not, rather than squeezing them. */
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-cluster) var(--space-group);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--foreground);
+}
+
+/* More tabs than fit scroll sideways instead of widening the page. The
+   tab's focus ring is drawn inside it, so the scroll box does not clip it. */
+.views {
+  flex: 1 1 16rem;
+  min-inline-size: 0;
+  overflow-x: auto;
+}
+
+.trigger {
+  min-inline-size: 0;
+  max-inline-size: 100%;
+  font-weight: 600;
+}
+
+.name {
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.option {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-cluster);
+}
+
+.modified {
+  color: var(--muted-foreground);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+}
+
+.form {
+  display: grid;
+  gap: var(--space-group);
+}
+
+.manage {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.manage > li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-block-size: var(--control-md);
+  border-block-end: 1px solid var(--border);
+}
+
+.manage > li:last-child {
+  border-block-end: 0;
+}
+
+.manage .name {
+  flex: 1 1 auto;
+}
+
+.delete {
+  margin-inline-start: auto;
+}
+
+.srOnly {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  margin: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
