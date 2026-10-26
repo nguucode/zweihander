@@ -1,0 +1,79 @@
+/* The cells sit side by side, each its own small field box: the edge,
+   fill, radius and validation colour are Text Input's (--field-edge comes
+   from the shared field, so error and success reach every cell). */
+.root {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* Square at the control tier, so a code field lines up with the other
+   fields in a form row. */
+.sm {
+  --otp-cell: var(--control-sm);
+  --otp-radius: var(--control-sm-radius-field);
+  font-size: var(--text-body-sm);
+}
+.md {
+  --otp-cell: var(--control-md);
+  --otp-radius: var(--control-md-radius-field);
+  font-size: var(--text-body);
+}
+
+.cell {
+  box-sizing: border-box;
+  inline-size: var(--otp-cell);
+  block-size: var(--otp-cell);
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--field-edge);
+  border-radius: var(--otp-radius);
+  background: var(--card);
+  box-shadow: var(--shadow-2xs);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-size: inherit;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  caret-color: var(--ring);
+  transition:
+    border-color var(--duration-base),
+    box-shadow var(--duration-base);
+}
+
+.cell:focus {
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: var(--focus-offset);
+}
+
+.cell[aria-invalid='true']:focus {
+  outline-color: var(--danger-text);
+}
+
+.cell:disabled {
+  cursor: var(--cursor-disabled);
+  opacity: 0.5;
+}
+
+.cell[readonly] {
+  background: var(--surface-filled);
+}
+
+.separator {
+  color: var(--muted-foreground);
+}
+
+/* A ghost button whose text starts where the cells do. */
+.resend {
+  justify-self: start;
+  margin-inline-start: calc(-1 * var(--control-sm-pad));
+}
+
+/* A cell is an <input>, which cannot carry a pseudo-element to extend its
+   hit area, so on touch the cells grow taller instead. Across, a tap on
+   any cell goes to the cell being typed into, so a narrow miss still lands. */
+@media (pointer: coarse) {
+  .cell {
+    block-size: var(--target-coarse);
+  }
+}

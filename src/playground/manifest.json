@@ -1619,6 +1619,117 @@
     },
     {
       "kind": "component",
+      "id": "components-inputs-otpinput",
+      "name": "OTPInput",
+      "category": "Inputs",
+      "status": "experimental",
+      "storyId": "components-inputs-otpinput--default",
+      "props": [
+        {
+          "name": "length",
+          "control": "number",
+          "default": 6,
+          "description": "How many characters the code has, one cell each."
+        },
+        {
+          "name": "groupSize",
+          "control": "number",
+          "description": "Splits the cells into groups of this many, with a dash between groups: `3` shows a 6-digit code as 3 – 3."
+        },
+        {
+          "name": "defaultValue",
+          "control": "text",
+          "description": "The starting code, uncontrolled."
+        },
+        {
+          "name": "validationType",
+          "control": "inline-radio",
+          "options": [
+            "numeric",
+            "alpha",
+            "alphanumeric"
+          ],
+          "default": "numeric",
+          "description": "Which characters a cell accepts; the rest are dropped as typed or pasted. Also picks the mobile keyboard."
+        },
+        {
+          "name": "mask",
+          "control": "boolean",
+          "default": false,
+          "description": "Shows dots instead of the characters, for a code read over someone's shoulder."
+        },
+        {
+          "name": "autoSubmit",
+          "control": "boolean",
+          "default": false,
+          "description": "Submits the surrounding form once every cell is filled."
+        },
+        {
+          "name": "resendCooldown",
+          "control": "number",
+          "default": 30,
+          "description": "Seconds before resend is allowed. `0` allows it at once. Read on mount and on each send."
+        },
+        {
+          "name": "resendLabel",
+          "control": "text",
+          "default": "Resend code",
+          "description": "The resend button's text. The countdown follows it in brackets, as `m:ss`."
+        },
+        {
+          "name": "label",
+          "control": "text",
+          "default": "Verification code",
+          "description": "The visible name, above the cells. A real `<label>` for the first cell; it also names the group. Required."
+        },
+        {
+          "name": "helperText",
+          "control": "text",
+          "description": "Under the cells, read as the group's description. The error message when `validationState` is `error`."
+        },
+        {
+          "name": "validationState",
+          "control": "inline-radio",
+          "options": [
+            "default",
+            "success",
+            "error"
+          ],
+          "default": "default",
+          "description": "Colours every cell's edge and the helper text. `error` also sets `aria-invalid` on the cells."
+        },
+        {
+          "name": "size",
+          "control": "inline-radio",
+          "options": [
+            "sm",
+            "md"
+          ],
+          "default": "md",
+          "description": "Square cells of 24px (`sm`) or 32px (`md`), from the control tiers."
+        },
+        {
+          "name": "disabled",
+          "control": "boolean",
+          "default": false,
+          "description": "Dimmed, out of the tab order. The resend button too."
+        },
+        {
+          "name": "readOnly",
+          "control": "boolean",
+          "default": false,
+          "description": "Focusable and submitted, but typing does not change it."
+        },
+        {
+          "name": "required",
+          "control": "boolean",
+          "default": false,
+          "description": "Must have a value to submit. Adds an asterisk to the label, hidden from screen readers."
+        }
+      ]
+    },
+    {
+      "kind": "component",
       "id": "components-inputs-search",
       "name": "Search",
       "category": "Inputs",

@@ -72,6 +72,8 @@ export interface InputFieldProps {
   hasButtonControl?: boolean
   /** An id for the label, for a part beyond the control that it also names. */
   labelId?: string
+  /** After the helper text, inside the field: an action on the whole field. */
+  footer?: ReactNode
   className?: string
 }
 
@@ -94,6 +96,7 @@ export function InputField({
   isFullWidth,
   hasButtonControl,
   labelId,
+  footer,
   className,
 }: InputFieldProps) {
   const ownLabelId = useId()
@@ -141,6 +144,7 @@ export function InputField({
       )}
       {children}
       {helperText && <Field.Description className={styles.helper}>{helperText}</Field.Description>}
+      {footer}
     </Field.Root>
   )
 }

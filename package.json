@@ -76,6 +76,10 @@
       "types": "./dist/components/inputs/Search.d.ts",
       "import": "./dist/components/inputs/Search.js"
     },
+    "./otp-input": {
+      "types": "./dist/components/inputs/OTPInput.d.ts",
+      "import": "./dist/components/inputs/OTPInput.js"
+    },
     "./number-input": {
       "types": "./dist/components/inputs/NumberInput.d.ts",
       "import": "./dist/components/inputs/NumberInput.js"
