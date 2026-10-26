@@ -123,7 +123,7 @@
       "name": "text-input",
       "type": "registry:component",
       "title": "Text Input",
-      "description": "Single-line text field with label, helper text, validation, prefix and suffix, on Base UI Field.",
+      "description": "Single-line text field with label, helper text, validation, prefix and suffix, add-ons and buttons inside the field, on Base UI Field.",
       "registryDependencies": [
         "https://ontheshore.biz/zweihander/r/utils.json",
         "https://ontheshore.biz/zweihander/r/tokens.json",

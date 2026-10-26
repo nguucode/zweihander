@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { expect, fn } from 'storybook/test'
 import { expectAnatomy } from '../../../.storybook/blocks'
 import { Icon } from '@/lib/icon'
-import { TextInput } from './TextInput'
+import { TextInput, TextInputButton } from './TextInput'
 
 const meta = {
   title: 'Components/Inputs/TextInput',
@@ -47,6 +47,17 @@ const meta = {
     },
     suffix: {
       description: 'Text or an icon after the value, e.g. a unit: "kg".',
+      control: false,
+      table: { type: { summary: 'ReactNode' } },
+    },
+    startAddon: {
+      description:
+        'A filled segment joined to the start of the box, for a fixed part of the value: "https://", a currency code. Or a `TextInputButton`, which fills it.',
+      control: false,
+      table: { type: { summary: 'ReactNode' } },
+    },
+    endAddon: {
+      description: 'A filled segment joined to the end of the box: a fixed ending (".com") or an attached `TextInputButton` ("Apply").',
       control: false,
       table: { type: { summary: 'ReactNode' } },
     },
@@ -117,15 +128,31 @@ export const Sizes: Story = {
   render: (args) => (
     <div style={stack}>
       {(['sm', 'md'] as const).map((size) => (
-        <TextInput key={size} {...args} size={size} label={size} />
+        <div key={size} style={stack}>
+          <TextInput {...args} size={size} label={size} />
+          <TextInput
+            {...args}
+            size={size}
+            label={`${size} with add-ons`}
+            placeholder="example"
+            startAddon="https://"
+            suffix={
+              <TextInputButton aria-label="Open link">
+                <Icon name="external" />
+              </TextInputButton>
+            }
+            endAddon={<TextInputButton>Check</TextInputButton>}
+          />
+        </div>
       ))}
     </div>
   ),
   play: async ({ canvas }) => {
-    const heights = ['sm', 'md'].map(
+    // Add-ons and buttons run the box's height; they never make it taller.
+    const heights = ['sm', 'md', 'sm with add-ons', 'md with add-ons'].map(
       (n) => canvas.getByLabelText(n).parentElement!.getBoundingClientRect().height,
     )
-    await expect(heights).toEqual([24, 32])
+    await expect(heights).toEqual([24, 32, 24, 32])
   },
 }
 
@@ -141,6 +168,85 @@ export const PrefixSuffix: Story = {
     // Pressing the prefix focuses the input, as the rest of the field does.
     await userEvent.click(canvas.getByText('https://'))
     await expect(canvas.getByLabelText('Website')).toHaveFocus()
+  },
+}
+
+export const Addons: Story = {
+  render: (args) => (
+    <div style={stack}>
+      <TextInput {...args} label="Website" placeholder="example" startAddon="https://" endAddon=".com" />
+      <TextInput {...args} label="Price" placeholder="0.00" inputMode="decimal" startAddon="USD" />
+      <TextInput {...args} label="Promo code" placeholder="SPRING" endAddon={<TextInputButton>Apply</TextInputButton>} />
+    </div>
+  ),
+  play: async ({ canvas, userEvent }) => {
+    // Pressing a text add-on focuses the input, as the label does.
+    await userEvent.click(canvas.getByText('https://'))
+    await expect(canvas.getByLabelText('Website')).toHaveFocus()
+    // An attached button is the next stop after the input.
+    await userEvent.click(canvas.getByLabelText('Promo code'))
+    await userEvent.tab()
+    await expect(canvas.getByRole('button', { name: 'Apply' })).toHaveFocus()
+  },
+}
+
+export const WithButton: Story = {
+  args: { label: 'Website', defaultValue: 'zweihander.dev' },
+  render: function Render(args) {
+    const [opened, setOpened] = useState(0)
+    return (
+      <div style={stack}>
+        <TextInput
+          {...args}
+          suffix={
+            <TextInputButton aria-label="Open link" onClick={() => setOpened((n) => n + 1)}>
+              <Icon name="external" />
+            </TextInputButton>
+          }
+        />
+        <TextInput
+          {...args}
+          label="Website, read-only"
+          readOnly
+          suffix={
+            <TextInputButton aria-label="Open read-only link">
+              <Icon name="external" />
+            </TextInputButton>
+          }
+        />
+        <TextInput
+          {...args}
+          label="Website, disabled"
+          disabled
+          suffix={
+            <TextInputButton aria-label="Open disabled link">
+              <Icon name="external" />
+            </TextInputButton>
+          }
+          endAddon={<TextInputButton>Check</TextInputButton>}
+        />
+        <span>Opened: {opened}</span>
+      </div>
+    )
+  },
+  play: async ({ canvas, userEvent }) => {
+    const button = canvas.getByRole('button', { name: 'Open link' })
+    await userEvent.click(button)
+    await expect(canvas.getByText('Opened: 1')).toBeVisible()
+    // Pressing the button does not focus the input under it.
+    await expect(canvas.getByLabelText('Website')).not.toHaveFocus()
+    // Keyboard: input, then its button.
+    await userEvent.click(canvas.getByLabelText('Website'))
+    await userEvent.tab()
+    await expect(button).toHaveFocus()
+    await userEvent.keyboard('{Enter}')
+    await expect(canvas.getByText('Opened: 2')).toBeVisible()
+    await userEvent.keyboard(' ')
+    await expect(canvas.getByText('Opened: 3')).toBeVisible()
+    // A read-only field keeps its button; a disabled field disables its buttons.
+    await expect(canvas.getByRole('button', { name: 'Open read-only link' })).toBeEnabled()
+    await expect(canvas.getByRole('button', { name: 'Open disabled link' })).toBeDisabled()
+    await expect(canvas.getByRole('button', { name: 'Check' })).toBeDisabled()
   },
 }
 
@@ -235,20 +341,35 @@ export const Controlled: Story = {
 export const anatomyParts = [
   { name: 'Label', selector: 'label', description: 'Names the field. Clicking it focuses the input.' },
   { name: 'Container', selector: 'label + span', description: 'The box: edge, fill and focus ring. Pressing its padding focuses the input.' },
-  { name: 'Prefix', selector: 'label + span > span:first-child', description: 'Optional text or icon before the value, in the muted colour.' },
+  { name: 'Start add-on', selector: 'label + span > span:nth-child(1)', description: 'Optional filled segment at the start, for a fixed part of the value.' },
+  { name: 'Prefix', selector: 'label + span > span:nth-child(2)', description: 'Optional text or icon before the value, in the muted colour.' },
   { name: 'Input', selector: 'input', description: 'The value, or the placeholder while empty.' },
-  { name: 'Suffix', selector: 'label + span > span:last-child', description: 'Optional text or icon after the value, e.g. a unit.' },
+  { name: 'Suffix', selector: 'label + span > span:nth-child(4)', description: 'Optional text, icon or icon button after the value, e.g. a unit.' },
+  { name: 'End add-on', selector: 'label + span > span:nth-child(5)', description: 'Optional filled segment at the end: a fixed ending, or an attached button.' },
   { name: 'Helper text', selector: 'label + span + p', description: 'The input\'s description. The error message when invalid.' },
 ]
 
 /** Every part present. */
 export const Anatomy: Story = {
   tags: ['!dev'],
-  args: { label: 'Website', placeholder: 'example', prefix: 'https://', suffix: '.com', helperText: 'Where people can find you.' },
+  args: {
+    label: 'Website',
+    placeholder: 'example',
+    startAddon: 'https://',
+    prefix: <Icon name="user" />,
+    suffix: (
+      <TextInputButton aria-label="Open link">
+        <Icon name="external" />
+      </TextInputButton>
+    ),
+    endAddon: '.com',
+    helperText: 'Where people can find you.',
+  },
   play: async ({ canvasElement }) => {
     const found = await expectAnatomy(canvasElement, anatomyParts)
     await expect(found[2]).toHaveTextContent('https://')
-    await expect(found[4]).toHaveTextContent('.com')
+    await expect(found[5]).toContainElement(canvasElement.querySelector('button'))
+    await expect(found[6]).toHaveTextContent('.com')
   },
 }
 

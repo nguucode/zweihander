@@ -35,6 +35,24 @@ size, what sits beside the value, and the validation state.
 | `prefix` | A fixed start the value continues: "https://", a currency sign, an icon that says what the field holds. |
 | `suffix` | A unit the value is measured in: "kg", "%", "days". |
 
+**Add-ons** are filled segments joined to the edge of the box, divided
+from the value by a hairline. Use them when the fixed part is long enough,
+or important enough, to need its own place: a protocol and a domain, a
+currency code, or an action attached to the field.
+
+<Canvas of={TextInputStories.Addons} />
+
+| Add-on | Use for |
+| --- | --- |
+| `startAddon` | A fixed start that is part of the value people see: "https://", "USD". |
+| `endAddon` | A fixed ending (".com"), or an attached `TextInputButton` that acts on the value: "Apply", "Check". |
+
+**Buttons in the field** act on the value without leaving it: open a link,
+reveal, clear. `TextInputButton` is an icon button sized to the field; put
+it in `suffix` (or `prefix`), or in an add-on, where it fills the segment.
+
+<Canvas of={TextInputStories.WithButton} />
+
 <Canvas of={TextInputStories.Validation} />
 
 | Validation state | Use for |
@@ -48,7 +66,7 @@ size, what sits beside the value, and the validation state.
 From npm, or copied into your project through the registry:
 
 ```js
-import { TextInput } from 'zweihander/text-input'
+import { TextInput, TextInputButton } from 'zweihander/text-input'
 ```
 
 ```sh
@@ -86,7 +104,8 @@ label above it, and the field radius, which never becomes a pill.
     { part: 'Container', property: 'Inline padding', token: '--control-sm-pad' },
     { part: 'Container', property: 'Corner radius', token: '--control-sm-radius-field' },
     { part: 'Container', property: 'Gap', token: '--control-sm-gap' },
-    { part: 'Prefix and suffix icon', property: 'Size', token: '--icon-sm' },
+    { part: 'Prefix, suffix and button icon', property: 'Size', token: '--icon-sm' },
+    { part: 'Add-on', property: 'Inline padding', token: '--control-sm-pad' },
     { part: 'Input', property: 'Font size', token: '--text-body-sm' },
     { part: 'Input', property: 'Line height', token: '--leading-body-sm' },
   ]}
@@ -99,7 +118,8 @@ label above it, and the field radius, which never becomes a pill.
     { part: 'Container', property: 'Inline padding', token: '--control-md-pad' },
     { part: 'Container', property: 'Corner radius', token: '--control-md-radius-field' },
     { part: 'Container', property: 'Gap', token: '--control-md-gap' },
-    { part: 'Prefix and suffix icon', property: 'Size', token: '--icon-md' },
+    { part: 'Prefix, suffix and button icon', property: 'Size', token: '--icon-md' },
+    { part: 'Add-on', property: 'Inline padding', token: '--control-md-pad' },
     { part: 'Input', property: 'Font size', token: '--text-body' },
     { part: 'Input', property: 'Line height', token: '--leading-body' },
   ]}
@@ -118,7 +138,9 @@ label above it, and the field radius, which never becomes a pill.
 
 The label and helper stay at body size in `sm` too: only the box gets
 smaller. The field is 20rem wide, capped at its container; with
-`isFullWidth` it fills the container. The edge is 1px.
+`isFullWidth` it fills the container. The edge is 1px. An add-on runs
+the full height of the box, and its 1px divider takes the edge's colour,
+so a field in the error state is red all round, divider included.
 
 ## Color
 
@@ -134,6 +156,10 @@ follow.
     { part: 'Container', property: 'Shadow', token: '--shadow-2xs' },
     { part: 'Label and input', property: 'Colour', token: '--foreground' },
     { part: 'Placeholder, prefix, suffix', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Add-on', property: 'Background', token: '--surface-filled' },
+    { part: 'Add-on text', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Add-on button', property: 'Colour', token: '--foreground' },
+    { part: 'Add-on button, hover', property: 'Background', token: '--accent' },
     { part: 'Helper text', property: 'Colour', token: '--muted-foreground' },
     { part: 'Required asterisk', property: 'Colour', token: '--danger-text' },
     { part: 'Focus ring', property: 'Colour', token: '--ring' },
@@ -182,6 +208,11 @@ follow.
 - **Read-only** fills the box with `--surface-filled`: it can be focused
   and copied, not changed.
 - **Disabled** is the enabled look at 50% opacity.
+- **A button in an add-on** fills the segment: hover gives it `--accent`,
+  and its focus ring sits inside the segment, so the box's edge does not
+  cut it. An icon button in `prefix` or `suffix` turns `--foreground` on
+  hover. In a read-only field the box takes the add-on's fill, so only the
+  divider sets the add-on apart.
 
 ## API
 
@@ -189,6 +220,9 @@ follow.
 <div style={{ overflowX: 'auto' }}>
   <ArgTypes of={TextInputStories} />
 </div>
+
+`TextInputButton` takes every `<button>` attribute; it is `type="button"`
+by default and follows the field's `disabled`.
 
 Every other `<input>` attribute passes through to the input, including
 `ref`, `type`, `name`, `pattern`, `maxLength`, `inputMode` and
@@ -232,6 +266,13 @@ red edge only points at the message.
   dontCaption="A red edge and 'Invalid' leave people guessing what to change."
 />
 
+**Prefix or add-on.** A prefix is a hint inside the box, read past
+without stopping: an icon, a currency sign. An add-on is a segment of its
+own, for a fixed part long enough to label the value ("https://", ".com")
+or for an action attached to it. Use one start and one end at most; a
+field with an add-on and a prefix on the same side has two things before
+the value to read.
+
 ## When not to use
 
 - **For several lines.** Use a
@@ -246,6 +287,9 @@ red edge only points at the message.
 - **To pick from a known list.** Use a
   [Select](?path=/docs/components-inputs-select--docs) or a
   [Combobox](?path=/docs/components-inputs-combobox--docs).
+- **For a unit people choose** (a currency, a country code). Add-ons take
+  text or a `TextInputButton`, not a Select: put a
+  [Select](?path=/docs/components-inputs-select--docs) beside the field.
 - **For a date.** Use a [Date Picker](?path=/docs/components-inputs-datepicker--docs).
 
 ## Accessibility
@@ -261,8 +305,13 @@ red edge only points at the message.
 - Do not rely on the placeholder as a label: it is not reliably announced
   and disappears as soon as anyone types. Without a visible label, pass
   `aria-label`.
-- Pressing the field's padding or a prefix focuses the input, as a click
-  anywhere on a native field does.
+- Pressing the field's padding, a prefix or a text add-on focuses the
+  input, as a click anywhere on a native field does.
+- A `TextInputButton` is a native `<button>` after the input in the tab
+  order, pressed with Enter or Space. An icon-only one needs `aria-label`.
+  Pressing it does not move focus to the input.
+- `TextInputButton` is disabled with the field. In a read-only field it
+  stays enabled, since opening or copying a fixed value is what it is for.
 - **The edge is `--field-border`, about 1.5:1, a deliberate exception to
   WCAG 1.4.11** (approved 2026-10-08), for the light hairline of the
   Claude apps. The field is a white `--card` box with a faint drop on the
