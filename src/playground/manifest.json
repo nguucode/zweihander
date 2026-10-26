@@ -2832,6 +2832,39 @@
     },
     {
       "kind": "pattern",
+      "id": "patterns-application-ui-card-heading",
+      "name": "Card Heading",
+      "category": "Application UI",
+      "status": "experimental",
+      "storyId": "patterns-application-ui-card-heading--simple",
+      "props": [
+        {
+          "name": "title",
+          "control": "text",
+          "default": "Job postings",
+          "description": "The card's name. Required."
+        },
+        {
+          "name": "description",
+          "control": "text",
+          "default": "Open roles across every team, newest first.",
+          "description": "One line of context under the title, in muted text."
+        },
+        {
+          "name": "headingLevel",
+          "control": "radio",
+          "options": [
+            2,
+            3,
+            4
+          ],
+          "default": 2,
+          "description": "The title is an h2; use 3 or 4 when the card sits under a section heading."
+        }
+      ]
+    },
+    {
+      "kind": "pattern",
       "id": "patterns-application-ui-data-table-page",
       "name": "Data Table Page",
       "category": "Application UI",

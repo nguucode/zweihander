@@ -1296,6 +1296,28 @@
       ]
     },
     {
+      "name": "card-heading",
+      "type": "registry:block",
+      "title": "Card Heading",
+      "description": "Application UI pattern: the top row of a card, with title, optional description, avatar or icon, and actions.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/patterns/application-ui/CardHeading.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/patterns/application-ui/CardHeading.tsx"
+        },
+        {
+          "path": "src/components/patterns/application-ui/CardHeading.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/patterns/application-ui/CardHeading.module.css"
+        }
+      ]
+    },
+    {
       "name": "stats",
       "type": "registry:block",
       "title": "Stats",
