@@ -1730,6 +1730,76 @@
     },
     {
       "kind": "component",
+      "id": "components-inputs-passwordinput",
+      "name": "PasswordInput",
+      "category": "Inputs",
+      "status": "experimental",
+      "storyId": "components-inputs-passwordinput--default",
+      "props": [
+        {
+          "name": "label",
+          "control": "text",
+          "default": "Password",
+          "description": "The visible name. A text label also names the Show / Hide button: \"Show new password\"."
+        },
+        {
+          "name": "autoComplete",
+          "control": "inline-radio",
+          "options": [
+            "current-password",
+            "new-password"
+          ],
+          "default": "current-password",
+          "description": "`current-password` to sign in, `new-password` where a password is chosen, so password managers fill or suggest the right one."
+        },
+        {
+          "name": "helperText",
+          "control": "text",
+          "description": "Under the field, before the rules. The error message when `validationState` is `error`."
+        },
+        {
+          "name": "validationState",
+          "control": "inline-radio",
+          "options": [
+            "default",
+            "success",
+            "error"
+          ],
+          "default": "default",
+          "description": "Colours the field's edge and the helper text; `error` sets `aria-invalid`. A met rule stays green."
+        },
+        {
+          "name": "size",
+          "control": "inline-radio",
+          "options": [
+            "sm",
+            "md"
+          ],
+          "default": "md",
+          "description": "The field's height, from the control tiers."
+        },
+        {
+          "name": "isFullWidth",
+          "control": "boolean",
+          "default": false,
+          "description": "Fills its container instead of the field's default width."
+        },
+        {
+          "name": "disabled",
+          "control": "boolean",
+          "default": false,
+          "description": "Dimmed and out of the tab order, the Show button too."
+        },
+        {
+          "name": "required",
+          "control": "boolean",
+          "default": false,
+          "description": "Must have a value to submit. Adds an asterisk to the label, hidden from screen readers."
+        }
+      ]
+    },
+    {
+      "kind": "component",
       "id": "components-inputs-search",
       "name": "Search",
       "category": "Inputs",
@@ -3354,6 +3424,27 @@
           "name": "mainId",
           "control": "text",
           "description": "The `id` of the `main` element, which the skip link targets. Generated if not given."
+        }
+      ]
+    },
+    {
+      "kind": "template",
+      "id": "templates-application-ui-settings",
+      "name": "Settings",
+      "category": "Application UI",
+      "status": "experimental",
+      "storyId": "templates-application-ui-settings--default",
+      "props": [
+        {
+          "name": "defaultSection",
+          "control": "inline-radio",
+          "options": [
+            "profile",
+            "account",
+            "notifications"
+          ],
+          "default": "profile",
+          "description": "The section shown first."
         }
       ]
     },

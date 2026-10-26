@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
 import { Icon } from '@/lib/icon'
-import { TextInput, TextInputButton, type TextInputProps } from '../../inputs/TextInput'
+import { assignRef } from './InputField'
+import { TextInput, TextInputButton, type TextInputProps } from './TextInput'
 import styles from './PasswordInput.module.css'
 
 export interface PasswordRule {
@@ -47,8 +48,7 @@ export function PasswordInput({
   const setRef = useCallback(
     (node: HTMLInputElement | null) => {
       own.current = node
-      if (typeof ref === 'function') ref(node)
-      else if (ref) ref.current = node
+      assignRef(ref, node)
     },
     [ref],
   )

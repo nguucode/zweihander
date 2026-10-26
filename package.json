@@ -24,6 +24,10 @@
       "types": "./dist/components/inputs/TextInput.d.ts",
       "import": "./dist/components/inputs/TextInput.js"
     },
+    "./password-input": {
+      "types": "./dist/components/inputs/PasswordInput.d.ts",
+      "import": "./dist/components/inputs/PasswordInput.js"
+    },
     "./field": {
       "types": "./dist/components/inputs/Field.d.ts",
       "import": "./dist/components/inputs/Field.js"

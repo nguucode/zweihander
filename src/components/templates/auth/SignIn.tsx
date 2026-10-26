@@ -7,7 +7,7 @@ import { TextInput } from '../../inputs/TextInput'
 import { Link } from '../../navigation/Link'
 import { Alert } from '../../notifications/Alert'
 import { AuthLayout, AuthProviders, type AuthLayoutProps, type AuthProvider } from './AuthLayout'
-import { PasswordInput } from './PasswordInput'
+import { PasswordInput } from '../../inputs/PasswordInput'
 import styles from './SignIn.module.css'
 
 export interface SignInValues {

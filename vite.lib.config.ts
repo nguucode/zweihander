@@ -14,6 +14,7 @@ export default defineConfig({
         'components/buttons/Button': 'src/components/buttons/Button.tsx',
         'components/atomic-elements/Divider': 'src/components/atomic-elements/Divider.tsx',
         'components/inputs/TextInput': 'src/components/inputs/TextInput.tsx',
+        'components/inputs/PasswordInput': 'src/components/inputs/PasswordInput.tsx',
         'components/inputs/Field': 'src/components/inputs/Field.tsx',
         'components/atomic-elements/Badge': 'src/components/atomic-elements/Badge.tsx',
         'lib/icon': 'src/lib/icon.tsx',
