@@ -3288,6 +3288,41 @@
     },
     {
       "kind": "template",
+      "id": "templates-auth-sign-in",
+      "name": "Sign In",
+      "category": "Auth",
+      "status": "experimental",
+      "storyId": "templates-auth-sign-in--default",
+      "props": [
+        {
+          "name": "hasRememberMe",
+          "control": "boolean",
+          "default": true,
+          "description": "Shows \"Keep me signed in\"."
+        },
+        {
+          "name": "forgotPasswordHref",
+          "control": "text",
+          "default": "#forgot-password"
+        },
+        {
+          "name": "signUpHref",
+          "control": "text",
+          "default": "#sign-up",
+          "description": "Shows \"No account? Sign up\" under the form. Leave it out where accounts are by invitation."
+        },
+        {
+          "name": "appearance",
+          "control": "inline-radio",
+          "options": [
+            "card",
+            "plain"
+          ]
+        }
+      ]
+    },
+    {
+      "kind": "template",
       "id": "templates-object-management-project-detail",
       "name": "Project Detail",
       "category": "Object Management",

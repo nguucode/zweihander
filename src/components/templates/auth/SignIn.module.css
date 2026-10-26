@@ -1,0 +1,28 @@
+.providers {
+  display: grid;
+  gap: var(--space-stack);
+}
+
+.form {
+  display: grid;
+  gap: var(--space-group);
+}
+
+/* "Keep me signed in" and "Forgot password?" share a row while they fit,
+   and the link drops under the checkbox when they do not. */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-inline) var(--space-group);
+}
+
+/* Without the checkbox the link still sits at the end. */
+.forgot {
+  margin-inline-start: auto;
+}
+
+.signUp {
+  margin: 0;
+}
