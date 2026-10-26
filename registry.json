@@ -1080,13 +1080,14 @@
       "name": "table",
       "type": "registry:component",
       "title": "Table",
-      "description": "Native table with captions, row headers, sortable columns (aria-sort), row selection, expandable rows, density, sticky header and an empty state.",
+      "description": "Native table with captions, row headers, sortable columns (aria-sort), row selection, expandable rows, a row actions menu, a total row, density, sticky header and an empty state.",
       "registryDependencies": [
         "https://ontheshore.biz/zweihander/r/utils.json",
         "https://ontheshore.biz/zweihander/r/tokens.json",
         "https://ontheshore.biz/zweihander/r/icon.json",
         "https://ontheshore.biz/zweihander/r/button.json",
-        "https://ontheshore.biz/zweihander/r/checkbox.json"
+        "https://ontheshore.biz/zweihander/r/checkbox.json",
+        "https://ontheshore.biz/zweihander/r/menu.json"
       ],
       "dependencies": [
         "@base-ui/react"
