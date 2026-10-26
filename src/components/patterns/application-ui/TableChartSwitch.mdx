@@ -1,0 +1,84 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks'
+import * as TableChartSwitchStories from './TableChartSwitch.stories'
+
+<Meta of={TableChartSwitchStories} />
+
+# Table Chart Switch
+
+One set of records, two ways to look at it: a table of the rows and a chart
+of their totals, under the same filters. After the table/chart toggle of
+SAP Fiori's List Report.
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/table-chart.json
+```
+
+The pattern owns no data and draws neither view: it lays out the filters,
+the summary and the switch, and shows the view in force. Filter once and
+hand the same result to both `table` and `chart`, so the two never disagree.
+
+## Table and chart
+
+The table comes first. Switch to the chart and the filters stay where they
+are, with their state; a change shows in whichever view is in force. The
+view not in force is hidden, not removed, so the table keeps its sort,
+selection and scroll while the viewer looks at the chart.
+
+<Canvas of={TableChartSwitchStories.Default} />
+
+The chart keeps its own View as table. That table lists what the chart
+plots (a total per month), not the records, so the two do not overlap.
+
+## Controlled
+
+Pass `view` and `onViewChange` to bring a viewer back to the view they left,
+or to keep it in a [Saved View](?path=/docs/patterns-application-ui-saved-views--docs).
+
+<Canvas of={TableChartSwitchStories.Controlled} />
+
+## Empty
+
+Nothing matches: each view shows its own empty state, the Table's
+`emptyState` and the chart's No data.
+
+<Canvas of={TableChartSwitchStories.Empty} />
+
+## Differences from the spec
+
+- Fiori's toggle is a pair of icon buttons in the table toolbar; here it is
+  a pair of text tabs, since the views are panels of one region and a word
+  says more than a glyph.
+- A `summary` slot, Fiori's "Invoices (128)" beside the toggle, gives the
+  row a start and the count a voice.
+
+## Props
+
+<ArgTypes of={TableChartSwitchStories} />
+
+Every other `<div>` attribute passes through.
+
+## Layout
+
+- **Filters on top**, full width.
+- **The summary and the switch share a row** below them: the summary at the
+  start, the switch at the end, where Fiori puts it in the table's toolbar.
+- **The view takes the full width** under that row. A wide table scrolls
+  inside its own box.
+- **When the row is too narrow** the summary wraps and the switch drops
+  under it; nothing widens the page.
+
+<Canvas of={TableChartSwitchStories.Narrow} />
+
+## Accessibility
+
+- The switch is a tab list named "View"; pass `aria-label` to say what it
+  shows, e.g. "Invoice view". The view in force is its tab panel, named
+  after its tab.
+- The summary is a `status`: when a filter changes the count, a screen
+  reader announces it.
+- Arrow keys move between Table and Chart, Enter or Space switches, and
+  focus stays on the tab.
+- The filters stay in the page when the view changes, so focus in them is
+  never lost.
+
+<Canvas of={TableChartSwitchStories.Keyboard} />

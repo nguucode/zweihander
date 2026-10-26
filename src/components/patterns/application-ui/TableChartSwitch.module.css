@@ -1,0 +1,34 @@
+/* Filters on top, then the summary and the switch on one row, then the view.
+   The Tabs root is flattened so its list joins the summary's row and its
+   panel takes the full width below; the row wraps when it is too narrow. */
+.root {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-group) var(--space-cluster);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--foreground);
+}
+
+.tabs {
+  display: contents;
+}
+
+.filters,
+.tabs > [role='tabpanel'] {
+  flex: 1 1 100%;
+  min-inline-size: 0;
+}
+
+.summary {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+  color: var(--muted-foreground);
+}
+
+.tabs > [role='tablist'] {
+  margin-inline-start: auto;
+}
