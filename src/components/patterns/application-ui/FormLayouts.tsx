@@ -89,12 +89,12 @@ export interface FormFieldGroupProps extends ComponentProps<"fieldset"> {
 
 /**
  * Related fields inside a FormSection, under a legend: an address, a set of
- * checkboxes. A `<fieldset>`, so `disabled` turns off every field in it. It
- * takes a whole row of a two-column section and lays out its own columns.
+ * checkboxes. It takes a whole row of a two-column section and lays out its
+ * own columns. `disabled` turns off every field in it: it is Base UI's
+ * Fieldset, whose context disables every Base UI Field inside, because a bare
+ * disabled `<fieldset>` only reaches native controls and would leave
+ * Checkbox, Switch and Radio (`<span>`s) clickable and undimmed.
  */
-// Base UI's Fieldset, not a bare <fieldset>: a native disabled fieldset only
-// reaches native controls, while Checkbox, Switch and Radio are <span>s that
-// would stay clickable and undimmed. Its context disables every Field inside.
 export function FormFieldGroup({
   legend,
   description,

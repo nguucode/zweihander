@@ -36,7 +36,8 @@ Related fields inside one section, under a legend: an address, a set of
 checkboxes. `FormFieldGroup` is a `<fieldset>`: it takes the section's
 whole row, lays out its own columns, and `disabled` turns off every field
 in it, Checkbox, Switch and Radio included (they are left out of the
-submitted data, as the browser does for any disabled field). Disable a
+submitted data, as the browser does for any disabled field). Slider and
+File Uploader do not read the group: give them `disabled` too. Disable a
 group while it does not apply, with the reason on screen, as the "Ship to
 the billing address" checkbox does here; see
 [Field › Disabled](?path=/docs/components-inputs-field--docs) for when to
