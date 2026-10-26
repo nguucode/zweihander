@@ -1,0 +1,121 @@
+/* The page fills the viewport by default; set block-size on it to put it in
+   a smaller box, as the stories do. The breakpoint is the page's own width
+   (a container), which in an app is the viewport's. Its background is the
+   Theme's canvas, read the way App Shell reads it. */
+.page {
+  container-type: inline-size;
+  display: grid;
+  min-block-size: 100dvh;
+  background: var(
+    --canvas,
+    var(--canvas-plain, var(--card)) var(--canvas-neutral, var(--background))
+      var(--canvas-tinted, var(--primary-subtle))
+  );
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+.frame {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.main {
+  display: grid;
+  place-items: center;
+  padding: var(--space-section) var(--space-container);
+}
+
+/* One narrow column: a form this short reads best at about 25rem, and a
+   phone gets the full width less the page's padding. */
+.column {
+  display: grid;
+  gap: var(--space-section);
+  inline-size: min(100%, 25rem);
+}
+
+.header {
+  display: grid;
+  gap: var(--space-inline);
+  justify-items: center;
+  text-align: center;
+}
+
+.brand {
+  display: flex;
+  margin-block-end: var(--space-group);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: var(--text-heading-lg);
+  line-height: var(--leading-heading-lg);
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.description {
+  margin: 0;
+  color: var(--muted-foreground);
+}
+
+.body {
+  display: grid;
+  gap: var(--space-group);
+}
+
+.footer {
+  display: grid;
+  gap: var(--space-inline);
+  color: var(--muted-foreground);
+  text-align: center;
+}
+
+.aside {
+  display: none;
+  overflow: hidden;
+  background: var(--muted);
+}
+
+/* An image fills the panel. */
+.aside > img {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+/* Split: the form starts at the left edge of its half, which reads better
+   than a centred column next to a picture. */
+.split .header {
+  justify-items: start;
+  text-align: start;
+}
+.split .footer {
+  text-align: start;
+}
+
+@container (min-width: 64rem) {
+  .split .frame {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .split .aside {
+    display: block;
+  }
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: var(--space-cluster);
+  color: var(--muted-foreground);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+}
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  border-block-start: 1px solid var(--border);
+}

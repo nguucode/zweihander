@@ -1798,6 +1798,63 @@
           "target": "components/zweihander/templates/object-management/projects-data.ts"
         }
       ]
+    },
+    {
+      "name": "auth-layout",
+      "type": "registry:block",
+      "title": "Auth Layout (template)",
+      "description": "Template: AuthLayout, the frame every auth screen shares. The logo, the title and the form in one narrow column on the Theme's canvas, in a card or plain, or beside a panel from 64rem; with AuthDivider (the \"or\" line under single sign-on) and PasswordInput (a password field with Show / Hide).",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/card.json",
+        "https://ontheshore.biz/zweihander/r/text-input.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/templates/auth/AuthLayout.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/templates/auth/AuthLayout.tsx"
+        },
+        {
+          "path": "src/components/templates/auth/AuthLayout.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/templates/auth/AuthLayout.module.css"
+        },
+        {
+          "path": "src/components/templates/auth/PasswordInput.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/templates/auth/PasswordInput.tsx"
+        }
+      ]
+    },
+    {
+      "name": "sign-in-template",
+      "type": "registry:block",
+      "title": "Sign In (template)",
+      "description": "Sign-in page template inside the Auth Layout: optional single sign-on buttons and an \"or\" line, email and password with Show / Hide, Keep me signed in, Forgot password and Sign up links; it checks the fields, then hands valid values to onSignIn and shows the message it returns.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/button.json",
+        "https://ontheshore.biz/zweihander/r/checkbox.json",
+        "https://ontheshore.biz/zweihander/r/text-input.json",
+        "https://ontheshore.biz/zweihander/r/link.json",
+        "https://ontheshore.biz/zweihander/r/alert.json",
+        "https://ontheshore.biz/zweihander/r/auth-layout.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/templates/auth/SignIn.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/templates/auth/SignIn.tsx"
+        },
+        {
+          "path": "src/components/templates/auth/SignIn.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/templates/auth/SignIn.module.css"
+        }
+      ]
     }
   ]
 }
