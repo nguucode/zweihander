@@ -1870,6 +1870,66 @@
       ]
     },
     {
+      "name": "home-template",
+      "type": "registry:block",
+      "title": "Home (template)",
+      "description": "Home page (dashboard, overview) template inside an App Shell: a greeting with a period select, a setup guide in an Action Panel until every step is done, key figures with trends, a chart card and a task list in Card Headings, and recent activity across projects in the aside, on sample data.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/icon.json",
+        "https://ontheshore.biz/zweihander/r/avatar.json",
+        "https://ontheshore.biz/zweihander/r/button.json",
+        "https://ontheshore.biz/zweihander/r/checkbox.json",
+        "https://ontheshore.biz/zweihander/r/card.json",
+        "https://ontheshore.biz/zweihander/r/select.json",
+        "https://ontheshore.biz/zweihander/r/progress-bar.json",
+        "https://ontheshore.biz/zweihander/r/link.json",
+        "https://ontheshore.biz/zweihander/r/menu.json",
+        "https://ontheshore.biz/zweihander/r/empty-state.json",
+        "https://ontheshore.biz/zweihander/r/tag.json",
+        "https://ontheshore.biz/zweihander/r/charts.json",
+        "https://ontheshore.biz/zweihander/r/stats.json",
+        "https://ontheshore.biz/zweihander/r/card-heading.json",
+        "https://ontheshore.biz/zweihander/r/action-panel.json",
+        "https://ontheshore.biz/zweihander/r/nav-sidebar.json",
+        "https://ontheshore.biz/zweihander/r/top-bar.json",
+        "https://ontheshore.biz/zweihander/r/app-shell.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/templates/application-ui/Home.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/templates/application-ui/Home.tsx"
+        },
+        {
+          "path": "src/components/templates/application-ui/Home.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/templates/application-ui/Home.module.css"
+        },
+        {
+          "path": "src/components/templates/application-ui/home-data.ts",
+          "type": "registry:component",
+          "target": "components/zweihander/templates/application-ui/home-data.ts"
+        },
+        {
+          "path": "src/components/templates/object-management/ProjectActivity.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/templates/object-management/ProjectActivity.tsx"
+        },
+        {
+          "path": "src/components/templates/object-management/ProjectActivity.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/templates/object-management/ProjectActivity.module.css"
+        },
+        {
+          "path": "src/components/templates/object-management/projects-data.ts",
+          "type": "registry:component",
+          "target": "components/zweihander/templates/object-management/projects-data.ts"
+        }
+      ]
+    },
+    {
       "name": "projects-template",
       "type": "registry:block",
       "title": "Projects (template)",

@@ -3527,6 +3527,27 @@
     },
     {
       "kind": "template",
+      "id": "templates-application-ui-home",
+      "name": "Home",
+      "category": "Application UI",
+      "status": "experimental",
+      "storyId": "templates-application-ui-home--default",
+      "props": [
+        {
+          "name": "defaultPeriod",
+          "control": "inline-radio",
+          "options": [
+            "7d",
+            "30d",
+            "90d"
+          ],
+          "default": "30d",
+          "description": "The period the figures and the chart cover first."
+        }
+      ]
+    },
+    {
+      "kind": "template",
       "id": "templates-application-ui-settings",
       "name": "Settings",
       "category": "Application UI",
