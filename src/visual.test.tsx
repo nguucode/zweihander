@@ -76,6 +76,7 @@ const STORIES: Record<string, { story: string; args?: Record<string, unknown>; p
   'patterns/application-ui/AppContent': { story: 'Flat' },
   'templates/application-ui/AppShell': { story: 'WithSidebar' },
   'templates/application-ui/Settings': { story: 'Default' },
+  'templates/application-ui/Home': { story: 'Default' },
   'patterns/application-ui/DataTablePage': { story: 'ToolbarAndPagination' },
   'patterns/application-ui/DescriptionList': { story: 'Columns' },
   'patterns/application-ui/FormLayouts': { story: 'SettingsSections' },

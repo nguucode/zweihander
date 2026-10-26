@@ -1,0 +1,148 @@
+/* The page is the container: the cards sit side by side when the page is
+   wide enough, whatever the viewport or the shell around it. */
+.page {
+  display: grid;
+  gap: var(--space-section);
+  container-type: inline-size;
+}
+
+/* Grid items keep their content's width by default; the chart must follow
+   the column instead of widening the page. */
+.page > * {
+  min-inline-size: 0;
+}
+
+.brand {
+  font-size: var(--text-heading-xs);
+}
+
+.sidebar {
+  block-size: 100%;
+}
+
+.account {
+  display: flex;
+  align-items: center;
+}
+
+/* Greeting and period share a row while there is room; the period drops
+   under the greeting when there is not. */
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-cluster) var(--space-group);
+}
+
+.heading {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: var(--text-heading-xl);
+  line-height: var(--leading-heading-xl);
+  font-weight: 500;
+  color: var(--foreground);
+  outline: none;
+}
+
+.description {
+  margin: 0;
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--muted-foreground);
+}
+
+.setup {
+  display: grid;
+  gap: var(--space-stack);
+}
+
+.steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-group);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.step {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.stepDone svg {
+  color: var(--success-text);
+}
+
+/* One column on a phone; side by side from 40rem, which a desktop page
+   still has with the sidebar and the aside both open (about 46rem). The
+   chart gets the larger share: its axis needs the width more than the
+   tasks do. */
+.grid {
+  display: grid;
+  gap: var(--space-group);
+  align-items: start;
+}
+@container (min-width: 40rem) {
+  .grid {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  }
+}
+
+.card {
+  display: grid;
+  gap: var(--space-group);
+  min-inline-size: 0;
+}
+
+.tasks {
+  display: grid;
+  gap: var(--space-stack);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* A ticked task stays in the list, so a slip of the finger can be undone. */
+.taskDone {
+  color: var(--muted-foreground);
+  text-decoration: line-through;
+}
+
+.overdue {
+  color: var(--danger-text);
+}
+
+.asideSection {
+  display: grid;
+  gap: var(--space-group);
+}
+
+.sectionTitle {
+  margin: 0;
+  font-size: var(--text-heading-sm);
+  line-height: var(--leading-heading-sm);
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+/* In the aside the list starts at the column's edge. */
+.activity {
+  padding: 0;
+}
+
+.srOnly {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

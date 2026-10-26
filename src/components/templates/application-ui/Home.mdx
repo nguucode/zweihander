@@ -1,0 +1,97 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks'
+import * as HomeStories from './Home.stories'
+
+<Meta of={HomeStories} />
+
+# Home
+
+The page an app opens on: a greeting and the period to look at, a setup
+guide while the workspace is new, the key figures, a chart and the user's
+tasks in a grid of cards, and recent activity in the aside. After Tailwind
+UI's home screens, shadcn's dashboard-01, Polaris' homepage and Fiori's
+overview page. Built from
+[App Shell](?path=/docs/templates-application-ui-app-shell--docs),
+[Stats](?path=/docs/patterns-application-ui-stats--docs),
+[Card Heading](?path=/docs/patterns-application-ui-card-heading--docs),
+[Action Panel](?path=/docs/patterns-application-ui-action-panel--docs),
+the charts and the kit's Select, Checkbox, Progress Bar and Card. The data
+is made up.
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/home-template.json
+```
+
+<Canvas of={HomeStories.Default} />
+
+## What works
+
+- **Period**: Last 7, 30 or 90 days. It changes the figures that add up
+  over time (hours logged, invoiced: each against the period before) and
+  the chart. Active projects is a count as it stands now, so the period
+  does not touch it; it links to the list instead.
+- **Setup guide**: an Action Panel with the steps, how many are done and
+  one button, for the next step. It shows until every step is done, then
+  goes, and focus moves to the page's heading. It sits first, above the
+  figures: while a workspace is new, setting it up is the job, and the
+  figures are mostly empty anyway.
+- **Your tasks**: what is assigned to you, soonest first, each with its
+  project and when it is due; overdue says so in words as well as red.
+  Ticking one keeps it in the list, struck through, so a slip can be undone.
+  No tasks shows "Nothing due".
+- **Recent activity**: the newest events across every project, each
+  naming its project, in the aside: it is context, not the job, so it
+  takes the side column on a desktop and goes under the page on a phone.
+
+<Canvas of={HomeStories.SetupGuide} />
+
+## Make it yours
+
+`Home` reads the samples in `home-data.ts` and the Projects template's
+`projects-data.ts`. Load your figures, tasks and setup steps in their
+place, and pass `today={new Date()}`: the sample pins today so the page
+and its tests hold still. `onTaskChange(id, isDone)` and
+`onSetupStep(id)` are where your API calls go.
+
+Keep the figures few, three or four, and only ones the reader acts on.
+A card per figure the business tracks turns home into a report nobody
+reads; put those in a report page and link to it. A card on home answers
+"what needs me today?" or "is anything off?".
+
+The recent activity list is the Project Detail template's timeline. The
+Feed pattern will replace it.
+
+<Canvas of={HomeStories.NothingDue} />
+
+## Props
+
+<ArgTypes of={HomeStories} />
+
+Any other prop goes to the App Shell's root, e.g. `style` to set its
+`block-size` when the page is not the whole viewport.
+
+## Layout
+
+- The greeting and the period share a row while there is room; the period
+  drops under the greeting when there is not.
+- The figures take as many columns as fit, one on a phone.
+- From 40rem of page width the chart and the tasks sit side by side, the
+  chart the wider; below, the tasks go under the chart. 40rem is less than
+  a desktop page keeps with the sidebar and the aside both open.
+- The aside is beside the page from 80rem of the shell's width, under it
+  below that.
+
+<Canvas of={HomeStories.Narrow} />
+
+## Accessibility
+
+- One `h1`, the greeting; the cards' and the aside's titles are `h2`.
+- The figures are a region named after the period ("Key figures, last
+  30 days"), so the name changes with it.
+- Each task is a checkbox named by its title and described by its project
+  and when it is due ("Overdue", "Due today"), so the colour is never the
+  only cue.
+- The setup guide is a group named "Finish setting up"; its progress bar
+  says how many steps are done, and a done step reads "(done)". When the
+  last step is done the guide goes and focus moves to the `h1`, not to the
+  page's body.
+- The aside is a complementary landmark named "Recent activity".
