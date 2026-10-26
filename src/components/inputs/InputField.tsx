@@ -60,11 +60,6 @@ export interface InputFieldProps {
   /** The info button's accessible name; the label is read after it. */
   infoLabel?: string
   helperText?: ReactNode
-  /**
-   * An error shown under the helper text, which then keeps its colour.
-   * Without it, an error state colours the helper text instead.
-   */
-  error?: ReactNode
   validationState?: ValidationState
   required?: boolean
   disabled?: boolean
@@ -92,7 +87,6 @@ export function InputField({
   labelInfo,
   infoLabel = 'More information',
   helperText,
-  error,
   validationState = 'default',
   required,
   disabled,
@@ -103,10 +97,10 @@ export function InputField({
   className,
 }: InputFieldProps) {
   const ownLabelId = useId()
-  const labelIdOrOwn = labelId ?? ownLabelId
+  const resolvedLabelId = labelId ?? ownLabelId
   const labelNode = label && (
     <Field.Label
-      id={labelIdOrOwn}
+      id={resolvedLabelId}
       className={styles.label}
       {...(hasButtonControl && { nativeLabel: false, render: <div /> })}
     >
@@ -132,12 +126,12 @@ export function InputField({
               read, and the button sits outside the <label> so pressing it does
               not also focus the control. */}
           <Popover.Root>
-            <Popover.Trigger className={styles.iconButton} aria-label={infoLabel} aria-describedby={labelIdOrOwn}>
+            <Popover.Trigger className={styles.iconButton} aria-label={infoLabel} aria-describedby={resolvedLabelId}>
               <Icon name="info" />
             </Popover.Trigger>
             <Popover.Portal>
               <Popover.Positioner className={styles.positioner} side="top" sideOffset={6}>
-                <Popover.Popup className={styles.info}>{labelInfo}</Popover.Popup>
+                <Popover.Popup className={styles.info} aria-labelledby={resolvedLabelId}>{labelInfo}</Popover.Popup>
               </Popover.Positioner>
             </Popover.Portal>
           </Popover.Root>
@@ -147,11 +141,6 @@ export function InputField({
       )}
       {children}
       {helperText && <Field.Description className={styles.helper}>{helperText}</Field.Description>}
-      {error && validationState === 'error' && (
-        <Field.Error match className={styles.error}>
-          {error}
-        </Field.Error>
-      )}
     </Field.Root>
   )
 }

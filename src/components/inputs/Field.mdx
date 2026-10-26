@@ -1,6 +1,6 @@
 import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
 import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
-import { Field } from './Field'
+import { Field, FieldControl } from './Field'
 import { boxClass, inputStyles } from './InputField'
 import * as FieldStories from './Field.stories'
 
@@ -11,7 +11,7 @@ import * as FieldStories from './Field.stories'
 <DocTabs>
 <DocTab value="overview">
 
-The label, required mark, info note, helper text and error for a control
+The label, required mark, info note and helper text for a control
 that has none of its own.
 
 <Status of={FieldStories} />
@@ -32,9 +32,9 @@ There is one appearance. What changes is which optional parts are there.
 
 | Part | Use for |
 | --- | --- |
-| `helperText` | The format, limits or purpose, in a line. It stays when there is an error. |
+| `helperText` | The format, limits or purpose, in a line; the error message when invalid. |
 | `labelInfo` | A longer rule or explanation most people do not need every time: behind an info button, so the form stays short. |
-| `error` | What is wrong and how to fix it. Turns the edge and the message red; the helper keeps its colour. |
+| `validationState` | `error` when the value cannot be accepted: the helper text says what to change, and it and the edge turn red. `success` for a value checked and accepted. |
 | `required` | An asterisk after the label. |
 
 ## Resources
@@ -71,9 +71,9 @@ time input in the same box as Text Input.
 <SpecTable
   caption="Every field"
   rows={[
-    { part: 'Label, helper text, error', property: 'Font size', token: '--text-body' },
-    { part: 'Label, helper text, error', property: 'Line height', token: '--leading-body' },
-    { part: 'Label, control, helper, error', property: 'Gap between', token: '--control-sm-gap' },
+    { part: 'Label and helper text', property: 'Font size', token: '--text-body' },
+    { part: 'Label and helper text', property: 'Line height', token: '--leading-body' },
+    { part: 'Label, control, helper', property: 'Gap between', token: '--control-sm-gap' },
     { part: 'Label and info button', property: 'Gap', token: '--space-1' },
     { part: 'Info button', property: 'Icon size', token: '--icon-sm' },
     { part: 'Info button', property: 'Touch target', token: '--target-coarse' },
@@ -105,7 +105,7 @@ the button.
 <SpecTable
   caption="error"
   rows={[
-    { part: 'Error', property: 'Colour', token: '--danger-text' },
+    { part: 'Helper text', property: 'Colour', token: '--danger-text' },
     { part: 'Field box edge', property: 'Colour', token: '--danger-text' },
   ]}
 />
@@ -118,9 +118,9 @@ the button.
     {
       label: 'Error',
       content: (
-        <Field label="Start time" helperText="HH:MM" error="Enter a time between 06:00 and 22:00.">
+        <Field label="Start time" validationState="error" helperText="Enter a time between 06:00 and 22:00.">
           <span className={boxClass('md')}>
-            <Field.Control type="time" className={inputStyles.control} />
+            <FieldControl type="time" className={inputStyles.control} />
           </span>
         </Field>
       ),
@@ -130,7 +130,7 @@ the button.
       content: (
         <Field label="Start time" helperText="Set by the rota." disabled>
           <span className={boxClass('md')}>
-            <Field.Control type="time" className={inputStyles.control} />
+            <FieldControl type="time" className={inputStyles.control} />
           </span>
         </Field>
       ),
@@ -139,16 +139,17 @@ the button.
 >
   <Field label="Start time" labelInfo="When the shift starts." helperText="HH:MM">
     <span className={boxClass('md')}>
-      <Field.Control type="time" className={inputStyles.control} />
+      <FieldControl type="time" className={inputStyles.control} />
     </span>
   </Field>
 </States>
 
 - **Hover** and **focus** belong to the control. The info button turns
   `--foreground` on hover and draws the `--ring` outline on keyboard focus.
-- **Error** colours the edge and the error message; the helper stays muted,
-  so the two read as two things.
-- **Disabled** disables the control; how it dims is the control's own.
+- **Error** colours the helper text, which then says what to change, and
+  the edge of a field box inside.
+- **Disabled** disables the control; how it dims is the control's own. The
+  info button stays active: the note may say why the field is disabled.
 
 ## API
 
@@ -156,16 +157,16 @@ the button.
   <ArgTypes of={FieldStories} />
 </div>
 
-`Field.Control` is Base UI's `Field.Control`: an `<input>` by default, any
+`FieldControl` is Base UI's `Field.Control`: an `<input>` by default, any
 element through `render`, with the label, description and invalid state
 wired to it. A Base UI control (Slider, Number Field, Checkbox) inside a
 Field wires itself.
 
 ### Differences from the spec
 
-- **The error is its own part**, under the helper text, rather than
-  replacing it. The Zweihänder controls keep the older contract, where an
-  error state recolours the helper text.
+- **No separate error part.** As in every Zweihänder control, the error
+  is the helper text in the error state (the kit's API convention), so a
+  field never shows a hint and an error at once.
 - **The info note is a toggletip**, opened by press or Enter, not a
   hover tooltip: tooltips do not open on touch.
 
@@ -205,19 +206,17 @@ An **error** says what to change, not only that something is wrong.
 
 - The label is a real `<label>` for the control: it is the control's
   accessible name, and clicking it focuses the control.
-- `helperText` and `error` are both the control's description
-  (`aria-describedby`), read in that order after its name.
-- `error` sets `aria-invalid="true"` on the control. Colour is never the
-  only signal: the message says what is wrong.
+- `helperText` is the control's description (`aria-describedby`), read
+  after its name.
+- `validationState="error"` sets `aria-invalid="true"` on the control.
+  Colour is never the only signal: the helper text says what is wrong.
 - The required asterisk is `aria-hidden`; put `required` on the control so
   screen readers announce it.
 - The info button is named by `infoLabel` ("More information") and
   described by the label, so a list of buttons tells which field each is
   for. It sits outside the `<label>`: pressing it opens the note without
-  focusing the control. Enter or a press opens the note, Escape closes it
-  and returns focus to the button.
-- On touch screens the info button's hit area grows to 44×44px without
-  growing the icon.
+  focusing the control. Enter or a press opens the note, a dialog named by
+  the label; Escape closes it and returns focus to the button.
 
 </DocTab>
 </DocTabs>

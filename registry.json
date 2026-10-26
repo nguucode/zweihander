@@ -97,7 +97,7 @@
       "name": "input-field",
       "type": "registry:component",
       "title": "Input field",
-      "description": "Internal: the label (with an optional info note), helper text, error, validation and field box shared by Field, Text Input, Textarea, Search, Number Input, Select and Combobox.",
+      "description": "Internal: the label (with an optional info note), helper text, validation and field box shared by Field, Text Input, Textarea, Search, Number Input, Select and Combobox.",
       "dependencies": [
         "@base-ui/react"
       ],
@@ -144,7 +144,7 @@
       "name": "field",
       "type": "registry:component",
       "title": "Field",
-      "description": "Label, required mark, info note, helper text and error for a control that has none of its own, on Base UI Field.",
+      "description": "Label, required mark, info note and helper text with validation for a control that has none of its own, on Base UI Field.",
       "registryDependencies": [
         "https://ontheshore.biz/zweihander/r/utils.json",
         "https://ontheshore.biz/zweihander/r/tokens.json",

@@ -1413,12 +1413,18 @@
         {
           "name": "helperText",
           "control": "text",
-          "description": "Under the control, read as its description: format, limits, what the value is for. Stays, in its own colour, when there is an error."
+          "description": "Under the control, read as its description: format, limits, what the value is for. The error message when `validationState` is `error`."
         },
         {
-          "name": "error",
-          "control": "text",
-          "description": "What is wrong and how to fix it, under the helper text. Sets `aria-invalid` on the control, joins its description and turns the edge red."
+          "name": "validationState",
+          "control": "inline-radio",
+          "options": [
+            "default",
+            "success",
+            "error"
+          ],
+          "default": "default",
+          "description": "Colours the helper text and the edge of a field box inside. `error` also sets `aria-invalid` on the control."
         },
         {
           "name": "required",

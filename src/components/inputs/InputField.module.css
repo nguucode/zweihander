@@ -69,17 +69,8 @@
 .state-error {
   --field-edge: var(--danger-text);
 }
-/* Only a helper that is last: with an error message after it, the helper
-   keeps its colour and the error says what is wrong. */
-.state-error .helper:last-child,
-.error {
+.state-error .helper {
   color: var(--danger-text);
-}
-
-.error {
-  margin: 0;
-  font-size: var(--text-body);
-  line-height: var(--leading-body);
 }
 .state-success {
   --field-edge: var(--success-text);

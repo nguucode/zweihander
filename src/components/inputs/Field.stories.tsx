@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect, waitFor, within } from 'storybook/test'
 import { expectAnatomy } from '../../../.storybook/blocks'
-import { Field } from './Field'
+import { Field, FieldControl } from './Field'
 import { boxClass, inputStyles } from './InputField'
 
 /**
@@ -10,7 +10,7 @@ import { boxClass, inputStyles } from './InputField'
  */
 const time = (
   <span className={boxClass('md')}>
-    <Field.Control type="time" required className={inputStyles.control} />
+    <FieldControl type="time" className={inputStyles.control} />
   </span>
 )
 
@@ -36,14 +36,15 @@ const meta = {
       table: { type: { summary: 'string' }, defaultValue: { summary: "'More information'" } },
     },
     helperText: {
-      description: 'Under the control, read as its description: format, limits, what the value is for. Stays, in its own colour, when there is an error.',
+      description: 'Under the control, read as its description: format, limits, what the value is for. The error message when `validationState` is `error`.',
       control: 'text',
       table: { type: { summary: 'ReactNode' } },
     },
-    error: {
-      description: 'What is wrong and how to fix it, under the helper text. Sets `aria-invalid` on the control, joins its description and turns the edge red.',
-      control: 'text',
-      table: { type: { summary: 'ReactNode' } },
+    validationState: {
+      description: 'Colours the helper text and the edge of a field box inside. `error` also sets `aria-invalid` on the control.',
+      control: 'inline-radio',
+      options: ['default', 'success', 'error'],
+      table: { type: { summary: "'default' | 'success' | 'error'" }, defaultValue: { summary: "'default'" } },
     },
     required: {
       description: 'Adds an asterisk after the label, hidden from screen readers. Put `required` on the control too: that is what they announce.',
@@ -66,7 +67,7 @@ const meta = {
       table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
     },
     children: {
-      description: 'The control: a Base UI control, or `Field.Control` rendering your own element through `render`.',
+      description: 'The control: a Base UI control, or `FieldControl` rendering your own element through `render`.',
       control: false,
       table: { type: { summary: 'ReactNode' } },
     },
@@ -104,6 +105,7 @@ export const WithLabelInfo: Story = {
     await userEvent.click(button)
     const body = within(canvasElement.ownerDocument.body)
     await expect(await body.findByText(/clocking in earlier/)).toBeVisible()
+    await expect(body.getByRole('dialog', { name: 'Start time' })).toBeVisible()
     await expect(canvas.getByLabelText('Start time')).not.toHaveFocus()
     await userEvent.keyboard('{Escape}')
     await waitFor(() => expect(body.queryByText(/clocking in earlier/)).toBeNull())
@@ -117,24 +119,24 @@ export const WithLabelInfo: Story = {
 }
 
 export const WithError: Story = {
-  args: {
-    helperText: 'In the time zone of the site.',
-    error: 'Enter a time between 06:00 and 22:00.',
-  },
+  args: { validationState: 'error', helperText: 'Enter a time between 06:00 and 22:00.' },
   play: async ({ canvas }) => {
     const control = canvas.getByLabelText('Start time')
     await expect(control).toHaveAttribute('aria-invalid', 'true')
-    // Both are read: what the value is, then what is wrong with it.
-    await expect(control).toHaveAccessibleDescription('In the time zone of the site. Enter a time between 06:00 and 22:00.')
-    // The helper keeps its colour; only the error is red.
-    const helper = canvas.getByText('In the time zone of the site.')
-    const error = canvas.getByText(/Enter a time between/)
-    await expect(getComputedStyle(helper).color).not.toBe(getComputedStyle(error).color)
+    await expect(control).toHaveAccessibleDescription('Enter a time between 06:00 and 22:00.')
   },
 }
 
 export const Required: Story = {
-  args: { required: true },
+  args: {
+    required: true,
+    // Field's `required` only draws the asterisk; the control says it is required.
+    children: (
+      <span className={boxClass('md')}>
+        <FieldControl type="time" required className={inputStyles.control} />
+      </span>
+    ),
+  },
   play: async ({ canvas }) => {
     await expect(canvas.getByText('*')).toHaveAttribute('aria-hidden', 'true')
     await expect(canvas.getByLabelText(/Start time/)).toBeRequired()
@@ -158,8 +160,8 @@ export const Validation: Story = {
         label="End time"
         required
         labelInfo="When the shift ends."
-        helperText="In the time zone of the site."
-        error="End after the start time."
+        validationState="error"
+        helperText="End after the start time."
       >
         {time}
       </Field>
@@ -178,8 +180,7 @@ export const anatomyParts = [
   { name: 'Required mark', selector: 'label > span[aria-hidden]', description: 'Optional asterisk; screen readers hear "required" from the control.' },
   { name: 'Info button', selector: 'label + button', description: 'Optional. Opens `labelInfo` in a small popup, on press or Enter.' },
   { name: 'Control', selector: 'input', description: 'What the field is for: a Base UI control or `Field.Control`.' },
-  { name: 'Helper text', selector: 'p', description: "Optional. The control's description." },
-  { name: 'Error', selector: 'p + div', description: 'Optional. What is wrong and how to fix it; also part of the description.' },
+  { name: 'Helper text', selector: 'p', description: "Optional. The control's description; the error message when invalid." },
 ]
 
 /** Every part present. */
@@ -189,23 +190,22 @@ export const Anatomy: Story = {
     required: true,
     labelInfo: 'When the shift starts.',
     helperText: 'In the time zone of the site.',
-    error: 'Enter a time between 06:00 and 22:00.',
   },
   play: async ({ canvasElement }) => {
     const found = await expectAnatomy(canvasElement, anatomyParts)
-    await expect(found[5]).toHaveTextContent('Enter a time between')
+    await expect(found[4]).toHaveTextContent('In the time zone')
   },
 }
 
 /** Guidelines, Do: the error says what to change. */
 export const DoSayWhatToFix: Story = {
-  args: { error: 'Enter a time between 06:00 and 22:00.' },
+  args: { validationState: 'error', helperText: 'Enter a time between 06:00 and 22:00.' },
 }
 
 /** Guidelines, Don't: an error that only says something is wrong. */
 export const DontVagueError: Story = {
   tags: ['!dev'],
-  args: { error: 'Invalid value.' },
+  args: { validationState: 'error', helperText: 'Invalid value.' },
 }
 
 /** Guidelines, Do: the short format hint under the control, the long rule behind the info button. */
