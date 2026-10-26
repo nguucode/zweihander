@@ -8,8 +8,7 @@ import * as TopBarStories from './TopBar.stories'
 The bar above the page: `start`, a middle and `end` slots, and `TopBarNav`
 for navigation links across it. One of the three pieces the
 [App Shell](?path=/docs/templates-application-ui-app-shell--docs) template places; inside
-one it also shows the shell's `brand` and, on narrow screens, the menu
-button that opens the navigation drawer. It was `AppHeader` (and
+one it also shows the shell's `brand`. It was `AppHeader` (and
 `TopBarNav` was `AppNav`).
 
 ```sh
@@ -22,9 +21,8 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/top-bar.json
 
 ## Top navigation
 
-`TopBarNav` takes `items` (`{ label, href }[]`) and `currentHref`. Below
-48rem the links hide; the App Shell's drawer holds them instead (its
-`mobileNavigation`).
+`TopBarNav` takes `items` (`{ label, href }[]`) and `currentHref`. Links
+that do not fit scroll sideways, so on a phone they stay in the bar.
 
 <Canvas of={TopBarStories.WithNavigation} />
 
@@ -51,5 +49,3 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/top-bar.json
 - The bar is a `header`; inside an App Shell it is the page's banner.
 - `TopBarNav` is a `nav` named "Main"; the current page has
   `aria-current="page"` and is shown by more than colour.
-- The menu button says what it opens with `aria-haspopup="dialog"` and
-  `aria-expanded`.

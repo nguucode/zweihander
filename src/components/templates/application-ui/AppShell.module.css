@@ -82,7 +82,7 @@
 }
 
 .sidebar {
-  display: none;
+  display: grid;
   grid-template-rows: auto minmax(0, 1fr);
   min-block-size: 0;
   /* The Sidebar inside drops its own fill and edge; this cell draws them. */
@@ -106,14 +106,19 @@
   overflow: hidden;
 }
 
-/* The sidebar from 64rem; below that it lives in the drawer. */
+/* The sidebar beside the page at every width; below 64rem it is the rail
+   (the NavSidebar reads that from the shell). */
+.withSidebar .frame {
+  grid-template-columns: auto minmax(0, 1fr);
+}
+/* The rail cannot expand there, so it does not animate into place either:
+   on a phone the sidebar would visibly close as the page loads. */
+@container (max-width: 63.99rem) {
+  .sidebar > * {
+    transition: none;
+  }
+}
 @container (min-width: 64rem) {
-  .withSidebar .frame {
-    grid-template-columns: auto minmax(0, 1fr);
-  }
-  .withSidebar .sidebar {
-    display: grid;
-  }
   /* sidebar layout: the sidebar runs the full height and there is no top bar. */
   .sidebarLayout.withSidebar .top {
     display: none;
@@ -130,8 +135,7 @@
   position: absolute;
   inset-block-start: var(--space-2);
   inset-inline-start: var(--space-2);
-  /* Above the sticky header and an open drawer: it is the first thing a
-     keyboard user lands on. */
+  /* Above the sticky header: it is the first thing a keyboard user lands on. */
   z-index: var(--layer-tooltip);
   padding: var(--control-sm-pad) var(--control-md-pad-spacious);
   border-radius: var(--radius-field);
@@ -146,84 +150,4 @@
   translate: 0;
   outline: var(--focus-width) solid var(--ring);
   outline-offset: var(--focus-offset);
-}
-
-/* -------------------------------------------------------------- drawer */
-.backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: var(--layer-overlay);
-  background: var(--scrim);
-  transition: opacity var(--duration-base);
-}
-.backdrop[data-starting-style],
-.backdrop[data-ending-style] {
-  opacity: 0;
-}
-
-.drawer {
-  position: fixed;
-  inset-block: 0;
-  inset-inline-start: 0;
-  z-index: var(--layer-overlay);
-  display: flex;
-  flex-direction: column;
-  inline-size: min(20rem, 85vw);
-  background: var(--background);
-  color: var(--foreground);
-  box-shadow: var(--shadow-lg);
-  outline: none;
-  transition: translate var(--duration-slow);
-}
-/* The navigation inside (a Sidebar) takes the drawer's width, not its own. */
-.drawer > :not(.drawerClose) {
-  flex: 1;
-  min-block-size: 0;
-  inline-size: 100%;
-}
-.drawer[data-starting-style],
-.drawer[data-ending-style] {
-  translate: -100% 0;
-}
-/* [dir] rather than :dir(), which the build lowers to a :lang() list. */
-:global([dir='rtl']) .drawer[data-starting-style],
-:global([dir='rtl']) .drawer[data-ending-style] {
-  translate: 100% 0;
-}
-
-.drawerClose {
-  position: absolute;
-  inset-block-start: var(--space-3);
-  inset-inline-end: var(--space-3);
-  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- local stacking inside the shell, not a global layer */
-  z-index: 1;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  inline-size: var(--space-8);
-  block-size: var(--space-8);
-  padding: 0;
-  border: 0;
-  border-radius: var(--radius-field);
-  background: transparent;
-  color: var(--muted-foreground);
-  font-size: var(--icon-md);
-  cursor: var(--cursor-button);
-}
-.drawerClose:hover {
-  background: var(--accent);
-  color: var(--accent-foreground);
-}
-.drawerClose:focus-visible {
-  outline: var(--focus-width) solid var(--ring);
-  outline-offset: var(--focus-offset);
-}
-
-.srOnly {
-  position: absolute;
-  inline-size: 1px;
-  block-size: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
 }

@@ -32,6 +32,9 @@
   align-items: center;
   gap: var(--space-cluster);
   flex: 1 1 16rem;
+  /* Narrower than a 20rem field inside, it shrinks the field rather than
+     widen the page. */
+  min-inline-size: 0;
 }
 
 .count {

@@ -1,10 +1,11 @@
 'use client'
 
-import { useId, useState, type ComponentProps, type ReactElement, type ReactNode } from 'react'
+import { useContext, useId, useState, type ComponentProps, type ReactElement, type ReactNode } from 'react'
 import { useRender } from '@base-ui/react/use-render'
 import { Icon } from '@/lib/icon'
 import { cn } from '@/lib/utils'
 import { Tooltip } from '../../overlays/Tooltip'
+import { ShellContext } from './TopBar'
 import styles from './NavSidebar.module.css'
 
 export interface NavSidebarItem {
@@ -102,7 +103,11 @@ export function NavSidebar({
   ...props
 }: NavSidebarProps) {
   const [collapsedState, setCollapsedState] = useState(defaultCollapsed)
-  const collapsed = isCollapsed ?? collapsedState
+  // In an App Shell under 64rem it is always the rail: expanded, it would
+  // cover most of a phone.
+  const { isNarrow } = useContext(ShellContext)
+  const collapsed = isNarrow || (isCollapsed ?? collapsedState)
+  const canToggle = isCollapsible && !isNarrow
   const toggle = () => {
     setCollapsedState(!collapsed)
     onCollapsedChange?.(!collapsed)
@@ -120,10 +125,10 @@ export function NavSidebar({
 
   return (
     <nav aria-label={ariaLabel} className={cn(styles.sidebar, collapsed && styles.collapsed, className)} {...props}>
-      {(header || isCollapsible) && (
+      {(header || canToggle) && (
         <div className={styles.header}>
           {header && <div className={styles.headerContent}>{header}</div>}
-          {isCollapsible && (
+          {canToggle && (
             <button
               type="button"
               className={styles.toggle}

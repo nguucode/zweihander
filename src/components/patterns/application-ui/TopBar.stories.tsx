@@ -46,8 +46,6 @@ export const Default: Story = {
   play: async ({ canvasElement }) => {
     const bar = canvasElement.querySelector('header')!
     await expect(within(bar).getByRole('searchbox', { name: 'Search' })).toBeVisible()
-    // Outside an App Shell there is no drawer, so no menu button.
-    await expect(within(bar).queryByRole('button', { name: /navigation/ })).toBeNull()
   },
 }
 

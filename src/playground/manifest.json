@@ -2899,12 +2899,6 @@
           "description": "The sidebar on the card colour (`solid`) or on the canvas (`transparent`)."
         },
         {
-          "name": "navigationLabel",
-          "control": "text",
-          "default": "Navigation",
-          "description": "Names the drawer and its button."
-        },
-        {
           "name": "mainId",
           "control": "text",
           "description": "The `id` of the `main` element, which the skip link targets. Generated if not given."

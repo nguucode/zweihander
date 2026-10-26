@@ -36,20 +36,6 @@
   margin-inline-start: auto;
 }
 
-/* The menu button only where the drawer is the navigation: below 64rem
-   when the drawer holds the sidebar, below 48rem when it holds top links.
-   The shell says which through data-drawer; its width is the container. */
-@container (min-width: 64rem) {
-  .header[data-drawer='sidebar'] .menuButton {
-    display: none;
-  }
-}
-@container (min-width: 48rem) {
-  .header[data-drawer='links'] .menuButton {
-    display: none;
-  }
-}
-
 /* Over a sidebar (the shell's top-bar layout), the logo takes a cell as wide
    as the sidebar, so it sits where it sits in the sidebar layout. */
 @container (min-width: 64rem) {
@@ -72,10 +58,16 @@
   padding: 0;
   list-style: none;
 }
-@container (max-width: 47.99rem) {
-  .nav {
-    display: none;
-  }
+/* Links that do not fit scroll sideways, rather than squeeze the bar. The
+   padding, taken back by the margin, keeps a focus ring inside the scroller,
+   which clips what overflows it. */
+.nav {
+  --nav-ring: calc(var(--focus-width) + var(--focus-offset));
+  min-inline-size: 0;
+  margin: calc(-1 * var(--nav-ring));
+  padding: var(--nav-ring);
+  overflow-x: auto;
+  scrollbar-width: none;
 }
 
 .navLink {
@@ -88,6 +80,7 @@
   font-size: var(--text-body);
   font-weight: 500;
   text-decoration: none;
+  white-space: nowrap;
 }
 .navLink:hover {
   background: var(--accent);

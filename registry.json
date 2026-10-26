@@ -1370,7 +1370,8 @@
         "https://ontheshore.biz/zweihander/r/utils.json",
         "https://ontheshore.biz/zweihander/r/tokens.json",
         "https://ontheshore.biz/zweihander/r/icon.json",
-        "https://ontheshore.biz/zweihander/r/tooltip.json"
+        "https://ontheshore.biz/zweihander/r/tooltip.json",
+        "https://ontheshore.biz/zweihander/r/top-bar.json"
       ],
       "dependencies": [
         "@base-ui/react"
@@ -1392,12 +1393,10 @@
       "name": "top-bar",
       "type": "registry:block",
       "title": "Top Bar",
-      "description": "Application UI pattern: TopBar, the bar above the page (start, middle and end slots, the shell's brand and drawer button), and TopBarNav links across it.",
+      "description": "Application UI pattern: TopBar, the bar above the page (start, middle and end slots, the shell's brand), and TopBarNav links across it, which scroll sideways when they do not fit.",
       "registryDependencies": [
         "https://ontheshore.biz/zweihander/r/utils.json",
-        "https://ontheshore.biz/zweihander/r/tokens.json",
-        "https://ontheshore.biz/zweihander/r/icon.json",
-        "https://ontheshore.biz/zweihander/r/button.json"
+        "https://ontheshore.biz/zweihander/r/tokens.json"
       ],
       "files": [
         {
@@ -1438,14 +1437,13 @@
       "name": "app-shell",
       "type": "registry:block",
       "title": "App Shell (template)",
-      "description": "Template: AppShell, the frame of an application. It places the TopBar, NavSidebar and AppContent patterns on the Theme's canvas (full-height sidebar or full-width top bar, solid or transparent pieces, a brand slot, flat or card content), with a skip link and a navigation drawer on narrow screens.",
+      "description": "Template: AppShell, the frame of an application. It places the TopBar, NavSidebar and AppContent patterns on the Theme's canvas (full-height sidebar or full-width top bar, solid or transparent pieces, a brand slot, flat or card content), with a skip link; below 64rem the sidebar is the icon rail.",
       "dependencies": [
         "@base-ui/react"
       ],
       "registryDependencies": [
         "https://ontheshore.biz/zweihander/r/utils.json",
         "https://ontheshore.biz/zweihander/r/tokens.json",
-        "https://ontheshore.biz/zweihander/r/icon.json",
         "https://ontheshore.biz/zweihander/r/top-bar.json",
         "https://ontheshore.biz/zweihander/r/app-content.json"
       ],
@@ -1483,7 +1481,8 @@
         "https://ontheshore.biz/zweihander/r/tabs.json",
         "https://ontheshore.biz/zweihander/r/empty-state.json",
         "https://ontheshore.biz/zweihander/r/app-shell.json",
-        "https://ontheshore.biz/zweihander/r/data-table-page.json"
+        "https://ontheshore.biz/zweihander/r/data-table-page.json",
+        "https://ontheshore.biz/zweihander/r/top-bar.json"
       ],
       "files": [
         {
