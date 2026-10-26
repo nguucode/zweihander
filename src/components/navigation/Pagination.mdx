@@ -10,7 +10,9 @@ import * as PaginationStories from './Pagination.stories'
 <DocTab value="overview">
 
 Moves through a long list one page at a time: previous, next, and the page
-numbers around the current one.
+numbers around the current one. Under a table it can also say which rows
+are shown ("21–40 of 340") and let the reader pick how many rows a page
+holds.
 
 <Status of={PaginationStories} />
 
@@ -19,7 +21,7 @@ numbers around the current one.
 ## Variants
 
 Pagination has one look. What changes is the size, how many numbers show,
-and whether the pages are buttons or links.
+whether the pages are buttons or links, and the two optional ends.
 
 | Form | Use for |
 | --- | --- |
@@ -27,6 +29,10 @@ and whether the pages are buttons or links.
 | `sm` | Dense places: a card, a side panel, a compact table footer. |
 | `getHref` | Pages with their own URL: each page is a link that can be opened in a new tab and shared. |
 | Buttons | Pages that only exist in this view's state, such as a filtered list in a dialog. The default. |
+| `totalItems` | A table footer, where the reader needs to know how many rows there are: adds the summary at the start. |
+| `pageSizeOptions` | Long tables where readers scan in bulk: adds a "Rows per page" select at the end. |
+
+<Canvas of={PaginationStories.WithSummary} />
 
 <Canvas of={PaginationStories.Small} />
 
@@ -66,6 +72,10 @@ hidden page is shown instead, since "…" would take the same room. So the
 number of controls stays the same as you move through the middle, and
 Next does not jump.
 
+The summary and the select only appear when `totalItems` and
+`pageSizeOptions` are passed. The summary sits at the start and pushes the
+pages and the select to the end; on a narrow screen the row wraps.
+
 ## Measurements
 
 Each size is a control tier (Foundations / Sizing). A control is square
@@ -100,6 +110,7 @@ digits or more. Previous and next have no padding, so they stay square.
   caption="Every size"
   rows={[
     { part: 'List', property: 'Gap between controls', token: '--space-stack' },
+    { part: 'Summary, List, Rows per page', property: 'Gap between them', token: '--space-inline' },
     { part: 'Ellipsis', property: 'Minimum width', token: '--space-6' },
     { part: 'Focus ring', property: 'Width', token: '--focus-width' },
     { part: 'Focus ring', property: 'Offset', token: '--focus-offset' },
@@ -120,7 +131,7 @@ the accent in the toolbar: the values follow.
     { part: 'Page, Previous, Next, hover', property: 'Colour', token: '--accent-foreground' },
     { part: 'Current page', property: 'Background', token: '--primary' },
     { part: 'Current page', property: 'Colour', token: '--primary-foreground' },
-    { part: 'Ellipsis', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Ellipsis, Summary, Rows per page label', property: 'Colour', token: '--muted-foreground' },
     { part: 'Focus ring', property: 'Colour', token: '--ring' },
   ]}
 />
@@ -154,6 +165,11 @@ At rest a control has no fill.
   <ArgTypes of={PaginationStories} />
 </div>
 
+The rows-per-page select is a [Select](?path=/docs/components-inputs-select--docs)
+at the same `size`. Changing it moves to the page that holds the first row
+shown before, so the reader does not lose their place; it calls
+`onPageSizeChange`, then `onPageChange` if the page moved.
+
 Every other `<nav>` attribute passes through. `paginationItems(page,
 total, siblings, boundary)` is exported too, for building your own.
 
@@ -176,6 +192,10 @@ keeps the same width as the reader moves, so Next stays under the pointer.
   dont={<Story of={PaginationStories.DontShowEveryPage} />}
   dontCaption="Every page number at once wraps over several lines and buries the current page."
 />
+
+Under a table, pass `totalItems` so the reader knows how much there is.
+Offer `pageSizeOptions` only when readers really scan in bulk; three or
+four choices (10, 20, 50, 100) are enough.
 
 When the pages have URLs, pass `getHref`, so a page can be opened in a new
 tab, bookmarked and shared.
@@ -202,6 +222,10 @@ tab, bookmarked and shared.
 - With `getHref`, each control is a real `<a href>`; without it, a native
   `<button>`. Both are in the tab order and activate with Enter (buttons
   with Space too).
+- The summary has `role="status"`, a polite live region, so "21–40 of 340"
+  is read out after a page or size change.
+- The rows-per-page select is a combobox named "Rows per page"; its
+  visible label is `aria-hidden` so the name is not read twice.
 - The ellipsis is `aria-hidden`: the page names already say which numbers
   are there.
 - Controls are 24px (`sm`) or 32px (`md`) and grow to 44px on touch

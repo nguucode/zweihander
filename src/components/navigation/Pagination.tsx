@@ -3,10 +3,19 @@
 import { useState, type ComponentProps, type ReactNode } from 'react'
 import { Icon } from '@/lib/icon'
 import { cn } from '@/lib/utils'
+import { Select } from '../inputs/Select'
 import styles from './Pagination.module.css'
 
 export interface PaginationProps extends Omit<ComponentProps<'nav'>, 'children' | 'onChange'> {
-  totalPages: number
+  /** Ignored when `totalItems` is set: the count is then worked out from `pageSize`, so the two cannot disagree. */
+  totalPages?: number
+  /** Rows in all. Shows the "21–40 of 340" summary. */
+  totalItems?: number
+  pageSize?: number
+  defaultPageSize?: number
+  onPageSizeChange?: (pageSize: number) => void
+  /** Choices for the "Rows per page" select; without them there is no select. */
+  pageSizeOptions?: number[]
   /** 1-based. */
   page?: number
   defaultPage?: number
@@ -41,6 +50,11 @@ export function paginationItems(page: number, total: number, siblings = 1, bound
 
 export function Pagination({
   totalPages,
+  totalItems,
+  pageSize: pageSizeProp,
+  defaultPageSize = 20,
+  onPageSizeChange,
+  pageSizeOptions,
   page: pageProp,
   defaultPage = 1,
   onPageChange,
@@ -53,12 +67,25 @@ export function Pagination({
   ...props
 }: PaginationProps) {
   const [pageState, setPageState] = useState(defaultPage)
-  const total = Math.max(1, totalPages)
+  const [pageSizeState, setPageSizeState] = useState(defaultPageSize)
+  const pageSize = Math.max(1, pageSizeProp ?? pageSizeState)
+  const pagesFor = (size: number) => Math.max(1, totalItems === undefined ? (totalPages ?? 1) : Math.ceil(totalItems / size))
+  const total = pagesFor(pageSize)
   const page = Math.min(Math.max(1, pageProp ?? pageState), total)
   const go = (p: number) => {
     setPageState(p)
     onPageChange?.(p)
   }
+  const first = (page - 1) * pageSize + 1
+  const changePageSize = (size: number) => {
+    setPageSizeState(size)
+    onPageSizeChange?.(size)
+    // Keep the first row the reader was looking at on screen.
+    const next = Math.min(Math.floor((first - 1) / size) + 1, pagesFor(size))
+    if (next !== page) go(next)
+  }
+  // Grouped in the reader's locale; the words around it are English, like the rest of the labels.
+  const formatCount = (n: number) => n.toLocaleString()
 
   const control = (target: number, label: string, content: ReactNode, extra?: string, current?: boolean) => {
     const disabled = target < 1 || target > total
@@ -90,6 +117,13 @@ export function Pagination({
 
   return (
     <nav aria-label={ariaLabel} className={cn(styles.pagination, styles[size], className)} {...props}>
+      {totalItems !== undefined && (
+        <p role="status" className={styles.summary}>
+          {totalItems > 0
+            ? `${formatCount(first)}–${formatCount(Math.min(page * pageSize, totalItems))} of ${formatCount(totalItems)}`
+            : '0 of 0'}
+        </p>
+      )}
       <ul className={styles.list}>
         <li>{control(page - 1, 'Previous page', <Icon name="chevron-left" />, styles.step)}</li>
         {paginationItems(page, total, siblingCount, boundaryCount).map((item) => (
@@ -105,6 +139,20 @@ export function Pagination({
         ))}
         <li>{control(page + 1, 'Next page', <Icon name="chevron-right" />, styles.step)}</li>
       </ul>
+      {pageSizeOptions && (
+        <div className={styles.pageSize}>
+          {/* The select carries the same name; this text is only what sighted readers see. */}
+          <span aria-hidden="true">Rows per page</span>
+          <Select
+            aria-label="Rows per page"
+            size={size}
+            className={styles.pageSizeSelect}
+            options={pageSizeOptions.map(String)}
+            value={String(pageSize)}
+            onValueChange={(v) => v && changePageSize(Number(v))}
+          />
+        </div>
+      )}
     </nav>
   )
 }

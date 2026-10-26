@@ -7,6 +7,10 @@
   --pagination-pad: var(--control-md-pad);
   --pagination-icon: var(--icon-md);
   --pagination-radius: var(--control-md-radius);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-stack) var(--space-inline);
   font-family: var(--font-sans);
   font-size: var(--text-body);
   line-height: var(--leading-body);
@@ -19,6 +23,25 @@
   --pagination-radius: var(--control-sm-radius);
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
+}
+
+/* The summary leads and pushes the pages and the select to the end. */
+.summary {
+  margin: 0 auto 0 0;
+  color: var(--muted-foreground);
+  font-variant-numeric: tabular-nums;
+}
+
+.pageSize {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-inline);
+  color: var(--muted-foreground);
+}
+
+/* A Select is a 20rem field by default; this one only holds a short number. */
+.pageSizeSelect {
+  inline-size: auto;
 }
 
 .list {
