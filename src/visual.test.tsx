@@ -45,6 +45,7 @@ const STORIES: Record<string, { story: string; args?: Record<string, unknown>; p
   'inputs/Combobox': { story: 'Sizes' },
   'inputs/DatePicker': { story: 'Default' },
   'inputs/DateRangePicker': { story: 'Default' },
+  'inputs/Field': { story: 'Validation' },
   'inputs/FileUploader': { story: 'WithStatus' },
   'inputs/NumberInput': { story: 'Sizes' },
   'inputs/Search': { story: 'Sizes' },

@@ -27,6 +27,30 @@
   color: var(--foreground);
 }
 
+/* The label and its info button. The button is out of the <label>, so
+   pressing it opens the note without focusing the control. */
+.labelRow {
+  --field-icon: var(--icon-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.info {
+  box-sizing: border-box;
+  max-inline-size: min(22rem, var(--available-width));
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-field);
+  background: var(--popover);
+  box-shadow: var(--shadow-md);
+  color: var(--popover-foreground);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  outline: none;
+}
+
 .required {
   /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- 2px between label and asterisk, below the spacing scale on purpose */
   margin-inline-start: 0.125rem;
@@ -45,8 +69,17 @@
 .state-error {
   --field-edge: var(--danger-text);
 }
-.state-error .helper {
+/* Only a helper that is last: with an error message after it, the helper
+   keeps its colour and the error says what is wrong. */
+.state-error .helper:last-child,
+.error {
   color: var(--danger-text);
+}
+
+.error {
+  margin: 0;
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
 }
 .state-success {
   --field-edge: var(--success-text);
