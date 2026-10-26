@@ -1,0 +1,5 @@
+---
+"zweihander": patch
+---
+
+Add the Import Export pattern (registry only). `ImportDialog` brings a CSV into a list in three steps in a Modal: upload, map each column to one of your `fields` (headings that match a field's key, label or `aliases` are mapped for you), and review every row with its problems from `validate`; it imports the rows without problems and ends on the result, with the skipped rows to download, fix and upload again. Pass `readFile` to read Excel with your own library. `ExportDialog` asks which rows, which columns (Column Chooser) and, when there is a choice, which format, then calls `onExport`. `parseCsv`, `toCsv` (it defuses cells a spreadsheet would run as a formula) and `downloadCsv` ship with it. The Projects template gains Import and Export buttons in its heading. Install with `npx shadcn@latest add https://ontheshore.biz/zweihander/r/import-export.json`. Projects: the heading's actions are now wrapped in `.headingActions`; copy `Projects.tsx` and `Projects.module.css` again.

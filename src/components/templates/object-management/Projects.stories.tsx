@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { expect, userEvent, waitFor, within } from 'storybook/test'
+import { expect, fireEvent, userEvent, waitFor, within } from 'storybook/test'
+import { toCsv } from '../../patterns/application-ui/ImportExport'
 import { Projects } from './Projects'
 
 /**
@@ -31,6 +32,34 @@ type Story = StoryObj<typeof meta>
 
 const rowNames = (canvas: ReturnType<typeof within>) => canvas.getAllByRole('rowheader').map((c: HTMLElement) => c.textContent)
 const body = () => within(document.body)
+
+/** Import a file: two good rows join the list, one with an unknown status is skipped. Export opens on the view in force. */
+export const ImportAndExport: Story = {
+  play: async ({ canvas }) => {
+    await userEvent.click(canvas.getByRole('button', { name: 'Import' }))
+    const d = within(await body().findByRole('dialog', { name: 'Import projects' }))
+    const input = document.querySelector<HTMLInputElement>('input[type=file]')!
+    const t = new DataTransfer()
+    t.items.add(new File([toCsv([['Project', 'Status', 'Budget'], ['Saltmarsh Audit', 'Active', '9000'], ['Ember Payroll', 'Paused', '1'], ['Quarry Ledger', '', '$12,500']])], 'new.csv', { type: 'text/csv' }))
+    input.files = t.files
+    fireEvent.change(input)
+    await waitFor(() => expect(d.getByRole('button', { name: 'Next' })).toBeEnabled())
+    await userEvent.click(d.getByRole('button', { name: 'Next' }))
+    await d.findByRole('table', { name: 'Columns to map' })
+    await userEvent.click(d.getByRole('button', { name: 'Next' }))
+    await userEvent.click(await d.findByRole('button', { name: 'Import 2 projects' }))
+    await userEvent.click(await d.findByRole('button', { name: 'Done' }))
+    await waitFor(() => expect(body().queryByRole('dialog')).toBeNull())
+    await expect(canvas.getByRole('heading', { level: 1, name: 'Projects 18' })).toBeVisible()
+    await expect(rowNames(canvas).slice(0, 2)).toEqual(['Saltmarsh Audit', 'Quarry Ledger'])
+    await userEvent.click(canvas.getByRole('button', { name: 'Export' }))
+    const e = within(await body().findByRole('dialog', { name: 'Export projects' }))
+    await expect(e.getByRole('radio', { name: /All view \(18\)/ })).toBeChecked()
+    await expect(e.getByRole('radio', { name: /Selected \(0\)/ })).toHaveAttribute('aria-disabled', 'true')
+    await userEvent.click(e.getByRole('button', { name: 'Cancel' }))
+    await waitFor(() => expect(body().queryByRole('dialog')).toBeNull())
+  },
+}
 
 /** The whole page at the width of its frame: views, search, sort across pages, the activity of a row and a bulk archive. */
 export const Default: Story = {
