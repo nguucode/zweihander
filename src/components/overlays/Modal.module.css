@@ -83,7 +83,12 @@
 /* The body scrolls; title and footer stay in view. */
 .body {
   min-block-size: 0;
-  margin-block-start: var(--space-group);
+  /* A scroll container clips what overflows it, and a field's focus ring is
+     drawn outside the field: pad by the ring and pull back by as much, so
+     the content stays where it was and the ring shows whole. */
+  padding: calc(var(--focus-width) + var(--focus-offset));
+  margin: calc(var(--space-group) - var(--focus-width) - var(--focus-offset)) calc(-1 * (var(--focus-width) + var(--focus-offset)))
+    calc(-1 * (var(--focus-width) + var(--focus-offset)));
   overflow-y: auto;
 }
 
