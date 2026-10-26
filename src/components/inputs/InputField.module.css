@@ -155,8 +155,11 @@
 }
 
 /* Keyed to the control, not any descendant: a stepper button disabled at
-   its limit must not dim the whole field. */
+   its limit must not dim the whole field. `.box:disabled` is a trigger that
+   is its own box (Select) inside a disabled <fieldset>, which Base UI's
+   data-disabled does not see. */
 .box:has(.control:disabled),
+.box:disabled,
 .box[data-disabled] {
   cursor: var(--cursor-disabled);
   opacity: 0.5;

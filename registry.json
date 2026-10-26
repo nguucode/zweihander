@@ -1521,7 +1521,7 @@
       "name": "form-layouts",
       "type": "registry:block",
       "title": "Form Layouts",
-      "description": "Application UI pattern: FormSection (split or stacked, one or two columns, optionally on a card), FormFullWidth and FormActions.",
+      "description": "Application UI pattern: FormSection (split or stacked, one or two columns, optionally on a card), FormFieldGroup (a fieldset of related fields with a legend), FormFullWidth and FormActions.",
       "registryDependencies": [
         "https://ontheshore.biz/zweihander/r/utils.json",
         "https://ontheshore.biz/zweihander/r/tokens.json"

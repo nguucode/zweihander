@@ -7,8 +7,9 @@ import * as FormLayoutsStories from './FormLayouts.stories'
 
 How the kit's fields are arranged into a form: sections with a heading
 and a line of context, fields one or two to a row, and a row of actions
-at the end. Three pieces: `FormSection`, `FormFullWidth` and
-`FormActions`. The `<form>` element is yours.
+at the end. Four pieces: `FormSection`, `FormFieldGroup`,
+`FormFullWidth` and `FormActions`. The `<form>` element is yours.
+After Tailwind UI's Form Layouts.
 
 ```sh
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/form-layouts.json
@@ -28,6 +29,16 @@ One section on a card: the title above, fields two to a row, and the
 actions in the card's bottom band.
 
 <Canvas of={FormLayoutsStories.StackedInCard} />
+
+## Field groups
+
+Related fields inside one section, under a legend: an address, a set of
+checkboxes. `FormFieldGroup` is a `<fieldset>`: it takes the section's
+whole row, lays out its own columns, and `disabled` turns off every field
+in it (they are left out of the submitted data, as the browser does for
+any disabled field).
+
+<Canvas of={FormLayoutsStories.FieldGroups} />
 
 ## In a modal
 
@@ -51,6 +62,9 @@ the button both submit.
 | `footer` | node | – | Usually `FormActions`; the card's bottom band when `isCard`. |
 | `headingLevel` | `2`, `3` | `2` | |
 
+`FormFieldGroup` takes `legend` (required), `description`, `columns`
+(`1`, `2`) and everything a `<fieldset>` takes, `disabled` among them.
+
 `FormActions` is a row of buttons aligned to the end: secondary actions
 first, the primary one last.
 
@@ -68,6 +82,11 @@ first, the primary one last.
 
   <Canvas of={FormLayoutsStories.Narrow} />
 
+- **A field group takes a whole row** of a two-column section, and its
+  own `columns` follow the same 32rem rule.
+- Labels sit above their fields, never beside them: the label width does
+  not depend on the longest translation, and a form reflows to a phone
+  with no change.
 - Actions end-aligned, primary last: the same place in every form, where
   the eye and the Tab key end up.
 
@@ -75,8 +94,10 @@ first, the primary one last.
 
 - Each section is a `<section>` with a heading, so the form's parts are in
   the page outline and a screen reader can jump between them.
-- Group related checkboxes in a `<fieldset>` with a `<legend>`, as the
-  Notifications section does; RadioGroup does this for you.
+- Group related fields in a `FormFieldGroup`, as the Notifications and
+  Billing sections do: a `group` named by its legend and described by its
+  description, so a screen reader announces both on entering it.
+  RadioGroup is a group of its own; do not wrap it.
 - Mark required fields with `required`. The field shows the asterisk and
   the browser enforces it; say in the description if most fields are
   optional instead.
