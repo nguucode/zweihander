@@ -36,7 +36,7 @@ const meta = {
   argTypes: {
     items: {
       description:
-        'The events, in the order shown (newest first is the norm). Each has `actor`, `action` (the rest of the sentence) and `at`, and may have `media` (an Avatar or an Icon), `comment` and `id`.',
+        'The events, in the order shown (newest first is the norm). Each has `actor`, `action` (the rest of the sentence) and `at`, and may have `media` (an Avatar or an Icon), `comment`, `id`, `href` (the row links), `onClick` (runs when it is followed) and `isUnread` (a dot).',
       control: false,
     },
     hasConnector: { description: 'The vertical line joining one event to the next. Off for a short, loose list.', table: { defaultValue: { summary: 'true' } } },
@@ -139,6 +139,32 @@ export const WithComposer: Story = {
     await waitFor(() => expect(canvas.getAllByRole('listitem')).toHaveLength(4))
     await expect(canvas.getAllByRole('listitem')[3]).toHaveTextContent('Sam Rivera commented')
     await expect(box).toHaveValue('')
+  },
+}
+
+/** `href` makes each sentence a link that covers its row; `isUnread` ends the row with a dot named "Unread". The Notification Center's rows. */
+export const LinkedAndUnread: Story = {
+  args: {
+    hasConnector: false,
+    items: events.map((event, i) => ({ ...event, href: `#event-${event.id}`, isUnread: i === 0 })),
+  },
+  play: async ({ canvas }) => {
+    const items = canvas.getAllByRole('listitem')
+    const link = canvas.getAllByRole('link')[0]
+    await expect(link).toHaveAccessibleName('Ines Okafor created Harbor Lights')
+    await expect(link).toHaveAttribute('href', '#event-1')
+    // The link's box covers the whole row, so the row is the target.
+    const row = items[0].getBoundingClientRect()
+    const target = getComputedStyle(link, '::after')
+    await expect(target.position).toBe('absolute')
+    await expect(link.offsetParent).toBe(items[0])
+    await expect(row.width).toBeGreaterThan(0)
+    // Only the unread row has the dot, and it is heard.
+    await expect(canvas.getAllByRole('img', { name: 'Unread' })).toHaveLength(1)
+    await expect(items[0]).toContainElement(canvas.getByRole('img', { name: 'Unread' }))
+    // Keyboard: one stop per row.
+    await userEvent.tab()
+    await expect(link).toHaveFocus()
   },
 }
 

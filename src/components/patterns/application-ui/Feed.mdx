@@ -49,6 +49,17 @@ so the newest sits by the box.
 
 <Canvas of={FeedStories.WithComposer} />
 
+## Linked and unread
+
+`href` makes the sentence a link whose target is the whole row, and
+`isUnread` ends the row with a dot; `onClick` runs when the link is
+followed, to mark the item read. The [Notification
+Center](?path=/docs/patterns-application-ui-notification-center--docs)
+lists its notifications this way. With `href`, keep links out of
+`actor` and `action`: links cannot nest.
+
+<Canvas of={FeedStories.LinkedAndUnread} />
+
 ## Empty
 
 No items shows `empty`, "No activity yet." by default, in place of the
@@ -96,4 +107,8 @@ own.
 - The feed has no landmark or heading of its own. Put it under a
   heading, or pass `role="region"` and an `aria-label` when it stands
   alone, as the Projects row does ("Harbor Lights activity").
+- A row with `href` is one link, named by its sentence; the time and
+  comment sit outside it.
+- The unread dot is an image named "Unread", so the state is heard as
+  well as seen.
 - The composer's field needs a visible label, such as "Add a comment".

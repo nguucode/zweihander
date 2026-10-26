@@ -1,0 +1,47 @@
+.panel {
+  display: grid;
+  gap: var(--space-group);
+  min-inline-size: 0;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-cluster);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  font-weight: 600;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* In the Popover: as wide as the Popover allows (its max-inline-size caps
+   it), and no taller than the room under the bell. The list scrolls; the
+   header stays pinned to the top of the popup. */
+.popup {
+  inline-size: var(--available-width);
+  max-block-size: var(--available-height);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.popup .header {
+  position: sticky;
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- local stacking over the scrolling list, not a global layer */
+  z-index: 1;
+  /* Pinned over the popup's own padding, so nothing scrolls above it. */
+  inset-block-start: calc(-1 * var(--space-group));
+  margin-block-start: calc(-1 * var(--space-group));
+  padding-block: var(--space-group) var(--space-2);
+  background: var(--popover);
+}
