@@ -1,0 +1,162 @@
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
+import * as ConfirmDialogStories from './ConfirmDialog.stories'
+
+<Meta of={ConfirmDialogStories} />
+
+# Confirm Dialog
+
+<DocTabs>
+<DocTab value="overview">
+
+Asks before something that cannot be undone: a warning, the action as a
+question, what it will destroy, then Cancel or the action. A press outside
+does nothing, so the reader has to choose.
+
+<Status of={ConfirmDialogStories} />
+
+<Canvas of={ConfirmDialogStories.Default} />
+
+## Variants
+
+| Variant | Use for |
+| --- | --- |
+| Default | An everyday delete: a comment, a file, a saved view. One question, two buttons. |
+| Type to confirm (`confirmText`) | A large delete that cannot be undone: a workspace, an account, a project with its files. The action waits until the reader types the name. |
+
+<Canvas of={ConfirmDialogStories.TypeToConfirm} />
+
+## Resources
+
+From npm, or copied into your project through the registry:
+
+```js
+import { ConfirmDialog } from 'zweihander/confirm-dialog'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/confirm-dialog.json
+```
+
+- Source: [src/components/overlays/ConfirmDialog.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/overlays/ConfirmDialog.tsx)
+- Spec: [uiguideline.com/components/modal](https://www.uiguideline.com/components/modal) (the alert dialog)
+- Built on: [Modal](?path=/docs/components-overlays-modal--docs) with `isAlert`, on [Base UI Alert Dialog](https://base-ui.com/react/components/alert-dialog)
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
+## Anatomy
+
+<Anatomy parts={ConfirmDialogStories.anatomyParts}>
+  <Story of={ConfirmDialogStories.Anatomy} />
+</Anatomy>
+
+The open dialogs on this tab and the next are pictures: rendered in a frame
+with `container` and `isModal={false}`, inert, so they do not lock this page
+or take its focus.
+
+## Measurements
+
+It is a Modal at `size="sm"` (at most 24rem wide): container, title,
+description, body and footer take Modal's measurements. Its own parts:
+
+<SpecTable
+  caption="Icon and field"
+  rows={[
+    { part: 'Warning icon', property: 'Width', token: '--icon-md' },
+    { part: 'Icon to title', property: 'Gap', token: '--space-inline' },
+    { part: 'Text to type', property: 'Font family', token: '--font-mono' },
+  ]}
+/>
+
+The icon is one line of the title tall, so it stays on the first line when
+the title wraps.
+
+## Color
+
+<SpecTable
+  caption="Its own parts"
+  rows={[
+    { part: 'Warning icon', property: 'Colour', token: '--destructive' },
+  ]}
+/>
+
+Everything else takes Modal's colours, and the buttons keep their own:
+Cancel is `secondary` outlined, the action `destructive`.
+
+## States
+
+The dialog is open or closed. With `confirmText`, the action is disabled
+until the field matches, then enabled; without it, it is enabled from the
+start.
+
+<States
+  states={[
+    { label: 'Waiting for the name', content: <Story of={ConfirmDialogStories.StateWaiting} /> },
+    { label: 'Ready', content: <Story of={ConfirmDialogStories.DoEverydayDelete} /> },
+  ]}
+/>
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={ConfirmDialogStories} />
+</div>
+
+### Differences from the spec
+
+- **Destructive only.** There is no neutral variant: a decision that
+  destroys nothing (sign out, leave without saving) is a
+  [Modal](?path=/docs/components-overlays-modal--docs) with `isAlert`, where
+  you choose the buttons.
+- **No pending state.** The dialog closes on confirm. If the delete can fail,
+  control `open` and keep it open until your request settles.
+
+</DocTab>
+<DocTab value="guidelines">
+
+## When to use
+
+Before an action that destroys something the reader cannot get back. Put
+the object's name in the title, say in the description what goes with it,
+and name the action button after what it does.
+
+Type to confirm is for the few deletes that are both large and final. Used
+on every delete, it becomes a chore readers do without reading.
+
+<DoDont
+  do={<Story of={ConfirmDialogStories.DoEverydayDelete} />}
+  doCaption="Ask once for an everyday delete, with the action on the button."
+  dont={<Story of={ConfirmDialogStories.DontTypeForSmall} />}
+  dontCaption="Do not make the reader type for a small delete: it teaches them to type without reading."
+/>
+
+## When not to use
+
+- **When the action can be undone.** Do it, then offer Undo in a
+  [Toast](?path=/docs/components-notifications-toast--docs): no question
+  is faster than a good one.
+- **For a decision that destroys nothing**, such as Sign out or Leave
+  without saving. Use a [Modal](?path=/docs/components-overlays-modal--docs)
+  with `isAlert`.
+- **To show a warning.** Use an
+  [Inline Alert](?path=/docs/components-notifications-inlinealert--docs).
+
+## Accessibility
+
+- `role="alertdialog"`, named by the title (the icon is hidden from
+  assistive tech) and described by the consequence.
+- Focus starts on Cancel, so Enter on open cannot delete. With
+  `confirmText` it starts in the field, which is named "To confirm, type"
+  and the name.
+- The action stays disabled until the field matches exactly, case
+  included; spaces around the text are ignored. Enter in the field confirms
+  once it matches.
+- A press outside does nothing. Cancel and Escape close it without
+  confirming, and focus goes back to the trigger.
+- Reopened, the field starts empty.
+
+</DocTab>
+</DocTabs>

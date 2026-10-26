@@ -136,6 +136,10 @@
       "types": "./dist/components/overlays/Drawer.d.ts",
       "import": "./dist/components/overlays/Drawer.js"
     },
+    "./confirm-dialog": {
+      "types": "./dist/components/overlays/ConfirmDialog.d.ts",
+      "import": "./dist/components/overlays/ConfirmDialog.js"
+    },
     "./menu": {
       "types": "./dist/components/navigation/Menu.d.ts",
       "import": "./dist/components/navigation/Menu.js"

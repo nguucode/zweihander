@@ -39,6 +39,7 @@
     "src/components/overlays/Popover.tsx",
     "src/components/overlays/Modal.tsx",
     "src/components/overlays/Drawer.tsx",
+    "src/components/overlays/ConfirmDialog.tsx",
     "src/components/navigation/Menu.tsx",
     "src/components/navigation/Breadcrumbs.tsx",
     "src/components/navigation/Pagination.tsx",

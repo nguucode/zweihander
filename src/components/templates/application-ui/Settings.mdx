@@ -39,8 +39,8 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/settings-template.json
   it is a read-only field that says who can change it, not a disabled one:
   it stays readable, focusable and sent with the form.
 - **Danger zone**: Delete account, last on the Account section and set
-  off by a rule, opens an alert dialog with Cancel focused. Cancel or
-  Escape keeps everything.
+  off by a rule, opens a [Confirm Dialog](?path=/docs/components-overlays-confirm-dialog--docs)
+  that waits until the username is typed. Cancel or Escape keeps everything.
 
 <Canvas of={SettingsStories.Account} />
 
@@ -92,4 +92,5 @@ Any other prop goes to the App Shell's root, e.g. `style` to set its
 - A field that fails is marked `aria-invalid`, its message part of its
   description, and gets focus.
 - Delete account opens an `alertdialog` named "Delete your account?",
-  with focus on Cancel; on close focus returns to the button.
+  with focus in the field to type the username; the delete button stays
+  disabled until it matches. On close focus returns to the button.

@@ -154,7 +154,11 @@ part with states of its own:
 Reach for a modal last: it stops everything else. Use one when the task
 must be finished or abandoned before going on, or for a decision with
 consequences. For a decision, use `isAlert`, say exactly what will happen in
-the description, and name the buttons after what they do.
+the description, and name the buttons after what they do. Before a delete
+or anything else that cannot be undone, use a
+[Confirm Dialog](?path=/docs/components-overlays-confirm-dialog--docs): it
+is this alert with the warning, the focus on Cancel and type to confirm
+built in.
 
 <DoDont
   do={<Story of={ModalStories.DoNameTheActions} />}

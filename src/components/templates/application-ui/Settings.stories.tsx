@@ -119,7 +119,7 @@ export const Account: Story = {
   },
 }
 
-/** Delete account asks first, in an alert dialog; Cancel keeps everything. */
+/** Delete account asks first, and waits until the username is typed; Cancel keeps everything. */
 export const DeleteAccount: Story = {
   decorators: box(1400),
   args: { defaultSection: 'account' },
@@ -127,8 +127,9 @@ export const DeleteAccount: Story = {
     const trigger = canvas.getByRole('button', { name: 'Delete account' })
     await userEvent.click(trigger)
     let dialog = await body().findByRole('alertdialog', { name: 'Delete your account?' })
-    // The safe choice has focus, so Enter cannot delete.
-    await waitFor(() => expect(within(dialog).getByRole('button', { name: 'Cancel' })).toHaveFocus())
+    const field = within(dialog).getByRole('textbox', { name: 'To confirm, type ines' })
+    await waitFor(() => expect(field).toHaveFocus())
+    await expect(within(dialog).getByRole('button', { name: 'Delete account' })).toBeDisabled()
     await userEvent.click(within(dialog).getByRole('button', { name: 'Cancel' }))
     await waitFor(() => expect(body().queryByRole('alertdialog')).toBeNull())
     await waitFor(() => expect(trigger).toHaveFocus())
@@ -136,6 +137,7 @@ export const DeleteAccount: Story = {
 
     await userEvent.click(trigger)
     dialog = await body().findByRole('alertdialog', { name: 'Delete your account?' })
+    await userEvent.type(within(dialog).getByRole('textbox'), 'ines')
     await userEvent.click(within(dialog).getByRole('button', { name: 'Delete account' }))
     await expect(args.onDeleteAccount).toHaveBeenCalledTimes(1)
     await waitFor(() => expect(body().queryByRole('alertdialog')).toBeNull())
