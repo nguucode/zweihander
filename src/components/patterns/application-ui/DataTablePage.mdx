@@ -18,6 +18,11 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/data-table-page.json
 
 ## Toolbar and pagination
 
+The footer holds a Pagination given `totalItems`, so it shows the rows on
+screen ("6–10 of 12") and a "Rows per page" select from
+`pageSizeOptions`. Any lone child spans the footer, so Pagination's summary
+leads and the pages end the bar; the wrapping inside is Pagination's own.
+
 <Canvas of={DataTablePageStories.ToolbarAndPagination} />
 
 ## Bulk actions
@@ -50,11 +55,18 @@ back; the footer goes away.
 `TableToolbarGroup` wraps the part that should take the free space and
 wrap first, usually the search and filters.
 
-**TableFooter** takes `summary` ("Showing 1–5 of 12") and, as children,
-usually a Pagination.
+**TableFooter** takes, as children, usually a Pagination with `totalItems`
+and `pageSizeOptions`. Its own `summary` slot is for a footer without
+Pagination's summary, such as "12 projects" on a list that fits one page;
+do not pass both, or the count is shown twice.
+
+<Canvas of={DataTablePageStories.FooterSummary} />
 
 ## Behaviour to copy
 
+- **Rows per page keeps the reader in place.** Pagination moves to the page
+  holding the first row that was on screen and reports it through
+  `onPageChange`; keep `page` and `pageSize` in your state.
 - **Filtering returns to page 1.** A new query on page 3 would otherwise
   show an empty page, or a page the reader never asked for.
 - **Selection is by id**, so it survives sorting and paging (Table's
@@ -69,13 +81,16 @@ usually a Pagination.
   under it, instead of anything shrinking below use.
 - In selection mode the actions are pushed to the end of the bar and drop
   under the count when they no longer fit.
-- The footer puts the summary at the start and the pagination at the end;
-  when both do not fit, the pagination wraps under the summary.
+- The footer puts the summary at the start and the pages and rows-per-page
+  select at the end; when they do not fit, they wrap under the summary.
 
 ## Accessibility
 
 - The selection count is a polite status line that is always in the page,
   so "2 selected" is announced as it changes, and silence when it clears.
+- The footer's "6–10 of 12" is Pagination's own status line, inside the
+  pages landmark ("Projects pages"), so a new page or page size is
+  announced too.
 - Search and the status filter are named ("Search projects", "Status")
   without visible labels, since the table's caption and placeholder make
   their purpose clear on screen.
