@@ -1,0 +1,50 @@
+/* The Card spaces the text and the action with its own padding and gap. */
+.text {
+  display: grid;
+  gap: var(--space-2);
+  min-inline-size: 0;
+}
+
+.title {
+  margin: 0;
+  font-size: var(--text-heading-sm);
+  line-height: var(--leading-heading-sm);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.description {
+  max-inline-size: 65ch;
+  color: var(--muted-foreground);
+  overflow-wrap: anywhere;
+}
+.description > p {
+  margin: 0;
+}
+
+.action {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-inline);
+}
+
+/* end: the action shares the row with the text while the text keeps 16rem,
+   then drops under it, as Card Heading's actions do. Two classes to beat
+   Card's flex-direction. The action stays at the top, by the title, when
+   the description runs to several lines. */
+.actionPanel.end {
+  flex-flow: row wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+.end > .text {
+  flex: 1 1 16rem;
+}
+
+/* The edge says "careful" before the button does, on every side and in
+   every appearance, flat surface included. [class] lifts it over Card's
+   two-class appearance rules, whichever stylesheet loads last. */
+.actionPanel.danger[class] {
+  border-color: var(--destructive);
+}

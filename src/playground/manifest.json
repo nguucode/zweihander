@@ -3114,6 +3114,59 @@
     },
     {
       "kind": "pattern",
+      "id": "patterns-application-ui-action-panel",
+      "name": "Action Panel",
+      "category": "Application UI",
+      "status": "experimental",
+      "storyId": "patterns-application-ui-action-panel--simple",
+      "props": [
+        {
+          "name": "title",
+          "control": "text",
+          "default": "Export your data",
+          "description": "What the action does, e.g. \"Delete account\". Names the panel. Required."
+        },
+        {
+          "name": "description",
+          "control": "text",
+          "default": "A ZIP of every project, file and comment, emailed to you within an hour.",
+          "description": "What happens when you take it: what changes, what it costs, whether it can be undone. Describes the panel."
+        },
+        {
+          "name": "actionPlacement",
+          "control": "radio",
+          "options": [
+            "below",
+            "end"
+          ],
+          "default": "below",
+          "description": "`below` the text (a button or a form), or at the `end` of the row beside it (a button or a switch)."
+        },
+        {
+          "name": "variant",
+          "control": "radio",
+          "options": [
+            "default",
+            "danger"
+          ],
+          "default": "default",
+          "description": "`danger` edges the panel in the destructive colour, for what cannot be undone. Pair it with a destructive Button."
+        },
+        {
+          "name": "headingLevel",
+          "control": "radio",
+          "options": [
+            2,
+            3,
+            4
+          ],
+          "default": 2,
+          "description": "The title is an h2; use 3 or 4 when the panel sits under a section heading."
+        }
+      ]
+    },
+    {
+      "kind": "pattern",
       "id": "patterns-application-ui-app-content",
       "name": "App Content",
       "category": "Application UI",
