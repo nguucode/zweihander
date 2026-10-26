@@ -132,6 +132,24 @@ links stay in the bar and scroll sideways when they do not fit.
 
 <Canvas of={AppShellStories.TopNavigation} />
 
+## With an aside
+
+Three columns, after Tailwind UI's multi-column layouts: the sidebar, the
+page and an `aside` on the right for what supports the page, such as a
+summary, a status or recent activity. Pass it as `aside`, and name it with
+`asideLabel`. From 80rem of shell width it sits beside the page, as wide as
+the expanded sidebar (`--sidebar-width`), and each column scrolls on its
+own, so the summary stays in view while the page scrolls. It takes the
+page's surface: a second card under `flat`, the canvas under `card`.
+
+<Canvas of={AppShellStories.WithAside} />
+
+Under 80rem there is no room for a third column next to a usable page, so
+the aside follows the page and the two scroll as one. Nothing is hidden:
+what the aside holds stays one scroll away, at any width.
+
+<Canvas of={AppShellStories.WithAsideStacked} />
+
 ## On a phone
 
 Under 64rem of shell width the sidebar stays beside the page as the icon
@@ -152,6 +170,8 @@ their names, as tooltips. There is no menu button and no drawer.
 | `brand` | node | – | The logo, placed by the shell. |
 | `sidebar` | node | – | A NavSidebar. Beside the content at every width; the icon rail below 64rem. |
 | `header` | node | – | A TopBar. In `sidebar` it shows only below 64rem; without one the shell adds a plain TopBar there for the logo. |
+| `aside` | node | – | A column beside the page, in an `aside` landmark. Right of the page from 80rem, below it under 80rem. |
+| `asideLabel` | string | – | The aside's accessible name. |
 | `mainId` | string | generated | The `id` of the `main` element, the skip link's target. |
 | `children` | node | – | The page, inside `<main>`. |
 
@@ -173,6 +193,10 @@ no sidebar, so there is no empty column.
   because the sidebar holds what the bar would. Below 64rem it is the icon
   rail and the top bar comes back in both layouts, for the logo, search and
   the account.
+- **An aside** sits right of the page from 80rem, `--sidebar-width` wide,
+  and the page and the aside each scroll on their own. Under 80rem it goes
+  below the page and the two scroll together; below 48rem it is flush too,
+  ruled off from a flat page at the top.
 - **Below 48rem** a flat page drops its 8px inset, edge and rounding and
   goes flush, since a frame around it only costs width on a phone.
 - **Everything follows density**: the top bar is `--control-md` plus two
@@ -196,6 +220,10 @@ no sidebar, so there is no empty column.
   generated, so two shells in one page (as in these docs) never share it.
 - The page is the `main` landmark; the sidebar and TopBarNav are `nav`
   landmarks named "Main".
+- The aside is a `complementary` landmark, after the page in reading and
+  focus order. Name it with `asideLabel`. It takes focus (`tabIndex={0}`)
+  with a visible ring, so a keyboard can scroll it when it scrolls on its
+  own and holds nothing focusable.
 - In the rail each link keeps its name, so the navigation reads the same
   on a phone.
 - The current page is marked `aria-current="page"` in both kinds of

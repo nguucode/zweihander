@@ -33,6 +33,15 @@ export interface AppShellProps extends ComponentProps<'div'> {
    * where the rail has no room for search or the account.
    */
   header?: ReactNode
+  /**
+   * A column beside the page for a summary, a status or activity, in an
+   * `aside` landmark. From 80rem of shell width it sits right of the page,
+   * as wide as the expanded sidebar, and each column scrolls on its own;
+   * below that it follows the page and the two scroll as one.
+   */
+  aside?: ReactNode
+  /** The aside's accessible name. Give one when the page has more than one `aside`. */
+  asideLabel?: string
   /** The `id` of the `main` element, which the skip link targets. Generated if not given. */
   mainId?: string
   children: ReactNode
@@ -52,6 +61,8 @@ export function AppShell({
   brand,
   sidebar,
   header,
+  aside,
+  asideLabel,
   mainId,
   children,
   className,
@@ -114,7 +125,7 @@ export function AppShell({
               {sidebar}
             </div>
           )}
-          <AppContent ref={mainRef} id={id}>
+          <AppContent ref={mainRef} id={id} aside={aside} asideLabel={asideLabel}>
             {children}
           </AppContent>
         </div>

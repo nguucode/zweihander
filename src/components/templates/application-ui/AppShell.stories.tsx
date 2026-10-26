@@ -204,6 +204,11 @@ const meta = {
     children: { control: false },
     sidebar: { control: false },
     header: { control: false },
+    aside: {
+      description: 'A column beside the page for a summary, a status or activity, in an `aside` landmark. Right of the page from 80rem of shell width, as wide as the expanded sidebar, each column scrolling on its own; below the page under 80rem.',
+      control: false,
+    },
+    asideLabel: { description: "The aside's accessible name. Give one when the page has more than one `aside`.", control: 'text' },
   },
 } satisfies Meta<typeof AppShell>
 
@@ -535,5 +540,117 @@ export const SidebarSurfaces: Story = {
     // On the deep canvas the text is the canvas's white and the badge is white.
     await expect(style('Transparent', 'a[aria-current="page"]').color).toBe('oklch(1 0 0)')
     await expect(style('Transparent', '[class*="badge"]').backgroundColor).toBe('oklch(1 0 0)')
+  },
+}
+
+/** A page long enough to scroll, so the columns' scrolling shows. */
+const longPage = (
+  <div style={{ display: 'grid', gap: 'var(--space-group)' }}>
+    {heading}
+    <Button startIcon={<Icon name="plus" />}>New invoice</Button>
+    {Array.from({ length: 12 }, (_, i) => (
+      <Card key={i} appearance="surface" size="sm">
+        <strong>Invoice INV-{1040 + i}</strong>
+        <span style={{ color: 'var(--muted-foreground)' }}>Posted to the ledger, waiting for approval.</span>
+      </Card>
+    ))}
+  </div>
+)
+
+/** The aside: a summary, a status and recent activity for what the page shows. */
+const asideContent = (
+  <div style={{ display: 'grid', gap: 'var(--space-group)' }}>
+    <h2 style={{ margin: 0, fontSize: 'var(--text-heading-xs)', fontWeight: 500 }}>Summary</h2>
+    <span style={{ color: 'var(--muted-foreground)' }}>12 invoices, 4 waiting for approval.</span>
+    <h2 style={{ margin: 0, fontSize: 'var(--text-heading-xs)', fontWeight: 500 }}>Activity</h2>
+    <span style={{ color: 'var(--muted-foreground)' }}>Ana Silva approved INV-1039.</span>
+    {/* Hard content: one long word must wrap, not widen the column. */}
+    <span data-testid="long-word">https://ledger.example.com/imports/2026-10-26/batch-0000000000000000000000000001</span>
+  </div>
+)
+
+/**
+ * Three columns: the sidebar, the page and an aside for a summary, a status
+ * or activity. From 80rem the aside sits beside the page, as wide as the
+ * expanded sidebar, and each column scrolls on its own.
+ */
+export const WithAside: Story = {
+  args: { brand, sidebar: sidebar(), aside: asideContent, asideLabel: 'Invoice summary', children: longPage },
+  decorators: box(1400),
+  play: async ({ canvas }) => {
+    const main = canvas.getByRole('main')
+    const aside = canvas.getByRole('complementary', { name: 'Invoice summary' })
+    const nav = canvas.getByRole('navigation', { name: 'Main' })
+    // Beside the page, after it in reading order, as wide as the sidebar.
+    await waitFor(() => expect(aside.getBoundingClientRect().left).toBeGreaterThanOrEqual(main.getBoundingClientRect().right))
+    await expect(main.compareDocumentPosition(aside) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    await expect(aside.getBoundingClientRect().width).toBeCloseTo(nav.getBoundingClientRect().width, 0)
+    // A long word wraps inside the column.
+    await expect(aside.scrollWidth).toBeLessThanOrEqual(aside.clientWidth)
+    // The page scrolls on its own: the aside stays put.
+    await expect(main.scrollHeight).toBeGreaterThan(main.clientHeight)
+    const top = aside.getBoundingClientRect().top
+    main.scrollTop = 200
+    await waitFor(() => expect(main.scrollTop).toBeGreaterThan(0))
+    await expect(aside.getBoundingClientRect().top).toBe(top)
+    // A keyboard reaches the aside after the page, so it can scroll it too.
+    canvas.getByRole('button', { name: 'New invoice' }).focus()
+    await userEvent.tab()
+    await expect(aside).toHaveFocus()
+  },
+}
+
+/** The aside on canvas content: no surface of its own, like the page. */
+export const WithAsideOnCanvas: Story = {
+  ...WithAside,
+  args: { ...WithAside.args, children: blocks },
+  decorators: [themed({ contentStyle: 'card' }), ...box(1400)],
+  play: async ({ canvas }) => {
+    const aside = canvas.getByRole('complementary')
+    await expect(getComputedStyle(aside).backgroundColor).toBe('rgba(0, 0, 0, 0)')
+    await waitFor(() => expect(aside.getBoundingClientRect().left).toBeGreaterThanOrEqual(canvas.getByRole('main').getBoundingClientRect().right))
+  },
+}
+
+/** Under 80rem the aside goes below the page and the two scroll as one. */
+export const WithAsideStacked: Story = {
+  ...WithAside,
+  decorators: box(1100),
+  play: async ({ canvas }) => {
+    const main = canvas.getByRole('main')
+    const aside = canvas.getByRole('complementary')
+    await waitFor(() => expect(aside.getBoundingClientRect().top).toBeGreaterThanOrEqual(main.getBoundingClientRect().bottom))
+    await expect(aside.getBoundingClientRect().width).toBeCloseTo(main.getBoundingClientRect().width, 0)
+    // One scroll: the page does not scroll inside itself, the region around both does.
+    await expect(main.scrollHeight).toBeLessThanOrEqual(main.clientHeight)
+    const region = main.parentElement!
+    await expect(region.scrollHeight).toBeGreaterThan(region.clientHeight)
+  },
+}
+
+/** On a phone the aside follows the page, flush, ruled off at the top. */
+export const WithAsideMobile: Story = {
+  ...WithAside,
+  args: { ...WithAside.args, sidebar: <NavSidebar items={entries} currentHref="#dashboard" style={{ blockSize: '100%' }} />, header: <TopBar end={headerEnd} /> },
+  decorators: box(390),
+  play: async ({ canvas }) => {
+    const main = canvas.getByRole('main')
+    const aside = canvas.getByRole('complementary')
+    await waitFor(() => expect(aside.getBoundingClientRect().top).toBeGreaterThanOrEqual(main.getBoundingClientRect().bottom))
+    await expect(aside.scrollWidth).toBeLessThanOrEqual(aside.clientWidth)
+    await expect(getComputedStyle(aside).borderTopColor).not.toBe('rgba(0, 0, 0, 0)')
+  },
+}
+
+/** `aside={false}`: no complementary landmark and no empty column. */
+export const WithoutAside: Story = {
+  args: { brand, sidebar: sidebar(), aside: false },
+  decorators: box(1400),
+  play: async ({ canvas }) => {
+    await expect(canvas.queryByRole('complementary')).toBeNull()
+    await expect(canvas.getByRole('main').parentElement!.getBoundingClientRect().right).toBeCloseTo(
+      canvas.getByRole('main').closest('[class*="frame"]')!.getBoundingClientRect().right,
+      0,
+    )
   },
 }

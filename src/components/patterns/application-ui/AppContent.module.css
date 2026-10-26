@@ -12,7 +12,8 @@
   min-inline-size: 0;
   padding: var(--content-flat, var(--space-2)) var(--content-card, 0);
 }
-.main {
+.main,
+.aside {
   /* stylelint-disable zweihander/no-token-shadow -- content reads the colours of the surface it sits on */
   --background: var(--content-flat, var(--card)) var(--content-card, var(--shell-canvas-solid));
   /* On the canvas (card), text reads the canvas colours, as a transparent piece does. */
@@ -29,13 +30,47 @@
   color: var(--content-flat, var(--card-foreground)) var(--content-card, var(--shell-canvas-foreground));
   outline: none;
 }
+
+/* The aside: a second column of the same surface, beside the page from
+   80rem (the sidebar, the page at 48rem and the aside fit there), else
+   below it. Long words wrap: the column is narrow. */
+.aside {
+  overflow-wrap: anywhere;
+}
+/* It takes focus so a keyboard can scroll it (see AppContent.tsx). */
+.aside:focus-visible {
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: calc(-1 * var(--focus-width));
+}
+/* Stacked, the page and the aside scroll as one, in the region around them:
+   each row is as tall as its content, so neither scrolls on its own. */
+.withAside {
+  grid-auto-rows: max-content;
+  gap: var(--content-flat, var(--space-2)) var(--content-card, 0);
+  overflow: auto;
+}
+@container (min-width: 80rem) {
+  /* Side by side, each column scrolls on its own. As wide as the expanded
+     sidebar, so the frame is symmetric and follows density. */
+  .withAside {
+    grid-template-rows: minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr) var(--sidebar-width);
+    overflow: hidden;
+  }
+}
+
 @container (max-width: 47.99rem) {
   .content {
     padding: 0;
   }
-  .main {
+  .main,
+  .aside {
     border-color: transparent;
     border-radius: 0;
+  }
+  /* Flush, the stacked aside needs a rule to part it from the page. */
+  .aside {
+    border-block-start-color: var(--content-flat, var(--border)) var(--content-card, transparent);
   }
 }
 @container (min-width: 64rem) {
