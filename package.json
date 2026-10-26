@@ -36,6 +36,10 @@
       "types": "./dist/components/atomic-elements/Badge.d.ts",
       "import": "./dist/components/atomic-elements/Badge.js"
     },
+    "./kbd": {
+      "types": "./dist/components/atomic-elements/Kbd.d.ts",
+      "import": "./dist/components/atomic-elements/Kbd.js"
+    },
     "./icon": {
       "types": "./dist/lib/icon.d.ts",
       "import": "./dist/lib/icon.js"

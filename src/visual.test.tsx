@@ -21,6 +21,7 @@ const STORIES: Record<string, { story: string; args?: Record<string, unknown>; p
   'atomic-elements/Avatar': { story: 'Colors' },
   'atomic-elements/Badge': { story: 'Variants' },
   'atomic-elements/Divider': { story: 'Sizes' },
+  'atomic-elements/Kbd': { story: 'Sizes' },
   'atomic-elements/Tag': { story: 'Matrix' },
   'buttons/Button': { story: 'Matrix' },
   'buttons/ToggleButton': { story: 'Matrix' },
