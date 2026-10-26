@@ -1713,6 +1713,29 @@
       ]
     },
     {
+      "name": "action-panel",
+      "type": "registry:block",
+      "title": "Action Panel",
+      "description": "Application UI pattern: a card offering one action, with a title, a description and a button, switch or small form below or beside the text, and a danger variant for what cannot be undone.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/card.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/patterns/application-ui/ActionPanel.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/patterns/application-ui/ActionPanel.tsx"
+        },
+        {
+          "path": "src/components/patterns/application-ui/ActionPanel.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/patterns/application-ui/ActionPanel.module.css"
+        }
+      ]
+    },
+    {
       "name": "top-bar",
       "type": "registry:block",
       "title": "Top Bar",

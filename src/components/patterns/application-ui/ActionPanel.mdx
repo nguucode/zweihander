@@ -1,0 +1,105 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks'
+import * as ActionPanelStories from './ActionPanel.stories'
+
+<Meta of={ActionPanelStories} />
+
+# Action Panel
+
+A [Card](?path=/docs/components-data-display-card--docs) that offers one action:
+a title saying what it does, a description of what happens when you take
+it, and the control that does it. For actions that stand on their own on a
+settings or detail page, such as exporting data, renewing a plan or
+deleting a workspace. After Tailwind UI Application UI, Forms: Action
+panels.
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/action-panel.json
+```
+
+## Simple
+
+A button under the description. The default, and the right one when the
+description runs to two lines or more.
+
+<Canvas of={ActionPanelStories.Simple} />
+
+## Button at the end
+
+`actionPlacement="end"` puts the action beside the text, for a short
+description. It drops under the text when the card gets narrow.
+
+<Canvas of={ActionPanelStories.ButtonAtEnd} />
+
+## With a switch
+
+A setting that takes effect the moment it changes, so there is no Save
+button. Give the Switch an `aria-label` that matches the title: the
+panel's title is not its label.
+
+<Canvas of={ActionPanelStories.WithSwitch} />
+
+## With an input
+
+A small form, one field and its button, for an action that needs one
+value. The form is yours: the panel lays out what you pass.
+
+<Canvas of={ActionPanelStories.WithInput} />
+
+## Danger
+
+`variant="danger"` edges the panel in the destructive colour, in every
+appearance, flat surface included. Use it only for what cannot be undone,
+with a destructive Button, and confirm in an alert
+[Modal](?path=/docs/components-overlays-modal--docs) (`isAlert`) before acting. Put it
+last on the page.
+
+<Canvas of={ActionPanelStories.Danger} />
+
+## Without a description
+
+The description is optional; several actions wrap onto more rows rather
+than overflow.
+
+<Canvas of={ActionPanelStories.TitleOnly} />
+
+## Props
+
+<ArgTypes of={ActionPanelStories} />
+
+Every other Card prop and `<div>` attribute passes through, except
+`onClick`, `render` and `orientation`: the panel is not itself a control,
+and its placement prop sets the direction.
+
+## Layout
+
+- **Below** stacks the text and the action, in the Card's gap.
+- **End** keeps the text at least 16rem wide, then wraps the action under
+  it, keeping its order.
+- The description stops at 65 characters a line; long titles and words
+  break anywhere rather than overflow.
+
+<Canvas of={ActionPanelStories.Narrow} />
+
+## Differences from the spec
+
+- **With link**: no slot of its own. Pass a [Link](?path=/docs/components-navigation-link--docs)
+  as the `action`.
+- **Simple well, with well**: not a variant. The tinted inset is the
+  Card's look; pick it with `appearance` so the panel matches the other
+  blocks on the page.
+- **Danger** is added: Tailwind leaves a danger zone to a red button.
+
+## Accessibility
+
+- The panel is a `group` named by its title, so a screen reader names
+  it when focus enters the control. The description is linked with
+  `aria-describedby`; screen readers differ on reading a group's
+  description, so the control's own name must make sense alone. The title
+  is heard twice in reading order, as the heading and the group's name.
+- The title is an `h2` by default. Use `headingLevel={3}` or `4` under a
+  section heading, so the outline has no gaps.
+- The danger edge is not the only warning: the title and the destructive
+  button say it too, so it does not rest on colour.
+- The control keeps its own name: a Switch needs an `aria-label`, a
+  button names its action ("Delete workspace", not "Delete"), a field
+  has its label.
