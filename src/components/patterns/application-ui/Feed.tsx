@@ -1,5 +1,6 @@
-import type { ComponentProps, Key, ReactNode } from 'react'
+import type { ComponentProps, Key, MouseEventHandler, ReactNode } from 'react'
 import { cn } from '@/lib/utils'
+import { Badge } from '../../atomic-elements/Badge'
 import styles from './Feed.module.css'
 
 export interface FeedItem {
@@ -15,6 +16,12 @@ export interface FeedItem {
   at: Date
   /** What they wrote, in a box under the sentence. */
   comment?: ReactNode
+  /** Makes the sentence a link, and the whole row clickable. Keep links out of `actor` and `action` then: links cannot nest. */
+  href?: string
+  /** Runs when the link is followed, e.g. to mark the item read. */
+  onClick?: MouseEventHandler<HTMLAnchorElement>
+  /** Not seen yet: a dot at the end of the row, read out as "Unread". */
+  isUnread?: boolean
 }
 
 export interface FeedProps extends Omit<ComponentProps<'div'>, 'children'> {
@@ -53,19 +60,28 @@ export function Feed({
       ) : (
         <ol className={styles.items}>
           {items.map((item, i) => (
-            <li key={item.id ?? i} className={styles.item}>
+            <li key={item.id ?? i} className={styles.item} data-unread={item.isUnread || undefined}>
               <span className={styles.media} aria-hidden="true">
                 {item.media}
               </span>
               <div className={styles.body}>
                 <p className={styles.sentence}>
-                  <strong>{item.actor}</strong> {item.action}{' '}
+                  {item.href ? (
+                    <a href={item.href} onClick={item.onClick} className={styles.link}>
+                      <strong>{item.actor}</strong> {item.action}
+                    </a>
+                  ) : (
+                    <>
+                      <strong>{item.actor}</strong> {item.action}
+                    </>
+                  )}{' '}
                   <time className={styles.time} dateTime={item.at.toISOString()}>
                     {formatTime(item.at)}
                   </time>
                 </p>
                 {item.comment && <div className={styles.comment}>{item.comment}</div>}
               </div>
+              {item.isUnread && <Badge isDot aria-label="Unread" className={styles.unread} />}
             </li>
           ))}
         </ol>

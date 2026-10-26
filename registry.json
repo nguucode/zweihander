@@ -1765,10 +1765,11 @@
       "name": "feed",
       "type": "registry:block",
       "title": "Feed",
-      "description": "Application UI pattern: a feed or timeline of events, each a sentence of who did what and when, with an avatar or icon, an optional comment under it, a connecting line, an empty state and an optional comment box.",
+      "description": "Application UI pattern: a feed or timeline of events, each a sentence of who did what and when, with an avatar or icon, an optional comment under it, an optional link and unread dot, a connecting line, an empty state and an optional comment box.",
       "registryDependencies": [
         "https://ontheshore.biz/zweihander/r/utils.json",
-        "https://ontheshore.biz/zweihander/r/tokens.json"
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/badge.json"
       ],
       "files": [
         {
@@ -1780,6 +1781,34 @@
           "path": "src/components/patterns/application-ui/Feed.module.css",
           "type": "registry:component",
           "target": "components/zweihander/patterns/application-ui/Feed.module.css"
+        }
+      ]
+    },
+    {
+      "name": "notification-center",
+      "type": "registry:block",
+      "title": "Notification Center",
+      "description": "Application UI pattern: NotificationCenter, a bell for the Top Bar with the unread count that opens a panel of notifications in a Popover, and NotificationPanel, the inside on its own: a heading with Mark all as read and your actions, optional All and Unread tabs, rows as Feed sentences that link and carry an unread dot, and an empty state.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/icon.json",
+        "https://ontheshore.biz/zweihander/r/badge.json",
+        "https://ontheshore.biz/zweihander/r/button.json",
+        "https://ontheshore.biz/zweihander/r/tabs.json",
+        "https://ontheshore.biz/zweihander/r/popover.json",
+        "https://ontheshore.biz/zweihander/r/feed.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/patterns/application-ui/NotificationCenter.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/patterns/application-ui/NotificationCenter.tsx"
+        },
+        {
+          "path": "src/components/patterns/application-ui/NotificationCenter.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/patterns/application-ui/NotificationCenter.module.css"
         }
       ]
     },

@@ -1,0 +1,97 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks'
+import * as NotificationCenterStories from './NotificationCenter.stories'
+
+<Meta of={NotificationCenterStories} />
+
+# Notification Center
+
+What needs your attention across the app: a bell in the [Top
+Bar](?path=/docs/patterns-application-ui-top-bar--docs) with the unread
+count on it, and a panel under it listing the notifications, newest
+first, unread ones marked with a dot. After Catalyst Blocks,
+Notifications.
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/notification-center.json
+```
+
+## In the Top Bar
+
+`NotificationCenter` is the bell and the panel. The bell is a ghost icon
+Button with a floating [Badge](?path=/docs/components-atomic-elements-badge--docs)
+for the unread count, and opens the panel in a
+[Popover](?path=/docs/components-overlays-popover--docs). The rows are a
+[Feed](?path=/docs/patterns-application-ui-feed--docs) without the
+connecting line: each is a sentence, `href` makes the whole row a link,
+and `isUnread` puts a dot at its end and counts it.
+
+<Canvas of={NotificationCenterStories.Default} />
+
+<Canvas of={NotificationCenterStories.Open} />
+
+## With tabs
+
+`hasTabs` adds All and Unread tabs; Unread carries the count, and shows
+`emptyUnread` once everything is read. `NotificationPanel` is the inside
+on its own, for a [Drawer](?path=/docs/components-overlays-drawer--docs)
+or a column of a page.
+
+<Canvas of={NotificationCenterStories.WithTabs} />
+
+## Empty
+
+No items shows `empty` in place of the list; the bell has no count and
+Mark all as read is disabled.
+
+<Canvas of={NotificationCenterStories.Empty} />
+
+## Props
+
+<ArgTypes of={NotificationCenterStories} />
+
+`NotificationPanel` takes the same props except `label`, `side`, `align`,
+`open`, `defaultOpen`, `onOpenChange` and `container`, which belong to
+the bell and its Popover. The pattern owns no data: `onMarkAllRead` is
+where you set every `isUnread` to false, and an item's `onClick` runs
+when its link is followed, to mark that one read.
+
+A notification that arrives while the panel is closed only changes the
+count. When it needs attention now, also raise a
+[Toast](?path=/docs/components-notifications-toast--docs): the count is
+not announced, and the bell is easy to miss.
+
+## Layout
+
+- The panel is as wide as a Popover goes (22rem), and narrower when the
+  window is.
+- It is no taller than the room under the bell. The list scrolls; the
+  header stays pinned at the top.
+- The header wraps: the actions drop under the heading when they do
+  not fit beside it.
+- The unread dot has a column of its own at the end of the row, so the
+  sentence never runs under it. Long names and file names break anywhere
+  rather than overflow.
+
+<Canvas of={NotificationCenterStories.LongContent} />
+
+## Differences from the spec
+
+- **Settings** is not a built-in button: `actions` takes what the app
+  has, such as a More menu with View all and Notification settings.
+- **Tabs** are optional; a short list reads fine without them.
+- **Time** is the Feed's: pass a relative `formatTime` ("5 minutes ago")
+  as the stories do.
+
+## Accessibility
+
+- The bell's name carries the count ("Notifications, 3 unread"); the
+  floating badge is hidden, so the count is said once.
+- The panel is a dialog named "Notifications". Opening it moves focus
+  inside; Escape closes it and returns focus to the bell.
+- A heading (level 2 by default, `headingLevel` to change it) names the
+  panel for heading navigation.
+- The notifications are a list. A row with `href` is one link: the
+  sentence is its text, and the whole row is its target.
+- An unread row ends with a dot named "Unread", so the state is heard
+  as well as seen.
+- Mark all as read is disabled when nothing is unread.

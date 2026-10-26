@@ -3387,6 +3387,15 @@
     },
     {
       "kind": "pattern",
+      "id": "patterns-application-ui-notification-center",
+      "name": "Notification Center",
+      "category": "Application UI",
+      "status": "experimental",
+      "storyId": "patterns-application-ui-notification-center--default",
+      "props": []
+    },
+    {
+      "kind": "pattern",
       "id": "patterns-application-ui-saved-views",
       "name": "Saved Views",
       "category": "Application UI",

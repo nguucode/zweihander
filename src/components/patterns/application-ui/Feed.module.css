@@ -22,6 +22,16 @@
   gap: var(--space-3);
 }
 
+/* The dot takes a column of its own at the end, so text never runs under it. */
+.item[data-unread] {
+  grid-template-columns: var(--avatar-sm) minmax(0, 1fr) auto;
+}
+
+/* Level with the media's centre, so it sits on the first line. */
+.unread {
+  margin-block-start: calc((var(--avatar-sm) - var(--badge-dot-md)) / 2);
+}
+
 .connected .item:not(:last-child)::before {
   content: '';
   position: absolute;
@@ -61,12 +71,36 @@
   font-weight: 500;
 }
 
+/* The row is the target: the link's box stretches over the whole item. */
+.link {
+  color: inherit;
+  text-decoration: none;
+}
+.link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+.link:hover {
+  text-decoration: underline;
+}
+.link:focus-visible {
+  outline: none;
+}
+.link:focus-visible::after {
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: var(--focus-offset);
+  border-radius: var(--radius-sm);
+}
+
 .time {
   color: var(--muted-foreground);
   white-space: nowrap;
 }
 
 .comment {
+  /* Above a linked row's stretched target, so links in the comment work. */
+  position: relative;
   padding: var(--space-2) var(--space-3);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);

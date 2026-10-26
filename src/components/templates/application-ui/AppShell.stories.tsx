@@ -9,6 +9,7 @@ import { Card } from '@/components/data-display/Card'
 import { Search } from '@/components/inputs/Search'
 import { Menu } from '@/components/navigation/Menu'
 import { NavSidebar, NavSidebarButton, type NavSidebarEntry } from '@/components/patterns/application-ui/NavSidebar'
+import { NotificationCenter } from '@/components/patterns/application-ui/NotificationCenter'
 import { TopBar, TopBarNav } from '@/components/patterns/application-ui/TopBar'
 import { AppShell, type AppShellLayout, type AppShellSurface } from './AppShell'
 import { Stats } from '@/components/patterns/application-ui/Stats'
@@ -76,9 +77,13 @@ const sidebar = (collapsible = false, withTopBarItems = true, onDeepCanvas = fal
 
 const headerEnd = (
   <>
-    <Button variant="secondary" appearance="ghost" isIconOnly aria-label="Notifications">
-      <Icon name="info" />
-    </Button>
+    <NotificationCenter
+      items={[
+        { id: 1, media: <Icon name="warning" />, actor: 'INV-2039', action: 'is 14 days overdue', at: new Date(2026, 9, 27, 9), href: '#inv-2039', isUnread: true },
+        { id: 2, media: <Avatar initials="LT" size="sm" />, actor: 'Linh Tran', action: 'approved PO-118', at: new Date(2026, 9, 26, 16), href: '#po-118', isUnread: true },
+        { id: 3, media: <Icon name="success" />, actor: 'September close', action: 'is ready to review', at: new Date(2026, 9, 24, 10), href: '#close' },
+      ]}
+    />
     <Menu
       align="end"
       trigger={
