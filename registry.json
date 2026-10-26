@@ -1355,6 +1355,29 @@
       ]
     },
     {
+      "name": "table-chart",
+      "type": "registry:block",
+      "title": "Table Chart Switch",
+      "description": "Application UI pattern: one set of records as a table or a chart, switched with tabs, under the same filters.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/tabs.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/patterns/application-ui/TableChartSwitch.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/patterns/application-ui/TableChartSwitch.tsx"
+        },
+        {
+          "path": "src/components/patterns/application-ui/TableChartSwitch.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/patterns/application-ui/TableChartSwitch.module.css"
+        }
+      ]
+    },
+    {
       "name": "filter-bar",
       "type": "registry:block",
       "title": "Filter Bar",

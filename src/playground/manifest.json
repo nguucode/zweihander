@@ -3029,6 +3029,15 @@
     },
     {
       "kind": "pattern",
+      "id": "patterns-application-ui-table-chart-switch",
+      "name": "Table Chart Switch",
+      "category": "Application UI",
+      "status": "experimental",
+      "storyId": "patterns-application-ui-table-chart-switch--default",
+      "props": []
+    },
+    {
+      "kind": "pattern",
       "id": "patterns-application-ui-top-bar",
       "name": "Top Bar",
       "category": "Application UI",
