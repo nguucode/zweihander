@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState, type ComponentProps, type FormEvent, type ReactNode } from 'react'
+import { useState, type ComponentProps, type FormEvent, type ReactNode } from 'react'
 import { Icon } from '@/lib/icon'
 import { Avatar } from '../../atomic-elements/Avatar'
 import { Button } from '../../buttons/Button'
@@ -10,7 +10,7 @@ import { PasswordInput, defaultPasswordRules } from '../../inputs/PasswordInput'
 import { TextInput } from '../../inputs/TextInput'
 import { Textarea } from '../../inputs/Textarea'
 import { Menu } from '../../navigation/Menu'
-import { Modal } from '../../overlays/Modal'
+import { ConfirmDialog } from '../../overlays/ConfirmDialog'
 import { FormFieldGroup, FormSection } from '../../patterns/application-ui/FormLayouts'
 import { NavSidebar } from '../../patterns/application-ui/NavSidebar'
 import { TopBar } from '../../patterns/application-ui/TopBar'
@@ -138,7 +138,7 @@ export function Settings({ defaultSection = 'profile', onSave, onDeleteAccount, 
             <div hidden={section !== 'account'} className={styles.panel}>
               {/* Straight to onSave: a password is never kept in page state. */}
               <PasswordForm onSave={onSave} />
-              <DangerZone onDeleteAccount={onDeleteAccount} />
+              <DangerZone username={saved.profile.username} onDeleteAccount={onDeleteAccount} />
             </div>
             <SectionForm id="notifications" hidden={section !== 'notifications'} saved={saved.notifications} onSave={save}>
               {(v) => (
@@ -289,11 +289,8 @@ function PasswordForm({ onSave }: { onSave?: OnSave }) {
   )
 }
 
-/** What cannot be undone, last on the page and confirmed in an alert dialog. */
-function DangerZone({ onDeleteAccount }: { onDeleteAccount?: () => void }) {
-  const [open, setOpen] = useState(false)
-  // The safe choice has focus when the dialog opens, so Enter cannot delete.
-  const cancel = useRef<HTMLButtonElement>(null)
+/** What cannot be undone, last on the page and confirmed by typing the username. */
+function DangerZone({ username, onDeleteAccount }: { username: string; onDeleteAccount?: () => void }) {
   return (
     <FormSection
       className={styles.danger}
@@ -301,33 +298,16 @@ function DangerZone({ onDeleteAccount }: { onDeleteAccount?: () => void }) {
       description="Your profile, projects and files are deleted for good. This cannot be undone."
     >
       <div>
-        <Modal
-          isAlert
-          open={open}
-          onOpenChange={setOpen}
-          initialFocus={cancel}
+        <ConfirmDialog
           title="Delete your account?"
           description="Your profile, projects and files are deleted for good. You cannot undo this."
+          confirmLabel="Delete account"
+          confirmText={username}
+          onConfirm={() => onDeleteAccount?.()}
           trigger={
             <Button variant="destructive" appearance="outlined">
               Delete account
             </Button>
-          }
-          footer={
-            <>
-              <Button ref={cancel} variant="secondary" appearance="outlined" onClick={() => setOpen(false)}>
-                Cancel
-              </Button>
-              <Button
-                variant="destructive"
-                onClick={() => {
-                  setOpen(false)
-                  onDeleteAccount?.()
-                }}
-              >
-                Delete account
-              </Button>
-            </>
           }
         />
       </div>

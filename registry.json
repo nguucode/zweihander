@@ -875,6 +875,32 @@
       ]
     },
     {
+      "name": "confirm-dialog",
+      "type": "registry:component",
+      "title": "Confirm Dialog",
+      "description": "Alert dialog that asks before a destructive action: warning icon, the action as a question, its consequence, Cancel with focus, a destructive button, and optional type-to-confirm, on Modal.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/icon.json",
+        "https://ontheshore.biz/zweihander/r/modal.json",
+        "https://ontheshore.biz/zweihander/r/button.json",
+        "https://ontheshore.biz/zweihander/r/text-input.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/overlays/ConfirmDialog.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/overlays/ConfirmDialog.tsx"
+        },
+        {
+          "path": "src/components/overlays/ConfirmDialog.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/overlays/ConfirmDialog.module.css"
+        }
+      ]
+    },
+    {
       "name": "menu",
       "type": "registry:component",
       "title": "Menu",
@@ -1823,12 +1849,12 @@
         "https://ontheshore.biz/zweihander/r/text-input.json",
         "https://ontheshore.biz/zweihander/r/textarea.json",
         "https://ontheshore.biz/zweihander/r/menu.json",
-        "https://ontheshore.biz/zweihander/r/modal.json",
         "https://ontheshore.biz/zweihander/r/form-layouts.json",
         "https://ontheshore.biz/zweihander/r/nav-sidebar.json",
         "https://ontheshore.biz/zweihander/r/top-bar.json",
         "https://ontheshore.biz/zweihander/r/vertical-nav.json",
-        "https://ontheshore.biz/zweihander/r/app-shell.json"
+        "https://ontheshore.biz/zweihander/r/app-shell.json",
+        "https://ontheshore.biz/zweihander/r/confirm-dialog.json"
       ],
       "files": [
         {

@@ -2682,6 +2682,51 @@
     },
     {
       "kind": "component",
+      "id": "components-overlays-confirm-dialog",
+      "name": "Confirm Dialog",
+      "category": "Overlays",
+      "status": "beta",
+      "storyId": "components-overlays-confirm-dialog--default",
+      "props": [
+        {
+          "name": "title",
+          "control": "text",
+          "default": "Delete “Atlas”?",
+          "description": "The action, as a question: \"Delete “Atlas”?\". Names the dialog; the warning icon is not part of the name."
+        },
+        {
+          "name": "description",
+          "control": "text",
+          "default": "Its 214 files and every comment on them are deleted for everyone. You cannot undo this.",
+          "description": "Required: what happens, to what, and that it cannot be undone. Read as the dialog's description."
+        },
+        {
+          "name": "confirmLabel",
+          "control": "text",
+          "default": "Delete project",
+          "description": "Required: the destructive button, named after what it does (\"Delete project\"), never \"OK\"."
+        },
+        {
+          "name": "cancelLabel",
+          "control": "text",
+          "default": "Cancel",
+          "description": "The safe button. It has focus when the dialog opens."
+        },
+        {
+          "name": "confirmText",
+          "control": "text",
+          "description": "Type to confirm: adds a field, and the confirm button stays disabled until the reader types this exactly (case-sensitive, spaces around it ignored). Use the name of what is deleted. Only for a delete that is large and cannot be undone; empty means no field."
+        },
+        {
+          "name": "defaultOpen",
+          "control": "boolean",
+          "default": false,
+          "description": "Open on first render, uncontrolled."
+        }
+      ]
+    },
+    {
+      "kind": "component",
       "id": "components-overlays-drawer",
       "name": "Drawer",
       "category": "Overlays",

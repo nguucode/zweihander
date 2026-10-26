@@ -1,0 +1,19 @@
+.heading {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-inline);
+}
+
+/* One line tall, so it sits on the title's first line when the title wraps. */
+.icon {
+  flex: none;
+  inline-size: var(--icon-md);
+  block-size: 1lh;
+  color: var(--destructive);
+}
+
+/* The text to type, set apart from the sentence around it. */
+.phrase {
+  font-family: var(--font-mono);
+  font-weight: 600;
+}
