@@ -3305,6 +3305,33 @@
     },
     {
       "kind": "pattern",
+      "id": "patterns-application-ui-feed",
+      "name": "Feed",
+      "category": "Application UI",
+      "status": "experimental",
+      "storyId": "patterns-application-ui-feed--simple",
+      "props": [
+        {
+          "name": "role",
+          "control": "text",
+          "default": "region"
+        },
+        {
+          "name": "hasConnector",
+          "control": "boolean",
+          "default": true,
+          "description": "The vertical line joining one event to the next. Off for a short, loose list."
+        },
+        {
+          "name": "empty",
+          "control": "text",
+          "default": "No activity yet.",
+          "description": "Shown instead of the list when there are no items."
+        }
+      ]
+    },
+    {
+      "kind": "pattern",
       "id": "patterns-application-ui-filter-bar",
       "name": "Filter Bar",
       "category": "Application UI",

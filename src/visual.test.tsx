@@ -89,6 +89,7 @@ const STORIES: Record<string, { story: string; args?: Record<string, unknown>; p
   'patterns/application-ui/Session': { story: 'Inactive' },
   'patterns/application-ui/VerticalNav': { story: 'Grouped' },
   'patterns/application-ui/ActionPanel': { story: 'Danger' },
+  'patterns/application-ui/Feed': { story: 'WithComments' },
   'states/EmptyState': { story: 'Default' },
   'states/ErrorState': { story: 'Default' },
   'states/SuccessState': { story: 'Default' },

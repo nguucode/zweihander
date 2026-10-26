@@ -133,11 +133,6 @@
   color: var(--foreground);
 }
 
-/* In the aside the list starts at the column's edge. */
-.activity {
-  padding: 0;
-}
-
 .srOnly {
   position: absolute;
   inline-size: 1px;

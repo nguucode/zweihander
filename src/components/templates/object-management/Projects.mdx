@@ -69,10 +69,11 @@ Table / Chart switch, the table, and the footer with the pages.
 with your data, the `setProjects` calls (Archive) with calls to your API,
 and the `views` state with the views you store per user. With many rows,
 filter, sort and page on the server: the page slices locally only because
-the sample is small. The activity list lives in `ProjectActivity.tsx`,
-shared with
-[Project Detail](?path=/docs/templates-object-management-project-detail--docs),
-until the Feed pattern replaces it.
+the sample is small. The activity list is the
+[Feed](?path=/docs/patterns-application-ui-feed--docs) pattern; `ProjectActivity.tsx` turns a project's events into its
+sentences, and
+[Project Detail](?path=/docs/templates-object-management-project-detail--docs)
+shares it.
 
 ## Props
 

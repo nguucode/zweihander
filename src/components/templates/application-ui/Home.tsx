@@ -151,7 +151,7 @@ export function Home({
         // The aside is the landmark named "Recent activity"; the timeline inside it takes no name of its own.
         <div className={styles.asideSection}>
           <h2 className={styles.sectionTitle}>Recent activity</h2>
-          <ActivityTimeline events={recentActivity} className={styles.activity} />
+          <ActivityTimeline events={recentActivity} />
         </div>
       }
       asideLabel="Recent activity"
