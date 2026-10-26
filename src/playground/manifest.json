@@ -3001,6 +3001,15 @@
     },
     {
       "kind": "pattern",
+      "id": "patterns-application-ui-saved-views",
+      "name": "Saved Views",
+      "category": "Application UI",
+      "status": "experimental",
+      "storyId": "patterns-application-ui-saved-views--default",
+      "props": []
+    },
+    {
+      "kind": "pattern",
       "id": "patterns-application-ui-stats",
       "name": "Stats",
       "category": "Application UI",

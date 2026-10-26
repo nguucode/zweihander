@@ -77,6 +77,7 @@ const STORIES: Record<string, { story: string; args?: Record<string, unknown>; p
   'patterns/application-ui/Stats': { story: 'WithTrend' },
   'patterns/application-ui/CardHeading': { story: 'WithIconAndRule' },
   'patterns/application-ui/FilterBar': { story: 'Default' },
+  'patterns/application-ui/SavedViews': { story: 'Default' },
   'states/EmptyState': { story: 'Default' },
   'states/ErrorState': { story: 'Default' },
   'states/SuccessState': { story: 'Default' },
