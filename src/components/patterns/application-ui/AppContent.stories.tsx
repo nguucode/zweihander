@@ -4,11 +4,17 @@ import { Theme } from '@/theme/Theme'
 import { Card } from '@/components/data-display/Card'
 import { AppShell } from '@/components/templates/application-ui/AppShell'
 import { AppContent } from './AppContent'
-import { PageHeading } from './PageHeading'
+
+const heading = (
+  <div style={{ display: 'grid', gap: 'var(--space-inline)' }}>
+    <h1 style={{ margin: 0, fontFamily: 'var(--font-heading)', fontSize: 'var(--text-heading-xl)', lineHeight: 'var(--leading-heading-xl)', fontWeight: 500 }}>Dashboard</h1>
+    <p style={{ margin: 0, color: 'var(--muted-foreground)' }}>What happened across your projects this month.</p>
+  </div>
+)
 
 const page = (
   <div style={{ display: 'grid', gap: 'var(--space-group)' }}>
-    <PageHeading title="Dashboard" description="What happened across your projects this month." />
+    {heading}
     <div style={{ display: 'grid', gap: 'var(--space-group)', gridTemplateColumns: 'repeat(auto-fit, minmax(10rem, 1fr))' }}>
       {['Active projects', 'Open tasks', 'Team members'].map((label) => (
         <Card key={label} appearance="surface" size="sm">

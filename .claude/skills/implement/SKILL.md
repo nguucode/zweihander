@@ -31,5 +31,5 @@ Once it passes, call the Skill tool with "matt-code-review" to review the work. 
 ## Ship
 
 1. Commit your work to the current branch.
-2. Push the branch and open a PR against `main`; call the Skill tool with "pr" to write the body. If the change is visual on purpose, say so in the PR and ask the user to add the `update screenshots` label.
+2. Run `npm run ship:check`: it fetches origin, fast-forwards the branch when the remote is ahead (the Visual baselines workflow commits to PR branches), and checks the changeset against a fresh `origin/main`. If it stops, fix the one-line reason and run it again. Then push the branch and open a PR against `main`; call the Skill tool with "pr" to write the body. If the change is visual on purpose, say so in the PR and ask the user to add the `update screenshots` label.
 3. Report the PR link. Do not merge: the user merges once CI is green.

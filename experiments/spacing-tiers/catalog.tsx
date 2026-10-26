@@ -60,7 +60,6 @@ const STORIES: Record<string, { story: string; args?: Record<string, unknown> }>
   'patterns/application-ui/DataTablePage': { story: 'ToolbarAndPagination' },
   'patterns/application-ui/DescriptionList': { story: 'Columns' },
   'patterns/application-ui/FormLayouts': { story: 'SettingsSections' },
-  'patterns/application-ui/PageHeading': { story: 'WithBreadcrumbsAndMeta' },
   'patterns/application-ui/Stats': { story: 'WithTrend' },
   'states/EmptyState': { story: 'Default' },
   'states/ErrorState': { story: 'Default' },

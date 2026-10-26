@@ -504,7 +504,7 @@ function Notes() {
         the calc() cases the research found but holding 64 and 80 until a page needs them.
       </li>
       <li>
-        <strong>Heading to content reads as 56px.</strong> <code>PageHeading</code> adds 24px padding and a rule, then the page gap adds 32px. Worth
+        <strong>Heading to content reads as 56px.</strong> The page heading adds 24px padding and a rule, then the page gap adds 32px. Worth
         deciding whether the heading keeps its own bottom padding when it sits in a page that already spaces sections.
       </li>
     </>
