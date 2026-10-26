@@ -3292,6 +3292,22 @@
       "props": []
     },
     {
+      "kind": "pattern",
+      "id": "patterns-application-ui-vertical-nav",
+      "name": "Vertical Nav",
+      "category": "Application UI",
+      "status": "experimental",
+      "storyId": "patterns-application-ui-vertical-nav--with-icons",
+      "props": [
+        {
+          "name": "currentHref",
+          "control": "text",
+          "default": "#members",
+          "description": "The href of the section on screen: that item gets `aria-current=\"page\"` and the selected fill."
+        }
+      ]
+    },
+    {
       "kind": "template",
       "id": "templates-application-ui-app-shell",
       "name": "App Shell",
