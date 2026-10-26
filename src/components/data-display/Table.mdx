@@ -10,7 +10,8 @@ import * as TableStories from './Table.stories'
 <DocTab value="overview">
 
 Rows of records with the same fields, to scan and compare: projects,
-invoices, members. Columns can sort, rows can be selected and expanded.
+invoices, members. Columns can sort, rows can be selected, expanded and
+acted on, and a total row can sum them up.
 
 <Status of={TableStories} />
 
@@ -28,6 +29,8 @@ its rows and keep its header in view.
 | `isSelectable` | Acting on several rows at once: archive, export, assign. |
 | `expandedContent` | Details that belong to one row but do not fit in a column: a description, a timeline, line items. |
 | `hasStickyHeader` | Long tables that scroll inside a fixed height, so the column names stay in view. |
+| `rowActions` | Actions on one record (edit, duplicate, archive) that do not earn a column: a menu at the row's end. |
+| `footer` on a column | A total row under the rows: sums, counts, averages. |
 | `emptyState` | Saying why there are no rows, and what to do: clear a search, add the first one. |
 
 <Canvas of={TableStories.Default} />
@@ -38,6 +41,16 @@ Rows with details open under themselves. Expansion is independent of
 selection and survives sorting:
 
 <Canvas of={TableStories.ExpandableRows} />
+
+A menu at the end of each row. A row with nothing to do gets no button:
+
+<Canvas of={TableStories.RowActions} />
+
+A total row under the rows, which sorting leaves at the bottom. The table
+does not add anything up: you pass each column's `footer`, so you decide
+whether it totals this page or every row.
+
+<Canvas of={TableStories.TotalRow} />
 
 <Canvas of={TableStories.StickyHeader} />
 
@@ -57,7 +70,7 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/table.json
 
 - Source: [src/components/data-display/Table.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/data-display/Table.tsx)
 - Spec: [uiguideline.com/components/table](https://www.uiguideline.com/components/table)
-- Behaviour: a native `<table>`; selection uses the kit's [Checkbox](?path=/docs/components-controls-checkbox--docs), expansion its [Button](?path=/docs/components-buttons-button--docs)
+- Behaviour: a native `<table>`; selection uses the kit's [Checkbox](?path=/docs/components-controls-checkbox--docs), expansion its [Button](?path=/docs/components-buttons-button--docs), row actions its [Menu](?path=/docs/components-navigation-menu--docs)
 - Figma: not in the library yet
 
 </DocTab>
@@ -71,8 +84,9 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/table.json
 
 The table sits in a container that scrolls sideways on a narrow screen
 rather than squeezing the columns. The selection column comes first, then
-the expand column; a row whose `expandedContent` returns nothing leaves its
-expand cell empty.
+the expand column; the actions column comes last. A row whose
+`expandedContent` or `rowActions` returns nothing leaves that cell empty.
+The total row is a `<tfoot>`, so it stays at the bottom whatever the sort.
 
 ## Measurements
 
@@ -110,6 +124,8 @@ Each density is a row height. Everything else is the same in both.
     { part: 'Selection and expand columns', property: 'Width', token: '--space-10' },
     { part: 'Expand column', property: 'Inline start padding', token: '--space-inline' },
     { part: 'Expand icon', property: 'Size', token: '--icon-md' },
+    { part: 'Actions column', property: 'Width', token: '--space-10' },
+    { part: 'Actions column', property: 'Inline end padding', token: '--space-inline' },
     { part: 'Expanded row', property: 'Block start padding', token: '--space-2' },
     { part: 'Expanded row', property: 'Inline and block end padding', token: '--space-4' },
     { part: 'Caption', property: 'Block padding', token: '--space-3' },
@@ -143,6 +159,7 @@ Switch the theme and the accent in the toolbar: the values follow.
     { part: 'Container', property: 'Background', token: '--card' },
     { part: 'Cell', property: 'Colour', token: '--card-foreground' },
     { part: 'Divider', property: 'Colour', token: '--border' },
+    { part: 'Total row', property: 'Rule above it', token: '--border' },
   ]}
 />
 
@@ -245,6 +262,9 @@ it is the one under the pointer or the keyboard.
 - `width`: any CSS width, e.g. `8rem` or `20%`.
 - `isRowHeader`: makes the column's cells `<th scope="row">`, the name a
   row is known by. Usually the first column.
+- `footer`: this column's cell in the total row, e.g. a sum. Any column
+  with one adds the row; put the label ("Total") on the row header column.
+  Hidden while there are no rows.
 
 `TableSort` is `{ key, direction }`, with direction `ascending` or
 `descending`.
@@ -329,6 +349,13 @@ Pass `expandedIds` to open rows from outside the table:
   is announced like the others.
 - The content cell spans every column, so it is read as one cell under its
   row.
+- Each row actions button is named after the row header ("Actions for
+  Atlas") and reports `aria-haspopup="menu"`. Enter opens the menu,
+  Escape closes it, and focus returns to the button. A row with no items
+  has no button.
+- The actions column's header is "Actions", visually hidden.
+- The total row is in a `<tfoot>` with one cell per column, so each total
+  is announced under its column; the label column is its row header.
 
 </DocTab>
 </DocTabs>

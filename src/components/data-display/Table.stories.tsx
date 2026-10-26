@@ -1,10 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useState } from 'react'
-import { expect, fn, userEvent, within } from 'storybook/test'
+import { expect, fn, userEvent, waitFor, within } from 'storybook/test'
 import { expectAnatomy } from '../../../.storybook/blocks'
 import { Icon } from '@/lib/icon'
 import { Tag } from '../atomic-elements/Tag'
 import { Button } from '../buttons/Button'
+import type { MenuEntry } from '../navigation/Menu'
 import { EmptyState } from '../states/EmptyState'
 import { Table, type TableColumn } from './Table'
 
@@ -54,7 +55,7 @@ const meta = {
   argTypes: {
     columns: {
       description:
-        'The columns, in order: `{ key, header, cell?, sortable?, sortValue?, align?, width?, isRowHeader? }`. See TableColumn below the table.',
+        'The columns, in order: `{ key, header, cell?, sortable?, sortValue?, align?, width?, isRowHeader?, footer? }`. See TableColumn below the table.',
       control: false,
       table: { type: { summary: 'TableColumn<Row>[]' } },
     },
@@ -133,6 +134,12 @@ const meta = {
       description: 'Called with every open id when an expand button is pressed.',
       control: false,
       table: { type: { summary: '(ids: string[]) => void' } },
+    },
+    rowActions: {
+      description:
+        'The items of a menu at the end of each row, opened by a "more" button named after the row ("Actions for Atlas"). A row that returns no items gets no button.',
+      control: false,
+      table: { type: { summary: '(row: Row) => MenuEntry[] | null | undefined' } },
     },
     density: {
       description: 'Row height. `md` is `--row-height` (48px Default, 36px Compact density); `sm` is one `--space-inline` shorter (40, 32).',
@@ -260,6 +267,8 @@ export const Compact: Story = { args: { density: 'sm', showCaption: true } }
 export const Empty: Story = {
   args: {
     rows: [],
+    // A total of nothing is noise next to an empty state: no footer row.
+    columns: [{ ...columns[0], footer: 'Total' }, ...columns.slice(1)],
     emptyState: (
       <EmptyState
         size="sm"
@@ -272,6 +281,7 @@ export const Empty: Story = {
   },
   play: async ({ canvas }) => {
     await expect(canvas.getByRole('heading', { name: 'No projects match “zeta”' })).toBeVisible()
+    await expect(canvas.getAllByRole('rowgroup')).toHaveLength(2)
   },
 }
 
@@ -393,6 +403,75 @@ export const ControlledExpansion: Story = {
   },
 }
 
+/** What each row's menu does; archived projects have no actions, so no button. */
+const onAction = fn()
+const actions = (p: Project): MenuEntry[] =>
+  p.status === 'Archived'
+    ? []
+    : [
+        { label: 'Edit', onSelect: () => onAction('edit', p.id) },
+        { label: 'Duplicate', onSelect: () => onAction('duplicate', p.id) },
+        { type: 'separator' },
+        { label: 'Archive', isDestructive: true, onSelect: () => onAction('archive', p.id) },
+      ]
+
+/** The menu renders into <body>, outside the story's canvas. */
+const page = (el: HTMLElement) => within(el.ownerDocument.body)
+
+/** A menu at the end of each row, for actions on that one record. */
+export const RowActions: Story = {
+  args: { rowActions: actions, isSelectable: true },
+  play: async ({ canvas, step }) => {
+    await step('The column has a hidden header, and a row with no items has no button', async () => {
+      await expect(canvas.getByRole('columnheader', { name: 'Actions' })).toBeInTheDocument()
+      await expect(canvas.queryByRole('button', { name: 'Actions for Design tokens' })).toBeNull()
+    })
+    await step('The button is named after the row and opens its menu', async () => {
+      const atlas = canvas.getByRole('button', { name: 'Actions for Atlas' })
+      await expect(atlas).toHaveAttribute('aria-haspopup', 'menu')
+      await userEvent.click(atlas)
+      await userEvent.click(await page(atlas).findByRole('menuitem', { name: 'Archive' }))
+      await expect(onAction).toHaveBeenLastCalledWith('archive', 'p1')
+      await waitFor(() => expect(atlas).toHaveFocus())
+    })
+    await step('Enter opens it from the keyboard; Escape closes it', async () => {
+      const billing = canvas.getByRole('button', { name: 'Actions for Billing revamp' })
+      billing.focus()
+      await userEvent.keyboard('{Enter}')
+      const menu = await page(billing).findByRole('menu')
+      await waitFor(() => expect(menu).toBeVisible())
+      await userEvent.keyboard('{Escape}')
+      await waitFor(() => expect(billing).toHaveAttribute('aria-expanded', 'false'))
+      await waitFor(() => expect(billing).toHaveFocus())
+    })
+  },
+}
+
+/** Files summed in a footer row that sorting leaves at the bottom. */
+const totalled: TableColumn<Project>[] = columns.map((c) =>
+  c.key === 'name'
+    ? { ...c, footer: 'Total' }
+    : c.key === 'files'
+      ? { ...c, footer: projects.reduce((n, p) => n + p.files, 0).toLocaleString('en') }
+      : c,
+)
+
+export const TotalRow: Story = {
+  args: { columns: totalled, isSelectable: true, expandedContent: details },
+  play: async ({ canvas }) => {
+    const [, body, foot] = canvas.getAllByRole('rowgroup')
+    await expect(within(body).getAllByRole('row')).toHaveLength(4)
+    // The label is the total row's header, so its cells read "Total, Files".
+    await expect(within(foot).getByRole('rowheader', { name: 'Total' })).toBeInTheDocument()
+    await expect(within(foot).getAllByRole('cell').map((c) => c.textContent)).toContain('1,464')
+    // One cell per column, the checkbox and expand columns included, so it lines up.
+    await expect(within(foot).getByRole('row').children).toHaveLength(canvas.getAllByRole('columnheader').length)
+    // Sorting moves the rows, never the total.
+    await userEvent.click(within(canvas.getByRole('columnheader', { name: /Files/ })).getByRole('button'))
+    await expect(canvas.getAllByRole('row').at(-1)).toHaveTextContent('Total')
+  },
+}
+
 /** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
 export const anatomyParts = [
   { name: 'Caption', selector: 'caption', description: 'Names the table. Visually hidden unless showCaption.' },
@@ -403,21 +482,33 @@ export const anatomyParts = [
   { name: 'Row checkbox', selector: 'tbody [role="checkbox"]', description: 'Named after the row header: "Select Atlas".' },
   { name: 'Expand button', selector: 'tbody [aria-expanded]', description: 'With expandedContent: a ghost icon button. The chevron turns down when open.' },
   { name: 'Row header', selector: 'tbody th[scope="row"]', description: 'The column marked isRowHeader, medium weight: the name a row is known by.' },
+  { name: 'Row actions', selector: 'tbody [aria-haspopup="menu"]', description: 'With rowActions: a ghost "more" button at the end of the row that opens a Menu.' },
   {
     name: 'Expanded row',
     selector: 'tbody td[colspan]',
     description: 'One cell spanning every column, under its row, with no rule between them. Holds any layout.',
   },
+  { name: 'Total row', selector: 'tfoot tr', description: 'With a footer on any column: a semibold row under a rule, outside the sort.' },
 ]
 
-/** Every part present: caption shown, a sortable column, selection, one row open. */
+/** Every part present: caption shown, a sortable column, selection, one row open, row actions, a total. */
 export const Anatomy: Story = {
   tags: ['!dev'],
-  args: { showCaption: true, isSelectable: true, expandedContent: details, defaultExpandedIds: ['p1'], rows: projects.slice(0, 3) },
+  args: {
+    showCaption: true,
+    isSelectable: true,
+    expandedContent: details,
+    defaultExpandedIds: ['p1'],
+    rowActions: actions,
+    // Every project, so the total matches the rows on screen.
+    columns: totalled,
+  },
   play: async ({ canvasElement, canvas }) => {
     const found = await expectAnatomy(canvasElement, anatomyParts)
     await expect(found[7]).toHaveTextContent('Atlas')
-    await expect(found[8]).toHaveTextContent(/Sam Rivera owns Atlas/)
+    await expect(found[9]).toHaveTextContent(/Sam Rivera owns Atlas/)
+    await expect(found[10]).toHaveTextContent('Total')
+    await expect(canvas.getByRole('columnheader', { name: 'Actions' })).toBeInTheDocument()
     // The expand column is announced like the others, by a hidden header.
     await expect(canvas.getByRole('columnheader', { name: 'Details' })).toBeInTheDocument()
   },

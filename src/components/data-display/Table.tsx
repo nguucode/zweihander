@@ -5,6 +5,7 @@ import { Icon } from '@/lib/icon'
 import { cn } from '@/lib/utils'
 import { Button } from '../buttons/Button'
 import { Checkbox } from '../controls/Checkbox'
+import { Menu, type MenuEntry } from '../navigation/Menu'
 import styles from './Table.module.css'
 
 export interface TableColumn<Row> {
@@ -22,6 +23,8 @@ export interface TableColumn<Row> {
   width?: string
   /** The row's header cell (`<th scope="row">`): usually the name column. */
   isRowHeader?: boolean
+  /** Fills this column's cell in a total row under the rows, e.g. a sum. Any column with one adds the row. */
+  footer?: ReactNode
 }
 
 export interface TableSort {
@@ -59,6 +62,11 @@ export interface TableProps<Row> {
   expandedIds?: string[]
   defaultExpandedIds?: string[]
   onExpandedChange?: (ids: string[]) => void
+  /**
+   * The items of a menu at the end of each row, behind a "more" button named
+   * after the row. A row that returns no items gets no button.
+   */
+  rowActions?: (row: Row) => MenuEntry[] | null | undefined
   /** Row height. `md` is `--row-height` (48px Default, 36px Compact density); `sm` is one `--space-inline` shorter (40, 32). */
   density?: 'sm' | 'md'
   /** Keep the header row in view while the table scrolls inside its container. */
@@ -93,6 +101,7 @@ export function Table<Row>({
   expandedIds: expandedProp,
   defaultExpandedIds = [],
   onExpandedChange,
+  rowActions,
   density = 'md',
   hasStickyHeader = false,
   emptyState,
@@ -139,7 +148,9 @@ export function Table<Row>({
     onExpandedChange?.(ids)
   }
   const isExpandable = expandedContent !== undefined
-  const columnCount = columns.length + (isSelectable ? 1 : 0) + (isExpandable ? 1 : 0)
+  const columnCount = columns.length + (isSelectable ? 1 : 0) + (isExpandable ? 1 : 0) + (rowActions ? 1 : 0)
+  // A total of no rows is noise next to an empty state.
+  const hasFooter = shown.length > 0 && columns.some((c) => c.footer !== undefined)
   // Ids come from each row's place in `rows`, so sorting does not change them.
   const position = new Map(rows.map((row, i) => [row, i]))
   const ids = shown.map((row, i) => getRowId(row, position.get(row) ?? i))
@@ -149,6 +160,20 @@ export function Table<Row>({
     const v = header && (header.cell ? header.cell(row) : (row as Record<string, unknown>)[header.key])
     // The fallback counts from `rows`, so a sort does not rename the row.
     return typeof v === 'string' || typeof v === 'number' ? String(v) : `row ${(position.get(row) ?? 0) + 1}`
+  }
+  const rowMenu = (row: Row) => {
+    const items = rowActions?.(row)
+    return items?.length ? (
+      <Menu
+        align="end"
+        items={items}
+        trigger={
+          <Button variant="secondary" appearance="ghost" size="sm" isIconOnly aria-label={`Actions for ${rowName(row)}`}>
+            <Icon name="more" />
+          </Button>
+        }
+      />
+    ) : null
   }
   const allSelected = ids.length > 0 && ids.every((id) => selected.has(id))
   const someSelected = !allSelected && ids.some((id) => selected.has(id))
@@ -201,6 +226,11 @@ export function Table<Row>({
                 </th>
               )
             })}
+            {rowActions && (
+              <th scope="col" className={styles.actions}>
+                <span className={styles.srOnly}>Actions</span>
+              </th>
+            )}
           </tr>
         </thead>
         <tbody>
@@ -268,6 +298,7 @@ export function Table<Row>({
                         </Cell>
                       )
                     })}
+                    {rowActions && <td className={styles.actions}>{rowMenu(row)}</td>}
                   </tr>
                   {isExpanded && (
                     <tr className={styles.expandedRow}>
@@ -281,6 +312,28 @@ export function Table<Row>({
             })
           )}
         </tbody>
+        {hasFooter && (
+          <tfoot>
+            <tr>
+              {isSelectable && <td className={styles.select} />}
+              {isExpandable && <td className={styles.expand} />}
+              {columns.map((col) => {
+                const Cell = col.isRowHeader ? 'th' : 'td'
+                return (
+                  <Cell
+                    key={col.key}
+                    scope={col.isRowHeader ? 'row' : undefined}
+                    style={{ textAlign: col.align }}
+                    className={styles.td}
+                  >
+                    {col.footer}
+                  </Cell>
+                )
+              })}
+              {rowActions && <td className={styles.actions} />}
+            </tr>
+          </tfoot>
+        )}
       </table>
     </div>
   )
