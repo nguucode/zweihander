@@ -1,4 +1,6 @@
-import type { ComponentProps, ReactNode } from "react";
+"use client";
+
+import { useId, type ComponentProps, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import styles from "./FormLayouts.module.css";
 
@@ -71,6 +73,53 @@ export function FormSection({
 /** In a two-column FormSection, a field that takes the whole row. */
 export function FormFullWidth({ className, ...props }: ComponentProps<"div">) {
   return <div className={cn(styles.fullWidth, className)} {...props} />;
+}
+
+export interface FormFieldGroupProps extends ComponentProps<"fieldset"> {
+  /** Names the group: "Billing address", "By email". */
+  legend: ReactNode;
+  /** A line under the legend. Screen readers hear it with the group's name. */
+  description?: ReactNode;
+  /** The fields. Give each input `isFullWidth`. */
+  children: ReactNode;
+  /** Lay the group's fields out two to a row (one on narrow screens). */
+  columns?: 1 | 2;
+}
+
+/**
+ * Related fields inside a FormSection, under a legend: an address, a set of
+ * checkboxes. A `<fieldset>`, so `disabled` turns off every field in it. It
+ * takes a whole row of a two-column section and lays out its own columns.
+ */
+export function FormFieldGroup({
+  legend,
+  description,
+  children,
+  columns = 1,
+  className,
+  "aria-describedby": describedBy,
+  ...props
+}: FormFieldGroupProps) {
+  const descriptionId = useId();
+  return (
+    <fieldset
+      {...props}
+      className={cn(styles.group, className)}
+      aria-describedby={
+        cn(description && descriptionId, describedBy) || undefined
+      }
+    >
+      <legend className={styles.legend}>{legend}</legend>
+      {description && (
+        <p id={descriptionId} className={styles.description}>
+          {description}
+        </p>
+      )}
+      <div className={cn(styles.fields, columns === 2 && styles.twoColumns)}>
+        {children}
+      </div>
+    </fieldset>
+  );
 }
 
 export interface FormActionsProps extends ComponentProps<"div"> {

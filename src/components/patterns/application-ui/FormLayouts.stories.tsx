@@ -9,7 +9,7 @@ import { Select } from '@/components/inputs/Select'
 import { TextInput } from '@/components/inputs/TextInput'
 import { Textarea } from '@/components/inputs/Textarea'
 import { Modal } from '@/components/overlays/Modal'
-import { FormActions, FormFullWidth, FormSection } from './FormLayouts'
+import { FormActions, FormFieldGroup, FormFullWidth, FormSection } from './FormLayouts'
 
 const onSubmit = fn()
 const submit = (e: FormEvent<HTMLFormElement>) => {
@@ -62,11 +62,10 @@ export const SettingsSections: Story = {
         {personal}
       </FormSection>
       <FormSection title="Notifications" description="We will always tell you about important changes to your account.">
-        <fieldset style={{ display: 'grid', gap: 'var(--space-3)', margin: 0, padding: 0, border: 0 }}>
-          <legend style={{ marginBlockEnd: 'var(--space-3)', fontWeight: 500 }}>By email</legend>
+        <FormFieldGroup legend="By email">
           <Checkbox name="comments" label="Comments" helperText="When someone comments on your posting." defaultChecked />
           <Checkbox name="offers" label="Offers" helperText="When a candidate accepts or rejects an offer." />
-        </fieldset>
+        </FormFieldGroup>
         <RadioGroup
           label="Push notifications"
           name="push"
@@ -93,6 +92,7 @@ export const SettingsSections: Story = {
     const intro = canvas.getByRole('heading', { name: 'Profile' }).getBoundingClientRect()
     const field = canvas.getByRole('textbox', { name: 'Username' }).getBoundingClientRect()
     await expect(field.left).toBeGreaterThan(intro.right)
+    await expect(within(canvas.getByRole('group', { name: 'By email' })).getAllByRole('checkbox')).toHaveLength(2)
     await userEvent.type(canvas.getByRole('textbox', { name: 'City' }), 'Nha Trang')
     await userEvent.click(canvas.getByRole('button', { name: 'Save' }))
     await expect(onSubmit).toHaveBeenCalledWith(expect.objectContaining({ username: 'avastone', city: 'Nha Trang', country: 'Vietnam', comments: 'on', push: 'mentions' }))
@@ -166,6 +166,59 @@ export const InModal: Story = {
     await waitFor(() => expect(onSubmit).toHaveBeenCalledWith({ email: 'leo@example.com', role: 'Editor' }))
     await userEvent.keyboard('{Escape}')
     await waitFor(() => expect(within(document.body).queryByRole('dialog')).toBeNull())
+  },
+}
+
+/**
+ * Field groups: related fields under a legend inside one section. A group
+ * takes a whole row and lays out its own columns; `disabled` turns off
+ * every field in it.
+ */
+export const FieldGroups: Story = {
+  render: () => (
+    <form aria-label="Billing" onSubmit={submit} style={{ maxInlineSize: '48rem' }}>
+      <FormSection layout="stacked" columns={2} title="Billing">
+        <TextInput label="Company" name="company" isFullWidth defaultValue="Ontheshore" />
+        <TextInput label="Tax ID" name="taxId" isFullWidth />
+        <FormFieldGroup legend="Billing address" description="Printed on every invoice." columns={2}>
+          <FormFullWidth>
+            <TextInput label="Street address" name="street" autoComplete="street-address" isFullWidth />
+          </FormFullWidth>
+          <TextInput label="City" name="billingCity" autoComplete="address-level2" isFullWidth />
+          <TextInput label="Postal code" name="postalCode" autoComplete="postal-code" isFullWidth />
+        </FormFieldGroup>
+        <FormFieldGroup legend="Shipping address, managed by your organisation's administrator" disabled>
+          <TextInput label="Street address" name="shippingStreet" isFullWidth defaultValue="12 Tran Phu" />
+          <Select label="Country" name="shippingCountry" options={countries} defaultValue="Vietnam" isFullWidth />
+        </FormFieldGroup>
+      </FormSection>
+      <FormActions style={{ paddingBlockStart: 'var(--space-6)' }}>
+        <Button type="submit">Save</Button>
+      </FormActions>
+    </form>
+  ),
+  play: async ({ canvas }) => {
+    const billing = canvas.getByRole('group', { name: 'Billing address' })
+    await expect(billing).toHaveAccessibleDescription('Printed on every invoice.')
+    // The group takes the section's whole row and has its own two columns.
+    const width = (el: Element) => el.getBoundingClientRect().width
+    await waitFor(() =>
+      expect(width(billing)).toBeGreaterThan(width(canvas.getByRole('textbox', { name: 'Company' })) + width(canvas.getByRole('textbox', { name: 'Tax ID' }))),
+    )
+    await waitFor(() => {
+      const city = within(billing).getByRole('textbox', { name: 'City' }).getBoundingClientRect()
+      const postal = within(billing).getByRole('textbox', { name: 'Postal code' }).getBoundingClientRect()
+      expect(Math.abs(city.top - postal.top)).toBeLessThan(2)
+    })
+    // A disabled group disables its fields, and they are left out of the submit.
+    const shipping = canvas.getByRole('group', { name: /Shipping address/ })
+    await expect(within(shipping).getByRole('textbox', { name: 'Street address' })).toBeDisabled()
+    // Select's trigger is its own box; it dims like the text field does.
+    await expect(Number(getComputedStyle(within(shipping).getByRole('combobox', { name: 'Country' })).opacity)).toBeLessThan(1)
+    await userEvent.type(within(billing).getByRole('textbox', { name: 'City' }), 'Hanoi')
+    await userEvent.click(canvas.getByRole('button', { name: 'Save' }))
+    await expect(onSubmit).toHaveBeenCalledWith(expect.objectContaining({ company: 'Ontheshore', billingCity: 'Hanoi' }))
+    await expect(onSubmit.mock.lastCall?.[0]).not.toHaveProperty('shippingStreet')
   },
 }
 
