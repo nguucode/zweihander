@@ -13,8 +13,7 @@ with `TopBarNav` for links across it), the
 [App Content](?path=/docs/patterns-application-ui-app-content--docs)
 (`AppContent`, which the shell puts around its children), on the Theme's
 canvas, with no padding or gap of its own. The navigation stays put while
-the page scrolls, and on a phone it moves into a drawer that the top bar's
-menu button opens.
+the page scrolls, and on a phone the sidebar narrows to its icon rail.
 
 ```sh
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/app-shell.json
@@ -25,9 +24,10 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/app-shell.json
 The default, `layout="sidebar"`: the sidebar runs the full height and
 there is **no top bar** on wide screens. What a top bar would hold goes in
 the NavSidebar, laid out as in the Claude apps: the logo and the collapse
-button in its top row, the tenant switcher and search in its `header`, the
-account, notifications and help in its `footer`. The header only appears
-while the sidebar is in the drawer, to hold the menu button and the logo.
+button in its top row, the tenant switcher and search in its `header`,
+notifications, help and the account in its `footer`. Below 64rem the
+sidebar is the rail: its header and footer rows stay, as icons, and the
+header comes back above the page with the logo.
 
 <Canvas of={AppShellStories.WithSidebar} />
 
@@ -125,16 +125,18 @@ and footer stay, as icons.
 
 ## Top navigation
 
-No sidebar: a logo and `TopBarNav` links in the header. `mobileNavigation`
-says what the drawer holds on a phone, where the links move.
+No sidebar: a logo and `TopBarNav` links in the header. On a phone the
+links stay in the bar and scroll sideways when they do not fit.
+
+<Canvas of={AppShellStories.TopNavigationMobile} />
 
 <Canvas of={AppShellStories.TopNavigation} />
 
 ## On a phone
 
-Under 64rem of shell width (48rem for top navigation) the navigation is a
-drawer. The header gets a menu button that opens it; choosing a link or
-pressing Escape closes it, and focus returns to the button.
+Under 64rem of shell width the sidebar stays beside the page as the icon
+rail, and cannot expand: 16rem would cover most of a phone. The links keep
+their names, as tooltips. There is no menu button and no drawer.
 
 <Canvas of={AppShellStories.Mobile} />
 
@@ -148,15 +150,13 @@ pressing Escape closes it, and focus returns to the button.
 | `topBarSurface` | `solid`, `transparent` | `solid` | The header on the card colour or on the canvas. |
 | `sidebarSurface` | `solid`, `transparent` | `transparent` | The sidebar on the card colour or on the canvas. |
 | `brand` | node | – | The logo, placed by the shell. |
-| `sidebar` | node | – | A NavSidebar. Beside the content from 64rem, in the drawer below. |
-| `header` | node | – | An TopBar. In `sidebar` it shows only while the sidebar is in the drawer; without one the shell adds a plain TopBar there. |
-| `mobileNavigation` | node | `sidebar` | What the drawer holds. |
-| `navigationLabel` | string | `Navigation` | Names the drawer and its buttons. |
+| `sidebar` | node | – | A NavSidebar. Beside the content at every width; the icon rail below 64rem. |
+| `header` | node | – | A TopBar. In `sidebar` it shows only below 64rem; without one the shell adds a plain TopBar there for the logo. |
 | `mainId` | string | generated | The `id` of the `main` element, the skip link's target. |
 | `children` | node | – | The page, inside `<main>`. |
 
 `sidebar={isAdmin && <NavSidebar … />}` works: `false` and `null` count as
-no sidebar, so there is no empty column, no drawer and no menu button.
+no sidebar, so there is no empty column.
 
 **TopBar** takes `start` (breadcrumbs, or a logo and TopBarNav), `end`
 (search, notifications, the account menu) and `children` for the middle.
@@ -168,11 +168,11 @@ no sidebar, so there is no empty column, no drawer and no menu button.
 - **The shell fills the viewport** (`block-size: 100dvh`) and only the
   page scrolls, so the sidebar and the header stay in place. Set
   `block-size` on it to put it in a smaller box.
-- **From 64rem** the sidebar sits beside the page; in `layout="sidebar"`
-  it runs the full height and the top bar is hidden, because the sidebar
-  holds what the bar would. Below 64rem the sidebar moves into the drawer
-  and the top bar comes back in both layouts, for the menu button and the
-  logo.
+- **The sidebar sits beside the page at every width.** From 64rem, in
+  `layout="sidebar"`, it runs the full height and the top bar is hidden,
+  because the sidebar holds what the bar would. Below 64rem it is the icon
+  rail and the top bar comes back in both layouts, for the logo, search and
+  the account.
 - **Below 48rem** a flat page drops its 8px inset, edge and rounding and
   goes flush, since a frame around it only costs width on a phone.
 - **Everything follows density**: the top bar is `--control-md` plus two
@@ -187,9 +187,6 @@ no sidebar, so there is no empty column, no drawer and no menu button.
   block it fills the line as usual; as a flex or grid item that would
   otherwise shrink to fit, give it a width (`inline-size: 100%` or
   `flex: 1`), or it collapses.
-- **The drawer holds the same NavSidebar.** A collapsible one opens there
-  as the icon rail if it is collapsed, so for a collapsed rail pass a
-  plain NavSidebar as `mobileNavigation`.
 
 ## Accessibility
 
@@ -198,13 +195,8 @@ no sidebar, so there is no empty column, no drawer and no menu button.
   `mainId` when something else should link there too; otherwise the id is
   generated, so two shells in one page (as in these docs) never share it.
 - The page is the `main` landmark; the sidebar and TopBarNav are `nav`
-  landmarks named "Main". Only one is in the page at a time: the hidden
-  one is `display: none`, so it is out of the accessibility tree too.
-- The drawer is a modal dialog named "Navigation": focus moves into it,
-  the page behind is inert, and Escape closes it. The menu button says
-  so with `aria-haspopup="dialog"` and `aria-expanded`.
-- The drawer slides in from the start edge, from the right in a
-  right-to-left page. It is portalled to the body, so it reads the page's
-  direction: set `dir="rtl"` on `<html>`, not only on the shell.
+  landmarks named "Main".
+- In the rail each link keeps its name, so the navigation reads the same
+  on a phone.
 - The current page is marked `aria-current="page"` in both kinds of
   navigation, and shown by more than colour.

@@ -162,8 +162,7 @@ const logoMiddle = (canvasElement: HTMLElement) => {
 
 /**
  * The shell in a box of the given size: it lays out by its own width. Link
- * clicks are kept from navigating the test page; React events reach this
- * wrapper from the portalled drawer too.
+ * clicks are kept from navigating the test page.
  */
 const box = (inlineSize: number) => [
   (Story: () => ReactNode) => (
@@ -205,7 +204,6 @@ const meta = {
     children: { control: false },
     sidebar: { control: false },
     header: { control: false },
-    mobileNavigation: { control: false },
   },
 } satisfies Meta<typeof AppShell>
 
@@ -222,8 +220,7 @@ export const WithSidebar: Story = {
   play: async ({ canvas, canvasElement }) => {
     const nav = canvas.getByRole('navigation', { name: 'Main' })
     await expect(within(nav).getByRole('link', { name: 'Dashboard' })).toHaveAttribute('aria-current', 'page')
-    // Wide: the sidebar is the navigation, so no menu button and no top bar.
-    await expect(canvas.queryByRole('button', { name: 'Open navigation' })).toBeNull()
+    // Wide: the sidebar holds what the top bar would, so there is no top bar.
     // The shell's header is the only <header>, hidden in this layout.
     await expect(canvasElement.querySelector('header')).not.toBeVisible()
     // The logo lines up with the sidebar's icons: two --space-inline in.
@@ -399,81 +396,75 @@ const topLinks = [
   { label: 'Calendar', href: '#calendar' },
 ]
 
-/** No sidebar: a logo and links in the header, which move into the drawer on a phone. */
+/** No sidebar: a logo and links in the header. */
 export const TopNavigation: Story = {
   args: {
     layout: 'top-bar',
     brand,
     header: <TopBar start={<TopBarNav items={topLinks} currentHref="#dashboard" />} end={headerEnd} />,
-    mobileNavigation: <NavSidebar items={entries.slice(0, 4)} currentHref="#dashboard" style={{ blockSize: '100%' }} />,
     mainId: 'content',
   },
   decorators: box(1100),
   play: async ({ canvas }) => {
     const nav = canvas.getByRole('navigation', { name: 'Main' })
     await expect(within(nav).getByRole('link', { name: 'Dashboard' })).toHaveAttribute('aria-current', 'page')
-    await expect(canvas.queryByRole('button', { name: 'Open navigation' })).toBeNull()
     await expect(canvas.getByRole('main')).toHaveAttribute('id', 'content')
     await expect(canvas.getByRole('link', { name: 'Skip to content' })).toHaveAttribute('href', '#content')
   },
 }
 
-/** On a phone the navigation is a drawer from the header's menu button; choosing a link closes it. */
+/**
+ * On a phone the sidebar stays beside the page as the icon rail, and the top
+ * bar holds the logo, search and the account. There is no menu button.
+ */
 export const Mobile: Story = {
   args: {
-    sidebar: sidebar(),
+    brand,
+    sidebar: <NavSidebar items={entries} currentHref="#dashboard" isCollapsible style={{ blockSize: '100%' }} />,
     header: <TopBar end={headerEnd} />,
   },
   decorators: box(390),
-  play: async ({ canvas }) => {
-    // Hidden, so out of the accessibility tree too: no second, unreachable navigation.
-    await expect(canvas.queryByRole('navigation', { name: 'Main' })).toBeNull()
-    const menu = canvas.getByRole('button', { name: 'Open navigation' })
-    await expect(menu).toHaveAttribute('aria-haspopup', 'dialog')
-    await expect(menu).toHaveAttribute('aria-expanded', 'false')
-    await userEvent.click(menu)
-    const drawer = await within(document.body).findByRole('dialog', { name: 'Navigation' })
-    await expect(menu).toHaveAttribute('aria-expanded', 'true')
-    // The sidebar fills the drawer's width, not its own 16rem.
-    const nav = within(drawer).getByRole('navigation', { name: 'Main' })
-    await waitFor(() => expect(nav.getBoundingClientRect().width).toBeCloseTo(drawer.getBoundingClientRect().width, 0))
-    await userEvent.click(within(drawer).getByRole('link', { name: 'Team' }))
-    await waitFor(() => expect(within(document.body).queryByRole('dialog')).toBeNull())
-    // Focus is back on the button that opened it.
-    await waitFor(() => expect(canvas.getByRole('button', { name: 'Open navigation' })).toHaveFocus())
+  play: async ({ canvas, canvasElement }) => {
+    const nav = canvas.getByRole('navigation', { name: 'Main' })
+    // The shell measures its width after the first layout.
+    await waitFor(() => expect(nav.getBoundingClientRect().width).toBeLessThan(100))
+    // A rail on a phone cannot expand: 16rem would cover the page.
+    await expect(within(nav).queryByRole('button', { name: /sidebar/ })).toBeNull()
+    await expect(within(nav).getByRole('link', { name: 'Projects, 12' })).toBeVisible()
+    await expect(canvas.queryByRole('button', { name: /navigation/ })).toBeNull()
+    await expect(within(canvasElement.querySelector('header')!).getByTestId('brand')).toBeVisible()
+    await expect(canvas.getByRole('main').getBoundingClientRect().width).toBeGreaterThan(250)
   },
 }
 
-/** The top-navigation shell on a phone: links are in the drawer, not squeezed into the bar. */
+/** The top-navigation shell on a phone: the links stay in the bar and scroll sideways. */
 export const TopNavigationMobile: Story = {
   ...TopNavigation,
   decorators: box(390),
-  play: async ({ canvas }) => {
-    // Hidden, so out of the accessibility tree too: no second, unreachable navigation.
-    await expect(canvas.queryByRole('navigation', { name: 'Main' })).toBeNull()
-    await userEvent.click(canvas.getByRole('button', { name: 'Open navigation' }))
-    const drawer = await within(document.body).findByRole('dialog', { name: 'Navigation' })
-    await expect(within(drawer).getByRole('link', { name: /^Projects/ })).toBeVisible()
-    await userEvent.keyboard('{Escape}')
-    await waitFor(() => expect(within(document.body).queryByRole('dialog')).toBeNull())
+  play: async ({ canvas, canvasElement }) => {
+    const nav = canvas.getByRole('navigation', { name: 'Main' })
+    await expect(within(nav).getByRole('link', { name: 'Calendar' })).toBeVisible()
+    await expect(nav.scrollWidth).toBeGreaterThan(nav.clientWidth)
+    // The bar itself does not overflow: only the links scroll.
+    const bar = canvasElement.querySelector('header')!
+    await expect(bar.scrollWidth).toBeLessThanOrEqual(bar.clientWidth)
+    await expect(canvas.queryByRole('button', { name: /navigation/ })).toBeNull()
   },
 }
 
 /**
  * A sidebar that is switched off, e.g. `sidebar={isAdmin && <NavSidebar />}`:
- * no sidebar column, no drawer and no menu button, as with no sidebar at all.
+ * no sidebar column, as with no sidebar at all.
  */
 export const WithoutNavigation: Story = {
   args: {
     sidebar: false,
-    mobileNavigation: null,
     brand,
     header: <TopBar end={headerEnd} />,
   },
   decorators: box(390),
   play: async ({ canvas }) => {
-    // A menu button here would open nothing.
-    await expect(canvas.queryByRole('button', { name: 'Open navigation' })).toBeNull()
+    await expect(canvas.queryByRole('navigation')).toBeNull()
     await expect(canvas.getByRole('main')).toBeVisible()
   },
 }

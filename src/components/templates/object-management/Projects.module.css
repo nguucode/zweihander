@@ -38,6 +38,7 @@
 
 .search {
   flex: 1 1 14rem;
+  min-inline-size: 0;
 }
 
 /* Six tabs with counts do not fit a phone: the tab list scrolls sideways

@@ -15,6 +15,7 @@ import { Tabs } from '../../navigation/Tabs'
 import { EmptyState } from '../../states/EmptyState'
 import { AppShell } from '../application-ui/AppShell'
 import { TableToolbar, TableToolbarGroup } from '../../patterns/application-ui/DataTablePage'
+import { TopBar } from '../../patterns/application-ui/TopBar'
 import { sampleProjects, type Project, type ProjectActivity, type ProjectStatus } from './projects-data'
 import styles from './Projects.module.css'
 
@@ -205,6 +206,24 @@ export function Projects({ projects: initialProjects = sampleProjects, ...props 
     />
   )
 
+  // No top bar in the sidebar layout: the account and notifications live in the sidebar's footer.
+  const account = (
+    <div className={styles.account}>
+      <Menu
+        align="start"
+        trigger={
+          <Button variant="secondary" appearance="ghost" startIcon={<Avatar initials="IO" size="sm" />}>
+            Ines Okafor
+          </Button>
+        }
+        items={[{ label: 'Your profile' }, { label: 'Settings' }, { type: 'separator' }, { label: 'Sign out' }]}
+      />
+      <Button variant="secondary" appearance="ghost" isIconOnly aria-label="Notifications">
+        <Icon name="info" />
+      </Button>
+    </div>
+  )
+
   return (
     <AppShell
       brand={<strong className={styles.brand}>Zweihänder</strong>}
@@ -213,25 +232,11 @@ export function Projects({ projects: initialProjects = sampleProjects, ...props 
           items={navigation(openCount)}
           currentHref="#projects"
           className={styles.sidebar}
-          footer={
-            // No top bar in the sidebar layout: the account and notifications live here.
-            <div className={styles.account}>
-              <Menu
-                align="start"
-                trigger={
-                  <Button variant="secondary" appearance="ghost" startIcon={<Avatar initials="IO" size="sm" />}>
-                    Ines Okafor
-                  </Button>
-                }
-                items={[{ label: 'Your profile' }, { label: 'Settings' }, { type: 'separator' }, { label: 'Sign out' }]}
-              />
-              <Button variant="secondary" appearance="ghost" isIconOnly aria-label="Notifications">
-                <Icon name="info" />
-              </Button>
-            </div>
-          }
+          footer={account}
         />
       }
+      // Under 64rem the sidebar is the rail, which hides its footer: the bar holds the account there.
+      header={<TopBar end={account} />}
       {...props}
     >
       <div className={styles.page}>

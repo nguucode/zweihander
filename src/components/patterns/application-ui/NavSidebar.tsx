@@ -276,12 +276,16 @@ export function NavSidebar({
   ...props
 }: NavSidebarProps) {
   const [collapsedState, setCollapsedState] = useState(defaultCollapsed)
-  const isRail = isCollapsed ?? collapsedState
+  const shell = useContext(ShellContext)
+  // In an App Shell under 64rem it is always the rail: expanded, it would
+  // cover most of a phone. The hover preview still floats over the page, but
+  // there is no expanding or docking it there.
+  const isRail = shell.isNarrow || (isCollapsed ?? collapsedState)
+  const canToggle = isCollapsible && !shell.isNarrow
   const setRail = (next: boolean) => {
     setCollapsedState(next)
     onCollapsedChange?.(next)
   }
-  const shell = useContext(ShellContext)
   const brand = given(brandProp) ? brandProp : shell.sidebarBrand
   const id = useId()
   const slotRef = useRef<HTMLDivElement>(null)
@@ -320,10 +324,10 @@ export function NavSidebar({
           className={cn(styles.sidebar, collapsed && styles.collapsed, peek.isOpen && styles.peek, className)}
           {...props}
         >
-          {(given(brand) || isCollapsible) && (
+          {(given(brand) || canToggle) && (
             <div className={cn(styles.brandRow, given(brand) && styles.withBrand)}>
               {given(brand) && <div className={styles.brand}>{brand}</div>}
-              {isCollapsible && (
+              {canToggle && (
                 <button
                   type="button"
                   className={styles.toggle}

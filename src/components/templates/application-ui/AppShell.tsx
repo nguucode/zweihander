@@ -1,8 +1,6 @@
 'use client'
 
-import { useId, useLayoutEffect, useRef, useState, type ComponentProps, type MouseEvent, type ReactNode, type RefObject } from 'react'
-import { Dialog } from '@base-ui/react/dialog'
-import { Icon } from '@/lib/icon'
+import { useId, useLayoutEffect, useRef, useState, type ComponentProps, type ReactNode, type RefObject } from 'react'
 import { cn } from '@/lib/utils'
 import { AppContent } from '../../patterns/application-ui/AppContent'
 import { ShellContext, TopBar } from '../../patterns/application-ui/TopBar'
@@ -28,20 +26,13 @@ export interface AppShellProps extends ComponentProps<'div'> {
   sidebarSurface?: AppShellSurface
   /** The logo. The shell places it, in the same spot in either layout. */
   brand?: ReactNode
-  /** A NavSidebar. Beside the page from 64rem; in the drawer below that. */
+  /** A NavSidebar. Beside the page at every width; below 64rem it is the icon rail. */
   sidebar?: ReactNode
   /**
-   * A TopBar. Above the page in `top-bar`; in `sidebar` only while the
-   * sidebar is in the drawer, for the menu button.
+   * A TopBar. Above the page in `top-bar`; in `sidebar` only below 64rem,
+   * where the rail has no room for search or the account.
    */
   header?: ReactNode
-  /**
-   * What the drawer holds on narrow screens. Defaults to `sidebar`; pass it
-   * for a top-navigation shell, whose links move into the drawer below 48rem.
-   */
-  mobileNavigation?: ReactNode
-  /** Names the drawer and its button. */
-  navigationLabel?: string
   /** The `id` of the `main` element, which the skip link targets. Generated if not given. */
   mainId?: string
   children: ReactNode
@@ -52,8 +43,7 @@ export interface AppShellProps extends ComponentProps<'div'> {
  * the TopBar, the NavSidebar and the AppContent, on the Theme's canvas, with no padding or gap of its
  * own; the Theme's `contentStyle` decides whether the page is one flat
  * surface or blocks on the canvas. The sidebar stays put while the content
- * scrolls; on narrow screens the navigation moves into a drawer that the
- * header's menu button opens.
+ * scrolls; on narrow screens it narrows to the icon rail.
  */
 export function AppShell({
   layout = 'sidebar',
@@ -62,45 +52,30 @@ export function AppShell({
   brand,
   sidebar,
   header,
-  mobileNavigation,
-  navigationLabel = 'Navigation',
   mainId,
   children,
   className,
   ...props
 }: AppShellProps) {
-  const [open, setOpen] = useState(false)
   const autoId = useId()
   const mainRef = useRef<HTMLElement>(null)
   const id = mainId ?? `${autoId}main`
   const hasSidebar = given(sidebar)
-  const hasMobileNavigation = given(mobileNavigation)
-  const drawerContent = hasMobileNavigation ? mobileNavigation : hasSidebar ? sidebar : null
-  const hasDrawer = drawerContent !== null
   const hasBrand = given(brand)
   // The logo is rendered once, in the place it shows: in the NavSidebar's top
-  // row for the sidebar layout while the sidebar is beside the page, else in
-  // the header.
+  // row for the sidebar layout while the sidebar is expanded, else in the
+  // header.
   // CSS alone would need two copies, and a logo can hold an id or a menu.
   const frameRef = useRef<HTMLDivElement>(null)
   const isWide = useIsWide(frameRef)
   const brandInSidebar = hasBrand && layout === 'sidebar' && hasSidebar && isWide
-  // The sidebar layout still needs a bar for the menu button while the sidebar is in the drawer.
-  const top = given(header) ? header : hasDrawer || hasBrand ? <TopBar /> : null
-  // A link chosen in the drawer navigates; the drawer should not stay over the new page.
-  const closeOnLink = (e: MouseEvent) => {
-    if ((e.target as HTMLElement).closest('a[href]')) setOpen(false)
-  }
+  const top = given(header) ? header : hasBrand ? <TopBar /> : null
   return (
     <ShellContext.Provider
       value={{
-        hasDrawer,
-        drawerHolds: hasSidebar ? 'sidebar' : 'links',
-        isOpen: open,
-        open: () => setOpen(true),
-        label: navigationLabel,
         brand: brandInSidebar ? null : brand,
         brandCell: layout === 'top-bar' && hasSidebar,
+        isNarrow: !isWide,
         sidebarBrand: brandInSidebar ? brand : null,
       }}
     >
@@ -109,7 +84,6 @@ export function AppShell({
           styles.shell,
           layout === 'top-bar' ? styles.topBarLayout : styles.sidebarLayout,
           hasSidebar && styles.withSidebar,
-          hasMobileNavigation && styles.withMobileNavigation,
           hasBrand && styles.withBrand,
           className,
         )}
@@ -145,31 +119,19 @@ export function AppShell({
           </AppContent>
         </div>
       </div>
-      {hasDrawer && (
-        <Dialog.Root open={open} onOpenChange={setOpen}>
-          <Dialog.Portal>
-            <Dialog.Backdrop className={styles.backdrop} />
-            <Dialog.Popup className={styles.drawer} onClick={closeOnLink}>
-              <Dialog.Title className={styles.srOnly}>{navigationLabel}</Dialog.Title>
-              <Dialog.Close className={styles.drawerClose} aria-label={`Close ${navigationLabel.toLowerCase()}`}>
-                <Icon name="close" />
-              </Dialog.Close>
-              {drawerContent}
-            </Dialog.Popup>
-          </Dialog.Portal>
-        </Dialog.Root>
-      )}
     </ShellContext.Provider>
   )
 }
 
-/** Whether the element is at least 64rem wide, the width where the sidebar sits beside the page (the CSS container query's twin). */
+/** Whether the element is at least 64rem wide, where the sidebar is expanded (the CSS container query's twin). */
 function useIsWide(ref: RefObject<HTMLElement | null>) {
   const [isWide, setIsWide] = useState(true)
   useLayoutEffect(() => {
     const element = ref.current
     if (!element) return
     const rem = Number.parseFloat(getComputedStyle(document.documentElement).fontSize)
+    // Measured now too, before the first paint, so a phone never sees the expanded sidebar.
+    setIsWide(element.clientWidth >= 64 * rem)
     const observer = new ResizeObserver(([entry]) => setIsWide(entry.contentRect.width >= 64 * rem))
     observer.observe(element)
     return () => observer.disconnect()
