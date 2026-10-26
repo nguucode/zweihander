@@ -1,0 +1,96 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks'
+import * as SessionStories from './Session.stories'
+import { SessionTimeout } from './Session'
+
+<Meta of={SessionStories} />
+
+# Session
+
+The two ends of a session: **Session Timeout**, the warning a minute
+before an idle session ends, and **Signed Out**, the page the reader lands
+on after it ends, with the account they were signed in to and **Sign in
+again**. After Carbon's login pattern. Built on
+[Modal](?path=/docs/overlays-modal--docs) (as an alert dialog), the **Auth
+Layout** (see [Sign In](?path=/docs/templates-auth-sign-in--docs#auth-layout)),
+Button and Link.
+
+Neither part knows about sessions. The app tracks inactivity, opens the
+warning, extends or ends the session from its buttons, and picks the
+reason the signed-out page gives.
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/session.json
+```
+
+## Session timeout warning
+
+Open it `countdown` seconds (60 by default) before an idle session ends.
+The time left counts down in the sentence. **Stay signed in** has focus,
+since that is what most readers want; it and Escape call `onContinue`,
+where you extend the session and close the warning. **Sign out** calls
+`onSignOut`. At zero, `onExpire` (or `onSignOut` when you leave it out):
+sign out and show Signed Out with reason `inactive`.
+
+<Canvas of={SessionStories.Warning} />
+
+Keep `countdown` at 20 seconds or more: WCAG 2.2.1 (Timing Adjustable)
+asks for a warning and at least 20 seconds to extend with a simple action.
+The countdown runs to a fixed end, so a background tab, whose timers the
+browser slows down, still ends on time. Closing and reopening it starts
+the count again.
+
+## Signed out
+
+The page after a session ends, with a title and a line for the `reason`:
+
+- `signed-out` (default): the reader pressed Sign out.
+- `inactive`: the warning ran out.
+- `expired`: the server ended the session, for example a token reached
+  its lifetime.
+
+<Canvas of={SessionStories.SignedOutPage} />
+
+### Remembered account
+
+Pass `account` (an email or a username, masked if you need to) to say which
+account **Sign in again** is for, and carry it in `signInHref` so the reader
+only types a password: [Progressive Sign In](?path=/docs/templates-auth-progressive-sign-in--docs)
+takes it as `defaultEmail`, which is also where its **Remember my email**
+comes back. `otherAccountHref` adds **Use another account**. Leave
+`account` out after a deliberate sign out on a shared computer.
+
+<Canvas of={SessionStories.Inactive} />
+
+## Props
+
+### Signed Out
+
+<ArgTypes of={SessionStories} />
+
+Every other Auth Layout prop (`brand`, `appearance`, `aside`, `footer`) and
+`<div>` attribute passes through.
+
+### Session Timeout
+
+<ArgTypes of={SessionTimeout} />
+
+## Layout
+
+- **Session Timeout** is a small (24rem) modal, never wider than the
+  screen. The buttons sit at the end of the footer, Stay signed in last.
+- **Signed Out** follows the Auth Layout: one 25rem column centred on the
+  canvas, in a card by default. A long account breaks anywhere instead of
+  pushing the page sideways at 320px.
+
+<Canvas of={SessionStories.Narrow} />
+
+## Accessibility
+
+- The warning is an `alertdialog` named by its title and described by its
+  sentence, so a screen reader reads the time left once, when it opens.
+  The time is a `timer`, which is not a live region: it does not announce
+  every second.
+- Focus moves to **Stay signed in** when the warning opens, and back to
+  where it was when it closes. Enter keeps the session; Escape does too.
+- Signed Out has one `h1`, the reason, inside `main`. **Sign in again** is
+  the first control in the page, before Use another account.

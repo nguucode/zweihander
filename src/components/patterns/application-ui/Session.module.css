@@ -1,0 +1,31 @@
+/* Digits keep their width, so the sentence does not shift each second. */
+.timer {
+  font-variant-numeric: tabular-nums;
+  color: var(--foreground);
+}
+
+/* The remembered account: a label over the id, so the reader sees which
+   account Sign in again is for. */
+.account {
+  display: grid;
+  gap: var(--space-inline);
+  justify-items: center;
+  margin: 0;
+}
+
+.label {
+  color: var(--muted-foreground);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+}
+
+.id {
+  font-weight: 500;
+  overflow-wrap: anywhere;
+  text-align: center;
+}
+
+.other {
+  margin: 0;
+  text-align: center;
+}

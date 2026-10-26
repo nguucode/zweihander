@@ -1470,6 +1470,32 @@
       ]
     },
     {
+      "name": "session",
+      "type": "registry:block",
+      "title": "Session",
+      "description": "Application UI pattern: the two ends of a session. SessionTimeout warns before an idle session ends, with a countdown, Stay signed in and Sign out in an alert dialog; SignedOut is the page after it ends, in the Auth Layout, with the reason, the remembered account and Sign in again.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/button.json",
+        "https://ontheshore.biz/zweihander/r/link.json",
+        "https://ontheshore.biz/zweihander/r/modal.json",
+        "https://ontheshore.biz/zweihander/r/auth-layout.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/patterns/application-ui/Session.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/patterns/application-ui/Session.tsx"
+        },
+        {
+          "path": "src/components/patterns/application-ui/Session.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/patterns/application-ui/Session.module.css"
+        }
+      ]
+    },
+    {
       "name": "filter-bar",
       "type": "registry:block",
       "title": "Filter Bar",
