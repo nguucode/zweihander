@@ -1,0 +1,10 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* Set apart from the boxes, so it does not read as one of them. */
+.reset {
+  margin-block-start: var(--space-3);
+}

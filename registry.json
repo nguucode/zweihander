@@ -1078,10 +1078,36 @@
       ]
     },
     {
+      "name": "column-chooser",
+      "type": "registry:component",
+      "title": "Column Chooser",
+      "description": "Button that opens a popover listing a table's columns, each with a checkbox to show or hide it, the row header locked, and a Reset to the default set.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/icon.json",
+        "https://ontheshore.biz/zweihander/r/button.json",
+        "https://ontheshore.biz/zweihander/r/checkbox.json",
+        "https://ontheshore.biz/zweihander/r/popover.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/data-display/ColumnChooser.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/data-display/ColumnChooser.tsx"
+        },
+        {
+          "path": "src/components/data-display/ColumnChooser.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/data-display/ColumnChooser.module.css"
+        }
+      ]
+    },
+    {
       "name": "table",
       "type": "registry:component",
       "title": "Table",
-      "description": "Native table with captions, row headers, sortable columns (aria-sort), row selection, expandable rows, a row actions menu, a total row, density, sticky header and an empty state.",
+      "description": "Native table with captions, row headers, sortable columns (aria-sort), row selection, expandable rows, a row actions menu, a total row, resizable columns, density, sticky header and an empty state.",
       "registryDependencies": [
         "https://ontheshore.biz/zweihander/r/utils.json",
         "https://ontheshore.biz/zweihander/r/tokens.json",

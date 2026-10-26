@@ -31,6 +31,7 @@ its rows and keep its header in view.
 | `hasStickyHeader` | Long tables that scroll inside a fixed height, so the column names stay in view. |
 | `rowActions` | Actions on one record (edit, duplicate, archive) that do not earn a column: a menu at the row's end. |
 | `footer` on a column | A total row under the rows: sums, counts, averages. |
+| `isResizable` | Tables whose columns hold text of unknown length (names, notes, emails), so people can widen what they read. |
 | `emptyState` | Saying why there are no rows, and what to do: clear a search, add the first one. |
 
 <Canvas of={TableStories.Default} />
@@ -51,6 +52,14 @@ does not add anything up: you pass each column's `footer`, so you decide
 whether it totals this page or every row.
 
 <Canvas of={TableStories.TotalRow} />
+
+A handle on each header's end edge resizes its column, by dragging or by
+the arrow keys. The table is then laid out by its header widths: give the
+columns a starting `width`, and keep `columnWidths` if they should last.
+Pair it with a [Column Chooser](?path=/docs/components-data-display-column-chooser--docs)
+to hide columns as well.
+
+<Canvas of={TableStories.Resizable} />
 
 <Canvas of={TableStories.StickyHeader} />
 
@@ -136,6 +145,21 @@ Each density is a row height. Everything else is the same in both.
   ]}
 />
 
+<SpecTable
+  caption="Resize handle (isResizable)"
+  rows={[
+    { part: 'Handle', property: 'Width', token: '--box-2xs' },
+    { part: 'Handle line', property: 'Inset from the header edges', token: '--space-2' },
+    { part: 'Handle line, hover and drag', property: 'Width', token: '--focus-width' },
+    { part: 'Handle', property: 'Hit area on touch screens', token: '--target-coarse' },
+  ]}
+/>
+
+The handle line is 1px at rest, like the row dividers; no token covers
+a hairline. Its strip is 16px wide (44px on touch screens), at the
+header's end, over the header's own padding. A column is 48px to 1200px wide; the arrow
+keys move it 16px at a time.
+
 Rows are divided by a 1px rule; the last row has none. The sort button
 pulls itself out by its own inline padding, so its label lines up with the
 cells below. Figures are tabular, so numbers line up column-wide.
@@ -183,6 +207,14 @@ Switch the theme and the accent in the toolbar: the values follow.
   caption="Expanded"
   rows={[
     { part: 'Expanded row', property: 'Divider under it', token: '--border' },
+  ]}
+/>
+
+<SpecTable
+  caption="Resize handle"
+  rows={[
+    { part: 'Handle line', property: 'Colour', token: '--border' },
+    { part: 'Handle line, hover and drag', property: 'Colour', token: '--primary' },
   ]}
 />
 
@@ -236,6 +268,8 @@ it is the one under the pointer or the keyboard.
   their own focus rings.
 - **Pressed** has no look of its own: the click sorts, selects or opens,
   and that state's look follows.
+- **Resize handle**: hover and drag thicken its line to 2px `--primary`;
+  focus draws the `--ring` outline inside the handle.
 - **Disabled**: Table has none. A row that cannot be acted on is a row
   without the control.
 - **Sorted** shows the column's icon at full colour, pointing up or down.
@@ -354,6 +388,14 @@ Pass `expandedIds` to open rows from outside the table:
   Escape closes it, and focus returns to the button. A row with no items
   has no button.
 - The actions column's header is "Actions", visually hidden.
+- With `isResizable`, each column header holds a focusable
+  `role="separator"` with `aria-orientation="vertical"`, named "Resize"
+  and the header ("Resize Owner"), or the column's `key` when the header
+  is not plain text. Its `aria-valuenow` is the column's
+  width in px, between `aria-valuemin` 48 and `aria-valuemax` 1200.
+- Arrow Right widens the column 16px and Arrow Left narrows it (mirrored
+  in right-to-left); Home sets the narrowest width and End the widest.
+  Dragging the handle does the same with a pointer.
 - The total row is in a `<tfoot>` with one cell per column, so each total
   is announced under its column; the label column is its row header.
 

@@ -1073,6 +1073,34 @@
     },
     {
       "kind": "component",
+      "id": "components-data-display-column-chooser",
+      "name": "Column Chooser",
+      "category": "Data Display",
+      "status": "beta",
+      "storyId": "components-data-display-column-chooser--default",
+      "props": [
+        {
+          "name": "label",
+          "control": "text",
+          "default": "Columns",
+          "description": "The button's text and the popover's title."
+        },
+        {
+          "name": "resetLabel",
+          "control": "text",
+          "default": "Reset",
+          "description": "The Reset button's text."
+        },
+        {
+          "name": "defaultOpen",
+          "control": "boolean",
+          "default": false,
+          "description": "Open on first render, uncontrolled."
+        }
+      ]
+    },
+    {
+      "kind": "component",
       "id": "components-data-display-table",
       "name": "Table",
       "category": "Data Display",
@@ -1112,6 +1140,12 @@
           "control": "boolean",
           "default": false,
           "description": "Keeps the header row in view while the table scrolls inside its container, when something limits the container's height."
+        },
+        {
+          "name": "isResizable",
+          "control": "boolean",
+          "default": false,
+          "description": "A handle at the end of each column header that drags, or arrow-keys, the column wider or narrower (48 to 1200px). The table is then laid out by its header widths (`table-layout: fixed`): columns without a `width` share what is left, and what no longer fits is clipped."
         }
       ]
     },

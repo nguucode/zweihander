@@ -157,6 +157,22 @@ const meta = {
       control: false,
       table: { type: { summary: 'ReactNode' } },
     },
+    isResizable: {
+      description:
+        'A handle at the end of each column header that drags, or arrow-keys, the column wider or narrower (48 to 1200px). The table is then laid out by its header widths (`table-layout: fixed`): columns without a `width` share what is left, and what no longer fits is clipped.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
+    columnWidths: {
+      description: 'Column widths in px, by key, for controlled resizing. Pair with `onColumnWidthsChange`; without it the table keeps its own.',
+      control: false,
+      table: { type: { summary: 'Record<string, number>' } },
+    },
+    onColumnWidthsChange: {
+      description: 'Called with every resized column\'s width in px while a handle moves. Store it to keep the widths across visits.',
+      control: false,
+      table: { type: { summary: '(widths: Record<string, number>) => void' } },
+    },
     className: {
       description: 'Added to the scroll container around the table.',
       control: false,
@@ -469,6 +485,86 @@ export const TotalRow: Story = {
     // Sorting moves the rows, never the total.
     await userEvent.click(within(canvas.getByRole('columnheader', { name: /Files/ })).getByRole('button'))
     await expect(canvas.getAllByRole('row').at(-1)).toHaveTextContent('Total')
+  },
+}
+
+/** Drag or arrow-key a header's end edge to resize its column. */
+export const Resizable: Story = {
+  args: { isResizable: true, onColumnWidthsChange: fn() },
+  play: async ({ args, canvas, step }) => {
+    const owner = canvas.getByRole('columnheader', { name: /Owner/ })
+    const handle = canvas.getByRole('separator', { name: 'Resize Owner' })
+    await step('Every column header has a focusable vertical separator with its width as the value', async () => {
+      await expect(canvas.getAllByRole('separator')).toHaveLength(columns.length)
+      await expect(handle).toHaveAttribute('aria-orientation', 'vertical')
+      await expect(handle).toHaveAttribute('aria-valuemin', '48')
+      await expect(handle).toHaveAttribute('aria-valuemax', '1200')
+      await waitFor(() => expect(Number(handle.getAttribute('aria-valuenow'))).toBe(Math.round(owner.getBoundingClientRect().width)))
+    })
+    await step('Arrow Right widens the column by 16px, Arrow Left narrows it', async () => {
+      handle.focus()
+      const before = Number(handle.getAttribute('aria-valuenow'))
+      await userEvent.keyboard('{ArrowRight}')
+      await expect(handle).toHaveAttribute('aria-valuenow', String(before + 16))
+      await expect(args.onColumnWidthsChange).toHaveBeenLastCalledWith({ owner: before + 16 })
+      await waitFor(() => expect(Math.round(owner.getBoundingClientRect().width)).toBe(before + 16))
+      await userEvent.keyboard('{ArrowLeft}{ArrowLeft}')
+      await expect(handle).toHaveAttribute('aria-valuenow', String(before - 16))
+    })
+    await step('End sets the widest width, Home the narrowest', async () => {
+      await userEvent.keyboard('{End}')
+      await expect(handle).toHaveAttribute('aria-valuenow', '1200')
+      await userEvent.keyboard('{Home}')
+      await expect(handle).toHaveAttribute('aria-valuenow', '48')
+      await waitFor(() => expect(Math.round(owner.getBoundingClientRect().width)).toBe(48))
+    })
+    await step('Dragging the handle resizes by the distance moved', async () => {
+      const files = canvas.getByRole('separator', { name: 'Resize Files' })
+      const th = canvas.getByRole('columnheader', { name: /Files/ })
+      const from = Math.round(th.getBoundingClientRect().width)
+      const { x, y } = files.getBoundingClientRect()
+      await userEvent.pointer([
+        { keys: '[MouseLeft>]', target: files, coords: { clientX: x, clientY: y } },
+        { target: files, coords: { clientX: x + 40, clientY: y } },
+        { keys: '[/MouseLeft]', target: files, coords: { clientX: x + 40, clientY: y } },
+      ])
+      await expect(files).toHaveAttribute('aria-valuenow', String(from + 40))
+      await waitFor(() => expect(Math.round(th.getBoundingClientRect().width)).toBe(from + 40))
+    })
+  },
+}
+
+/** Right to left: the handle is on the header's left edge, so Arrow Left widens. */
+export const ResizableRtl: Story = {
+  args: { isResizable: true },
+  render: (args) => (
+    <div dir="rtl">
+      <Table {...args} />
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    const handle = canvas.getByRole('separator', { name: 'Resize Owner' })
+    await waitFor(() => expect(Number(handle.getAttribute('aria-valuenow'))).toBeGreaterThan(48))
+    const before = Number(handle.getAttribute('aria-valuenow'))
+    handle.focus()
+    await userEvent.keyboard('{ArrowLeft}')
+    await expect(handle).toHaveAttribute('aria-valuenow', String(before + 16))
+    await userEvent.keyboard('{ArrowRight}{ArrowRight}')
+    await expect(handle).toHaveAttribute('aria-valuenow', String(before - 16))
+  },
+}
+
+/** Widths owned by the caller: the handle reports, the caller decides. */
+export const ControlledWidths: Story = {
+  args: { isResizable: true, columnWidths: { name: 200 }, onColumnWidthsChange: fn() },
+  play: async ({ args, canvas }) => {
+    const handle = canvas.getByRole('separator', { name: 'Resize Project' })
+    await expect(handle).toHaveAttribute('aria-valuenow', '200')
+    handle.focus()
+    await userEvent.keyboard('{ArrowRight}')
+    await expect(args.onColumnWidthsChange).toHaveBeenLastCalledWith({ name: 216 })
+    // Not stored by the caller, so it stays where it was.
+    await expect(handle).toHaveAttribute('aria-valuenow', '200')
   },
 }
 

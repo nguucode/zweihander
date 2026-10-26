@@ -225,3 +225,53 @@ tbody tr.selected.expanded + tr.expandedRow > * {
   clip-path: inset(50%);
   white-space: nowrap;
 }
+
+/* Resizable: the header widths set the layout, so a narrowed column
+   really narrows. What no longer fits is clipped, not spilled into the
+   next column. */
+.resizable {
+  table-layout: fixed;
+}
+.resizable .th,
+.resizable .td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  overflow-wrap: anywhere;
+}
+.resizable .th {
+  position: relative;
+}
+
+/* A strip on the header's end edge; the line inside shows where it is. */
+.resizeHandle {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: 0;
+  inline-size: var(--box-2xs);
+  cursor: col-resize;
+  touch-action: none;
+}
+.resizeHandle::before {
+  content: '';
+  position: absolute;
+  inset-block: var(--space-2);
+  inset-inline-end: 0;
+  inline-size: 1px;
+  background: var(--border);
+}
+.resizeHandle:hover::before,
+.resizeHandle:active::before {
+  inline-size: var(--focus-width);
+  background: var(--primary);
+}
+.resizeHandle:focus-visible {
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: var(--focus-offset-inset);
+}
+/* The visible line stays thin; on touch screens the strip it sits in is
+   44px wide, all inside the header so the cell's clip does not cut it. */
+@media (pointer: coarse) {
+  .resizeHandle {
+    inline-size: var(--target-coarse);
+  }
+}
