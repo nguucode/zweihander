@@ -18,11 +18,10 @@ import { NavSidebar } from '../../patterns/application-ui/NavSidebar'
 import { TopBar } from '../../patterns/application-ui/TopBar'
 import { EmptyState } from '../../states/EmptyState'
 import { AppShell } from '../application-ui/AppShell'
-import { ActivityTimeline, fullMoment, money, STATUSES, statusTag } from './ProjectActivity'
+import { ActivityTimeline, fullMoment, healthLabel, money, STATUSES, statusTag } from './ProjectActivity'
 import { sampleProjects, sampleTeam, type Project, type ProjectActivity, type ProjectStatus, type TeamMember } from './projects-data'
 import styles from './ProjectDetail.module.css'
 
-const health: Record<Project['health'], string> = { 'on-track': 'On track', 'potential-risk': 'Potential risk', risk: 'Risk' }
 const fullDay = new Intl.DateTimeFormat('en', { day: 'numeric', month: 'short', year: 'numeric' })
 /** Who makes the edits in this sample: the signed-in user. */
 const ME = 'Ines Okafor'
@@ -84,7 +83,7 @@ export function ProjectDetail({ project: initialProject = sampleProjects[0], tea
         layout="stacked"
         items={[
           { term: 'Status', details: statusTag(project.status) },
-          { term: 'Health', details: health[project.health] },
+          { term: 'Health', details: healthLabel[project.health] },
           {
             term: 'Last update',
             details: <time dateTime={project.updatedAt.toISOString()}>{fullMoment.format(project.updatedAt)}</time>,

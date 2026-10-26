@@ -163,6 +163,25 @@ const compare = (a: unknown, b: unknown) => {
   return String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: 'base' })
 }
 
+/**
+ * The rows in the order the table sorts them. For a controlled sort, e.g.
+ * to sort every row before slicing out a page.
+ */
+export function sortRows<Row>(rows: Row[], columns: TableColumn<Row>[], sort: TableSort | null | undefined): Row[] {
+  const col = sort && columns.find((c) => c.key === sort.key)
+  if (!sort || !col) return rows
+  const value = col.sortValue ?? ((row: Row) => (row as Record<string, unknown>)[col.key])
+  // Descending flips the comparison, not the result: empty values stay
+  // last and ties keep their order either way.
+  const sign = sort.direction === 'descending' ? -1 : 1
+  return [...rows].sort((a, b) => {
+    const va = value(a)
+    const vb = value(b)
+    if (va == null || vb == null) return compare(va, vb)
+    return sign * compare(va, vb)
+  })
+}
+
 export function Table<Row>({
   columns,
   rows,
@@ -200,21 +219,7 @@ export function Table<Row>({
   const baseId = useId()
 
   // Uncontrolled sort is done here; a controlled one is the caller's job.
-  const shown = useMemo(() => {
-    if (!sort || sortProp !== undefined) return rows
-    const col = columns.find((c) => c.key === sort.key)
-    if (!col) return rows
-    const value = col.sortValue ?? ((row: Row) => (row as Record<string, unknown>)[col.key])
-    // Descending flips the comparison, not the result: empty values stay
-    // last and ties keep their order either way.
-    const sign = sort.direction === 'descending' ? -1 : 1
-    return [...rows].sort((a, b) => {
-      const va = value(a)
-      const vb = value(b)
-      if (va == null || vb == null) return compare(va, vb)
-      return sign * compare(va, vb)
-    })
-  }, [rows, columns, sort, sortProp])
+  const shown = useMemo(() => (sortProp !== undefined ? rows : sortRows(rows, columns, sort)), [rows, columns, sort, sortProp])
 
   const setSort = (key: string) => {
     // Ascending, then descending, then back to unsorted.

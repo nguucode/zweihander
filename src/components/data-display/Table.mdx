@@ -303,6 +303,12 @@ it is the one under the pointer or the keyboard.
 `TableSort` is `{ key, direction }`, with direction `ascending` or
 `descending`.
 
+With `sort` controlled, the table leaves the order to you. `sortRows(rows,
+columns, sort)` returns the rows in the order the table would sort them,
+so you can sort every row before slicing out a page, as the
+[Projects](?path=/docs/templates-object-management-projects--docs)
+template does.
+
 </DocTab>
 <DocTab value="guidelines">
 

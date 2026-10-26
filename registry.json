@@ -1618,7 +1618,7 @@
       "name": "projects-template",
       "type": "registry:block",
       "title": "Projects (template)",
-      "description": "Object-management page template: projects in a table inside an App Shell, with tabs that count their rows, search, a status filter, sorting, bulk archive and an expandable activity per row, on sample data.",
+      "description": "Index page (list report) template: projects inside an App Shell, in saved views with counts, narrowed by search and filters with chips, as a paged table or a chart, with sorting, a column chooser, bulk archive and an expandable activity per row, on sample data.",
       "registryDependencies": [
         "https://ontheshore.biz/zweihander/r/utils.json",
         "https://ontheshore.biz/zweihander/r/tokens.json",
@@ -1632,11 +1632,16 @@
         "https://ontheshore.biz/zweihander/r/search.json",
         "https://ontheshore.biz/zweihander/r/menu.json",
         "https://ontheshore.biz/zweihander/r/nav-sidebar.json",
-        "https://ontheshore.biz/zweihander/r/tabs.json",
         "https://ontheshore.biz/zweihander/r/empty-state.json",
         "https://ontheshore.biz/zweihander/r/app-shell.json",
         "https://ontheshore.biz/zweihander/r/data-table-page.json",
-        "https://ontheshore.biz/zweihander/r/top-bar.json"
+        "https://ontheshore.biz/zweihander/r/top-bar.json",
+        "https://ontheshore.biz/zweihander/r/charts.json",
+        "https://ontheshore.biz/zweihander/r/column-chooser.json",
+        "https://ontheshore.biz/zweihander/r/pagination.json",
+        "https://ontheshore.biz/zweihander/r/filter-bar.json",
+        "https://ontheshore.biz/zweihander/r/saved-views.json",
+        "https://ontheshore.biz/zweihander/r/table-chart.json"
       ],
       "files": [
         {

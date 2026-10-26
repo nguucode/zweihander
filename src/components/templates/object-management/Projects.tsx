@@ -1,34 +1,30 @@
 'use client'
 
-import { useMemo, useState, type ComponentProps } from 'react'
+import { useMemo, useRef, useState, type ComponentProps } from 'react'
 import { Icon } from '@/lib/icon'
 import { Avatar } from '../../atomic-elements/Avatar'
 import { Badge } from '../../atomic-elements/Badge'
 import { Button } from '../../buttons/Button'
 import { ToggleButton } from '../../buttons/ToggleButton'
-import { Table, type TableColumn } from '../../data-display/Table'
+import { BarChart } from '../../charts/BarChart'
+import { ColumnChooser } from '../../data-display/ColumnChooser'
+import { sortRows, Table, type TableColumn, type TableSort } from '../../data-display/Table'
 import { Search } from '../../inputs/Search'
 import { Menu } from '../../navigation/Menu'
+import { Pagination } from '../../navigation/Pagination'
 import { NavSidebar, type NavSidebarEntry } from '../../patterns/application-ui/NavSidebar'
-import { Tabs } from '../../navigation/Tabs'
 import { EmptyState } from '../../states/EmptyState'
 import { AppShell } from '../application-ui/AppShell'
-import { TableToolbar, TableToolbarGroup } from '../../patterns/application-ui/DataTablePage'
+import { TableFooter, TableToolbar } from '../../patterns/application-ui/DataTablePage'
+import { FilterBar } from '../../patterns/application-ui/FilterBar'
+import { SavedViews, type SavedView } from '../../patterns/application-ui/SavedViews'
+import { TableChartSwitch } from '../../patterns/application-ui/TableChartSwitch'
 import { TopBar } from '../../patterns/application-ui/TopBar'
-import { ActivityTimeline, fullMoment, money, STATUSES, statusTag } from './ProjectActivity'
-import { sampleProjects, type Project } from './projects-data'
+import { ActivityTimeline, fullMoment, HEALTHS, healthLabel, money, STATUSES, statusTag } from './ProjectActivity'
+import { sampleProjects, type Project, type ProjectHealth, type ProjectStatus } from './projects-data'
 import styles from './Projects.module.css'
 
-
-/** Each tab is a saved filter; every tab but Archived leaves archived projects out. */
-const TABS: { value: string; label: string; matches: (p: Project) => boolean }[] = [
-  { value: 'all', label: 'All', matches: (p) => !p.isArchived },
-  { value: 'risk', label: 'Risk', matches: (p) => !p.isArchived && p.health === 'risk' },
-  { value: 'on-hold', label: 'On hold', matches: (p) => !p.isArchived && p.status === 'On hold' },
-  { value: 'potential-risk', label: 'Potential risk', matches: (p) => !p.isArchived && p.health === 'potential-risk' },
-  { value: 'on-track', label: 'On track', matches: (p) => !p.isArchived && p.health === 'on-track' },
-  { value: 'archived', label: 'Archived', matches: (p) => p.isArchived },
-]
+const PAGE_SIZES = [10, 25, 50]
 
 // Short on purpose: seven columns have to fit a laptop without the table scrolling.
 const day = new Intl.DateTimeFormat('en', { day: 'numeric', month: 'short' })
@@ -79,6 +75,35 @@ const columns: TableColumn<Project>[] = [
   { key: 'estimation', header: 'Estimation', sortable: true, align: 'end', cell: (p) => money.format(p.estimation) },
 ]
 
+/** What a view saves: which projects (archived or not, the filters), the columns and the sort. The search is not saved. */
+interface ViewState {
+  isArchived: boolean
+  status: ProjectStatus[]
+  health: ProjectHealth[]
+  columns: string[]
+  sort: TableSort | null
+}
+type View = Omit<SavedView, 'count'> & { state: ViewState }
+
+const base: ViewState = { isArchived: false, status: [], health: [], columns: columns.map((c) => c.key), sort: null }
+const PREDEFINED: View[] = [
+  { id: 'all', label: 'All', isPredefined: true, state: base },
+  { id: 'risk', label: 'Risk', isPredefined: true, state: { ...base, health: ['risk'] } },
+  { id: 'on-hold', label: 'On hold', isPredefined: true, state: { ...base, status: ['On hold'] } },
+  { id: 'potential-risk', label: 'Potential risk', isPredefined: true, state: { ...base, health: ['potential-risk'] } },
+  { id: 'on-track', label: 'On track', isPredefined: true, state: { ...base, health: ['on-track'] } },
+  { id: 'archived', label: 'Archived', isPredefined: true, state: { ...base, isArchived: true } },
+]
+
+const matches = (p: Project, s: ViewState) =>
+  p.isArchived === s.isArchived &&
+  (s.status.length === 0 || s.status.includes(p.status)) &&
+  (s.health.length === 0 || s.health.includes(p.health))
+// Every list keeps a fixed order (STATUSES, HEALTHS, the columns), so equal states stringify the same.
+const same = (a: ViewState, b: ViewState) => JSON.stringify(a) === JSON.stringify(b)
+const toggle = <T,>(order: readonly T[], list: T[], value: T, on: boolean) =>
+  order.filter((x) => (x === value ? on : list.includes(x)))
+
 const navigation = (count: number): NavSidebarEntry[] => [
   { label: 'Dashboard', href: '#dashboard', icon: <Icon name="star" /> },
   { label: 'Projects', href: '#projects', icon: <Icon name="file" />, badge: String(count) },
@@ -92,63 +117,133 @@ export interface ProjectsProps extends Omit<ComponentProps<'div'>, 'children'> {
 }
 
 /**
- * An object-management page: projects in a table, sliced by tabs, narrowed by
- * search and a status filter, sortable, selectable for bulk archive, and
- * expandable to each project's activity. The state is local; swap it for
- * your data layer when you copy the page.
+ * An index page (list report): projects in saved views, narrowed by search
+ * and filters, as a table with pages or as a chart of their estimation. The
+ * table sorts, hides columns, selects rows for a bulk archive and expands to
+ * each project's activity. The state is local; swap it for your data layer
+ * when you copy the page.
  */
 export function Projects({ projects: initialProjects = sampleProjects, ...props }: ProjectsProps) {
   const [projects, setProjects] = useState(initialProjects)
-  const [tab, setTab] = useState('all')
+  const [views, setViews] = useState(PREDEFINED)
+  const [viewId, setViewId] = useState('all')
+  const active = views.find((v) => v.id === viewId) ?? views[0]
+  const [state, setState] = useState(active.state)
   const [query, setQuery] = useState('')
-  const [status, setStatus] = useState('all')
+  const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(PAGE_SIZES[0])
   const [selected, setSelected] = useState<string[]>([])
   const [isCompact, setIsCompact] = useState(false)
+  const searchRef = useRef<HTMLInputElement>(null)
 
-  // Tab counts follow the search and the status filter, so a count always
-  // matches the rows its tab shows.
-  const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase()
-    return projects.filter(
-      (p) =>
-        (status === 'all' || p.status === status) &&
-        (!q || p.name.toLowerCase().includes(q) || !!p.pm?.name.toLowerCase().includes(q)),
-    )
-  }, [projects, query, status])
-  const activeTab = TABS.find((t) => t.value === tab) ?? TABS[0]
-  const rows = filtered.filter(activeTab.matches)
-  const openCount = projects.filter((p) => !p.isArchived).length
-
-  const clearFilters = () => {
-    setQuery('')
-    setStatus('all')
+  // Any change to the rows shown starts again at the first page and drops
+  // the selection, so Archive never acts on rows you can no longer see.
+  const goTo = (n: number) => {
+    setPage(n)
+    setSelected([])
+  }
+  const update = (patch: Partial<ViewState>) => {
+    setState((s) => ({ ...s, ...patch }))
+    goTo(1)
+  }
+  const pick = (id: string) => {
+    setViewId(id)
+    setState(views.find((v) => v.id === id)?.state ?? base)
+    goTo(1)
   }
 
-  const table = (
-    <Table
-      columns={columns}
-      rows={rows}
-      getRowId={(p) => p.id}
-      caption={`${activeTab.label} projects`}
-      density={isCompact ? 'sm' : 'md'}
-      isSelectable
-      selectedIds={selected}
-      onSelectionChange={setSelected}
-      expandedContent={(p) => p.activity.length > 0 && <ActivityTimeline project={p} />}
-      emptyState={
-        <EmptyState
-          size="sm"
-          headingLevel={2}
-          title={query ? `No projects match “${query}”` : 'No projects here'}
-          description="Try another name or PM, another tab, or clear the filters."
-          action={
-            <Button size="sm" variant="secondary" appearance="outlined" onClick={clearFilters}>
-              Clear filters
-            </Button>
-          }
-        />
+  // The search narrows every view, so a view's count is the rows it would show.
+  const searched = useMemo(() => {
+    const q = query.trim().toLowerCase()
+    return q ? projects.filter((p) => p.name.toLowerCase().includes(q) || !!p.pm?.name.toLowerCase().includes(q)) : projects
+  }, [projects, query])
+  // Sorted before paging, so the sort covers every page.
+  const rows = sortRows(searched.filter((p) => matches(p, state)), columns, state.sort)
+  const pageCount = Math.max(1, Math.ceil(rows.length / pageSize))
+  const current = Math.min(page, pageCount)
+  const pageRows = rows.slice((current - 1) * pageSize, current * pageSize)
+  // An archive can move rows out from under the selection.
+  const shownSelected = selected.filter((id) => pageRows.some((p) => p.id === id))
+  const openCount = projects.filter((p) => !p.isArchived).length
+
+  // Back to the view's own filters: clearing must not leave the view.
+  const canClear = !!query || state.status.join() !== active.state.status.join() || state.health.join() !== active.state.health.join()
+  const clearFilters = () => {
+    setQuery('')
+    update({ status: active.state.status, health: active.state.health })
+    // The empty state, and this button with it, is about to go.
+    searchRef.current?.focus()
+  }
+
+  const byStatus = STATUSES.map((status) => ({
+    status,
+    estimation: rows.filter((p) => p.status === status).reduce((sum, p) => sum + p.estimation, 0),
+  }))
+
+  const filterMenu = <T extends string>(label: string, options: { value: T; label: string }[], value: T[], set: (next: T[]) => void) => (
+    <Menu
+      trigger={
+        <Button variant="secondary" appearance="outlined" endIcon={<Icon name="chevron-down" />}>
+          {label}
+        </Button>
       }
+      items={options.map((o) => ({
+        type: 'checkbox' as const,
+        label: o.label,
+        checked: value.includes(o.value),
+        onCheckedChange: (on: boolean) => set(toggle(options.map((x) => x.value), value, o.value, on)),
+      }))}
     />
+  )
+
+  const table = (
+    <>
+      <Table
+        columns={columns.filter((c) => state.columns.includes(c.key))}
+        rows={pageRows}
+        getRowId={(p) => p.id}
+        caption={`${active.label} projects`}
+        density={isCompact ? 'sm' : 'md'}
+        sort={state.sort}
+        onSortChange={(sort) => update({ sort })}
+        isSelectable
+        selectedIds={shownSelected}
+        onSelectionChange={setSelected}
+        expandedContent={(p) => p.activity.length > 0 && <ActivityTimeline project={p} />}
+        emptyState={
+          <EmptyState
+            size="sm"
+            headingLevel={2}
+            title={query ? `No projects match “${query}”` : 'No projects here'}
+            description="Try another name or PM, another view, or clear the filters."
+            action={
+              canClear && (
+                <Button size="sm" variant="secondary" appearance="outlined" onClick={clearFilters}>
+                  Clear filters
+                </Button>
+              )
+            }
+          />
+        }
+      />
+      {rows.length > 0 && (
+        <TableFooter>
+          <Pagination
+            totalItems={rows.length}
+            page={current}
+            onPageChange={goTo}
+            pageSize={pageSize}
+            onPageSizeChange={(size) => {
+              setPageSize(size)
+              goTo(1)
+            }}
+            pageSizeOptions={PAGE_SIZES}
+            size="sm"
+            aria-label="Project pages"
+          />
+        </TableFooter>
+      )}
+    </>
   )
 
   // No top bar in the sidebar layout: the account and notifications live in the sidebar's footer.
@@ -185,83 +280,111 @@ export function Projects({ projects: initialProjects = sampleProjects, ...props 
       {...props}
     >
       <div className={styles.page}>
-        <h1 className={styles.title}>
-          Projects <Badge count={openCount} variant="secondary" />
-        </h1>
-        <TableToolbar
-          selectedCount={selected.length}
-          onClearSelection={() => setSelected([])}
-          selectionActions={
-            <Button
-              size="sm"
-              variant="secondary"
-              appearance="outlined"
-              onClick={() => {
-                setProjects((all) => all.map((p) => (selected.includes(p.id) ? { ...p, isArchived: true } : p)))
-                setSelected([])
-              }}
-            >
-              Archive
-            </Button>
-          }
-        >
-          <TableToolbarGroup>
-            <ToggleButton
-              isIconOnly
-              aria-label="Compact rows"
-              variant="secondary"
-              appearance="outlined"
-              pressed={isCompact}
-              onPressedChange={setIsCompact}
-            >
-              <Icon name="menu" />
-            </ToggleButton>
-            <Menu
-              trigger={
-                <Button variant="secondary" appearance="outlined" endIcon={<Icon name="chevron-down" />}>
-                  {status === 'all' ? 'All statuses' : status}
+        <div className={styles.heading}>
+          <h1 className={styles.title}>
+            Projects <Badge count={openCount} variant="secondary" />
+          </h1>
+          <Button startIcon={<Icon name="plus" />}>Add project</Button>
+        </div>
+        <SavedViews
+          aria-label="Project views"
+          // The view in force counts what it shows now, saved or not.
+          views={views.map(({ state: s, ...view }) => ({ ...view, count: searched.filter((p) => matches(p, view.id === active.id ? state : s)).length }))}
+          value={active.id}
+          onValueChange={pick}
+          isModified={!same(state, active.state)}
+          onSave={() => setViews((all) => all.map((v) => (v.id === active.id ? { ...v, state } : v)))}
+          onDiscard={() => update(active.state)}
+          onSaveAs={({ label, isShared }) => {
+            const id = `view-${Date.now()}`
+            setViews((all) => [...all, { id, label, isShared, state }])
+            setViewId(id)
+          }}
+          isShareable
+          onDelete={(id) => {
+            setViews((all) => all.filter((v) => v.id !== id))
+            if (id === active.id) pick('all')
+          }}
+        />
+        <TableChartSwitch
+          aria-label="Show projects as"
+          summary={`${rows.length} ${rows.length === 1 ? 'project' : 'projects'}`}
+          filters={
+            <TableToolbar
+              className={styles.toolbar}
+              selectedCount={shownSelected.length}
+              onClearSelection={() => setSelected([])}
+              selectionActions={
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  appearance="outlined"
+                  onClick={() => {
+                    setProjects((all) => all.map((p) => (shownSelected.includes(p.id) ? { ...p, isArchived: true } : p)))
+                    setSelected([])
+                  }}
+                >
+                  Archive
                 </Button>
               }
-              items={[
-                {
-                  type: 'radio',
-                  label: 'Status',
-                  value: status,
-                  onValueChange: setStatus,
-                  options: [{ value: 'all', label: 'All statuses' }, ...STATUSES.map((s) => ({ value: s, label: s }))],
-                },
-              ]}
+            >
+              <FilterBar
+                aria-label="Project filters"
+                search={
+                  <Search
+                    ref={searchRef}
+                    aria-label="Search projects"
+                    placeholder="Search projects or PMs"
+                    value={query}
+                    onChange={(e) => {
+                      setQuery(e.target.value)
+                      goTo(1)
+                    }}
+                    className={styles.search}
+                  />
+                }
+                filters={
+                  <>
+                    {filterMenu('Status', STATUSES.map((s) => ({ value: s, label: s })), state.status, (status) => update({ status }))}
+                    {filterMenu('Health', HEALTHS.map((h) => ({ value: h, label: healthLabel[h] })), state.health, (health) => update({ health }))}
+                  </>
+                }
+                applied={[
+                  ...state.status.map((s) => ({ id: `status:${s}`, label: `Status: ${s}` })),
+                  ...state.health.map((h) => ({ id: `health:${h}`, label: `Health: ${healthLabel[h]}` })),
+                ]}
+                onRemove={(id) => {
+                  const [field, value] = id.split(/:(.*)/)
+                  if (field === 'status') update({ status: state.status.filter((s) => s !== value) })
+                  else update({ health: state.health.filter((h) => h !== value) })
+                }}
+                onClearAll={() => update({ status: [], health: [] })}
+              />
+              <div className={styles.tableSettings}>
+                <ToggleButton
+                  isIconOnly
+                  aria-label="Compact rows"
+                  variant="secondary"
+                  appearance="outlined"
+                  pressed={isCompact}
+                  onPressedChange={setIsCompact}
+                >
+                  <Icon name="menu" />
+                </ToggleButton>
+                <ColumnChooser columns={columns} visibleKeys={state.columns} onVisibleKeysChange={(keys) => update({ columns: keys })} />
+              </div>
+            </TableToolbar>
+          }
+          table={table}
+          chart={
+            <BarChart
+              title="Estimation by status"
+              data={rows.length ? byStatus : []}
+              x="status"
+              series={[{ key: 'estimation', label: 'Estimation' }]}
+              format={money.format}
             />
-            <Search
-              aria-label="Search projects"
-              placeholder="Search projects or PMs"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              className={styles.search}
-            />
-          </TableToolbarGroup>
-          <Button startIcon={<Icon name="plus" />}>Add project</Button>
-        </TableToolbar>
-        <Tabs
-          aria-label="Project views"
-          className={styles.tabs}
-          value={tab}
-          onValueChange={(next) => {
-            setTab(next)
-            // Selection is per view: archiving rows you can no longer see would surprise.
-            setSelected([])
-          }}
-          items={TABS.map((t) => ({
-            value: t.value,
-            label: (
-              <>
-                {t.label} <Badge count={filtered.filter(t.matches).length} size="sm" variant="secondary" />
-              </>
-            ),
-            // One table, in the selected tab's panel only. Base UI keeps a closing
-            // panel mounted for a frame, so the same table in every panel showed twice.
-            content: t.value === tab ? table : undefined,
-          }))}
+          }
         />
       </div>
     </AppShell>
