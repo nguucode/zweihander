@@ -1,32 +1,23 @@
 'use client'
 
 import { createContext, useContext, type ComponentProps, type ReactNode } from 'react'
-import { Icon } from '@/lib/icon'
 import { cn } from '@/lib/utils'
-import { Button } from '../../buttons/Button'
 import styles from './TopBar.module.css'
 
 /**
- * What the Top Bar needs from the App Shell around it: the drawer (whether
- * there is one, what it holds, how to open it), the brand, and whether the
- * brand takes a sidebar-wide cell. Outside a shell, none of it applies.
+ * What the shell's pieces need from the App Shell around them: the brand,
+ * whether it takes a sidebar-wide cell, and whether the shell is narrower
+ * than 64rem, where a NavSidebar is the icon rail. Outside a shell, none of
+ * it applies.
  */
 export const ShellContext = createContext<{
-  hasDrawer: boolean
-  drawerHolds: 'sidebar' | 'links'
-  isOpen: boolean
-  open: () => void
-  label: string
   brand: ReactNode
   brandCell: boolean
+  isNarrow: boolean
 }>({
-  hasDrawer: false,
-  drawerHolds: 'sidebar',
-  isOpen: false,
-  open: () => {},
-  label: 'Navigation',
   brand: null,
   brandCell: false,
+  isNarrow: false,
 })
 
 /** `null`, `false` and `undefined` render nothing. */
@@ -40,34 +31,12 @@ export interface TopBarProps extends ComponentProps<'header'> {
   children?: ReactNode
 }
 
-/**
- * The bar above the page. Inside an App Shell it shows the shell's brand and,
- * on narrow screens, the menu button that opens the navigation drawer.
- */
+/** The bar above the page. Inside an App Shell it shows the shell's brand. */
 export function TopBar({ start, end, children, className, ...props }: TopBarProps) {
-  const drawer = useContext(ShellContext)
+  const shell = useContext(ShellContext)
   return (
-    <header
-      className={cn(styles.header, className)}
-      data-drawer={drawer.hasDrawer ? drawer.drawerHolds : undefined}
-      data-brand-cell={drawer.brandCell || undefined}
-      {...props}
-    >
-      {drawer.hasDrawer && (
-        <Button
-          variant="secondary"
-          appearance="ghost"
-          isIconOnly
-          aria-label={`Open ${drawer.label.toLowerCase()}`}
-          aria-haspopup="dialog"
-          aria-expanded={drawer.isOpen}
-          className={styles.menuButton}
-          onClick={drawer.open}
-        >
-          <Icon name="menu" />
-        </Button>
-      )}
-      {given(drawer.brand) && <div className={styles.brand}>{drawer.brand}</div>}
+    <header className={cn(styles.header, className)} data-brand-cell={shell.brandCell || undefined} {...props}>
+      {given(shell.brand) && <div className={styles.brand}>{shell.brand}</div>}
       {start && <div className={styles.start}>{start}</div>}
       {children && <div className={styles.center}>{children}</div>}
       {end && <div className={styles.end}>{end}</div>}
@@ -87,7 +56,7 @@ export interface TopBarNavProps extends Omit<ComponentProps<'nav'>, 'children'> 
   'aria-label'?: string
 }
 
-/** Navigation links across the Top Bar. Hidden below 48rem, where the drawer holds them. */
+/** Navigation links across the Top Bar. When they do not fit, they scroll sideways. */
 export function TopBarNav({ items, currentHref, className, 'aria-label': ariaLabel = 'Main', ...props }: TopBarNavProps) {
   return (
     <nav aria-label={ariaLabel} className={cn(styles.nav, className)} {...props}>

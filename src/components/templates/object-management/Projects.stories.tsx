@@ -90,12 +90,13 @@ export const Default: Story = {
   },
 }
 
-/** Below 64rem the sidebar moves into a drawer behind the header's menu button. */
+/** Below 64rem the sidebar stays beside the page as the icon rail. */
 export const Tablet: Story = {
   decorators: box(768),
   play: async ({ canvas }) => {
-    await expect(canvas.queryByRole('navigation', { name: 'Main' })).toBeNull()
-    await expect(canvas.getByRole('button', { name: 'Open navigation' })).toBeVisible()
+    const nav = canvas.getByRole('navigation', { name: 'Main' })
+    await expect(nav.getBoundingClientRect().width).toBeLessThan(100)
+    await expect(within(nav).getByRole('link', { name: /^Projects/ })).toHaveAttribute('aria-current', 'page')
     await expect(canvas.getByRole('table')).toBeVisible()
   },
 }
@@ -108,11 +109,8 @@ export const Mobile: Story = {
     await expect(main.scrollWidth).toBeLessThanOrEqual(main.clientWidth)
     const tabs = canvas.getByRole('tablist', { name: 'Project views' })
     await expect(tabs.scrollWidth).toBeGreaterThan(tabs.clientWidth)
-    await userEvent.click(canvas.getByRole('button', { name: 'Open navigation' }))
-    const drawer = await body().findByRole('dialog', { name: 'Navigation' })
-    await expect(within(drawer).getByRole('link', { name: /^Projects/ })).toHaveAttribute('aria-current', 'page')
-    await userEvent.keyboard('{Escape}')
-    await waitFor(() => expect(body().queryByRole('dialog')).toBeNull())
+    const nav = canvas.getByRole('navigation', { name: 'Main' })
+    await expect(within(nav).getByRole('link', { name: /^Projects/ })).toHaveAttribute('aria-current', 'page')
   },
 }
 
