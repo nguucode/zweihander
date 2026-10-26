@@ -2815,7 +2815,7 @@
         {
           "name": "currentHref",
           "control": "text",
-          "default": "#atlas",
+          "default": "#invoices",
           "description": "The `href` of the page the reader is on. That item gets the selected fill and `aria-current=\"page\"`."
         },
         {
@@ -2827,8 +2827,8 @@
         {
           "name": "isCollapsible",
           "control": "boolean",
-          "default": false,
-          "description": "Shows a button in the header that collapses and expands the sidebar."
+          "default": true,
+          "description": "Shows a button in the top row that collapses and expands the sidebar."
         }
       ]
     },

@@ -12,6 +12,7 @@
      redefining it. */
   --shell-muted-foreground: var(--muted-foreground);
   --shell-subtle-foreground: var(--subtle-foreground);
+  --shell-accent-foreground: var(--accent-foreground);
   --shell-canvas-foreground: var(--canvas-foreground, var(--foreground));
   /* A solid colour standing for the canvas, for what components draw as
      "the surface under me" (a Badge ring, a Checkbox fill). A gradient
@@ -67,10 +68,36 @@
 :is(.top, .sidebar)[data-surface='transparent'] {
   /* stylelint-disable zweihander/no-token-shadow -- what sits on the canvas reads the canvas colours */
   --background: var(--shell-canvas-solid);
+  --foreground: var(--shell-canvas-foreground);
+  --accent-foreground: var(--canvas-foreground, var(--shell-accent-foreground));
   --muted-foreground: var(--shell-canvas-muted-foreground);
   --subtle-foreground: var(--shell-canvas-subtle-foreground);
   /* stylelint-enable zweihander/no-token-shadow */
   color: var(--shell-canvas-foreground);
+}
+
+/* A white (solid) sidebar marks the current item with the brand's light
+   tint: a gray fill on white reads as hover. Its hover preview is white too. */
+.sidebar[data-surface='solid'] {
+  --sidebar-selected: var(--primary-subtle);
+  --sidebar-selected-foreground: var(--primary-subtle-text);
+  --sidebar-peek-background: var(--card);
+}
+/* A transparent sidebar keeps the kit's fills on the kit's canvases. On a
+   canvas of the consumer's own (a deep colour or a gradient), the Theme
+   tokens canvas-hover, canvas-selected, canvas-field (and -border) and
+   canvas-badge (and -foreground) set them; on a dark canvas, dark veils for
+   the fills keep white text readable, and a white badge stands out on any
+   hue. The hover preview floats on the canvas's solid colour. */
+.sidebar[data-surface='transparent'] {
+  --sidebar-hover: var(--canvas-hover, var(--hover-overlay));
+  --sidebar-selected: var(--canvas-selected, var(--selected));
+  --sidebar-selected-foreground: var(--shell-canvas-foreground);
+  --sidebar-field: var(--canvas-field, var(--card));
+  --sidebar-field-border: var(--canvas-field-border, var(--input));
+  --sidebar-badge: var(--canvas-badge, var(--destructive));
+  --sidebar-badge-foreground: var(--canvas-badge-foreground, var(--destructive-foreground));
+  --sidebar-peek-background: var(--shell-canvas-solid);
 }
 
 .top {
@@ -82,28 +109,17 @@
 }
 
 .sidebar {
+  /* One child: the NavSidebar, its <nav> in a display: contents slot. */
   display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
   min-block-size: 0;
-  /* The Sidebar inside drops its own fill and edge; this cell draws them. */
+  /* The NavSidebar inside drops its own fill and edge; this cell draws them. */
   --sidebar-background: transparent;
   --sidebar-border: 0;
   border-inline-end: 1px solid var(--border);
 }
 .sidebar[data-surface='transparent'] {
   border-inline-end-color: var(--shell-transparent-edge);
-}
-.sidebar > :last-child {
-  grid-row: -2;
-}
-/* In a collapsed rail the logo keeps its place and is cut to the rail's
-   width, so a logo should lead with its mark. */
-.sidebarBrand {
-  display: flex;
-  align-items: center;
-  block-size: var(--shell-bar);
-  padding-inline-start: var(--shell-logo-x);
-  overflow: hidden;
 }
 
 /* The sidebar beside the page at every width; below 64rem it is the rail
@@ -114,7 +130,8 @@
 /* The rail cannot expand there, so it does not animate into place either:
    on a phone the sidebar would visibly close as the page loads. */
 @container (max-width: 63.99rem) {
-  .sidebar > * {
+  .sidebar > *,
+  .sidebar > * > nav {
     transition: none;
   }
 }

@@ -23,10 +23,11 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/app-shell.json
 
 The default, `layout="sidebar"`: the sidebar runs the full height and
 there is **no top bar** on wide screens. What a top bar would hold goes in
-the NavSidebar: search in its `header`, the account and notifications in its
-`footer`. Below 64rem the sidebar is the rail, which has no room for them,
-so the header comes back there with the logo: pass the account and search
-in `header` as well.
+the NavSidebar, laid out as in the Claude apps: the logo and the collapse
+button in its top row, the tenant switcher and search in its `header`,
+notifications, help and the account in its `footer`. Below 64rem the
+sidebar is the rail: its header and footer rows stay, as icons, and the
+header comes back above the page with the logo.
 
 <Canvas of={AppShellStories.WithSidebar} />
 
@@ -43,8 +44,10 @@ Pass the logo as `brand`, not inside the NavSidebar or the TopBar. The
 shell places it in the same spot in both layouts: its left edge on the
 sidebar icons' left edge, centred in a row as tall as the top bar. It does
 not move when the sidebar collapses, and it follows density. In the
-sidebar layout a collapsed rail cuts the logo to the rail's width, so lead
-the logo with its mark. It is rendered once, wherever it shows.
+sidebar layout the shell hands it to the NavSidebar's top row, next to the
+collapse button; a collapsed rail cuts the logo to the rail's width, so lead
+the logo with its mark. It is rendered once, wherever it shows. A sidebar
+that is not a NavSidebar gets no logo in the sidebar layout.
 
 ## Canvas and content style
 
@@ -80,6 +83,25 @@ custom canvas from `tokens`, set `canvas` to the preset closest to it
 
 <Canvas of={AppShellStories.TransparentOnPlain} />
 
+### Sidebar surfaces
+
+The NavSidebar takes each surface's colours from the shell:
+
+- **Gray**: `transparent` on the `neutral` canvas, the sidebar's own look.
+- **White**: `solid`. The current item takes the brand's light tint
+  (`--primary-subtle`), since a gray fill on white reads as hover.
+- **Transparent on a deep canvas of your own**: a colour or gradient dark
+  enough for white text. Beside `canvas`, `canvas-solid`, `canvas-foreground`
+  and `canvas-muted-foreground`, the Theme tokens `canvas-hover`,
+  `canvas-selected`, `canvas-field`, `canvas-field-border`, `canvas-badge`
+  and `canvas-badge-foreground` set the sidebar's fills on it. Dark veils
+  (black at 12–24%) for hover, the current item and the search field deepen
+  the canvas under white text; a white badge with red text stands out on
+  any hue, a red canvas included. On a canvas of the brand's own hue, give
+  a brand avatar the `subtle` variant, or it vanishes.
+
+<Canvas of={AppShellStories.SidebarSurfaces} />
+
 ## Combinations
 
 Of the 36 combinations of layout, the two surfaces, canvas and content
@@ -96,7 +118,8 @@ used:
 ## Collapsed rail
 
 NavSidebar's `isCollapsible` turns it into an icon rail that the reader can
-expand. The links keep their names, and show them as tooltips.
+expand. The links keep their names, and show them as tooltips; the header
+and footer stay, as icons.
 
 <Canvas of={AppShellStories.CollapsedRail} />
 

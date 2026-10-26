@@ -9,8 +9,10 @@ import * as NavSidebarStories from './NavSidebar.stories'
 <DocTabs>
 <DocTab value="overview">
 
-The app's main navigation, down the side of the screen: a header, links
-in named groups, and a footer. It can collapse to an icon rail. A pattern,
+The app's main navigation, down the side of the screen, laid out as in the
+Claude apps: the logo and the collapse button on top, a header for the
+tenant switcher and search, links in categories, and a footer for the
+account, notifications and help. It can collapse to an icon rail. A pattern,
 one of the three pieces the [App Shell](?path=/docs/templates-application-ui-app-shell--docs)
 template places (with the Top Bar and App Content); it was the
 Navigation/Sidebar component.
@@ -24,11 +26,58 @@ Navigation/Sidebar component.
 | Variant | Use for |
 | --- | --- |
 | Expanded | The default: icon, label and badge on every row. |
-| Collapsible (`isCollapsible`) | Apps where the content needs the width at times: a button in the header folds the sidebar to the rail. |
-| Rail (`isCollapsed` or `defaultCollapsed`) | Icons only, labels in tooltips. For tools the reader knows well. Every item needs an icon. |
-| Plain | No header or footer: a section's own navigation inside a larger layout. |
+| Collapsible (`isCollapsible`) | Apps where the content needs the width at times: a button in the top row folds the sidebar to the rail. |
+| Rail (`isCollapsed` or `defaultCollapsed`) | Icons only, labels in tooltips. For tools the reader knows well. The header and footer stay, as icons; items without an icon are left out. |
+| Plain | No logo, header or footer: a section's own navigation inside a larger layout. |
 
 <Canvas of={NavSidebarStories.Collapsible} />
+
+### Rail preview
+
+Collapsed, resting the mouse on the rail for a moment floats the full
+sidebar over the page, as in the Claude apps; the rail keeps its place in
+the layout, so the page does not move. The preview's top button, "Keep
+sidebar open", docks it. It stays while a menu opened from it is open.
+Touch and keyboard do not open it: keyboard focus reaches the same links in
+the rail, and the expand button docks the sidebar.
+
+<Canvas of={NavSidebarStories.RailPreview} />
+
+### Categories
+
+A group is a category. `isCollapsible` makes its label a button that opens
+and closes it; `limit` shows its first items with a small "Show more" for
+the rest, and the current page is never hidden behind the limit. `action`
+is opt-in: a button at the end of the label row (an icon Button that adds an
+item, say), shown on hover and focus. Leave it off where nothing is added
+from the sidebar.
+
+<Canvas of={NavSidebarStories.Categories} />
+
+### Header and footer rows
+
+`NavSidebarButton` is a row that looks like an item: an icon, a label, an
+optional `badge`, `description` line and `end` (a chevron, a shortcut). It
+is a button, so it can be a Menu's or Popover's trigger. Its appearances:
+
+| Appearance | Use for |
+| --- | --- |
+| `ghost` | A row like an item: notifications (with its count as `badge`), help, the account. |
+| `switcher` | A tenant or workspace switcher: the name in medium weight, its chevron right after it, the avatar a rounded square. |
+| `field` | A search button drawn as an input, its shortcut hint at the far end, that opens a command palette. |
+
+An Avatar in the leading slot is 20px in every density, and every leading
+visual (logo mark, avatar, icon) is centred on the nav icons' line. In the
+rail a row shows its icon only and takes its label (and badge) as its name
+and tooltip.
+
+### Backgrounds
+
+Gray is the sidebar's own `--surface-filled`, and what a transparent
+sidebar shows on the neutral canvas. In an App Shell it can also be white
+(`sidebarSurface="solid"`, the current item in the brand tint) or
+transparent on a deep canvas of your own; see Sidebar surfaces on the
+[App Shell](?path=/docs/templates-application-ui-app-shell--docs) page.
 
 <Canvas of={NavSidebarStories.Plain} />
 
@@ -55,23 +104,28 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/nav-sidebar.json
   <Story of={NavSidebarStories.Anatomy} />
 </Anatomy>
 
-In the rail, the header, the labels, the badges and the footer are hidden;
-each group starts with a rule instead of its label.
+In the rail the logo keeps its place, cut to the rail's width, and the
+expand button shows over it on hover or focus. The header and footer stay
+as icons; labels, badges, category heads and "Show more" are hidden, and
+each category starts with a rule instead of its label.
 
 ## Measurements
 
-Items are rows of the md control tier, flush against each other: a fill
-marks a row, not a gap.
+Items are rows of the md control tier, 2px apart in every density, so
+hover and current fills never touch.
 
 <SpecTable
   caption="Sidebar"
   rows={[
     { part: 'NavSidebar', property: 'Padding', token: '--space-inline' },
     { part: 'NavSidebar', property: 'Gap between groups', token: '--space-group' },
-    { part: 'Header', property: 'Height', token: '--control-md' },
+    { part: 'Brand row', property: 'Height from the top edge: --control-md plus twice', token: '--space-cluster' },
+    { part: 'Header', property: 'Gap between rows', token: '--space-inline' },
     { part: 'Header', property: 'Space below', token: '--space-inline' },
     { part: 'Collapse button', property: 'Size', token: '--control-md' },
-    { part: 'Footer', property: 'Space and padding above', token: '--space-cluster' },
+    { part: 'Category label row', property: 'Height', token: '--box-sm' },
+    { part: 'Items, footer rows', property: 'Gap', token: '--space-0-5' },
+    { part: 'Footer', property: 'Space above', token: '--space-inline' },
   ]}
 />
 
@@ -82,10 +136,11 @@ marks a row, not a gap.
     { part: 'Item', property: 'Inline padding', token: '--space-inline' },
     { part: 'Item', property: 'Gap', token: '--space-inline' },
     { part: 'Item', property: 'Corner radius', token: '--radius-control' },
-    { part: 'Icon', property: 'Size', token: '--icon-md' },
+    { part: 'Icon', property: 'Size, and the width of every leading slot', token: '--icon-md' },
+    { part: 'Avatar in a row', property: 'Size', token: '--box-xs' },
     { part: 'Label', property: 'Font size', token: '--text-body' },
     { part: 'Label', property: 'Line height', token: '--leading-body' },
-    { part: 'Group label, badge', property: 'Font size', token: '--text-body-sm' },
+    { part: 'Category label, badge, Show more', property: 'Font size', token: '--text-body-sm' },
     { part: 'Badge', property: 'Inline padding', token: '--control-xs-pad' },
     { part: 'Badge', property: 'Corner radius', token: '--radius-pill' },
     { part: 'Hit area', property: 'Minimum on touch screens', token: '--target-coarse' },
@@ -112,8 +167,9 @@ scrolls when the items do not fit.
   rows={[
     { part: 'NavSidebar', property: 'Background', token: '--surface-filled' },
     { part: 'NavSidebar', property: 'Edge', token: '--border' },
-    { part: 'Group label', property: 'Colour', token: '--muted-foreground' },
-    { part: 'Footer', property: 'Rule', token: '--border' },
+    { part: 'Category label', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Search field', property: 'Background', token: '--card' },
+    { part: 'Search field', property: 'Edge', token: '--input' },
   ]}
 />
 
@@ -126,14 +182,17 @@ scrolls when the items do not fit.
     { part: 'Item, hover', property: 'Label and icon', token: '--accent-foreground' },
     { part: 'Item, current', property: 'Background', token: '--selected' },
     { part: 'Item, current', property: 'Label and icon', token: '--foreground' },
-    { part: 'Badge', property: 'Background', token: '--secondary' },
-    { part: 'Badge', property: 'Colour', token: '--secondary-foreground' },
+    { part: 'Badge', property: 'Background', token: '--destructive' },
+    { part: 'Badge', property: 'Colour', token: '--destructive-foreground' },
     { part: 'Focus ring', property: 'Colour', token: '--ring' },
   ]}
 />
 
 Hover is an overlay, not a solid: in dark mode the sidebar's own surface
-is the same grey as `--accent`, so an opaque hover fill would vanish.
+is the same grey as `--accent`, so an opaque hover fill would vanish. A
+badge is a count that needs attention, so it is red and sits right after
+its label. An App Shell overrides the current fill, the hover, the search
+field and the badge for its white and transparent surfaces.
 
 ## States
 
@@ -207,7 +266,17 @@ item an icon if the sidebar can collapse.
   included ("Inbox, 12"), and a tooltip shows the same text on hover and
   on keyboard focus.
 - The collapse button is named "Collapse sidebar" / "Expand sidebar" and
-  carries `aria-expanded`.
+  carries `aria-expanded`; in the rail preview it is "Keep sidebar open".
+- A badge joins its row's name after a comma ("Inbox, 12",
+  "Notifications, 3"), expanded and in the rail alike.
+- The rail preview opens on mouse hover only. Keyboard focus never covers
+  the rail with it: the rail's links are reachable as they are, and the
+  expand button docks the sidebar.
+- A collapsible category's label is a button with `aria-expanded` and
+  `aria-controls` pointing at its list; Enter and Space open and close it.
+  A category's `action` needs its own name ("Add to Pinned").
+- A `NavSidebarButton` is named by its text; in the rail, by its `label`
+  through `aria-label`, with the same text as a tooltip.
 - Rows are 32px tall, 44px on touch screens (`pointer: coarse`).
 
 </DocTab>

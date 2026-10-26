@@ -6,18 +6,21 @@ import styles from './TopBar.module.css'
 
 /**
  * What the shell's pieces need from the App Shell around them: the brand,
- * whether it takes a sidebar-wide cell, and whether the shell is narrower
- * than 64rem, where a NavSidebar is the icon rail. Outside a shell, none of
- * it applies.
+ * whether it takes a sidebar-wide cell, where a NavSidebar's top row puts
+ * it, and whether the shell is narrower than 64rem, where a NavSidebar is
+ * the icon rail. Outside a shell, none of it applies.
  */
 export const ShellContext = createContext<{
   brand: ReactNode
   brandCell: boolean
   isNarrow: boolean
+  /** The logo for a NavSidebar's top row: the sidebar layout, while the sidebar is expanded. */
+  sidebarBrand: ReactNode
 }>({
   brand: null,
   brandCell: false,
   isNarrow: false,
+  sidebarBrand: null,
 })
 
 /** `null`, `false` and `undefined` render nothing. */
