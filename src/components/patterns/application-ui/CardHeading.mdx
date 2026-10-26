@@ -1,0 +1,69 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks'
+import * as CardHeadingStories from './CardHeading.stories'
+
+<Meta of={CardHeadingStories} />
+
+# Card Heading
+
+The top row of a card: what the card is, a line of context, and what you
+can do with it. Put it first inside a [Card](?path=/docs/data-display-card--docs);
+the card's padding and gap space it from the content. After Tailwind UI
+Application UI, Headings: Card headings.
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/card-heading.json
+```
+
+## Simple
+
+A title and, optionally, one line of description.
+
+<Canvas of={CardHeadingStories.Simple} />
+
+## With action
+
+The card's main action at the end of the title row. One primary button at
+most; a card is part of a page that has its own primary action.
+
+<Canvas of={CardHeadingStories.WithAction} />
+
+## With avatar and menu
+
+Who or what the card is about, as an Avatar or an Icon before the title.
+Rarely used actions go in a Menu behind "More actions" so the row stays
+short.
+
+<Canvas of={CardHeadingStories.WithAvatarAndMenu} />
+
+## With a rule
+
+The heading draws no line of its own. When the content needs setting off,
+put a [Divider](?path=/docs/atomic-elements-divider--docs) after the heading,
+inside the card.
+
+<Canvas of={CardHeadingStories.Complete} />
+
+## Props
+
+<ArgTypes of={CardHeadingStories} />
+
+Every other `<div>` attribute passes through.
+
+## Layout
+
+- **Actions wrap, the title does not squeeze.** The title and description
+  keep the row down to 16rem, then the actions drop underneath them,
+  keeping their order.
+- **Long titles break anywhere** rather than overflow.
+
+<Canvas of={CardHeadingStories.Narrow} />
+
+## Accessibility
+
+- The title is an `h2` by default: a card on a page sits under the
+  page's `h1`. Use `headingLevel={3}` or `4` when the card sits under a
+  section heading, so the outline has no gaps.
+- The media is decorative and hidden from assistive tech: the title
+  already says who or what the card is about.
+- An icon-only action needs an `aria-label`, as on any Button. When a card
+  repeats on a page, make action names unique, e.g. "Edit Chelsea Hagon".
