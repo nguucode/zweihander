@@ -1378,6 +1378,31 @@
       ]
     },
     {
+      "name": "inline-edit",
+      "type": "registry:block",
+      "title": "Inline Edit",
+      "description": "Application UI pattern: a value in a table cell or description list row that edits in place, with Enter/Escape, Save/Cancel, an error at the field and a saving state.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/icon.json",
+        "https://ontheshore.biz/zweihander/r/button.json",
+        "https://ontheshore.biz/zweihander/r/text-input.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/patterns/application-ui/InlineEdit.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/patterns/application-ui/InlineEdit.tsx"
+        },
+        {
+          "path": "src/components/patterns/application-ui/InlineEdit.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/patterns/application-ui/InlineEdit.module.css"
+        }
+      ]
+    },
+    {
       "name": "filter-bar",
       "type": "registry:block",
       "title": "Filter Bar",
