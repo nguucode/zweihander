@@ -1,0 +1,35 @@
+/* The buttons keep their own size and colour; the group only joins them.
+   Inner corners go square and each button after the first overlaps the
+   previous one by its 1px border, so two outlined buttons share one line
+   instead of drawing a double one. Two classes' worth of specificity, so
+   it outranks Button's size class whichever stylesheet loads first. */
+.group {
+  display: inline-flex;
+  /* Keeps the z-index below inside the group. */
+  isolation: isolate;
+}
+
+.group > :not(:first-child) {
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- the buttons' 1px border, see above */
+  margin-inline-start: -1px;
+  border-start-start-radius: 0;
+  border-end-start-radius: 0;
+}
+
+.group > :not(:last-child) {
+  border-start-end-radius: 0;
+  border-end-end-radius: 0;
+}
+
+/* A pressed button's border is its own colour; raised, it draws over the
+   neighbour's line it overlaps. Focus goes higher still so the ring is
+   never cut by the next button. */
+.group > [aria-pressed='true'] {
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- local stacking inside the group, not a global layer */
+  z-index: 1;
+}
+
+.group > :focus-visible {
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- local stacking inside the group, not a global layer */
+  z-index: 2;
+}

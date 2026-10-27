@@ -22,6 +22,7 @@ export default defineConfig({
         'components/atomic-elements/Avatar': 'src/components/atomic-elements/Avatar.tsx',
         'components/atomic-elements/Tag': 'src/components/atomic-elements/Tag.tsx',
         'components/buttons/ToggleButton': 'src/components/buttons/ToggleButton.tsx',
+        'components/buttons/ButtonGroup': 'src/components/buttons/ButtonGroup.tsx',
         'components/controls/Switch': 'src/components/controls/Switch.tsx',
         'components/controls/Checkbox': 'src/components/controls/Checkbox.tsx',
         'components/controls/Radio': 'src/components/controls/Radio.tsx',

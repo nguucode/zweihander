@@ -1,0 +1,176 @@
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
+// Imported so docs:check reads the buttons' CSS: the group's measurements are theirs.
+import { ToggleButton } from './ToggleButton'
+import * as ButtonGroupStories from './ButtonGroup.stories'
+
+<Meta of={ButtonGroupStories} />
+
+# Button Group
+
+<DocTabs>
+<DocTab value="overview">
+
+Buttons joined into one bar. `ToggleGroup` joins
+[Toggle Buttons](?path=/docs/components-buttons-togglebutton--docs) that
+share one selection; `ButtonGroup` joins plain
+[Buttons](?path=/docs/components-buttons-button--docs) that act.
+
+<Status of={ButtonGroupStories} />
+
+Button Group is outside the 1.0 component list, so it starts as experimental.
+
+<Canvas of={ButtonGroupStories.Default} />
+
+## Variants
+
+| Form | Use for |
+| --- | --- |
+| `ToggleGroup`, single | A segmented control: one view, one mode, one period at a time. |
+| `ToggleGroup multiple` | Settings that combine: status filters, Bold and Italic. |
+| `ButtonGroup` | Related actions that read as a set: previous and next, zoom in and out. |
+
+<Canvas of={ButtonGroupStories.Multiple} />
+
+<Canvas of={ButtonGroupStories.Actions} />
+
+<Canvas of={ButtonGroupStories.IconOnly} />
+
+## Resources
+
+From npm, or copied into your project through the registry:
+
+```js
+import { ButtonGroup, ToggleGroup } from 'zweihander/button-group'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/button-group.json
+```
+
+- Source: [src/components/buttons/ButtonGroup.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/buttons/ButtonGroup.tsx)
+- Spec: none on uiguideline.com; after [shadcn/ui Button Group](https://ui.shadcn.com/docs/components/button-group) and [Toggle Group](https://ui.shadcn.com/docs/components/toggle-group)
+- Behaviour: [Base UI Toggle Group](https://base-ui.com/react/components/toggle-group)
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
+## Anatomy
+
+<Anatomy parts={ButtonGroupStories.anatomyParts}>
+  <Story of={ButtonGroupStories.Anatomy} />
+</Anatomy>
+
+The buttons keep their own anatomy; the container only joins them.
+
+## Measurements
+
+The group adds no size of its own. Each button keeps its tier, so a group
+of `sm` buttons is `--control-sm` tall. Inner corners are square and each
+button after the first overlaps the one before by its 1px border, so two
+outlined buttons share one line. The outer corners keep the buttons'
+radius.
+
+<SpecTable
+  caption="sm"
+  rows={[
+    { part: 'Button', property: 'Height', token: '--control-sm' },
+    { part: 'Container', property: 'Outer corner radius', token: '--control-sm-radius' },
+  ]}
+/>
+
+<SpecTable
+  caption="md"
+  rows={[
+    { part: 'Button', property: 'Height', token: '--control-md' },
+    { part: 'Container', property: 'Outer corner radius', token: '--control-md-radius' },
+  ]}
+/>
+
+## Color
+
+The group paints nothing: unpressed and pressed colours are the Toggle
+Button's, and a ButtonGroup's are each Button's. The pressed toggle is
+raised over its neighbours so its own border wins where they overlap.
+
+<SpecTable
+  caption="Default toggles"
+  rows={[
+    { part: 'Button, unpressed', property: 'Border', token: '--input' },
+    { part: 'Selected', property: 'Background', token: '--primary' },
+    { part: 'Selected', property: 'Label', token: '--primary-foreground' },
+  ]}
+/>
+
+## States
+
+<States
+  states={[
+    { label: 'Enabled' },
+    { label: 'Hover', pseudo: 'hover' },
+    { label: 'Focus', pseudo: 'focus-visible' },
+    { label: 'Disabled', content: <Story of={ButtonGroupStories.Disabled} /> },
+  ]}
+>
+  <Story of={ButtonGroupStories.Default} />
+</States>
+
+Hover, focus and pressed are each button's own. The focused button is
+raised over its neighbours so the ring is never cut.
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={ButtonGroupStories} />
+</div>
+
+The table is `ToggleGroup`'s. `ButtonGroup` takes only `<div>` attributes:
+`aria-label` names it. Both pass every other `<div>` attribute through.
+
+</DocTab>
+<DocTab value="guidelines">
+
+## When to use
+
+Use `ToggleGroup` when the toggles answer one question (which view, which
+filters) and `ButtonGroup` when a few actions belong together. Give every
+button in a group the same variant and appearance, so the pressed one is
+the only one that stands out.
+
+<DoDont
+  do={<Story of={ButtonGroupStories.DoSameLook} />}
+  doCaption="One look across the group: only the pressed segment stands out."
+  dont={<Story of={ButtonGroupStories.DontMixLooks} />}
+  dontCaption="A different variant per button reads as several states at once."
+/>
+
+<Canvas of={ButtonGroupStories.Controlled} />
+
+## When not to use
+
+- **To switch between panels of content.** Use Tabs: they own the panel
+  and its `tabpanel` role.
+- **For a choice submitted with a form.** Use a Radio group or Checkboxes:
+  a toggle applies at once, a form field waits for Submit.
+- **For unrelated actions.** Lay out separate Buttons with a gap; joining
+  them says they belong together.
+- **For more than a handful of options.** Use a Select.
+
+## Accessibility
+
+- Both containers have `role="group"`; name them with `aria-label`.
+- Each toggle is a native `<button>` with `aria-pressed`, so a screen reader
+  announces "Board, toggle button, pressed".
+- A `ToggleGroup` is one tab stop. Arrow keys move between its toggles
+  and wrap, Home and End jump to the first and last; Space or Enter
+  presses.
+- Single choice keeps one pressed: pressing the pressed toggle again does
+  not release it.
+- A `ButtonGroup`'s buttons are each a tab stop, with no `aria-pressed`.
+- A disabled `ToggleGroup` disables every toggle in it.
+- An icon-only button needs its own `aria-label`, as on Button.
+
+</DocTab>
+</DocTabs>

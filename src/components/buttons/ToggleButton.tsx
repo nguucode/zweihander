@@ -72,7 +72,8 @@ export function ToggleButton({
           // Its aria-label reached Toggle with the other props and comes back
           // in toggleProps, which is what Button's icon-only type asks for.
           isIconOnly,
-          disabled,
+          // A disabled ToggleGroup disables its toggles through state.
+          disabled: state.disabled,
           className: cn(state.pressed && appearance !== 'contained' && styles.tinted, className),
           children,
         } as ButtonProps
