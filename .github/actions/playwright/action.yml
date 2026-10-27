@@ -1,0 +1,29 @@
+name: Install Playwright browsers
+description: >
+  `npx playwright install --with-deps` for chromium, firefox and webkit, with
+  the browsers and the apt .deb files it downloads kept in the Actions cache.
+  The slow part was never the browsers or `apt-get update`: it was apt
+  fetching fonts from a slow Azure mirror. On a hit apt installs from the
+  cached .debs and the browsers are already in place. Caches saved on a PR
+  stay with that PR; the deploy workflow on main saves the copy every PR
+  reads. The month in the key refreshes the .debs as Ubuntu updates them.
+runs:
+  using: composite
+  steps:
+    - id: key
+      shell: bash
+      run: echo "key=playwright-$ImageOS-$(npx playwright --version | cut -d' ' -f2)-$(date +%Y-%m)" >> "$GITHUB_OUTPUT"
+    - uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cache/ms-playwright
+          ~/.cache/playwright-debs
+        key: ${{ steps.key.outputs.key }}
+    - shell: bash
+      run: |
+        mkdir -p ~/.cache/playwright-debs
+        sudo cp ~/.cache/playwright-debs/*.deb /var/cache/apt/archives/ 2>/dev/null || true
+        npx playwright install --with-deps chromium firefox webkit
+        cp /var/cache/apt/archives/*.deb ~/.cache/playwright-debs/ 2>/dev/null || true
+        # A non-empty .debs folder in the log shows apt kept what it fetched.
+        du -sh ~/.cache/ms-playwright ~/.cache/playwright-debs

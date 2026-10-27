@@ -28,7 +28,7 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - run: npx playwright install --with-deps chromium
+      - uses: ./.github/actions/playwright
       - run: npx vitest --project visual run --update
       - name: Commit changed baselines
         run: |

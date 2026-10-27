@@ -35,8 +35,9 @@ jobs:
       - run: npm run skills:check
       - run: npm run playground:check
       - run: npm run lint:css
-      # Usually ~1 min; a hung apt mirror fails fast instead of eating the job.
-      - run: npx playwright install --with-deps chromium firefox webkit
+      # A cache hit downloads nothing; a miss on a hung apt mirror fails fast
+      # instead of eating the job.
+      - uses: ./.github/actions/playwright
         timeout-minutes: 5
       - run: npx tsc -b
       - run: npx vitest --project storybook run
