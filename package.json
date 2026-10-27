@@ -196,6 +196,10 @@
       "types": "./dist/components/data-display/Collapse.d.ts",
       "import": "./dist/components/data-display/Collapse.js"
     },
+    "./resizable": {
+      "types": "./dist/components/data-display/Resizable.d.ts",
+      "import": "./dist/components/data-display/Resizable.js"
+    },
     "./slider": {
       "types": "./dist/components/controls/Slider.d.ts",
       "import": "./dist/components/controls/Slider.js"

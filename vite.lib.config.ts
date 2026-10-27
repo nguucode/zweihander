@@ -57,6 +57,7 @@ export default defineConfig({
         'components/states/ErrorState': 'src/components/states/ErrorState.tsx',
         'components/states/SuccessState': 'src/components/states/SuccessState.tsx',
         'components/data-display/Collapse': 'src/components/data-display/Collapse.tsx',
+        'components/data-display/Resizable': 'src/components/data-display/Resizable.tsx',
         'components/controls/Slider': 'src/components/controls/Slider.tsx',
         'components/navigation/Stepper': 'src/components/navigation/Stepper.tsx',
         'components/controls/Rating': 'src/components/controls/Rating.tsx',
