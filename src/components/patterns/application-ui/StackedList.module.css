@@ -1,31 +1,12 @@
-/* One record a row, divided by a line: media, the text, facts at the end,
-   then a menu or a chevron. The facts wrap under the text when the row
-   runs out of room, so the list needs no breakpoint of its own. */
-.root {
-  display: grid;
-  min-inline-size: 0;
-  font-family: var(--font-sans);
-  color: var(--foreground);
-}
-
-.list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
+/* One record a row: media, the text, facts at the end, then a menu or a
+   chevron. ListContainer pads the rows and draws the lines between them.
+   The facts wrap under the text when the row runs out of room, so the
+   list needs no breakpoint of its own. */
 .item {
   position: relative;
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  box-sizing: border-box;
-  min-block-size: var(--row-height);
-  padding: var(--space-inline) var(--space-4);
-}
-
-.item + .item {
-  border-block-start: 1px solid var(--border);
 }
 
 /* The whole row is the target, so hovering anywhere on it underlines the
@@ -120,17 +101,4 @@
   inline-size: var(--icon-md);
   block-size: var(--icon-md);
   color: var(--muted-foreground);
-}
-
-.empty {
-  margin: 0;
-  padding: var(--space-3) var(--space-4);
-  font-size: var(--text-body-sm);
-  line-height: var(--leading-body-sm);
-  color: var(--muted-foreground);
-}
-
-.footer {
-  padding: var(--space-3) var(--space-4);
-  border-block-start: 1px solid var(--border);
 }

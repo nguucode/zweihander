@@ -49,7 +49,12 @@ linked row: the row's link covers them.
 
 <Canvas of={StackedListStories.LinkedWithActions} />
 
-## Footer
+## Frame, footer and empty
+
+The frame, the lines between rows, the footer and the empty state come
+from [List Container](?path=/docs/patterns-application-ui-list-container--docs):
+`appearance` puts the list in a card (`card`) or makes each row its own
+panel (`separate`).
 
 `footer` goes after the last row, past a divider. A list on its own page
 takes a [Pagination](?path=/docs/components-navigation-pagination--docs);
@@ -59,7 +64,7 @@ a short list in a card or on a dashboard takes a "View all" link.
 
 <Canvas of={StackedListStories.WithViewAll} />
 
-## Empty
+### Empty
 
 No items shows `empty`, "Nothing here yet." by default, in place of the
 list. The footer still shows.

@@ -42,6 +42,12 @@ const meta = {
         'The rows, in the order shown. Each has a `title`, and may have `media` (an Avatar or an Icon), `description` (a line under the title), `status` (a Tag or Badge after it), `meta` (facts at the end), `href` (the row links, with a chevron), `onClick` (runs when it is followed), `actions` (Menu entries: a ⋯ button and a context menu) and `id`.',
       control: false,
     },
+    appearance: {
+      description: 'The frame, from List Container: `flat` (lines between rows), `card` (the same in a bordered panel) or `separate` (each row its own panel).',
+      control: 'inline-radio',
+      options: ['flat', 'card', 'separate'],
+      table: { type: { summary: "'flat' | 'card' | 'separate'" }, defaultValue: { summary: "'flat'" } },
+    },
     footer: { description: 'After the last row, past a divider: a Pagination or a "View all" link. Rendered as given.', control: false },
     empty: { description: 'Shown instead of the list when there are no items.', control: 'text', table: { defaultValue: { summary: '"Nothing here yet."' } } },
   },
