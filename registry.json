@@ -2003,6 +2003,16 @@
           "path": "src/components/patterns/application-ui/StackedList.module.css",
           "type": "registry:component",
           "target": "components/zweihander/patterns/application-ui/StackedList.module.css"
+        },
+        {
+          "path": "src/components/patterns/application-ui/ListItemParts.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/patterns/application-ui/ListItemParts.tsx"
+        },
+        {
+          "path": "src/components/patterns/application-ui/ListItemParts.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/patterns/application-ui/ListItemParts.module.css"
         }
       ]
     },

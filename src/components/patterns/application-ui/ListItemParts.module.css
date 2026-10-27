@@ -1,0 +1,77 @@
+/* What Stacked List's rows and Grid List's cards share. The layout around
+   these parts (row or card) stays in each pattern's own stylesheet. */
+
+/* The row or card is the target, so hovering anywhere on it underlines the
+   title. No background tint: muted text on a tint drops below 4.5:1. */
+.target {
+  position: relative;
+}
+.target:hover:not(:has(.end:hover)) .link {
+  text-decoration: underline;
+}
+
+/* An Icon sits in a filled circle; an Avatar of the same size covers it. */
+.media {
+  display: grid;
+  flex: none;
+  place-items: center;
+  inline-size: var(--avatar-md);
+  block-size: var(--avatar-md);
+  border-radius: var(--radius-full);
+  background: var(--surface-filled);
+  color: var(--muted-foreground);
+}
+
+.heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1) var(--space-2);
+  margin: 0;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  font-weight: 500;
+  min-inline-size: 0;
+}
+
+.title,
+.link {
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+
+/* The item is the target: the link's box stretches over the whole of it. */
+.link {
+  color: inherit;
+  text-decoration: none;
+}
+.link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+.link:focus-visible {
+  outline: none;
+}
+.link:focus-visible::after {
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: calc(var(--focus-width) * -1);
+  /* A card sets this to follow its panel's corners. */
+  border-radius: var(--list-item-focus-radius, 0);
+}
+
+.description,
+.meta {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--muted-foreground);
+  overflow-wrap: anywhere;
+  min-inline-size: 0;
+}
+
+/* Above a linked item's stretched target, so the menu button gets the click. */
+.end {
+  position: relative;
+  flex: none;
+}
