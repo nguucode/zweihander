@@ -98,6 +98,7 @@ const STORIES: Record<string, { story: string; args?: Record<string, unknown>; p
   'patterns/application-ui/StackedList': { story: 'LinkedWithActions' },
   'patterns/application-ui/GridList': { story: 'WithCover' },
   'patterns/application-ui/MediaObject': { story: 'Variants' },
+  'patterns/application-ui/CommonActions': { story: 'Reference' },
   'patterns/application-ui/EventCalendar': { story: 'Month' },
   'patterns/application-ui/ImportExport': { story: 'Export', args: { defaultOpen: true } },
   'patterns/application-ui/NotificationCenter': { story: 'WithTabs' },
