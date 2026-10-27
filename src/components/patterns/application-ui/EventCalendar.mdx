@@ -1,0 +1,134 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks'
+import * as EventCalendarStories from './EventCalendar.stories'
+
+<Meta of={EventCalendarStories} />
+
+# Event Calendar
+
+Events on a month, week, day or year view, with a header to move through
+time and switch views: a team's schedule, bookings, deadlines. After
+Tailwind UI Application UI, Data Display: Calendars.
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/calendar-events.json
+```
+
+It owns no events: pass the ones you have, and it shows those that fall in
+view. Picking a date is the [Calendar](?path=/docs/data-display-calendar--docs)
+component; this pattern reuses its date helpers, and draws the year view
+with it.
+
+## Month
+
+The default view. Each day lists its events, all-day ones first, then by
+start time with the time after the title. A day with more than three
+lists two and "n more", which opens the day view (or picks the day for the
+list below). An all-day or multi-day event shows on every day it covers.
+`actions` takes the header's last slot, e.g. an "Add event" button.
+
+<Canvas of={EventCalendarStories.Month} />
+
+## Week
+
+An hour grid, a column per day. Timed events sit by their start and end;
+events that overlap share the width side by side. All-day events, and
+timed events that cross midnight, go to a row above the hours. The grid
+opens at the week's first timed event, or at 8:00.
+
+<Canvas of={EventCalendarStories.Week} />
+
+## Day
+
+The week's hour grid, one column wide.
+
+<Canvas of={EventCalendarStories.Day} />
+
+## Year
+
+Twelve small Calendars. Picking a day opens it in the day view (or the
+month, when `views` leaves the day out).
+
+<Canvas of={EventCalendarStories.Year} />
+
+## The selected day's events
+
+`hasEventList` lists the selected day's events under the month, in full.
+With `views={['month']}` the view switch is gone.
+
+<Canvas of={EventCalendarStories.WithEventList} />
+
+## Clickable events
+
+`onEventClick` makes events buttons, to open one in a
+[Drawer](?path=/docs/overlays-drawer--docs) for example; an event with
+`href` is a link.
+
+<Canvas of={EventCalendarStories.Clickable} />
+
+## Empty
+
+<Canvas of={EventCalendarStories.Empty} />
+
+## Props
+
+<ArgTypes of={EventCalendarStories} />
+
+Every other `<div>` attribute passes through. Each event takes `id`,
+`title`, `start`, and optionally `end` (exclusive for a timed event, the
+last day for an all-day one), `allDay`, `color` (a Tag variant) and
+`href`.
+
+## Layout
+
+- **The header wraps.** Title first; the arrows and Today, the view
+  switch and `actions` follow on the same row while it has room, then
+  drop under the title.
+- **A month under 40rem wide shows dots, not titles**: one per event, up
+  to three, in the event's colour. The day's button still says how many.
+  Turn on `hasEventList` wherever the calendar can be that narrow, so the
+  titles are one tap away. It follows the calendar's own width, not the
+  viewport's.
+- **The week keeps each day at least 6rem** and scrolls sideways under
+  that; the day view takes the full width. Both show ten hours and scroll
+  for the rest.
+- **Long titles are cut with an ellipsis** in the month; in the hour grid
+  they clip at the event's edge. The full title is in the event's
+  accessible name either way.
+
+<Canvas of={EventCalendarStories.Narrow} />
+
+## Differences from the spec
+
+Tailwind UI's Calendars, and where this departs from them:
+
+- **The view switch is a Select**, as Tailwind's menu is, but it changes
+  only the view: "Add event" is yours to put in `actions`.
+- **Multi-day events repeat on each day** in the month, rather than one
+  bar across the week. Simpler, and it reads the same on a phone.
+- **The narrow week does not swap to a strip of days.** It scrolls
+  sideways; pick the day view for a phone.
+- **No "current time" line** in the week and day views.
+- **The year view marks no events.** It is twelve Calendars, and Calendar
+  has no way to mark a day; its API stays as it is. Pick a day to see it.
+
+## Accessibility
+
+- The title is a heading (`headingLevel`, 2 by default) and a polite live
+  region, so moving through time is announced. The event list's heading
+  is one level below.
+- The month is a table named by the title, with a column header per
+  weekday. Each day is a button named by its full date and its number of
+  events, `aria-pressed` when selected and `aria-current="date"` on today.
+- One day is a tab stop. The arrow keys move the selected day (across the
+  month's edge too, which turns the month) and focus follows; Tab goes
+  on to that day's events. Right to left, left and right follow the
+  screen.
+- Events are links with `href`, buttons with `onEventClick`, and text
+  otherwise. Their name is the title then the start time.
+- In the week and day views each day is a list named by its full date,
+  and the all-day row's lists say "All day". The hour labels and the day
+  headings above the columns are hidden from assistive tech: the lists
+  carry the dates and the events their times. The scrolling hours are a
+  focusable group, so a keyboard can scroll them.
+- Previous and Next are named for the view's unit ("Next week"); their
+  arrows mirror right to left.

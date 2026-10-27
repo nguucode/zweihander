@@ -3430,6 +3430,58 @@
     },
     {
       "kind": "pattern",
+      "id": "patterns-application-ui-event-calendar",
+      "name": "Event Calendar",
+      "category": "Application UI",
+      "status": "experimental",
+      "storyId": "patterns-application-ui-event-calendar--month",
+      "props": [
+        {
+          "name": "defaultView",
+          "control": "inline-radio",
+          "options": [
+            "day",
+            "week",
+            "month",
+            "year"
+          ],
+          "description": "The view shown first, when you do not control it."
+        },
+        {
+          "name": "hasEventList",
+          "control": "boolean",
+          "default": false,
+          "description": "Lists the selected day's events under the month. A narrow month shows dots, not titles: turn it on where the calendar can be narrow."
+        },
+        {
+          "name": "headingLevel",
+          "control": "inline-radio",
+          "options": [
+            2,
+            3,
+            4
+          ],
+          "default": 2,
+          "description": "The level of the title (the month, week, day or year shown). The event list under the month takes the next level."
+        },
+        {
+          "name": "locale",
+          "control": "text",
+          "default": "en-US",
+          "description": "BCP 47 tag, e.g. `vi-VN`, for names, dates and times. Defaults to the browser's."
+        },
+        {
+          "name": "weekStartsOn",
+          "control": "number",
+          "min": 0,
+          "max": 6,
+          "default": 0,
+          "description": "0 = Sunday … 6 = Saturday. Defaults to the locale's."
+        }
+      ]
+    },
+    {
+      "kind": "pattern",
       "id": "patterns-application-ui-feed",
       "name": "Feed",
       "category": "Application UI",
