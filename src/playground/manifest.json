@@ -2581,7 +2581,17 @@
             "vertical"
           ],
           "default": "horizontal",
-          "description": "`horizontal` puts each label under its marker; `vertical` stacks the steps, for long descriptions or a narrow column."
+          "description": "`horizontal` puts each label under its marker; `vertical` stacks the steps, for long descriptions or a narrow column. Bullets are always one row."
+        },
+        {
+          "name": "appearance",
+          "control": "inline-radio",
+          "options": [
+            "circles",
+            "bullets"
+          ],
+          "default": "circles",
+          "description": "`circles` shows every step with its marker and label. `bullets` shows only the current step's label, \"Step 2 of 4: Workspace\", over a row of dots: for a dialog, a phone, or a flow too long for labels."
         },
         {
           "name": "size",
@@ -2591,7 +2601,7 @@
             "md"
           ],
           "default": "md",
-          "description": "A 32px (`md`) or 24px (`sm`) marker. `sm` takes a 12px label."
+          "description": "A 32px (`md`) or 24px (`sm`) marker. `sm` takes a 12px label. With bullets the dots stay one size and only the text shrinks."
         }
       ]
     },

@@ -23,6 +23,7 @@ checkout, a setup wizard.
 | Horizontal (default) | Three to five steps above a form. The label sits under its marker, so every step gets the same width whatever its label. |
 | Vertical | Steps with long descriptions, or a narrow column beside the form. |
 | `sm` | Dense places: a dialog, a side panel. |
+| Bullets (`appearance="bullets"`) | A phone, a narrow dialog, or more steps than fit with labels: only the current step's label shows, "Step 3 of 4: Invite", over a row of dots. |
 | Navigable (`onStepClick`) | Flows where going back to fix an earlier step is normal. Finished steps become buttons. |
 
 <Canvas of={StepperStories.Navigable} />
@@ -30,6 +31,8 @@ checkout, a setup wizard.
 <Canvas of={StepperStories.Vertical} />
 
 <Canvas of={StepperStories.Small} />
+
+<Canvas of={StepperStories.Bullets} />
 
 ## Resources
 
@@ -95,7 +98,18 @@ each marker, beside the text.
   ]}
 />
 
-The marker's ring and the connector are 2px. Horizontal, a connector runs
+<SpecTable
+  caption="Bullets"
+  rows={[
+    { part: 'Dot', property: 'Size, half of', token: '--box-2xs' },
+    { part: 'Dot', property: 'Hit area', token: '--box-sm' },
+    { part: 'Dots', property: 'Gap', token: '--space-1' },
+    { part: 'Summary to dots', property: 'Gap', token: '--space-2' },
+  ]}
+/>
+
+The marker's ring and the connector are 2px. The current dot's ring is
+2px wide, 2px clear of the dot, in the dot's own colour. Horizontal, a connector runs
 along the markers' centre line from one marker to the next, `--space-2`
 clear of each.
 
@@ -137,6 +151,19 @@ clear of each.
 />
 
 <SpecTable
+  caption="Bullets"
+  rows={[
+    { part: 'Dot, complete', property: 'Colour', token: '--primary' },
+    { part: 'Dot and ring, current', property: 'Colour', token: '--primary-text' },
+    { part: 'Dot, upcoming', property: 'Colour', token: '--border' },
+    { part: 'Dot, error', property: 'Colour', token: '--danger-text' },
+    { part: 'Ring gap, current', property: 'Colour', token: '--background' },
+    { part: 'Dot hit area, hover', property: 'Background', token: '--muted' },
+    { part: '"Step 3 of 4"', property: 'Colour', token: '--muted-foreground' },
+  ]}
+/>
+
+<SpecTable
   caption="Every status"
   rows={[
     { part: 'Description', property: 'Colour', token: '--muted-foreground' },
@@ -167,6 +194,8 @@ current one are buttons, with hover and focus of their own.
 - **Hover** underlines the label of a clickable step.
 - **Focus** is a 2px `--ring` outline, 2px outside the step.
 - **Upcoming** steps are never buttons, so they have no hover or focus.
+- With bullets, **hover** fills the dot's hit area with `--muted`, since
+  there is no visible label to underline.
 
 ## API
 
@@ -180,6 +209,11 @@ Every other `<nav>` attribute passes through.
 A step's `status` is only for the exception, such as an error: the rest
 is worked out from `current`. Only finished steps can be clicked; upcoming
 ones stay text, because a flow that can be skipped ahead is a set of Tabs.
+
+Bullets ignore `orientation` and draw no connectors: the dots sit close
+enough to read as one line. When `current` is past the last step, the
+"Step 3 of 4" line is left out. A step with an error that is also
+`current` keeps `aria-current` and the ring.
 
 </DocTab>
 <DocTab value="guidelines">
@@ -213,7 +247,10 @@ import wizard. Keep it to three to five steps with a word or two each.
 - The current step has `aria-current="step"`.
 - The marker is decorative, so each label carries its status in visually
   hidden text: "Account, completed", "Invite, not started", "Workspace,
-  has an error".
+  has an error". Bullets hide every label but the current one, and still
+  say each in the same hidden text. Their visible "Step 3 of 4: Invite"
+  is hidden from screen readers, which hear the list instead.
+- An error on the current step keeps `aria-current="step"`.
 - Without `onStepClick` nothing is focusable. With it, complete and
   current steps are real buttons: reached with Tab, pressed with Enter or
   Space, showing the focus ring, and 44px tall on touch screens
