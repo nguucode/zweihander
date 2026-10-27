@@ -2386,6 +2386,22 @@
     },
     {
       "kind": "component",
+      "id": "components-navigation-context-menu",
+      "name": "Context Menu",
+      "category": "Navigation",
+      "status": "experimental",
+      "storyId": "components-navigation-context-menu--default",
+      "props": [
+        {
+          "name": "disabled",
+          "control": "boolean",
+          "default": false,
+          "description": "Leaves the browser's own menu in place, for an area with nothing to act on right now."
+        }
+      ]
+    },
+    {
+      "kind": "component",
       "id": "components-navigation-link",
       "name": "Link",
       "category": "Navigation",

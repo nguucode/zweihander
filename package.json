@@ -156,6 +156,10 @@
       "types": "./dist/components/navigation/Menubar.d.ts",
       "import": "./dist/components/navigation/Menubar.js"
     },
+    "./context-menu": {
+      "types": "./dist/components/navigation/ContextMenu.d.ts",
+      "import": "./dist/components/navigation/ContextMenu.js"
+    },
     "./breadcrumbs": {
       "types": "./dist/components/navigation/Breadcrumbs.d.ts",
       "import": "./dist/components/navigation/Breadcrumbs.js"

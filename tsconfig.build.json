@@ -43,6 +43,7 @@
     "src/components/overlays/ConfirmDialog.tsx",
     "src/components/navigation/Menu.tsx",
     "src/components/navigation/Menubar.tsx",
+    "src/components/navigation/ContextMenu.tsx",
     "src/components/navigation/CommandPalette.tsx",
     "src/components/navigation/Breadcrumbs.tsx",
     "src/components/navigation/Pagination.tsx",
