@@ -3519,6 +3519,38 @@
     },
     {
       "kind": "pattern",
+      "id": "patterns-application-ui-list-container",
+      "name": "List Container",
+      "category": "Application UI",
+      "status": "experimental",
+      "storyId": "patterns-application-ui-list-container--flat",
+      "props": [
+        {
+          "name": "role",
+          "control": "text",
+          "default": "region"
+        },
+        {
+          "name": "appearance",
+          "control": "inline-radio",
+          "options": [
+            "flat",
+            "card",
+            "separate"
+          ],
+          "default": "flat",
+          "description": "`flat`: rows divided by a line, no frame. `card`: the same inside a bordered panel. `separate`: each row its own panel, a gap instead of lines."
+        },
+        {
+          "name": "empty",
+          "control": "text",
+          "default": "Nothing here yet.",
+          "description": "Shown instead of the list when there are no rows."
+        }
+      ]
+    },
+    {
+      "kind": "pattern",
       "id": "patterns-application-ui-nav-sidebar",
       "name": "Nav Sidebar",
       "category": "Application UI",
@@ -3630,6 +3662,17 @@
           "name": "role",
           "control": "text",
           "default": "region"
+        },
+        {
+          "name": "appearance",
+          "control": "inline-radio",
+          "options": [
+            "flat",
+            "card",
+            "separate"
+          ],
+          "default": "flat",
+          "description": "The frame, from List Container: `flat` (lines between rows), `card` (the same in a bordered panel) or `separate` (each row its own panel)."
         },
         {
           "name": "empty",

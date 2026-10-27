@@ -1887,17 +1887,40 @@
       ]
     },
     {
+      "name": "list-container",
+      "type": "registry:block",
+      "title": "List Container",
+      "description": "Application UI pattern: the frame around a list, with a line between rows, flat, in a card or as separate cards, and a footer and an empty state.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/patterns/application-ui/ListContainer.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/patterns/application-ui/ListContainer.tsx"
+        },
+        {
+          "path": "src/components/patterns/application-ui/ListContainer.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/patterns/application-ui/ListContainer.module.css"
+        }
+      ]
+    },
+    {
       "name": "stacked-list",
       "type": "registry:block",
       "title": "Stacked List",
-      "description": "Application UI pattern: a list of records as rows, each with an avatar or icon, a title and a line under it, a status, facts at the end, and a link to the record or a menu of actions that also opens on right click, with a footer for pagination or a View all link and an empty state.",
+      "description": "Application UI pattern: a list of records as rows, each with an avatar or icon, a title and a line under it, a status, facts at the end, and a link to the record or a menu of actions that also opens on right click, in a List Container: flat, card or separate, with a footer and an empty state.",
       "registryDependencies": [
         "https://ontheshore.biz/zweihander/r/utils.json",
         "https://ontheshore.biz/zweihander/r/tokens.json",
         "https://ontheshore.biz/zweihander/r/icon.json",
         "https://ontheshore.biz/zweihander/r/button.json",
         "https://ontheshore.biz/zweihander/r/menu.json",
-        "https://ontheshore.biz/zweihander/r/context-menu.json"
+        "https://ontheshore.biz/zweihander/r/context-menu.json",
+        "https://ontheshore.biz/zweihander/r/list-container.json"
       ],
       "files": [
         {

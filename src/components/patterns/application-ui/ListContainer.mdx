@@ -1,0 +1,94 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks'
+import * as ListContainerStories from './ListContainer.stories'
+
+<Meta of={ListContainerStories} />
+
+# List Container
+
+The frame around a list: a line between rows, optionally a panel around
+them, a footer and an empty state. It owns the rows' padding and dividers
+and nothing inside them. After Tailwind UI Application UI, Lists: List
+containers.
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/list-container.json
+```
+
+`ListContainer` is the `<ul>` and its frame; `ListContainerItem` is one
+`<li>`, padded as a Table row. For records (an avatar, a title, a status, a
+link or actions), use [Stacked
+List](?path=/docs/patterns-application-ui-stacked-list--docs): it renders
+through List Container and takes the same `appearance`, `footer` and
+`empty`, so there is one way to frame a list, add a footer or say it is
+empty.
+
+## Flat
+
+Rows divided by a line, no frame. The default: a list in a page section,
+or in a panel that already has an edge.
+
+<Canvas of={ListContainerStories.Flat} />
+
+## Card
+
+The same rows in a bordered panel, as an outline Card, for a list that
+stands on its own on the page.
+
+<Canvas of={ListContainerStories.Card} />
+
+## Separate
+
+Each row its own panel, a gap instead of lines: rows that read as separate
+objects rather than one list.
+
+<Canvas of={ListContainerStories.Separate} />
+
+## With Stacked List
+
+<Canvas of={ListContainerStories.WithStackedList} />
+
+<Canvas of={ListContainerStories.SeparateStackedList} />
+
+## Empty
+
+No rows shows `empty`, "Nothing here yet." by default, in place of the
+list, inside the frame. The footer still shows.
+
+<Canvas of={ListContainerStories.Empty} />
+
+## Props
+
+<ArgTypes of={ListContainerStories} />
+
+Every `<div>` attribute passes through to the root, and every `<li>`
+attribute to `ListContainerItem`.
+
+## Layout
+
+- Rows pad by `--space-inline` above and below and `--space-4` at the
+  sides, and are at least `--row-height` tall, so a list lines up with a
+  Table of the same density.
+- `footer` sits past a divider in `flat` and `card`, and after the gap in
+  `separate`.
+- No breakpoints: the container is as wide as its column. Long words in a
+  row break anywhere rather than overflow.
+
+<Canvas of={ListContainerStories.LongContent} />
+
+## Differences from the spec
+
+- **Full width on mobile** (Tailwind's card and separate variants that
+  drop their side edges on small screens) is left out: whether a panel
+  bleeds to the screen edge is the page layout's call, not the list's.
+- **Flat card** (a tinted panel without a border) is the `card`
+  appearance: one panel look, the outline Card's.
+
+## Accessibility
+
+- The rows are an unordered list, so a screen reader announces how many
+  there are. Keep `ListContainerItem` the only child of the container, so
+  the list has only `<li>` children.
+- The empty state is a paragraph in place of the list, so an empty list
+  is not announced as a list of zero items.
+- The container has no landmark or heading of its own. Put it under a
+  heading, or pass `role="region"` and an `aria-label`.

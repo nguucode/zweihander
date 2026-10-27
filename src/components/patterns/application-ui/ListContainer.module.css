@@ -1,0 +1,64 @@
+/* The frame owns the rows' padding and the lines between them, so every
+   list on a page lines up whatever sits in its rows. */
+.root {
+  display: grid;
+  min-inline-size: 0;
+  font-family: var(--font-sans);
+  color: var(--foreground);
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Rows pad and size as Table rows do, so the two line up at any density. */
+.item {
+  box-sizing: border-box;
+  min-block-size: var(--row-height);
+  padding: var(--space-inline) var(--space-4);
+  overflow-wrap: anywhere;
+}
+
+.flat > .list > .item + .item,
+.card > .list > .item + .item {
+  border-block-start: 1px solid var(--border);
+}
+
+/* card and separate panels look like an outline Card. overflow: clip keeps
+   a row's inset focus ring inside the rounded corners. */
+.card,
+.separate > .list > .item,
+.separate > .empty {
+  /* stylelint-disable-next-line zweihander/no-token-shadow -- what sits on the panel reads its colour */
+  --background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-panel);
+  background: var(--card);
+  overflow: clip;
+}
+
+.separate {
+  gap: var(--space-3);
+}
+.separate > .list {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.empty {
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--muted-foreground);
+}
+
+.footer {
+  padding: var(--space-3) var(--space-4);
+}
+.flat > .footer,
+.card > .footer {
+  border-block-start: 1px solid var(--border);
+}
