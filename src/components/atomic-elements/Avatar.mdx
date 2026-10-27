@@ -1,6 +1,6 @@
 import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
 import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
-import { Avatar } from './Avatar'
+import { Avatar, AvatarGroup } from './Avatar'
 import * as AvatarStories from './Avatar.stories'
 
 <Meta of={AvatarStories} />
@@ -11,7 +11,7 @@ import * as AvatarStories from './Avatar.stories'
 <DocTab value="overview">
 
 A picture of a person or account, with initials or a silhouette when there
-is no picture.
+is no picture, an optional presence dot, and a group that overlaps several.
 
 <Status of={AvatarStories} />
 
@@ -35,12 +35,26 @@ person (a hash of their id), never from a status.
 
 <Canvas of={AvatarStories.Sizes} />
 
+### Status
+
+`status` puts a presence dot on the bottom-end corner, in Badge's presence
+colours: online, away, busy, offline.
+
+<Canvas of={AvatarStories.Status} />
+
+### Group
+
+`AvatarGroup` overlaps a row of avatars, for the people on a record or a
+thread. `max` is the most circles in the row, the "+n" included.
+
+<Canvas of={AvatarStories.Group} />
+
 ## Resources
 
 From npm, or copied into your project through the registry:
 
 ```js
-import { Avatar } from 'zweihander/avatar'
+import { Avatar, AvatarGroup } from 'zweihander/avatar'
 ```
 
 ```sh
@@ -61,7 +75,8 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/avatar.json
 </Anatomy>
 
 One avatar shows one of image, initials or silhouette, in that order of
-preference. A broken image falls back to the next.
+preference. A broken image falls back to the next. The status dot and the
+group are optional.
 
 ## Measurements
 
@@ -103,6 +118,20 @@ corner setting.
 <SpecTable caption="Every size" rows={[{ part: 'Container', property: 'Corner radius', token: '--radius-pill' }]} />
 
 The image and the silhouette fill the circle edge to edge.
+
+The status dot is a Badge dot: `sm` on the xs and sm avatars, `md` on md and
+lg. It sits on the corner of the avatar's box, outside the curve.
+
+<SpecTable
+  caption="Status dot and group"
+  rows={[
+    { part: 'Status dot', property: 'Ring', token: '--background' },
+    { part: 'Group', property: 'Ring around each avatar', token: '--background' },
+    { part: 'Group', property: 'Overlap: a quarter of the size, md shown', token: '--avatar-md' },
+  ]}
+/>
+
+The ring is 2px, as on a floating Badge.
 
 ## Color
 
@@ -147,6 +176,10 @@ the values for another one.
 On `solid` the silhouette is always white, one look across hues; see
 Accessibility for what that costs.
 
+The status dot takes Badge's presence colours: online `success`, away
+`warning`, busy `destructive`, offline `secondary`. The "+n" in a group is a
+neutral subtle avatar.
+
 ## States
 
 An avatar is not interactive: no hover, focus or pressed. Its states are
@@ -158,6 +191,8 @@ which part it can show.
     { label: 'Initials', content: <Avatar size="lg" initials="SR" imageAlt="Sam Rivera" /> },
     { label: 'Silhouette', content: <Avatar size="lg" imageAlt="Unknown user" /> },
     { label: 'Broken image', content: <Story of={AvatarStories.BrokenImage} /> },
+    { label: 'Online', content: <Avatar size="lg" initials="SR" imageAlt="Sam Rivera" status="online" /> },
+    { label: 'Offline', content: <Avatar size="lg" initials="SR" imageAlt="Sam Rivera" status="offline" /> },
   ]}
 />
 
@@ -176,6 +211,14 @@ which part it can show.
 Every other `<span>` attribute passes through to the container, including
 `ref`.
 
+### AvatarGroup
+
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={AvatarGroup} />
+</div>
+
+Every other `<span>` attribute passes through to the row.
+
 ### Differences from the spec
 
 - **`initials` is added.** The spec's Anatomy has an Initials part but
@@ -191,6 +234,12 @@ Every other `<span>` attribute passes through to the container, including
   initials do.
 - **`color` and `variant` are added**, to tell people apart in a list.
 - **The circle ignores the radius preset.**
+- **`status` and `AvatarGroup` are added.** The status words and the
+  "+n" name are English by default; `statusLabel` and `moreLabel` translate
+  them.
+- **`max` counts the "+n".** The row never grows past `max` circles, and
+  the "+n" always stands for two or more: never "+1" where the person
+  would have fitted.
 
 </DocTab>
 <DocTab value="guidelines">
@@ -214,9 +263,11 @@ once.
 
 - **For a product, team or workspace logo.** An Avatar is always round, so
   it reads as a person. Use an image with its own shape.
-- **For status.** Colour on an avatar means nothing. Put a
-  [Badge](?path=/docs/components-atomic-elements-badge--docs) dot on it
-  for Online or Away.
+- **For status through colour.** The avatar's `color` means nothing. Use
+  `status` for presence, and print the status where people act on it (an
+  assignee picker): a dot is a glance, not the only cue.
+- **For a long list of people.** A group shows who at a glance; past a
+  handful, show the count or a list of names instead.
 - **For an icon in a circle.** Use the icon itself, or an icon-only
   [Button](?path=/docs/components-buttons-button--docs) when it acts.
 
@@ -226,7 +277,11 @@ once.
   image, so the image, the initials and the silhouette all announce the
   same person. The inner `<img>` has `alt=""`.
 - Without `imageAlt` the avatar is **decorative** and hidden
-  (`aria-hidden`).
+  (`aria-hidden`), its status dot with it.
+- With `status`, the status **joins the name**: "Mary Thompson, Online".
+  The dot itself is not read.
+- In a group, the "+n" is named "3 more" when the avatars are named, and
+  decorative when they are not.
 - Initials are never read out: with `imageAlt` the avatar's name replaces
   them, without it the avatar is hidden. They are uppercased with CSS, so
   the text keeps the letters as passed.

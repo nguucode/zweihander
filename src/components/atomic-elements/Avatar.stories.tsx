@@ -3,7 +3,7 @@ import { expect, waitFor } from 'storybook/test'
 import { expectAnatomy } from '../../../.storybook/blocks'
 import { ACCENT_COLORS, GRAY_COLORS } from '@/theme/palettes'
 import { Theme } from '@/theme/Theme'
-import { Avatar } from './Avatar'
+import { Avatar, AvatarGroup } from './Avatar'
 import { contrast, lum, paint } from '@/test/story-helpers'
 
 // A self-contained stand-in portrait, so stories never depend on the network.
@@ -53,6 +53,18 @@ const meta = {
       control: 'inline-radio',
       options: ['subtle', 'solid'],
       table: { type: { summary: "'subtle' | 'solid'" }, defaultValue: { summary: "'subtle'" } },
+    },
+    status: {
+      description:
+        'A presence dot at the bottom-end corner, in the Badge presence colours. With `imageAlt` it joins the name: "Mary Thompson, Online".',
+      control: 'select',
+      options: [undefined, 'online', 'away', 'busy', 'offline'],
+      table: { type: { summary: "'online' | 'away' | 'busy' | 'offline'" } },
+    },
+    statusLabel: {
+      description: 'The status word in the name, for another language.',
+      control: 'text',
+      table: { type: { summary: 'string' }, defaultValue: { summary: "'Online' | 'Away' | 'Busy' | 'Offline'" } },
     },
   },
   excludeStories: ['anatomyParts'],
@@ -233,12 +245,129 @@ export const Contrast: Story = {
   },
 }
 
+const STATUSES = ['online', 'away', 'busy', 'offline'] as const
+
+export const Status: Story = {
+  render: (args) => (
+    <div style={row}>
+      {STATUSES.map((status, i) => (
+        <Avatar key={status} {...args} imageSrc={i ? undefined : args.imageSrc} initials="SR" status={status} />
+      ))}
+    </div>
+  ),
+  play: async ({ canvas, canvasElement }) => {
+    // The dot is inside role="img", which is not read, so the status is in the name.
+    for (const word of ['Online', 'Away', 'Busy', 'Offline']) {
+      await expect(canvas.getByRole('img', { name: `Mary Thompson, ${word}` })).toBeVisible()
+    }
+    // Sits on the corner of the box, outside the curve, and is not cropped by it.
+    const avatar = canvasElement.querySelector<HTMLElement>('[role="img"]')!
+    const dot = avatar.lastElementChild!
+    await waitFor(() => {
+      const a = avatar.getBoundingClientRect()
+      const d = dot.getBoundingClientRect()
+      expect([d.right, d.bottom]).toEqual([a.right, a.bottom])
+      expect(d.width).toBeGreaterThan(0)
+    })
+    await expect(getComputedStyle(avatar).overflow).toBe('visible')
+    // Four statuses, four colours.
+    const colours = [...canvasElement.querySelectorAll('[role="img"]')].map(
+      (el) => getComputedStyle(el.lastElementChild!).backgroundColor,
+    )
+    await expect(new Set(colours).size).toBe(4)
+  },
+}
+
+export const StatusLabel: Story = {
+  tags: ['!dev'],
+  args: { status: 'away', statusLabel: 'Vắng mặt' },
+  play: async ({ canvas }) => {
+    await expect(canvas.getByRole('img', { name: 'Mary Thompson, Vắng mặt' })).toBeVisible()
+  },
+}
+
+export const StatusDecorative: Story = {
+  tags: ['!dev'],
+  args: { imageAlt: undefined, status: 'online' },
+  play: async ({ canvas }) => {
+    // No name: the dot is hidden with the rest of the avatar.
+    await expect(canvas.queryByRole('img')).toBeNull()
+  },
+}
+
+const PEOPLE = [
+  { initials: 'MT', imageAlt: 'Mary Thompson', color: 'violet' },
+  { initials: 'SR', imageAlt: 'Sam Rivera', color: 'teal' },
+  { initials: 'LT', imageAlt: 'Linh Tran', color: 'amber' },
+  { initials: 'AS', imageAlt: 'Ana Silva', color: 'blue' },
+  { initials: 'IO', imageAlt: 'Ian Okafor', color: 'pink' },
+  { initials: 'KN', imageAlt: 'Kim Nguyen' },
+] as const
+
+/** Overlapping, with a "+n" for the people past `max`. */
+export const Group: Story = {
+  render: () => (
+    <div style={{ display: 'grid', gap: 'var(--space-4)', justifyItems: 'start' }}>
+      {(['xs', 'sm', 'md', 'lg'] as const).map((size) => (
+        // The first asks for lg; the group's size wins.
+        <AvatarGroup key={size} size={size} max={4} avatars={[{ ...PEOPLE[0], size: 'lg' }, ...PEOPLE.slice(1)]} data-testid={size} />
+      ))}
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    const group = canvas.getByTestId('md')
+    // max counts the "+n": three people, then +3 for the other three.
+    await expect([...group.children].map((el) => el.getAttribute('aria-label'))).toEqual([
+      'Mary Thompson',
+      'Sam Rivera',
+      'Linh Tran',
+      '3 more',
+    ])
+    await expect(group.lastElementChild).toHaveTextContent('+3')
+    await waitFor(() => {
+      const [first, second] = [...group.children].map((el) => el.getBoundingClientRect())
+      // The group's size wins over each avatar's.
+      expect(first.width).toBe(group.lastElementChild!.getBoundingClientRect().width)
+      // Each tucks under the one before by a quarter of its size.
+      expect(second.left - first.left).toBeCloseTo(first.width * 0.75)
+    })
+    // Earlier ones on top, so a status dot is never covered by the next.
+    const z = [...group.children].map((el) => Number(getComputedStyle(el).zIndex))
+    await expect(z).toEqual([...z].sort((a, b) => b - a))
+    await expect(new Set(z).size).toBe(4)
+  },
+}
+
+export const GroupEdges: Story = {
+  tags: ['!dev'],
+  render: () => (
+    <div style={{ display: 'grid', gap: 'var(--space-4)', justifyItems: 'start' }}>
+      <AvatarGroup max={5} avatars={[...PEOPLE]} data-testid="one-over" />
+      <AvatarGroup avatars={[...PEOPLE]} data-testid="no-max" />
+      <AvatarGroup max={3} avatars={PEOPLE.map(({ initials }) => ({ initials }))} data-testid="decorative" />
+      <AvatarGroup max={3} avatars={[...PEOPLE]} moreLabel={(n) => `${n} người khác`} data-testid="label" />
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    // One over max: the "+n" takes the last slot, so +2, never +1.
+    await expect(canvas.getByTestId('one-over').children).toHaveLength(5)
+    await expect(canvas.getByTestId('one-over').lastElementChild).toHaveTextContent('+2')
+    await expect(canvas.getByTestId('no-max').children).toHaveLength(6)
+    // Decorative avatars (names printed elsewhere): the "+n" is decorative too.
+    await expect(canvas.getByTestId('decorative').lastElementChild).toHaveAttribute('aria-hidden', 'true')
+    await expect(canvas.getByRole('img', { name: '4 người khác' })).toBeVisible()
+  },
+}
+
 /** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
 export const anatomyParts = [
   { name: 'Container', selector: '[role="img"]', description: 'The circle, in the chosen colour and variant. Clips its content and carries the name.' },
   { name: 'Image', selector: 'img', description: 'Cropped to fill. Silent itself: the name is on the container.' },
   { name: 'Initials', selector: '[role="img"] > span', description: 'Shown when there is no image, or it fails to load.' },
   { name: 'Silhouette', selector: 'svg', description: 'A head and shoulders, when there is neither.' },
+  { name: 'Status dot', selector: '[role="img"] > span:last-child:empty', description: 'Optional. Presence, on the bottom-end corner, in a ring of the page colour. Part of the name.' },
+  { name: 'Group', selector: '[data-part="group"]', description: 'Optional. Avatars overlapping by a quarter, each ringed in the page colour.' },
+  { name: 'More', selector: '[data-part="group"] > :last-child', description: 'A neutral avatar with "+n" for the people past `max`. Named only when the avatars are.' },
 ]
 
 /** One avatar per fallback, so every part is on screen at once. */
@@ -249,7 +378,8 @@ export const Anatomy: Story = {
     <div style={row}>
       <Avatar {...args} />
       <Avatar {...args} imageSrc={undefined} initials="SR" imageAlt="Sam Rivera" />
-      <Avatar {...args} imageSrc={undefined} imageAlt="Unknown user" />
+      <Avatar {...args} imageSrc={undefined} imageAlt="Unknown user" status="online" />
+      <AvatarGroup size="lg" max={3} avatars={[...PEOPLE]} data-part="group" />
     </div>
   ),
   play: async ({ canvasElement }) => {

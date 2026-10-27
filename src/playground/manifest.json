@@ -46,6 +46,12 @@
           ],
           "default": "subtle",
           "description": "`subtle` is a tint of the hue; `solid` is its fill (600 in light, 400 in dark)."
+        },
+        {
+          "name": "statusLabel",
+          "control": "text",
+          "default": "Online' | 'Away' | 'Busy' | 'Offline",
+          "description": "The status word in the name, for another language."
         }
       ]
     },
