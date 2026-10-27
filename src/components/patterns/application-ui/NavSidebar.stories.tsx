@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect, fn, userEvent, waitFor, within } from 'storybook/test'
 import { expectAnatomy } from '../../../../.storybook/blocks'
 import { Icon } from '@/lib/icon'
+import { Kbd } from '@/components/atomic-elements/Kbd'
 import { Avatar } from '@/components/atomic-elements/Avatar'
 import { Button } from '@/components/buttons/Button'
 import { Menu } from '@/components/navigation/Menu'
@@ -89,7 +90,7 @@ const tenant = (
 const header = (
   <>
     {tenant}
-    <NavSidebarButton appearance="field" icon={<Icon name="search" />} label="Search" end="⌘K" />
+    <NavSidebarButton appearance="field" icon={<Icon name="search" />} label="Search" end={<Kbd size="sm" keys={['⌘', 'K']} />} />
   </>
 )
 

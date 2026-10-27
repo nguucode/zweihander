@@ -55,6 +55,8 @@ export const Combination: Story = {
   play: async ({ canvasElement }) => {
     const group = canvasElement.querySelector(':scope kbd:has(> kbd)')!
     await expect(group.querySelectorAll(':scope > kbd')).toHaveLength(3)
+    // Each one is drawn as a cap, with the raised lower edge.
+    for (const cap of group.querySelectorAll(':scope > kbd')) await expect(getComputedStyle(cap).borderBottomWidth).toBe('2px')
     await expect(group).toHaveTextContent('⌘⇧P')
   },
 }

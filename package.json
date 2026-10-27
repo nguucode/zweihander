@@ -144,6 +144,10 @@
       "types": "./dist/components/overlays/ConfirmDialog.d.ts",
       "import": "./dist/components/overlays/ConfirmDialog.js"
     },
+    "./command-palette": {
+      "types": "./dist/components/navigation/CommandPalette.d.ts",
+      "import": "./dist/components/navigation/CommandPalette.js"
+    },
     "./menu": {
       "types": "./dist/components/navigation/Menu.d.ts",
       "import": "./dist/components/navigation/Menu.js"

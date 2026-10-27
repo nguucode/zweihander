@@ -1,0 +1,209 @@
+/* The Modal's backdrop and layer: the palette is a dialog like any other. */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: var(--layer-overlay);
+  background: var(--scrim);
+  transition: opacity var(--duration-fast);
+}
+.backdrop[data-starting-style],
+.backdrop[data-ending-style] {
+  opacity: 0;
+}
+
+/* Near the top, not centred: the list grows and shrinks as you type, and a
+   centred box would jump with it. The input stays where the eye is. */
+.viewport {
+  position: fixed;
+  inset: 0;
+  z-index: var(--layer-overlay);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: max(var(--space-group), 12dvh) var(--space-group) var(--space-group);
+}
+
+/* 40rem: room for a long command name and its shortcut, the Modal lg width
+   less a little, as in Linear, Raycast and Spotlight. */
+.popup {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  inline-size: 100%;
+  max-inline-size: 40rem;
+  max-block-size: 100%;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-panel);
+  background: var(--popover);
+  box-shadow: var(--shadow-xl);
+  color: var(--popover-foreground);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  outline: none;
+  transition:
+    opacity var(--duration-fast),
+    scale var(--duration-fast);
+}
+.popup[data-starting-style],
+.popup[data-ending-style] {
+  opacity: 0;
+  scale: 0.98;
+}
+
+/* The search row: taller than a field (box xl, 48px), so it reads as the
+   palette's one input. No box of its own: the popup is the box, a rule
+   under it ends the row. Its inset is the list's plus an item's, so the
+   search icon sits on the same column as the item icons. */
+.search {
+  --palette-pad: calc(var(--space-stack) + var(--control-md-pad));
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--control-md-gap);
+  min-block-size: var(--box-xl);
+  padding-inline: var(--palette-pad);
+  border-block-end: 1px solid var(--border);
+}
+
+.searchIcon {
+  flex-shrink: 0;
+  font-size: var(--icon-md);
+  color: var(--muted-foreground);
+}
+
+.input {
+  flex: 1;
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: none; /* focus is the caret: the field is the whole popup */
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: var(--text-body-lg);
+  line-height: var(--leading-body-lg);
+}
+.input::placeholder {
+  color: var(--muted-foreground);
+  opacity: 1;
+}
+
+/* About ten rows, then it scrolls; the search row and the hints stay. */
+.results {
+  --palette-inset: var(--space-stack);
+  min-block-size: 0;
+  max-block-size: 24rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scroll-padding-block: var(--palette-inset);
+}
+
+.list {
+  padding: var(--palette-inset);
+}
+.list:empty {
+  display: none;
+}
+
+.group + .group {
+  margin-block-start: var(--space-1);
+}
+
+/* As a Menu's group label. */
+.groupLabel {
+  padding: var(--control-xs-pad) var(--control-md-pad) var(--control-xs-gap);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  font-weight: 500;
+  color: var(--muted-foreground);
+}
+
+/* As a Menu item: a row of tier md, the corner nested inside the popup's. */
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--control-md-gap);
+  min-block-size: var(--control-md);
+  padding: var(--space-stack) var(--control-md-pad);
+  border-radius: calc(var(--radius-panel) - var(--palette-inset));
+  cursor: default;
+  user-select: none;
+  outline: none;
+}
+.item[data-highlighted] {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+.item[data-disabled] {
+  color: var(--muted-foreground);
+  opacity: 0.6;
+}
+
+.icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--icon-md);
+  font-size: var(--icon-md);
+  color: var(--muted-foreground);
+}
+.item[data-highlighted] .icon {
+  color: inherit;
+}
+
+.label {
+  flex: 1;
+  min-inline-size: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.empty {
+  padding: var(--space-6) var(--control-md-pad);
+  color: var(--muted-foreground);
+  text-align: center;
+}
+.empty:empty {
+  display: none;
+}
+
+/* The keys that work here, quiet, under the list. */
+.footer {
+  display: flex;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-group);
+  padding: var(--space-2) calc(var(--space-stack) + var(--control-md-pad));
+  border-block-start: 1px solid var(--border);
+  font-size: var(--text-body-xs);
+  line-height: var(--leading-body-xs);
+  color: var(--muted-foreground);
+}
+
+.hint {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.visuallyHidden {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Rows are 32px; on touch they grow to 44px, edge to edge. */
+@media (pointer: coarse) {
+  .item {
+    min-block-size: var(--target-coarse);
+  }
+}
