@@ -1936,6 +1936,34 @@
       ]
     },
     {
+      "name": "grid-list",
+      "type": "registry:block",
+      "title": "Grid List",
+      "description": "Application UI pattern: records as cards in a responsive grid, each with an optional cover picture, an avatar or icon, a title, a status, a line and facts under it, and a link to the record or a menu of actions that also opens on right click; the same item as Stacked List, framed by List Container with a footer and an empty state.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/icon.json",
+        "https://ontheshore.biz/zweihander/r/button.json",
+        "https://ontheshore.biz/zweihander/r/menu.json",
+        "https://ontheshore.biz/zweihander/r/context-menu.json",
+        "https://ontheshore.biz/zweihander/r/list-container.json",
+        "https://ontheshore.biz/zweihander/r/stacked-list.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/patterns/application-ui/GridList.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/patterns/application-ui/GridList.tsx"
+        },
+        {
+          "path": "src/components/patterns/application-ui/GridList.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/patterns/application-ui/GridList.module.css"
+        }
+      ]
+    },
+    {
       "name": "import-export",
       "type": "registry:block",
       "title": "Import Export",

@@ -96,6 +96,7 @@ const STORIES: Record<string, { story: string; args?: Record<string, unknown>; p
   'patterns/application-ui/Feed': { story: 'WithComments' },
   'patterns/application-ui/ListContainer': { story: 'Appearances' },
   'patterns/application-ui/StackedList': { story: 'LinkedWithActions' },
+  'patterns/application-ui/GridList': { story: 'WithCover' },
   'patterns/application-ui/ImportExport': { story: 'Export', args: { defaultOpen: true } },
   'patterns/application-ui/NotificationCenter': { story: 'WithTabs' },
   'states/EmptyState': { story: 'Default' },
