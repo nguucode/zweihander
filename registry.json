@@ -1384,7 +1384,8 @@
         "https://ontheshore.biz/zweihander/r/icon.json",
         "https://ontheshore.biz/zweihander/r/button.json",
         "https://ontheshore.biz/zweihander/r/checkbox.json",
-        "https://ontheshore.biz/zweihander/r/menu.json"
+        "https://ontheshore.biz/zweihander/r/menu.json",
+        "https://ontheshore.biz/zweihander/r/context-menu.json"
       ],
       "dependencies": [
         "@base-ui/react"

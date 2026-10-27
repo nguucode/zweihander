@@ -47,6 +47,17 @@ A menu at the end of each row. A row with nothing to do gets no button:
 
 <Canvas of={TableStories.RowActions} />
 
+`hasRowContextMenu` also opens a row's `rowActions` at the pointer on
+right click or long press, through [Context
+Menu](?path=/docs/components-navigation-context-menu--docs), as Stacked
+List and Grid List do. It is off by default: the row then loses the
+browser's own menu, so people can no longer copy a cell's text or open a
+link in a cell in a new tab from it. Turn it on for tables people work
+through record by record, not ones they read or copy from. A row with no
+items, and an expanded row's details, keep the browser's menu.
+
+<Canvas of={TableStories.RowContextMenu} />
+
 A total row under the rows, which sorting leaves at the bottom. The table
 does not add anything up: you pass each column's `footer`, so you decide
 whether it totals this page or every row.
@@ -394,6 +405,8 @@ Pass `expandedIds` to open rows from outside the table:
   Escape closes it, and focus returns to the button. A row with no items
   has no button.
 - The actions column's header is "Actions", visually hidden.
+- With `hasRowContextMenu`, the right-click menu is a shortcut to the
+  same entries, never the only way in: the ⋯ button stays.
 - When the table is wider than its box and nothing in it takes focus, the
   scroll box becomes a tab stop with a focus ring: `role="region"` named by
   the caption, which the browser scrolls with the arrow keys. A table that

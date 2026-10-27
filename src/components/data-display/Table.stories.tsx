@@ -141,6 +141,12 @@ const meta = {
       control: false,
       table: { type: { summary: '(row: Row) => MenuEntry[] | null | undefined' } },
     },
+    hasRowContextMenu: {
+      description:
+        "Also opens a row's `rowActions` on right click or long press, at the pointer. Off by default: the row then loses the browser's own menu (copy a cell's text, open a link in a new tab).",
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
     density: {
       description: 'Row height. `md` is `--row-height` (48px Default, 36px Compact density); `sm` is one `--space-inline` shorter (40, 32).',
       control: 'inline-radio',
@@ -504,6 +510,29 @@ export const RowActions: Story = {
       await userEvent.keyboard('{Escape}')
       await waitFor(() => expect(billing).toHaveAttribute('aria-expanded', 'false'))
       await waitFor(() => expect(billing).toHaveFocus())
+    })
+  },
+}
+
+/** True when nothing handled the right click, so the browser shows its own menu. */
+const rightClick = (el: Element) => el.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, cancelable: true, button: 2 }))
+
+/** `hasRowContextMenu`: right click or long press on a row opens its `rowActions` at the pointer. */
+export const RowContextMenu: Story = {
+  args: { rowActions: actions, hasRowContextMenu: true },
+  play: async ({ canvas, step }) => {
+    const row = (name: string) => canvas.getByRole('rowheader', { name }).closest('tr')!
+    await step('Right click on a row opens the same entries as its ⋯ button', async () => {
+      onAction.mockClear()
+      await userEvent.pointer({ keys: '[MouseRight]', target: row('Billing revamp') })
+      await userEvent.click(await within(document.body).findByRole('menuitem', { name: 'Duplicate' }))
+      await expect(onAction).toHaveBeenLastCalledWith('duplicate', 'p2')
+      // A shortcut, never the only way in: the ⋯ button stays.
+      await expect(canvas.getByRole('button', { name: 'Actions for Billing revamp' })).toBeInTheDocument()
+    })
+    await step('A row with no actions keeps the browser menu, and the rows add no tab stop', async () => {
+      await expect(rightClick(row('Design tokens'))).toBe(true)
+      await expect(row('Atlas')).not.toHaveAttribute('tabindex')
     })
   },
 }
