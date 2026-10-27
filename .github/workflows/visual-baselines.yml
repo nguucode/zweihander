@@ -29,8 +29,6 @@ jobs:
           cache: npm
       - run: npm ci
       - uses: ./.github/actions/playwright
-        with:
-          browsers: chromium
       - run: npx vitest --project visual run --update
       - name: Commit changed baselines
         run: |

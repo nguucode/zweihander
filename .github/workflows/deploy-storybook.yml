@@ -38,8 +38,6 @@ jobs:
       - run: npm run playground:check
       # Runs on main, so the cache it saves is the one every PR's CI reads.
       - uses: ./.github/actions/playwright
-        with:
-          browsers: chromium firefox webkit
       - run: npx tsc -b
       - run: npx vitest --project storybook run
       # Verifies the npm package still builds; output isn't published here

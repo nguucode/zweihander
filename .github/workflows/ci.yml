@@ -38,8 +38,6 @@ jobs:
       # A cache hit downloads nothing; a miss on a hung apt mirror fails fast
       # instead of eating the job.
       - uses: ./.github/actions/playwright
-        with:
-          browsers: chromium firefox webkit
         timeout-minutes: 5
       - run: npx tsc -b
       - run: npx vitest --project storybook run
