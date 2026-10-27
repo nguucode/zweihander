@@ -6,7 +6,7 @@ import { ResendButton } from '../../buttons/ResendButton'
 import { TextInput } from '../../inputs/TextInput'
 import { Link } from '../../navigation/Link'
 import { Alert } from '../../notifications/Alert'
-import { AuthLayout, focusTitle, type AuthLayoutProps } from './AuthLayout'
+import { attempt, AuthLayout, focusTitle, type AuthLayoutProps } from './AuthLayout'
 import styles from './PasswordReset.module.css'
 
 export interface ForgotPasswordValues {
@@ -28,8 +28,6 @@ export interface ForgotPasswordProps extends Omit<AuthLayoutProps, 'title' | 'de
   /** Where "Back to sign in" goes. */
   signInHref?: string
 }
-
-const generic = 'Something went wrong. Try again.'
 
 /**
  * A forgot-password page, a template, in two steps in the Auth Layout: the
@@ -66,15 +64,6 @@ export function ForgotPassword({
     else emailRef.current?.focus()
   }, [isSent])
 
-  /** `onRequest`'s message, or a generic one when it throws. */
-  async function request(to: string) {
-    try {
-      return (await onRequest?.({ email: to })) || undefined
-    } catch {
-      return generic
-    }
-  }
-
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     if (isPending) return
@@ -90,7 +79,7 @@ export function ForgotPassword({
 
     setIsPending(true)
     try {
-      const message = await request(typed)
+      const message = await attempt(() => onRequest?.({ email: typed }))
       if (message) return setFailure(message)
       setEmail(typed)
       shouldMoveFocus.current = true
@@ -104,7 +93,7 @@ export function ForgotPassword({
     setFailure(undefined)
     setNotice(undefined)
     const at = visit.current
-    const message = await request(email)
+    const message = await attempt(() => onRequest?.({ email }))
     if (at !== visit.current) return
     if (message) {
       setFailure(message)

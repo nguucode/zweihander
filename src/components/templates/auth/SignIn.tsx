@@ -6,7 +6,7 @@ import { Checkbox } from '../../controls/Checkbox'
 import { TextInput } from '../../inputs/TextInput'
 import { Link } from '../../navigation/Link'
 import { Alert } from '../../notifications/Alert'
-import { AuthLayout, AuthProviders, type AuthLayoutProps, type AuthProvider } from './AuthLayout'
+import { attempt, AuthLayout, AuthProviders, type AuthLayoutProps, type AuthProvider } from './AuthLayout'
 import { PasswordInput } from '../../inputs/PasswordInput'
 import styles from './SignIn.module.css'
 
@@ -85,12 +85,7 @@ export function SignIn({
 
     setIsPending(true)
     try {
-      let message: string | void
-      try {
-        message = await onSignIn?.(values)
-      } catch {
-        message = 'Something went wrong. Try again.'
-      }
+      const message = await attempt(() => onSignIn?.(values))
       if (message) {
         setFailure(message)
         // The alert is announced; the password is the field to retype.

@@ -7,7 +7,7 @@ import { TextInput } from '../../inputs/TextInput'
 import { Spinner } from '../../loaders/Spinner'
 import { Link } from '../../navigation/Link'
 import { Alert } from '../../notifications/Alert'
-import { AuthLayout, AuthProviders, focusTitle, type AuthLayoutProps, type AuthProvider } from './AuthLayout'
+import { attempt, AuthLayout, AuthProviders, focusTitle, type AuthLayoutProps, type AuthProvider } from './AuthLayout'
 import { PasswordInput } from '../../inputs/PasswordInput'
 import styles from './ProgressiveSignIn.module.css'
 
@@ -60,17 +60,6 @@ export interface ProgressiveSignInProps extends Omit<AuthLayoutProps, 'title' | 
 }
 
 type Step = { name: 'email' } | { name: 'password' } | { name: 'sso'; provider: string }
-
-const generic = 'Something went wrong. Try again.'
-
-/** The handler's result, or a generic message when it throws. */
-async function attempt<T>(call: () => T | Promise<T>): Promise<T | string> {
-  try {
-    return await call()
-  } catch {
-    return generic
-  }
-}
 
 /**
  * A sign-in page that asks for the email first, a template: Continue hands

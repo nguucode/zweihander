@@ -6,7 +6,7 @@ import { Checkbox } from '../../controls/Checkbox'
 import { TextInput } from '../../inputs/TextInput'
 import { Link } from '../../navigation/Link'
 import { Alert } from '../../notifications/Alert'
-import { AuthLayout, AuthProviders, type AuthLayoutProps, type AuthProvider } from './AuthLayout'
+import { attempt, AuthLayout, AuthProviders, type AuthLayoutProps, type AuthProvider } from './AuthLayout'
 import { PasswordInput, defaultPasswordRules, type PasswordRule } from '../../inputs/PasswordInput'
 import styles from './SignUp.module.css'
 
@@ -99,12 +99,7 @@ export function SignUp({
 
     setIsPending(true)
     try {
-      let message: string | void
-      try {
-        message = await onSignUp?.(values)
-      } catch {
-        message = 'Something went wrong. Try again.'
-      }
+      const message = await attempt(() => onSignUp?.(values))
       // The alert is announced; focus stays where it was, nothing needs retyping.
       if (message) setFailure(message)
     } finally {
