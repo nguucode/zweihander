@@ -10,8 +10,11 @@ import * as SearchStories from './Search.stories'
 <DocTabs>
 <DocTab value="overview">
 
-A field for a search query, with a button to clear it. The field is
-[Text Input](?path=/docs/components-inputs-textinput--docs)'s.
+A field for a search query, with a button to clear it and, optionally, a
+key that focuses it. The field is
+[Text Input](?path=/docs/components-inputs-textinput--docs)'s. It searches
+one place: a list, a table, a results page. Finding anything from anywhere
+is the [Command Palette](?path=/docs/components-navigation-commandpalette--docs).
 
 <Status of={SearchStories} />
 
@@ -35,6 +38,13 @@ visible label.
 | --- | --- |
 | None (default) | A search box whose place makes its purpose plain: a page header, above a list. It is named "Search", or by `aria-label`. |
 | `label` | A search inside a form, among other labelled fields. |
+
+<Canvas of={SearchStories.Shortcut} />
+
+| Shortcut | Use for |
+| --- | --- |
+| None (default) | Most fields. |
+| `shortcut="/"` | The one search a page is about, such as a list page's [Filter Bar](?path=/docs/patterns-application-ui-filterbar--docs). The key cap shows while the field is empty and idle. |
 
 ## Resources
 
@@ -63,7 +73,10 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/search.json
 </Anatomy>
 
 The placeholder is the input's, "Search" unless given. The browser's own
-clear control is hidden, so there are not two.
+clear control is hidden, so there are not two. Not numbered above: with `shortcut`, a
+[Kbd](?path=/docs/components-atomic-elements-kbd--docs) key cap of the
+field's size sits where the clear button goes, while the field is empty and
+not focused; the two never show at once.
 
 ## Measurements
 
@@ -136,6 +149,7 @@ default ones.
     { label: 'Focus', pseudo: 'focus' },
     { label: 'With a query', content: <Search defaultValue="tooltip" /> },
     { label: 'Clear hover', pseudo: 'hover', content: <Search defaultValue="tooltip" /> },
+    { label: 'With a shortcut', content: <Search shortcut="/" /> },
     { label: 'Read-only', content: <Search defaultValue="tooltip" readOnly /> },
     { label: 'Disabled', content: <Search defaultValue="tooltip" disabled /> },
   ]}
@@ -149,6 +163,9 @@ default ones.
 - **Focus** is the field's 2px `--ring` outline around the box, on click
   as well as keyboard. The clear button, when tabbed to, draws its own
   ring instead, so the two never double.
+- **The shortcut's key cap** shows while the field is empty and hides on
+  focus, when the key would type instead. Disabled or read-only, there is
+  no key cap and the key is not bound.
 - **Read-only** fills the box with `--surface-filled`.
 - **Disabled** is the enabled look at 50% opacity.
 
@@ -169,6 +186,13 @@ Every other `<input>` attribute passes through, including `ref`, `name`,
 - **`label` and `size` are added**, from the shared field,
   so a search box can match the form or toolbar it sits in.
 - **`value` is added** for a controlled query.
+- **`shortcut` is added**, a single key that focuses the field.
+- **No suggestion panel.** Recent searches and results grouped by type, as the
+  spec's global search shows them, are the
+  [Command Palette](?path=/docs/components-navigation-commandpalette--docs)'s
+  job; picking one value from matches is the
+  [Combobox](?path=/docs/components-inputs-combobox--docs)'s. Search stays a
+  field, so there are not three lists that behave alike.
 - Native `disabled`, `readOnly` names.
 
 </DocTab>
@@ -190,7 +214,17 @@ When it searches the site, put it inside a `<form role="search">` (or
 `<search>`) so it becomes a landmark people can jump to. The component is
 only the field: filtering a list in place does not need a landmark.
 
+Above a list page, Search goes in the
+[Filter Bar](?path=/docs/patterns-application-ui-filterbar--docs)'s `search`
+slot, which is already the `role="search"` landmark. Give the page's main
+search `shortcut="/"`, and only that one.
+
 ## When not to use
+
+- **To find anything from anywhere in the app**, with recent items and
+  results grouped by type. Use the
+  [Command Palette](?path=/docs/components-navigation-commandpalette--docs),
+  opened with ⌘K or from a search button. Do not bind ⌘K to a Search.
 
 - **To choose one value from a list.** Use a
   [Combobox](?path=/docs/components-inputs-combobox--docs): it shows the
@@ -211,6 +245,10 @@ only the field: filtering a list in place does not need a landmark.
   where it was.
 - The clear button's hit area grows to 44px on touch screens.
 - The search icon is decorative and hidden from screen readers.
+- **`shortcut`** focuses the field from anywhere on the page, without typing
+  the key. It does nothing while focus is in a form field, or with ⌘,
+  Ctrl or Alt held, or while the field is disabled or read-only. The input carries `aria-keyshortcuts`; the key cap is
+  hidden from screen readers so the key is not read twice.
 - The edge is the light `--field-border`, the approved exception to WCAG
   1.4.11 described on Text Input.
 
