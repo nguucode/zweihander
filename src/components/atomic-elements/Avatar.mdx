@@ -49,6 +49,11 @@ thread. `max` is the most circles in the row, the "+n" included.
 
 <Canvas of={AvatarStories.Group} />
 
+With `hasTooltips`, each named avatar shows its name on hover, and the
+"+n" lists the people it stands for, on hover or keyboard focus:
+
+<Canvas of={AvatarStories.GroupTooltips} />
+
 ## Resources
 
 From npm, or copied into your project through the registry:
@@ -282,6 +287,10 @@ once.
   The dot itself is not read.
 - In a group, the "+n" is named "3 more" when the avatars are named, and
   decorative when they are not.
+- With `hasTooltips`, the "+n" is the one avatar that takes focus, with
+  the focus ring, and its tooltip of hidden names is its description. The
+  other avatars' tooltips open on hover only: their names are already
+  their accessible names.
 - Initials are never read out: with `imageAlt` the avatar's name replaces
   them, without it the avatar is hidden. They are uppercased with CSS, so
   the text keeps the letters as passed.

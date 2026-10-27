@@ -28,3 +28,72 @@
   opacity: 0;
   scale: 0.96;
 }
+
+/* Hover card: on the popup layer (50) with Popover, below tooltips, and
+   drawn like one: a raised --popover surface, not an inverted label. */
+.cardPositioner {
+  z-index: var(--layer-overlay);
+}
+
+/* Avatar at the start, spanning the title and the meta; the action
+   under the text. */
+.card {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: var(--space-cluster);
+  align-items: center;
+  inline-size: max-content;
+  max-inline-size: min(20rem, var(--available-width));
+  padding: var(--space-group);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-panel);
+  background: var(--popover);
+  box-shadow: var(--shadow-md);
+  color: var(--popover-foreground);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  overflow-wrap: break-word;
+  outline: none;
+  transform-origin: var(--transform-origin);
+  transition:
+    opacity var(--duration-fast),
+    scale var(--duration-fast);
+}
+
+.card[data-starting-style],
+.card[data-ending-style] {
+  opacity: 0;
+  scale: 0.97;
+}
+
+.card > * {
+  grid-column: 1 / -1;
+}
+
+.cardAvatar {
+  display: flex;
+  grid-column: 1;
+  grid-row: 1 / span 2;
+}
+
+.cardAvatar ~ .cardTitle,
+.cardAvatar ~ .cardDescription {
+  grid-column: 2;
+}
+
+.cardTitle {
+  font-weight: 600;
+}
+
+.cardDescription {
+  color: var(--muted-foreground);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+}
+
+.cardAction {
+  display: flex;
+  margin-block-start: var(--space-3);
+}

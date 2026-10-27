@@ -2,9 +2,11 @@ import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { expectAnatomy, Pictured } from '../../../.storybook/blocks'
 import { Icon } from '@/lib/icon'
+import { Avatar } from '../atomic-elements/Avatar'
 import { Button } from '../buttons/Button'
+import { Link } from '../navigation/Link'
 import { TextInput } from '../inputs/TextInput'
-import { Tooltip, TooltipGroup, type TooltipProps } from './Tooltip'
+import { HoverCard, Tooltip, TooltipGroup, type HoverCardProps, type TooltipProps } from './Tooltip'
 import styles from './Tooltip.module.css'
 
 const meta = {
@@ -83,7 +85,7 @@ const meta = {
       table: { type: { summary: 'string' } },
     },
   },
-  excludeStories: ['anatomyParts'],
+  excludeStories: ['anatomyParts', 'hoverCardParts'],
   // Room for the tooltip to open into. A picture lays its popup out itself.
   decorators: [
     (Story, { parameters }) =>
@@ -261,4 +263,98 @@ export const DontEssentialInfo: Story = {
       {picture(args)}
     </div>
   ),
+}
+
+/** A person: the anatomy the hover card is drawn for. */
+const mary: HoverCardProps = {
+  trigger: <Link href="#mary">Mary Thompson</Link>,
+  avatar: <Avatar size="lg" initials="MT" color="teal" />,
+  title: 'Mary Thompson',
+  description: 'Finance lead, Accounts Payable · Active 5m ago',
+  action: (
+    <Button size="sm" appearance="outlined">
+      Message
+    </Button>
+  ),
+}
+
+/** Hover card: a preview of a person on hover or focus of a link to them. */
+export const HoverCardPerson: Story = {
+  render: () => (
+    <p style={{ margin: 0 }}>
+      Approved by <HoverCard {...mary} delay={300} /> on 12 March.
+    </p>
+  ),
+  play: async ({ canvas }) => {
+    const link = canvas.getByRole('link', { name: 'Mary Thompson' })
+    await userEvent.hover(link)
+    const card = await waitFor(() => {
+      const el = document.querySelector(`.${styles.card}`)
+      expect(el).not.toBeNull()
+      return el as HTMLElement
+    })
+    // Visible once it has faded in.
+    await waitFor(() => expect(within(card).getByText('Finance lead, Accounts Payable · Active 5m ago')).toBeVisible())
+    // The pointer can cross to the card: closeDelay keeps it open on the way.
+    await userEvent.hover(card)
+    await expect(within(card).getByRole('button', { name: 'Message' })).toBeVisible()
+    await userEvent.unhover(card)
+    await waitFor(() => expect(document.querySelector(`.${styles.card}`)).toBeNull())
+  },
+}
+
+/** Keyboard focus on the link opens it too, after the same delay. */
+export const HoverCardFocus: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: 'var(--space-4)', alignItems: 'center' }}>
+      <HoverCard {...mary} delay={0} />
+      <Button appearance="outlined">Next</Button>
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    await userEvent.tab()
+    await expect(canvas.getByRole('link', { name: 'Mary Thompson' })).toHaveFocus()
+    await waitFor(() => expect(document.querySelector(`.${styles.card}`)).not.toBeNull())
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(document.querySelector(`.${styles.card}`)).toBeNull())
+    // Not a dialog: focus stays on the link, and Tab moves past the card, its action included.
+    await userEvent.keyboard('{Shift>}{Tab}{/Shift}')
+    await userEvent.tab()
+    await waitFor(() => expect(document.querySelector(`.${styles.card}`)).not.toBeNull())
+    await userEvent.tab()
+    await expect(canvas.getByRole('button', { name: 'Next' })).toHaveFocus()
+  },
+}
+
+/** The hover card open in place, as a picture, 6px under the link. */
+const cardPicture = (props: HoverCardProps) => (
+  <Pictured positioner={styles.cardPositioner} style={{ display: 'flex', flexDirection: 'column', alignItems: 'start', gap: 6 }}>
+    {(container) => <HoverCard {...props} open container={container} />}
+  </Pictured>
+)
+
+export const hoverCardParts = [
+  { name: 'Container', selector: `.${styles.card}`, description: 'A raised `--popover` surface, 6px from the link, at most 20rem wide.' },
+  { name: 'Avatar', selector: `.${styles.cardAvatar}`, description: 'Optional. At the start, beside the name and the meta.' },
+  { name: 'Name', selector: `.${styles.cardTitle}`, description: 'What is previewed: a person, a record, a document.' },
+  { name: 'Meta', selector: `.${styles.cardDescription}`, description: 'Optional. One or two muted lines: role, team, last active.' },
+  { name: 'Action', selector: `.${styles.cardAction}`, description: 'Optional. A shortcut that the linked page offers too.' },
+  { name: 'Trigger', selector: 'a', description: 'A link to what the card previews. Hover or focus opens the card.' },
+]
+
+/** Every part of the hover card present, open in place. */
+export const HoverCardAnatomy: Story = {
+  tags: ['!dev'],
+  parameters: { picture: true },
+  render: () => cardPicture(mary),
+  play: async ({ canvasElement }) => {
+    await expectAnatomy(canvasElement, hoverCardParts)
+  },
+}
+
+/** Overview and Specs: the hover card open, without an action. */
+export const HoverCardPicture: Story = {
+  tags: ['!dev'],
+  parameters: { picture: true },
+  render: () => cardPicture({ ...mary, action: undefined }),
 }

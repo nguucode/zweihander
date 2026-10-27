@@ -1,6 +1,9 @@
+'use client'
+
 import { useState, type ComponentProps } from 'react'
 import { cn } from '@/lib/utils'
 import type { AccentColor } from '@/theme/palettes'
+import { Tooltip, TooltipGroup } from '../overlays/Tooltip'
 import { Badge, type BadgeProps } from './Badge'
 import styles from './Avatar.module.css'
 
@@ -100,6 +103,8 @@ export interface AvatarGroupProps extends ComponentProps<'span'> {
   size?: AvatarProps['size']
   /** The name of the "+n" avatar, for another language. Used only when the avatars are named. */
   moreLabel?: (count: number) => string
+  /** Each named avatar shows its name on hover, and the "+n" lists the people it stands for, on hover or focus. */
+  hasTooltips?: boolean
 }
 
 /** Avatars overlapping in a row, with a "+n" for the ones past `max`. */
@@ -108,6 +113,7 @@ export function AvatarGroup({
   max,
   size = 'md',
   moreLabel = (count) => `${count} more`,
+  hasTooltips = false,
   className,
   ...props
 }: AvatarGroupProps) {
@@ -118,15 +124,40 @@ export function AvatarGroup({
   // Named avatars get a named "+n"; decorative ones (the names are printed) a decorative one.
   const isNamed = avatars.some((a) => a.imageAlt)
 
-  return (
+  // With tooltips, the "+n" lists who it stands for, and takes focus so
+  // that list can be read by keyboard too.
+  const hiddenNames = hasTooltips
+    ? avatars
+        .slice(shown.length)
+        .map((a) => a.imageAlt)
+        .filter(Boolean)
+        .join(', ')
+    : ''
+  const more = hidden > 0 && (
+    // ponytail: past +99 the text outgrows an xs circle; shorten the count if a list that long turns up.
+    <Avatar
+      size={size}
+      initials={`+${hidden}`}
+      imageAlt={isNamed ? moreLabel(hidden) : undefined}
+      tabIndex={hiddenNames ? 0 : undefined}
+    />
+  )
+
+  const group = (
     <span className={cn(styles.group, className)} {...props}>
-      {shown.map((avatar, i) => (
-        <Avatar key={i} {...avatar} size={size} style={{ zIndex: shown.length - i, ...avatar.style }} />
-      ))}
-      {hidden > 0 && (
-        // ponytail: past +99 the text outgrows an xs circle; shorten the count if a list that long turns up.
-        <Avatar size={size} initials={`+${hidden}`} imageAlt={isNamed ? moreLabel(hidden) : undefined} />
-      )}
+      {shown.map((avatar, i) => {
+        const el = <Avatar {...avatar} size={size} style={{ zIndex: shown.length - i, ...avatar.style }} />
+        return hasTooltips && avatar.imageAlt ? (
+          <Tooltip key={i} content={avatar.imageAlt}>
+            {el}
+          </Tooltip>
+        ) : (
+          <Avatar key={i} {...avatar} size={size} style={{ zIndex: shown.length - i, ...avatar.style }} />
+        )
+      })}
+      {more && hiddenNames ? <Tooltip content={hiddenNames}>{more}</Tooltip> : more}
     </span>
   )
+  // One shared delay: once a name shows, the next shows as the pointer moves on.
+  return hasTooltips ? <TooltipGroup>{group}</TooltipGroup> : group
 }
