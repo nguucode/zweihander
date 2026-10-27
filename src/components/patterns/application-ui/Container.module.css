@@ -19,7 +19,8 @@
 
 /* Padding follows the viewport, not a container: a padded Container sits
    outside the App Shell, where no ancestor is a size container. The steps
-   match App Content's, so a page looks the same in and out of the shell. */
+   use App Content's tokens and 64rem step, so a page's sides match in and
+   out of the shell. */
 .padded {
   --container-padding: var(--space-container);
 }

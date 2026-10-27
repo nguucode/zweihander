@@ -63,6 +63,11 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {
   play: async ({ canvasElement }) => {
     const [el] = containers(canvasElement)
+    // A plain div: no role, no landmark, not focusable.
+    await expect(el.tagName).toBe('DIV')
+    await expect(el).not.toHaveAttribute('role')
+    await expect(el.tabIndex).toBe(-1)
+    await expect(el).not.toHaveAttribute('tabindex')
     await waitFor(() => {
       expect(box(el).width).toBeCloseTo(rem(64), 0)
       const { start, end } = gaps(el)
