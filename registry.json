@@ -2167,6 +2167,28 @@
       ]
     },
     {
+      "name": "container",
+      "type": "registry:block",
+      "title": "Container",
+      "description": "Application UI pattern: caps a page's content at a maximum width and centres it, with optional side padding by breakpoint for a page outside the App Shell, where App Content does not pad it.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/patterns/application-ui/Container.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/patterns/application-ui/Container.tsx"
+        },
+        {
+          "path": "src/components/patterns/application-ui/Container.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/patterns/application-ui/Container.module.css"
+        }
+      ]
+    },
+    {
       "name": "app-shell",
       "type": "registry:block",
       "title": "App Shell (template)",

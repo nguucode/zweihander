@@ -1,0 +1,85 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks'
+import * as ContainerStories from './Container.stories'
+
+<Meta of={ContainerStories} />
+
+# Container
+
+Caps a page's content at a maximum width and centres it in the space it
+is given. After Tailwind UI Application UI, Layout: Containers.
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/container.json
+```
+
+Container only sets a width. Inside an [App
+Shell](?path=/docs/templates-application-ui-app-shell--docs), [App
+Content](?path=/docs/patterns-application-ui-app-content--docs) owns the
+page: its padding, its scroll and the aside column. Put a Container inside
+it when a page should not stretch across a wide screen, a settings page or
+a form; leave it out for a table that uses every column.
+
+## Sizes
+
+`size` is the widest the content gets: `sm` 48rem for a form or a settings
+page, `md` (the default) 64rem for most pages, `lg` 80rem for a wide table
+or a dashboard.
+
+<Canvas of={ContainerStories.Sizes} />
+
+## Padded
+
+`padded` adds side padding by breakpoint, for a page outside the App
+Shell, such as a sign-in page or a public page: `--space-container`, and
+`--space-section` from a 64rem viewport: App Content's tokens and step,
+measured against the viewport instead of the shell, on the sides only.
+The cap measures the content, so a padded and an unpadded Container of one
+size give the same line length.
+
+<Canvas of={ContainerStories.Padded} />
+
+## In an App Shell
+
+No `padded`: App Content already pads the page, and the Container centres
+the content in it. With an aside, it centres in the page column.
+
+<Canvas of={ContainerStories.InAppShell} />
+
+## Props
+
+<ArgTypes of={ContainerStories} />
+
+Every other `<div>` attribute passes through.
+
+## Layout
+
+- **Full width up to the cap.** It fills its parent, block, grid or flex,
+  until it reaches its size, then centres with equal space on each side.
+- **Narrower than its size,** it takes the width it is given and never
+  overflows.
+- **Padding follows the viewport,** not a container query: outside the
+  App Shell no ancestor is a size container to query.
+
+<Canvas of={ContainerStories.Narrow} />
+
+## Differences from the spec
+
+Tailwind UI's Containers, and where this departs from them:
+
+- **Three steps, not every `max-w-*`.** `sm`, `md` and `lg` follow
+  Tailwind's `max-w-3xl`, `5xl` and `7xl`.
+- **Padding is opt-in and uses the kit's spacing tokens.** Tailwind pads
+  every container (`px-4 sm:px-6 lg:px-8`); here App Content pads the page
+  in the shell, so padding twice would be wrong. One step at 64rem, as in
+  App Content, instead of Tailwind's two.
+- **No "full width on mobile" variant.** Under its size a Container is
+  already full width; a flush, unpadded page on a phone is App Content's
+  job.
+
+## Accessibility
+
+- A plain `div`: no landmark, no role and no focus. The landmark is the
+  `main` around it (App Content's, or your own outside the shell).
+- It changes no order; content reads and tabs in DOM order.
+- At 320px it takes the full width and its content reflows; it adds no
+  horizontal scroll.

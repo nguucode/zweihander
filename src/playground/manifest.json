@@ -3429,6 +3429,33 @@
     },
     {
       "kind": "pattern",
+      "id": "patterns-application-ui-container",
+      "name": "Container",
+      "category": "Application UI",
+      "status": "experimental",
+      "storyId": "patterns-application-ui-container--default",
+      "props": [
+        {
+          "name": "size",
+          "control": "radio",
+          "options": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "default": "md",
+          "description": "The widest the content gets: `sm` 48rem for a form or a settings page, `md` 64rem for most pages, `lg` 80rem for a wide table or a dashboard."
+        },
+        {
+          "name": "padded",
+          "control": "boolean",
+          "default": false,
+          "description": "Adds the page's side padding, `--space-container`, and `--space-section` from a 64rem viewport. Leave it off inside an App Shell, where App Content already pads the page."
+        }
+      ]
+    },
+    {
+      "kind": "pattern",
       "id": "patterns-application-ui-data-table-page",
       "name": "Data Table Page",
       "category": "Application UI",
