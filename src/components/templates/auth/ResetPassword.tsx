@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { Button } from '../../buttons/Button'
 import { Link } from '../../navigation/Link'
 import { Alert } from '../../notifications/Alert'
-import { AuthLayout, focusTitle, type AuthLayoutProps } from './AuthLayout'
+import { attempt, AuthLayout, focusTitle, type AuthLayoutProps } from './AuthLayout'
 import { PasswordInput, defaultPasswordRules, type PasswordRule } from '../../inputs/PasswordInput'
 import styles from './PasswordReset.module.css'
 
@@ -75,12 +75,7 @@ export function ResetPassword({
 
     setIsPending(true)
     try {
-      let message: string | void
-      try {
-        message = await onChangePassword?.({ password })
-      } catch {
-        message = 'Something went wrong. Try again.'
-      }
+      const message = await attempt(() => onChangePassword?.({ password }))
       if (message) setFailure(message)
       else setIsDone(true)
     } finally {

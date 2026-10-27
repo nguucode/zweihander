@@ -92,6 +92,19 @@ export function focusTitle(page: HTMLElement | null) {
   title.focus()
 }
 
+/**
+ * Runs an auth screen's handler: its result, or "Something went wrong. Try
+ * again." when it throws or its promise rejects. The screen shows a returned
+ * message in its Alert.
+ */
+export async function attempt<T>(call: () => T | Promise<T>): Promise<T | string> {
+  try {
+    return await call()
+  } catch {
+    return 'Something went wrong. Try again.'
+  }
+}
+
 /** The "or" line between the single sign-on buttons and the form. */
 export function AuthDivider({ children = 'or' }: { children?: ReactNode }) {
   return <div className={styles.divider}>{children}</div>

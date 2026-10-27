@@ -7,7 +7,7 @@ import { OTPInput } from '../../inputs/OTPInput'
 import { TextInput } from '../../inputs/TextInput'
 import { Link } from '../../navigation/Link'
 import { Alert } from '../../notifications/Alert'
-import { AuthLayout, focusTitle, type AuthLayoutProps } from './AuthLayout'
+import { attempt, AuthLayout, focusTitle, type AuthLayoutProps } from './AuthLayout'
 import styles from './MFAChallenge.module.css'
 
 /**
@@ -66,17 +66,6 @@ export interface MFAChallengeProps extends Omit<AuthLayoutProps, 'title' | 'desc
 }
 
 type Step = 'code' | 'methods' | 'backup'
-
-const generic = 'Something went wrong. Try again.'
-
-/** The handler's message, or a generic one when it throws. */
-async function attempt(call: () => Result) {
-  try {
-    return (await call()) || undefined
-  } catch {
-    return generic
-  }
-}
 
 /** The method's button under Try another way. */
 const choice = (m: MFAMethod) =>
