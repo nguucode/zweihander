@@ -1,0 +1,408 @@
+/* The header on one row (title, arrows and Today, the view switch,
+   actions) that wraps when narrow; the view under it. The root is a
+   container, so the month swaps titles for dots by its own width. */
+.root {
+  /* Region sizes, off the box ramp: the hour labels' column. */
+  --event-gutter: 4rem;
+  container-type: inline-size;
+  display: grid;
+  gap: var(--space-group);
+  min-inline-size: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  color: var(--foreground);
+  font-variant-numeric: tabular-nums;
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-cluster);
+}
+
+.title {
+  flex: 1 1 12rem;
+  margin: 0;
+  font-size: var(--text-heading-sm);
+  line-height: var(--leading-heading-sm);
+  font-weight: 600;
+}
+
+.nav,
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+/* Room for the longest view name, so it does not resize as views change. */
+.header .viewSelect {
+  flex: none;
+  inline-size: 8rem;
+}
+
+/* ---------------------------------------------------------------- events */
+
+.eventSlot {
+  min-inline-size: 0;
+}
+
+.event {
+  box-sizing: border-box;
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-1);
+  inline-size: 100%;
+  margin: 0;
+  padding: 0 var(--space-1);
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: var(--event-subtle);
+  color: var(--event-text);
+  font: inherit;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  text-align: start;
+  text-decoration: none;
+}
+a.event,
+button.event {
+  cursor: var(--cursor-button);
+}
+a.event:hover,
+button.event:hover {
+  background: color-mix(in oklch, var(--event-subtle), var(--event-solid) 15%);
+}
+
+.eventTitle {
+  flex: 1;
+  min-inline-size: 0;
+  overflow: hidden;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.time {
+  flex-shrink: 0;
+}
+
+.event:focus-visible,
+.dayNumber:focus-visible,
+.more:focus-visible {
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: var(--focus-offset);
+}
+
+/* ----------------------------------------------------------------- month */
+
+.month {
+  inline-size: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.weekday {
+  padding: var(--space-1);
+  border-block-end: 1px solid var(--border);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  font-weight: 500;
+  color: var(--muted-foreground);
+  text-align: center;
+}
+
+/* A height on a cell is its minimum: a busy day grows the row. */
+.cell {
+  block-size: calc(2 * var(--row-height));
+  padding: var(--space-1);
+  border: 1px solid var(--border);
+  vertical-align: top;
+}
+.cell[data-outside] {
+  background: var(--surface-filled);
+}
+
+.dayNumber {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: var(--box-sm);
+  block-size: var(--box-sm);
+  margin: 0 0 var(--space-1);
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--foreground);
+  font: inherit;
+  font-size: var(--text-body-sm);
+  cursor: var(--cursor-button);
+}
+.cell[data-outside] .dayNumber {
+  color: var(--muted-foreground);
+}
+.dayNumber:hover {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+
+/* Today as in Calendar: an orange disc with a dark figure (4.9:1). */
+.dayNumber[aria-current='date'],
+.today {
+  background: var(--orange);
+  color: var(--orange-contrast);
+  font-weight: 600;
+}
+
+/* After today: a selected today shows as selected. */
+.dayNumber[aria-pressed='true'] {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  font-weight: 600;
+}
+
+.cellEvents,
+.allDayEvents,
+.listEvents,
+.column {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cellEvents {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.more {
+  margin: 0;
+  padding: 0 var(--space-1);
+  border: 0;
+  background: transparent;
+  color: var(--muted-foreground);
+  font: inherit;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  cursor: var(--cursor-button);
+}
+.more:hover {
+  color: var(--foreground);
+  text-decoration: underline;
+}
+
+.dots {
+  display: none;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-1);
+}
+
+.dot {
+  inline-size: var(--badge-dot-md);
+  block-size: var(--badge-dot-md);
+  border-radius: var(--radius-pill);
+  background: var(--event-solid);
+}
+
+/* Too narrow for titles: each day shows a dot per event (up to three)
+   and the list under the month carries the rest. */
+@container (max-width: 39.99rem) {
+  .cell {
+    block-size: var(--row-height);
+    text-align: center;
+  }
+  .cellEvents {
+    display: none;
+  }
+  .dots {
+    display: flex;
+  }
+}
+
+/* ------------------------------------------------------------ week, day */
+
+/* The gutter of hours, then a column per day. Week columns keep 6rem and
+   the grid scrolls sideways under that; the hours scroll down. */
+.timeGrid {
+  --event-columns: var(--event-gutter) repeat(var(--days), minmax(6rem, 1fr));
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-control);
+}
+.root[data-view='day'] .timeGrid {
+  --event-columns: var(--event-gutter) minmax(0, 1fr);
+}
+
+.dayHeads,
+.allDay,
+.scroller {
+  display: grid;
+  grid-template-columns: var(--event-columns);
+}
+
+.dayHeads,
+.allDay {
+  border-block-end: 1px solid var(--border);
+}
+
+.dayHead {
+  padding: var(--space-1);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--muted-foreground);
+  text-align: center;
+}
+.dayHead:first-child {
+  grid-column-start: 2;
+}
+
+.headNumber {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: var(--box-sm);
+  block-size: var(--box-sm);
+  border-radius: var(--radius-pill);
+  color: var(--foreground);
+  font-weight: 600;
+}
+
+.allDayLabel {
+  padding: var(--space-1);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--muted-foreground);
+}
+
+.allDayEvents {
+  display: grid;
+  align-content: start;
+  gap: var(--space-1);
+  padding: var(--space-1);
+  border-inline-start: 1px solid var(--border);
+}
+
+/* Ten hours on show; an hour is a row. */
+.scroller {
+  grid-template-rows: calc(24 * var(--row-height));
+  max-block-size: calc(10 * var(--row-height));
+  overflow-y: auto;
+}
+
+.hours {
+  display: grid;
+  grid-template-rows: repeat(24, var(--row-height));
+}
+
+/* Each label sits on the line where its hour starts. */
+.hour {
+  padding-inline-end: var(--space-2);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--muted-foreground);
+  text-align: end;
+  translate: 0 -50%;
+}
+
+/* A line at every hour, drawn by the column so it needs no elements. */
+.column {
+  position: relative;
+  border-inline-start: 1px solid var(--border);
+  background: repeating-linear-gradient(to bottom, var(--border) 0 1px, transparent 1px var(--row-height));
+}
+
+.column > .eventSlot {
+  position: absolute;
+  box-sizing: border-box;
+  padding: 0 calc(var(--space-1) / 2) calc(var(--space-1) / 4);
+}
+
+.column .event {
+  flex-direction: column;
+  gap: 0;
+  block-size: 100%;
+  overflow: hidden;
+  border-inline-start: 3px solid var(--event-solid);
+}
+.column .eventTitle {
+  flex: none;
+  max-inline-size: 100%;
+}
+
+/* ------------------------------------------------------------------ year */
+
+.year {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  gap: var(--space-group);
+  justify-items: center;
+}
+
+/* Each month is bounded to itself, so Calendar's arrows are disabled:
+   hide them, the header moves the year. */
+.year button:disabled {
+  display: none;
+}
+
+/* ------------------------------------------------------------ event list */
+
+.eventList {
+  display: grid;
+  gap: var(--space-stack);
+  padding-block-start: var(--space-group);
+  border-block-start: 1px solid var(--border);
+}
+
+.listTitle {
+  margin: 0;
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  font-weight: 600;
+}
+
+.listEvents {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.listEvents .event {
+  justify-content: space-between;
+  padding: var(--space-2);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+}
+
+.empty {
+  margin: 0;
+  color: var(--muted-foreground);
+}
+
+/* Day numbers are below the 44px touch target: their hit area grows on
+   coarse pointers, the disc does not. */
+@media (pointer: coarse) {
+  .dayNumber::after {
+    content: '';
+    position: absolute;
+    inset: 50% auto auto 50%;
+    inline-size: var(--target-coarse);
+    block-size: var(--target-coarse);
+    translate: -50% -50%;
+  }
+  .listEvents .event {
+    min-block-size: var(--target-coarse);
+    align-items: center;
+  }
+}
+
+/* Previous and next point the way time moves: mirrored right to left. */
+:global([dir='rtl']) .dirIcon {
+  scale: -1 1;
+}
+:global([dir='rtl'] [dir='ltr']) .dirIcon {
+  scale: none;
+}
