@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { expect, screen, waitFor, within } from 'storybook/test'
+import { expect, screen, spyOn, waitFor, within } from 'storybook/test'
 import { setPrefersDark, withPrefersDark } from '@/test/story-helpers'
 import { Playground, type Manifest, type ManifestItem, type Prop } from './Playground'
 
@@ -118,8 +118,12 @@ const withUrl = (search: Record<string, string>) => () => {
   for (const key of ['item', 'vp', 'address', ...manifest.items.flatMap((i) => i.props.map((p) => p.name))]) url.searchParams.delete(key)
   for (const key of [...url.searchParams.keys()].filter((k) => k.startsWith('theme-'))) url.searchParams.delete(key)
   for (const [k, v] of Object.entries(search)) url.searchParams.set(k, v)
-  history.replaceState(null, '', url)
-  return () => history.replaceState(null, '', before)
+  // Only when it changes: WebKit allows 100 replaceState calls per 10 seconds
+  // per page, and every story in this file shares one page.
+  if (url.href !== before) history.replaceState(null, '', url)
+  return () => {
+    if (location.href !== before) history.replaceState(null, '', before)
+  }
 }
 
 const meta = {
@@ -193,7 +197,7 @@ export const Default: Story = {
       'href',
       `/playground-fixture/?path=/story/${tooltip.storyId}`,
     )
-    await expect(param('item')).toBe(tooltip.id)
+    await waitFor(() => expect(param('item')).toBe(tooltip.id))
     // Tooltip has no props: no right column.
     await expect(canvas.queryByRole('complementary', { name: 'Props' })).toBeNull()
 
@@ -217,13 +221,13 @@ export const Default: Story = {
     await expect(home.top).toBeGreaterThan(page.top)
     await expect(home.bottom).toBeLessThan(page.bottom)
     await expect(viewportTab(canvas, 'Mobile')).toHaveAttribute('aria-selected', 'true')
-    await expect(param('vp')).toBe('mobile')
+    await waitFor(() => expect(param('vp')).toBe('mobile'))
     await userEvent.click(viewportTab(canvas, 'Tablet'))
     await fitsDevice(canvas, 834, 1194)
     // Tablet is an iPad the same way: no Safari bar, the page fills the screen.
     await expect((await frame(canvas)).offsetHeight).toBe(1194)
     await expect(canvas.queryByRole('textbox', { name: 'Address' })).toBeNull()
-    await expect(param('vp')).toBe('tablet')
+    await waitFor(() => expect(param('vp')).toBe('tablet'))
 
     // Back steps to the entry before Tooltip: Button on Desktop, as the page opened.
     history.back()
@@ -301,24 +305,24 @@ export const Props: Story = {
     await userEvent.click(panel.getByRole('combobox', { name: 'variant' }))
     await userEvent.click(await screen.findByRole('option', { name: 'secondary' }))
     await waitFor(() => expect(last()).toEqual(update({ variant: 'secondary' })))
-    await expect(param('variant')).toBe('secondary')
+    await waitFor(() => expect(param('variant')).toBe('secondary'))
 
     await userEvent.click(panel.getByRole('switch', { name: 'isLoading' }))
     await waitFor(() => expect(last()).toEqual(update({ isLoading: true })))
-    await expect(param('isLoading')).toBe('true')
+    await waitFor(() => expect(param('isLoading')).toBe('true'))
 
     const text = panel.getByRole('textbox', { name: 'children' })
     await userEvent.clear(text)
     await userEvent.type(text, 'Save it!')
     await waitFor(() => expect(last()).toEqual(update({ children: 'Save it!' })))
-    await expect(param('children')).toBe('Save it!')
+    await waitFor(() => expect(param('children')).toBe('Save it!'))
 
     // Back to its default, a prop is reset in the frame and leaves the URL.
     await userEvent.click(panel.getByRole('switch', { name: 'isLoading' }))
     await waitFor(() =>
       expect(last()).toEqual({ type: 'resetStoryArgs', args: [{ storyId: button.storyId, argNames: ['isLoading'] }] }),
     )
-    await expect(param('isLoading')).toBeNull()
+    await waitFor(() => expect(param('isLoading')).toBeNull())
 
     // Reset puts everything back.
     await userEvent.click(panel.getByRole('button', { name: 'Reset' }))
@@ -328,8 +332,8 @@ export const Props: Story = {
         args: [{ storyId: button.storyId, argNames: ['variant', 'children'] }],
       }),
     )
-    await expect(param('variant')).toBeNull()
-    await expect(param('children')).toBeNull()
+    await waitFor(() => expect(param('variant')).toBeNull())
+    await waitFor(() => expect(param('children')).toBeNull())
     await expect(panel.getByRole('combobox', { name: 'variant' })).toHaveTextContent('primary')
     await expect(panel.getByRole('textbox', { name: 'children' })).toHaveValue('Button')
 
@@ -369,7 +373,7 @@ export const FromUrl: Story = {
         args: [{ storyId: badge.storyId, updatedArgs: { count: 12 } }],
       }),
     )
-    await expect(param('count')).toBe('12')
+    await waitFor(() => expect(param('count')).toBe('12'))
   },
 }
 
@@ -403,10 +407,10 @@ export const Keyboard: Story = {
     await expect(viewportTab(canvas, 'Tablet')).toHaveFocus()
     await expect(viewportTab(canvas, 'Tablet')).toHaveAttribute('aria-selected', 'true')
     await fitsDevice(canvas, 834, 1194)
-    await expect(param('vp')).toBe('tablet')
+    await waitFor(() => expect(param('vp')).toBe('tablet'))
     await userEvent.keyboard('{ArrowRight}')
     await fitsDevice(canvas, 393, 852)
-    await expect(param('vp')).toBe('mobile')
+    await waitFor(() => expect(param('vp')).toBe('mobile'))
   },
 }
 
@@ -480,22 +484,24 @@ export const ThemeColorRadius: Story = {
     await userEvent.click(dialog.getByRole('radio', { name: 'Full rounded' }))
     await waitFor(() => expect(lastGlobals(received)).toEqual({ radius: 'full-rounded' }))
     await userEvent.click(dialog.getByRole('radio', { name: 'Dark' }))
-    await expect([param('theme-accent'), param('theme-gray'), param('theme-radius'), param('theme-appearance')]).toEqual([
-      'rose',
-      'slate',
-      'full-rounded',
-      'dark',
-    ])
+    await waitFor(() =>
+      expect([param('theme-accent'), param('theme-gray'), param('theme-radius'), param('theme-appearance')]).toEqual([
+        'rose',
+        'slate',
+        'full-rounded',
+        'dark',
+      ]),
+    )
 
     // Back to the default: the param goes.
     await userEvent.click(accent.getByRole('radio', { name: 'Blue' }))
     await waitFor(() => expect(lastGlobals(received)).toEqual({ accent: 'blue' }))
-    await expect(param('theme-accent')).toBeNull()
+    await waitFor(() => expect(param('theme-accent')).toBeNull())
 
     // Reset puts every option back and empties the URL of them.
     await userEvent.click(dialog.getByRole('button', { name: 'Reset' }))
     await waitFor(() => expect(lastGlobals(received)).toEqual({ gray: 'gray', radius: 'rounded', appearance: 'system' }))
-    await expect(themeParams()).toEqual([])
+    await waitFor(() => expect(themeParams()).toEqual([]))
     await expect(gray.getByRole('radio', { name: 'Gray' })).toBeChecked()
     await expect(dialog.getByRole('radio', { name: 'System' })).toBeChecked()
   },
@@ -518,12 +524,12 @@ export const ThemeTypo: Story = {
     await userEvent.click(scaling)
     await userEvent.click(await screen.findByRole('option', { name: '110%' }))
     await waitFor(() => expect(lastGlobals(received)).toEqual({ scaling: '110%' }))
-    await expect([param('theme-font'), param('theme-scaling')]).toEqual(['inter', '110%'])
+    await waitFor(() => expect([param('theme-font'), param('theme-scaling')]).toEqual(['inter', '110%']))
 
     // Reset covers Typo too.
     await userEvent.click(dialog.getByRole('button', { name: 'Reset' }))
     await waitFor(() => expect(lastGlobals(received)).toEqual({ font: 'system', scaling: '100%' }))
-    await expect(themeParams()).toEqual([])
+    await waitFor(() => expect(themeParams()).toEqual([]))
     await expect(font).toHaveTextContent('System')
   },
 }
@@ -664,25 +670,25 @@ export const BrowserBar: Story = {
     // The address field is a real, named text field, on example.com until changed.
     const address = canvas.getByRole('textbox', { name: 'Address' })
     await expect(address).toHaveValue('example.com')
-    await expect(param('address')).toBeNull()
+    await waitFor(() => expect(param('address')).toBeNull())
 
     // A domain typed in goes in the URL; back to example.com, it leaves.
     await userEvent.clear(address)
     await userEvent.type(address, 'acme.dev')
-    await expect(param('address')).toBe('acme.dev')
+    await waitFor(() => expect(param('address')).toBe('acme.dev'))
     await userEvent.clear(address)
-    await expect(param('address')).toBeNull()
+    await waitFor(() => expect(param('address')).toBeNull())
     // Left empty, the field goes back to example.com, as the link shows it.
     await userEvent.tab()
     await expect(address).toHaveValue('example.com')
     await userEvent.clear(address)
     await userEvent.type(address, ' acme.dev ')
-    await expect(param('address')).toBe('acme.dev')
+    await waitFor(() => expect(param('address')).toBe('acme.dev'))
     await userEvent.tab()
     await expect(address).toHaveValue('acme.dev')
     await userEvent.clear(address)
     await userEvent.type(address, 'example.com')
-    await expect(param('address')).toBeNull()
+    await waitFor(() => expect(param('address')).toBeNull())
 
     // The bar wears the Preview theme's appearance: System follows the OS (light here).
     // Found before the modal popover opens, which hides the page from queries.
@@ -713,14 +719,22 @@ export const BrowserBarFromUrl: Story = {
     const address = () => canvas.getByRole('textbox', { name: 'Address' })
     // A shared link opens on the same domain.
     await expect(address()).toHaveValue('acme.dev')
-    await userEvent.clear(address())
-    await userEvent.type(address(), 'shop.dev')
-    await expect(param('address')).toBe('shop.dev')
+    // Typing writes the URL in bursts, not once a keystroke: WebKit throws
+    // past 100 replaceState calls in 10 seconds.
+    const writes = spyOn(history, 'replaceState')
+    try {
+      await userEvent.clear(address())
+      await userEvent.type(address(), 'shop.dev')
+      await waitFor(() => expect(param('address')).toBe('shop.dev'))
+      await expect(writes.mock.calls.length).toBeLessThan('shop.dev'.length)
+    } finally {
+      writes.mockRestore()
+    }
     // Tablet and Mobile have no address field, and leave the address as it was.
     for (const vp of ['Tablet', 'Mobile']) {
       await userEvent.click(viewportTab(canvas, vp))
       await expect(canvas.queryByRole('textbox', { name: 'Address' })).toBeNull()
-      await expect(param('address')).toBe('shop.dev')
+      await waitFor(() => expect(param('address')).toBe('shop.dev'))
     }
     await userEvent.click(viewportTab(canvas, 'Desktop'))
     await expect(address()).toHaveValue('shop.dev')

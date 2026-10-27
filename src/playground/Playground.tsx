@@ -143,9 +143,43 @@ function parseValue(prop: Prop, raw: string): unknown {
 /** Where a control starts. An unset boolean reads as off and an unset string as empty. */
 const defaultOf = (prop: Prop) => prop.default ?? { boolean: false, text: '' }[prop.control]
 
-/** The current URL with these params set, or removed where undefined. Other params (Storybook's own) stay. */
+/**
+ * Writes to the address bar go through here. WebKit throws a SecurityError
+ * past 100 replaceState calls in 10 seconds, which typing into the address
+ * or a text prop reaches, and the keystroke is lost. So a burst is written at
+ * most once per URL_WRITE_MS, always ending on its last URL.
+ */
+const URL_WRITE_MS = 200
+let pendingUrl: string | null = null
+let lastUrlWrite = 0
+let urlTimer: ReturnType<typeof setTimeout> | undefined
+
+/** Drops a write still waiting: on Back, and when the Playground goes away. */
+function dropUrl() {
+  clearTimeout(urlTimer)
+  urlTimer = undefined
+  pendingUrl = null
+}
+
+function flushUrl() {
+  if (pendingUrl !== null && pendingUrl !== location.href) {
+    history.replaceState(null, '', pendingUrl)
+    lastUrlWrite = Date.now()
+  }
+  dropUrl()
+}
+
+function replaceUrl(url: string) {
+  pendingUrl = url
+  if (urlTimer) return
+  const wait = lastUrlWrite + URL_WRITE_MS - Date.now()
+  if (wait <= 0) flushUrl()
+  else urlTimer = setTimeout(flushUrl, wait)
+}
+
+/** The current URL, or the one waiting to be written, with these params set, or removed where undefined. Other params (Storybook's own) stay. */
 function urlWith(changes: Record<string, string | undefined>) {
-  const url = new URL(location.href)
+  const url = new URL(pendingUrl ?? location.href)
   for (const [key, value] of Object.entries(changes)) {
     if (value === undefined) url.searchParams.delete(key)
     else url.searchParams.set(key, value)
@@ -196,12 +230,22 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
     // The Preview theme is the page's, not the item's: Back keeps it, and
     // puts it on the entry it lands on.
     const onPop = () => {
+      dropUrl()
       setState(readUrl(items))
-      history.replaceState(null, '', urlWith(themeUrl(themeRef.current)))
+      replaceUrl(urlWith(themeUrl(themeRef.current)))
     }
     addEventListener('popstate', onPop)
     return () => removeEventListener('popstate', onPop)
   }, [items])
+
+  // A reload or a closed tab still keeps the last edit.
+  useEffect(() => {
+    addEventListener('pagehide', flushUrl)
+    return () => {
+      removeEventListener('pagehide', flushUrl)
+      dropUrl()
+    }
+  }, [])
 
   // The page's own UI follows the OS; the Preview theme only dresses the frame.
   // On <html>, not a wrapper: popups (Select, the drawer) portal to <body>.
@@ -213,24 +257,26 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
   const select = (item: ManifestItem) => {
     setDrawerOpen(false)
     if (item.id === state.item.id) return
-    history.pushState(null, '', urlWith({ ...withoutProps(state.item), item: item.id }))
+    const url = urlWith({ ...withoutProps(state.item), item: item.id })
+    flushUrl()
+    history.pushState(null, '', url)
     setState((s) => ({ ...s, item, args: {} }))
   }
   const setVp = (vp: Viewport) => {
-    history.replaceState(null, '', urlWith({ vp }))
+    replaceUrl(urlWith({ vp }))
     setState((s) => ({ ...s, vp }))
   }
   // Only a value off the default goes in the URL; undefined (a cleared number) means the default.
   const setProp = (prop: Prop, value: unknown) => {
     const changed = value !== undefined && value !== defaultOf(prop)
-    history.replaceState(null, '', urlWith({ [prop.name]: changed ? String(value) : undefined }))
+    replaceUrl(urlWith({ [prop.name]: changed ? String(value) : undefined }))
     setState((s) => {
       const { [prop.name]: _, ...args } = s.args
       return { ...s, args: changed ? { ...args, [prop.name]: value } : args }
     })
   }
   const setTheme = (theme: PreviewTheme) => {
-    history.replaceState(null, '', urlWith(themeUrl(theme)))
+    replaceUrl(urlWith(themeUrl(theme)))
     themeRef.current = theme
     setPreviewTheme(theme)
   }
@@ -238,11 +284,11 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
   // empty field stands for the default (the bar tidies the field on blur).
   const setAddress = (address: string) => {
     const domain = address.trim()
-    history.replaceState(null, '', urlWith({ address: domain && domain !== DEFAULT_ADDRESS ? domain : undefined }))
+    replaceUrl(urlWith({ address: domain && domain !== DEFAULT_ADDRESS ? domain : undefined }))
     setState((s) => ({ ...s, address }))
   }
   const resetProps = () => {
-    history.replaceState(null, '', urlWith(withoutProps(state.item)))
+    replaceUrl(urlWith(withoutProps(state.item)))
     setState((s) => ({ ...s, args: {} }))
   }
 
