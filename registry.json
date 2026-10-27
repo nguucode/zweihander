@@ -231,10 +231,11 @@
       "name": "avatar",
       "type": "registry:component",
       "title": "Avatar",
-      "description": "Round picture of a person with initials and silhouette fallbacks, neutral or any accent hue in subtle or solid, an optional presence dot, and a group that overlaps them with a +n for the rest.",
+      "description": "Round picture of a person with initials and silhouette fallbacks, neutral or any accent hue in subtle or solid, an optional presence dot, and a group that overlaps them with a +n for the rest and optional name tooltips.",
       "registryDependencies": [
         "https://ontheshore.biz/zweihander/r/utils.json",
         "https://ontheshore.biz/zweihander/r/badge.json",
+        "https://ontheshore.biz/zweihander/r/tooltip.json",
         "https://ontheshore.biz/zweihander/r/tokens.json",
         "https://ontheshore.biz/zweihander/r/theme.json"
       ],
@@ -825,7 +826,7 @@
       "name": "tooltip",
       "type": "registry:component",
       "title": "Tooltip",
-      "description": "Short inverted label on hover or focus, with side and delay, on Base UI Tooltip; TooltipGroup shares the delay.",
+      "description": "Short inverted label on hover or focus, with side and delay, on Base UI Tooltip; TooltipGroup shares the delay. HoverCard previews a person or record behind a link, on Base UI PreviewCard.",
       "registryDependencies": [
         "https://ontheshore.biz/zweihander/r/utils.json",
         "https://ontheshore.biz/zweihander/r/tokens.json"

@@ -170,7 +170,12 @@ the only one that stands out.
   not release it.
 - A `ButtonGroup`'s buttons are each a tab stop, with no `aria-pressed`.
 - A disabled `ToggleGroup` disables every toggle in it.
-- An icon-only button needs its own `aria-label`, as on Button.
+- An icon-only button needs its own `aria-label`, as on Button. A
+  [Tooltip](?path=/docs/components-overlays-tooltip--docs) can show that
+  label to sighted users: it merges onto the button instead of wrapping
+  it, so the buttons still join.
+
+  <Canvas of={ButtonGroupStories.WithTooltips} />
 
 </DocTab>
 </DocTabs>

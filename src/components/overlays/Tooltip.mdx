@@ -1,6 +1,7 @@
 import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
 import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
 import * as TooltipStories from './Tooltip.stories'
+import { HoverCard } from './Tooltip'
 
 <Meta of={TooltipStories} />
 
@@ -10,7 +11,8 @@ import * as TooltipStories from './Tooltip.stories'
 <DocTab value="overview">
 
 A short label that appears when you hover over or focus a control: the
-name of an icon-only button, a keyboard shortcut, a one-line hint.
+name of an icon-only button, a keyboard shortcut, a one-line hint. Its
+sibling `HoverCard` previews a person or record behind a link.
 
 <Status of={TooltipStories} />
 
@@ -18,8 +20,13 @@ name of an icon-only button, a keyboard shortcut, a one-line hint.
 
 ## Variants
 
-There is one tooltip. It opens on hover after a short delay and on
-keyboard focus at once. Wrap a row of tooltips in `TooltipGroup` so that
+| Variant | When to use |
+|---|---|
+| Tooltip | A label or a one-line hint on a control. |
+| Hover card | A preview of a person or record on a link to it: avatar, name, meta and an optional action. |
+
+The tooltip opens on hover after a short delay and on keyboard focus at
+once. Wrap a row of tooltips in `TooltipGroup` so that
 once one has opened, moving to the next opens it without the delay:
 
 <Canvas of={TooltipStories.Group} />
@@ -27,12 +34,24 @@ once one has opened, moving to the next opens it without the delay:
 Only one tooltip is open at a time: opening one closes any other. Hover or
 focus the triggers above to see them.
 
+### Hover card
+
+`HoverCard` opens after 600ms of hover or focus on a link and stays open
+for 300ms after the pointer leaves, so the pointer can cross to it. It is
+drawn like a Popover, a raised surface, not an inverted label:
+
+<Canvas of={TooltipStories.HoverCardPicture} />
+
+Hover the name to open the real one:
+
+<Canvas of={TooltipStories.HoverCardPerson} />
+
 ## Resources
 
 From npm, or copied into your project through the registry:
 
 ```js
-import { Tooltip, TooltipGroup } from 'zweihander/tooltip'
+import { HoverCard, Tooltip, TooltipGroup } from 'zweihander/tooltip'
 ```
 
 ```sh
@@ -41,7 +60,7 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/tooltip.json
 
 - Source: [src/components/overlays/Tooltip.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/overlays/Tooltip.tsx)
 - Spec: [uiguideline.com/components/tooltip](https://www.uiguideline.com/components/tooltip)
-- Behaviour: [Base UI Tooltip](https://base-ui.com/react/components/tooltip)
+- Behaviour: [Base UI Tooltip](https://base-ui.com/react/components/tooltip), [Base UI Preview Card](https://base-ui.com/react/components/preview-card)
 - Figma: not in the library yet
 
 </DocTab>
@@ -56,6 +75,12 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/tooltip.json
 The open tooltips on this tab and the next are pictures: real tooltips
 held open and rendered in place with `container`, laid out above the
 trigger where they open.
+
+The hover card, open under its link:
+
+<Anatomy parts={TooltipStories.hoverCardParts}>
+  <Story of={TooltipStories.HoverCardAnatomy} />
+</Anatomy>
 
 ## Measurements
 
@@ -76,6 +101,23 @@ trigger, on the `--layer-tooltip` layer, above popovers and modals, so a
 tooltip on a control inside one still shows. It fades in over
 `--duration-fast`.
 
+<SpecTable
+  caption="Hover card"
+  rows={[
+    { part: 'Container', property: 'Padding', token: '--space-group' },
+    { part: 'Container', property: 'Corner radius', token: '--radius-panel' },
+    { part: 'Container', property: 'Shadow', token: '--shadow-md' },
+    { part: 'Avatar to text', property: 'Gap', token: '--space-cluster' },
+    { part: 'Text to action', property: 'Gap', token: '--space-3' },
+    { part: 'Name', property: 'Font size', token: '--text-body' },
+    { part: 'Meta', property: 'Font size', token: '--text-body-sm' },
+  ]}
+/>
+
+The hover card is as wide as its content, at most 20rem. It opens 6px
+under the link, start-aligned, on the `--layer-overlay` layer with
+Popover, below tooltips.
+
 ## Color
 
 <SpecTable
@@ -86,7 +128,17 @@ tooltip on a control inside one still shows. It fades in over
   ]}
 />
 
-Inverted in both modes: a tooltip is not part of the page, and the
+<SpecTable
+  caption="Hover card"
+  rows={[
+    { part: 'Container', property: 'Background', token: '--popover' },
+    { part: 'Container', property: 'Border', token: '--border' },
+    { part: 'Name', property: 'Colour', token: '--popover-foreground' },
+    { part: 'Meta', property: 'Colour', token: '--muted-foreground' },
+  ]}
+/>
+
+The tooltip is inverted in both modes: a tooltip is not part of the page, and the
 dark-on-light (light-on-dark in dark mode) box says so, at the same
 contrast as body text.
 
@@ -105,6 +157,9 @@ contrast as body text.
   Opening fades it in and scales it up from 96%.
 - The trigger keeps the states of its own component; the tooltip has none
   of its own.
+- The hover card has the same two states, after `delay` (600ms) of hover
+  or focus and `closeDelay` (300ms) after the pointer leaves both the link
+  and the card.
 
 ## API
 
@@ -115,6 +170,12 @@ contrast as body text.
 
 `TooltipGroup` is Base UI's `Tooltip.Provider`: tooltips inside it share
 one delay.
+
+### HoverCard
+
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={HoverCard} />
+</div>
 
 </DocTab>
 <DocTab value="guidelines">
@@ -141,6 +202,9 @@ flash as the pointer crosses a toolbar.
 - **For links, buttons or other interactive content.** Hover and touch
   cannot reach the tooltip. Use a
   [Popover](?path=/docs/components-overlays-popover--docs).
+- **For a rich preview.** A tooltip holds text only. To preview a person
+  or record behind a link, use `HoverCard`. Its action is a shortcut, so
+  the linked page must offer the same action.
 - **On a disabled button.** It is not focusable, so its tooltip never opens
   by keyboard. Put the reason it is disabled in text next to it.
 
@@ -158,6 +222,17 @@ flash as the pointer crosses a toolbar.
   own `aria-label`; the tooltip then shows that label to sighted users too.
 - The trigger must be focusable: a Button, a link, a field.
 - `--background` on `--foreground` reads at 16:1 or more in both modes.
+
+### Hover card
+
+- The trigger is a link to what the card previews. Hover or keyboard focus
+  on it opens the card; Escape closes it.
+
+  <Canvas of={TooltipStories.HoverCardFocus} />
+
+- The card is a visual preview, not a dialog: focus stays on the link and
+  Tab moves past the card, its action included. Touch has no hover, so
+  everything on it must be on the page the link opens.
 
 </DocTab>
 </DocTabs>

@@ -143,3 +143,9 @@
 .group > .avatar + .avatar {
   margin-inline-start: calc(var(--avatar-size) / -4);
 }
+
+/* Only a group's "+n" with tooltips takes focus. */
+.avatar:focus-visible {
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: var(--focus-offset);
+}

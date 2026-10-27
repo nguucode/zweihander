@@ -1,8 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useState } from 'react'
-import { expect, fn } from 'storybook/test'
+import { expect, fn, within } from 'storybook/test'
 import { expectAnatomy } from '../../../.storybook/blocks'
 import { Icon } from '@/lib/icon'
+import { Tooltip } from '../overlays/Tooltip'
 import { Button } from './Button'
 import { ButtonGroup, ToggleGroup } from './ButtonGroup'
 import { ToggleButton } from './ToggleButton'
@@ -189,6 +190,35 @@ export const IconToggles: Story = {
     await userEvent.click(calendar)
     await expect(calendar).toHaveAttribute('aria-pressed', 'true')
     await expect(canvas.getByRole('button', { name: 'List' })).toHaveAttribute('aria-pressed', 'false')
+  },
+}
+
+/** A Tooltip merges onto its button rather than wrapping it, so tooltipped buttons still join. */
+export const WithTooltips: Story = {
+  render: () => (
+    <ButtonGroup aria-label="Pages">
+      <Tooltip content="Previous">
+        <Button variant="secondary" appearance="outlined" isIconOnly aria-label="Previous">
+          <Icon name="chevron-left" />
+        </Button>
+      </Tooltip>
+      <Tooltip content="Next">
+        <Button variant="secondary" appearance="outlined" isIconOnly aria-label="Next">
+          <Icon name="chevron-right" />
+        </Button>
+      </Tooltip>
+    </ButtonGroup>
+  ),
+  play: async ({ canvas, userEvent }) => {
+    const group = canvas.getByRole('group', { name: 'Pages' })
+    const [previous, next] = [canvas.getByRole('button', { name: 'Previous' }), canvas.getByRole('button', { name: 'Next' })]
+    await expect([...group.children]).toEqual([previous, next])
+    await expect(getComputedStyle(previous).borderStartEndRadius).toBe('0px')
+    await expect(getComputedStyle(next).marginInlineStart).toBe('-1px')
+    // Opening a tooltip adds nothing inside the group.
+    await userEvent.tab()
+    await within(document.body).findByRole('tooltip', {}, { timeout: 300 })
+    await expect([...group.children]).toEqual([previous, next])
   },
 }
 

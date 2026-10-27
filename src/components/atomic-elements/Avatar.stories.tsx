@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { expect, waitFor } from 'storybook/test'
+import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { expectAnatomy } from '../../../.storybook/blocks'
 import { ACCENT_COLORS, GRAY_COLORS } from '@/theme/palettes'
 import { Theme } from '@/theme/Theme'
@@ -335,6 +335,23 @@ export const Group: Story = {
     const z = [...group.children].map((el) => Number(getComputedStyle(el).zIndex))
     await expect(z).toEqual([...z].sort((a, b) => b - a))
     await expect(new Set(z).size).toBe(4)
+  },
+}
+
+/** `hasTooltips`: each name on hover, and the "+n" lists who it stands for, on hover or focus. */
+export const GroupTooltips: Story = {
+  render: () => <AvatarGroup max={4} hasTooltips avatars={[...PEOPLE]} />,
+  play: async ({ canvas }) => {
+    const body = within(document.body)
+    await userEvent.hover(canvas.getByRole('img', { name: 'Sam Rivera' }))
+    await expect(await body.findByRole('tooltip')).toHaveTextContent('Sam Rivera')
+    await userEvent.unhover(canvas.getByRole('img', { name: 'Sam Rivera' }))
+    // Only the "+n" takes focus: the others' names are already their accessible names.
+    await userEvent.tab()
+    const more = canvas.getByRole('img', { name: '3 more' })
+    await expect(more).toHaveFocus()
+    await waitFor(() => expect(body.getByRole('tooltip')).toHaveTextContent('Ana Silva, Ian Okafor, Kim Nguyen'))
+    await expect(more).toHaveAccessibleDescription('Ana Silva, Ian Okafor, Kim Nguyen')
   },
 }
 
