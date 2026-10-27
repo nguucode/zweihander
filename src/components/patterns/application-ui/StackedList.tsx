@@ -1,9 +1,10 @@
 import type { Key, MouseEventHandler, ReactNode } from 'react'
 import { Icon } from '@/lib/icon'
-import { Button } from '../../buttons/Button'
-import { ContextMenu } from '../../navigation/ContextMenu'
-import { Menu, type MenuEntry } from '../../navigation/Menu'
+import { cn } from '@/lib/utils'
+import type { MenuEntry } from '../../navigation/Menu'
 import { ListContainer, ListContainerItem, type ListContainerProps } from './ListContainer'
+import { ListItemActions, ListItemContextMenu, ListItemHeading, ListItemMedia } from './ListItemParts'
+import parts from './ListItemParts.module.css'
 import styles from './StackedList.module.css'
 
 export interface StackedListItem {
@@ -41,66 +42,25 @@ export interface StackedListProps extends Omit<ListContainerProps, 'children'> {
 export function StackedList({ items, ...props }: StackedListProps) {
   return (
     <ListContainer {...props}>
-      {items.map((item, i) => {
-        const key = item.id ?? i
-        const actions = item.actions?.length ? item.actions : null
-        const row = (
-          <ListContainerItem key={key} className={styles.item}>
-            {item.media && (
-              <span className={styles.media} aria-hidden="true">
-                {item.media}
-              </span>
-            )}
+      {items.map((item, i) => (
+        <ListItemContextMenu key={item.id ?? i} item={item}>
+          <ListContainerItem className={cn(parts.target, styles.item)}>
+            <ListItemMedia item={item} />
             <div className={styles.main}>
               <div className={styles.text}>
-                <p className={styles.heading}>
-                  {item.href ? (
-                    <a href={item.href} onClick={item.onClick} className={styles.link}>
-                      {item.title}
-                    </a>
-                  ) : (
-                    <span className={styles.title}>{item.title}</span>
-                  )}
-                  {item.status}
-                </p>
-                {item.description && <p className={styles.description}>{item.description}</p>}
+                <ListItemHeading item={item} />
+                {item.description && <p className={parts.description}>{item.description}</p>}
               </div>
-              {item.meta && <div className={styles.meta}>{item.meta}</div>}
+              {item.meta && <div className={parts.meta}>{item.meta}</div>}
             </div>
-            {actions ? (
-              <span className={styles.end}>
-                <Menu
-                  align="end"
-                  items={actions}
-                  trigger={
-                    <Button
-                      variant="secondary"
-                      appearance="ghost"
-                      size="sm"
-                      isIconOnly
-                      aria-label={`Actions for ${typeof item.title === 'string' ? item.title : `item ${i + 1}`}`}
-                    >
-                      <Icon name="more" />
-                    </Button>
-                  }
-                />
-              </span>
+            {item.actions?.length ? (
+              <ListItemActions item={item} index={i} />
             ) : (
               item.href && <Icon name="chevron-right" className={styles.chevron} />
             )}
           </ListContainerItem>
-        )
-        // A linked row keeps the browser's own link menu (open in new tab,
-        // copy link); the ⋯ button still has the actions. The <li> itself
-        // is the area, so the list keeps only <li> children.
-        return actions && !item.href ? (
-          <ContextMenu key={key} items={actions}>
-            {row}
-          </ContextMenu>
-        ) : (
-          row
-        )
-      })}
+        </ListItemContextMenu>
+      ))}
     </ListContainer>
   )
 }
