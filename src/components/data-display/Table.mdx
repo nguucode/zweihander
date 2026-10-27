@@ -394,6 +394,11 @@ Pass `expandedIds` to open rows from outside the table:
   Escape closes it, and focus returns to the button. A row with no items
   has no button.
 - The actions column's header is "Actions", visually hidden.
+- When the table is wider than its box and nothing in it takes focus, the
+  scroll box becomes a tab stop with a focus ring: `role="region"` named by
+  the caption, which the browser scrolls with the arrow keys. A table that
+  fits, or whose cells hold a control (a sort button, a checkbox), gets no
+  extra tab stop.
 - With `isResizable`, each column header holds a focusable
   `role="separator"` with `aria-orientation="vertical"`, named "Resize"
   and the header ("Resize Owner"), or the column's `key` when the header

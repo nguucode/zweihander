@@ -219,13 +219,12 @@ export const Empty: Story = {
 
 /**
  * At 320px a long summary wraps, the switch drops under it, and nothing
- * widens the page. Shown on the chart: the Table's scroll box is not yet
- * focusable when it overflows with no control in its cells, which axe flags.
+ * widens the page: the Table scrolls inside its own box.
  */
 export const Narrow: Story = {
   render: () => (
     <div data-testid="narrow" style={{ inlineSize: 320 }}>
-      <Invoices defaultView="chart" summary="Invoices for Nordwestdeutsche-Landesbank-Girozentrale-Hannover-Niederlassung" />
+      <Invoices summary="Invoices for Nordwestdeutsche-Landesbank-Girozentrale-Hannover-Niederlassung" />
     </div>
   ),
   play: async ({ canvas }) => {

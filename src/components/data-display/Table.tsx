@@ -91,6 +91,11 @@ const MIN_WIDTH = 48
 const MAX_WIDTH = 1200
 const KEY_STEP = 16
 const clampWidth = (w: number) => Math.round(Math.min(MAX_WIDTH, Math.max(MIN_WIDTH, w)))
+// Candidates only: `tabIndex` and `:disabled` decide, so a Base UI control's
+// hidden `<input tabindex="-1">` or a roving `tabIndex={-1}` cell does not count.
+const FOCUS_CANDIDATES = 'a[href], button, input, select, textarea, [tabindex], [contenteditable]'
+const hasTabStop = (el: Element) =>
+  [...el.querySelectorAll<HTMLElement>(FOCUS_CANDIDATES)].some((e) => e.tabIndex >= 0 && !e.matches(':disabled') && !e.closest('[inert]'))
 
 /** The drag handle at a header's end: a focusable vertical separator, after the APG window splitter. */
 function ResizeHandle({ label, width, onResize }: { label: string; width?: number; onResize: (width: number) => void }) {
@@ -217,6 +222,31 @@ export function Table<Row>({
   const [widthsState, setWidthsState] = useState<Record<string, number>>({})
   const widths = widthsProp ?? widthsState
   const baseId = useId()
+  const containerRef = useRef<HTMLDivElement>(null)
+  // A scroll box keyboard users can't reach: it overflows and nothing inside
+  // takes focus (axe scrollable-region-focusable). Then the box itself is the
+  // tab stop, so the arrow keys scroll it. It stays one while focused, even
+  // once it fits, so focus is not dropped on the page.
+  const [isScrollRegion, setIsScrollRegion] = useState(false)
+  const checkScrollRegion = () => {
+    const el = containerRef.current
+    if (!el) return
+    const overflows = el.scrollWidth > el.clientWidth || el.scrollHeight > el.clientHeight
+    setIsScrollRegion((overflows || document.activeElement === el) && !hasTabStop(el))
+  }
+  // After every render, since cells may add or drop controls; unchanged state bails out.
+  // ponytail: a cell that adds a control from its own state, without a Table render or a resize, is missed until the next one; a MutationObserver if that shows up.
+  // oxlint-disable-next-line react-hooks/exhaustive-deps
+  useLayoutEffect(checkScrollRegion)
+  // Once: checkScrollRegion reads only the ref and the setter, so the first one stays current.
+  // oxlint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    const el = containerRef.current!
+    const observer = new ResizeObserver(checkScrollRegion)
+    observer.observe(el)
+    observer.observe(el.firstElementChild!)
+    return () => observer.disconnect()
+  }, [])
 
   // Uncontrolled sort is done here; a controlled one is the caller's job.
   const shown = useMemo(() => (sortProp !== undefined ? rows : sortRows(rows, columns, sort)), [rows, columns, sort, sortProp])
@@ -273,9 +303,16 @@ export function Table<Row>({
   const someSelected = !allSelected && ids.some((id) => selected.has(id))
 
   return (
-    <div className={cn(styles.container, hasStickyHeader && styles.sticky, className)}>
+    <div
+      ref={containerRef}
+      className={cn(styles.container, hasStickyHeader && styles.sticky, className)}
+      {...(isScrollRegion && { tabIndex: 0, role: 'region', 'aria-labelledby': `${baseId}-caption` })}
+      onBlur={checkScrollRegion}
+    >
       <table className={cn(styles.table, styles[density], isResizable && styles.resizable)}>
-        <caption className={showCaption ? styles.caption : styles.srOnly}>{caption}</caption>
+        <caption id={`${baseId}-caption`} className={showCaption ? styles.caption : styles.srOnly}>
+          {caption}
+        </caption>
         <thead>
           <tr>
             {isSelectable && (
