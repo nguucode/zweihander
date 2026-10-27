@@ -5,6 +5,7 @@ import { Icon } from '@/lib/icon'
 import { cn } from '@/lib/utils'
 import { Button } from '../buttons/Button'
 import { Checkbox } from '../controls/Checkbox'
+import { ContextMenu } from '../navigation/ContextMenu'
 import { Menu, type MenuEntry } from '../navigation/Menu'
 import styles from './Table.module.css'
 
@@ -67,6 +68,12 @@ export interface TableProps<Row> {
    * after the row. A row that returns no items gets no button.
    */
   rowActions?: (row: Row) => MenuEntry[] | null | undefined
+  /**
+   * Also opens a row's `rowActions` on right click or long press, at the
+   * pointer. Off by default: the row then keeps no browser menu of its own,
+   * so copying a cell's text or opening a link in it from that menu is gone.
+   */
+  hasRowContextMenu?: boolean
   /** Row height. `md` is `--row-height` (48px Default, 36px Compact density); `sm` is one `--space-inline` shorter (40, 32). */
   density?: 'sm' | 'md'
   /** Keep the header row in view while the table scrolls inside its container. */
@@ -205,6 +212,7 @@ export function Table<Row>({
   defaultExpandedIds = [],
   onExpandedChange,
   rowActions,
+  hasRowContextMenu = false,
   density = 'md',
   hasStickyHeader = false,
   emptyState,
@@ -285,9 +293,8 @@ export function Table<Row>({
     // The fallback counts from `rows`, so a sort does not rename the row.
     return typeof v === 'string' || typeof v === 'number' ? String(v) : `row ${(position.get(row) ?? 0) + 1}`
   }
-  const rowMenu = (row: Row) => {
-    const items = rowActions?.(row)
-    return items?.length ? (
+  const rowMenu = (row: Row, items: MenuEntry[] | null) =>
+    items ? (
       <Menu
         align="end"
         items={items}
@@ -298,7 +305,6 @@ export function Table<Row>({
         }
       />
     ) : null
-  }
   const allSelected = ids.length > 0 && ids.every((id) => selected.has(id))
   const someSelected = !allSelected && ids.some((id) => selected.has(id))
 
@@ -386,58 +392,73 @@ export function Table<Row>({
               const hasContent = content != null && content !== false
               const isExpanded = hasContent && expanded.has(id)
               const contentId = `${baseId}-expanded-${position.get(row) ?? i}`
+              const returned = rowActions?.(row)
+              const actions = returned?.length ? returned : null
+              const rowEl = (
+                <tr
+                  aria-selected={isSelectable ? isSelected : undefined}
+                  className={cn(isSelected && styles.selected, isExpanded && styles.expanded)}
+                >
+                  {isSelectable && (
+                    <td className={styles.select}>
+                      <Checkbox
+                        aria-label={`Select ${rowName(row)}`}
+                        checked={isSelected}
+                        onCheckedChange={(on) => setSelected(on ? [...selected, id] : [...selected].filter((x) => x !== id))}
+                      />
+                    </td>
+                  )}
+                  {isExpandable && (
+                    <td className={styles.expand}>
+                      {hasContent && (
+                        <Button
+                          variant="secondary"
+                          appearance="ghost"
+                          size="sm"
+                          isIconOnly
+                          aria-label={`Expand ${rowName(row)}`}
+                          aria-expanded={isExpanded}
+                          // Only points at the content row while it exists.
+                          aria-controls={isExpanded ? contentId : undefined}
+                          onClick={() => setExpanded(isExpanded ? [...expanded].filter((x) => x !== id) : [...expanded, id])}
+                        >
+                          <span className={styles.expandIcon} aria-hidden="true">
+                            <Icon name="chevron-right" />
+                          </span>
+                        </Button>
+                      )}
+                    </td>
+                  )}
+                  {columns.map((col) => {
+                    const value = col.cell ? col.cell(row) : ((row as Record<string, unknown>)[col.key] as ReactNode)
+                    const Cell = col.isRowHeader ? 'th' : 'td'
+                    return (
+                      <Cell
+                        key={col.key}
+                        scope={col.isRowHeader ? 'row' : undefined}
+                        style={{ textAlign: col.align }}
+                        className={cn(styles.td, col.isRowHeader && styles.rowHeader)}
+                      >
+                        {value}
+                      </Cell>
+                    )
+                  })}
+                  {rowActions && <td className={styles.actions}>{rowMenu(row, actions)}</td>}
+                </tr>
+              )
               return (
                 <Fragment key={id}>
-                  <tr
-                    aria-selected={isSelectable ? isSelected : undefined}
-                    className={cn(isSelected && styles.selected, isExpanded && styles.expanded)}
-                  >
-                    {isSelectable && (
-                      <td className={styles.select}>
-                        <Checkbox
-                          aria-label={`Select ${rowName(row)}`}
-                          checked={isSelected}
-                          onCheckedChange={(on) => setSelected(on ? [...selected, id] : [...selected].filter((x) => x !== id))}
-                        />
-                      </td>
-                    )}
-                    {isExpandable && (
-                      <td className={styles.expand}>
-                        {hasContent && (
-                          <Button
-                            variant="secondary"
-                            appearance="ghost"
-                            size="sm"
-                            isIconOnly
-                            aria-label={`Expand ${rowName(row)}`}
-                            aria-expanded={isExpanded}
-                            // Only points at the content row while it exists.
-                            aria-controls={isExpanded ? contentId : undefined}
-                            onClick={() => setExpanded(isExpanded ? [...expanded].filter((x) => x !== id) : [...expanded, id])}
-                          >
-                            <span className={styles.expandIcon} aria-hidden="true">
-                              <Icon name="chevron-right" />
-                            </span>
-                          </Button>
-                        )}
-                      </td>
-                    )}
-                    {columns.map((col) => {
-                      const value = col.cell ? col.cell(row) : ((row as Record<string, unknown>)[col.key] as ReactNode)
-                      const Cell = col.isRowHeader ? 'th' : 'td'
-                      return (
-                        <Cell
-                          key={col.key}
-                          scope={col.isRowHeader ? 'row' : undefined}
-                          style={{ textAlign: col.align }}
-                          className={cn(styles.td, col.isRowHeader && styles.rowHeader)}
-                        >
-                          {value}
-                        </Cell>
-                      )
-                    })}
-                    {rowActions && <td className={styles.actions}>{rowMenu(row)}</td>}
-                  </tr>
+                  {/* The <tr> itself is the area, so <tbody> keeps only <tr> children.
+                      Disabled, not left out, for a row with no items: the browser
+                      keeps its menu there, and the row is not remounted (focus
+                      kept) when its items come or go. */}
+                  {hasRowContextMenu ? (
+                    <ContextMenu items={actions ?? []} disabled={!actions}>
+                      {rowEl}
+                    </ContextMenu>
+                  ) : (
+                    rowEl
+                  )}
                   {isExpanded && (
                     <tr className={styles.expandedRow}>
                       <td id={contentId} colSpan={columnCount} className={styles.expandedContent}>

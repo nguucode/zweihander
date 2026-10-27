@@ -1230,6 +1230,12 @@
           "description": "Adds a checkbox column, with a header checkbox that selects every row shown."
         },
         {
+          "name": "hasRowContextMenu",
+          "control": "boolean",
+          "default": false,
+          "description": "Also opens a row's `rowActions` on right click or long press, at the pointer. Off by default: the row then loses the browser's own menu (copy a cell's text, open a link in a new tab)."
+        },
+        {
           "name": "density",
           "control": "inline-radio",
           "options": [
