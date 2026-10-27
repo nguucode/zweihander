@@ -1,0 +1,118 @@
+/* As many 16rem columns as fit the container, not the viewport, so the grid
+   works in an aside as on a full page. auto-fill keeps a lone card one
+   column wide instead of stretching it across the row. */
+.grid > ul {
+  grid-template-columns: repeat(auto-fill, minmax(min(16rem, 100%), 1fr));
+}
+
+/* List Container draws the panel; the card pads its own parts so the cover
+   can run to the edges. Two classes, to win over List Container's row
+   padding whatever order the stylesheets load in. */
+.grid .card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+/* The whole card is the target, so hovering anywhere on it underlines the
+   title. No background tint: muted text on a tint drops below 4.5:1. */
+.card:hover:not(:has(.end:hover)) .link {
+  text-decoration: underline;
+}
+
+.cover {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 16 / 9;
+  border-block-end: 1px solid var(--border);
+  background: var(--surface-filled);
+  color: var(--muted-foreground);
+  overflow: hidden;
+}
+.cover > img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+.body {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  min-inline-size: 0;
+}
+
+/* An Icon sits in a filled circle; an Avatar of the same size covers it. */
+.media {
+  display: grid;
+  flex: none;
+  place-items: center;
+  inline-size: var(--avatar-md);
+  block-size: var(--avatar-md);
+  border-radius: var(--radius-full);
+  background: var(--surface-filled);
+  color: var(--muted-foreground);
+}
+
+.text {
+  display: grid;
+  flex: 1;
+  gap: var(--space-1);
+  min-inline-size: 0;
+}
+
+.heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1) var(--space-2);
+  margin: 0;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  font-weight: 500;
+  min-inline-size: 0;
+}
+
+.title,
+.link {
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+
+/* The card is the target: the link's box stretches over the whole item. */
+.link {
+  color: inherit;
+  text-decoration: none;
+}
+.link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+.link:focus-visible {
+  outline: none;
+}
+.link:focus-visible::after {
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: calc(var(--focus-width) * -1);
+  /* Inside the panel's 1px border, so 1px less round than the panel. */
+  border-radius: calc(var(--radius-panel) - 1px);
+}
+
+.description,
+.meta {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--muted-foreground);
+  overflow-wrap: anywhere;
+  min-inline-size: 0;
+}
+
+/* Above a linked card's stretched target, so the menu button gets the click. */
+.end {
+  position: relative;
+  flex: none;
+}

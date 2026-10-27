@@ -3465,6 +3465,27 @@
     },
     {
       "kind": "pattern",
+      "id": "patterns-application-ui-grid-list",
+      "name": "Grid List",
+      "category": "Application UI",
+      "status": "experimental",
+      "storyId": "patterns-application-ui-grid-list--simple",
+      "props": [
+        {
+          "name": "role",
+          "control": "text",
+          "default": "region"
+        },
+        {
+          "name": "empty",
+          "control": "text",
+          "default": "Nothing here yet.",
+          "description": "Shown instead of the grid when there are no items."
+        }
+      ]
+    },
+    {
+      "kind": "pattern",
       "id": "patterns-application-ui-import-export",
       "name": "Import Export",
       "category": "Application UI",

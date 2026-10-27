@@ -1,0 +1,120 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks'
+import * as GridListStories from './GridList.stories'
+
+<Meta of={GridListStories} />
+
+# Grid List
+
+Records as cards in a grid: people on a team, projects, files and photos.
+Each card names the record, says a little about it, and either opens it
+or offers its actions. After Tailwind UI Application UI, Lists: Grid
+Lists.
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/grid-list.json
+```
+
+A card takes the same item as a [Stacked
+List](?path=/docs/patterns-application-ui-stacked-list--docs) row, plus an
+optional `cover`, so a list can switch between rows and cards without
+reshaping its data. Use cards when the picture or the record's identity
+matters more than comparing facts down a column; use Stacked List when
+people scan and compare.
+
+## Simple
+
+An Avatar or an Icon, the `title` with a `description` under it, and
+`meta` under that: an email, an owner, a date.
+
+<Canvas of={GridListStories.Simple} />
+
+## Linked
+
+`href` makes the title a link whose target is the whole card. `status`
+takes a Tag (or a Badge) and puts it after the title.
+
+<Canvas of={GridListStories.Linked} />
+
+## With actions
+
+`actions` takes [Menu](?path=/docs/components-navigation-menu--docs)
+entries, as in Stacked List and Table's `rowActions`: a ⋯ button in the
+card's corner, named "Actions for" the title, and a [Context
+Menu](?path=/docs/components-navigation-context-menu--docs) on the card
+with the same entries. A card with `href` keeps the browser's own link
+menu instead, so there the ⋯ button is the only way in.
+
+<Canvas of={GridListStories.WithActions} />
+
+A card can link and have actions: the menu sits above the card's link, so
+a click on it opens the menu, not the record. Keep `status`,
+`description` and `meta` free of controls on a linked card: the link
+covers them.
+
+<Canvas of={GridListStories.LinkedWithActions} />
+
+## With a cover
+
+`cover` puts a picture across the top of the card, edge to edge, at
+16:9: a file preview, a photo, a logo. It is decorative, so give the
+`<img>` `alt=""`; the title names the card.
+
+<Canvas of={GridListStories.WithCover} />
+
+## Footer and empty
+
+The card panels, the footer and the empty state come from [List
+Container](?path=/docs/patterns-application-ui-list-container--docs),
+always in its `separate` appearance: a card is its own panel, so there is
+no `flat` or `card` grid. `footer` goes after the grid; `empty` shows in
+place of it, "Nothing here yet." by default.
+
+<Canvas of={GridListStories.WithFooter} />
+
+<Canvas of={GridListStories.Empty} />
+
+## Props
+
+<ArgTypes of={GridListStories} />
+
+Every `<div>` attribute passes through to the root, so a page names the
+grid with `role="region"` and `aria-label` when it has no heading of its
+own.
+
+## Layout
+
+- As many columns at least 16rem wide as the container fits, measured
+  on the container rather than the viewport: three in 840px, one in a
+  narrow aside or on a phone. There is no breakpoint of its own.
+- A lone card stays one column wide instead of stretching across the
+  row.
+- Cards in a row are as tall as the tallest; text starts at the top.
+- Long titles, emails and paths break anywhere rather than overflow.
+
+<Canvas of={GridListStories.LongContent} />
+
+## Differences from the spec
+
+- **Column count** follows the container, not fixed counts per viewport
+  breakpoint as in Tailwind, so the grid works in a side panel too.
+- **Actions** are a ⋯ Menu, not a row of buttons along the bottom of the
+  card (Tailwind's contact cards with Email and Call): two or more
+  actions fit one menu at every width, and the card stays one shape.
+- **Centred contact cards** (avatar above the name) are left out: one
+  layout, media beside the title, reads the same as a Stacked List row.
+
+## Accessibility
+
+- The cards are an unordered list, so a screen reader announces how many
+  there are. Reading and tab order go left to right, then down.
+- The media and the cover are hidden from assistive tech: the title
+  names the record.
+- A card with `href` is one link, named by its title; the status,
+  description and meta sit outside it.
+- Each card is one tab stop, two with actions: the link, then the ⋯
+  button.
+- The ⋯ button is named "Actions for" the title; keep `title` a string
+  when there are actions. The context menu is a shortcut to the same
+  entries, never the only way to reach one.
+- The grid has no landmark or heading of its own. Put it under a
+  heading, or pass `role="region"` and an `aria-label`.
