@@ -1,0 +1,6 @@
+/* While its menu is open, the area keeps a primary outline inside its edge,
+   so the reader sees which row or object the menu acts on. */
+.area[data-popup-open] {
+  outline: var(--focus-width) solid var(--primary);
+  outline-offset: calc(var(--focus-width) * -1);
+}

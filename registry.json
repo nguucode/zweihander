@@ -977,6 +977,32 @@
       ]
     },
     {
+      "name": "context-menu",
+      "type": "registry:component",
+      "title": "Context Menu",
+      "description": "Menu opened at the pointer by a right click or long press on an area, a row, a card or an object, with the same entries as Menu, on Base UI Context Menu.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/menu.json"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "files": [
+        {
+          "path": "src/components/navigation/ContextMenu.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/navigation/ContextMenu.tsx"
+        },
+        {
+          "path": "src/components/navigation/ContextMenu.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/navigation/ContextMenu.module.css"
+        }
+      ]
+    },
+    {
       "name": "menubar",
       "type": "registry:component",
       "title": "Menubar",

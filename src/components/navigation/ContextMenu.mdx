@@ -1,0 +1,186 @@
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
+import * as ContextMenuStories from './ContextMenu.stories'
+
+<Meta of={ContextMenuStories} />
+
+# Context Menu
+
+<DocTabs>
+<DocTab value="overview">
+
+A menu that opens at the pointer when someone right-clicks, or long-presses
+on touch, an area: a table row, a card, an object on a canvas. Its items
+are an action menu's, so it is a faster way to the same actions.
+
+<Status of={ContextMenuStories} />
+
+<Canvas of={ContextMenuStories.Default} />
+
+## Variants
+
+Context Menu has one look: the popup is a
+[Menu](?path=/docs/components-navigation-menu--docs) popup and takes the
+same entries: actions with icons and shortcuts, links, submenus, checkbox
+and radio items, groups and separators.
+
+| Area | Use for |
+| --- | --- |
+| Enabled (the default) | An area with actions on it. Right click and long press open the menu. |
+| Disabled (`disabled`) | An area with nothing to act on right now. The browser's own menu shows instead. |
+
+On a list or table, give each row its own Context Menu, with the same items
+as the row's visible "more" button:
+
+<Canvas of={ContextMenuStories.OnRows} />
+
+## Resources
+
+From npm, or copied into your project through the registry:
+
+```js
+import { ContextMenu } from 'zweihander/context-menu'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/context-menu.json
+```
+
+- Source: [src/components/navigation/ContextMenu.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/navigation/ContextMenu.tsx)
+- Spec: [uiguideline.com/components/menu](https://www.uiguideline.com/components/menu)
+- Behaviour: [Base UI Context Menu](https://base-ui.com/react/components/context-menu)
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
+## Anatomy
+
+<Anatomy parts={ContextMenuStories.anatomyParts}>
+  <Story of={ContextMenuStories.Anatomy} />
+</Anatomy>
+
+The popup on this tab is a picture: it is drawn open below its area, not at
+a pointer, and does not lock the page. Its parts are Menu's; see
+[Menu](?path=/docs/components-navigation-menu--docs) for the item's own
+anatomy.
+
+## Measurements
+
+The popup is Menu's, with the same items of the md control tier. It opens
+with its top-left corner on the pointer, as the operating system's menus
+do. Near the bottom of the window it flips above the pointer; near the
+right edge it slides left to stay on screen. On
+touch it opens at the finger after a 500ms press.
+
+<SpecTable
+  caption="Popup"
+  rows={[
+    { part: 'Popup', property: 'Padding', token: '--space-stack' },
+    { part: 'Popup', property: 'Corner radius', token: '--radius-field' },
+    { part: 'Popup', property: 'Shadow', token: '--shadow-md' },
+    { part: 'Popup', property: 'Layer', token: '--layer-overlay' },
+    { part: 'Item', property: 'Height', token: '--control-md' },
+    { part: 'Item', property: 'Inline padding', token: '--control-md-pad' },
+    { part: 'Area, open', property: 'Outline width', token: '--focus-width' },
+  ]}
+/>
+
+## Color
+
+<SpecTable
+  caption="Area and popup"
+  rows={[
+    { part: 'Area, open', property: 'Outline', token: '--primary' },
+    { part: 'Popup', property: 'Background', token: '--popover' },
+    { part: 'Popup', property: 'Text', token: '--popover-foreground' },
+    { part: 'Item, highlighted', property: 'Background', token: '--accent' },
+    { part: 'Destructive item', property: 'Text and icon', token: '--danger-text' },
+  ]}
+/>
+
+The area keeps its own colours. While its menu is open it gets a primary
+outline inside its edge, so the reader sees which row or object the menu
+acts on. The rest of the popup's colours are Menu's.
+
+## States
+
+<States
+  states={[
+    { label: 'Closed', content: <Story of={ContextMenuStories.Default} /> },
+    { label: 'Open', content: <Story of={ContextMenuStories.Open} /> },
+    { label: 'Disabled', content: <Story of={ContextMenuStories.Disabled} /> },
+  ]}
+/>
+
+- **Closed**: the area looks like itself; nothing hints at the menu, which
+  is why its items must be reachable another way.
+- **Open**: the area is outlined in `--primary`; items highlight as in Menu.
+- **Disabled**: a right click shows the browser's menu.
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={ContextMenuStories} />
+</div>
+
+`items` is Menu's `items`. `children` is one element: the area itself, its
+props and the open marker merged onto it, so a `<tr>` stays a row of the
+table.
+
+### Differences from the spec
+
+- **No placement props.** Menu's `side` and `align` are left out: a context
+  menu opens at the pointer, and flips on its own near the window edge.
+- **Always modal.** There is no `isModal`: Base UI makes a context menu
+  modal, as the operating system's menus are, so page scroll is locked
+  until it closes.
+
+</DocTab>
+<DocTab value="guidelines">
+
+## When to use
+
+Use a Context Menu where people act on many things in place, rows of a
+table, files, cards on a board, objects on a canvas, and expect the right
+click they know from desktop apps. Put the same actions behind a visible
+control too, a row's "more" button or a toolbar: the right click is a
+shortcut, not the way in.
+
+<DoDont
+  do={<Story of={ContextMenuStories.DoShortcutToVisible} />}
+  doCaption="The right click repeats the row's visible actions menu."
+  dont={<Story of={ContextMenuStories.DontOnlyWay} />}
+  dontCaption="Actions only a right click reaches. Nothing on screen says they exist, and keyboard and touch users may never find them."
+/>
+
+## When not to use
+
+- **For the only way to an action.** Use a
+  [Menu](?path=/docs/components-navigation-menu--docs) from a visible
+  button, or Buttons; add a Context Menu with the same items on top.
+- **On text people read or copy.** A right click there should keep the
+  browser's menu: copy, look up, translate.
+- **For a tool's commands by category.** Use a
+  [Menubar](?path=/docs/components-navigation-menubar--docs).
+
+## Accessibility
+
+- A right click on the area opens the menu at the pointer and outlines the
+  area while it is open.
+- The popup is Menu's: `role="menu"` with `menuitem` entries, and the keys
+  inside are Menu's: the arrows move, Enter runs the action and closes.
+- Shift+F10 or the Menu key open it from the keyboard: the browser fires
+  `contextmenu` on the focused element, so the area, or a control in it,
+  must take focus.
+- Escape closes it and returns focus to where it was.
+- Nothing announces that a context menu exists, so each of its items must
+  also sit behind a visible control, such as the row's "more" button,
+  named after the row.
+- `disabled` leaves the browser's own menu in place.
+- It is modal: page scroll is locked while it is open, so the menu is the
+  only thing to interact with.
+
+</DocTab>
+</DocTabs>
