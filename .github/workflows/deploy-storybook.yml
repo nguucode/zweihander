@@ -36,7 +36,10 @@ jobs:
       # The Playground's item list and props panels come from the story files;
       # fails if a story file no longer loads or the committed list is stale.
       - run: npm run playground:check
-      - run: npx playwright install --with-deps chromium firefox webkit
+      # Runs on main, so the cache it saves is the one every PR's CI reads.
+      - uses: ./.github/actions/playwright
+        with:
+          browsers: chromium firefox webkit
       - run: npx tsc -b
       - run: npx vitest --project storybook run
       # Verifies the npm package still builds; output isn't published here
