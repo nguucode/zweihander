@@ -1,0 +1,102 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks'
+import * as MediaObjectStories from './MediaObject.stories'
+
+<Meta of={MediaObjectStories} />
+
+# Media Object
+
+Media beside a block of text: an avatar by a comment, an icon by a
+setting, a thumbnail by a product. After Tailwind UI Application UI,
+Layout: Media Objects.
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/media-object.json
+```
+
+Use it for one thing on its own. A list of records is a [Stacked
+List](?path=/docs/patterns-application-ui-stacked-list--docs) or a [Grid
+List](?path=/docs/patterns-application-ui-grid-list--docs); a history of
+events is a [Feed](?path=/docs/patterns-application-ui-feed--docs); the top
+row of a card is a [Card
+Heading](?path=/docs/patterns-application-ui-card-heading--docs). Those
+lay out their own media because each treats it differently (a filled
+circle, a timeline, a heading-sized row). A framed block with a picture on
+the side is a [Card](?path=/docs/data-display-card--docs) with
+`orientation="horizontal"`.
+
+## Basic
+
+`media`, then `title` and `description`. The title is bold text, so a
+column of comments does not fill the page outline with headings.
+
+<Canvas of={MediaObjectStories.Basic} />
+
+## As a heading
+
+`headingLevel` makes the title a heading, for a media object that starts a
+section.
+
+<Canvas of={MediaObjectStories.AsHeading} />
+
+## Alignment
+
+`align` places the media at the top (the default), the middle or the
+bottom of the text, or stretches it to the text's height.
+
+<Canvas of={MediaObjectStories.AlignCenter} />
+<Canvas of={MediaObjectStories.AlignEnd} />
+<Canvas of={MediaObjectStories.Stretch} />
+
+## Media at the end
+
+`mediaPosition="end"` draws the media after the text. The DOM order does
+not change.
+
+<Canvas of={MediaObjectStories.MediaAtEnd} />
+
+## Nested
+
+`children` comes after the description: actions, or a reply as another
+Media Object, which lines up with the parent's text.
+
+<Canvas of={MediaObjectStories.Nested} />
+
+## Props
+
+<ArgTypes of={MediaObjectStories} />
+
+Every other `<div>` attribute passes through.
+
+## Layout
+
+- **No breakpoint.** Media and text share a row while the text keeps
+  12rem; in a narrower container the text wraps under the media. It
+  follows the container, so it works in an aside as on a full page.
+- **Long words break anywhere** rather than overflow.
+
+<Canvas of={MediaObjectStories.Narrow} />
+
+## Differences from the spec
+
+Tailwind UI's Media Objects, and where this departs from them:
+
+- **Responsive stacking follows the container, not the viewport.** The
+  text wraps under the media only when it would get less than 12rem, so
+  an avatar stays beside its text on a phone. Tailwind's "basic
+  responsive" and "wide responsive" stack below the `sm` breakpoint, and
+  the wide one swaps a large image's size; neither is a separate variant
+  here.
+- **Stretch suits a thumbnail or a placeholder** with no fixed height. An
+  Avatar or an `<img>` with a height keeps it.
+- **The media is always decorative**, and `headingLevel` is opt-in;
+  Tailwind uses an `h4` every time.
+
+## Accessibility
+
+- The media is decorative and hidden from assistive tech: the title says
+  who or what it is. Do not put a link or a button in `media`.
+- The title is a paragraph unless `headingLevel` is set. Set it only when
+  the object starts a section, and pick the level that follows the
+  heading above, so the outline has no gaps.
+- `mediaPosition="end"` moves the media visually only (CSS `order`); reading and focus
+  order stay media, title, description, then `children`.

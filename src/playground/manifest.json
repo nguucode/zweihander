@@ -3572,6 +3572,60 @@
     },
     {
       "kind": "pattern",
+      "id": "patterns-application-ui-media-object",
+      "name": "Media Object",
+      "category": "Application UI",
+      "status": "experimental",
+      "storyId": "patterns-application-ui-media-object--basic",
+      "props": [
+        {
+          "name": "title",
+          "control": "text",
+          "default": "Ines Okafor",
+          "description": "What the object is: a person, a product, the author of a comment. Required."
+        },
+        {
+          "name": "description",
+          "control": "text",
+          "default": "Reconciled the October bank feed. Two card refunds are still unmatched; I left them in suspense until the statements arrive.",
+          "description": "A line or a paragraph under the title, in muted text."
+        },
+        {
+          "name": "align",
+          "control": "radio",
+          "options": [
+            "start",
+            "center",
+            "end",
+            "stretch"
+          ],
+          "default": "start",
+          "description": "Where the media sits against the text: top, middle, bottom, or stretched to the height of the text."
+        },
+        {
+          "name": "mediaPosition",
+          "control": "radio",
+          "options": [
+            "start",
+            "end"
+          ],
+          "default": "start",
+          "description": "Which side the media is on. The DOM order stays media first either way."
+        },
+        {
+          "name": "headingLevel",
+          "control": "radio",
+          "options": [
+            2,
+            3,
+            4
+          ],
+          "description": "Makes the title a heading of this level. Leave it out in a list of comments, where the titles are not sections."
+        }
+      ]
+    },
+    {
+      "kind": "pattern",
       "id": "patterns-application-ui-nav-sidebar",
       "name": "Nav Sidebar",
       "category": "Application UI",

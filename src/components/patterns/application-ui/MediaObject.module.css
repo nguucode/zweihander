@@ -1,0 +1,61 @@
+/* Media and text share a row while the text keeps 12rem; below that the
+   text wraps under the media, so the pattern needs no breakpoint and works
+   in an aside as on a full page. */
+.mediaObject {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--space-cluster) var(--space-group);
+  font-family: var(--font-sans);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--foreground);
+}
+
+.mediaObject[data-align='center'] {
+  align-items: center;
+}
+.mediaObject[data-align='end'] {
+  align-items: flex-end;
+}
+.mediaObject[data-align='stretch'] {
+  align-items: stretch;
+}
+/* order, not row-reverse: the DOM (reading order) stays media first, and
+   when the row wraps the media drops under the text at the start edge
+   instead of hanging off the far end above it. */
+.mediaObject[data-media-position='end'] > .media {
+  order: 1;
+}
+
+/* An Icon takes the icon size; an Avatar or an image keeps its own. */
+.media {
+  display: flex;
+  flex: none;
+  font-size: var(--icon-md);
+  color: var(--muted-foreground);
+}
+
+.body {
+  display: grid;
+  flex: 1 1 12rem;
+  align-content: start;
+  gap: var(--space-1);
+  min-inline-size: 0;
+}
+
+.title {
+  margin: 0;
+  font-size: inherit;
+  line-height: inherit;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.description {
+  color: var(--muted-foreground);
+  overflow-wrap: anywhere;
+}
+.description > p {
+  margin: 0;
+}

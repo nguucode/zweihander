@@ -1964,6 +1964,28 @@
       ]
     },
     {
+      "name": "media-object",
+      "type": "registry:block",
+      "title": "Media Object",
+      "description": "Application UI pattern: an avatar, icon or image beside a title and description, aligned to the top, middle, bottom or stretched, on either side, with room for actions or nested replies; the text wraps under the media in a narrow container.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/patterns/application-ui/MediaObject.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/patterns/application-ui/MediaObject.tsx"
+        },
+        {
+          "path": "src/components/patterns/application-ui/MediaObject.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/patterns/application-ui/MediaObject.module.css"
+        }
+      ]
+    },
+    {
       "name": "import-export",
       "type": "registry:block",
       "title": "Import Export",
