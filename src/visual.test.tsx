@@ -62,6 +62,7 @@ const STORIES: Record<string, { story: string; args?: Record<string, unknown>; p
   'navigation/Link': { story: 'Variants' },
   'navigation/CommandPalette': { story: 'Default', args: { defaultOpen: true } },
   'navigation/Menu': { story: 'Default', args: { defaultOpen: true } },
+  'navigation/Menubar': { story: 'Open' },
   'navigation/Pagination': { story: 'WithSummary' },
   'navigation/Stepper': { story: 'Default' },
   'navigation/Tabs': { story: 'Default' },

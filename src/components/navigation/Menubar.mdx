@@ -1,0 +1,201 @@
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
+import * as MenubarStories from './Menubar.stories'
+
+<Meta of={MenubarStories} />
+
+# Menubar
+
+<DocTabs>
+<DocTab value="overview">
+
+A row of menus across the top of a tool, as in a desktop app: File, Edit,
+View, each opening a flyout of commands. Use it in an editor-like screen
+with more commands than a toolbar can show.
+
+<Status of={MenubarStories} />
+
+<Canvas of={MenubarStories.Default} />
+
+## Variants
+
+Menubar has one look. Each flyout is a
+[Menu](?path=/docs/components-navigation-menu--docs) popup and takes the
+same entries: actions with shortcuts, links, submenus, checkbox and radio
+items, groups and separators.
+
+| Menu | Use for |
+| --- | --- |
+| Enabled (the default) | Commands that apply now. |
+| Disabled (`disabled`) | A menu that does not apply in the current state. It stays in place, muted, so the bar does not shift. |
+
+<Canvas of={MenubarStories.DisabledMenu} />
+
+## Resources
+
+From npm, or copied into your project through the registry:
+
+```js
+import { Menubar } from 'zweihander/menubar'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/menubar.json
+```
+
+- Source: [src/components/navigation/Menubar.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/navigation/Menubar.tsx)
+- Spec: [uiguideline.com/components/menu](https://www.uiguideline.com/components/menu)
+- Behaviour: [Base UI Menubar](https://base-ui.com/react/components/menubar)
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
+## Anatomy
+
+<Anatomy parts={MenubarStories.anatomyParts}>
+  <Story of={MenubarStories.Anatomy} />
+</Anatomy>
+
+The flyout on this tab is a picture: it is drawn open in place, not
+positioned over the page. Its parts are Menu's; see
+[Menu](?path=/docs/components-navigation-menu--docs) for the item's own
+anatomy.
+
+## Measurements
+
+The bar is a strip: its triggers are rows of the sm control tier, one step
+shorter than the md items in the flyout. Triggers sit inset from the bar
+edge by the same amount as items inside a Menu popup, and their corner
+nests inside the bar's the same way.
+
+<SpecTable
+  caption="Bar"
+  rows={[
+    { part: 'Bar', property: 'Padding', token: '--space-stack' },
+    { part: 'Bar', property: 'Gap between triggers', token: '--space-0-5' },
+    { part: 'Bar', property: 'Corner radius', token: '--radius-field' },
+    { part: 'Trigger', property: 'Height', token: '--control-sm' },
+    { part: 'Trigger', property: 'Inline padding', token: '--control-sm-pad' },
+    { part: 'Trigger', property: 'Font size', token: '--text-body' },
+    { part: 'Trigger', property: 'Line height', token: '--leading-body' },
+    { part: 'Trigger', property: 'Focus ring width', token: '--focus-width' },
+    { part: 'Hit area', property: 'Minimum on touch screens', token: '--target-coarse' },
+  ]}
+/>
+
+A flyout opens 4px below its trigger, lined up with the trigger's start
+edge. When the bar is wider than its container, it scrolls sideways.
+
+## Color
+
+<SpecTable
+  caption="Bar"
+  rows={[
+    { part: 'Bar', property: 'Background', token: '--background' },
+    { part: 'Bar', property: 'Text', token: '--foreground' },
+    { part: 'Bar', property: 'Border', token: '--border' },
+    { part: 'Trigger, hover, highlighted or open', property: 'Background', token: '--accent' },
+    { part: 'Trigger, hover, highlighted or open', property: 'Text', token: '--accent-foreground' },
+    { part: 'Trigger, disabled', property: 'Text', token: '--muted-foreground' },
+    { part: 'Trigger, focus', property: 'Ring', token: '--ring' },
+  ]}
+/>
+
+The flyout's colours are Menu's.
+
+## States
+
+<States
+  states={[
+    { label: 'Closed', content: <Story of={MenubarStories.Default} /> },
+    { label: 'Open', content: <Story of={MenubarStories.Open} /> },
+    { label: 'Disabled menu', content: <Story of={MenubarStories.DisabledMenu} /> },
+  ]}
+/>
+
+- **Hover and highlighted**: the trigger takes the same `--accent` fill as
+  a highlighted item in the flyout.
+- **Open**: the trigger keeps that fill while its flyout is open, so the
+  reader sees which menu they are in.
+- **Focus**: a keyboard focus ring inside the trigger, so it does not
+  collide with its neighbours.
+- **Disabled**: muted at 60% opacity, no fill on hover, skipped by the
+  arrow keys.
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={MenubarStories} />
+</div>
+
+`menus` is data, and each menu's `items` is Menu's `items`. Shortcuts are
+plain trailing text, as in Menu: display only, binding the key is left to
+the page.
+
+### Differences from the spec
+
+- **No navigation menu.** The source pairs a menubar with a navigation
+  menu: links in flyouts, each with a description. Zweihänder leaves that
+  out: app navigation is the Nav Sidebar and the Top Bar's links, which
+  show the current page; a flyout of described links is a marketing-site
+  pattern.
+- **No item description.** Flyout items are Menu's entries, one line
+  each. A second line of text is what a navigation menu needs, and it is
+  not built.
+
+</DocTab>
+<DocTab value="guidelines">
+
+## When to use
+
+Use a Menubar in a screen that works like a desktop tool, an invoice or
+report editor, a spreadsheet, where people look for commands by category
+and learn their shortcuts. Name each menu for what it holds and keep the
+order people know from desktop apps: File, Edit, View, then your own,
+then Help.
+
+<DoDont
+  do={<Story of={MenubarStories.DoConventionalOrder} />}
+  doCaption="Commands, grouped by the familiar File, Edit, View, with their shortcuts."
+  dont={<Story of={MenubarStories.DontNavigation} />}
+  dontCaption="Pages behind flyouts. Navigation belongs in the Nav Sidebar or the Top Bar, where the current page shows."
+/>
+
+## When not to use
+
+- **For the app's navigation.** Use a
+  [Nav Sidebar](?path=/docs/patterns-application-ui-nav-sidebar--docs) or
+  the [Top Bar](?path=/docs/patterns-application-ui-top-bar--docs)'s
+  links: they show where the reader is, a menubar does not.
+- **For a few actions on one thing.** Use a
+  [Menu](?path=/docs/components-navigation-menu--docs) from a button, or
+  Buttons.
+- **To find any command by name.** Add a
+  [Command Palette](?path=/docs/components-navigation-command-palette--docs);
+  it can sit alongside the menubar.
+
+## Accessibility
+
+- The bar is a `role="menubar"`, named by `aria-label`. Each trigger is a
+  `menuitem` with `aria-haspopup="menu"` and `aria-expanded`; a disabled
+  menu's trigger has `aria-disabled`.
+- The bar is one tab stop. Arrow Left and Right move along the triggers,
+  skipping disabled menus.
+- Arrow Down, Enter or Space on a trigger opens its flyout on the first
+  item. Inside a flyout the keys are Menu's.
+- With a flyout open, Arrow Right and Left move to the next and previous
+  menu and open it, and moving the pointer onto another trigger opens that
+  menu instead.
+- Escape closes the flyout and returns focus to its trigger; choosing an
+  action closes it too.
+- Shortcuts and icons are hidden from assistive tech; the label names the
+  item.
+- Triggers are 24px tall; on touch screens (`pointer: coarse`) their hit
+  area grows to 44px.
+- `isModal` (the default) makes the rest of the page inert while a flyout
+  is open, so a screen reader stays in the menu.
+
+</DocTab>
+</DocTabs>
