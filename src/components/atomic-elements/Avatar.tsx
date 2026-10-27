@@ -1,7 +1,18 @@
 import { useState, type ComponentProps } from 'react'
 import { cn } from '@/lib/utils'
 import type { AccentColor } from '@/theme/palettes'
+import { Badge, type BadgeProps } from './Badge'
 import styles from './Avatar.module.css'
+
+type AvatarStatus = 'online' | 'away' | 'busy' | 'offline'
+
+// Badge's presence colours, so a dot on an avatar and a dot beside a name match.
+const STATUS: Record<AvatarStatus, { variant: BadgeProps['variant']; label: string }> = {
+  online: { variant: 'success', label: 'Online' },
+  away: { variant: 'warning', label: 'Away' },
+  busy: { variant: 'destructive', label: 'Busy' },
+  offline: { variant: 'secondary', label: 'Offline' },
+}
 
 export interface AvatarProps extends ComponentProps<'span'> {
   size?: 'xs' | 'sm' | 'md' | 'lg'
@@ -14,6 +25,10 @@ export interface AvatarProps extends ComponentProps<'span'> {
   color?: AccentColor
   /** `subtle` is a tint of the hue; `solid` is its 600 step (400 in dark). */
   variant?: 'subtle' | 'solid'
+  /** A presence dot at the bottom-end corner. Joins the name as ", Online" when there is `imageAlt`. */
+  status?: AvatarStatus
+  /** The status word in the name, for another language. Defaults to Online, Away, Busy or Offline. */
+  statusLabel?: string
 }
 
 export function Avatar({
@@ -23,6 +38,8 @@ export function Avatar({
   initials,
   color,
   variant = 'subtle',
+  status,
+  statusLabel = status && STATUS[status].label,
   className,
   ...props
 }: AvatarProps) {
@@ -37,12 +54,13 @@ export function Avatar({
       // The label lives on the container so the image, the initials and the silhouette
       // all announce the same thing: the person, not "S R" or nothing.
       role={imageAlt ? 'img' : undefined}
-      aria-label={imageAlt}
+      // Children of role="img" are not read, so the status joins the name.
+      aria-label={imageAlt && status ? `${imageAlt}, ${statusLabel}` : imageAlt}
       aria-hidden={imageAlt ? undefined : true}
       // The Theme's own palette switch: on the avatar it remaps --primary and
       // its tints to this hue, already measured for contrast.
       data-accent={color}
-      className={cn(styles.avatar, styles[size], styles[variant], className)}
+      className={cn(styles.avatar, styles[size], styles[variant], status && styles.hasStatus, className)}
       {...props}
     >
       {showImage ? (
@@ -61,6 +79,53 @@ export function Avatar({
           <circle cx="32" cy="26" r="12" />
           <rect x="12" y="42" width="40" height="30" rx="20" />
         </svg>
+      )}
+      {status && (
+        <Badge
+          isDot
+          variant={STATUS[status].variant}
+          size={size === 'xs' || size === 'sm' ? 'sm' : 'md'}
+          className={styles.status}
+        />
+      )}
+    </span>
+  )
+}
+
+export interface AvatarGroupProps extends ComponentProps<'span'> {
+  /** The people, in order. Each takes Avatar's props; the group's `size` wins. */
+  avatars: AvatarProps[]
+  /** The most circles in the row, the "+n" included. Unset shows everyone. */
+  max?: number
+  size?: AvatarProps['size']
+  /** The name of the "+n" avatar, for another language. Used only when the avatars are named. */
+  moreLabel?: (count: number) => string
+}
+
+/** Avatars overlapping in a row, with a "+n" for the ones past `max`. */
+export function AvatarGroup({
+  avatars,
+  max,
+  size = 'md',
+  moreLabel = (count) => `${count} more`,
+  className,
+  ...props
+}: AvatarGroupProps) {
+  // The "+n" takes the last slot, so it always stands for two or more: never "+1"
+  // where the person would have fitted.
+  const shown = max !== undefined && avatars.length > max ? avatars.slice(0, Math.max(max - 1, 0)) : avatars
+  const hidden = avatars.length - shown.length
+  // Named avatars get a named "+n"; decorative ones (the names are printed) a decorative one.
+  const isNamed = avatars.some((a) => a.imageAlt)
+
+  return (
+    <span className={cn(styles.group, className)} {...props}>
+      {shown.map((avatar, i) => (
+        <Avatar key={i} {...avatar} size={size} style={{ zIndex: shown.length - i, ...avatar.style }} />
+      ))}
+      {hidden > 0 && (
+        // ponytail: past +99 the text outgrows an xs circle; shorten the count if a list that long turns up.
+        <Avatar size={size} initials={`+${hidden}`} imageAlt={isNamed ? moreLabel(hidden) : undefined} />
       )}
     </span>
   )

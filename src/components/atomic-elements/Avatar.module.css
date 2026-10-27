@@ -4,6 +4,8 @@
   justify-content: center;
   flex-shrink: 0;
   overflow: hidden;
+  /* Positions the status dot. */
+  position: relative;
   /* Always round, whatever the Theme's radius preset: a circle is the shape,
      not a corner setting. */
   border-radius: var(--radius-pill);
@@ -16,26 +18,34 @@
 }
 
 .xs {
-  inline-size: var(--avatar-xs);
-  block-size: var(--avatar-xs);
+  --avatar-size: var(--avatar-xs);
+
+  inline-size: var(--avatar-size);
+  block-size: var(--avatar-size);
   font-size: var(--text-body-sm);
 }
 
 .sm {
-  inline-size: var(--avatar-sm);
-  block-size: var(--avatar-sm);
+  --avatar-size: var(--avatar-sm);
+
+  inline-size: var(--avatar-size);
+  block-size: var(--avatar-size);
   font-size: var(--text-body-sm);
 }
 
 .md {
-  inline-size: var(--avatar-md);
-  block-size: var(--avatar-md);
+  --avatar-size: var(--avatar-md);
+
+  inline-size: var(--avatar-size);
+  block-size: var(--avatar-size);
   font-size: var(--text-body);
 }
 
 .lg {
-  inline-size: var(--avatar-lg);
-  block-size: var(--avatar-lg);
+  --avatar-size: var(--avatar-lg);
+
+  inline-size: var(--avatar-size);
+  block-size: var(--avatar-size);
   font-size: var(--text-body-lg);
 }
 
@@ -43,6 +53,7 @@
   inline-size: 100%;
   block-size: 100%;
   object-fit: cover;
+  clip-path: circle(50%);
 }
 
 .initials {
@@ -82,6 +93,7 @@
   inline-size: 100%;
   block-size: 100%;
   fill: currentColor;
+  clip-path: circle(50%);
 }
 
 .subtle:not([data-accent]) .silhouette {
@@ -96,4 +108,38 @@
    Initials keep the measured label. */
 .solid .silhouette {
   color: var(--neutral-solid-foreground);
+}
+
+/* On the bounding box's corner, outside the curve, as in most chat apps: the
+   ring in the page colour cuts it out of the circle and any picture, as on
+   a floating Badge. With a dot the circle stops clipping, so the image and
+   silhouette clip themselves (above); without one nothing changes. */
+.hasStatus {
+  overflow: visible;
+}
+
+.status {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline-end: 0;
+  box-shadow: 0 0 0 2px var(--background);
+}
+
+.group {
+  display: inline-flex;
+  isolation: isolate;
+  align-items: center;
+  vertical-align: middle;
+}
+
+/* Each one tucks under the one before by a quarter, ringed in the page
+   colour so the circles stay apart whatever their colour. Earlier ones sit
+   on top (z-index set inline), so a status dot on the bottom-end corner is
+   never covered by the next avatar. */
+.group > .avatar {
+  box-shadow: 0 0 0 2px var(--background);
+}
+
+.group > .avatar + .avatar {
+  margin-inline-start: calc(var(--avatar-size) / -4);
 }
