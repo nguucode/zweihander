@@ -1,0 +1,116 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks'
+import * as StackedListStories from './StackedList.stories'
+
+<Meta of={StackedListStories} />
+
+# Stacked List
+
+Records as rows, one under the other: people on a team, projects, files,
+invoices. Each row names the record, says a little about it, and either
+opens it or offers its actions. After Tailwind UI Application UI, Lists:
+Stacked Lists; Polaris Resource list; Salesforce Item.
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/stacked-list.json
+```
+
+## Simple
+
+An Avatar or an Icon, the `title` with a `description` under it, and
+`meta` at the end: facts that help pick the row out, such as a role, an
+owner or a date. A line divides the rows.
+
+<Canvas of={StackedListStories.Simple} />
+
+## Linked
+
+`href` makes the title a link whose target is the whole row, with a
+chevron at the end to say it opens. `status` takes a Tag (or a Badge)
+and puts it after the title.
+
+<Canvas of={StackedListStories.Linked} />
+
+## With actions
+
+`actions` takes [Menu](?path=/docs/components-navigation-menu--docs)
+entries, the same as Table's `rowActions`: a ⋯ button at the end of the
+row, named "Actions for" the title, and a [Context
+Menu](?path=/docs/components-navigation-context-menu--docs) on the row
+with the same entries, for right click or long press. A row with `href`
+keeps the browser's own link menu instead (open in a new tab, copy the
+link), so there the ⋯ button is the only way in.
+
+<Canvas of={StackedListStories.WithActions} />
+
+A row can link and have actions: the menu takes the chevron's place and
+sits above the row's link, so a click on it opens the menu, not the
+record. Keep `status`, `description` and `meta` free of controls on a
+linked row: the row's link covers them.
+
+<Canvas of={StackedListStories.LinkedWithActions} />
+
+## Footer
+
+`footer` goes after the last row, past a divider. A list on its own page
+takes a [Pagination](?path=/docs/components-navigation-pagination--docs);
+a short list in a card or on a dashboard takes a "View all" link.
+
+<Canvas of={StackedListStories.WithPagination} />
+
+<Canvas of={StackedListStories.WithViewAll} />
+
+## Empty
+
+No items shows `empty`, "Nothing here yet." by default, in place of the
+list. The footer still shows.
+
+<Canvas of={StackedListStories.Empty} />
+
+## Props
+
+<ArgTypes of={StackedListStories} />
+
+Every `<div>` attribute passes through to the root, so a page names the
+list with `role="region"` and `aria-label` when it has no heading of its
+own.
+
+## Layout
+
+- The media column is as wide as a medium Avatar; an Icon sits in a
+  filled circle of that size, and an Avatar covers it.
+- `meta` sits at the end of the row while the title fits beside it, and
+  wraps under the text when it does not. The list has no breakpoint of
+  its own, so it works in a narrow aside as on a full page.
+- Long titles, emails and paths break anywhere rather than overflow.
+- Rows pad by `--space-inline` above and below, as Table rows do, and
+  are at least `--row-height` tall: a one-line row without media lines up
+  with a Table row of the same density.
+
+<Canvas of={StackedListStories.LongContent} />
+
+## Differences from the spec
+
+- **Selection and bulk actions** (Polaris) are left out: a list you
+  select from and act on in bulk is a
+  [Table](?path=/docs/components-data-display-table--docs).
+- **Actions** are a ⋯ Menu, not buttons written out in the row:
+  Tailwind's "View" button is the row link, and two or more actions fit
+  one menu at every width.
+- **Meta** wraps under the text instead of hiding on small screens, so
+  nothing is lost on a phone.
+
+## Accessibility
+
+- The rows are an unordered list, so a screen reader announces how many
+  there are.
+- The media is hidden from assistive tech: the title names the record.
+- A row with `href` is one link, named by its title; the status,
+  description and meta sit outside it. The chevron is decorative.
+- Each row is one tab stop, two with actions: the link, then the ⋯
+  button.
+- The ⋯ button is named "Actions for" the title; keep `title` a string
+  when there are actions, or it falls back to "Actions for item 2". The
+  context menu is a shortcut to the same entries, never the only way to
+  reach one.
+- The list has no landmark or heading of its own. Put it under a
+  heading, or pass `role="region"` and an `aria-label`.

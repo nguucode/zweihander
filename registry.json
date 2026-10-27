@@ -1887,6 +1887,32 @@
       ]
     },
     {
+      "name": "stacked-list",
+      "type": "registry:block",
+      "title": "Stacked List",
+      "description": "Application UI pattern: a list of records as rows, each with an avatar or icon, a title and a line under it, a status, facts at the end, and a link to the record or a menu of actions that also opens on right click, with a footer for pagination or a View all link and an empty state.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/icon.json",
+        "https://ontheshore.biz/zweihander/r/button.json",
+        "https://ontheshore.biz/zweihander/r/menu.json",
+        "https://ontheshore.biz/zweihander/r/context-menu.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/patterns/application-ui/StackedList.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/patterns/application-ui/StackedList.tsx"
+        },
+        {
+          "path": "src/components/patterns/application-ui/StackedList.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/patterns/application-ui/StackedList.module.css"
+        }
+      ]
+    },
+    {
       "name": "import-export",
       "type": "registry:block",
       "title": "Import Export",

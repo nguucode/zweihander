@@ -3620,6 +3620,27 @@
     },
     {
       "kind": "pattern",
+      "id": "patterns-application-ui-stacked-list",
+      "name": "Stacked List",
+      "category": "Application UI",
+      "status": "experimental",
+      "storyId": "patterns-application-ui-stacked-list--simple",
+      "props": [
+        {
+          "name": "role",
+          "control": "text",
+          "default": "region"
+        },
+        {
+          "name": "empty",
+          "control": "text",
+          "default": "Nothing here yet.",
+          "description": "Shown instead of the list when there are no items."
+        }
+      ]
+    },
+    {
+      "kind": "pattern",
       "id": "patterns-application-ui-stats",
       "name": "Stats",
       "category": "Application UI",
