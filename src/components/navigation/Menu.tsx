@@ -71,7 +71,8 @@ export interface MenuProps {
 
 const text = (label: ReactNode, textValue?: string) => textValue ?? (typeof label === 'string' ? label : undefined)
 
-function Entries({ items }: { items: MenuEntry[] }) {
+/** Renders `MenuEntry[]` as Base UI menu parts, inside a `MenuSurface`. A building block for menus that share Menu's look. */
+export function MenuEntries({ items }: { items: MenuEntry[] }) {
   return items.map((entry, i) => {
     switch (entry.type) {
       case 'separator':
@@ -80,7 +81,7 @@ function Entries({ items }: { items: MenuEntry[] }) {
         return (
           <BaseMenu.Group key={i} className={styles.group}>
             <BaseMenu.GroupLabel className={styles.groupLabel}>{entry.label}</BaseMenu.GroupLabel>
-            <Entries items={entry.items} />
+            <MenuEntries items={entry.items} />
           </BaseMenu.Group>
         )
       case 'checkbox':
@@ -158,9 +159,9 @@ function Entries({ items }: { items: MenuEntry[] }) {
                   <Icon name="chevron-right" />
                 </span>
               </BaseMenu.SubmenuTrigger>
-              <Surface side="right" align="start" sideOffset={4}>
-                <Entries items={entry.items} />
-              </Surface>
+              <MenuSurface side="right" align="start">
+                <MenuEntries items={entry.items} />
+              </MenuSurface>
             </BaseMenu.SubmenuRoot>
           )
         }
@@ -188,17 +189,18 @@ function Entries({ items }: { items: MenuEntry[] }) {
   })
 }
 
-function Surface({
+/** Menu's popup surface, rendered through a portal, 4px from its trigger by default. */
+export function MenuSurface({
   side,
   align,
-  sideOffset,
+  sideOffset = 4,
   container,
   className,
   children,
 }: {
   side: MenuProps['side']
   align: MenuProps['align']
-  sideOffset: number
+  sideOffset?: number
   container?: HTMLElement | null
   className?: string
   children: ReactNode
@@ -232,9 +234,9 @@ export function Menu({
       modal={isModal}
     >
       <BaseMenu.Trigger render={trigger} />
-      <Surface side={side} align={align} sideOffset={4} container={container} className={className}>
-        <Entries items={items} />
-      </Surface>
+      <MenuSurface side={side} align={align} container={container} className={className}>
+        <MenuEntries items={items} />
+      </MenuSurface>
     </BaseMenu.Root>
   )
 }

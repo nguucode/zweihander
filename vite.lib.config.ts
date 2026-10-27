@@ -45,6 +45,7 @@ export default defineConfig({
         'components/overlays/Drawer': 'src/components/overlays/Drawer.tsx',
         'components/overlays/ConfirmDialog': 'src/components/overlays/ConfirmDialog.tsx',
         'components/navigation/Menu': 'src/components/navigation/Menu.tsx',
+        'components/navigation/Menubar': 'src/components/navigation/Menubar.tsx',
         'components/navigation/CommandPalette': 'src/components/navigation/CommandPalette.tsx',
         'components/navigation/Breadcrumbs': 'src/components/navigation/Breadcrumbs.tsx',
         'components/navigation/Pagination': 'src/components/navigation/Pagination.tsx',

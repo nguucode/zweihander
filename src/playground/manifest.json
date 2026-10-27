@@ -2480,6 +2480,22 @@
     },
     {
       "kind": "component",
+      "id": "components-navigation-menubar",
+      "name": "Menubar",
+      "category": "Navigation",
+      "status": "experimental",
+      "storyId": "components-navigation-menubar--default",
+      "props": [
+        {
+          "name": "isModal",
+          "control": "boolean",
+          "default": true,
+          "description": "While a flyout is open, locks page scroll and makes the rest of the page inert. `false` leaves the page scrollable and clickable."
+        }
+      ]
+    },
+    {
+      "kind": "component",
       "id": "components-navigation-pagination",
       "name": "Pagination",
       "category": "Navigation",

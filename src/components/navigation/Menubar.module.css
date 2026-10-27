@@ -1,0 +1,73 @@
+/* The bar: a quiet strip on the page surface, triggers inset the same
+   4px as the items inside a Menu popup, so a trigger's corner nests the
+   same way. */
+.bar {
+  --menubar-inset: var(--space-stack);
+  display: flex;
+  align-items: center;
+  gap: var(--space-0-5);
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  overflow-x: auto;
+  padding: var(--menubar-inset);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-field);
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+}
+
+/* A trigger is a row of tier sm: shorter than the md items in the flyout,
+   so the bar stays a strip and not a toolbar of buttons. */
+.trigger {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  block-size: var(--control-sm);
+  padding: 0 var(--control-sm-pad);
+  border: 0;
+  border-radius: calc(var(--radius-field) - var(--menubar-inset));
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: 500;
+  cursor: default;
+  user-select: none;
+  outline: none;
+}
+
+/* Hover, keyboard highlight and the open menu share the item highlight. */
+.trigger:hover,
+.trigger[data-highlighted],
+.trigger[data-popup-open] {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+
+.trigger:focus-visible {
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: calc(var(--focus-width) * -1);
+}
+
+.trigger[data-disabled] {
+  background: transparent;
+  color: var(--muted-foreground);
+  opacity: 0.6;
+}
+
+/* Triggers are 24px; on touch the hit area grows to 44px without the
+   strip growing. */
+@media (pointer: coarse) {
+  .trigger {
+    position: relative;
+  }
+  .trigger::after {
+    content: '';
+    position: absolute;
+    inset: 50% 0 auto;
+    block-size: var(--target-coarse);
+    translate: 0 -50%;
+  }
+}
