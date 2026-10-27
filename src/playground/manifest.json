@@ -350,6 +350,28 @@
     },
     {
       "kind": "component",
+      "id": "components-buttons-buttongroup",
+      "name": "ButtonGroup",
+      "category": "Buttons",
+      "status": "experimental",
+      "storyId": "components-buttons-buttongroup--default",
+      "props": [
+        {
+          "name": "multiple",
+          "control": "boolean",
+          "default": false,
+          "description": "Any number pressed at once. Without it, one at a time (a segmented control): once one is pressed, pressing it again keeps it pressed."
+        },
+        {
+          "name": "disabled",
+          "control": "boolean",
+          "default": false,
+          "description": "Disables every toggle in the group."
+        }
+      ]
+    },
+    {
+      "kind": "component",
       "id": "components-buttons-togglebutton",
       "name": "ToggleButton",
       "category": "Buttons",

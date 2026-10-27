@@ -301,6 +301,32 @@
       ]
     },
     {
+      "name": "button-group",
+      "type": "registry:component",
+      "title": "Button Group",
+      "description": "Buttons joined into one bar: ButtonGroup for related actions, ToggleGroup on Base UI for a segmented control or toggles that combine.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/toggle-button.json"
+      ],
+      "dependencies": [
+        "@base-ui/react"
+      ],
+      "files": [
+        {
+          "path": "src/components/buttons/ButtonGroup.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/buttons/ButtonGroup.tsx"
+        },
+        {
+          "path": "src/components/buttons/ButtonGroup.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/buttons/ButtonGroup.module.css"
+        }
+      ]
+    },
+    {
       "name": "choice-field",
       "type": "registry:component",
       "title": "Choice field",

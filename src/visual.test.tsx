@@ -25,6 +25,7 @@ const STORIES: Record<string, { story: string; args?: Record<string, unknown>; p
   'atomic-elements/Tag': { story: 'Matrix' },
   'buttons/Button': { story: 'Matrix' },
   'buttons/ToggleButton': { story: 'Matrix' },
+  'buttons/ButtonGroup': { story: 'Matrix' },
   'charts/BarChart': { story: 'Stacked' },
   'charts/ChartLegend': { story: 'Toggles' },
   'charts/LineChart': { story: 'MultiSeries' },

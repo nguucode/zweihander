@@ -52,6 +52,10 @@
       "types": "./dist/components/atomic-elements/Tag.d.ts",
       "import": "./dist/components/atomic-elements/Tag.js"
     },
+    "./button-group": {
+      "types": "./dist/components/buttons/ButtonGroup.d.ts",
+      "import": "./dist/components/buttons/ButtonGroup.js"
+    },
     "./toggle-button": {
       "types": "./dist/components/buttons/ToggleButton.d.ts",
       "import": "./dist/components/buttons/ToggleButton.js"
