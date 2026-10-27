@@ -28,10 +28,10 @@
   border-block-start: 1px solid var(--border);
 }
 
-/* A linked row lights up as a whole, since the whole row is the target,
-   but not while the pointer is on the menu button, which does not open it. */
-.item:has(.link):hover:not(:has(.end:hover)) {
-  background: var(--hover-overlay);
+/* The whole row is the target, so hovering anywhere on it underlines the
+   title. No background tint: muted text on a tint drops below 4.5:1. */
+.item:hover:not(:has(.end:hover)) .link {
+  text-decoration: underline;
 }
 
 /* An Icon sits in a filled circle; an Avatar of the same size covers it. */
@@ -90,9 +90,6 @@
   content: '';
   position: absolute;
   inset: 0;
-}
-.link:hover {
-  text-decoration: underline;
 }
 .link:focus-visible {
   outline: none;
