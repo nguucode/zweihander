@@ -33,13 +33,20 @@ const meta = {
       table: { type: { summary: 'number' } },
     },
     orientation: {
-      description: '`horizontal` puts each label under its marker; `vertical` stacks the steps, for long descriptions or a narrow column.',
+      description: '`horizontal` puts each label under its marker; `vertical` stacks the steps, for long descriptions or a narrow column. Bullets are always one row.',
       control: 'inline-radio',
       options: ['horizontal', 'vertical'],
       table: { type: { summary: "'horizontal' | 'vertical'" }, defaultValue: { summary: "'horizontal'" } },
     },
+    appearance: {
+      description:
+        '`circles` shows every step with its marker and label. `bullets` shows only the current step\'s label, "Step 2 of 4: Workspace", over a row of dots: for a dialog, a phone, or a flow too long for labels.',
+      control: 'inline-radio',
+      options: ['circles', 'bullets'],
+      table: { type: { summary: "'circles' | 'bullets'" }, defaultValue: { summary: "'circles'" } },
+    },
     size: {
-      description: 'A 32px (`md`) or 24px (`sm`) marker. `sm` takes a 12px label.',
+      description: 'A 32px (`md`) or 24px (`sm`) marker. `sm` takes a 12px label. With bullets the dots stay one size and only the text shrinks.',
       control: 'inline-radio',
       options: ['sm', 'md'],
       table: { type: { summary: "'sm' | 'md'" }, defaultValue: { summary: "'md'" } },
@@ -125,6 +132,51 @@ export const Navigable: Story = {
     await expect(mediaRules('pointer: coarse', account).find((r) => r.style.minBlockSize)?.style.minBlockSize).toBe('var(--target-coarse)')
     await userEvent.keyboard('{Enter}')
     await expect(within(nav).getAllByRole('listitem')[0]).toHaveAttribute('aria-current', 'step')
+  },
+}
+
+/** Only the current step's label is shown; every dot still says its label and status. */
+export const Bullets: Story = {
+  args: {
+    appearance: 'bullets',
+    current: 2,
+    steps: [steps[0], { ...steps[1], status: 'error' }, steps[2], steps[3]],
+  },
+  play: async ({ canvas, canvasElement }) => {
+    const nav = canvas.getByRole('navigation', { name: 'Progress' })
+    await expect(within(nav).getByText(/Step 3 of 4/)).toBeVisible()
+    await expect(within(nav).getByText('Invite', { selector: 'p span' })).toBeVisible()
+    const items = within(nav).getAllByRole('listitem')
+    await expect(items).toHaveLength(4)
+    await expect(items[2]).toHaveAttribute('aria-current', 'step')
+    await expect(items[1]).toHaveTextContent('Workspace, has an error')
+    // Only the current label shows: the others are clipped to nothing.
+    await expect(within(items[0]).getByText('Account').getBoundingClientRect().width).toBeLessThanOrEqual(1)
+    // The dots carry no numbers or icons, and there are no connectors between them.
+    await expect(canvasElement.querySelector('ol svg')).toBeNull()
+    for (const item of items) await expect(item.children).toHaveLength(1)
+  },
+}
+
+/** An error on the current step keeps `aria-current` and, with bullets, the ring. */
+export const BulletsErrorOnCurrent: Story = {
+  tags: ['!dev'],
+  args: { appearance: 'bullets', current: 1, steps: [steps[0], { ...steps[1], status: 'error' }, steps[2]] },
+  play: async ({ canvas }) => {
+    const item = canvas.getAllByRole('listitem')[1]
+    await expect(item).toHaveAttribute('aria-current', 'step')
+    await expect(getComputedStyle(item.querySelector('[aria-hidden="true"]')!).boxShadow).not.toBe('none')
+  },
+}
+
+/** Bullets with `onStepClick`: each finished dot is a button named by its step. */
+export const BulletsNavigable: Story = {
+  tags: ['!dev'],
+  args: { appearance: 'bullets', current: 2, onStepClick: fn() },
+  play: async ({ args, canvas }) => {
+    await expect(canvas.getAllByRole('button')).toHaveLength(3)
+    await userEvent.click(canvas.getByRole('button', { name: /^Account\s*, completed/ }))
+    await expect(args.onStepClick).toHaveBeenCalledWith(0)
   },
 }
 

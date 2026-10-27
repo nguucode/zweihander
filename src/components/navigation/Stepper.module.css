@@ -170,3 +170,56 @@ button.target:focus-visible {
     min-block-size: var(--target-coarse);
   }
 }
+
+/* Bullets: the current step's label over a row of dots. Each dot keeps
+   its label and status in hidden text, so the list still says every step. */
+.summary {
+  margin: 0 0 var(--space-2);
+}
+.count {
+  color: var(--muted-foreground);
+}
+.bullets .list {
+  align-items: center;
+  gap: var(--space-1);
+}
+.bullets .step {
+  flex: none;
+}
+.bullets .target {
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--box-sm);
+  block-size: var(--box-sm);
+  border-radius: var(--radius-pill);
+}
+.bullets button.target:hover {
+  background: var(--muted);
+}
+.bullets .marker {
+  --step-marker: calc(var(--box-2xs) / 2);
+  --dot: var(--border);
+  border-width: 0;
+  background: var(--dot);
+}
+.bullets .complete .marker {
+  --dot: var(--primary);
+}
+.bullets .current .marker {
+  --dot: var(--primary-text);
+}
+.bullets .error .marker {
+  --dot: var(--danger-text);
+}
+/* A ring round the dot says here, in the dot's own colour, so an error on
+   the current step keeps it. */
+.bullets [aria-current='step'] .marker {
+  box-shadow:
+    0 0 0 2px var(--background),
+    0 0 0 4px var(--dot);
+}
+@media (pointer: coarse) {
+  .bullets button.target {
+    min-inline-size: var(--target-coarse);
+  }
+}
