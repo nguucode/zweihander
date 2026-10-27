@@ -158,12 +158,20 @@ export const MapColumns: Story = {
     await expect(await d.findByText('Choose a column for Name.')).toBeVisible()
     const next = d.getByRole('button', { name: 'Next' })
     await expect(next).toBeDisabled()
-    await userEvent.click(d.getByRole('combobox', { name: 'Field for Title' }))
-    await userEvent.click(await body().findByRole('option', { name: 'Name (required)' }))
+    // Each pick waits for its list to finish closing. A closing list is still
+    // mounted: the next findByRole('option') can return its option, which no
+    // longer takes the pointer, and axe reads a list that the combobox no
+    // longer controls as a nameless listbox. WebKit's slower transitions
+    // showed both.
+    const choose = async (combobox: string, option: string) => {
+      await userEvent.click(d.getByRole('combobox', { name: combobox }))
+      await userEvent.click(await body().findByRole('option', { name: option }))
+      await waitFor(() => expect(body().queryByRole('listbox')).toBeNull())
+    }
+    await choose('Field for Title', 'Name (required)')
     await waitFor(() => expect(next).toBeEnabled())
     // A field takes one column: choosing Name for State frees Title.
-    await userEvent.click(d.getByRole('combobox', { name: 'Field for State' }))
-    await userEvent.click(await body().findByRole('option', { name: 'Name (required)' }))
+    await choose('Field for State', 'Name (required)')
     await waitFor(() => expect(d.getByRole('combobox', { name: 'Field for Title' })).toHaveTextContent('Do not import'))
     await expect(d.getByRole('combobox', { name: 'Field for State' })).toHaveTextContent('Name (required)')
   },

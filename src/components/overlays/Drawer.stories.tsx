@@ -317,7 +317,10 @@ export const Long: Story = {
     // The body scrolls; the footer stays on screen.
     const done = within(dialog).getByRole('button', { name: 'Close invoice' })
     await waitFor(() => expect(done.getBoundingClientRect().bottom).toBeLessThanOrEqual(window.innerHeight))
-    // A body of text is a tab stop, so the keyboard can scroll it.
+    // A body of text is a tab stop, so the keyboard can scroll it. Wait for
+    // the panel to take focus first: until it does, focus is still on the
+    // trigger and Tab lands on Base UI's focus guard instead.
+    await waitFor(() => expect(dialog).toHaveFocus())
     await userEvent.tab()
     await userEvent.tab()
     await expect(document.activeElement).toHaveTextContent('Line 1.')
