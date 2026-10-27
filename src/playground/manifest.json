@@ -1155,6 +1155,56 @@
     },
     {
       "kind": "component",
+      "id": "components-data-display-resizable",
+      "name": "Resizable",
+      "category": "Data Display",
+      "status": "experimental",
+      "storyId": "components-data-display-resizable--default",
+      "props": [
+        {
+          "name": "orientation",
+          "control": "inline-radio",
+          "options": [
+            "horizontal",
+            "vertical"
+          ],
+          "default": "horizontal",
+          "description": "`horizontal` puts the panes side by side with an upright handle; `vertical` stacks them with a flat one."
+        },
+        {
+          "name": "defaultSize",
+          "control": "number",
+          "min": 0,
+          "max": 100,
+          "default": 50,
+          "description": "The first pane's starting size in percent, when uncontrolled."
+        },
+        {
+          "name": "minSize",
+          "control": "number",
+          "min": 0,
+          "max": 100,
+          "default": 10,
+          "description": "The first pane's smallest size in percent. Home moves the handle here."
+        },
+        {
+          "name": "maxSize",
+          "control": "number",
+          "min": 0,
+          "max": 100,
+          "default": 90,
+          "description": "The first pane's largest size in percent. End moves the handle here."
+        },
+        {
+          "name": "handleLabel",
+          "control": "text",
+          "default": "Resize inbox",
+          "description": "The handle's accessible name. Name it after the first pane: \"Resize inbox\"."
+        }
+      ]
+    },
+    {
+      "kind": "component",
       "id": "components-data-display-table",
       "name": "Table",
       "category": "Data Display",

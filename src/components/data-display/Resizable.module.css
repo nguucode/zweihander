@@ -1,0 +1,67 @@
+/* The first pane takes its share; the handle a line; the second pane the rest. */
+.root {
+  display: flex;
+  inline-size: 100%;
+  block-size: 100%;
+  min-block-size: 0;
+}
+.vertical {
+  flex-direction: column;
+}
+
+.pane {
+  flex: 0 0 var(--resizable-size);
+  min-inline-size: 0;
+  min-block-size: 0;
+  overflow: auto;
+}
+.end {
+  flex: 1 1 0;
+}
+
+/* A 1px line between the panes; its hit area reaches past it on both sides,
+   24px across with the line (WCAG 2.5.8). */
+.handle {
+  position: relative;
+  flex: none;
+  inline-size: 1px;
+  background: var(--border);
+  cursor: col-resize;
+  touch-action: none;
+}
+.vertical > .handle {
+  inline-size: auto;
+  block-size: 1px;
+  cursor: row-resize;
+}
+.handle::after {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  inset-inline: calc(var(--box-sm) / -2);
+}
+.vertical > .handle::after {
+  inset-inline: 0;
+  inset-block: calc(var(--box-sm) / -2);
+}
+/* Hover and drag draw the line 2px --primary, the look of Table's resize handle;
+   a shadow, not a wider box, so the panes do not shift. */
+.handle:hover,
+.handle:active {
+  background: var(--primary);
+  box-shadow: 0 0 0 calc((var(--focus-width) - 1px) / 2) var(--primary);
+}
+.handle:focus-visible {
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: var(--focus-offset);
+}
+/* The line stays thin; on touch screens its hit area is 44px across. */
+@media (pointer: coarse) {
+  .handle::after {
+    inset-inline: calc(var(--target-coarse) / -2);
+  }
+  .vertical > .handle::after {
+    inset-inline: 0;
+    inset-block: calc(var(--target-coarse) / -2);
+  }
+}

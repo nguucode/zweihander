@@ -1,0 +1,183 @@
+import { Meta, Canvas, Story, ArgTypes } from '@storybook/addon-docs/blocks'
+import { Anatomy, DocTab, DocTabs, DoDont, SpecTable, States, Status } from '../../../.storybook/blocks'
+import { Resizable } from './Resizable'
+import * as ResizableStories from './Resizable.stories'
+
+<Meta of={ResizableStories} />
+
+# Resizable
+
+<DocTabs>
+<DocTab value="overview">
+
+Two panes split by a handle that people drag, or move with the arrow keys,
+to give one pane more room: a list beside its detail, a query above its
+results.
+
+<Status of={ResizableStories} />
+
+Resizable is outside the 1.0 component list, so it starts as experimental.
+
+<Canvas of={ResizableStories.Default} />
+
+## Variants
+
+| Orientation | Use for |
+| --- | --- |
+| `horizontal` (default) | Panes side by side: a list and the record picked from it, a file tree and the file. |
+| `vertical` | Panes stacked: an editor over its output, a chart over its table. |
+
+<Canvas of={ResizableStories.Vertical} />
+
+`minSize` and `maxSize` keep the first pane between two sizes, in percent
+of the whole, so neither pane can be dragged out of sight.
+
+<Canvas of={ResizableStories.Limits} />
+
+For three panes, put a Resizable in a pane of another.
+
+<Canvas of={ResizableStories.DoNameEachHandle} />
+
+## Resources
+
+From npm, or copied into your project through the registry:
+
+```js
+import { Resizable } from 'zweihander/resizable'
+```
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/resizable.json
+```
+
+- Source: [src/components/data-display/Resizable.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/data-display/Resizable.tsx)
+- Spec: none on uiguideline.com; after [shadcn/ui Resizable](https://ui.shadcn.com/docs/components/resizable) and the [APG window splitter](https://www.w3.org/WAI/ARIA/apg/patterns/windowsplitter/)
+- Base UI: none; Base UI has no splitter
+- Figma: not in the library yet
+
+</DocTab>
+<DocTab value="specs">
+
+## Anatomy
+
+<Anatomy parts={ResizableStories.anatomyParts}>
+  <Story of={ResizableStories.Anatomy} />
+</Anatomy>
+
+The limits, `minSize` and `maxSize`, have no element of their own: they
+are where the handle stops.
+
+## Measurements
+
+<SpecTable
+  caption="Every orientation"
+  rows={[
+    { part: 'Handle', property: 'Hit area across the line', token: '--box-sm' },
+    { part: 'Handle', property: 'Hit area on touch screens', token: '--target-coarse' },
+    { part: 'Handle', property: 'Line on hover and drag', token: '--focus-width' },
+    { part: 'Handle', property: 'Focus outline offset', token: '--focus-offset' },
+  ]}
+/>
+
+The line is 1px; its hit area reaches past it on both sides, and grows
+to 44px on touch screens without the line getting wider. The panes have no padding of their own: what goes in
+them sets it. Sizes are percentages of the whole, so the split holds
+when the window changes size.
+
+## Color
+
+<SpecTable
+  caption="Handle"
+  rows={[
+    { part: 'Handle', property: 'Line', token: '--border' },
+    { part: 'Handle', property: 'Line on hover and drag', token: '--primary' },
+    { part: 'Handle', property: 'Focus outline', token: '--ring' },
+  ]}
+/>
+
+## States
+
+<States
+  states={[
+    { label: 'Enabled' },
+    { label: 'Hover', pseudo: 'hover' },
+    { label: 'Focus', pseudo: 'focus-visible' },
+    { label: 'Dragging', pseudo: 'active' },
+  ]}
+>
+  <div style={{ blockSize: 80, inlineSize: 160, border: '1px solid var(--border)' }}>
+    <Resizable start={null} end={null} />
+  </div>
+</States>
+
+- **Hover** and **Dragging** thicken the line to 2px `--primary`, as on
+  Table's column resize handle. The cursor turns to a resize arrow.
+- **Focus** is a 2px `--ring` outline, 2px outside the line.
+- There is no disabled state: a split that should not move is two plain
+  boxes.
+
+## API
+
+{/* Storybook's table does not scroll by itself on a phone. */}
+<div style={{ overflowX: 'auto' }}>
+  <ArgTypes of={ResizableStories} />
+</div>
+
+Resizable fills its parent: give the parent a height for side-by-side
+panes, and both a height for stacked ones.
+
+### Differences from the spec
+
+shadcn's Resizable is a group of any number of panels and handles
+(`ResizablePanelGroup`, `ResizablePanel`, `ResizableHandle`). Zweihänder
+takes flat props and two panes, `start` and `end`, as its API conventions
+ask; nest one for three panes. There is no collapse on Enter and no saved
+layout: store `onSizeChange` to keep the split.
+
+</DocTab>
+<DocTab value="guidelines">
+
+## When to use
+
+Use Resizable where people need to trade room between two things they
+look at together, and the right split depends on the content: a long name
+in a list, a wide table in the detail.
+
+<DoDont
+  do={<Story of={ResizableStories.DoNameEachHandle} />}
+  doCaption="Each handle is named after the pane it sizes: “Resize folders”, “Resize inbox”."
+  dont={<Story of={ResizableStories.DontKeepDefaultName} />}
+  dontCaption="Both handles keep the default name, so a screen reader hears “Resize” twice and cannot tell them apart."
+/>
+
+Keep `minSize` above zero (the default is 10%), so a pane cannot be
+dragged out of sight with its content still in the tab order.
+
+## When not to use
+
+- **For a fixed sidebar beside the page.** Use the App Shell template:
+  its Nav Sidebar has a set width and collapses.
+- **For a panel that slides over the page.** Use Drawer.
+- **For a column of a table.** Use Table's `isResizable`.
+- **For layouts that only change with the window.** Use the
+  Multi-column layout template: Resizable is for people, not
+  breakpoints.
+
+## Accessibility
+
+- The handle is a focusable `role="separator"`, after the APG window
+  splitter. Side by side it is `aria-orientation="vertical"`; stacked it
+  is `"horizontal"`.
+- Its name is `handleLabel` and `aria-controls` points at the first pane.
+- `aria-valuenow` is the first pane's size in percent, between
+  `aria-valuemin` (`minSize`) and `aria-valuemax` (`maxSize`).
+- Side by side, Arrow Right moves the handle 16px right and Arrow Left
+  16px left; in right-to-left text the first pane is on the right, so
+  Arrow Left grows it. Stacked, Arrow Down and Arrow Up do the same.
+  Home moves it to `minSize`, End to `maxSize`. These are the keys and
+  the step of Table's column resize handle.
+- Dragging the handle moves it by the distance dragged, never past the
+  limits.
+
+</DocTab>
+</DocTabs>

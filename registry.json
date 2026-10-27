@@ -1255,6 +1255,28 @@
       ]
     },
     {
+      "name": "resizable",
+      "type": "registry:component",
+      "title": "Resizable",
+      "description": "Two panes split by a handle that moves by dragging or with the arrow keys, with optional size limits.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/data-display/Resizable.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/data-display/Resizable.tsx"
+        },
+        {
+          "path": "src/components/data-display/Resizable.module.css",
+          "type": "registry:component",
+          "target": "components/zweihander/data-display/Resizable.module.css"
+        }
+      ]
+    },
+    {
       "name": "slider",
       "type": "registry:component",
       "title": "Slider",

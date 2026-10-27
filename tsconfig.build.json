@@ -54,6 +54,7 @@
     "src/components/states/ErrorState.tsx",
     "src/components/states/SuccessState.tsx",
     "src/components/data-display/Collapse.tsx",
+    "src/components/data-display/Resizable.tsx",
     "src/components/controls/Slider.tsx",
     "src/components/navigation/Stepper.tsx",
     "src/components/controls/Rating.tsx",
