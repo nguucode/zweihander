@@ -6,6 +6,12 @@
 .sticky {
   overflow-y: auto;
 }
+/* Only focusable when it scrolls and nothing inside takes focus. Inset: the
+   box clips anything drawn outside it. */
+.container:focus-visible {
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: var(--focus-offset-inset);
+}
 
 .table {
   --table-row: var(--row-height);

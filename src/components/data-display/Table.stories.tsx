@@ -322,6 +322,51 @@ export const StickyHeader: Story = {
   decorators: [(Story) => <div style={{ blockSize: '20rem', display: 'grid' }}>{Story()}</div>],
 }
 
+/** Plain columns: no sort buttons, so nothing in the cells takes focus. */
+const plainColumns = columns.map((c) => ({ ...c, sortable: false }))
+
+/**
+ * Too narrow for its columns, with nothing focusable in the cells: the scroll
+ * box becomes the tab stop, a region named by the caption, so keyboard users
+ * can scroll it with the arrow keys.
+ */
+export const NarrowScroll: Story = {
+  args: { columns: plainColumns },
+  decorators: [(Story) => <div style={{ inlineSize: '16rem' }}>{Story()}</div>],
+  play: async ({ canvas }) => {
+    const region = await canvas.findByRole('region', { name: 'Projects' })
+    await expect(region).toHaveAttribute('tabindex', '0')
+    // Tab reaches it, with the focus ring; the browser scrolls a focused box with the arrow keys.
+    await userEvent.tab()
+    await expect(region).toHaveFocus()
+    await expect(getComputedStyle(region).outlineStyle).toBe('solid')
+  },
+}
+
+/** Narrow too, but the sort buttons already reach the scroll box: no extra tab stop. */
+export const NarrowWithControls: Story = {
+  tags: ['!dev'],
+  decorators: NarrowScroll.decorators,
+  play: async ({ canvas }) => {
+    const box = canvas.getByRole('table', { name: 'Projects' }).parentElement!
+    await waitFor(() => expect(box.scrollWidth).toBeGreaterThan(box.clientWidth))
+    await expect(canvas.queryByRole('region')).toBeNull()
+    await expect(box).not.toHaveAttribute('tabindex')
+  },
+}
+
+/** Plain columns that fit: nothing to scroll, so no tab stop. */
+export const FitsWithoutControls: Story = {
+  tags: ['!dev'],
+  args: { columns: plainColumns },
+  play: async ({ canvas }) => {
+    const box = canvas.getByRole('table', { name: 'Projects' }).parentElement!
+    await waitFor(() => expect(box.scrollWidth).toBeLessThanOrEqual(box.clientWidth))
+    await expect(canvas.queryByRole('region')).toBeNull()
+    await expect(box).not.toHaveAttribute('tabindex')
+  },
+}
+
 /** What an open row shows; archived projects have nothing to add, so no button. */
 const details = (p: Project) =>
   p.status === 'Archived' ? null : (
