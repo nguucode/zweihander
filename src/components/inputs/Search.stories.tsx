@@ -60,6 +60,11 @@ const meta = {
       control: 'text',
       table: { type: { summary: 'string' }, defaultValue: { summary: "''" } },
     },
+    shortcut: {
+      description: 'One key, e.g. `/`, that focuses the field from anywhere on the page, unless focus is already in a form field. Shown as a key cap while the field is empty and idle. Off while disabled or read-only. No modifiers: ⌘K belongs to the Command Palette. One per page.',
+      control: 'text',
+      table: { type: { summary: 'string' } },
+    },
     onChange: {
       description: 'The native change event, also fired when the clear button or Escape empties the field.',
       control: false,
@@ -134,6 +139,49 @@ export const Controlled: Story = {
   },
 }
 
+export const Shortcut: Story = {
+  args: { shortcut: '/', placeholder: 'Search projects' },
+  render: (args) => (
+    <div style={{ display: 'grid', gap: 'var(--space-4)', justifyItems: 'start' }}>
+      <Search {...args} />
+      <TextInput aria-label="Note" />
+    </div>
+  ),
+  play: async ({ canvas, canvasElement, userEvent }) => {
+    const field = canvas.getByRole('searchbox')
+    const hint = canvasElement.querySelector('span:has(> input) > kbd')!
+    // Drawn for sight; the key is announced from the input instead.
+    await expect(hint).toHaveTextContent('/')
+    await expect(hint).toHaveAttribute('aria-hidden', 'true')
+    await expect(field).toHaveAttribute('aria-keyshortcuts', '/')
+    await expect(hint).toBeVisible()
+    // From anywhere on the page, the key focuses the field without typing itself.
+    await userEvent.click(canvasElement)
+    await userEvent.keyboard('/')
+    await expect(field).toHaveFocus()
+    await expect(field).toHaveValue('')
+    // While focused the hint would be wrong: the key now types.
+    await expect(hint).not.toBeVisible()
+    await userEvent.keyboard('/a')
+    await expect(field).toHaveValue('/a')
+    // In another text field the key is left alone.
+    const note = canvas.getByRole('textbox', { name: 'Note' })
+    await userEvent.click(note)
+    await userEvent.keyboard('/')
+    await expect(note).toHaveValue('/')
+    await expect(note).toHaveFocus()
+    // With a modifier it is not this key.
+    await userEvent.click(canvasElement)
+    for (const mod of ['Control', 'Meta', 'Alt']) {
+      await userEvent.keyboard(`{${mod}>}/{/${mod}}`)
+      await expect(field).not.toHaveFocus()
+    }
+    // With a query, the clear button takes the hint's place.
+    await expect(field).toHaveValue('/a')
+    await expect(canvasElement.querySelector('span:has(> input) > kbd')).toBeNull()
+  },
+}
+
 export const WithLabel: Story = {
   args: { label: 'Find a component' },
   play: async ({ canvas }) => {
@@ -156,9 +204,10 @@ export const FullWidth: Story = {
 }
 
 export const Disabled: Story = {
-  args: { disabled: true, defaultValue: 'locked' },
+  args: { disabled: true, defaultValue: 'locked', shortcut: '/' },
   play: async ({ canvas }) => {
     await expect(canvas.getByRole('searchbox')).toBeDisabled()
+    await expect(canvas.getByRole('searchbox')).not.toHaveAttribute('aria-keyshortcuts')
     await expect(canvas.queryByRole('button', { name: 'Clear search' })).toBeNull()
   },
 }

@@ -3,3 +3,8 @@
 .input::-webkit-search-decoration {
   appearance: none;
 }
+
+/* Focused, the key types instead: the hint would be wrong. */
+:focus-within > .shortcut {
+  display: none;
+}

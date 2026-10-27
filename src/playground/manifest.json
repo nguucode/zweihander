@@ -1860,6 +1860,11 @@
           "description": "Fills the width of its container. Otherwise 20rem, capped at the container."
         },
         {
+          "name": "shortcut",
+          "control": "text",
+          "description": "One key, e.g. `/`, that focuses the field from anywhere on the page, unless focus is already in a form field. Shown as a key cap while the field is empty and idle. Off while disabled or read-only. No modifiers: ⌘K belongs to the Command Palette. One per page."
+        },
+        {
           "name": "placeholder",
           "control": "text",
           "default": "Search",
