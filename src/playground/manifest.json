@@ -3385,6 +3385,22 @@
     },
     {
       "kind": "pattern",
+      "id": "patterns-application-ui-common-actions",
+      "name": "Common Actions",
+      "category": "Application UI",
+      "status": "experimental",
+      "storyId": "patterns-application-ui-common-actions--reference",
+      "props": [
+        {
+          "name": "caption",
+          "control": "text",
+          "default": "Common actions",
+          "description": "Names the table for assistive tech. Visually hidden."
+        }
+      ]
+    },
+    {
+      "kind": "pattern",
       "id": "patterns-application-ui-data-table-page",
       "name": "Data Table Page",
       "category": "Application UI",

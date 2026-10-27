@@ -1864,6 +1864,26 @@
       ]
     },
     {
+      "name": "common-actions",
+      "type": "registry:block",
+      "title": "Common Actions",
+      "description": "Application UI pattern: the actions every record and form shares (Create, Edit, Save, Delete and the rest) as data, each with its label, use, placement, button style, confirmation level and shortcut, and a reference table that renders it.",
+      "registryDependencies": [
+        "https://ontheshore.biz/zweihander/r/utils.json",
+        "https://ontheshore.biz/zweihander/r/tokens.json",
+        "https://ontheshore.biz/zweihander/r/button.json",
+        "https://ontheshore.biz/zweihander/r/kbd.json",
+        "https://ontheshore.biz/zweihander/r/table.json"
+      ],
+      "files": [
+        {
+          "path": "src/components/patterns/application-ui/CommonActions.tsx",
+          "type": "registry:component",
+          "target": "components/zweihander/patterns/application-ui/CommonActions.tsx"
+        }
+      ]
+    },
+    {
       "name": "feed",
       "type": "registry:block",
       "title": "Feed",

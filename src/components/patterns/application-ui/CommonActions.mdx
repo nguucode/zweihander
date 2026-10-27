@@ -1,0 +1,144 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks'
+import * as CommonActionsStories from './CommonActions.stories'
+
+<Meta of={CommonActionsStories} />
+
+# Common Actions
+
+The actions every record and form shares (Create, Edit, Save, Cancel,
+Delete and the rest), each with one label, one place, one button style,
+one level of confirmation and, where the platform already has one, one
+shortcut. After Carbon's Common actions pattern, cut to what an enterprise
+app repeats on every object.
+
+```sh
+npx shadcn@latest add https://ontheshore.biz/zweihander/r/common-actions.json
+```
+
+It installs `commonActions`, the table below as data, and
+`CommonActionsTable`, which renders it. Place a button by reading its row:
+
+```tsx
+import { commonActions } from './CommonActions'
+
+<Button type="submit" {...commonActions.save.button}>{commonActions.save.label}</Button>
+```
+
+There is no `<SaveButton>`: the buttons stay Button, Menu entries and
+Confirm Dialogs, and the catalogue only decides which. Rename a label or
+change a level in your copy, and the table follows. A pattern usually owns
+no data; this one is conventions, not records, so it ships them as data
+the table and your code can both read.
+
+## Reference
+
+<Canvas of={CommonActionsStories.Reference} />
+
+## Placement
+
+**Form footer.** Cancel, then Save, at the end. Save is the submit button
+and the only primary one in the form. [Form
+Layouts](?path=/docs/patterns-application-ui-form-layouts--docs)'
+`FormActions` lays them out.
+
+<Canvas of={CommonActionsStories.FormFooter} />
+
+**List header.** Import and Export, then Create as the page's one primary
+button, at the end of the [Card
+Heading](?path=/docs/patterns-application-ui-card-heading--docs) or page
+header.
+
+<Canvas of={CommonActionsStories.ListHeader} />
+
+**Record header.** Edit next to the title; everything else in the overflow
+menu, Delete last after a separator so it is never the item under the
+pointer when the menu opens. A list row puts the same entries in its ⋯
+menu ([Stacked List](?path=/docs/patterns-application-ui-stacked-list--docs),
+[Grid List](?path=/docs/patterns-application-ui-grid-list--docs)).
+
+<Canvas of={CommonActionsStories.RecordHeader} />
+
+## Confirmation
+
+Ask in proportion to what is lost. Each step up costs every user a click
+on every use, so the level follows how hard the action is to reverse, not
+how serious it sounds.
+
+| Level | When | Built with |
+| --- | --- | --- |
+| None | Easy to reverse, or nothing is lost: Edit, Duplicate, Export | The button |
+| Undo toast | Reversible, but the result leaves the screen: Archive, Remove | [Toast](?path=/docs/components-notifications-toast--docs) with an Undo action |
+| Confirm Dialog | Cannot be undone: Delete | [Confirm Dialog](?path=/docs/components-overlays-confirm-dialog--docs) |
+| Type to confirm | Cannot be undone and takes other records with it: a workspace, a ledger | Confirm Dialog with `confirmText`, from a danger [Action Panel](?path=/docs/patterns-application-ui-action-panel--docs) |
+
+Delete is a Confirm Dialog by default and goes up to type to confirm when
+it cascades, so no row of the table names that level. An Undo toast times
+out: keep the action reachable elsewhere too (an Archived filter, the
+record's menu) for anyone who misses it. The dialog's own Cancel is
+outlined, beside its contained destructive button; that is Confirm
+Dialog's, not a second Cancel style.
+
+<Canvas of={CommonActionsStories.ArchiveWithUndo} />
+<Canvas of={CommonActionsStories.DeleteWithConfirm} />
+<Canvas of={CommonActionsStories.TypeToConfirm} />
+
+## Labels
+
+- **One verb, sentence case.** Add the object only when the page has more
+  than one kind: "Create invoice" in a header, "Delete" in an invoice's own
+  menu.
+- **The pairs are not synonyms.** Create makes a record, Add puts one into
+  a set; Delete destroys it, Remove takes it out of the set; Cancel throws
+  input away, Close has none to throw.
+- **The confirm button repeats the action** ("Delete invoice"), never
+  "OK" or "Yes".
+
+## Shortcuts
+
+Only shortcuts the platform already teaches: ⌘S, Esc, ⌘Z. Shown as
+[Kbd](?path=/docs/components-atomic-elements-kbd--docs) in Mac glyphs; show Ctrl for
+⌘ on other systems. The app binds them; the catalogue only names them. A
+shortcut for anything else belongs in the [Command
+Palette](?path=/docs/components-navigation-command-palette--docs), where it can be
+found.
+
+## Props
+
+<ArgTypes of={CommonActionsStories} />
+
+`commonActions` is keyed by id (`save`, `delete`, …); each entry has
+`label`, `purpose`, `placement`, `confirm` (`none`, `undo`, `dialog` or
+`typed`), and optionally `button` (`variant` and `appearance`; left out
+for an action that only lives in a menu) and `shortcut`.
+
+## Layout
+
+- **No breakpoint of its own.** The form footer and the headers wrap their
+  buttons when the row runs out of room; Save stays last.
+- **The reference table** scrolls sideways in a narrow container, as any
+  [Table](?path=/docs/components-data-display-table--docs).
+
+<Canvas of={CommonActionsStories.Narrow} />
+
+## Differences from the spec
+
+Carbon's Common actions, and where this departs from them:
+
+- **Fewer actions.** Clear, Reset, Copy, Refresh, Search and a wizard's
+  Back and Next are left out: they belong to Filter Bar, Search, Steps
+  and their own components, which already place them.
+- **Archive and Undo are added**, because an ERP keeps records with
+  transactions and reverses rather than asks.
+- **The trigger for Delete is outlined**, as on Action Panel; only the
+  dialog's confirm button is filled.
+
+## Accessibility
+
+- Cancel comes before Save in the DOM as on screen, so Tab reaches the
+  safe choice first and Save is the submit button that Enter in a field
+  presses.
+- The icon-only ⋯ button is named "More actions".
+- A Confirm Dialog focuses Cancel when it opens, so Enter cannot delete;
+  with type to confirm, it focuses the field.
+- The reference table names each row by its action (a row header), so a
+  screen reader announces "Save" with each cell.
