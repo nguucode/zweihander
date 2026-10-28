@@ -1,5 +1,5 @@
 /* The Playground page: header over three columns (items, live view,
-   props). Each column scrolls on its own so the live view stays in sight. */
+   details: Playground, Specs, Guideline). Each column scrolls on its own so the live view stays in sight. */
 
 .shell {
   display: flex;
@@ -64,10 +64,7 @@
 
 @media (min-width: 1024px) {
   .columns {
-    grid-template-columns: 18rem minmax(0, 1fr);
-  }
-  .columns:has(.aside) {
-    grid-template-columns: 18rem minmax(0, 1fr) 18rem;
+    grid-template-columns: 18rem minmax(0, 1fr) 22rem;
   }
   .browser,
   .aside {
@@ -178,24 +175,36 @@
   flex-direction: column;
 }
 
-/* Browse (under 1024) at the start, the viewport tabs in the middle. */
+/* Browse (under 1024), the item's name, then the Theme and Storybook buttons. */
 .toolbar {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  display: flex;
   align-items: center;
   gap: var(--space-2);
   padding: var(--space-2) var(--space-4);
   border-block-end: 1px solid var(--border);
 }
 
-.viewports {
+.itemName {
+  flex: 1;
+  min-inline-size: 0;
+  margin: 0;
+  overflow: hidden;
+  font-family: var(--font-heading);
+  font-size: var(--text-heading-2xs);
+  font-weight: 500;
+  line-height: var(--leading-heading-2xs);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tools {
   display: flex;
-  grid-column: 2;
   align-items: center;
   gap: var(--space-1);
 }
 
 .live {
+  position: relative;
   display: flex;
   flex: 1;
   flex-direction: column;
@@ -220,6 +229,19 @@
 }
 
 /* --- right column --------------------------------------------------------- */
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.missing {
+  margin: 0;
+  color: var(--muted-foreground);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+}
 
 .props {
   display: flex;
