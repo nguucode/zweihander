@@ -8,6 +8,7 @@ import { Playground, type Manifest } from './Playground'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <Playground manifest={manifest as Manifest} />
+    {/* In development Storybook runs on its own port (npm run storybook). */}
+    <Playground manifest={manifest as Manifest} storybookUrl={import.meta.env.DEV ? 'http://localhost:6006/' : undefined} />
   </StrictMode>,
 )

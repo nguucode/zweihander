@@ -256,6 +256,100 @@
   gap: var(--space-2);
 }
 
+/* --- Specs tab ------------------------------------------------------------- */
+
+.specs,
+.specSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.specs {
+  gap: var(--space-6);
+}
+
+.anatomy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+}
+.anatomy li {
+  display: flex;
+  gap: var(--space-2);
+}
+.anatomyNumber {
+  flex: none;
+  color: var(--destructive);
+  font-weight: 600;
+}
+
+.specTable {
+  inline-size: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+}
+.specCaption {
+  padding-block-end: var(--space-1);
+  color: var(--muted-foreground);
+  font-weight: 500;
+  text-align: start;
+}
+.specTable th {
+  padding: var(--space-1) var(--space-2);
+  border-block-end: 1px solid var(--border);
+  color: var(--muted-foreground);
+  font-weight: 500;
+  text-align: start;
+}
+.specTable td {
+  padding: var(--space-2);
+  border-block-end: 1px solid var(--border);
+  vertical-align: top;
+}
+.specRow {
+  cursor: default;
+}
+.specRow:hover,
+.specRow[aria-current='true'] {
+  background: var(--accent);
+}
+.specRow:focus-visible {
+  outline: var(--focus-width) solid var(--ring);
+  outline-offset: calc(var(--focus-width) * -1);
+}
+
+.specPart,
+.specValue {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-weight: 500;
+}
+.specProperty,
+.specToken {
+  display: block;
+  color: var(--muted-foreground);
+  overflow-wrap: anywhere;
+}
+.specToken {
+  font-family: var(--font-mono);
+  font-size: var(--text-body-xs);
+}
+.specSwatch {
+  flex: none;
+  inline-size: 0.75rem;
+  block-size: 0.75rem;
+  border-radius: var(--radius-sm);
+  box-shadow: inset 0 0 0 1px var(--border);
+}
+
 /* --- Preview theme popover -------------------------------------------------- */
 
 .themeSections {
