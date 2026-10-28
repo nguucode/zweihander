@@ -16,6 +16,7 @@ import { Tooltip } from '@/components/overlays/Tooltip'
 import { EmptyState } from '@/components/states/EmptyState'
 import { ErrorState } from '@/components/states/ErrorState'
 import { Icon } from '@/lib/icon'
+import { INSPECT_EVENT, INSPECTED_EVENT, partNumber, partOf, type InspectRequest, type TokenValue } from './inspect'
 import styles from './Playground.module.css'
 import {
   DEFAULT_PREVIEW_THEME,
@@ -89,7 +90,37 @@ const TABS = [
 export type PanelTab = (typeof TABS)[number][0]
 
 /** The tabs an item has: Specs and Guideline only once its docs are written. */
-const tabsOf = (_item: ManifestItem): PanelTab[] => ['playground']
+const tabsOf = (item: ManifestItem): PanelTab[] => [
+  'playground',
+  ...(item.specs ? (['specs'] as const) : []),
+  ...(item.guideline ? (['guideline'] as const) : []),
+]
+
+/** A row of a Specs table, as the Specs tab hovers it. */
+type SpecRow = SpecTableData['rows'][number]
+
+/**
+ * The Measurements tables for the item as it stands: with a `size` prop, the
+ * table captioned with the current size plus those captioned with no size
+ * (Every size); without one, all of them.
+ */
+function measurementsFor(item: ManifestItem, args: Args) {
+  const size = item.props.find((p) => p.name === 'size')
+  const sizes = size?.options?.map(String) ?? []
+  const current = String(args.size ?? size?.default ?? '')
+  return (item.specs?.measurements ?? []).filter((t) => !t.caption || !sizes.includes(t.caption) || t.caption === current)
+}
+
+/** What the frame draws and resolves while Specs is open. */
+function inspectRequest(item: ManifestItem, args: Args, highlight: SpecRow | null): InspectRequest | null {
+  if (!item.specs) return null
+  const tables = [...measurementsFor(item, args), ...item.specs.color]
+  return {
+    parts: item.specs.anatomy.map(({ name, selector }) => ({ name, selector })),
+    tokens: [...new Set(tables.flatMap((t) => t.rows.map((r) => r.token)))],
+    highlight: highlight && { part: partOf(highlight.part), property: highlight.property, token: highlight.token },
+  }
+}
 
 const GROUPS = [
   ['component', 'Components'],
@@ -251,6 +282,9 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
   const [filters, setFilters] = useState(NO_FILTERS)
   const [folds, setFolds] = useState(NO_FOLDS)
   const [drawerOpen, setDrawerOpen] = useState(false)
+  // The Specs row under the pointer or focus, and the token values the frame sent back.
+  const [highlight, setHighlight] = useState<SpecRow | null>(null)
+  const [values, setValues] = useState<Record<string, TokenValue>>({})
   const wide = useWide()
 
   useEffect(() => {
@@ -283,6 +317,7 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
   // A new item is a step Back returns to; a tab or prop change is not.
   const select = (item: ManifestItem) => {
     setDrawerOpen(false)
+    setHighlight(null)
     if (item.id === state.item.id) return
     const url = urlWith({ ...withoutProps(state.item), item: item.id })
     flushUrl()
@@ -312,6 +347,10 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
     replaceUrl(urlWith(withoutProps(state.item)))
     setState((s) => ({ ...s, args: {} }))
   }
+
+  // The wanted tab, or Playground when this item has not got it.
+  const has = tabsOf(state.item)
+  const tab = has.includes(state.tab) ? state.tab : 'playground'
 
   const browser = (
     <Browser
@@ -382,13 +421,30 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
             args={state.args}
             theme={previewTheme}
             storybookUrl={storybookUrl}
+            inspect={tab === 'specs' ? inspectRequest(state.item, state.args, highlight) : null}
+            onValues={setValues}
           />
         </main>
 
         <aside aria-label="Details" className={styles.aside}>
-          <Panel item={state.item} tab={state.tab} onTab={setTab}>
-            <PropsPanel item={state.item} args={state.args} onChange={setProp} onReset={resetProps} />
-          </Panel>
+          <Panel
+            item={state.item}
+            has={has}
+            tab={tab}
+            onTab={setTab}
+            content={{
+              playground: <PropsPanel item={state.item} args={state.args} onChange={setProp} onReset={resetProps} />,
+              specs: state.item.specs && (
+                <SpecsPanel
+                  specs={state.item.specs}
+                  measurements={measurementsFor(state.item, state.args)}
+                  values={values}
+                  highlight={highlight}
+                  onHighlight={setHighlight}
+                />
+              ),
+            }}
+          />
         </aside>
       </div>
     </div>
@@ -724,7 +780,7 @@ function Browser({
 // --- center column ----------------------------------------------------------------
 
 /** Storybook's preview channel event in a postMessage, if this is one. */
-function channelEvent(data: unknown): { type?: string } | undefined {
+function channelEvent(data: unknown): { type?: string; args?: unknown[] } | undefined {
   try {
     const message = typeof data === 'string' ? JSON.parse(data) : data
     return message?.key === STORYBOOK_CHANNEL ? message.event : undefined
@@ -753,11 +809,16 @@ function LiveView({
   args,
   theme,
   storybookUrl,
+  inspect,
+  onValues,
 }: {
   item: ManifestItem
   args: Args
   theme: PreviewTheme
   storybookUrl: string
+  /** What the Specs tab asks the frame to draw; null clears it. */
+  inspect: InspectRequest | null
+  onValues: (values: Record<string, TokenValue>) => void
 }) {
   const frame = useRef<HTMLIFrameElement>(null)
   // Which src finished, and how. A src that has not finished is loading.
@@ -782,10 +843,18 @@ function LiveView({
   // before that the preview has no store and throws. Each src gets a new
   // iframe (key={src}), so the frame's window says which one rendered.
   const [rendered, setRendered] = useState<Window | null>(null)
+  const onValuesRef = useRef(onValues)
+  useEffect(() => {
+    onValuesRef.current = onValues
+  })
   useEffect(() => {
     const onMessage = (event: MessageEvent) => {
       const target = frame.current?.contentWindow
-      if (target && event.source === target && channelEvent(event.data)?.type === 'storyRendered') setRendered(target)
+      if (!target || event.source !== target) return
+      const channel = channelEvent(event.data)
+      if (channel?.type === 'storyRendered') setRendered(target)
+      const payload = channel?.args?.[0] as { values?: Record<string, TokenValue> } | undefined
+      if (channel?.type === INSPECTED_EVENT && payload?.values) onValuesRef.current(payload.values)
     }
     addEventListener('message', onMessage)
     return () => removeEventListener('message', onMessage)
@@ -821,6 +890,17 @@ function LiveView({
     )
     if (Object.keys(globals).length) postTo(target, src)('updateGlobals', { globals })
   }, [theme, rendered, src])
+
+  // The Specs drawing, sent again only when it changes. A new frame starts with none.
+  const request = JSON.stringify(inspect)
+  const sentInspect = useRef<{ target: Window; request: string } | null>(null)
+  useEffect(() => {
+    const target = frame.current?.contentWindow
+    if (!target || target !== rendered) return
+    const before = sentInspect.current?.target === target ? sentInspect.current.request : 'null'
+    sentInspect.current = { target, request }
+    if (request !== before) postTo(target, src)(INSPECT_EVENT, { request: JSON.parse(request) })
+  }, [request, rendered, src])
 
   return (
     <div className={styles.live}>
@@ -863,17 +943,17 @@ function LiveView({
  */
 function Panel({
   item,
+  has,
   tab,
   onTab,
-  children,
+  content,
 }: {
   item: ManifestItem
+  has: PanelTab[]
   tab: PanelTab
   onTab: (tab: PanelTab) => void
-  children: ReactNode
+  content: Partial<Record<PanelTab, ReactNode>>
 }) {
-  const has = tabsOf(item)
-  const shown = has.includes(tab) ? tab : 'playground'
   const missing = TABS.filter(([value]) => !has.includes(value)).map(([, label]) => label)
   return (
     <div className={styles.panel}>
@@ -884,15 +964,123 @@ function Panel({
           value,
           label,
           disabled: !has.includes(value),
-          content: value === 'playground' ? children : null,
+          content: content[value] ?? null,
         }))}
-        value={shown}
+        value={tab}
         onValueChange={(value) => onTab(value as PanelTab)}
       />
       {missing.length > 0 && (
         <p className={styles.missing}>
           {missing.join(' and ')} {missing.length === 1 ? 'is' : 'are'} not written for {item.name} yet.
         </p>
+      )}
+    </div>
+  )
+}
+
+/**
+ * The Specs tab: the anatomy parts, numbered as the frame numbers them, then
+ * the Measurements tables for the current size and the Color tables. Each
+ * value is the token as the frame resolves it, in the Preview theme. Hovering
+ * or focusing a row asks the frame to draw that row's redline.
+ */
+function SpecsPanel({
+  specs,
+  measurements,
+  values,
+  highlight,
+  onHighlight,
+}: {
+  specs: Specs
+  measurements: SpecTableData[]
+  values: Record<string, TokenValue>
+  highlight: SpecRow | null
+  onHighlight: (row: SpecRow | null) => void
+}) {
+  const parts = specs.anatomy.map((a) => a.name)
+  const table = (data: SpecTableData, index: number) => (
+    <table key={index} className={styles.specTable}>
+      {data.caption && <caption className={styles.specCaption}>{data.caption}</caption>}
+      <thead>
+        <tr>
+          <th scope="col">Part</th>
+          <th scope="col">Value</th>
+        </tr>
+      </thead>
+      <tbody>
+        {data.rows.map((row, i) => {
+          const value = values[row.token]
+          const part = parts.indexOf(partOf(row.part))
+          return (
+            <tr
+              key={i}
+              // Focusable so the keyboard can ask for the redline too.
+              tabIndex={0}
+              aria-current={row === highlight ? 'true' : undefined}
+              className={styles.specRow}
+              onMouseEnter={() => onHighlight(row)}
+              onMouseLeave={() => onHighlight(null)}
+              onFocus={() => onHighlight(row)}
+              onBlur={() => onHighlight(null)}
+            >
+              <td>
+                <span className={styles.specPart}>
+                  {part >= 0 && <span aria-hidden="true">{partNumber(part)} </span>}
+                  {row.part}
+                </span>
+                <span className={styles.specProperty}>{row.property}</span>
+              </td>
+              <td>
+                <span className={styles.specValue}>
+                  {value?.kind === 'color' && (
+                    <span aria-hidden="true" className={styles.specSwatch} style={{ background: value.text }} />
+                  )}
+                  {value?.text ?? '…'}
+                </span>
+                <code className={styles.specToken}>{row.token}</code>
+              </td>
+            </tr>
+          )
+        })}
+      </tbody>
+    </table>
+  )
+  return (
+    <div className={styles.specs}>
+      {specs.anatomy.length > 0 && (
+        <section aria-labelledby="pg-anatomy" className={styles.specSection}>
+          <h2 id="pg-anatomy" className={styles.groupTitle}>
+            Anatomy
+          </h2>
+          <ol className={styles.anatomy}>
+            {specs.anatomy.map((part, i) => (
+              <li key={part.name}>
+                <span aria-hidden="true" className={styles.anatomyNumber}>
+                  {partNumber(i)}
+                </span>
+                <span>
+                  <strong>{part.name}</strong> {part.description}
+                </span>
+              </li>
+            ))}
+          </ol>
+        </section>
+      )}
+      {measurements.length > 0 && (
+        <section aria-labelledby="pg-measurements" className={styles.specSection}>
+          <h2 id="pg-measurements" className={styles.groupTitle}>
+            Measurements
+          </h2>
+          {measurements.map(table)}
+        </section>
+      )}
+      {specs.color.length > 0 && (
+        <section aria-labelledby="pg-color" className={styles.specSection}>
+          <h2 id="pg-color" className={styles.groupTitle}>
+            Color
+          </h2>
+          {specs.color.map(table)}
+        </section>
       )}
     </div>
   )

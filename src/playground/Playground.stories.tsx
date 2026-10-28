@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect, screen, waitFor, within } from 'storybook/test'
 import { setPrefersDark, withPrefersDark } from '@/test/story-helpers'
+import type { InspectRequest } from './inspect'
 import { Playground, type Manifest, type ManifestItem, type Prop } from './Playground'
 
 const item = (
@@ -25,13 +26,28 @@ const manifest: Manifest = {
       { name: 'count', control: 'number', default: 8 },
       { name: 'isDot', control: 'boolean', default: false, description: 'A dot with no number.' },
     ]),
-    item('component', 'Button', 'Buttons', 'beta', [
-      { name: 'variant', control: 'inline-radio', options: ['primary', 'secondary'], default: 'primary' },
-      // Same name as the Preview theme's appearance: the theme's param is prefixed.
-      { name: 'appearance', control: 'select', options: ['filled', 'outlined'], default: 'filled' },
-      { name: 'isLoading', control: 'boolean' },
-      { name: 'children', control: 'text', default: 'Button' },
-    ]),
+    {
+      ...item('component', 'Button', 'Buttons', 'beta', [
+        { name: 'variant', control: 'inline-radio', options: ['primary', 'secondary'], default: 'primary' },
+        // Same name as the Preview theme's appearance: the theme's param is prefixed.
+        { name: 'appearance', control: 'select', options: ['filled', 'outlined'], default: 'filled' },
+        { name: 'size', control: 'inline-radio', options: ['sm', 'md'], default: 'md' },
+        { name: 'isLoading', control: 'boolean' },
+        { name: 'children', control: 'text', default: 'Button' },
+      ]),
+      specs: {
+        anatomy: [
+          { name: 'Container', selector: 'button', description: 'The clickable box.' },
+          { name: 'Label', selector: 'button > span', description: 'The text.' },
+        ],
+        measurements: [
+          { caption: 'sm', rows: [{ part: 'Container', property: 'Height', token: '--control-sm' }] },
+          { caption: 'md', rows: [{ part: 'Container', property: 'Height', token: '--control-md' }] },
+          { caption: 'Every size', rows: [{ part: 'Focus ring', property: 'Width', token: '--focus-width' }] },
+        ],
+        color: [{ caption: 'primary', rows: [{ part: 'Label, contained', property: 'Colour', token: '--primary-foreground' }] }],
+      },
+    },
     item('component', 'Tooltip', 'Overlays', 'experimental'),
     item('pattern', 'App Shell', 'Application UI', 'experimental'),
   ],
@@ -603,13 +619,87 @@ export const FollowsOs: Story = {
  */
 export const DetailTabs: Story = {
   beforeEach: withUrl({ tab: 'specs' }),
-  play: async ({ canvas }) => {
+  play: async ({ canvas, userEvent }) => {
     await showing(canvas, 'Button')
+    // Button has Specs: the URL's tab opens.
+    await expect(detailTab(canvas, 'Specs')).toHaveAttribute('aria-selected', 'true')
+    await expect(detailTab(canvas, 'Guideline')).toHaveAttribute('aria-disabled', 'true')
+    await expect(canvas.getByText('Guideline is not written for Button yet.')).toBeVisible()
+
+    // Tooltip has neither: Playground shows, and the wanted tab stays in the URL for the next item.
+    const items = await openItems(canvas, userEvent)
+    await userEvent.click(items.getByRole('link', { name: /Tooltip/ }))
+    await showing(canvas, 'Tooltip')
     await expect(detailTab(canvas, 'Playground')).toHaveAttribute('aria-selected', 'true')
     await expect(detailTab(canvas, 'Specs')).toHaveAttribute('aria-disabled', 'true')
-    await expect(detailTab(canvas, 'Guideline')).toHaveAttribute('aria-disabled', 'true')
-    await expect(canvas.getByText('Specs and Guideline are not written for Button yet.')).toBeVisible()
-    // The wanted tab stays in the URL, for the next item that has it.
+    await expect(canvas.getByText('Specs and Guideline are not written for Tooltip yet.')).toBeVisible()
     await expect(param('tab')).toBe('specs')
+  },
+}
+
+const lastInspect = (received: ChannelEvent[]) =>
+  (received.findLast((e) => e.type === 'playground/inspect')?.args[0] as { request: InspectRequest | null } | undefined)
+    ?.request
+
+/**
+ * Specs asks the frame to number the parts and resolve the tokens of the
+ * tables it shows: the current size's, plus those for every size. The frame
+ * answers with the values; hovering a row asks for its redline.
+ */
+export const SpecsTab: Story = {
+  beforeEach: withUrl({ tab: 'specs' }),
+  play: async ({ canvas, userEvent }) => {
+    const received = await fakePreview(await frame(canvas))
+    const panel = propsPanel(canvas)
+    await waitFor(() =>
+      expect(lastInspect(received)).toEqual({
+        parts: [
+          { name: 'Container', selector: 'button' },
+          { name: 'Label', selector: 'button > span' },
+        ],
+        tokens: ['--control-md', '--focus-width', '--primary-foreground'],
+        highlight: null,
+      }),
+    )
+    // The md table and the one for every size; sm is not the current size.
+    await expect(panel.getByRole('table', { name: 'md' })).toBeVisible()
+    await expect(panel.getByRole('table', { name: 'Every size' })).toBeVisible()
+    await expect(panel.queryByRole('table', { name: 'sm' })).toBeNull()
+    await expect(panel.getByRole('heading', { name: 'Anatomy' })).toBeVisible()
+
+    // The frame's answer fills the value column.
+    const iframe = await frame(canvas)
+    const data = JSON.stringify({
+      key: 'storybook-channel',
+      event: { type: 'playground/inspected', args: [{ values: { '--control-md': { kind: 'length', text: '32px' } } }] },
+    })
+    window.dispatchEvent(new MessageEvent('message', { data, source: iframe.contentWindow }))
+    const row = await panel.findByRole('row', { name: /Height 32px --control-md/ })
+
+    // Hover asks for that row's redline, on its anatomy part; leaving clears it.
+    await userEvent.hover(row)
+    await waitFor(() =>
+      expect(lastInspect(received)?.highlight).toEqual({ part: 'Container', property: 'Height', token: '--control-md' }),
+    )
+    await userEvent.unhover(row)
+    await waitFor(() => expect(lastInspect(received)?.highlight).toBeNull())
+    // A row whose part has no element in the anatomy (Focus ring) is still listed, unnumbered.
+    await expect(panel.getByRole('row', { name: /^Focus ring Width/ })).toBeVisible()
+
+    // Back on Playground, the frame is told to stop drawing.
+    await userEvent.click(detailTab(canvas, 'Playground'))
+    await waitFor(() => expect(lastInspect(received)).toBeNull())
+  },
+}
+
+/** The size picked on Playground is the size Specs measures. */
+export const SpecsFollowSize: Story = {
+  beforeEach: withUrl({ tab: 'specs', size: 'sm' }),
+  play: async ({ canvas }) => {
+    const received = await fakePreview(await frame(canvas))
+    const panel = propsPanel(canvas)
+    await expect(panel.getByRole('table', { name: 'sm' })).toBeVisible()
+    await expect(panel.queryByRole('table', { name: 'md' })).toBeNull()
+    await waitFor(() => expect(lastInspect(received)?.tokens).toEqual(['--control-sm', '--focus-width', '--primary-foreground']))
   },
 }

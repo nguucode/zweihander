@@ -9,6 +9,16 @@ import '@fontsource-variable/inter'
 import '@fontsource-variable/geist'
 import './docs-canvas.css'
 import { parsePreviewTheme, PreviewThemeScope } from '../src/playground/PreviewTheme'
+import { addons } from 'storybook/preview-api'
+import { INSPECT_EVENT, INSPECTED_EVENT, startInspector, type InspectRequest } from '../src/playground/inspect'
+
+// The Playground's Specs tab draws over the item from inside this frame: it
+// asks over the channel, and gets the token values back the same way.
+const inspector = startInspector(
+  () => document.getElementById('storybook-root'),
+  (values) => addons.getChannel().emit(INSPECTED_EVENT, { values }),
+)
+addons.getChannel().on(INSPECT_EVENT, ({ request }: { request: InspectRequest | null }) => inspector.set(request))
 
 // Puts the toolbar's theme on <html>, where the dark token set is scoped.
 // Set while rendering rather than in an effect: a decorator is a plain
