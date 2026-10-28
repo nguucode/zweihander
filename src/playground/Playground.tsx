@@ -100,6 +100,7 @@ const tabsOf = (item: ManifestItem): PanelTab[] => [
 
 /** A Do or Don't example from Guideline, shown in the live view in place of the item's own story. */
 type Example = { storyId: string; kind: 'do' | 'dont'; caption: string }
+const exampleLabel = (kind: Example['kind']) => (kind === 'do' ? 'Do' : "Don't")
 
 /** A row of a Specs table, as the Specs tab hovers it. */
 type SpecRow = SpecTableData['rows'][number]
@@ -301,7 +302,10 @@ function urlWith(changes: Record<string, string | undefined>) {
 const withoutProps = (item: ManifestItem) => Object.fromEntries(item.props.map((p) => [p.name, undefined]))
 
 /** The item's story in the full Storybook. */
-const storyPage = (storybookUrl: string, item: ManifestItem) => `${storybookUrl}?path=/story/${item.storyId}`
+const storyPage = (storybookUrl: string, storyId: string) => `${storybookUrl}?path=/story/${storyId}`
+/** The item's docs page in the full Storybook, on one of its tabs. */
+const docsPage = (storybookUrl: string, item: ManifestItem, docTab: string) =>
+  `${storybookUrl}?path=/docs/${item.id}--docs&docTab=${docTab}`
 
 function useWide() {
   return useSyncExternalStore(
@@ -336,7 +340,7 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
   const [highlight, setHighlight] = useState<SpecRow | null>(null)
   const [values, setValues] = useState<Record<string, TokenValue>>({})
   // The forced state on Specs. Disabled is the item's own prop, so it shows on Playground too.
-  const [pseudo, setPseudo] = useState('default')
+  const [forcedState, setForcedState] = useState('default')
   const [example, setExample] = useState<Example | null>(null)
   const wide = useWide()
 
@@ -371,7 +375,7 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
   const select = (item: ManifestItem) => {
     setDrawerOpen(false)
     setHighlight(null)
-    setPseudo('default')
+    setForcedState('default')
     setExample(null)
     if (item.id === state.item.id) return
     const url = urlWith({ ...withoutProps(state.item), item: item.id })
@@ -408,10 +412,11 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
   const has = tabsOf(state.item)
   const tab = has.includes(state.tab) ? state.tab : 'playground'
   const disabled = disabledProp(state.item)
-  const specState = disabled && state.args[disabled.name] === true ? 'disabled' : pseudo
+  const specState = disabled && state.args[disabled.name] === true ? 'disabled' : forcedState
   const setSpecState = (next: string) => {
     if (disabled && (next === 'disabled') !== (specState === 'disabled')) setProp(disabled, next === 'disabled')
-    if (next !== 'disabled') setPseudo(next)
+    // Disabled drops a forced state, so turning the prop off later shows Default.
+    setForcedState(next === 'disabled' ? 'default' : next)
   }
 
   const browser = (
@@ -465,7 +470,7 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
             <h2 className={styles.itemName}>{state.item.name}</h2>
             {example && (
               <>
-                <Tag text={example.kind === 'do' ? 'Do' : "Don't"} variant={example.kind === 'do' ? 'success' : 'danger'} />
+                <Tag text={exampleLabel(example.kind)} variant={example.kind === 'do' ? 'success' : 'danger'} />
                 <Button appearance="ghost" variant="secondary" startIcon={<Icon name="chevron-left" />} onClick={() => setExample(null)}>
                   Back to {state.item.name}
                 </Button>
@@ -479,7 +484,8 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
                   variant="secondary"
                   isIconOnly
                   aria-label="Open in Storybook"
-                  href={storyPage(storybookUrl, state.item)}
+                  // The story on show: the Do/Don't example while one is picked.
+                  href={storyPage(storybookUrl, example?.storyId ?? state.item.storyId)}
                 >
                   <Icon name="external" />
                 </Button>
@@ -523,7 +529,7 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
                   guideline={state.item.guideline}
                   example={example}
                   onExample={setExample}
-                  docsUrl={`${storybookUrl}?path=/docs/${state.item.id}--docs&docTab=guidelines`}
+                  docsUrl={docsPage(storybookUrl, state.item, 'guidelines')}
                 />
               ),
             }}
@@ -917,7 +923,7 @@ function LiveView({
   // frame. The src only starts the frame on the default theme, so the common
   // case needs no update after the first render.
   const src = `${storybookUrl}iframe.html?${new URLSearchParams({ id: storyId, viewMode: 'story', embed: 'true', globals: `appearance:${DEFAULT_PREVIEW_THEME.appearance}` })}`
-  const storyLink = storyPage(storybookUrl, item)
+  const storyLink = storyPage(storybookUrl, storyId)
   const state = done?.src === src ? (done.ok ? 'ready' : 'error') : 'loading'
 
   useEffect(() => {
@@ -1141,7 +1147,7 @@ function SpecsPanel({
     </table>
   )
   return (
-    <div className={styles.specs}>
+    <div className={styles.sections}>
       {states.length > 0 && (
         <RadioGroup
           label="State"
@@ -1153,7 +1159,7 @@ function SpecsPanel({
         />
       )}
       {specs.anatomy.length > 0 && (
-        <section aria-labelledby="pg-anatomy" className={styles.specSection}>
+        <section aria-labelledby="pg-anatomy" className={styles.section}>
           <h2 id="pg-anatomy" className={styles.groupTitle}>
             Anatomy
           </h2>
@@ -1172,7 +1178,7 @@ function SpecsPanel({
         </section>
       )}
       {measurements.length > 0 && (
-        <section aria-labelledby="pg-measurements" className={styles.specSection}>
+        <section aria-labelledby="pg-measurements" className={styles.section}>
           <h2 id="pg-measurements" className={styles.groupTitle}>
             Measurements
           </h2>
@@ -1180,7 +1186,7 @@ function SpecsPanel({
         </section>
       )}
       {color.length > 0 && (
-        <section aria-labelledby="pg-color" className={styles.specSection}>
+        <section aria-labelledby="pg-color" className={styles.section}>
           <h2 id="pg-color" className={styles.groupTitle}>
             Color
           </h2>
@@ -1191,9 +1197,9 @@ function SpecsPanel({
   )
 }
 
-/** `code`, **bold** and [links](…) in a line of the page's markdown, as text and elements. */
-function inline(text: string) {
-  return text.split(/(`[^`]+`|\*\*[^*]+\*\*|\[[^\]]+\]\([^)]+\))/).map((part, i) => {
+/** `code`, **bold** and [links](…) in a line of the page's markdown, as text and elements; line breaks become spaces. */
+function inlineMarkdown(text: string) {
+  return text.replace(/\s*\n\s*/g, ' ').split(/(`[^`]+`|\*\*[^*]+\*\*|\[[^\]]+\]\([^)]+\))/).map((part, i) => {
     if (part.startsWith('`')) return <code key={i}>{part.slice(1, -1)}</code>
     if (part.startsWith('**')) return <strong key={i}>{part.slice(2, -2)}</strong>
     // A link's target is a Storybook path that means nothing here: its words stay.
@@ -1208,12 +1214,12 @@ function Prose({ blocks }: { blocks: string[] }) {
     block.startsWith('- ') ? (
       <ul key={i} className={styles.proseList}>
         {block.split(/\n(?=- )/).map((line, j) => (
-          <li key={j}>{inline(line.slice(2).replace(/\s*\n\s*/g, ' '))}</li>
+          <li key={j}>{inlineMarkdown(line.slice(2))}</li>
         ))}
       </ul>
     ) : (
       <p key={i} className={styles.prose}>
-        {inline(block.replace(/\s*\n\s*/g, ' '))}
+        {inlineMarkdown(block)}
       </p>
     ),
   )
@@ -1244,14 +1250,14 @@ function GuidelinePanel({
       data-kind={kind}
       onClick={() => onExample({ storyId, kind, caption })}
     >
-      <span className={styles.exampleKind}>{kind === 'do' ? 'Do' : "Don't"}</span>
+      <span className={styles.exampleKind}>{exampleLabel(kind)}</span>
       {caption}
     </button>
   )
   return (
-    <div className={styles.specs}>
+    <div className={styles.sections}>
       {guideline.whenToUse.length > 0 && (
-        <section aria-labelledby="pg-when" className={styles.specSection}>
+        <section aria-labelledby="pg-when" className={styles.section}>
           <h2 id="pg-when" className={styles.groupTitle}>
             When to use
           </h2>
@@ -1259,7 +1265,7 @@ function GuidelinePanel({
         </section>
       )}
       {guideline.whenNotToUse.length > 0 && (
-        <section aria-labelledby="pg-when-not" className={styles.specSection}>
+        <section aria-labelledby="pg-when-not" className={styles.section}>
           <h2 id="pg-when-not" className={styles.groupTitle}>
             When not to use
           </h2>
@@ -1267,11 +1273,11 @@ function GuidelinePanel({
         </section>
       )}
       {guideline.doDont.length > 0 && (
-        <section aria-labelledby="pg-dodont" className={styles.specSection}>
+        <section aria-labelledby="pg-dodont" className={styles.section}>
           <h2 id="pg-dodont" className={styles.groupTitle}>
             Do and don't
           </h2>
-          <p className={styles.missing}>Pick one to see it in the live view.</p>
+          <p className={styles.hint}>Pick one to see it in the live view.</p>
           {guideline.doDont.map((pair, i) => (
             <div key={i} className={styles.pair}>
               {side('do', pair.do)}

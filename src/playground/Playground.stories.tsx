@@ -780,6 +780,10 @@ export const GuidelineTab: Story = {
     await waitFor(async () => expect((await frame(canvas)).getAttribute('src')).toContain('id=components-buttons-button--do-one'))
     await expect(doButton).toHaveAttribute('aria-pressed', 'true')
     await expect(within(canvas.getByRole('main')).getByText('Do')).toBeVisible()
+    await expect(canvas.getByRole('link', { name: 'Open in Storybook' })).toHaveAttribute(
+      'href',
+      '/playground-fixture/?path=/story/components-buttons-button--do-one',
+    )
 
     // Back shows the item again, its props kept.
     await userEvent.click(canvas.getByRole('button', { name: 'Back to Button' }))
