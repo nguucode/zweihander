@@ -54,13 +54,23 @@ function tables(section = '') {
   })
 }
 
-/** The prose of a section: its paragraphs and lists, without docs blocks or comments. */
+/** The prose of a section: its paragraphs and lists, without docs blocks, comments, code blocks or tables. */
 function prose(section = '') {
   return section
+    .replace(/^```[\s\S]*?^```/gm, '')
     .split(/\n\s*\n/)
     .map((p) => p.trim())
-    .filter((p) => p && !p.startsWith('<') && !p.startsWith('{') && !p.startsWith('</'))
+    .filter((p) => p && !/^(<|\{|\||import |#)/.test(p))
 }
+
+/** The page's opening prose: after its `# Title`, before its first section. */
+const intro = (source) => prose(source.replace(/^[\s\S]*?^# .*$/m, '').split(/^## /m)[0])
+
+/** Prose sections the Guideline tab shows besides When to use, in this order, when the page has them. */
+const PATTERN_SECTIONS = ['Layout', 'What works', 'Make it yours', 'Accessibility']
+const COMPONENT_SECTIONS = ['Accessibility']
+const proseSections = (s, titles) =>
+  titles.map((title) => ({ title, blocks: prose(s[title]) })).filter((section) => section.blocks.length)
 
 /** The pseudo-classes the page's <States> force (hover, focus-visible, active), in order of first use. */
 const pseudoStates = (source) => [...new Set([...source.matchAll(/pseudo: '([a-z-]+)'/g)].map((m) => m[1]))]
@@ -84,18 +94,27 @@ function doDonts(source) {
 }
 
 /**
- * The Specs and Guideline data of one MDX page, or null for a page without
- * DocTabs (patterns, templates): those tabs are not written for it.
+ * The Specs and Guideline data of one MDX page. A component page (DocTabs)
+ * has both. A pattern or template page has no Specs: its Guideline is its
+ * opening prose and its Layout, What works, Make it yours and Accessibility
+ * sections; null if it has none of those.
  */
 export function readDocs(source) {
-  if (!source.includes('<DocTabs')) return null
   const s = sections(source)
+  if (!source.includes('<DocTabs')) {
+    const guide = { intro: intro(source), sections: proseSections(s, PATTERN_SECTIONS) }
+    if (!guide.intro.length && !guide.sections.length) return null
+    return { hasSpecs: false, ...guide, whenToUse: [], whenNotToUse: [], doDont: [] }
+  }
   return {
+    hasSpecs: true,
     measurements: tables(s.Measurements),
     color: tables(s.Color),
     pseudo: pseudoStates(s.States ?? ''),
+    intro: [],
     whenToUse: prose(s['When to use']),
     whenNotToUse: prose(s['When not to use']),
     doDont: doDonts(source),
+    sections: proseSections(s, COMPONENT_SECTIONS),
   }
 }

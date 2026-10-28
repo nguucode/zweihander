@@ -16,7 +16,7 @@ import { Tooltip } from '@/components/overlays/Tooltip'
 import { EmptyState } from '@/components/states/EmptyState'
 import { ErrorState } from '@/components/states/ErrorState'
 import { Icon } from '@/lib/icon'
-import { INSPECT_EVENT, INSPECTED_EVENT, partNumber, partOf, type InspectRequest, type TokenValue } from './inspect'
+import { anatomyPartFor, INSPECT_EVENT, INSPECTED_EVENT, partNumber, type InspectRequest, type TokenValue } from './inspect'
 import styles from './Playground.module.css'
 import {
   DEFAULT_PREVIEW_THEME,
@@ -60,10 +60,13 @@ export interface Specs {
 }
 
 export interface Guideline {
-  /** Markdown paragraphs and lists, docs blocks left out. */
+  /** A pattern or template page's opening prose. Markdown paragraphs and lists, docs blocks left out, as below. */
+  intro: string[]
   whenToUse: string[]
   whenNotToUse: string[]
   doDont: { do: { storyId: string; caption: string }; dont: { storyId: string; caption: string } }[]
+  /** Further prose sections: Accessibility; for a pattern or template also Layout, What works, Make it yours. */
+  sections: { title: string; blocks: string[] }[]
 }
 
 /** One editable prop: the manifest leaves out ReactNode and function props. */
@@ -120,9 +123,16 @@ const STATE_LABELS: Record<string, string> = {
 const disabledProp = (item: ManifestItem) =>
   item.props.find((p) => p.control === 'boolean' && /^(isD|d)isabled$/.test(p.name))
 
-/** The states Specs offers for an item: none for a static one. One Focus, whichever the page forces first. */
+/**
+ * The states Specs offers for an item: none for a static one. One Focus,
+ * whichever the page forces first. Pressed for any item the page shows
+ * hovered or focused, as an interactive item has a pressed look whether or
+ * not its page shows it.
+ */
 function statesOf(item: ManifestItem) {
-  const states = ['default', ...(item.specs?.pseudo ?? []), ...(disabledProp(item) ? ['disabled'] : [])]
+  const pseudo = item.specs?.pseudo ?? []
+  const interactive = pseudo.some((s) => s === 'hover' || s.startsWith('focus'))
+  const states = ['default', ...pseudo, ...(interactive ? ['active'] : []), ...(disabledProp(item) ? ['disabled'] : [])]
   const labels = new Set<string>()
   const unique = states.filter((s) => STATE_LABELS[s] && !labels.has(STATE_LABELS[s]) && labels.add(STATE_LABELS[s]))
   return unique.length > 1 ? unique : []
@@ -168,7 +178,11 @@ function inspectRequest(item: ManifestItem, args: Args, state: string, highlight
   return {
     parts: item.specs.anatomy.map(({ name, selector }) => ({ name, selector })),
     tokens: [...new Set(tablesFor(tables, item, args, state).flatMap((t) => t.rows.map((r) => r.token)))],
-    highlight: highlight && { part: partOf(highlight.part), property: highlight.property, token: highlight.token },
+    highlight: highlight && {
+      part: anatomyPartFor(highlight.part, item.specs.anatomy.map((a) => a.name)) ?? '',
+      property: highlight.property,
+      token: highlight.token,
+    },
     ...(state === 'default' || state === 'disabled' ? {} : { pseudo: state }),
   }
 }
@@ -1111,7 +1125,7 @@ function SpecsPanel({
       <tbody>
         {data.rows.map((row, i) => {
           const value = values[row.token]
-          const part = parts.indexOf(partOf(row.part))
+          const part = parts.indexOf(anatomyPartFor(row.part, parts) ?? '')
           return (
             <tr
               key={i}
@@ -1229,9 +1243,10 @@ function Prose({ blocks }: { blocks: string[] }) {
 
 /**
  * The Guideline tab: when to use the item and when not, then the page's
- * Do/Don't pairs. Picking one shows its story in the live view; the toolbar
- * says which and leads back. The rest of the guidelines (accessibility,
- * content) stay on the docs page, one link away.
+ * Do/Don't pairs, then Accessibility. Picking a pair's side shows its story
+ * in the live view; the toolbar says which and leads back. A pattern or
+ * template has its opening prose and its Layout, What works, Make it yours
+ * and Accessibility instead. The docs page is one link away.
  */
 function GuidelinePanel({
   guideline,
@@ -1258,6 +1273,11 @@ function GuidelinePanel({
   )
   return (
     <div className={styles.sections}>
+      {guideline.intro.length > 0 && (
+        <div className={styles.section}>
+          <Prose blocks={guideline.intro} />
+        </div>
+      )}
       {guideline.whenToUse.length > 0 && (
         <section aria-labelledby="pg-when" className={styles.section}>
           <h2 id="pg-when" className={styles.groupTitle}>
@@ -1288,8 +1308,16 @@ function GuidelinePanel({
           ))}
         </section>
       )}
+      {guideline.sections.map((section, i) => (
+        <section key={section.title} aria-labelledby={`pg-guide-${i}`} className={styles.section}>
+          <h2 id={`pg-guide-${i}`} className={styles.groupTitle}>
+            {section.title}
+          </h2>
+          <Prose blocks={section.blocks} />
+        </section>
+      ))}
       <a href={docsUrl} className={styles.headerLink}>
-        Accessibility and the rest of the guidelines
+        The full docs page
       </a>
     </div>
   )
