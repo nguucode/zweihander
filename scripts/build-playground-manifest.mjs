@@ -20,6 +20,7 @@ import { fileURLToPath } from 'node:url'
 import { createServer } from 'vite'
 import { builtinHandlers, builtinResolvers, makeFsImporter, parse as parseDocgen, utils } from 'react-docgen'
 import { loadCsf } from 'storybook/internal/csf-tools'
+import { readDocs } from './playground-docs.mjs'
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const src = join(root, 'src')
@@ -138,6 +139,38 @@ function toProp(name, argType, args, all, untyped) {
   return prop
 }
 
+/**
+ * The Specs and Guideline tabs' data, from the MDX page beside the story
+ * file (Button.stories.tsx, Button.mdx) and its `anatomyParts` export.
+ * Nothing for an item whose page has no DocTabs.
+ */
+function docsOf(file, csf, mod) {
+  const page = file.replace(/\.stories\.[jt]sx?$/, '.mdx')
+  const docs = existsSync(page) ? readDocs(readFileSync(page, 'utf8')) : null
+  if (!docs) return {}
+  const ids = Object.fromEntries(csf.indexInputs.map((s) => [s.exportName, s.__id]))
+  const storyId = (name) => ids[name] ?? fail(`${relative(root, page)}: <DoDont> shows ${name}, which the story file does not export`)
+  const { measurements, color, whenToUse, whenNotToUse, doDont } = docs
+  return {
+    specs: {
+      anatomy: (mod.anatomyParts ?? []).map(({ name, selector, description }) => ({ name, selector, description })),
+      measurements,
+      color,
+    },
+    guideline: {
+      whenToUse,
+      whenNotToUse,
+      doDont: doDont.map((pair) => ({
+        do: { storyId: storyId(pair.do.story), caption: pair.do.caption },
+        dont: { storyId: storyId(pair.dont.story), caption: pair.dont.caption },
+      })),
+    },
+  }
+}
+const fail = (message) => {
+  throw new Error(message)
+}
+
 const server = await createServer({
   root,
   configFile: false,
@@ -203,6 +236,7 @@ try {
         status,
         storyId: story.id,
         props,
+        ...docsOf(file, csf, mod),
       })
     } catch (e) {
       errors.push(`${rel}: ${e.message.split('\n')[0]}`)

@@ -287,7 +287,7 @@
     "skills:check": "node scripts/check-skills.mjs && node --test scripts/check-skills.test.mjs scripts/ship-check.test.mjs",
     "ship:check": "node scripts/ship-check.mjs",
     "playground:manifest": "node scripts/build-playground-manifest.mjs",
-    "playground:check": "node scripts/build-playground-manifest.mjs --check",
+    "playground:check": "node scripts/build-playground-manifest.mjs --check && node --test scripts/playground-docs.test.mjs",
     "build:lib": "vite build --config vite.lib.config.ts && tsc -p tsconfig.build.json && cp src/tokens.css dist/tokens.css",
     "lint": "oxlint && npm run lint:css",
     "lint:css": "stylelint \"src/**/*.css\" \".storybook/**/*.css\" && node --test scripts/stylelint-semantic-tokens.test.mjs",
