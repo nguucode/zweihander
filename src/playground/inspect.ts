@@ -81,7 +81,7 @@ function redline(layer: HTMLElement, el: Element, property: string, value: strin
   const shade = { background: 'rgb(229 72 77 / 0.25)' }
   box(layer, r, { border: `1px solid ${INK}` })
   if (p.includes('padding')) {
-    const [t, rt, b, l] = ['Top', 'Right', 'Bottom', 'Left'].map((side) => parseFloat(cs.getPropertyValue(`padding-${side.toLowerCase()}`)) || 0)
+    const [t, rt, b, l] = ['top', 'right', 'bottom', 'left'].map((side) => parseFloat(cs.getPropertyValue(`padding-${side}`)) || 0)
     const inline = !p.includes('block')
     const block = !p.includes('inline')
     if (inline) {
@@ -94,7 +94,7 @@ function redline(layer: HTMLElement, el: Element, property: string, value: strin
     }
   } else if (p.includes('gap')) {
     const kids = [...el.children].map((k) => k.getBoundingClientRect()).filter((k) => k.width && k.height)
-    const row = cs.flexDirection.startsWith('column') ? false : true
+    const row = !cs.flexDirection.startsWith('column')
     for (let i = 1; i < kids.length; i++) {
       const a = kids[i - 1]
       const b = kids[i]

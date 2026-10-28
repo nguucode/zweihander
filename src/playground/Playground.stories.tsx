@@ -52,6 +52,16 @@ const manifest: Manifest = {
         ],
         pseudo: ['hover', 'focus-visible', 'focus'],
       },
+      guideline: {
+        whenToUse: ['For an action on this page: `save` or **delete**.', '- One primary per view\n- The rest step down'],
+        whenNotToUse: ['Not for going to [another page](?path=/docs/link).'],
+        doDont: [
+          {
+            do: { storyId: 'components-buttons-button--do-one', caption: 'One primary button.' },
+            dont: { storyId: 'components-buttons-button--dont-two', caption: 'Two primaries compete.' },
+          },
+        ],
+      },
     },
     item('component', 'Tooltip', 'Overlays', 'experimental'),
     item('pattern', 'App Shell', 'Application UI', 'experimental'),
@@ -628,8 +638,8 @@ export const DetailTabs: Story = {
     await showing(canvas, 'Button')
     // Button has Specs: the URL's tab opens.
     await expect(detailTab(canvas, 'Specs')).toHaveAttribute('aria-selected', 'true')
-    await expect(detailTab(canvas, 'Guideline')).toHaveAttribute('aria-disabled', 'true')
-    await expect(canvas.getByText('Guideline is not written for Button yet.')).toBeVisible()
+    await expect(detailTab(canvas, 'Guideline')).not.toHaveAttribute('aria-disabled', 'true')
+    await expect(canvas.queryByText(/not written for Button/)).toBeNull()
 
     // Tooltip has neither: Playground shows, and the wanted tab stays in the URL for the next item.
     const items = await openItems(canvas, userEvent)
@@ -735,5 +745,57 @@ export const SpecsStates: Story = {
 
     await userEvent.click(picker.getByRole('radio', { name: 'Default' }))
     await waitFor(() => expect(lastInspect(received)).not.toHaveProperty('pseudo'))
+  },
+}
+
+/**
+ * Guideline: when to use and when not, then the Do/Don't pairs. Picking one
+ * shows its story in the live view, says which in the toolbar, and leads back.
+ */
+export const GuidelineTab: Story = {
+  beforeEach: withUrl({ tab: 'guideline' }),
+  play: async ({ canvas, userEvent }) => {
+    await showing(canvas, 'Button')
+    const panel = propsPanel(canvas)
+    await expect(panel.getByRole('heading', { name: 'When to use' })).toBeVisible()
+    // Inline markdown: code and bold become elements, a link keeps its words.
+    await expect(panel.getByText('save', { selector: 'code' })).toBeVisible()
+    await expect(panel.getByText('delete', { selector: 'strong' })).toBeVisible()
+    await expect(panel.getAllByRole('listitem').map((li) => li.textContent)).toEqual(['One primary per view', 'The rest step down'])
+    await expect(panel.getByText('Not for going to another page.')).toBeVisible()
+    await expect(panel.getByRole('link', { name: 'Accessibility and the rest of the guidelines' })).toHaveAttribute(
+      'href',
+      `/playground-fixture/?path=/docs/${button.id}--docs&docTab=guidelines`,
+    )
+
+    const received = await fakePreview(await frame(canvas))
+    await userEvent.click(detailTab(canvas, 'Playground'))
+    await userEvent.click(panel.getByRole('switch', { name: 'isLoading' }))
+    await waitFor(() => expect(received.at(-1)?.type).toBe('updateStoryArgs'))
+    await userEvent.click(detailTab(canvas, 'Guideline'))
+
+    // The Do example takes the live view; the item's props do not go to it.
+    const doButton = panel.getByRole('button', { name: /^Do One primary button/ })
+    await userEvent.click(doButton)
+    await waitFor(async () => expect((await frame(canvas)).getAttribute('src')).toContain('id=components-buttons-button--do-one'))
+    await expect(doButton).toHaveAttribute('aria-pressed', 'true')
+    await expect(within(canvas.getByRole('main')).getByText('Do')).toBeVisible()
+    await expect(canvas.getByRole('link', { name: 'Open in Storybook' })).toHaveAttribute(
+      'href',
+      '/playground-fixture/?path=/story/components-buttons-button--do-one',
+    )
+
+    // Back shows the item again, its props kept.
+    await userEvent.click(canvas.getByRole('button', { name: 'Back to Button' }))
+    await waitFor(async () => expect((await frame(canvas)).getAttribute('src')).toContain(`id=${button.storyId}`))
+    await expect(canvas.queryByRole('button', { name: 'Back to Button' })).toBeNull()
+    await waitFor(() => expect(param('isLoading')).toBe('true'))
+    await expect(propsPanel(canvas).queryByRole('switch', { name: 'isLoading' })).toBeNull()
+
+    // Another tab ends the example too.
+    await userEvent.click(panel.getByRole('button', { name: /^Don't Two primaries/ }))
+    await waitFor(async () => expect((await frame(canvas)).getAttribute('src')).toContain('id=components-buttons-button--dont-two'))
+    await userEvent.click(detailTab(canvas, 'Playground'))
+    await waitFor(async () => expect((await frame(canvas)).getAttribute('src')).toContain(`id=${button.storyId}`))
   },
 }
