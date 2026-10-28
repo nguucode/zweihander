@@ -98,6 +98,9 @@ const tabsOf = (item: ManifestItem): PanelTab[] => [
   ...(item.guideline ? (['guideline'] as const) : []),
 ]
 
+/** A Do or Don't example from Guideline, shown in the live view in place of the item's own story. */
+type Example = { storyId: string; kind: 'do' | 'dont'; caption: string }
+
 /** A row of a Specs table, as the Specs tab hovers it. */
 type SpecRow = SpecTableData['rows'][number]
 
@@ -334,6 +337,7 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
   const [values, setValues] = useState<Record<string, TokenValue>>({})
   // The forced state on Specs. Disabled is the item's own prop, so it shows on Playground too.
   const [pseudo, setPseudo] = useState('default')
+  const [example, setExample] = useState<Example | null>(null)
   const wide = useWide()
 
   useEffect(() => {
@@ -368,6 +372,7 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
     setDrawerOpen(false)
     setHighlight(null)
     setPseudo('default')
+    setExample(null)
     if (item.id === state.item.id) return
     const url = urlWith({ ...withoutProps(state.item), item: item.id })
     flushUrl()
@@ -376,6 +381,7 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
   }
   // The tab stays across items; one an item does not have shows Playground.
   const setTab = (tab: PanelTab) => {
+    setExample(null)
     replaceUrl(urlWith({ tab: tab === 'playground' ? undefined : tab }))
     setState((s) => ({ ...s, tab }))
   }
@@ -457,6 +463,14 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
               </Modal>
             )}
             <h2 className={styles.itemName}>{state.item.name}</h2>
+            {example && (
+              <>
+                <Tag text={example.kind === 'do' ? 'Do' : "Don't"} variant={example.kind === 'do' ? 'success' : 'danger'} />
+                <Button appearance="ghost" variant="secondary" startIcon={<Icon name="chevron-left" />} onClick={() => setExample(null)}>
+                  Back to {state.item.name}
+                </Button>
+              </>
+            )}
             <div className={styles.tools}>
               <ThemePopover theme={previewTheme} onChange={setTheme} />
               <Tooltip content="Open in Storybook">
@@ -474,10 +488,11 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
           </div>
           <LiveView
             item={state.item}
-            args={state.args}
+            storyId={example?.storyId}
+            args={example ? {} : state.args}
             theme={previewTheme}
             storybookUrl={storybookUrl}
-            inspect={tab === 'specs' ? inspectRequest(state.item, state.args, specState, highlight) : null}
+            inspect={tab === 'specs' && !example ? inspectRequest(state.item, state.args, specState, highlight) : null}
             onValues={setValues}
           />
         </main>
@@ -501,6 +516,14 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
                   values={values}
                   highlight={highlight}
                   onHighlight={setHighlight}
+                />
+              ),
+              guideline: state.item.guideline && (
+                <GuidelinePanel
+                  guideline={state.item.guideline}
+                  example={example}
+                  onExample={setExample}
+                  docsUrl={`${storybookUrl}?path=/docs/${state.item.id}--docs&docTab=guidelines`}
                 />
               ),
             }}
@@ -866,6 +889,7 @@ const postTo = (target: Window, src: string) => (type: string, payload: object) 
 
 function LiveView({
   item,
+  storyId = item.storyId,
   args,
   theme,
   storybookUrl,
@@ -873,6 +897,8 @@ function LiveView({
   onValues,
 }: {
   item: ManifestItem
+  /** The story to show: the item's own unless a Guideline example stands in. */
+  storyId?: string
   args: Args
   theme: PreviewTheme
   storybookUrl: string
@@ -890,7 +916,7 @@ function LiveView({
   // channel (below), so a change re-renders the story without reloading the
   // frame. The src only starts the frame on the default theme, so the common
   // case needs no update after the first render.
-  const src = `${storybookUrl}iframe.html?${new URLSearchParams({ id: item.storyId, viewMode: 'story', embed: 'true', globals: `appearance:${DEFAULT_PREVIEW_THEME.appearance}` })}`
+  const src = `${storybookUrl}iframe.html?${new URLSearchParams({ id: storyId, viewMode: 'story', embed: 'true', globals: `appearance:${DEFAULT_PREVIEW_THEME.appearance}` })}`
   const storyLink = storyPage(storybookUrl, item)
   const state = done?.src === src ? (done.ok ? 'ready' : 'error') : 'loading'
 
@@ -933,9 +959,9 @@ function LiveView({
     // Back to default is a reset: Storybook then uses the story's own args.
     const argNames = Object.keys(before).filter((name) => !Object.hasOwn(args, name))
     const updatedArgs = Object.fromEntries(Object.entries(args).filter(([name, value]) => before[name] !== value))
-    if (argNames.length) post('resetStoryArgs', { storyId: item.storyId, argNames })
-    if (Object.keys(updatedArgs).length) post('updateStoryArgs', { storyId: item.storyId, updatedArgs })
-  }, [args, rendered, src, item.storyId])
+    if (argNames.length) post('resetStoryArgs', { storyId, argNames })
+    if (Object.keys(updatedArgs).length) post('updateStoryArgs', { storyId, updatedArgs })
+  }, [args, rendered, src, storyId])
 
   // The Preview theme the same way, as Storybook globals. A new frame starts
   // on the default (its src says so).
@@ -1161,6 +1187,102 @@ function SpecsPanel({
           {color.map(table)}
         </section>
       )}
+    </div>
+  )
+}
+
+/** `code`, **bold** and [links](…) in a line of the page's markdown, as text and elements. */
+function inline(text: string) {
+  return text.split(/(`[^`]+`|\*\*[^*]+\*\*|\[[^\]]+\]\([^)]+\))/).map((part, i) => {
+    if (part.startsWith('`')) return <code key={i}>{part.slice(1, -1)}</code>
+    if (part.startsWith('**')) return <strong key={i}>{part.slice(2, -2)}</strong>
+    // A link's target is a Storybook path that means nothing here: its words stay.
+    if (part.startsWith('[')) return part.slice(1, part.indexOf(']'))
+    return part
+  })
+}
+
+/** Paragraphs of the page's markdown: a run of `- ` lines is a list. */
+function Prose({ blocks }: { blocks: string[] }) {
+  return blocks.map((block, i) =>
+    block.startsWith('- ') ? (
+      <ul key={i} className={styles.proseList}>
+        {block.split(/\n(?=- )/).map((line, j) => (
+          <li key={j}>{inline(line.slice(2).replace(/\s*\n\s*/g, ' '))}</li>
+        ))}
+      </ul>
+    ) : (
+      <p key={i} className={styles.prose}>
+        {inline(block.replace(/\s*\n\s*/g, ' '))}
+      </p>
+    ),
+  )
+}
+
+/**
+ * The Guideline tab: when to use the item and when not, then the page's
+ * Do/Don't pairs. Picking one shows its story in the live view; the toolbar
+ * says which and leads back. The rest of the guidelines (accessibility,
+ * content) stay on the docs page, one link away.
+ */
+function GuidelinePanel({
+  guideline,
+  example,
+  onExample,
+  docsUrl,
+}: {
+  guideline: Guideline
+  example: Example | null
+  onExample: (example: Example) => void
+  docsUrl: string
+}) {
+  const side = (kind: Example['kind'], { storyId, caption }: { storyId: string; caption: string }) => (
+    <button
+      type="button"
+      aria-pressed={example?.storyId === storyId}
+      className={styles.example}
+      data-kind={kind}
+      onClick={() => onExample({ storyId, kind, caption })}
+    >
+      <span className={styles.exampleKind}>{kind === 'do' ? 'Do' : "Don't"}</span>
+      {caption}
+    </button>
+  )
+  return (
+    <div className={styles.specs}>
+      {guideline.whenToUse.length > 0 && (
+        <section aria-labelledby="pg-when" className={styles.specSection}>
+          <h2 id="pg-when" className={styles.groupTitle}>
+            When to use
+          </h2>
+          <Prose blocks={guideline.whenToUse} />
+        </section>
+      )}
+      {guideline.whenNotToUse.length > 0 && (
+        <section aria-labelledby="pg-when-not" className={styles.specSection}>
+          <h2 id="pg-when-not" className={styles.groupTitle}>
+            When not to use
+          </h2>
+          <Prose blocks={guideline.whenNotToUse} />
+        </section>
+      )}
+      {guideline.doDont.length > 0 && (
+        <section aria-labelledby="pg-dodont" className={styles.specSection}>
+          <h2 id="pg-dodont" className={styles.groupTitle}>
+            Do and don't
+          </h2>
+          <p className={styles.missing}>Pick one to see it in the live view.</p>
+          {guideline.doDont.map((pair, i) => (
+            <div key={i} className={styles.pair}>
+              {side('do', pair.do)}
+              {side('dont', pair.dont)}
+            </div>
+          ))}
+        </section>
+      )}
+      <a href={docsUrl} className={styles.headerLink}>
+        Accessibility and the rest of the guidelines
+      </a>
     </div>
   )
 }
