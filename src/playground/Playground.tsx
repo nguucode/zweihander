@@ -41,6 +41,30 @@ export interface ManifestItem {
   /** The story the live view shows. */
   storyId: string
   props: Prop[]
+  /** The Specs tab: only for an item whose MDX page has DocTabs. */
+  specs?: Specs
+  /** The Guideline tab, from the same page. */
+  guideline?: Guideline
+}
+
+/** One `<SpecTable>`: a size (Measurements) or a variant (Color), by its caption. */
+export interface SpecTableData {
+  caption?: string
+  rows: { part: string; property: string; token: string }[]
+}
+
+export interface Specs {
+  /** The story file's `anatomyParts`: each part's element in the story, by selector. */
+  anatomy: { name: string; selector: string; description: string }[]
+  measurements: SpecTableData[]
+  color: SpecTableData[]
+}
+
+export interface Guideline {
+  /** Markdown paragraphs and lists, docs blocks left out. */
+  whenToUse: string[]
+  whenNotToUse: string[]
+  doDont: { do: { storyId: string; caption: string }; dont: { storyId: string; caption: string } }[]
 }
 
 /** One editable prop: the manifest leaves out ReactNode and function props. */
