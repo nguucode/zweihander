@@ -55,11 +55,22 @@
   overflow-y: auto;
 }
 
-/* Under 1024 the items sit in the drawer and props go below the live view,
-   and the page scrolls as one. */
+/* Under 1024 the items sit in the drawer and the details go below the live
+   view, and the page scrolls as one. The live view sticks at the top while
+   the details scroll under it, so a tapped Specs row's redline, or a picked
+   Do/Don't, stays in sight. */
 .aside {
   padding: var(--space-4);
   border-block-start: 1px solid var(--border);
+}
+
+@media (max-width: 1023.98px) {
+  .center {
+    position: sticky;
+    z-index: var(--layer-sticky);
+    inset-block-start: 0;
+    background: var(--background);
+  }
 }
 
 @media (min-width: 1024px) {
@@ -208,8 +219,9 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  /* Under 1024 the column has no height of its own: most of the screen. */
-  min-block-size: max(24rem, 70dvh);
+  /* Under 1024 the column has no height of its own: enough of the screen
+     to see the item, leaving the rest to the details scrolling under it. */
+  min-block-size: max(16rem, 40dvh);
 }
 
 .frame {

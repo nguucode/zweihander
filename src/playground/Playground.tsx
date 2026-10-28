@@ -1122,6 +1122,8 @@ function SpecsPanel({
               onMouseEnter={() => onHighlight(row)}
               onMouseLeave={() => onHighlight(null)}
               onFocus={() => onHighlight(row)}
+              // A tap where a touch browser does not focus the row.
+              onClick={() => onHighlight(row)}
               onBlur={() => onHighlight(null)}
             >
               <td>

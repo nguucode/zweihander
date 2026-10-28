@@ -698,6 +698,14 @@ export const SpecsTab: Story = {
     )
     await userEvent.unhover(row)
     await waitFor(() => expect(lastInspect(received)?.highlight).toBeNull())
+    // A tap (or Tab) focuses the row, which asks for the redline the same way.
+    row.focus()
+    await waitFor(() => expect(lastInspect(received)?.highlight?.property).toBe('Height'))
+    row.blur()
+    await waitFor(() => expect(lastInspect(received)?.highlight).toBeNull())
+    // Under 1024 the details sit below the live view, which sticks at the top so the redline stays in sight.
+    if (canvas.queryByRole('button', { name: 'Browse' }))
+      await expect(getComputedStyle(canvas.getByRole('main')).position).toBe('sticky')
     // A row whose part has no element in the anatomy (Focus ring) is still listed, unnumbered.
     await expect(panel.getByRole('row', { name: /^Focus ring Width/ })).toBeVisible()
 
