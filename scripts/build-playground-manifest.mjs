@@ -141,8 +141,8 @@ function toProp(name, argType, args, all, untyped) {
 
 /**
  * The Specs and Guideline tabs' data, from the MDX page beside the story
- * file (Button.stories.tsx, Button.mdx) and its `anatomyParts` export.
- * Nothing for an item whose page has no DocTabs.
+ * file (Button.stories.tsx, Button.mdx) and its `anatomyParts` export. A
+ * pattern or template page gives Guideline only.
  */
 function docsOf(file, csf, mod) {
   const page = file.replace(/\.stories\.[jt]sx?$/, '.mdx')
@@ -150,21 +150,25 @@ function docsOf(file, csf, mod) {
   if (!docs) return {}
   const ids = Object.fromEntries(csf.indexInputs.map((s) => [s.exportName, s.__id]))
   const storyId = (name) => ids[name] ?? fail(`${relative(root, page)}: <DoDont> shows ${name}, which the story file does not export`)
-  const { measurements, color, pseudo, whenToUse, whenNotToUse, doDont } = docs
+  const { hasSpecs, measurements, color, pseudo, intro, whenToUse, whenNotToUse, doDont, sections } = docs
   return {
-    specs: {
-      anatomy: (mod.anatomyParts ?? []).map(({ name, selector, description }) => ({ name, selector, description })),
-      measurements,
-      color,
-      pseudo,
-    },
+    ...(hasSpecs && {
+      specs: {
+        anatomy: (mod.anatomyParts ?? []).map(({ name, selector, description }) => ({ name, selector, description })),
+        measurements,
+        color,
+        pseudo,
+      },
+    }),
     guideline: {
+      intro,
       whenToUse,
       whenNotToUse,
       doDont: doDont.map((pair) => ({
         do: { storyId: storyId(pair.do.story), caption: pair.do.caption },
         dont: { storyId: storyId(pair.dont.story), caption: pair.dont.caption },
       })),
+      sections,
     },
   }
 }

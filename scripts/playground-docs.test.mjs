@@ -55,20 +55,35 @@ Not for navigation.
 
 test('reads the tables, prose and Do/Don’t pairs', () => {
   assert.deepEqual(readDocs(page), {
+    hasSpecs: true,
     measurements: [
       { caption: 'sm', rows: [{ part: 'Container', property: 'Height', token: '--control-sm' }] },
       { rows: [{ part: 'Focus ring', property: 'Colour', token: '--ring' }] },
     ],
     color: [{ caption: 'primary', rows: [{ part: 'Label', property: 'Colour', token: '--primary-foreground' }] }],
     pseudo: ['hover', 'focus-visible'],
+    intro: [],
     whenToUse: ['Use it for an action.', '- Save\n- Delete'],
     whenNotToUse: ['Not for navigation.'],
     doDont: [{ do: { story: 'DoOne', caption: 'One primary.' }, dont: { story: 'DontTwo', caption: '"Two" compete.' } }],
+    sections: [],
   })
 })
 
-test('a page without DocTabs has nothing for the tabs', () => {
-  assert.equal(readDocs('# Pattern\n\n## Layout\n'), null)
+test('a pattern page: Guideline from its opening prose and sections, no Specs', () => {
+  const pattern = `import X from './X'\n\n# Pattern\n\nThe frame around an app.\n\n\`\`\`sh\nnpx add it\n\`\`\`\n\n<Canvas of={S.Default} />\n\n## Layout\n\n- Sidebar\n- Page\n\n| a | b |\n\n## Props\n\nNot read.\n`
+  assert.deepEqual(readDocs(pattern), {
+    hasSpecs: false,
+    intro: ['The frame around an app.'],
+    sections: [{ title: 'Layout', blocks: ['- Sidebar\n- Page'] }],
+    whenToUse: [],
+    whenNotToUse: [],
+    doDont: [],
+  })
+})
+
+test('a page with no prose at all gives nothing', () => {
+  assert.equal(readDocs('# Pattern\n\n<Canvas of={S.Default} />\n\n## Props\n'), null)
 })
 
 test('a row that is not a literal fails loudly', () => {

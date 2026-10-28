@@ -53,6 +53,7 @@ const manifest: Manifest = {
         pseudo: ['hover', 'focus-visible', 'focus'],
       },
       guideline: {
+        intro: [],
         whenToUse: ['For an action on this page: `save` or **delete**.', '- One primary per view\n- The rest step down'],
         whenNotToUse: ['Not for going to [another page](?path=/docs/link).'],
         doDont: [
@@ -61,10 +62,21 @@ const manifest: Manifest = {
             dont: { storyId: 'components-buttons-button--dont-two', caption: 'Two primaries compete.' },
           },
         ],
+        sections: [{ title: 'Accessibility', blocks: ['A native `<button>`.'] }],
       },
     },
     item('component', 'Tooltip', 'Overlays', 'experimental'),
-    item('pattern', 'App Shell', 'Application UI', 'experimental'),
+    {
+      ...item('pattern', 'App Shell', 'Application UI', 'experimental'),
+      // A pattern's page has no Specs: Guideline is its opening prose and sections.
+      guideline: {
+        intro: ['The frame around an app.'],
+        whenToUse: [],
+        whenNotToUse: [],
+        doDont: [],
+        sections: [{ title: 'Layout', blocks: ['A sidebar and the page.'] }],
+      },
+    },
   ],
 }
 const [badge, button, tooltip] = manifest.items
@@ -738,9 +750,9 @@ export const SpecsStates: Story = {
     const received = await fakePreview(await frame(canvas))
     const panel = propsPanel(canvas)
     const picker = within(panel.getByRole('radiogroup', { name: 'State' }))
-    // focus and focus-visible are one Focus; no disabled prop, so no Disabled.
-    await expect(picker.getAllByRole('radio')).toHaveLength(3)
-    for (const name of ['Default', 'Hover', 'Focus']) await expect(picker.getByRole('radio', { name })).toBeVisible()
+    // focus and focus-visible are one Focus; Pressed for an interactive item even if its page does not force it; no disabled prop, so no Disabled.
+    await expect(picker.getAllByRole('radio')).toHaveLength(4)
+    for (const name of ['Default', 'Hover', 'Focus', 'Pressed']) await expect(picker.getByRole('radio', { name })).toBeVisible()
     await expect(panel.getByRole('table', { name: 'primary' })).toBeVisible()
     await expect(panel.queryByRole('table', { name: 'secondary' })).toBeNull()
     // The hover row's table is empty by default, so it is not shown.
@@ -771,7 +783,8 @@ export const GuidelineTab: Story = {
     await expect(panel.getByText('delete', { selector: 'strong' })).toBeVisible()
     await expect(panel.getAllByRole('listitem').map((li) => li.textContent)).toEqual(['One primary per view', 'The rest step down'])
     await expect(panel.getByText('Not for going to another page.')).toBeVisible()
-    await expect(panel.getByRole('link', { name: 'Accessibility and the rest of the guidelines' })).toHaveAttribute(
+    await expect(panel.getByRole('heading', { name: 'Accessibility' })).toBeVisible()
+    await expect(panel.getByRole('link', { name: 'The full docs page' })).toHaveAttribute(
       'href',
       `/playground-fixture/?path=/docs/${button.id}--docs&docTab=guidelines`,
     )
@@ -805,5 +818,20 @@ export const GuidelineTab: Story = {
     await waitFor(async () => expect((await frame(canvas)).getAttribute('src')).toContain('id=components-buttons-button--dont-two'))
     await userEvent.click(detailTab(canvas, 'Playground'))
     await waitFor(async () => expect((await frame(canvas)).getAttribute('src')).toContain(`id=${button.storyId}`))
+  },
+}
+
+/** A pattern: no Specs, and a Guideline made of its page's opening prose and sections. */
+export const PatternGuideline: Story = {
+  beforeEach: withUrl({ item: 'patterns-application-ui-app-shell', tab: 'guideline' }),
+  play: async ({ canvas }) => {
+    await showing(canvas, 'App Shell')
+    await expect(detailTab(canvas, 'Guideline')).toHaveAttribute('aria-selected', 'true')
+    await expect(detailTab(canvas, 'Specs')).toHaveAttribute('aria-disabled', 'true')
+    await expect(canvas.getByText('Specs is not written for App Shell yet.')).toBeVisible()
+    const panel = propsPanel(canvas)
+    await expect(panel.getByText('The frame around an app.')).toBeVisible()
+    await expect(panel.getByRole('heading', { name: 'Layout' })).toBeVisible()
+    await expect(panel.queryByRole('heading', { name: 'When to use' })).toBeNull()
   },
 }
