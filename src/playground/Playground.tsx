@@ -21,14 +21,10 @@ import {
   DEFAULT_PREVIEW_THEME,
   parsePreviewTheme,
   PREVIEW_THEME_VALUES,
-  resolveAppearance,
   themeCode,
   usePrefersDark,
   type PreviewTheme,
 } from './PreviewTheme'
-import { PreviewWindow } from './PreviewWindow'
-import { DEFAULT_ADDRESS, SafariBar } from './SafariBar'
-import { VIEWPORTS, type Viewport } from './viewports'
 
 /** One entry of `manifest.json`, written by scripts/build-playground-manifest.mjs. */
 export interface ManifestItem {
@@ -60,6 +56,17 @@ export interface Manifest {
   items: ManifestItem[]
 }
 
+/** The right column's tabs, in order; `?tab=` holds one. */
+const TABS = [
+  ['playground', 'Playground'],
+  ['specs', 'Specs'],
+  ['guideline', 'Guideline'],
+] as const
+export type PanelTab = (typeof TABS)[number][0]
+
+/** The tabs an item has: Specs and Guideline only once its docs are written. */
+const tabsOf = (_item: ManifestItem): PanelTab[] => ['playground']
+
 const GROUPS = [
   ['component', 'Components'],
   ['pattern', 'Patterns'],
@@ -78,13 +85,12 @@ const LOAD_TIMEOUT = 20000
 // --- URL state ----------------------------------------------------------------
 
 /**
- * `?item=`, `?vp=`, `?address=` and the item's changed props from the
- * address bar. Anything unknown falls back: Button, Desktop, example.com,
- * the prop's default.
+ * `?item=`, `?tab=` and the item's changed props from the address bar.
+ * Anything unknown falls back: Button, Playground, the prop's default.
  */
 function readUrl(items: ManifestItem[]) {
   const q = new URLSearchParams(location.search)
-  const vp = q.get('vp') ?? ''
+  const tab = TABS.find(([value]) => value === q.get('tab'))?.[0] ?? 'playground'
   const item =
     items.find((i) => i.id === q.get('item')) ??
     items.find((i) => i.kind === 'component' && i.name === 'Button') ??
@@ -97,8 +103,7 @@ function readUrl(items: ManifestItem[]) {
   }
   return {
     item,
-    vp: Object.hasOwn(VIEWPORTS, vp) ? (vp as Viewport) : 'desktop',
-    address: q.get('address')?.trim() || DEFAULT_ADDRESS,
+    tab,
     args,
   }
 }
@@ -219,8 +224,6 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
   const [previewTheme, setPreviewTheme] = useState(readTheme)
   const themeRef = useRef(previewTheme)
   const dark = usePrefersDark()
-  // The Preview theme's light or dark, for what the Playground draws around the page.
-  const appearance = resolveAppearance(previewTheme.appearance, dark)
   const [filters, setFilters] = useState(NO_FILTERS)
   const [folds, setFolds] = useState(NO_FOLDS)
   const [drawerOpen, setDrawerOpen] = useState(false)
@@ -253,7 +256,7 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
     document.documentElement.classList.toggle('dark', dark)
   }, [dark])
 
-  // A new item is a step Back returns to; a viewport or prop change is not.
+  // A new item is a step Back returns to; a tab or prop change is not.
   const select = (item: ManifestItem) => {
     setDrawerOpen(false)
     if (item.id === state.item.id) return
@@ -262,9 +265,10 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
     history.pushState(null, '', url)
     setState((s) => ({ ...s, item, args: {} }))
   }
-  const setVp = (vp: Viewport) => {
-    replaceUrl(urlWith({ vp }))
-    setState((s) => ({ ...s, vp }))
+  // The tab stays across items; one an item does not have shows Playground.
+  const setTab = (tab: PanelTab) => {
+    replaceUrl(urlWith({ tab: tab === 'playground' ? undefined : tab }))
+    setState((s) => ({ ...s, tab }))
   }
   // Only a value off the default goes in the URL; undefined (a cleared number) means the default.
   const setProp = (prop: Prop, value: unknown) => {
@@ -279,13 +283,6 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
     replaceUrl(urlWith(themeUrl(theme)))
     themeRef.current = theme
     setPreviewTheme(theme)
-  }
-  // What the Browser bar shows; the URL keeps it only off the default. An
-  // empty field stands for the default (the bar tidies the field on blur).
-  const setAddress = (address: string) => {
-    const domain = address.trim()
-    replaceUrl(urlWith({ address: domain && domain !== DEFAULT_ADDRESS ? domain : undefined }))
-    setState((s) => ({ ...s, address }))
   }
   const resetProps = () => {
     replaceUrl(urlWith(withoutProps(state.item)))
@@ -314,7 +311,6 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
         <a href={storybookUrl} className={styles.headerLink}>
           Storybook
         </a>
-        <ThemePopover theme={previewTheme} onChange={setTheme} />
       </header>
 
       <div className={styles.columns}>
@@ -341,16 +337,9 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
                 {browser}
               </Modal>
             )}
-            <div className={styles.viewports}>
-              <Tabs
-                aria-label="Viewport"
-                appearance="pills"
-                // Arrow keys switch at once: a viewport change does not reload the frame.
-                activateOnFocus
-                items={Object.entries(VIEWPORTS).map(([value, { label }]) => ({ value, label }))}
-                value={state.vp}
-                onValueChange={(vp) => setVp(vp as Viewport)}
-              />
+            <h2 className={styles.itemName}>{state.item.name}</h2>
+            <div className={styles.tools}>
+              <ThemePopover theme={previewTheme} onChange={setTheme} />
               <Tooltip content="Open in Storybook">
                 <Button
                   appearance="ghost"
@@ -366,27 +355,17 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
           </div>
           <LiveView
             item={state.item}
-            vp={state.vp}
             args={state.args}
             theme={previewTheme}
-            appearance={appearance}
             storybookUrl={storybookUrl}
-            bar={
-              <SafariBar
-                // The bar wears the Preview theme's appearance, as the page in the frame does.
-                appearance={appearance}
-                address={state.address}
-                onAddress={setAddress}
-              />
-            }
           />
         </main>
 
-        {state.item.props.length > 0 && (
-          <aside aria-labelledby="pg-props" className={styles.aside}>
+        <aside aria-label="Details" className={styles.aside}>
+          <Panel item={state.item} tab={state.tab} onTab={setTab}>
             <PropsPanel item={state.item} args={state.args} onChange={setProp} onReset={resetProps} />
-          </aside>
-        )}
+          </Panel>
+        </aside>
       </div>
     </div>
   )
@@ -747,20 +726,14 @@ const postTo = (target: Window, src: string) => (type: string, payload: object) 
 
 function LiveView({
   item,
-  vp,
   args,
   theme,
-  appearance,
   storybookUrl,
-  bar,
 }: {
   item: ManifestItem
-  vp: Viewport
   args: Args
   theme: PreviewTheme
-  appearance: 'light' | 'dark'
   storybookUrl: string
-  bar: ReactNode
 }) {
   const frame = useRef<HTMLIFrameElement>(null)
   // Which src finished, and how. A src that has not finished is loading.
@@ -827,7 +800,6 @@ function LiveView({
 
   return (
     <div className={styles.live}>
-      <PreviewWindow vp={vp} theme={{ accent: theme.accent, gray: theme.gray, appearance }} bar={bar}>
         <iframe
           key={src}
           ref={frame}
@@ -855,12 +827,52 @@ function LiveView({
             />
           </div>
         )}
-      </PreviewWindow>
     </div>
   )
 }
 
 // --- right column ----------------------------------------------------------------
+
+/**
+ * The right column's tabs. One the item has not got is disabled, with a line
+ * saying so, and the panel falls back to Playground.
+ */
+function Panel({
+  item,
+  tab,
+  onTab,
+  children,
+}: {
+  item: ManifestItem
+  tab: PanelTab
+  onTab: (tab: PanelTab) => void
+  children: ReactNode
+}) {
+  const has = tabsOf(item)
+  const shown = has.includes(tab) ? tab : 'playground'
+  const missing = TABS.filter(([value]) => !has.includes(value)).map(([, label]) => label)
+  return (
+    <div className={styles.panel}>
+      <Tabs
+        aria-label="Details"
+        isFullWidth
+        items={TABS.map(([value, label]) => ({
+          value,
+          label,
+          disabled: !has.includes(value),
+          content: value === 'playground' ? children : null,
+        }))}
+        value={shown}
+        onValueChange={(value) => onTab(value as PanelTab)}
+      />
+      {missing.length > 0 && (
+        <p className={styles.missing}>
+          {missing.join(' and ')} {missing.length === 1 ? 'is' : 'are'} not written for {item.name} yet.
+        </p>
+      )}
+    </div>
+  )
+}
 
 function PropsPanel({
   item,
@@ -883,6 +895,7 @@ function PropsPanel({
           Reset
         </Button>
       </div>
+      {item.props.length === 0 && <p className={styles.missing}>{item.name} has no props to change here.</p>}
       {item.props.map((prop) => (
         <PropControl
           key={`${item.id} ${prop.name}`}
