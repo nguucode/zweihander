@@ -1,0 +1,10 @@
+import{n as e,r as t}from"./rolldown-runtime-DkW27tQK.js";import{t as n}from"./jsx-runtime-DeHZSEgm.js";import{n as r,t as i}from"./docs.module-DsqiEr3v.js";import{n as a,t as o}from"./TokenTable-CC7xKKB4.js";var s=t({Rings:()=>m,__namedExportsOrder:()=>h,default:()=>p});function c(){return(0,l.jsxs)(`div`,{className:i.stackWide,children:[(0,l.jsx)(o,{tokens:d}),(0,l.jsxs)(`div`,{className:i.row,children:[(0,l.jsx)(`div`,{"data-ring":`offset`,style:{...f,outlineOffset:`var(--focus-offset)`}}),(0,l.jsx)(`span`,{className:i.caption,children:`offset`}),(0,l.jsx)(`div`,{"data-ring":`inset`,style:{...f,outlineOffset:`var(--focus-offset-inset)`}}),(0,l.jsx)(`span`,{className:i.caption,children:`offset-inset`})]})]})}var l,u,d,f,p,m,h;function g(){return(g=e((()=>{a(),r(),l=n(),{expect:u}=__STORYBOOK_MODULE_TEST__,d=[{name:`--focus-width`,use:`Ring thickness, on every focusable element`},{name:`--focus-offset`,use:`Ring outside the element: buttons, fields, links, free-standing controls`},{name:`--focus-offset-inset`,use:`Ring inside the element: tabs, rows, accordion headers, close buttons in a panel`}],f={inlineSize:`var(--control-md)`,blockSize:`var(--control-md)`,borderRadius:`var(--radius-control)`,background:`var(--muted)`,outline:`var(--focus-width) solid var(--ring)`},p={title:`Foundations/Focus`,render:()=>(0,l.jsx)(c,{}),parameters:{layout:`padded`}},m={play:async({canvasElement:e})=>{let t=t=>getComputedStyle(e.querySelector(`[data-ring="${t}"]`));await u(t(`offset`).outlineWidth).toBe(`2px`),await u(t(`offset`).outlineOffset).toBe(`2px`),await u(t(`inset`).outlineOffset).toBe(`-2px`)}},h=[`Rings`],m.parameters={...m.parameters,docs:{...m.parameters?.docs,source:{originalSource:`{
+  play: async ({
+    canvasElement
+  }) => {
+    const ring = (kind: string) => getComputedStyle(canvasElement.querySelector(\`[data-ring="\${kind}"]\`)!);
+    await expect(ring('offset').outlineWidth).toBe('2px');
+    await expect(ring('offset').outlineOffset).toBe('2px');
+    await expect(ring('inset').outlineOffset).toBe('-2px');
+  }
+}`,...m.parameters?.docs?.source}}}})))()}export{m as n,g as r,s as t};

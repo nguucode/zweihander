@@ -1,0 +1,29 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "button-group",
+  "title": "Button Group",
+  "description": "Buttons joined into one bar: ButtonGroup for related actions, ToggleGroup on Base UI for a segmented control or toggles that combine.",
+  "dependencies": [
+    "@base-ui/react"
+  ],
+  "registryDependencies": [
+    "https://ontheshore.biz/zweihander/r/utils.json",
+    "https://ontheshore.biz/zweihander/r/tokens.json",
+    "https://ontheshore.biz/zweihander/r/toggle-button.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/buttons/ButtonGroup.tsx",
+      "content": "'use client'\n\nimport type { ComponentProps } from 'react'\nimport { ToggleGroup as BaseToggleGroup } from '@base-ui/react/toggle-group'\nimport { cn } from '@/lib/utils'\nimport styles from './ButtonGroup.module.css'\n\nexport type ButtonGroupProps = ComponentProps<'div'>\n\n/** Buttons joined into one bar: related actions that read as a set. */\nexport function ButtonGroup({ className, ...props }: ButtonGroupProps) {\n  return <div role=\"group\" {...props} className={cn(styles.group, className)} />\n}\n\nexport interface ToggleGroupProps\n  extends Omit<ComponentProps<'div'>, 'defaultValue' | 'onChange' | 'dir'> {\n  /** Controlled: the `value` of each pressed ToggleButton. */\n  value?: string[]\n  /** Uncontrolled: the values pressed at first. */\n  defaultValue?: string[]\n  /** Base UI's second argument (event details) is dropped: nothing here needs it. */\n  onValueChange?: (value: string[]) => void\n  /** Any number pressed at once. Without it, one at a time: a segmented control. */\n  multiple?: boolean\n  /** Disables every toggle in the group. */\n  disabled?: boolean\n}\n\n/** ToggleButtons joined into one bar, sharing one selection. */\nexport function ToggleGroup({ onValueChange, multiple = false, className, ...props }: ToggleGroupProps) {\n  return (\n    <BaseToggleGroup\n      {...props}\n      multiple={multiple}\n      onValueChange={(next, details) => {\n        // Single choice is a segmented control: once a segment is chosen,\n        // pressing it again does not leave none chosen.\n        if (!multiple && next.length === 0) return details.cancel()\n        onValueChange?.(next)\n      }}\n      className={cn(styles.group, className)}\n    />\n  )\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/buttons/ButtonGroup.tsx"
+    },
+    {
+      "path": "src/components/buttons/ButtonGroup.module.css",
+      "content": "/* The buttons keep their own size and colour; the group only joins them.\n   Inner corners go square and each button after the first overlaps the\n   previous one by its 1px border, so two outlined buttons share one line\n   instead of drawing a double one. Two classes' worth of specificity, so\n   it outranks Button's size class whichever stylesheet loads first. */\n.group {\n  display: inline-flex;\n  /* Keeps the z-index below inside the group. */\n  isolation: isolate;\n}\n\n.group > :not(:first-child) {\n  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- the buttons' 1px border, see above */\n  margin-inline-start: -1px;\n  border-start-start-radius: 0;\n  border-end-start-radius: 0;\n}\n\n.group > :not(:last-child) {\n  border-start-end-radius: 0;\n  border-end-end-radius: 0;\n}\n\n/* A pressed button's border is its own colour; raised, it draws over the\n   neighbour's line it overlaps. Focus goes higher still so the ring is\n   never cut by the next button. */\n.group > [aria-pressed='true'] {\n  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- local stacking inside the group, not a global layer */\n  z-index: 1;\n}\n\n/* A contained button's hover ring stands off the button, so in a group it\n   would cut across the next button. The hover fill is enough to show which\n   one the pointer is on. Doubled class to outrank Button's hover rule. */\n.group.group > :hover:not(:focus-visible) {\n  outline: none;\n}\n\n.group > :focus-visible {\n  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- local stacking inside the group, not a global layer */\n  z-index: 2;\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/buttons/ButtonGroup.module.css"
+    }
+  ],
+  "type": "registry:component"
+}

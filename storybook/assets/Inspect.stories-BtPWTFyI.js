@@ -1,0 +1,129 @@
+import{n as e}from"./rolldown-runtime-DkW27tQK.js";import{t}from"./jsx-runtime-DeHZSEgm.js";import{a as n,i as r,s as i}from"./iframe-C8tnim7F.js";import{n as a,t as o}from"./Button-Bwi4V5f1.js";var s,c,l,u,d,f,p,m;function h(){return(h=e((()=>{a(),n(),s=t(),{expect:c,waitFor:l}=__STORYBOOK_MODULE_TEST__,u={title:`Site/Inspect`,render:()=>(0,s.jsx)(o,{children:`Subscribe`}),parameters:{docs:{description:{component:`What the Specs tab draws inside the preview frame: the parts numbered, the
+hovered row's redline, and the tokens resolved as the frame sees them.`}}}},d=()=>document.querySelector(`[data-playground-inspector]`),f={play:async()=>{let e=[`Container`,`Start icon`,`Label`,`Title`,`Previous month`];await c(r(`Container, outlined`,e)).toBe(`Container`),await c(r(`Title and description`,e)).toBe(`Title`),await c(r(`Icon`,e)).toBe(`Start icon`),await c(r(`Previous and next`,e)).toBe(`Previous month`),await c(r(`Focus ring`,e)).toBe(`Focus ring`),await c(r(`Lab`,e)).toBeNull(),await c(r(`Option`,e)).toBeNull()}},p={play:async({canvasElement:e})=>{let t={},n=i(()=>e,e=>t=e),r=[{name:`Container`,selector:`button`},{name:`Missing`,selector:`nav`}];try{n.set({parts:r,tokens:[`--control-md`,`--primary`,`--nope`]}),await l(()=>c(d()?.textContent).toBe(`①`)),await c(d()).toHaveAttribute(`aria-hidden`,`true`),await c(getComputedStyle(d()).pointerEvents).toBe(`none`),await l(()=>c(t[`--control-md`]).toEqual({kind:`length`,text:`32px`})),await c(t[`--primary`].kind).toBe(`color`),await c(t[`--nope`]).toEqual({kind:`missing`,text:`Not defined here`}),n.set({parts:r,tokens:[`--control-md`],highlight:{part:`Container`,property:`Height`,token:`--control-md`}}),await l(()=>c(d()?.textContent).toContain(`Height 32px`));let i=e.querySelector(`button`).getBoundingClientRect(),a=[...d().children].find(e=>e.style.width===`1px`);await c(parseFloat(a.style.height)).toBeCloseTo(i.height,0),n.set({parts:r,tokens:[],highlight:{part:`Container`,property:`Inline padding`,token:`--x`}}),await l(()=>c([...d().children].filter(e=>e.style.background.includes(`0.25`))).toHaveLength(2)),n.set({parts:r,tokens:[`--focus-width`],highlight:{part:`Focus ring`,property:`Width`,token:`--focus-width`}}),await l(()=>c(d()?.textContent).toContain(`Width 2px`));let o=[...d().children].find(e=>e.style.borderWidth===`2px`);await c(parseFloat(o.style.width)).toBeCloseTo(i.width+8,0),n.set({parts:r,tokens:[],highlight:{part:`Container`,property:`Corner radius`,token:`--x`}}),await l(()=>c([...d().children].some(e=>e.style.borderTopLeftRadius!==``)).toBe(!0)),n.set({parts:r,tokens:[],highlight:{part:`Container`,property:`Font size`,token:`--x`}}),await l(()=>c([...d().children].filter(e=>e.style.background.includes(`0.25`))).toHaveLength(1)),n.set({parts:r,tokens:[],pseudo:`hover`}),await c(e).toHaveClass(`pseudo-hover-all`),n.set({parts:r,tokens:[],pseudo:`active`}),await c(e).not.toHaveClass(`pseudo-hover-all`),await c(e).toHaveClass(`pseudo-active-all`)}finally{n.set(null)}await c(d()).toBeNull(),await c(e).not.toHaveClass(`pseudo-active-all`)}},m=[`RowToPart`,`Default`],f.parameters={...f.parameters,docs:{...f.parameters?.docs,source:{originalSource:`{
+  play: async () => {
+    const names = ['Container', 'Start icon', 'Label', 'Title', 'Previous month'];
+    await expect(anatomyPartFor('Container, outlined', names)).toBe('Container');
+    await expect(anatomyPartFor('Title and description', names)).toBe('Title');
+    await expect(anatomyPartFor('Icon', names)).toBe('Start icon');
+    await expect(anatomyPartFor('Previous and next', names)).toBe('Previous month');
+    await expect(anatomyPartFor('Focus ring', names)).toBe('Focus ring');
+    // A whole word only: "Lab" is not Label.
+    await expect(anatomyPartFor('Lab', names)).toBeNull();
+    await expect(anatomyPartFor('Option', names)).toBeNull();
+  }
+}`,...f.parameters?.docs?.source},description:{story:`Which anatomy part a Specs row is about.`,...f.parameters?.docs?.description}}},p.parameters={...p.parameters,docs:{...p.parameters?.docs,source:{originalSource:`{
+  play: async ({
+    canvasElement
+  }) => {
+    let values: Record<string, TokenValue> = {};
+    const inspector = startInspector(() => canvasElement, v => values = v);
+    const parts = [{
+      name: 'Container',
+      selector: 'button'
+    }, {
+      name: 'Missing',
+      selector: 'nav'
+    }];
+    try {
+      inspector.set({
+        parts,
+        tokens: ['--control-md', '--primary', '--nope']
+      });
+      // One number, on the part that is there; decoration only.
+      await waitFor(() => expect(layer()?.textContent).toBe('①'));
+      await expect(layer()).toHaveAttribute('aria-hidden', 'true');
+      await expect(getComputedStyle(layer()!).pointerEvents).toBe('none');
+      await waitFor(() => expect(values['--control-md']).toEqual({
+        kind: 'length',
+        text: '32px'
+      }));
+      await expect(values['--primary'].kind).toBe('color');
+      await expect(values['--nope']).toEqual({
+        kind: 'missing',
+        text: 'Not defined here'
+      });
+
+      // A row's redline: the part's height, with its value.
+      inspector.set({
+        parts,
+        tokens: ['--control-md'],
+        highlight: {
+          part: 'Container',
+          property: 'Height',
+          token: '--control-md'
+        }
+      });
+      await waitFor(() => expect(layer()?.textContent).toContain('Height 32px'));
+      const button = canvasElement.querySelector('button')!.getBoundingClientRect();
+      const line = [...layer()!.children].find(el => (el as HTMLElement).style.width === '1px') as HTMLElement;
+      await expect(parseFloat(line.style.height)).toBeCloseTo(button.height, 0);
+
+      // Inline padding shades the two sides.
+      inspector.set({
+        parts,
+        tokens: [],
+        highlight: {
+          part: 'Container',
+          property: 'Inline padding',
+          token: '--x'
+        }
+      });
+      await waitFor(() => expect([...layer()!.children].filter(el => (el as HTMLElement).style.background.includes('0.25'))).toHaveLength(2));
+
+      // The focus ring at its width and offset around the focusable element, though no anatomy part names it.
+      inspector.set({
+        parts,
+        tokens: ['--focus-width'],
+        highlight: {
+          part: 'Focus ring',
+          property: 'Width',
+          token: '--focus-width'
+        }
+      });
+      await waitFor(() => expect(layer()?.textContent).toContain('Width 2px'));
+      const ring = [...layer()!.children].find(el => (el as HTMLElement).style.borderWidth === '2px') as HTMLElement;
+      await expect(parseFloat(ring.style.width)).toBeCloseTo(button.width + 2 * (2 + 2), 0);
+
+      // Radius marks the corner; font size shades the first line of text.
+      inspector.set({
+        parts,
+        tokens: [],
+        highlight: {
+          part: 'Container',
+          property: 'Corner radius',
+          token: '--x'
+        }
+      });
+      await waitFor(() => expect([...layer()!.children].some(el => (el as HTMLElement).style.borderTopLeftRadius !== '')).toBe(true));
+      inspector.set({
+        parts,
+        tokens: [],
+        highlight: {
+          part: 'Container',
+          property: 'Font size',
+          token: '--x'
+        }
+      });
+      await waitFor(() => expect([...layer()!.children].filter(el => (el as HTMLElement).style.background.includes('0.25'))).toHaveLength(1));
+
+      // A forced state goes on the item's root as the pseudo-states addon's class, and comes off.
+      inspector.set({
+        parts,
+        tokens: [],
+        pseudo: 'hover'
+      });
+      await expect(canvasElement).toHaveClass('pseudo-hover-all');
+      inspector.set({
+        parts,
+        tokens: [],
+        pseudo: 'active'
+      });
+      await expect(canvasElement).not.toHaveClass('pseudo-hover-all');
+      await expect(canvasElement).toHaveClass('pseudo-active-all');
+    } finally {
+      inspector.set(null);
+    }
+    await expect(layer()).toBeNull();
+    await expect(canvasElement).not.toHaveClass('pseudo-active-all');
+  }
+}`,...p.parameters?.docs?.source}}}})))()}h();export{p as Default,f as RowToPart,m as __namedExportsOrder,u as default};

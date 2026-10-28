@@ -1,0 +1,25 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "media-object",
+  "title": "Media Object",
+  "description": "Application UI pattern: an avatar, icon or image beside a title and description, aligned to the top, middle, bottom or stretched, on either side, with room for actions or nested replies; the text wraps under the media in a narrow container.",
+  "registryDependencies": [
+    "https://ontheshore.biz/zweihander/r/utils.json",
+    "https://ontheshore.biz/zweihander/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/patterns/application-ui/MediaObject.tsx",
+      "content": "import type { ComponentProps, ReactNode } from 'react'\nimport { cn } from '@/lib/utils'\nimport styles from './MediaObject.module.css'\n\nexport interface MediaObjectProps extends Omit<ComponentProps<'div'>, 'title'> {\n  /** An Avatar, an Icon or an image beside the text. Decorative: the title names what it shows. */\n  media: ReactNode\n  /** What the object is: a person, a product, a comment's author. */\n  title: ReactNode\n  /** A line or a paragraph under the title. */\n  description?: ReactNode\n  /** Anything after the description: actions, or nested Media Objects for replies. */\n  children?: ReactNode\n  /** Where the media sits against the text: top, middle, bottom, or stretched to the text's full height. */\n  align?: 'start' | 'center' | 'end' | 'stretch'\n  /** Which side the media is on. */\n  mediaPosition?: 'start' | 'end'\n  /** Makes the title a heading of this level. Without it the title is bold text, right for a list of comments. */\n  headingLevel?: 2 | 3 | 4\n}\n\n/**\n * Media beside a block of text: an avatar by a comment, an icon by a\n * setting, a thumbnail by a product. It owns no data and no landmark.\n */\nexport function MediaObject({\n  media,\n  title,\n  description,\n  children,\n  align = 'start',\n  mediaPosition = 'start',\n  headingLevel,\n  className,\n  ...props\n}: MediaObjectProps) {\n  const Title = headingLevel ? (`h${headingLevel}` as const) : 'p'\n  return (\n    <div\n      className={cn(styles.mediaObject, className)}\n      data-align={align}\n      data-media-position={mediaPosition}\n      {...props}\n    >\n      <div className={styles.media} aria-hidden=\"true\">\n        {media}\n      </div>\n      <div className={styles.body}>\n        <Title className={styles.title}>{title}</Title>\n        {description && <div className={styles.description}>{description}</div>}\n        {children}\n      </div>\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/patterns/application-ui/MediaObject.tsx"
+    },
+    {
+      "path": "src/components/patterns/application-ui/MediaObject.module.css",
+      "content": "/* Media and text share a row while the text keeps 12rem; below that the\n   text wraps under the media, so the pattern needs no breakpoint and works\n   in an aside as on a full page. */\n.mediaObject {\n  display: flex;\n  flex-wrap: wrap;\n  align-items: flex-start;\n  gap: var(--space-cluster) var(--space-group);\n  font-family: var(--font-sans);\n  font-size: var(--text-body-sm);\n  line-height: var(--leading-body-sm);\n  color: var(--foreground);\n}\n\n.mediaObject[data-align='center'] {\n  align-items: center;\n}\n.mediaObject[data-align='end'] {\n  align-items: flex-end;\n}\n.mediaObject[data-align='stretch'] {\n  align-items: stretch;\n}\n/* order, not row-reverse: the DOM (reading order) stays media first, and\n   when the row wraps the media drops under the text at the start edge\n   instead of hanging off the far end above it. */\n.mediaObject[data-media-position='end'] > .media {\n  order: 1;\n}\n\n/* An Icon takes the icon size; an Avatar or an image keeps its own. */\n.media {\n  display: flex;\n  flex: none;\n  font-size: var(--icon-md);\n  color: var(--muted-foreground);\n}\n\n.body {\n  display: grid;\n  flex: 1 1 12rem;\n  align-content: start;\n  gap: var(--space-1);\n  min-inline-size: 0;\n}\n\n.title {\n  margin: 0;\n  font-size: inherit;\n  line-height: inherit;\n  font-weight: 600;\n  overflow-wrap: anywhere;\n}\n\n.description {\n  color: var(--muted-foreground);\n  overflow-wrap: anywhere;\n}\n.description > p {\n  margin: 0;\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/patterns/application-ui/MediaObject.module.css"
+    }
+  ],
+  "type": "registry:block"
+}

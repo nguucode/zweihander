@@ -1,0 +1,84 @@
+import{n as e}from"./rolldown-runtime-DkW27tQK.js";import{t}from"./jsx-runtime-DeHZSEgm.js";import{i as n,r}from"./react-BXJ34t_g.js";import{c as i,l as a,n as o,r as s,u as c}from"./blocks-CaB3w3bd.js";import{n as l,t as u}from"./Button-Bwi4V5f1.js";import{a as d,c as f,d as p,i as m,l as h,n as g,o as _,r as v,s as y,t as b,u as x}from"./States-COwIDKmw.js";import{n as S,t as C}from"./Status-Bh5ZRJmX.js";import{a as w,c as T,d as E,f as D,h as O,i as k,l as A,m as j,n as M,o as N,p as P,r as F,s as I,t as L,u as R}from"./Button.stories-C1O22Och.js";function z(e){let t={a:`a`,code:`code`,h1:`h1`,h2:`h2`,h3:`h3`,li:`li`,p:`p`,pre:`pre`,strong:`strong`,table:`table`,tbody:`tbody`,td:`td`,th:`th`,thead:`thead`,tr:`tr`,ul:`ul`,...n(),...e.components};return(0,V.jsxs)(V.Fragment,{children:[(0,V.jsx)(i,{of:M}),`
+`,(0,V.jsx)(t.h1,{id:`button`,children:`Button`}),`
+`,(0,V.jsxs)(f,{children:[(0,V.jsxs)(y,{value:`overview`,children:[(0,V.jsxs)(t.p,{children:[`Triggers an action on the current page, or, with `,(0,V.jsx)(t.code,{children:`href`}),`, navigates.`]}),(0,V.jsx)(C,{of:M}),(0,V.jsx)(s,{of:F}),(0,V.jsx)(t.h2,{id:`variants`,children:`Variants`}),(0,V.jsxs)(t.p,{children:[(0,V.jsx)(t.code,{children:`variant`}),` is the colour, by meaning; `,(0,V.jsx)(t.code,{children:`appearance`}),` is the emphasis. Any
+variant takes any appearance.`]}),(0,V.jsx)(s,{of:E}),(0,V.jsxs)(t.table,{children:[(0,V.jsx)(t.thead,{children:(0,V.jsxs)(t.tr,{children:[(0,V.jsx)(t.th,{children:`Variant`}),(0,V.jsx)(t.th,{children:`Use for`})]})}),(0,V.jsxs)(t.tbody,{children:[(0,V.jsxs)(t.tr,{children:[(0,V.jsx)(t.td,{children:(0,V.jsx)(u,{children:`Primary`})}),(0,V.jsx)(t.td,{children:`The next step: Save, Continue, Create. One per view.`})]}),(0,V.jsxs)(t.tr,{children:[(0,V.jsx)(t.td,{children:(0,V.jsx)(u,{variant:`accent`,children:`Accent`})}),(0,V.jsx)(t.td,{children:`A strong action in neutral black or white, where the brand colour would clash or already means something else.`})]}),(0,V.jsxs)(t.tr,{children:[(0,V.jsx)(t.td,{children:(0,V.jsx)(u,{variant:`secondary`,children:`Secondary`})}),(0,V.jsx)(t.td,{children:`Everything else: Cancel, Back, Export.`})]}),(0,V.jsxs)(t.tr,{children:[(0,V.jsx)(t.td,{children:(0,V.jsx)(u,{variant:`destructive`,children:`Destructive`})}),(0,V.jsx)(t.td,{children:`Deleting, or anything that cannot be undone.`})]})]})]}),(0,V.jsxs)(t.table,{children:[(0,V.jsx)(t.thead,{children:(0,V.jsxs)(t.tr,{children:[(0,V.jsx)(t.th,{children:`Appearance`}),(0,V.jsx)(t.th,{children:`Use for`})]})}),(0,V.jsxs)(t.tbody,{children:[(0,V.jsxs)(t.tr,{children:[(0,V.jsx)(t.td,{children:(0,V.jsx)(u,{children:`Contained`})}),(0,V.jsx)(t.td,{children:`The action to take, filled so it is found first.`})]}),(0,V.jsxs)(t.tr,{children:[(0,V.jsx)(t.td,{children:(0,V.jsx)(u,{appearance:`outlined`,children:`Outlined`})}),(0,V.jsx)(t.td,{children:`Actions that matter but are not the next step.`})]}),(0,V.jsxs)(t.tr,{children:[(0,V.jsx)(t.td,{children:(0,V.jsx)(u,{appearance:`ghost`,children:`Ghost`})}),(0,V.jsx)(t.td,{children:`Low emphasis and dense places: toolbars, table rows, a card's corner.`})]})]})]}),(0,V.jsx)(s,{of:D}),(0,V.jsx)(s,{of:P}),(0,V.jsx)(s,{of:A}),(0,V.jsx)(t.h2,{id:`resources`,children:`Resources`}),(0,V.jsx)(t.p,{children:`From npm, or copied into your project through the registry:`}),(0,V.jsx)(t.pre,{children:(0,V.jsx)(t.code,{className:`language-js`,children:`import { Button } from 'zweihander/button'
+`})}),(0,V.jsx)(t.pre,{children:(0,V.jsx)(t.code,{className:`language-sh`,children:`npx shadcn@latest add https://ontheshore.biz/zweihander/r/button.json
+`})}),(0,V.jsxs)(t.ul,{children:[`
+`,(0,V.jsxs)(t.li,{children:[`Source: `,(0,V.jsx)(t.a,{href:`https://github.com/nguucode/zweihander/blob/main/src/components/buttons/Button.tsx`,rel:`nofollow`,children:`src/components/buttons/Button.tsx`})]}),`
+`,(0,V.jsxs)(t.li,{children:[`Spec: `,(0,V.jsx)(t.a,{href:`https://www.uiguideline.com/components/button`,rel:`nofollow`,children:`uiguideline.com/components/button`})]}),`
+`,(0,V.jsxs)(t.li,{children:[`Behaviour: `,(0,V.jsx)(t.a,{href:`https://base-ui.com/react/components/button`,rel:`nofollow`,children:`Base UI Button`})]}),`
+`,(0,V.jsx)(t.li,{children:`Figma: not in the library yet`}),`
+`]})]}),(0,V.jsxs)(y,{value:`specs`,children:[(0,V.jsx)(t.h2,{id:`anatomy`,children:`Anatomy`}),(0,V.jsx)(x,{parts:j,children:(0,V.jsx)(a,{of:L})}),(0,V.jsxs)(t.p,{children:[`While `,(0,V.jsx)(t.code,{children:`isLoading`}),`, a spinner takes the content's place; the content stays,
+invisible, so the button keeps its width and its name.`]}),(0,V.jsx)(t.h2,{id:`measurements`,children:`Measurements`}),(0,V.jsx)(t.p,{children:`Each size is a control tier (Foundations / Sizing). Buttons take the
+spacious inline padding: a centred label needs more room either side than
+a field's left-aligned text.`}),(0,V.jsx)(v,{caption:`sm`,rows:[{part:`Container`,property:`Height`,token:`--control-sm`},{part:`Container`,property:`Inline padding`,token:`--control-sm-pad-spacious`},{part:`Container`,property:`Corner radius`,token:`--control-sm-radius`},{part:`Container`,property:`Gap`,token:`--control-sm-gap`},{part:`Icon`,property:`Size`,token:`--icon-sm`},{part:`Label`,property:`Font size`,token:`--text-body-sm`},{part:`Label`,property:`Line height`,token:`--leading-body-sm`}]}),(0,V.jsx)(v,{caption:`md`,rows:[{part:`Container`,property:`Height`,token:`--control-md`},{part:`Container`,property:`Inline padding`,token:`--control-md-pad-spacious`},{part:`Container`,property:`Corner radius`,token:`--control-md-radius`},{part:`Container`,property:`Gap`,token:`--control-md-gap`},{part:`Icon`,property:`Size`,token:`--icon-md`},{part:`Label`,property:`Font size`,token:`--text-body`},{part:`Label`,property:`Line height`,token:`--leading-body`}]}),(0,V.jsx)(v,{caption:`Every size`,rows:[{part:`Focus ring`,property:`Width`,token:`--focus-width`},{part:`Focus ring`,property:`Offset`,token:`--focus-offset`},{part:`Hit area`,property:`Minimum on touch screens`,token:`--target-coarse`}]}),(0,V.jsxs)(t.p,{children:[`An icon-only button is square: its width is its height. With `,(0,V.jsx)(t.code,{children:`isFullWidth`}),`
+it fills its container.`]}),(0,V.jsx)(t.h2,{id:`color`,children:`Color`}),(0,V.jsx)(t.p,{children:`Each variant has a solid (the contained fill), a colour on that solid, and
+a tone that outlined and ghost use for their label. Switch the theme and the
+accent in the toolbar: the values follow.`}),(0,V.jsx)(v,{caption:`primary`,rows:[{part:`Container, contained`,property:`Background`,token:`--primary`},{part:`Label, contained`,property:`Colour`,token:`--primary-foreground`},{part:`Label, outlined and ghost`,property:`Colour`,token:`--primary-text`},{part:`Container, outlined`,property:`Border`,token:`--primary-text`}]}),(0,V.jsx)(v,{caption:`accent`,rows:[{part:`Container, contained`,property:`Background`,token:`--foreground`},{part:`Label, contained`,property:`Colour`,token:`--background`},{part:`Label, outlined and ghost`,property:`Colour`,token:`--foreground`},{part:`Container, outlined`,property:`Border`,token:`--foreground`}]}),(0,V.jsx)(v,{caption:`secondary`,rows:[{part:`Container, contained`,property:`Background`,token:`--secondary`},{part:`Label, contained`,property:`Colour`,token:`--secondary-foreground`},{part:`Label, outlined and ghost`,property:`Colour`,token:`--foreground`},{part:`Container, outlined`,property:`Border`,token:`--input`}]}),(0,V.jsx)(v,{caption:`destructive`,rows:[{part:`Container, contained`,property:`Background`,token:`--destructive`},{part:`Label, contained`,property:`Colour`,token:`--destructive-foreground`},{part:`Label, outlined and ghost`,property:`Colour`,token:`--destructive`},{part:`Container, outlined`,property:`Border`,token:`--destructive`}]}),(0,V.jsx)(v,{caption:`Every variant`,rows:[{part:`Focus ring`,property:`Colour`,token:`--ring`},{part:`Container, contained`,property:`Drop shadow`,token:`--shadow-xs`}]}),(0,V.jsx)(t.p,{children:`Ghost and outlined have no fill at rest. Contained is lit from above: a
+lighter top, a highlight on the top edge, a darker bottom edge and a
+hairline border a step darker than the solid. Each is the variant's solid
+moved in lightness, so it has no token of its own and follows the accent
+and the mode.`}),(0,V.jsx)(t.h2,{id:`states`,children:`States`}),(0,V.jsx)(b,{states:[{label:`Enabled`},{label:`Hover`,pseudo:`hover`},{label:`Focus`,pseudo:`focus-visible`},{label:`Pressed`,pseudo:`active`},{label:`Disabled`,content:(0,V.jsx)(a,{of:k})},{label:`Loading`,content:(0,V.jsx)(a,{of:R})}],children:(0,V.jsx)(a,{of:F})}),(0,V.jsxs)(t.ul,{children:[`
+`,(0,V.jsxs)(t.li,{children:[(0,V.jsx)(t.strong,{children:`Hover and pressed`}),` are mixed from the variant's own colours, not a
+token each. A coloured solid (primary, destructive) moves away from its
+label and gains contrast; accent and secondary move toward it. Outlined
+and ghost tint the background with their tone, 8% on hover and 14% when
+pressed. Every state keeps the label at 4.5:1, measured by the
+`,(0,V.jsx)(t.code,{children:`StateContrast`}),` story under all seventeen accents in both modes.`]}),`
+`,(0,V.jsxs)(t.li,{children:[(0,V.jsx)(t.strong,{children:`Hover`}),`, on contained, also draws a 1px hairline ring standing
+`,(0,V.jsx)(t.code,{children:`--focus-offset`}),` off the button, where the focus ring sits, so focus
+replaces it rather than adding a second ring. Inside a ButtonGroup the
+ring is left out: it would cut across the next button.`]}),`
+`,(0,V.jsxs)(t.li,{children:[(0,V.jsx)(t.strong,{children:`Pressed`}),`, on contained, turns the light over: shade on the top edge,
+no drop shadow, no gradient, as if pushed in.`]}),`
+`,(0,V.jsxs)(t.li,{children:[(0,V.jsx)(t.strong,{children:`Focus`}),` is a 2px `,(0,V.jsx)(t.code,{children:`--ring`}),` outline, 2px outside the button.`]}),`
+`,(0,V.jsxs)(t.li,{children:[(0,V.jsx)(t.strong,{children:`Disabled`}),` is the enabled look at 50% opacity.`]}),`
+`,(0,V.jsxs)(t.li,{children:[(0,V.jsx)(t.strong,{children:`Loading`}),` keeps the full colour: the button is busy, not unavailable.`]}),`
+`]}),(0,V.jsx)(t.h2,{id:`api`,children:`API`}),(0,V.jsx)(`div`,{style:{overflowX:`auto`},children:(0,V.jsx)(o,{of:M})}),(0,V.jsxs)(t.p,{children:[`Every other `,(0,V.jsx)(t.code,{children:`<button>`}),` attribute passes through, including `,(0,V.jsx)(t.code,{children:`ref`}),`.`]}),(0,V.jsx)(t.h3,{id:`differences-from-the-spec`,children:`Differences from the spec`}),(0,V.jsxs)(t.ul,{children:[`
+`,(0,V.jsxs)(t.li,{children:[(0,V.jsx)(t.strong,{children:`Two sizes, not four.`}),` `,(0,V.jsx)(t.code,{children:`sm`}),` (24px) and `,(0,V.jsx)(t.code,{children:`md`}),` (32px) only, the compact control scale of the Claude apps. The spec's larger steps were dropped; a big call to action is `,(0,V.jsx)(t.code,{children:`md`}),` with more room around it, not a taller box.`]}),`
+`,(0,V.jsxs)(t.li,{children:[(0,V.jsxs)(t.strong,{children:[(0,V.jsx)(t.code,{children:`disabled`}),`, not `,(0,V.jsx)(t.code,{children:`isDisabled`})]}),`: the native attribute keeps its name.`]}),`
+`,(0,V.jsxs)(t.li,{children:[(0,V.jsxs)(t.strong,{children:[(0,V.jsx)(t.code,{children:`isIconOnly`}),` is added.`]}),` The spec has no icon-only button, and a
+square button that still requires a name is common enough to need one.`]}),`
+`,(0,V.jsxs)(t.li,{children:[(0,V.jsxs)(t.strong,{children:[(0,V.jsx)(t.code,{children:`render`}),` is added`]}),` for composition with routers and other elements,
+matching Base UI and shadcn. It replaced `,(0,V.jsx)(t.code,{children:`asChild`}),` in 0.8.`]}),`
+`,(0,V.jsxs)(t.li,{children:[(0,V.jsxs)(t.strong,{children:[(0,V.jsx)(t.code,{children:`accent`}),` is the inverted neutral`]}),` (foreground on background), as on
+Badge: the token set has one brand hue and `,(0,V.jsx)(t.code,{children:`primary`}),` uses it.`]}),`
+`,(0,V.jsxs)(t.li,{children:[`Outlined and ghost `,(0,V.jsx)(t.code,{children:`primary`}),` use `,(0,V.jsx)(t.code,{children:`--primary-text`}),`, a step of the accent
+measured to read at 4.5:1 on the page. The solid step would not, for
+warm accents.`]}),`
+`]})]}),(0,V.jsxs)(y,{value:`guidelines`,children:[(0,V.jsx)(t.h2,{id:`when-to-use`,children:`When to use`}),(0,V.jsxs)(t.p,{children:[`Use a Button for an action on the current page: save, submit, open a
+dialog, delete. Use one `,(0,V.jsx)(t.code,{children:`primary contained`}),` button per view, for the thing
+to do next. Everything else steps down to `,(0,V.jsx)(t.code,{children:`outlined`}),` or `,(0,V.jsx)(t.code,{children:`ghost`}),`, or to
+`,(0,V.jsx)(t.code,{children:`secondary`}),`.`]}),(0,V.jsx)(d,{do:(0,V.jsx)(a,{of:w}),doCaption:`One primary button: the thing to do next. The rest step down.`,dont:(0,V.jsx)(a,{of:I}),dontCaption:`Two primary buttons compete for the same click.`}),(0,V.jsxs)(t.p,{children:[(0,V.jsx)(t.strong,{children:`Loading`}),` keeps the button's width and focus and blocks it from acting
+again, so a double-submit is impossible and a keyboard user is not dropped
+back to the top of the page.`]}),(0,V.jsx)(d,{do:(0,V.jsx)(a,{of:R}),doCaption:`Show progress with isLoading: the button stays where focus is, and cannot fire twice.`,dont:(0,V.jsx)(a,{of:N}),dontCaption:`Disabling it to show progress drops keyboard focus and reads as unavailable.`}),(0,V.jsx)(t.h2,{id:`when-not-to-use`,children:`When not to use`}),(0,V.jsxs)(t.ul,{children:[`
+`,(0,V.jsxs)(t.li,{children:[(0,V.jsx)(t.strong,{children:`To navigate.`}),` A link is not a button. Pass `,(0,V.jsx)(t.code,{children:`href`}),` and Button renders a
+real `,(0,V.jsx)(t.code,{children:`<a>`}),`: it keeps link semantics, opens in a new tab on middle-click,
+and gets the link cursor. A plain Button with an `,(0,V.jsx)(t.code,{children:`onClick`}),` that changes
+the page does none of that.`]}),`
+`,(0,V.jsxs)(t.li,{children:[(0,V.jsx)(t.strong,{children:`For a setting that stays on or off.`}),` Use a
+`,(0,V.jsx)(t.a,{href:`?path=/docs/components-buttons-togglebutton--docs`,children:`Toggle Button`}),`, a
+Switch or a Checkbox.`]}),`
+`,(0,V.jsxs)(t.li,{children:[(0,V.jsx)(t.strong,{children:`For a link inside running text.`}),` Use Link.`]}),`
+`]}),(0,V.jsx)(s,{of:T}),(0,V.jsx)(t.h2,{id:`accessibility`,children:`Accessibility`}),(0,V.jsxs)(t.ul,{children:[`
+`,(0,V.jsxs)(t.li,{children:[`A native `,(0,V.jsx)(t.code,{children:`<button>`}),`, `,(0,V.jsx)(t.code,{children:`type="button"`}),` by default so it never submits a
+form by accident. Enter and Space both activate it.`]}),`
+`,(0,V.jsxs)(t.li,{children:[(0,V.jsx)(t.code,{children:`isIconOnly`}),` needs `,(0,V.jsx)(t.code,{children:`aria-label`}),`; TypeScript refuses it without one.
+Icons are `,(0,V.jsx)(t.code,{children:`aria-hidden`}),` everywhere else, so they never double the name.`]}),`
+`,(0,V.jsxs)(t.li,{children:[(0,V.jsx)(t.code,{children:`isLoading`}),` sets `,(0,V.jsx)(t.code,{children:`aria-busy`}),` and `,(0,V.jsx)(t.code,{children:`aria-disabled`}),` but keeps the button
+focusable. `,(0,V.jsx)(t.code,{children:`disabled`}),` removes it from the tab order, as native buttons
+do.`]}),`
+`,(0,V.jsxs)(t.li,{children:[`A disabled or loading link renders a bare `,(0,V.jsx)(t.code,{children:`<a>`}),` with no `,(0,V.jsx)(t.code,{children:`href`}),` (the
+only thing that stops an `,(0,V.jsx)(t.code,{children:`<a>`}),` navigating) and `,(0,V.jsx)(t.code,{children:`aria-disabled`}),`. With
+`,(0,V.jsx)(t.code,{children:`render`}),`, the render element is dropped too, since a router's Link would
+keep its own `,(0,V.jsx)(t.code,{children:`href`}),`.`]}),`
+`,(0,V.jsxs)(t.li,{children:[(0,V.jsx)(t.code,{children:`render`}),` is for elements that are already interactive: a link or a
+router's Link. It merges props onto the element and adds no role or
+keyboard handling, so do not render a `,(0,V.jsx)(t.code,{children:`<div>`}),` through it.`]}),`
+`,(0,V.jsxs)(t.li,{children:[`Hover and pressed keep the label at 4.5:1 too. The `,(0,V.jsx)(t.code,{children:`StateContrast`}),`
+story measures every variant × appearance × state under all seventeen
+accents in both modes, from the CSS that ships.`]}),`
+`,(0,V.jsxs)(t.li,{children:[(0,V.jsx)(t.code,{children:`sm`}),` and `,(0,V.jsx)(t.code,{children:`md`}),` are under 44px; on touch screens (`,(0,V.jsx)(t.code,{children:`pointer: coarse`}),`) the
+hit area grows to 44×44px without the button growing.`]}),`
+`,(0,V.jsxs)(t.li,{children:[`Focus ring: 2px `,(0,V.jsx)(t.code,{children:`--ring`}),`, 2px offset, at 3:1 or better on the page.`]}),`
+`]})]})]})]})}function B(e={}){let{wrapper:t}={...n(),...e.components};return t?(0,V.jsx)(t,{...e,children:(0,V.jsx)(z,{...e})}):z(e)}var V;function H(){return(H=e((()=>{V=t(),r(),c(),p(),h(),_(),m(),g(),S(),l(),O()})))()}H();export{B as default};

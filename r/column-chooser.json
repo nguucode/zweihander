@@ -1,0 +1,29 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "column-chooser",
+  "title": "Column Chooser",
+  "description": "Button that opens a popover listing a table's columns, each with a checkbox to show or hide it, the row header locked, and a Reset to the default set.",
+  "registryDependencies": [
+    "https://ontheshore.biz/zweihander/r/utils.json",
+    "https://ontheshore.biz/zweihander/r/tokens.json",
+    "https://ontheshore.biz/zweihander/r/icon.json",
+    "https://ontheshore.biz/zweihander/r/button.json",
+    "https://ontheshore.biz/zweihander/r/checkbox.json",
+    "https://ontheshore.biz/zweihander/r/popover.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/data-display/ColumnChooser.tsx",
+      "content": "'use client'\n\nimport { useState, type ReactNode } from 'react'\nimport { Icon } from '@/lib/icon'\nimport { Button } from '../buttons/Button'\nimport { Checkbox } from '../controls/Checkbox'\nimport { Popover } from '../overlays/Popover'\nimport styles from './ColumnChooser.module.css'\n\n/** A Table column fits as is: only these fields are read. Declared here, not picked from Table, so the chooser installs without it. */\nexport interface ColumnChooserColumn {\n  key: string\n  header: ReactNode\n  /** The row header names each row, so it cannot be hidden. */\n  isRowHeader?: boolean\n}\n\nexport interface ColumnChooserProps {\n  /** Every column, hidden ones included, in table order. */\n  columns: ColumnChooserColumn[]\n  /** The shown columns' keys. Pair with `onVisibleKeysChange`. */\n  visibleKeys?: string[]\n  /** Shown at first, uncontrolled, and what Reset brings back. Defaults to every column. */\n  defaultVisibleKeys?: string[]\n  /** Called with the shown keys, in column order, when a box is ticked or Reset is pressed. */\n  onVisibleKeysChange?: (keys: string[]) => void\n  /** Also called by Reset, to put back what lives outside the chooser, such as column widths. */\n  onReset?: () => void\n  /** The button's text and the popover's title. */\n  label?: string\n  resetLabel?: string\n  open?: boolean\n  defaultOpen?: boolean\n  onOpenChange?: (open: boolean) => void\n  /** Where the popup renders instead of `<body>`. */\n  container?: HTMLElement | null\n  className?: string\n}\n\n/** A button that opens a list of a table's columns, each with a checkbox to show or hide it. */\nexport function ColumnChooser({\n  columns,\n  visibleKeys,\n  defaultVisibleKeys,\n  onVisibleKeysChange,\n  onReset,\n  label = 'Columns',\n  resetLabel = 'Reset',\n  open,\n  defaultOpen,\n  onOpenChange,\n  container,\n  className,\n}: ColumnChooserProps) {\n  // Column order, whatever order the keys came in; the row header always in.\n  const ordered = (keys: Set<string>) => columns.filter((c) => c.isRowHeader || keys.has(c.key)).map((c) => c.key)\n  const initial = defaultVisibleKeys ? ordered(new Set(defaultVisibleKeys)) : columns.map((c) => c.key)\n  const [state, setState] = useState(initial)\n  const shown = new Set(visibleKeys ?? state)\n  const set = (keys: Set<string>) => {\n    const next = ordered(keys)\n    setState(next)\n    onVisibleKeysChange?.(next)\n  }\n  const shownCount = columns.filter((c) => shown.has(c.key)).length\n  return (\n    <Popover\n      trigger={\n        <Button variant=\"secondary\" appearance=\"outlined\" endIcon={<Icon name=\"chevron-down\" />} className={className}>\n          {label}\n        </Button>\n      }\n      title={label}\n      align=\"end\"\n      open={open}\n      defaultOpen={defaultOpen}\n      onOpenChange={onOpenChange}\n      container={container}\n    >\n      <div className={styles.list}>\n        {columns.map((col) => {\n          const checked = col.isRowHeader || shown.has(col.key)\n          return (\n            <Checkbox\n              key={col.key}\n              label={col.header}\n              checked={checked}\n              // The row header always shows, and so does the last column left.\n              disabled={col.isRowHeader || (checked && shownCount <= 1)}\n              onCheckedChange={(on) => {\n                const next = new Set(shown)\n                if (on) next.add(col.key)\n                else next.delete(col.key)\n                set(next)\n              }}\n            />\n          )\n        })}\n      </div>\n      <Button\n        variant=\"secondary\"\n        appearance=\"ghost\"\n        size=\"sm\"\n        className={styles.reset}\n        onClick={() => {\n          set(new Set(initial))\n          onReset?.()\n        }}\n      >\n        {resetLabel}\n      </Button>\n    </Popover>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/data-display/ColumnChooser.tsx"
+    },
+    {
+      "path": "src/components/data-display/ColumnChooser.module.css",
+      "content": ".list {\n  display: flex;\n  flex-direction: column;\n  gap: var(--space-2);\n}\n\n/* Set apart from the boxes, so it does not read as one of them. */\n.reset {\n  margin-block-start: var(--space-3);\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/data-display/ColumnChooser.module.css"
+    }
+  ],
+  "type": "registry:component"
+}

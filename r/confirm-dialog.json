@@ -1,0 +1,29 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "confirm-dialog",
+  "title": "Confirm Dialog",
+  "description": "Alert dialog that asks before a destructive action: warning icon, the action as a question, its consequence, Cancel with focus, a destructive button, and optional type-to-confirm, on Modal.",
+  "registryDependencies": [
+    "https://ontheshore.biz/zweihander/r/utils.json",
+    "https://ontheshore.biz/zweihander/r/tokens.json",
+    "https://ontheshore.biz/zweihander/r/icon.json",
+    "https://ontheshore.biz/zweihander/r/modal.json",
+    "https://ontheshore.biz/zweihander/r/button.json",
+    "https://ontheshore.biz/zweihander/r/text-input.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/overlays/ConfirmDialog.tsx",
+      "content": "'use client'\n\nimport { useState, type ReactElement, type ReactNode } from 'react'\nimport { Icon } from '@/lib/icon'\nimport { Button } from '../buttons/Button'\nimport { TextInput } from '../inputs/TextInput'\nimport { Modal, ModalClose } from './Modal'\nimport styles from './ConfirmDialog.module.css'\n\nexport interface ConfirmDialogProps {\n  /** The button that opens it. Omit when `open` is controlled from elsewhere. */\n  trigger?: ReactElement\n  /** The action, as a question: \"Delete “Atlas”?\". Names the dialog. */\n  title: ReactNode\n  /** What happens, and that it cannot be undone. Describes the dialog. */\n  description: ReactNode\n  /** The destructive button, named after what it does: \"Delete project\". */\n  confirmLabel: string\n  /** The safe button. */\n  cancelLabel?: string\n  /**\n   * Type to confirm: the confirm button stays disabled until the reader types\n   * this exactly (case-sensitive, spaces around it ignored). Use the name of\n   * what is deleted. Leave it out, or empty, for an everyday delete.\n   */\n  confirmText?: string\n  /** Called when the reader confirms. The dialog closes. */\n  onConfirm: () => void\n  open?: boolean\n  defaultOpen?: boolean\n  onOpenChange?: (open: boolean) => void\n  /** Where it renders instead of `<body>`. */\n  container?: HTMLElement | null\n  /** `false` for a picture of the dialog, as on the docs: a plain dialog, not modal. */\n  isModal?: boolean\n}\n\n/** Asks before something that cannot be undone, in an alert dialog. */\nexport function ConfirmDialog({\n  trigger,\n  title,\n  description,\n  confirmLabel,\n  cancelLabel = 'Cancel',\n  confirmText,\n  onConfirm,\n  open,\n  defaultOpen = false,\n  onOpenChange,\n  container,\n  isModal = true,\n}: ConfirmDialogProps) {\n  const [ownOpen, setOwnOpen] = useState(defaultOpen)\n  const isOpen = open ?? ownOpen\n  const [typed, setTyped] = useState('')\n  // Clear what was typed on every open, however it opened. Not on close:\n  // the button would flash disabled while the dialog fades out.\n  const [wasOpen, setWasOpen] = useState(isOpen)\n  if (isOpen !== wasOpen) {\n    setWasOpen(isOpen)\n    if (isOpen) setTyped('')\n  }\n  const setOpen = (next: boolean) => {\n    setOwnOpen(next)\n    onOpenChange?.(next)\n  }\n  // An empty text would match at once: treat it as no type to confirm.\n  const phrase = confirmText?.trim() || undefined\n  const ready = phrase === undefined || typed.trim() === phrase\n  const confirm = () => {\n    if (!ready) return\n    onConfirm()\n    setOpen(false)\n  }\n\n  return (\n    <Modal\n      isAlert={isModal}\n      isModal={isModal}\n      closeOnBackdropClick={false}\n      hasCloseButton={false}\n      size=\"sm\"\n      trigger={trigger}\n      container={container}\n      open={isOpen}\n      onOpenChange={setOpen}\n      title={\n        <span className={styles.heading}>\n          <Icon name=\"warning\" className={styles.icon} />\n          {title}\n        </span>\n      }\n      description={description}\n      footer={\n        <>\n          {/* Before the action, so it has focus on open (after the field, when there is one) and Enter cannot delete. */}\n          <ModalClose render={<Button variant=\"secondary\" appearance=\"outlined\" />}>{cancelLabel}</ModalClose>\n          <Button variant=\"destructive\" disabled={!ready} onClick={confirm}>\n            {confirmLabel}\n          </Button>\n        </>\n      }\n    >\n      {phrase !== undefined && (\n        // A form, so Enter in the field confirms once it matches.\n        <form\n          onSubmit={(event) => {\n            event.preventDefault()\n            confirm()\n          }}\n        >\n          <TextInput\n            label={\n              <>\n                To confirm, type <strong className={styles.phrase}>{phrase}</strong>\n              </>\n            }\n            value={typed}\n            onChange={(event) => setTyped(event.target.value)}\n            autoComplete=\"off\"\n            autoCapitalize=\"off\"\n            spellCheck={false}\n            isFullWidth\n          />\n        </form>\n      )}\n    </Modal>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/overlays/ConfirmDialog.tsx"
+    },
+    {
+      "path": "src/components/overlays/ConfirmDialog.module.css",
+      "content": ".heading {\n  display: flex;\n  align-items: flex-start;\n  gap: var(--space-inline);\n}\n\n/* One line tall, so it sits on the title's first line when the title wraps. */\n.icon {\n  flex: none;\n  inline-size: var(--icon-md);\n  block-size: 1lh;\n  color: var(--destructive);\n}\n\n/* The text to type, set apart from the sentence around it. */\n.phrase {\n  font-family: var(--font-mono);\n  font-weight: 600;\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/overlays/ConfirmDialog.module.css"
+    }
+  ],
+  "type": "registry:component"
+}

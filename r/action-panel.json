@@ -1,0 +1,26 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "action-panel",
+  "title": "Action Panel",
+  "description": "Application UI pattern: a card offering one action, with a title, a description and a button, switch or small form below or beside the text, and a danger variant for what cannot be undone.",
+  "registryDependencies": [
+    "https://ontheshore.biz/zweihander/r/utils.json",
+    "https://ontheshore.biz/zweihander/r/tokens.json",
+    "https://ontheshore.biz/zweihander/r/card.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/patterns/application-ui/ActionPanel.tsx",
+      "content": "'use client'\n\nimport { useId, type ReactNode } from 'react'\nimport { cn } from '@/lib/utils'\nimport { Card, type CardProps } from '../../data-display/Card'\nimport styles from './ActionPanel.module.css'\n\nexport interface ActionPanelProps extends Omit<CardProps, 'title' | 'onClick' | 'render' | 'orientation'> {\n  title: ReactNode\n  description?: ReactNode\n  action: ReactNode\n  actionPlacement?: 'below' | 'end'\n  variant?: 'default' | 'danger'\n  headingLevel?: 2 | 3 | 4\n}\n\n/**\n * A card that offers one action: what it is, what it does, and the control\n * that does it. The panel is a group named by its title and described by\n * its description, so the control is announced with that context.\n */\nexport function ActionPanel({\n  title,\n  description,\n  action,\n  actionPlacement = 'below',\n  variant = 'default',\n  headingLevel = 2,\n  className,\n  ...props\n}: ActionPanelProps) {\n  const id = useId()\n  const Heading = `h${headingLevel}` as const\n  return (\n    <Card\n      role=\"group\"\n      aria-labelledby={`${id}title`}\n      aria-describedby={description ? `${id}description` : undefined}\n      className={cn(styles.actionPanel, styles[actionPlacement], variant === 'danger' && styles.danger, className)}\n      {...props}\n    >\n      <div className={styles.text}>\n        <Heading id={`${id}title`} className={styles.title}>\n          {title}\n        </Heading>\n        {description && (\n          <div id={`${id}description`} className={styles.description}>\n            {description}\n          </div>\n        )}\n      </div>\n      <div className={styles.action}>{action}</div>\n    </Card>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/patterns/application-ui/ActionPanel.tsx"
+    },
+    {
+      "path": "src/components/patterns/application-ui/ActionPanel.module.css",
+      "content": "/* The Card spaces the text and the action with its own padding and gap. */\n.text {\n  display: grid;\n  gap: var(--space-2);\n  min-inline-size: 0;\n}\n\n.title {\n  margin: 0;\n  font-size: var(--text-heading-sm);\n  line-height: var(--leading-heading-sm);\n  font-weight: 600;\n  overflow-wrap: anywhere;\n}\n\n.description {\n  max-inline-size: 65ch;\n  color: var(--muted-foreground);\n  overflow-wrap: anywhere;\n}\n.description > p {\n  margin: 0;\n}\n\n.action {\n  display: flex;\n  flex-wrap: wrap;\n  align-items: center;\n  gap: var(--space-inline);\n}\n\n/* end: the action shares the row with the text while the text keeps 16rem,\n   then drops under it, as Card Heading's actions do. Two classes to beat\n   Card's flex-direction. The action stays at the top, by the title, when\n   the description runs to several lines. */\n.actionPanel.end {\n  flex-flow: row wrap;\n  align-items: flex-start;\n  justify-content: space-between;\n}\n.end > .text {\n  flex: 1 1 16rem;\n}\n\n/* The edge says \"careful\" before the button does, on every side and in\n   every appearance, flat surface included. [class] lifts it over Card's\n   two-class appearance rules, whichever stylesheet loads last. */\n.actionPanel.danger[class] {\n  border-color: var(--destructive);\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/patterns/application-ui/ActionPanel.module.css"
+    }
+  ],
+  "type": "registry:block"
+}

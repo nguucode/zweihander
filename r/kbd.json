@@ -1,0 +1,25 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "kbd",
+  "title": "Kbd",
+  "description": "Key cap that shows which key to press, alone or as a combination.",
+  "registryDependencies": [
+    "https://ontheshore.biz/zweihander/r/utils.json",
+    "https://ontheshore.biz/zweihander/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/atomic-elements/Kbd.tsx",
+      "content": "import type { ComponentProps, ReactNode } from 'react'\nimport { cn } from '@/lib/utils'\nimport styles from './Kbd.module.css'\n\n/** One key as `children`, or a combination as `keys`: never both. */\nexport type KbdProps = Omit<ComponentProps<'kbd'>, 'children'> & { size?: 'sm' | 'md' } & (\n    | { children: ReactNode; keys?: never }\n    | { /** A key combination, one key cap per entry: `['⌘', 'K']`. */ keys: string[]; children?: never }\n  )\n\nexport function Kbd({ keys, size = 'md', className, children, ...props }: KbdProps) {\n  const cap = cn(styles.key, styles[size])\n  if (!keys) {\n    return (\n      <kbd className={cn(cap, className)} {...props}>\n        {children}\n      </kbd>\n    )\n  }\n  // HTML's own markup for a combination: a <kbd> of <kbd>s, one per key.\n  return (\n    <kbd className={cn(styles.group, className)} {...props}>\n      {keys.map((key, i) => (\n        <kbd key={i} className={cap}>\n          {key}\n        </kbd>\n      ))}\n    </kbd>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/atomic-elements/Kbd.tsx"
+    },
+    {
+      "path": "src/components/atomic-elements/Kbd.module.css",
+      "content": "/* A key cap: one glyph or word on a raised, bordered chip. It sits in a\n   line of text, a tooltip or a menu row, so it inherits nothing from the\n   UA's monospace <kbd> style. */\n.key {\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  box-sizing: border-box;\n  padding-inline: var(--space-1);\n  border: 1px solid var(--border);\n  border-block-end-width: 2px;\n  border-radius: var(--radius-sm);\n  background: var(--muted);\n  color: var(--muted-foreground);\n  font-family: var(--font-sans);\n  font-size: var(--text-body-xs);\n  line-height: var(--leading-body-xs);\n  font-weight: 500;\n  white-space: nowrap;\n  vertical-align: middle;\n}\n\n/* Small parts on the box ramp: md is xs (20px), sm is 2xs (16px). The\n   minimum width equal to the height keeps a single glyph square. */\n.md {\n  min-inline-size: var(--box-xs);\n  block-size: var(--box-xs);\n}\n\n.sm {\n  min-inline-size: var(--box-2xs);\n  block-size: var(--box-2xs);\n  padding-inline: var(--space-0-5);\n}\n\n.group {\n  display: inline-flex;\n  align-items: center;\n  gap: var(--space-0-5);\n  font: inherit;\n  vertical-align: middle;\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/atomic-elements/Kbd.module.css"
+    }
+  ],
+  "type": "registry:component"
+}

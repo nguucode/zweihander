@@ -1,0 +1,25 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "list-container",
+  "title": "List Container",
+  "description": "Application UI pattern: the frame around a list, with a line between rows, flat, in a card or as separate cards, and a footer and an empty state.",
+  "registryDependencies": [
+    "https://ontheshore.biz/zweihander/r/utils.json",
+    "https://ontheshore.biz/zweihander/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/patterns/application-ui/ListContainer.tsx",
+      "content": "import { Children, type ComponentProps, type ReactNode } from 'react'\nimport { cn } from '@/lib/utils'\nimport styles from './ListContainer.module.css'\n\nexport interface ListContainerProps extends Omit<ComponentProps<'div'>, 'children'> {\n  /** The rows: one ListContainerItem each. */\n  children?: ReactNode\n  /** `flat`: rows divided by a line, no frame. `card`: the same inside a bordered panel. `separate`: each row its own panel, a gap instead of lines. */\n  appearance?: 'flat' | 'card' | 'separate'\n  /** After the last row, past a divider: a Pagination or a \"View all\" link. Rendered as given. */\n  footer?: ReactNode\n  /** Shown instead of the list when there are no rows. */\n  empty?: ReactNode\n}\n\n/**\n * The frame around a list: a line between rows, optionally a panel around\n * them, a footer and an empty state. It owns the rows' padding and dividers;\n * what sits in a row is up to the caller (Stacked List puts its records here).\n */\nexport function ListContainer({ children, appearance = 'flat', footer, empty = 'Nothing here yet.', className, ...props }: ListContainerProps) {\n  return (\n    <div className={cn(styles.root, styles[appearance], className)} {...props}>\n      {Children.toArray(children).length === 0 ? <p className={styles.empty}>{empty}</p> : <ul className={styles.list}>{children}</ul>}\n      {footer && <div className={styles.footer}>{footer}</div>}\n    </div>\n  )\n}\n\n/** One row of a ListContainer: an `<li>` with the row's padding and divider. Every `<li>` prop passes through. */\nexport function ListContainerItem({ className, ...props }: ComponentProps<'li'>) {\n  return <li className={cn(styles.item, className)} {...props} />\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/patterns/application-ui/ListContainer.tsx"
+    },
+    {
+      "path": "src/components/patterns/application-ui/ListContainer.module.css",
+      "content": "/* The frame owns the rows' padding and the lines between them, so every\n   list on a page lines up whatever sits in its rows. */\n.root {\n  display: grid;\n  min-inline-size: 0;\n  font-family: var(--font-sans);\n  color: var(--foreground);\n}\n\n.list {\n  margin: 0;\n  padding: 0;\n  list-style: none;\n}\n\n/* Rows pad and size as Table rows do, so the two line up at any density. */\n.item {\n  box-sizing: border-box;\n  min-block-size: var(--row-height);\n  padding: var(--space-inline) var(--space-4);\n  overflow-wrap: anywhere;\n}\n\n.flat > .list > .item + .item,\n.card > .list > .item + .item {\n  border-block-start: 1px solid var(--border);\n}\n\n/* card and separate panels look like an outline Card. overflow: clip keeps\n   a row's inset focus ring inside the rounded corners. */\n.card,\n.separate > .list > .item,\n.separate > .empty {\n  /* stylelint-disable-next-line zweihander/no-token-shadow -- what sits on the panel reads its colour */\n  --background: var(--card);\n  border: 1px solid var(--border);\n  border-radius: var(--radius-panel);\n  background: var(--card);\n  overflow: clip;\n}\n\n.separate {\n  gap: var(--space-3);\n}\n.separate > .list {\n  display: grid;\n  gap: var(--space-3);\n}\n\n.empty {\n  margin: 0;\n  padding: var(--space-3) var(--space-4);\n  font-size: var(--text-body-sm);\n  line-height: var(--leading-body-sm);\n  color: var(--muted-foreground);\n}\n\n.footer {\n  padding: var(--space-3) var(--space-4);\n}\n.flat > .footer,\n.card > .footer {\n  border-block-start: 1px solid var(--border);\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/patterns/application-ui/ListContainer.module.css"
+    }
+  ],
+  "type": "registry:block"
+}

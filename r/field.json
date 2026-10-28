@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "field",
+  "title": "Field",
+  "description": "Label, required mark, info note and helper text with validation for a control that has none of its own, on Base UI Field.",
+  "dependencies": [
+    "@base-ui/react"
+  ],
+  "registryDependencies": [
+    "https://ontheshore.biz/zweihander/r/utils.json",
+    "https://ontheshore.biz/zweihander/r/tokens.json",
+    "https://ontheshore.biz/zweihander/r/input-field.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/inputs/Field.tsx",
+      "content": "'use client'\n\nimport type { ReactNode } from 'react'\nimport { Field as BaseField } from '@base-ui/react/field'\nimport { InputField, type ValidationState } from './InputField'\n\nexport interface FieldProps {\n  /** The control: a Base UI control, or `FieldControl` rendering your own element. */\n  children: ReactNode\n  /** Names the control. */\n  label: ReactNode\n  /** A longer note about the label, behind an info button after it. Opens on press, not hover. */\n  labelInfo?: ReactNode\n  /** The info button's accessible name; the label is read after it as its description. */\n  infoLabel?: string\n  /** Under the control, read as its description. The error message when `validationState` is error. */\n  helperText?: ReactNode\n  validationState?: ValidationState\n  /** Adds an asterisk after the label. Put `required` on the control too. */\n  required?: boolean\n  disabled?: boolean\n  /** The name the control submits under, and the key for a Base UI Form's errors. */\n  name?: string\n  isFullWidth?: boolean\n  className?: string\n}\n\n/**\n * Label, helper text and validation for a control that has none of its own.\n * Text Input, Select, Checkbox and the other Zweihänder controls already\n * carry this anatomy: do not wrap them.\n */\nexport function Field(props: FieldProps) {\n  return <InputField {...props} />\n}\n\n/** Base UI's field control: an <input> by default, any element through `render`. Wired to the label, helper and invalid state. */\nexport const FieldControl = BaseField.Control\n",
+      "type": "registry:component",
+      "target": "components/zweihander/inputs/Field.tsx"
+    }
+  ],
+  "type": "registry:component"
+}

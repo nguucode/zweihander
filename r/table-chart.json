@@ -1,0 +1,26 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "table-chart",
+  "title": "Table Chart Switch",
+  "description": "Application UI pattern: one set of records as a table or a chart, switched with tabs, under the same filters.",
+  "registryDependencies": [
+    "https://ontheshore.biz/zweihander/r/utils.json",
+    "https://ontheshore.biz/zweihander/r/tokens.json",
+    "https://ontheshore.biz/zweihander/r/tabs.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/patterns/application-ui/TableChartSwitch.tsx",
+      "content": "'use client'\n\nimport type { ComponentProps, ReactNode } from 'react'\nimport { cn } from '@/lib/utils'\nimport { Tabs } from '../../navigation/Tabs'\nimport styles from './TableChartSwitch.module.css'\n\nexport type TableChartView = 'table' | 'chart'\n\nexport interface TableChartSwitchProps extends Omit<ComponentProps<'div'>, 'children'> {\n  /** The records, usually a Table. */\n  table: ReactNode\n  /** The same records summed up, usually a BarChart or LineChart. */\n  chart: ReactNode\n  /** The filters both views share, usually a FilterBar. It stays put when the view changes. */\n  filters?: ReactNode\n  /** At the start of the switch's row: what the views show, e.g. \"128 invoices\". */\n  summary?: ReactNode\n  /** The view shown. */\n  view?: TableChartView\n  defaultView?: TableChartView\n  onViewChange?: (view: TableChartView) => void\n  tableLabel?: string\n  chartLabel?: string\n  /** Names the switch. Defaults to \"View\". */\n  'aria-label'?: string\n}\n\n/**\n * One set of records, two ways to look at it: a table of the rows and a\n * chart of their totals, under the same filters. Owns no data: filter once\n * and hand the result to both views.\n */\nexport function TableChartSwitch({\n  table,\n  chart,\n  filters,\n  summary,\n  view,\n  defaultView = 'table',\n  onViewChange,\n  tableLabel = 'Table',\n  chartLabel = 'Chart',\n  'aria-label': ariaLabel = 'View',\n  className,\n  ...props\n}: TableChartSwitchProps) {\n  return (\n    <div {...props} className={cn(styles.root, className)}>\n      {filters != null && <div className={styles.filters}>{filters}</div>}\n      {/* A status, so a screen reader hears the new count when a filter changes it. */}\n      {summary != null && (\n        <div className={styles.summary} role=\"status\">\n          {summary}\n        </div>\n      )}\n      <Tabs\n        appearance=\"pills\"\n        size=\"sm\"\n        // Both views stay mounted, so the table keeps its sort, selection\n        // and scroll while the viewer looks at the chart.\n        keepMounted\n        aria-label={ariaLabel}\n        className={styles.tabs}\n        value={view}\n        defaultValue={view === undefined ? defaultView : undefined}\n        onValueChange={onViewChange && ((v) => onViewChange(v as TableChartView))}\n        items={[\n          { value: 'table', label: tableLabel, content: table },\n          { value: 'chart', label: chartLabel, content: chart },\n        ]}\n      />\n    </div>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/patterns/application-ui/TableChartSwitch.tsx"
+    },
+    {
+      "path": "src/components/patterns/application-ui/TableChartSwitch.module.css",
+      "content": "/* Filters on top, then the summary and the switch on one row, then the view.\n   The Tabs root is flattened so its list joins the summary's row and its\n   panel takes the full width below; the row wraps when it is too narrow. */\n.root {\n  display: flex;\n  flex-wrap: wrap;\n  align-items: center;\n  gap: var(--space-group) var(--space-cluster);\n  font-family: var(--font-sans);\n  font-size: var(--text-body);\n  line-height: var(--leading-body);\n  color: var(--foreground);\n}\n\n.tabs {\n  display: contents;\n}\n\n.filters,\n.tabs > [role='tabpanel'] {\n  flex: 1 1 100%;\n  min-inline-size: 0;\n}\n\n.summary {\n  flex: 1 1 auto;\n  min-inline-size: 0;\n  overflow-wrap: anywhere;\n  color: var(--muted-foreground);\n}\n\n.tabs > [role='tablist'] {\n  margin-inline-start: auto;\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/patterns/application-ui/TableChartSwitch.module.css"
+    }
+  ],
+  "type": "registry:block"
+}

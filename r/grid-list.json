@@ -1,0 +1,31 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "grid-list",
+  "title": "Grid List",
+  "description": "Application UI pattern: records as cards in a responsive grid, each with an optional cover picture, an avatar or icon, a title, a status, a line and facts under it, and a link to the record or a menu of actions that also opens on right click; the same item as Stacked List, framed by List Container with a footer and an empty state.",
+  "registryDependencies": [
+    "https://ontheshore.biz/zweihander/r/utils.json",
+    "https://ontheshore.biz/zweihander/r/tokens.json",
+    "https://ontheshore.biz/zweihander/r/icon.json",
+    "https://ontheshore.biz/zweihander/r/button.json",
+    "https://ontheshore.biz/zweihander/r/menu.json",
+    "https://ontheshore.biz/zweihander/r/context-menu.json",
+    "https://ontheshore.biz/zweihander/r/list-container.json",
+    "https://ontheshore.biz/zweihander/r/stacked-list.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/patterns/application-ui/GridList.tsx",
+      "content": "import type { ReactNode } from 'react'\nimport { cn } from '@/lib/utils'\nimport { ListContainer, ListContainerItem, type ListContainerProps } from './ListContainer'\nimport { ListItemActions, ListItemContextMenu, ListItemHeading, ListItemMedia } from './ListItemParts'\nimport parts from './ListItemParts.module.css'\nimport type { StackedListItem } from './StackedList'\nimport styles from './GridList.module.css'\n\n/** A Stacked List item, plus an optional picture across the top of the card. */\nexport interface GridListItem extends StackedListItem {\n  /** A picture across the top of the card: a photo, a file preview, a logo. Decorative, so give an `<img>` `alt=\"\"`: the title names the item. */\n  cover?: ReactNode\n}\n\nexport interface GridListProps extends Omit<ListContainerProps, 'children' | 'appearance'> {\n  /** The cards, in reading order: left to right, then down. */\n  items: GridListItem[]\n}\n\n/**\n * Records as cards in a grid: people, projects, files. Each card takes the\n * same item as a Stacked List row, plus an optional cover picture. The grid\n * fits as many columns as its container allows. The card panels, footer and\n * empty state are List Container's `separate` appearance.\n */\nexport function GridList({ items, className, ...props }: GridListProps) {\n  return (\n    <ListContainer {...props} appearance=\"separate\" className={cn(styles.grid, className)}>\n      {items.map((item, i) => (\n        <ListItemContextMenu key={item.id ?? i} item={item}>\n          <ListContainerItem className={cn(parts.target, styles.card)}>\n            {item.cover && (\n              <div className={styles.cover} aria-hidden=\"true\">\n                {item.cover}\n              </div>\n            )}\n            <div className={styles.body}>\n              <ListItemMedia item={item} />\n              <div className={styles.text}>\n                <ListItemHeading item={item} />\n                {item.description && <p className={parts.description}>{item.description}</p>}\n                {item.meta && <div className={parts.meta}>{item.meta}</div>}\n              </div>\n              <ListItemActions item={item} index={i} />\n            </div>\n          </ListContainerItem>\n        </ListItemContextMenu>\n      ))}\n    </ListContainer>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/patterns/application-ui/GridList.tsx"
+    },
+    {
+      "path": "src/components/patterns/application-ui/GridList.module.css",
+      "content": "/* As many 16rem columns as fit the container, not the viewport, so the grid\n   works in an aside as on a full page. auto-fill keeps a lone card one\n   column wide instead of stretching it across the row. */\n.grid > ul {\n  grid-template-columns: repeat(auto-fill, minmax(min(16rem, 100%), 1fr));\n}\n\n/* List Container draws the panel; the card pads its own parts so the cover\n   can run to the edges. Two classes, to win over List Container's row\n   padding whatever order the stylesheets load in. The parts it shares with\n   Stacked List (media, heading, link, menu) are ListItemParts'. */\n.grid .card {\n  display: flex;\n  flex-direction: column;\n  padding: 0;\n  /* The link's focus ring sits inside the panel's 1px border, so 1px less\n     round than the panel. */\n  --list-item-focus-radius: calc(var(--radius-panel) - 1px);\n}\n\n.cover {\n  display: grid;\n  place-items: center;\n  aspect-ratio: 16 / 9;\n  border-block-end: 1px solid var(--border);\n  background: var(--surface-filled);\n  color: var(--muted-foreground);\n  overflow: hidden;\n}\n.cover > img {\n  inline-size: 100%;\n  block-size: 100%;\n  object-fit: cover;\n}\n\n.body {\n  display: flex;\n  align-items: flex-start;\n  gap: var(--space-3);\n  padding: var(--space-4);\n  min-inline-size: 0;\n}\n\n.text {\n  display: grid;\n  flex: 1;\n  gap: var(--space-1);\n  min-inline-size: 0;\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/patterns/application-ui/GridList.module.css"
+    }
+  ],
+  "type": "registry:block"
+}

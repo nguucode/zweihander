@@ -1,0 +1,27 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "success-state",
+  "title": "Success State",
+  "description": "What a finished flow shows: Empty State in the success tone, with the next step as its action.",
+  "registryDependencies": [
+    "https://ontheshore.biz/zweihander/r/utils.json",
+    "https://ontheshore.biz/zweihander/r/tokens.json",
+    "https://ontheshore.biz/zweihander/r/icon.json",
+    "https://ontheshore.biz/zweihander/r/empty-state.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/states/SuccessState.tsx",
+      "content": "import type { ReactNode } from 'react'\nimport { Icon } from '@/lib/icon'\nimport { cn } from '@/lib/utils'\nimport { EmptyState, type EmptyStateProps } from './EmptyState'\nimport styles from './SuccessState.module.css'\n\nexport interface SuccessStateProps extends Omit<EmptyStateProps, 'title'> {\n  /** What was done. */\n  title: ReactNode\n  /** Announce it when it replaces a form or a progress view (`role=\"status\"`). */\n  isLive?: boolean\n}\n\n/**\n * What a flow shows when it has finished: the invite is sent, the import\n * is done. Empty State's layout in the success tone, with the next step as\n * its action.\n */\nexport function SuccessState({\n  icon = <Icon name=\"success\" />,\n  isLive = false,\n  className,\n  ...props\n}: SuccessStateProps) {\n  return <EmptyState role={isLive ? 'status' : undefined} icon={icon} className={cn(styles.success, className)} {...props} />\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/states/SuccessState.tsx"
+    },
+    {
+      "path": "src/components/states/SuccessState.module.css",
+      "content": "/* The disc in the success tone: --success-subtle behind --success-text,\n   4.5:1 and more. */\n.success {\n  --empty-icon-bg: var(--success-subtle);\n  --empty-icon-fg: var(--success-text);\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/states/SuccessState.module.css"
+    }
+  ],
+  "type": "registry:component"
+}

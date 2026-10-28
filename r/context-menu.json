@@ -1,0 +1,29 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "context-menu",
+  "title": "Context Menu",
+  "description": "Menu opened at the pointer by a right click or long press on an area, a row, a card or an object, with the same entries as Menu, on Base UI Context Menu.",
+  "dependencies": [
+    "@base-ui/react"
+  ],
+  "registryDependencies": [
+    "https://ontheshore.biz/zweihander/r/utils.json",
+    "https://ontheshore.biz/zweihander/r/tokens.json",
+    "https://ontheshore.biz/zweihander/r/menu.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/navigation/ContextMenu.tsx",
+      "content": "'use client'\n\nimport type { ReactElement } from 'react'\nimport { ContextMenu as BaseContextMenu } from '@base-ui/react/context-menu'\nimport { MenuEntries, MenuSurface, type MenuProps } from './Menu'\nimport styles from './ContextMenu.module.css'\n\nexport interface ContextMenuProps\n  extends Pick<MenuProps, 'items' | 'open' | 'defaultOpen' | 'onOpenChange' | 'container' | 'className'> {\n  /** The area: one element, its props merged, not wrapped, so a `<tr>` or `<li>` stays valid. */\n  children: ReactElement\n  disabled?: boolean\n}\n\n/** Always modal, as Base UI makes it: page scroll is locked while open. Menu's popup and entries, opened at the pointer by a right click or a long press on an area. */\nexport function ContextMenu({ children, items, disabled, open, defaultOpen, onOpenChange, container, className }: ContextMenuProps) {\n  return (\n    <BaseContextMenu.Root\n      open={open}\n      defaultOpen={defaultOpen}\n      onOpenChange={onOpenChange && ((next) => onOpenChange(next))}\n      disabled={disabled}\n    >\n      <BaseContextMenu.Trigger className={styles.area} render={children} />\n      {/* The popup's corner sits on the pointer, as in the OS menus. */}\n      <MenuSurface side=\"bottom\" align=\"start\" sideOffset={0} container={container} className={className}>\n        <MenuEntries items={items} />\n      </MenuSurface>\n    </BaseContextMenu.Root>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/navigation/ContextMenu.tsx"
+    },
+    {
+      "path": "src/components/navigation/ContextMenu.module.css",
+      "content": "/* While its menu is open, the area keeps a primary outline inside its edge,\n   so the reader sees which row or object the menu acts on. */\n.area[data-popup-open] {\n  outline: var(--focus-width) solid var(--primary);\n  outline-offset: calc(var(--focus-width) * -1);\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/navigation/ContextMenu.module.css"
+    }
+  ],
+  "type": "registry:component"
+}

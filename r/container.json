@@ -1,0 +1,25 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "container",
+  "title": "Container",
+  "description": "Application UI pattern: caps a page's content at a maximum width and centres it, with optional side padding by breakpoint for a page outside the App Shell, where App Content does not pad it.",
+  "registryDependencies": [
+    "https://ontheshore.biz/zweihander/r/utils.json",
+    "https://ontheshore.biz/zweihander/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/patterns/application-ui/Container.tsx",
+      "content": "import type { ComponentProps } from 'react'\nimport { cn } from '@/lib/utils'\nimport styles from './Container.module.css'\n\nexport interface ContainerProps extends ComponentProps<'div'> {\n  /** The widest the content gets: `sm` 48rem, `md` 64rem, `lg` 80rem. */\n  size?: 'sm' | 'md' | 'lg'\n  /**\n   * Adds the page's side padding, `--space-container` and `--space-section`\n   * from a 64rem viewport. Leave it off inside an App Shell: App Content\n   * already pads the page.\n   */\n  padded?: boolean\n}\n\n/**\n * Caps the width of a page's content and centres it in the space it is\n * given. It owns no landmark and no surface; inside an App Shell, App\n * Content keeps the padding, the scroll and the aside column.\n */\nexport function Container({ size = 'md', padded = false, className, ...props }: ContainerProps) {\n  return <div className={cn(styles.container, padded && styles.padded, className)} data-size={size} {...props} />\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/patterns/application-ui/Container.tsx"
+    },
+    {
+      "path": "src/components/patterns/application-ui/Container.module.css",
+      "content": "/* The width caps the content, not the padding: a padded and an unpadded\n   Container of one size give the same line length. Sizes after Tailwind's\n   max-w-3xl, 5xl and 7xl. Full width up to the cap, so it fills a grid or\n   flex parent the same as a block one. */\n.container {\n  --container-max: 64rem;\n  --container-padding: 0px;\n  inline-size: 100%;\n  max-inline-size: calc(var(--container-max) + 2 * var(--container-padding));\n  margin-inline: auto;\n  padding-inline: var(--container-padding);\n}\n.container[data-size='sm'] {\n  --container-max: 48rem;\n}\n.container[data-size='lg'] {\n  --container-max: 80rem;\n}\n\n/* Padding follows the viewport, not a container: a padded Container sits\n   outside the App Shell, where no ancestor is a size container. The steps\n   use App Content's tokens and 64rem step, so a page's sides match in and\n   out of the shell. */\n.padded {\n  --container-padding: var(--space-container);\n}\n@media (width >= 64rem) {\n  .padded {\n    --container-padding: var(--space-section);\n  }\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/patterns/application-ui/Container.module.css"
+    }
+  ],
+  "type": "registry:block"
+}

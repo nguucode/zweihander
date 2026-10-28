@@ -1,0 +1,29 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "menubar",
+  "title": "Menubar",
+  "description": "Row of menus as in a desktop app, File, Edit, View, each opening a Menu flyout, with arrow-key movement along the bar, on Base UI Menubar.",
+  "dependencies": [
+    "@base-ui/react"
+  ],
+  "registryDependencies": [
+    "https://ontheshore.biz/zweihander/r/utils.json",
+    "https://ontheshore.biz/zweihander/r/tokens.json",
+    "https://ontheshore.biz/zweihander/r/menu.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/navigation/Menubar.tsx",
+      "content": "'use client'\n\nimport { Menu as BaseMenu } from '@base-ui/react/menu'\nimport { Menubar as BaseMenubar } from '@base-ui/react/menubar'\nimport { cn } from '@/lib/utils'\nimport { MenuEntries, MenuSurface, type MenuEntry } from './Menu'\nimport styles from './Menubar.module.css'\n\nexport interface MenubarMenu {\n  /** The top-level item: File, Edit, View. */\n  label: string\n  /** The flyout's entries, the same data as Menu's `items`. */\n  items: MenuEntry[]\n  disabled?: boolean\n  /** Open this menu on first render, uncontrolled. */\n  defaultOpen?: boolean\n}\n\nexport interface MenubarProps {\n  menus: MenubarMenu[]\n  /** Names the bar. Needed when a page has more than one menubar. */\n  'aria-label'?: string\n  /**\n   * While a flyout is open, lock page scroll and make the rest of the page\n   * inert. `false` leaves the page as is.\n   */\n  isModal?: boolean\n  /** Where the flyouts render instead of `<body>`, e.g. an element in fullscreen. */\n  container?: HTMLElement | null\n  className?: string\n}\n\n/** A row of menus, as in a desktop app: File, Edit, View, each opening a flyout. */\nexport function Menubar({ menus, 'aria-label': ariaLabel, isModal = true, container, className }: MenubarProps) {\n  return (\n    <BaseMenubar aria-label={ariaLabel} modal={isModal} className={cn(styles.bar, className)}>\n      {menus.map((menu, i) => (\n        <BaseMenu.Root key={i} disabled={menu.disabled} defaultOpen={menu.defaultOpen}>\n          <BaseMenu.Trigger className={styles.trigger}>{menu.label}</BaseMenu.Trigger>\n          <MenuSurface side=\"bottom\" align=\"start\" container={container}>\n            <MenuEntries items={menu.items} />\n          </MenuSurface>\n        </BaseMenu.Root>\n      ))}\n    </BaseMenubar>\n  )\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/navigation/Menubar.tsx"
+    },
+    {
+      "path": "src/components/navigation/Menubar.module.css",
+      "content": "/* The bar: a quiet strip on the page surface, triggers inset the same\n   4px as the items inside a Menu popup, so a trigger's corner nests the\n   same way. */\n.bar {\n  --menubar-inset: var(--space-stack);\n  display: flex;\n  align-items: center;\n  gap: var(--space-0-5);\n  inline-size: fit-content;\n  max-inline-size: 100%;\n  overflow-x: auto;\n  padding: var(--menubar-inset);\n  border: 1px solid var(--border);\n  border-radius: var(--radius-field);\n  background: var(--background);\n  color: var(--foreground);\n  font-family: var(--font-sans);\n  font-size: var(--text-body);\n  line-height: var(--leading-body);\n}\n\n/* A trigger is a row of tier sm: shorter than the md items in the flyout,\n   so the bar stays a strip and not a toolbar of buttons. */\n.trigger {\n  display: inline-flex;\n  flex-shrink: 0;\n  align-items: center;\n  block-size: var(--control-sm);\n  padding: 0 var(--control-sm-pad);\n  border: 0;\n  border-radius: calc(var(--radius-field) - var(--menubar-inset));\n  background: transparent;\n  color: inherit;\n  font: inherit;\n  font-weight: 500;\n  cursor: default;\n  user-select: none;\n  outline: none;\n}\n\n/* Hover, keyboard highlight and the open menu share the item highlight. */\n.trigger:hover,\n.trigger[data-highlighted],\n.trigger[data-popup-open] {\n  background: var(--accent);\n  color: var(--accent-foreground);\n}\n\n.trigger:focus-visible {\n  outline: var(--focus-width) solid var(--ring);\n  outline-offset: calc(var(--focus-width) * -1);\n}\n\n.trigger[data-disabled] {\n  background: transparent;\n  color: var(--muted-foreground);\n  opacity: 0.6;\n}\n\n/* Triggers are 24px; on touch the hit area grows to 44px without the\n   strip growing. */\n@media (pointer: coarse) {\n  .trigger {\n    position: relative;\n  }\n  .trigger::after {\n    content: '';\n    position: absolute;\n    inset: 50% 0 auto;\n    block-size: var(--target-coarse);\n    translate: 0 -50%;\n  }\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/navigation/Menubar.module.css"
+    }
+  ],
+  "type": "registry:component"
+}
