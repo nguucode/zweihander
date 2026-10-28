@@ -45,7 +45,12 @@ const manifest: Manifest = {
           { caption: 'md', rows: [{ part: 'Container', property: 'Height', token: '--control-md' }] },
           { caption: 'Every size', rows: [{ part: 'Focus ring', property: 'Width', token: '--focus-width' }] },
         ],
-        color: [{ caption: 'primary', rows: [{ part: 'Label, contained', property: 'Colour', token: '--primary-foreground' }] }],
+        color: [
+          { caption: 'primary', rows: [{ part: 'Label, contained', property: 'Colour', token: '--primary-foreground' }] },
+          { caption: 'secondary', rows: [{ part: 'Label', property: 'Colour', token: '--secondary-foreground' }] },
+          { caption: 'Every variant', rows: [{ part: 'Container, hover', property: 'Background', token: '--accent' }] },
+        ],
+        pseudo: ['hover', 'focus-visible', 'focus'],
       },
     },
     item('component', 'Tooltip', 'Overlays', 'experimental'),
@@ -701,5 +706,34 @@ export const SpecsFollowSize: Story = {
     await expect(panel.getByRole('table', { name: 'sm' })).toBeVisible()
     await expect(panel.queryByRole('table', { name: 'md' })).toBeNull()
     await waitFor(() => expect(lastInspect(received)?.tokens).toEqual(['--control-sm', '--focus-width', '--primary-foreground']))
+  },
+}
+
+/**
+ * The State picker forces a pseudo-class on the live item, and the Color
+ * rows that name a state show only in it. Tables follow the variant as they
+ * follow the size.
+ */
+export const SpecsStates: Story = {
+  beforeEach: withUrl({ tab: 'specs' }),
+  play: async ({ canvas, userEvent }) => {
+    const received = await fakePreview(await frame(canvas))
+    const panel = propsPanel(canvas)
+    const picker = within(panel.getByRole('radiogroup', { name: 'State' }))
+    // focus and focus-visible are one Focus; no disabled prop, so no Disabled.
+    await expect(picker.getAllByRole('radio')).toHaveLength(3)
+    for (const name of ['Default', 'Hover', 'Focus']) await expect(picker.getByRole('radio', { name })).toBeVisible()
+    await expect(panel.getByRole('table', { name: 'primary' })).toBeVisible()
+    await expect(panel.queryByRole('table', { name: 'secondary' })).toBeNull()
+    // The hover row's table is empty by default, so it is not shown.
+    await expect(panel.queryByRole('table', { name: 'Every variant' })).toBeNull()
+
+    await userEvent.click(picker.getByRole('radio', { name: 'Hover' }))
+    await waitFor(() => expect(lastInspect(received)?.pseudo).toBe('hover'))
+    await expect(panel.getByRole('row', { name: /Container, hover Background/ })).toBeVisible()
+    await expect(lastInspect(received)?.tokens).toContain('--accent')
+
+    await userEvent.click(picker.getByRole('radio', { name: 'Default' }))
+    await waitFor(() => expect(lastInspect(received)).not.toHaveProperty('pseudo'))
   },
 }

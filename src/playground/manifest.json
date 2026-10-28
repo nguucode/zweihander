@@ -255,7 +255,8 @@
               }
             ]
           }
-        ]
+        ],
+        "pseudo": []
       },
       "guideline": {
         "whenToUse": [
@@ -532,7 +533,8 @@
               }
             ]
           }
-        ]
+        ],
+        "pseudo": []
       },
       "guideline": {
         "whenToUse": [
@@ -638,7 +640,8 @@
               }
             ]
           }
-        ]
+        ],
+        "pseudo": []
       },
       "guideline": {
         "whenToUse": [
@@ -777,7 +780,8 @@
               }
             ]
           }
-        ]
+        ],
+        "pseudo": []
       },
       "guideline": {
         "whenToUse": [
@@ -1184,6 +1188,10 @@
               }
             ]
           }
+        ],
+        "pseudo": [
+          "hover",
+          "focus-visible"
         ]
       },
       "guideline": {
@@ -1522,6 +1530,11 @@
               }
             ]
           }
+        ],
+        "pseudo": [
+          "hover",
+          "focus-visible",
+          "active"
         ]
       },
       "guideline": {
@@ -1648,6 +1661,10 @@
               }
             ]
           }
+        ],
+        "pseudo": [
+          "hover",
+          "focus-visible"
         ]
       },
       "guideline": {
@@ -1980,6 +1997,10 @@
               }
             ]
           }
+        ],
+        "pseudo": [
+          "hover",
+          "focus-visible"
         ]
       },
       "guideline": {
@@ -2251,6 +2272,10 @@
               }
             ]
           }
+        ],
+        "pseudo": [
+          "hover",
+          "focus-visible"
         ]
       },
       "guideline": {
@@ -2558,6 +2583,9 @@
               }
             ]
           }
+        ],
+        "pseudo": [
+          "focus-visible"
         ]
       },
       "guideline": {
@@ -2846,6 +2874,10 @@
               }
             ]
           }
+        ],
+        "pseudo": [
+          "hover",
+          "focus-visible"
         ]
       },
       "guideline": {
@@ -3034,6 +3066,10 @@
               }
             ]
           }
+        ],
+        "pseudo": [
+          "hover",
+          "focus-visible"
         ]
       },
       "guideline": {
@@ -3293,6 +3329,9 @@
               }
             ]
           }
+        ],
+        "pseudo": [
+          "focus-visible"
         ]
       },
       "guideline": {
@@ -3615,6 +3654,9 @@
               }
             ]
           }
+        ],
+        "pseudo": [
+          "focus-visible"
         ]
       },
       "guideline": {
@@ -3963,6 +4005,11 @@
               }
             ]
           }
+        ],
+        "pseudo": [
+          "hover",
+          "focus-visible",
+          "active"
         ]
       },
       "guideline": {
@@ -4272,6 +4319,11 @@
               }
             ]
           }
+        ],
+        "pseudo": [
+          "hover",
+          "focus-visible",
+          "active"
         ]
       },
       "guideline": {
@@ -4527,6 +4579,10 @@
               }
             ]
           }
+        ],
+        "pseudo": [
+          "hover",
+          "focus-visible"
         ]
       },
       "guideline": {
@@ -4748,6 +4804,10 @@
               }
             ]
           }
+        ],
+        "pseudo": [
+          "hover",
+          "focus-visible"
         ]
       },
       "guideline": {
@@ -4967,6 +5027,11 @@
               }
             ]
           }
+        ],
+        "pseudo": [
+          "hover",
+          "focus-visible",
+          "active"
         ]
       },
       "guideline": {
@@ -5062,7 +5127,12 @@
             ]
           }
         ],
-        "color": []
+        "color": [],
+        "pseudo": [
+          "hover",
+          "focus-visible",
+          "active"
+        ]
       },
       "guideline": {
         "whenToUse": [
@@ -5200,6 +5270,11 @@
               }
             ]
           }
+        ],
+        "pseudo": [
+          "hover",
+          "focus-visible",
+          "active"
         ]
       },
       "guideline": {
@@ -5620,6 +5695,11 @@
               }
             ]
           }
+        ],
+        "pseudo": [
+          "hover",
+          "focus-visible",
+          "active"
         ]
       },
       "guideline": {
@@ -6016,6 +6096,9 @@
               }
             ]
           }
+        ],
+        "pseudo": [
+          "focus"
         ]
       },
       "guideline": {
@@ -6347,6 +6430,9 @@
               }
             ]
           }
+        ],
+        "pseudo": [
+          "focus"
         ]
       },
       "guideline": {
@@ -6664,6 +6750,9 @@
               }
             ]
           }
+        ],
+        "pseudo": [
+          "focus"
         ]
       },
       "guideline": {
@@ -6893,7 +6982,8 @@
               }
             ]
           }
-        ]
+        ],
+        "pseudo": []
       },
       "guideline": {
         "whenToUse": [
@@ -7244,6 +7334,9 @@
               }
             ]
           }
+        ],
+        "pseudo": [
+          "focus-visible"
         ]
       },
       "guideline": {
@@ -7583,6 +7676,10 @@
               }
             ]
           }
+        ],
+        "pseudo": [
+          "focus",
+          "hover"
         ]
       },
       "guideline": {
@@ -7877,6 +7974,9 @@
               }
             ]
           }
+        ],
+        "pseudo": [
+          "focus"
         ]
       },
       "guideline": {
@@ -8020,6 +8120,9 @@
               }
             ]
           }
+        ],
+        "pseudo": [
+          "focus"
         ]
       },
       "guideline": {
@@ -8283,6 +8386,10 @@
               }
             ]
           }
+        ],
+        "pseudo": [
+          "focus",
+          "hover"
         ]
       },
       "guideline": {
@@ -8657,6 +8764,9 @@
               }
             ]
           }
+        ],
+        "pseudo": [
+          "focus-visible"
         ]
       },
       "guideline": {
@@ -8977,6 +9087,9 @@
               }
             ]
           }
+        ],
+        "pseudo": [
+          "focus"
         ]
       },
       "guideline": {
@@ -9348,6 +9461,9 @@
               }
             ]
           }
+        ],
+        "pseudo": [
+          "focus"
         ]
       },
       "guideline": {
@@ -9596,7 +9712,8 @@
               }
             ]
           }
-        ]
+        ],
+        "pseudo": []
       },
       "guideline": {
         "whenToUse": [
@@ -9731,7 +9848,8 @@
               }
             ]
           }
-        ]
+        ],
+        "pseudo": []
       },
       "guideline": {
         "whenToUse": [
@@ -9929,7 +10047,8 @@
               }
             ]
           }
-        ]
+        ],
+        "pseudo": []
       },
       "guideline": {
         "whenToUse": [
@@ -10118,6 +10237,10 @@
               }
             ]
           }
+        ],
+        "pseudo": [
+          "hover",
+          "focus-visible"
         ]
       },
       "guideline": {
@@ -10375,7 +10498,8 @@
               }
             ]
           }
-        ]
+        ],
+        "pseudo": []
       },
       "guideline": {
         "whenToUse": [
@@ -10510,7 +10634,8 @@
               }
             ]
           }
-        ]
+        ],
+        "pseudo": []
       },
       "guideline": {
         "whenToUse": [
@@ -10708,6 +10833,10 @@
               }
             ]
           }
+        ],
+        "pseudo": [
+          "hover",
+          "focus-visible"
         ]
       },
       "guideline": {
@@ -10978,7 +11107,8 @@
               }
             ]
           }
-        ]
+        ],
+        "pseudo": []
       },
       "guideline": {
         "whenToUse": [
@@ -11152,7 +11282,8 @@
               }
             ]
           }
-        ]
+        ],
+        "pseudo": []
       },
       "guideline": {
         "whenToUse": [
@@ -11415,6 +11546,10 @@
               }
             ]
           }
+        ],
+        "pseudo": [
+          "hover",
+          "focus-visible"
         ]
       },
       "guideline": {
@@ -11751,6 +11886,10 @@
               }
             ]
           }
+        ],
+        "pseudo": [
+          "hover",
+          "focus-visible"
         ]
       },
       "guideline": {
@@ -12067,6 +12206,10 @@
               }
             ]
           }
+        ],
+        "pseudo": [
+          "hover",
+          "focus-visible"
         ]
       },
       "guideline": {
@@ -12389,6 +12532,10 @@
               }
             ]
           }
+        ],
+        "pseudo": [
+          "hover",
+          "focus-visible"
         ]
       },
       "guideline": {
@@ -12562,6 +12709,10 @@
               }
             ]
           }
+        ],
+        "pseudo": [
+          "hover",
+          "focus-visible"
         ]
       },
       "guideline": {
@@ -12816,6 +12967,10 @@
               }
             ]
           }
+        ],
+        "pseudo": [
+          "hover",
+          "focus-visible"
         ]
       },
       "guideline": {
@@ -12950,7 +13105,8 @@
               }
             ]
           }
-        ]
+        ],
+        "pseudo": []
       },
       "guideline": {
         "whenToUse": [
@@ -13228,6 +13384,10 @@
               }
             ]
           }
+        ],
+        "pseudo": [
+          "hover",
+          "focus-visible"
         ]
       },
       "guideline": {
@@ -13500,6 +13660,10 @@
               }
             ]
           }
+        ],
+        "pseudo": [
+          "hover",
+          "focus-visible"
         ]
       },
       "guideline": {
@@ -13754,6 +13918,10 @@
               }
             ]
           }
+        ],
+        "pseudo": [
+          "hover",
+          "focus-visible"
         ]
       },
       "guideline": {
@@ -13965,7 +14133,8 @@
               }
             ]
           }
-        ]
+        ],
+        "pseudo": []
       },
       "guideline": {
         "whenToUse": [
@@ -14203,6 +14372,11 @@
               }
             ]
           }
+        ],
+        "pseudo": [
+          "hover",
+          "focus-visible",
+          "active"
         ]
       },
       "guideline": {
@@ -14447,6 +14621,11 @@
               }
             ]
           }
+        ],
+        "pseudo": [
+          "hover",
+          "focus-visible",
+          "active"
         ]
       },
       "guideline": {
@@ -14672,6 +14851,11 @@
               }
             ]
           }
+        ],
+        "pseudo": [
+          "hover",
+          "focus-visible",
+          "active"
         ]
       },
       "guideline": {
@@ -15435,6 +15619,10 @@
               }
             ]
           }
+        ],
+        "pseudo": [
+          "hover",
+          "focus-visible"
         ]
       },
       "guideline": {

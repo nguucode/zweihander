@@ -26,6 +26,8 @@ const page = `
 
 <SpecTable caption="not read" rows={[]} />
 
+<States states={[{ label: 'Hover', pseudo: 'hover' }, { label: 'Focus', pseudo: 'focus-visible' }, { label: 'Again', pseudo: 'hover' }]} />
+
 </DocTab>
 <DocTab value="guidelines">
 
@@ -58,6 +60,7 @@ test('reads the tables, prose and Do/Don’t pairs', () => {
       { rows: [{ part: 'Focus ring', property: 'Colour', token: '--ring' }] },
     ],
     color: [{ caption: 'primary', rows: [{ part: 'Label', property: 'Colour', token: '--primary-foreground' }] }],
+    pseudo: ['hover', 'focus-visible'],
     whenToUse: ['Use it for an action.', '- Save\n- Delete'],
     whenNotToUse: ['Not for navigation.'],
     doDont: [{ do: { story: 'DoOne', caption: 'One primary.' }, dont: { story: 'DontTwo', caption: '"Two" compete.' } }],
