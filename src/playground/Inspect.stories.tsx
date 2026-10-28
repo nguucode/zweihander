@@ -48,9 +48,17 @@ export const Default: Story = {
       // Inline padding shades the two sides.
       inspector.set({ parts, tokens: [], highlight: { part: 'Container', property: 'Inline padding', token: '--x' } })
       await waitFor(() => expect([...layer()!.children].filter((el) => (el as HTMLElement).style.background.includes('0.25'))).toHaveLength(2))
+
+      // A forced state goes on the item's root as the pseudo-states addon's class, and comes off.
+      inspector.set({ parts, tokens: [], pseudo: 'hover' })
+      await expect(canvasElement).toHaveClass('pseudo-hover-all')
+      inspector.set({ parts, tokens: [], pseudo: 'active' })
+      await expect(canvasElement).not.toHaveClass('pseudo-hover-all')
+      await expect(canvasElement).toHaveClass('pseudo-active-all')
     } finally {
       inspector.set(null)
     }
     await expect(layer()).toBeNull()
+    await expect(canvasElement).not.toHaveClass('pseudo-active-all')
   },
 }

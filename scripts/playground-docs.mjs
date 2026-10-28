@@ -1,6 +1,7 @@
 /**
  * What the Playground's Specs and Guideline tabs show, read from a
  * component's MDX page: the SpecTables under Measurements and Color, the
+ * pseudo-classes its States section forces,
  * Do/Don't pairs, and the When to use / When not to use prose.
  *
  * The MDX stays the one place these are written; this reads them the way
@@ -61,6 +62,9 @@ function prose(section = '') {
     .filter((p) => p && !p.startsWith('<') && !p.startsWith('{') && !p.startsWith('</'))
 }
 
+/** The pseudo-classes the page's <States> force (hover, focus-visible, active), in order of first use. */
+const pseudoStates = (source) => [...new Set([...source.matchAll(/pseudo: '([a-z-]+)'/g)].map((m) => m[1]))]
+
 /**
  * The Do/Don't pairs of the page, as story export names and captions. A
  * pair's block ends on a line of its own (`/>`), after the nested <Story />s.
@@ -89,6 +93,7 @@ export function readDocs(source) {
   return {
     measurements: tables(s.Measurements),
     color: tables(s.Color),
+    pseudo: pseudoStates(s.States ?? ''),
     whenToUse: prose(s['When to use']),
     whenNotToUse: prose(s['When not to use']),
     doDont: doDonts(source),

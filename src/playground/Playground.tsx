@@ -55,6 +55,8 @@ export interface Specs {
   anatomy: { name: string; selector: string; description: string }[]
   measurements: SpecTableData[]
   color: SpecTableData[]
+  /** Pseudo-classes the page's States section forces: the Specs tab offers them. */
+  pseudo: string[]
 }
 
 export interface Guideline {
@@ -99,26 +101,71 @@ const tabsOf = (item: ManifestItem): PanelTab[] => [
 /** A row of a Specs table, as the Specs tab hovers it. */
 type SpecRow = SpecTableData['rows'][number]
 
+/** A state the Specs tab can show: a forced pseudo-class, or `disabled` through the item's own prop. */
+const STATE_LABELS: Record<string, string> = {
+  default: 'Default',
+  hover: 'Hover',
+  'focus-visible': 'Focus',
+  focus: 'Focus',
+  'focus-within': 'Focus',
+  active: 'Pressed',
+  disabled: 'Disabled',
+}
+
+/** The item's boolean disabled prop, if it has one. */
+const disabledProp = (item: ManifestItem) =>
+  item.props.find((p) => p.control === 'boolean' && /^(isD|d)isabled$/.test(p.name))
+
+/** The states Specs offers for an item: none for a static one. One Focus, whichever the page forces first. */
+function statesOf(item: ManifestItem) {
+  const states = ['default', ...(item.specs?.pseudo ?? []), ...(disabledProp(item) ? ['disabled'] : [])]
+  const labels = new Set<string>()
+  const unique = states.filter((s) => STATE_LABELS[s] && !labels.has(STATE_LABELS[s]) && labels.add(STATE_LABELS[s]))
+  return unique.length > 1 ? unique : []
+}
+
 /**
- * The Measurements tables for the item as it stands: with a `size` prop, the
- * table captioned with the current size plus those captioned with no size
- * (Every size); without one, all of them.
+ * A row's state, if its part names one after the comma (`Container, hover`),
+ * as a test for the state picked. `focus ring` is a part, not a state.
  */
-function measurementsFor(item: ManifestItem, args: Args) {
-  const size = item.props.find((p) => p.name === 'size')
-  const sizes = size?.options?.map(String) ?? []
-  const current = String(args.size ?? size?.default ?? '')
-  return (item.specs?.measurements ?? []).filter((t) => !t.caption || !sizes.includes(t.caption) || t.caption === current)
+const ROW_STATES: [RegExp, string[]][] = [
+  [/hover/i, ['hover']],
+  [/focus(?! ring)/i, ['focus-visible', 'focus', 'focus-within']],
+  [/press/i, ['active']],
+  [/disabled/i, ['disabled']],
+]
+const rowShows = (row: SpecRow, state: string) => {
+  const qualifier = row.part.split(',').slice(1).join(',')
+  const named = ROW_STATES.filter(([re]) => re.test(qualifier))
+  return !named.length || named.some(([, states]) => states.includes(state))
+}
+
+/**
+ * The tables for the item as it stands. A caption that is one of a choice
+ * prop's options (`md` of size, `primary` of variant) shows only while that
+ * prop has that value; any other caption (Every size) always shows. Rows
+ * naming a state show only in that state.
+ */
+function tablesFor(tables: SpecTableData[], item: ManifestItem, args: Args, state: string) {
+  const choices = item.props.filter((p) => p.options)
+  return tables
+    .filter((t) => {
+      const owners = choices.filter((p) => p.options!.map(String).includes(t.caption ?? ''))
+      return !owners.length || owners.some((p) => String(args[p.name] ?? p.default) === t.caption)
+    })
+    .map((t) => ({ ...t, rows: t.rows.filter((r) => rowShows(r, state)) }))
+    .filter((t) => t.rows.length)
 }
 
 /** What the frame draws and resolves while Specs is open. */
-function inspectRequest(item: ManifestItem, args: Args, highlight: SpecRow | null): InspectRequest | null {
+function inspectRequest(item: ManifestItem, args: Args, state: string, highlight: SpecRow | null): InspectRequest | null {
   if (!item.specs) return null
-  const tables = [...measurementsFor(item, args), ...item.specs.color]
+  const tables = [...item.specs.measurements, ...item.specs.color]
   return {
     parts: item.specs.anatomy.map(({ name, selector }) => ({ name, selector })),
-    tokens: [...new Set(tables.flatMap((t) => t.rows.map((r) => r.token)))],
+    tokens: [...new Set(tablesFor(tables, item, args, state).flatMap((t) => t.rows.map((r) => r.token)))],
     highlight: highlight && { part: partOf(highlight.part), property: highlight.property, token: highlight.token },
+    ...(state === 'default' || state === 'disabled' ? {} : { pseudo: state }),
   }
 }
 
@@ -285,6 +332,8 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
   // The Specs row under the pointer or focus, and the token values the frame sent back.
   const [highlight, setHighlight] = useState<SpecRow | null>(null)
   const [values, setValues] = useState<Record<string, TokenValue>>({})
+  // The forced state on Specs. Disabled is the item's own prop, so it shows on Playground too.
+  const [pseudo, setPseudo] = useState('default')
   const wide = useWide()
 
   useEffect(() => {
@@ -318,6 +367,7 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
   const select = (item: ManifestItem) => {
     setDrawerOpen(false)
     setHighlight(null)
+    setPseudo('default')
     if (item.id === state.item.id) return
     const url = urlWith({ ...withoutProps(state.item), item: item.id })
     flushUrl()
@@ -351,6 +401,12 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
   // The wanted tab, or Playground when this item has not got it.
   const has = tabsOf(state.item)
   const tab = has.includes(state.tab) ? state.tab : 'playground'
+  const disabled = disabledProp(state.item)
+  const specState = disabled && state.args[disabled.name] === true ? 'disabled' : pseudo
+  const setSpecState = (next: string) => {
+    if (disabled && (next === 'disabled') !== (specState === 'disabled')) setProp(disabled, next === 'disabled')
+    if (next !== 'disabled') setPseudo(next)
+  }
 
   const browser = (
     <Browser
@@ -421,7 +477,7 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
             args={state.args}
             theme={previewTheme}
             storybookUrl={storybookUrl}
-            inspect={tab === 'specs' ? inspectRequest(state.item, state.args, highlight) : null}
+            inspect={tab === 'specs' ? inspectRequest(state.item, state.args, specState, highlight) : null}
             onValues={setValues}
           />
         </main>
@@ -437,7 +493,11 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
               specs: state.item.specs && (
                 <SpecsPanel
                   specs={state.item.specs}
-                  measurements={measurementsFor(state.item, state.args)}
+                  measurements={tablesFor(state.item.specs.measurements, state.item, state.args, specState)}
+                  color={tablesFor(state.item.specs.color, state.item, state.args, specState)}
+                  states={statesOf(state.item)}
+                  state={specState}
+                  onState={setSpecState}
                   values={values}
                   highlight={highlight}
                   onHighlight={setHighlight}
@@ -987,12 +1047,21 @@ function Panel({
 function SpecsPanel({
   specs,
   measurements,
+  color,
+  states,
+  state,
+  onState,
   values,
   highlight,
   onHighlight,
 }: {
   specs: Specs
   measurements: SpecTableData[]
+  color: SpecTableData[]
+  /** Empty for a static item: no picker. */
+  states: string[]
+  state: string
+  onState: (state: string) => void
   values: Record<string, TokenValue>
   highlight: SpecRow | null
   onHighlight: (row: SpecRow | null) => void
@@ -1047,6 +1116,16 @@ function SpecsPanel({
   )
   return (
     <div className={styles.specs}>
+      {states.length > 0 && (
+        <RadioGroup
+          label="State"
+          helperText="Forced on the live item. Color rows follow it."
+          orientation="horizontal"
+          options={states.map((value) => ({ value, label: STATE_LABELS[value] }))}
+          value={state}
+          onValueChange={(value) => onState(value as string)}
+        />
+      )}
       {specs.anatomy.length > 0 && (
         <section aria-labelledby="pg-anatomy" className={styles.specSection}>
           <h2 id="pg-anatomy" className={styles.groupTitle}>
@@ -1074,12 +1153,12 @@ function SpecsPanel({
           {measurements.map(table)}
         </section>
       )}
-      {specs.color.length > 0 && (
+      {color.length > 0 && (
         <section aria-labelledby="pg-color" className={styles.specSection}>
           <h2 id="pg-color" className={styles.groupTitle}>
             Color
           </h2>
-          {specs.color.map(table)}
+          {color.map(table)}
         </section>
       )}
     </div>

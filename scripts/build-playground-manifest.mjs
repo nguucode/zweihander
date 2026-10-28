@@ -150,12 +150,13 @@ function docsOf(file, csf, mod) {
   if (!docs) return {}
   const ids = Object.fromEntries(csf.indexInputs.map((s) => [s.exportName, s.__id]))
   const storyId = (name) => ids[name] ?? fail(`${relative(root, page)}: <DoDont> shows ${name}, which the story file does not export`)
-  const { measurements, color, whenToUse, whenNotToUse, doDont } = docs
+  const { measurements, color, pseudo, whenToUse, whenNotToUse, doDont } = docs
   return {
     specs: {
       anatomy: (mod.anatomyParts ?? []).map(({ name, selector, description }) => ({ name, selector, description })),
       measurements,
       color,
+      pseudo,
     },
     guideline: {
       whenToUse,

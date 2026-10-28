@@ -14,6 +14,12 @@ export interface InspectRequest {
   tokens: string[]
   /** The row being hovered or focused, if any. `part` is an anatomy part's name. */
   highlight?: { part: string; property: string; token: string } | null
+  /**
+   * A pseudo-class to force on the whole item (hover, focus-visible, active),
+   * through storybook-addon-pseudo-states' `pseudo-<state>-all` class, as the
+   * docs' <States> block does.
+   */
+  pseudo?: string
 }
 
 export type TokenValue = { kind: 'color' | 'length' | 'raw' | 'missing'; text: string }
@@ -145,9 +151,18 @@ export function startInspector(root: () => Element | null, onValues: (values: Re
     })
   }
 
+  let forced: { el: Element; name: string } | null = null
+  const force = (pseudo?: string) => {
+    forced?.el.classList.remove(forced.name)
+    const el = root()
+    forced = pseudo && el ? { el, name: `pseudo-${pseudo}-all` } : null
+    if (forced) forced.el.classList.add(forced.name)
+  }
+
   return {
     set(next: InspectRequest | null) {
       request = next
+      force(next?.pseudo)
       sent = ''
       if (next && !frame) frame = requestAnimationFrame(draw)
       if (!next) {
