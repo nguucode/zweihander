@@ -161,9 +161,19 @@ accent in the toolbar: the values follow.
   ]}
 />
 
-<SpecTable caption="Every variant" rows={[{ part: 'Focus ring', property: 'Colour', token: '--ring' }]} />
+<SpecTable
+  caption="Every variant"
+  rows={[
+    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+    { part: 'Container, contained', property: 'Drop shadow', token: '--shadow-xs' },
+  ]}
+/>
 
-Ghost and outlined have no fill at rest.
+Ghost and outlined have no fill at rest. Contained is lit from above: a
+lighter top, a highlight on the top edge, a darker bottom edge and a
+hairline border a step darker than the solid. Each is the variant's solid
+moved in lightness, so it has no token of its own and follows the accent
+and the mode.
 
 ## States
 
@@ -186,6 +196,12 @@ Ghost and outlined have no fill at rest.
   and ghost tint the background with their tone, 8% on hover and 14% when
   pressed. Every state keeps the label at 4.5:1, measured by the
   `StateContrast` story under all seventeen accents in both modes.
+- **Hover**, on contained, also draws a 1px hairline ring standing
+  `--focus-offset` off the button, where the focus ring sits, so focus
+  replaces it rather than adding a second ring. Inside a ButtonGroup the
+  ring is left out: it would cut across the next button.
+- **Pressed**, on contained, turns the light over: shade on the top edge,
+  no drop shadow, no gradient, as if pushed in.
 - **Focus** is a 2px `--ring` outline, 2px outside the button.
 - **Disabled** is the enabled look at 50% opacity.
 - **Loading** keeps the full colour: the button is busy, not unavailable.

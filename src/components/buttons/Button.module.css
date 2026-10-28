@@ -5,8 +5,8 @@
   justify-content: center;
   box-sizing: border-box;
   margin: 0;
-  /* Always present, transparent unless outlined, so switching appearance
-     never shifts the layout by a pixel. */
+  /* Always present, transparent unless outlined or contained, so switching
+     appearance never shifts the layout by a pixel. */
   border: 1px solid transparent;
   font-family: var(--font-sans);
   font-size: var(--text-body);
@@ -18,7 +18,8 @@
   transition:
     background-color var(--duration-base),
     color var(--duration-base),
-    border-color var(--duration-base);
+    border-color var(--duration-base),
+    box-shadow var(--duration-base);
 }
 
 /* An <a> navigates, so it takes the link cursor rather than the button one.
@@ -127,17 +128,59 @@ a[href].button {
   border-color: var(--button-border);
 }
 
+/* background-color, not the shorthand, so contained keeps its lighting
+   gradient on hover. */
 .button {
-  background: var(--button-bg);
+  background-color: var(--button-bg);
   color: var(--button-fg);
 }
 .button:hover {
-  background: var(--button-bg-hover);
+  background-color: var(--button-bg-hover);
   color: var(--button-fg-hover);
 }
 .button:active {
-  background: var(--button-bg-active);
+  background-color: var(--button-bg-active);
   color: var(--button-fg-active);
+}
+
+/* ------------------------------------------------------------ lighting
+   Contained is lit from above so it reads as a key you can press; pressed
+   turns the light over, as if pushed in. The edge and hairline are the
+   solid moved in lightness, so they follow the variant, the accent and the
+   mode. Highlight and shade are light, not colour: white and black at an
+   alpha, the same on every fill, so no token holds them. The fill
+   StateContrast measures is unchanged; the gradient lifts only its top, by
+   a few percent. Offsets are the approved Figma values. */
+.contained {
+  --button-highlight: oklch(1 0 0 / 0.2);
+  --button-shade: oklch(0 0 0 / 0.45);
+  --button-bottom-edge: oklch(from var(--button-solid) calc(l - 0.12) c h);
+  --button-hairline: oklch(from var(--button-solid) calc(l - 0.06) c h);
+  border-color: var(--button-hairline);
+  background-image: linear-gradient(oklch(1 0 0 / 0.06), transparent);
+  box-shadow:
+    inset 0 0.5px 1px var(--button-highlight),
+    inset 0 -1px 1.2px 0.35px var(--button-bottom-edge),
+    var(--shadow-xs);
+}
+.contained:active {
+  background-image: none;
+  box-shadow:
+    inset 0 1.5px 2px var(--button-shade),
+    inset 0 -0.5px 1px var(--button-highlight);
+}
+
+/* Hover draws a hairline ring detached from the button, in the focus
+   ring's place, --focus-offset out, so focus-visible replaces it instead
+   of stacking a second ring beside it. An outline, not a positioned
+   pseudo-element: an outline never counts as overflow, so a button flush
+   with a scroll box's edge does not make it scroll. Set on hover only:
+   forced-colors mode paints even a transparent outline, so one at rest
+   would show as a permanent ring. */
+.contained:hover:not(:focus-visible) {
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- hairline, the same 1px as the button's border; there is no border-width scale */
+  outline: 1px solid var(--button-hairline);
+  outline-offset: var(--focus-offset);
 }
 
 /* ---------------------------------------------------------------- sizes */

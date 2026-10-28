@@ -29,6 +29,13 @@
   z-index: 1;
 }
 
+/* A contained button's hover ring stands off the button, so in a group it
+   would cut across the next button. The hover fill is enough to show which
+   one the pointer is on. Doubled class to outrank Button's hover rule. */
+.group.group > :hover:not(:focus-visible) {
+  outline: none;
+}
+
 .group > :focus-visible {
   /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- local stacking inside the group, not a global layer */
   z-index: 2;
