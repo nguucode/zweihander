@@ -12,6 +12,7 @@ Project info (decisions, tickets, roadmap, Figma links) lives in the Obsidian va
 - Research (`/research`): save to `docs/research/YYYY-MM-DD-<topic>.md` in this repo, then copy it to the vault mirror `10-projects/zweihander/repo/docs/research/` and add a line to `_context.md`.
 - Skills: when a skill in `.claude/skills/` overlaps a built-in or plugin skill, use the one in `.claude/skills/` (`matt-code-review` for standards + spec review).
 - Component conventions (API, MDX docs page, tests, status) for any change under `src/components/**`: `docs/agents/components.md`.
+- Consumer: Shard (nguucode/shard, `/Volumes/KAFKA/Code/shard`, live at crm.ontheshore.biz) copies kit items from the registry. A kit change found while working on Shard lands here first (branch + PR, same conventions), with the identical edit in Shard until this merges and the registry redeploys; then Shard re-adds the item. Link the Shard change in the PR. Renaming or removing a registry item breaks Shard: check `ITEMS` in Shard's `scripts/zw-check.mjs`.
 
 ## Agent skills
 
