@@ -52,9 +52,9 @@ export function Avatar({
   const [failedSrc, setFailedSrc] = useState<string>()
   // An empty string is no image, not a request for the page's own URL.
   const showImage = !!imageSrc && failedSrc !== imageSrc
-  // 16px holds one letter at the smallest type size. A count ("+3") stays
-  // whole: half of it would be a different number.
-  const letters = size === 'xs' && initials && !initials.startsWith('+') ? Array.from(initials)[0] : initials
+  // 16px holds one letter at the smallest type size. A count ("+3", "9+")
+  // stays whole: half of it would be a different number.
+  const letters = size === 'xs' && initials && !initials.includes('+') ? Array.from(initials)[0] : initials
 
   return (
     <span
@@ -140,10 +140,11 @@ export function AvatarGroup({
         .join(', ')
     : ''
   const more = hidden > 0 && (
-    // ponytail: the count is not shortened, so it outgrows an xs circle past +9 and an sm one past +99; cap it if a list that long turns up.
+    // A 16px circle holds two characters, so past nine the xs count reads "9+".
+    // ponytail: larger sizes are not capped; an sm circle outgrows +99.
     <Avatar
       size={size}
-      initials={`+${hidden}`}
+      initials={size === 'xs' && hidden > 9 ? '9+' : `+${hidden}`}
       imageAlt={isNamed ? moreLabel(hidden) : undefined}
       tabIndex={hiddenNames ? 0 : undefined}
     />

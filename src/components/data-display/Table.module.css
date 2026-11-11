@@ -54,8 +54,9 @@
   white-space: nowrap;
 }
 /* The only rule between rows: the header's. On the cells, so a sticky
-   header carries it along. */
-thead > tr > * {
+   header carries it along. Under .table: a bare element selector is global
+   in a CSS module and would rule every table on the page. */
+.table thead > tr > * {
   border-block-end: var(--border-width-selected) solid var(--border);
 }
 .sticky thead .th,
@@ -231,7 +232,7 @@ tbody tr.selected.expanded + tr.expandedRow > * {
 
 /* The total row sits under the header's rule, turned over: with no
    dividers between rows, that is what makes the sum read as a sum. */
-tfoot > tr > * {
+.table tfoot > tr > * {
   border-block-start: var(--border-width-selected) solid var(--border);
   font-weight: 600;
 }

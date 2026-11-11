@@ -318,8 +318,9 @@ export const StatusSizes: Story = {
         const avatar = canvas.getByRole('img', { name: `${n}, Online` })
         return { a: avatar.getBoundingClientRect(), d: avatar.lastElementChild!.getBoundingClientRect() }
       })
-      expect(dots.map(({ d }) => [d.width, d.height])).toEqual([[6, 6], [6, 6], [6, 6], [8, 8], [16, 16], [20, 20]])
-      for (const { a, d } of dots.slice(0, 4)) expect([d.right, d.bottom]).toEqual([a.right, a.bottom])
+      // No dot at xs (16px), as in Atlassian; the name above still says "Online".
+      expect(dots.map(({ d }) => [d.width, d.height])).toEqual([[0, 0], [6, 6], [6, 6], [8, 8], [16, 16], [20, 20]])
+      for (const { a, d } of dots.slice(1, 4)) expect([d.right, d.bottom]).toEqual([a.right, a.bottom])
       // xl and 2xl: the dot's centre is on the circle, so it overlaps the picture instead of floating off it.
       for (const { a, d } of dots.slice(4)) {
         const fromCentre = Math.hypot(d.left + d.width / 2 - (a.left + a.width / 2), d.top + d.height / 2 - (a.top + a.height / 2))

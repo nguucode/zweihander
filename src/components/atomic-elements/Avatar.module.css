@@ -149,6 +149,12 @@
 /* At 96px and up the box's corner is far off the curve, and a Badge dot is
    a speck: the dot grows and its centre sits on the circle at 45 degrees,
    which is (1 - 1/sqrt(2)) / 2 = 0.1464 of the size in from each edge. */
+/* No status at 16px, as in Atlassian: the dot and its ring would cover most
+   of the picture. The status stays in the accessible name. */
+.xs > .status {
+  display: none;
+}
+
 .xl > .status,
 .xxl > .status {
   inset-block-end: calc(var(--avatar-size) * 0.1464 - var(--avatar-status-size) / 2);

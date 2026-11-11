@@ -19,13 +19,17 @@
 /* sm is for a Table row: 4px of cell padding around one line of text,
    28px. Reading, the value box is that line and the cell's padding, moved
    onto it, and it pulls back by as much: the hover fill is the row, never
-   taller. Editing, nothing is pulled back: the 32px input takes its room
-   and the row grows to 40px, like any row that holds a 32px field, instead
-   of overhanging the rows above and below. */
+   taller. Editing in a table cell, nothing is pulled back: the 32px input
+   takes its room and the row grows to 40px, like any row that holds a 32px
+   field, instead of overhanging the rows above and below. Outside a table
+   the input still pulls back to the text line, so nothing around it moves. */
 .sm {
   margin-block: calc(var(--space-1) * -1);
 }
 .sm.editing {
+  margin-block: calc((1lh - var(--inline-edit-size)) / 2);
+}
+:is(td, th) .sm.editing {
   margin-block: 0;
 }
 .sm .value {
@@ -66,6 +70,11 @@
 .value:focus-visible {
   outline: var(--focus-width) solid var(--ring);
   outline-offset: var(--focus-offset);
+}
+/* Flush with the row, so the ring goes inside: outside it the table's
+   scroll container and a sticky header would clip it. */
+.sm .value:focus-visible {
+  outline-offset: var(--focus-offset-inset);
 }
 
 .text,
