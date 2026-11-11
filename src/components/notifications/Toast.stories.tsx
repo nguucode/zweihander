@@ -318,6 +318,14 @@ export const Anatomy: Story = {
     const found = await expectAnatomy(canvasElement, anatomyParts)
     await expect(found[2]).toHaveTextContent('File moved to Trash')
     await expect(found[4]).toHaveTextContent('Undo')
+    // Atlassian's flag: content 16px from the edge (15px padding and the 1px border), 16px from
+    // the icon to the text, 8px from the title to the description, the action a 24px row right under it.
+    const toast = getComputedStyle(found[0])
+    await expect(toast.paddingLeft).toBe('15px')
+    await expect(toast.columnGap).toBe('16px')
+    await expect(getComputedStyle(found[2].parentElement!).rowGap).toBe('8px')
+    await expect((found[4] as HTMLElement).offsetHeight).toBe(24)
+    await expect((found[4] as HTMLElement).offsetTop - ((found[3] as HTMLElement).offsetTop + (found[3] as HTMLElement).offsetHeight)).toBe(0)
   },
 }
 

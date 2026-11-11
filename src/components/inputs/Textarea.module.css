@@ -1,6 +1,8 @@
 /* A textarea's box grows with it, so it takes vertical padding instead of a
-   fixed height: 4px at sm, 8px at md, which puts the first line within a
-   pixel of where a single-line field of the same size puts its text. The padding sits on the
+   fixed height. The numbers are @atlaskit/textarea's: 2px at sm (its
+   compact), 6px at md, and 7px at the sides in both, a pixel more than a
+   single-line field (Atlassian hard-codes the 7px; there is no 7px step, so
+   it is 6px plus the border width). The padding sits on the
    <textarea>, not the box, so the browser's resize handle lands in the
    field's corner. Doubled classes outrank the shared size classes,
    whichever stylesheet loads first. */
@@ -9,12 +11,14 @@
   padding: 0;
 }
 .pad-sm {
-  --pad-block: var(--space-1);
-  --pad-inline: var(--space-1-5);
+  --pad-block: var(--space-0-5);
 }
 .pad-md {
-  --pad-block: var(--space-2);
-  --pad-inline: var(--space-1-5);
+  --pad-block: var(--space-1-5);
+}
+.pad-sm,
+.pad-md {
+  --pad-inline: calc(var(--space-1-5) + var(--border-width));
 }
 
 .textarea.textarea {

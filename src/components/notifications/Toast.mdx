@@ -80,12 +80,13 @@ from.
 <SpecTable
   caption="Every toast"
   rows={[
-    { part: 'Container', property: 'Padding', token: '--space-group' },
+    { part: 'Container', property: 'Padding, from the outer edge', token: '--space-group' },
     { part: 'Container', property: 'Corner radius', token: '--radius-lg' },
-    { part: 'Container', property: 'Gap, between parts', token: '--space-cluster' },
+    { part: 'Container', property: 'Gap, icon to text', token: '--space-group' },
     { part: 'Title and description', property: 'Font size', token: '--text-body' },
     { part: 'Title and description', property: 'Line height', token: '--leading-body' },
-    { part: 'Title and description', property: 'Gap', token: '--space-stack' },
+    { part: 'Title and description', property: 'Gap', token: '--space-inline' },
+    { part: 'Action', property: 'Height', token: '--control-sm' },
     { part: 'Close button', property: 'Size', token: '--box-sm' },
     { part: 'Close button', property: 'Icon size', token: '--icon-md' },
     { part: 'Close button', property: 'Corner radius', token: '--radius-sm' },
@@ -99,8 +100,11 @@ from.
 />
 
 At most 25rem (400px) wide, and never wider than the window less the edge
-distance on both sides. The close button is 24px on a 20px line: it is
-pulled 2px up and down, so it centres on the first line.
+distance on both sides. The padding counts the 1px border: the content
+sits 16px from the toast's edge. The close button is 24px on a 20px line:
+it is pulled 2px up and down, so it centres on the first line, and it
+sits 8px from the text. The action is a 24px row straight under the
+description.
 
 ## Color
 
@@ -198,8 +202,12 @@ toast.add({ title: 'File moved to Trash', action: { label: 'Undo', onClick: rest
 
 ### Differences from the spec
 
-- **Sized after Atlassian's flag**: 400px wide, 16px padding, 8px
-  corners, the overlay shadow, a 24px close button.
+- **Sized after Atlassian's flag**: 400px wide, 16px padding, 16px from
+  the icon to the text, 8px from the title to the description, 8px
+  corners, the overlay shadow, a 24px close button. The stack sits 16px
+  from the window edge, where Atlassian's sits 48px up and 80px in: that
+  offset clears its own navigation, and the kit's stack can sit on any
+  edge.
 
 - **Bottom right by default**, where the spec suggests top right.
   `placement` takes any corner or edge centre.

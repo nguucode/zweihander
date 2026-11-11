@@ -71,18 +71,21 @@ a check where an action shows its icon, so their labels line up.
 The item follows Atlassian Design's dropdown item: 8px block and 12px
 inline padding around a 20px line, so a one-line item is 36px tall. The
 box ramp has no 36px step, so the md control tier (32px) is the floor and
-the padding makes the rest. The item's corner nests inside the popup's:
-the popup radius minus the popup padding (8 − 4 = 4px), so the highlight
-runs parallel to the popup edge.
+the padding makes the rest. The rest is Atlassian's dropdown menu too
+(its newer menu): items sit 12px inside the popup and 2px apart, with a
+6px corner and 12px between icon and label; a shortcut or a chevron sits
+24px after the label; a separator runs edge to edge with 12px above and
+below; a group label has 8px block padding, 12px before and 24px after.
+The popup's padding counts its 1px border.
 
 <SpecTable
   caption="Popup"
   rows={[
-    { part: 'Popup', property: 'Padding', token: '--space-stack' },
+    { part: 'Popup', property: 'Padding, from the outer edge', token: '--space-3' },
     { part: 'Popup', property: 'Corner radius', token: '--radius-lg' },
     { part: 'Popup', property: 'Shadow', token: '--shadow-overlay' },
     { part: 'Popup', property: 'Layer', token: '--layer-overlay' },
-    { part: 'Separator', property: 'Margin', token: '--space-1' },
+    { part: 'Separator', property: 'Space above and below', token: '--space-3' },
   ]}
 />
 
@@ -92,12 +95,16 @@ runs parallel to the popup edge.
     { part: 'Item', property: 'Minimum height', token: '--control-md' },
     { part: 'Item', property: 'Inline padding', token: '--space-3' },
     { part: 'Item', property: 'Block padding', token: '--space-2' },
-    { part: 'Item', property: 'Gap', token: '--control-md-gap' },
+    { part: 'Item', property: 'Gap', token: '--space-3' },
+    { part: 'Item', property: 'Corner radius', token: '--radius-md' },
+    { part: 'Item', property: 'Space between items', token: '--space-0-5' },
     { part: 'Icon, check, chevron', property: 'Size', token: '--icon-md' },
     { part: 'Label', property: 'Font size', token: '--text-body' },
     { part: 'Label', property: 'Line height', token: '--leading-body' },
     { part: 'Shortcut, group label', property: 'Font size', token: '--text-body-sm' },
-    { part: 'Shortcut', property: 'Space before', token: '--space-group' },
+    { part: 'Label', property: 'Space after', token: '--space-3' },
+    { part: 'Group label', property: 'Block padding', token: '--space-2' },
+    { part: 'Group label', property: 'Inline end padding', token: '--space-6' },
     { part: 'Hit area', property: 'Minimum on touch screens', token: '--target-coarse' },
   ]}
 />

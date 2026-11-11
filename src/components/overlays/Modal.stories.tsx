@@ -136,6 +136,11 @@ export const Default: Story = {
     await expect(getComputedStyle(document.body).overflow).toBe('hidden')
     await waitFor(() => expect(dialog.contains(document.activeElement)).toBe(true))
     await expect(args.onOpenChange).toHaveBeenLastCalledWith(true)
+    // Atlassian's modal: 24px around, 16px above the body and above the footer, 8px between the buttons.
+    const footer = dialog.querySelector(`.${styles.footer}`)!
+    await expect(parseFloat(getComputedStyle(dialog).paddingTop) + parseFloat(getComputedStyle(dialog).borderTopWidth)).toBe(24)
+    await expect(getComputedStyle(footer).marginTop).toBe('16px')
+    await expect(getComputedStyle(footer).columnGap).toBe('8px')
     // Cancel is a ModalClose: it closes, and focus goes back to the trigger.
     await userEvent.click(within(dialog).getByRole('button', { name: 'Cancel' }))
     await waitFor(() => expect(body().queryByRole('dialog')).toBeNull())

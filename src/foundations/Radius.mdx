@@ -113,8 +113,10 @@ is the container's minus that inset, never its own token:
 }
 ```
 
-At the default that is 6 − 4 = 2px for a menu item, and the pills Tabs
-chips are their track's corner minus the 2px track inset. A negative
+The pills Tabs chips work this way: their corner is the track's minus the
+2px track inset. Menu no longer does: its popup is inset 12px, further than
+its 8px corner, so an item is a free-standing shape with the control
+radius, and the `.menu` above is an illustration only. A negative
 result clamps to 0, so a square container gets square children. Both
 corners then stay concentric at every preset; two independent tokens only
 line up at one.

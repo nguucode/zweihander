@@ -67,8 +67,12 @@ this layout with the disc in their own tone.
 
 ## Measurements
 
-The icon is half the disc's size. The description wraps at 40 characters
-(`max-inline-size: 40ch`), so it stays a short paragraph on a wide page.
+The icon is half the disc's size. Title and description are at most
+464px wide at `md` and 304px at `sm` (29rem and 19rem, Atlassian's wide
+and narrow empty state), so they stay a short paragraph on a wide page.
+`md` keeps Atlassian's rhythm: 48px above and below, 24px under the
+image, 16px under the heading, 24px above the buttons, 4px between them.
+`sm` is the kit's own, a step tighter.
 
 <SpecTable
   caption="sm"
@@ -90,10 +94,10 @@ The icon is half the disc's size. The description wraps at 40 characters
     { part: 'Container', property: 'Block padding (twice)', token: '--space-section' },
     { part: 'Container', property: 'Inline padding', token: '--space-container' },
     { part: 'Icon disc', property: 'Size', token: '--space-12' },
-    { part: 'Icon disc', property: 'Space below', token: '--space-group' },
+    { part: 'Icon disc', property: 'Space below', token: '--space-container' },
     { part: 'Title', property: 'Font size', token: '--text-heading-md' },
     { part: 'Title', property: 'Line height', token: '--leading-heading-md' },
-    { part: 'Description', property: 'Space above', token: '--space-inline' },
+    { part: 'Description', property: 'Space above', token: '--space-group' },
     { part: 'Action', property: 'Space above', token: '--space-container' },
   ]}
 />
@@ -104,7 +108,7 @@ The icon is half the disc's size. The description wraps at 40 characters
     { part: 'Icon disc', property: 'Corner radius', token: '--radius-pill' },
     { part: 'Description', property: 'Font size', token: '--text-body' },
     { part: 'Description', property: 'Line height', token: '--leading-body' },
-    { part: 'Action', property: 'Gap between buttons', token: '--space-inline' },
+    { part: 'Action', property: 'Gap between buttons', token: '--space-stack' },
   ]}
 />
 

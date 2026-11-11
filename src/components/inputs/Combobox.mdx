@@ -81,7 +81,8 @@ The options list opens under the field, at least as wide as it:
 
 A field is one step taller than a Button, after Atlassian Design: `sm` is
 32px and `md` is 40px (Foundations / Sizing). The sizes share the rest:
-6px of inline padding, the 16px icon, the field radius, which never
+8px of padding at the start and 10px at the end, after Atlassian's
+Select, the 16px icon, the field radius, which never
 becomes a pill, and body type. The clear and open buttons are 24px
 targets round their icons, side by side.
 
@@ -89,7 +90,8 @@ targets round their icons, side by side.
   caption="sm"
   rows={[
     { part: 'Field', property: 'Height', token: '--control-md' },
-    { part: 'Field', property: 'Inline padding', token: '--space-1-5' },
+    { part: 'Field', property: 'Inline padding, start', token: '--space-2' },
+    { part: 'Field', property: 'Inline padding, end', token: '--space-2-5' },
     { part: 'Field', property: 'Corner radius', token: '--control-md-radius-field' },
     { part: 'Field', property: 'Gap', token: '--space-2' },
     { part: 'Icons and buttons', property: 'Size', token: '--icon-md' },
@@ -102,7 +104,8 @@ targets round their icons, side by side.
   caption="md"
   rows={[
     { part: 'Field', property: 'Height', token: '--control-lg' },
-    { part: 'Field', property: 'Inline padding', token: '--space-1-5' },
+    { part: 'Field', property: 'Inline padding, start', token: '--space-2' },
+    { part: 'Field', property: 'Inline padding, end', token: '--space-2-5' },
     { part: 'Field', property: 'Corner radius', token: '--control-md-radius-field' },
     { part: 'Field', property: 'Gap', token: '--space-2' },
     { part: 'Icons and buttons', property: 'Size', token: '--icon-md' },
@@ -117,7 +120,9 @@ targets round their icons, side by side.
     { part: 'Label and helper', property: 'Gap to the field', token: '--space-stack' },
     { part: 'Label and helper', property: 'Font size', token: '--text-body-sm' },
     { part: 'Clear and open buttons', property: 'Width and height', token: '--control-sm' },
-    { part: 'Options list', property: 'Block padding', token: '--space-1' },
+    { part: 'Options list', property: 'Block padding', token: '--space-2' },
+    { part: 'Option', property: 'Block padding', token: '--space-1-5' },
+    { part: 'Option', property: 'Inline padding', token: '--space-3' },
     { part: 'Options list', property: 'Corner radius', token: '--radius-lg' },
     { part: 'Option', property: 'Minimum height', token: '--control-md' },
     { part: 'Check', property: 'Size', token: '--icon-md' },
@@ -128,7 +133,7 @@ targets round their icons, side by side.
 />
 
 The field is 20rem wide unless `isFullWidth`; the list is at least as
-wide as the field, 4px under it, and scrolls after 20rem (about ten
+wide as the field, 8px under it, and scrolls after 20rem (about ten
 options).
 
 ## Color

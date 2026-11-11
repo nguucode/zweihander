@@ -67,7 +67,7 @@ inert, so they do not lock this page or take its focus.
 <SpecTable
   caption="Container"
   rows={[
-    { part: 'Container', property: 'Padding', token: '--space-container' },
+    { part: 'Container', property: 'Padding, from the outer edge', token: '--space-container' },
     { part: 'Container', property: 'Corner radius', token: '--radius-panel' },
     { part: 'Container', property: 'Shadow', token: '--shadow-overlay' },
     { part: 'Container', property: 'Margin to the screen edge', token: '--space-group' },
@@ -75,7 +75,7 @@ inert, so they do not lock this page or take its focus.
     { part: 'Title', property: 'Line height', token: '--leading-heading-md' },
     { part: 'Title to close button', property: 'Gap', token: '--space-group' },
     { part: 'Title to description', property: 'Gap', token: '--space-inline' },
-    { part: 'Body, footer', property: 'Gap above', token: '--space-container' },
+    { part: 'Body, footer', property: 'Gap above', token: '--space-group' },
     { part: 'Footer', property: 'Gap between actions', token: '--space-inline' },
   ]}
 />
@@ -95,10 +95,14 @@ inert, so they do not lock this page or take its focus.
 Width is `size`: at most 400px (`sm`), 600px (`md`) or 800px (`lg`), set
 in rem (25, 37.5, 50), and never wider than the screen less its margin.
 These are Atlassian's small, medium and large modals, with its 24px
-padding, 12px corner and 20/24 semibold title. The 8px from the title to
-the description and the 16px margin to the screen edge are the kit's own:
-Atlassian has no number for either. The close button is a 24px box, as
-tall as the title's line. The border is 1px. Backdrop
+padding, 12px corner and 20/24 semibold title, 16px from the title to the
+body and from the body to the footer, and 8px between the footer's
+buttons. The 8px from the title to the description is the kit's own:
+Atlassian's header has no description. So is the 16px margin to the
+screen edge: Atlassian keeps a 60px gutter, which leaves a phone no room
+for the modal. The close button is a 24px box, as
+tall as the title's line. The border is 1px, and the padding counts it:
+the content sits 24px from the modal's edge. Backdrop
 and modal sit on the `--layer-overlay` layer and fade in over
 `--duration-base`.
 

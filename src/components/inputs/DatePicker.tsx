@@ -184,7 +184,7 @@ function PickerField({
       isFullWidth={isFullWidth}
       className={className}
     >
-      <span ref={boxRef} className={boxClass(size)} onMouseDown={focusControl}>
+      <span ref={boxRef} className={cn(boxClass(size), inputStyles.picker)} onMouseDown={focusControl}>
         <Field.Control
           ref={inputRef}
           id={id}
@@ -226,14 +226,14 @@ function PickerField({
             </Popover.Trigger>
           )}
           <Popover.Portal container={container}>
-            {/* Under the whole field, start-aligned and 4px clear of it; not the
+            {/* Under the whole field, start-aligned and 8px clear of it, as Atlassian's; not the
                 calendar button, which sits inside the box. */}
             <Popover.Positioner
               className={styles.positioner}
               anchor={boxRef}
               side="bottom"
               align="start"
-              sideOffset={4}
+              sideOffset={8}
             >
               <Popover.Popup
                 aria-label={popupLabel}

@@ -145,8 +145,8 @@ buttons do not make a row of text taller.
     { part: 'Actions column', property: 'Width', token: '--box-md' },
     { part: 'Expanded row', property: 'Block start and inline padding', token: '--space-2' },
     { part: 'Expanded row', property: 'Block end padding', token: '--space-4' },
-    { part: 'Caption', property: 'Block padding', token: '--space-3' },
-    { part: 'Caption', property: 'Inline padding', token: '--space-2' },
+    { part: 'Caption', property: 'Block start padding', token: '--space-6' },
+    { part: 'Caption', property: 'Block end and inline padding', token: '--space-2' },
     { part: 'Focus ring', property: 'Width', token: '--focus-width' },
     { part: 'Focus ring', property: 'Offset, inside the button', token: '--focus-offset-inset' },
     { part: 'Sort button', property: 'Hit area on touch screens', token: '--target-coarse' },
@@ -335,6 +335,11 @@ Cell sizing follows Atlassian's dynamic table.
   total row; the rule is the header's, turned over.
 - **The header keeps its `--surface-filled` background**, which
   Atlassian's header does not have.
+- **The first and last cells keep their 8px inline padding.** Atlassian's
+  sit flush with the table's edge (0); here the header is filled and rows
+  tint on hover, so flush text would touch the edge of the fill.
+- **The caption** sits 24px from the top and 8px above the table, as
+  Atlassian's; its 8px inline padding lines it up with the cells' text.
 
 </DocTab>
 <DocTab value="guidelines">

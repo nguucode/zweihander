@@ -6,13 +6,27 @@
 
 /* A fieldset carries browser padding, border and margin, and its legend is
    positioned by the browser; reset them so the group lays out like a grid. */
+/* Vertical options are 4px apart: with a 20px label line that is one option
+   every 24px, Atlassian's radio row, so the 24px hit areas meet and never
+   overlap. */
 .group {
   display: flex;
-  gap: var(--space-inline) var(--space-6);
+  gap: var(--space-1) var(--space-6);
   min-inline-size: 0;
   margin: 0;
   padding: 0;
   border: 0;
+}
+/* Two cases keep the wider 8px: an option with its own helper text, so the
+   helper stays nearer its option than the next one; and touch screens, where
+   the 44px hit areas would otherwise reach well into the neighbouring circle. */
+.group:has(.optionHelper) {
+  row-gap: var(--space-inline);
+}
+@media (pointer: coarse) {
+  .group {
+    row-gap: var(--space-inline);
+  }
 }
 
 .vertical {

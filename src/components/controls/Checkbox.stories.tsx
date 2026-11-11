@@ -99,6 +99,10 @@ export const Default: Story = {
     await expect(box.getBoundingClientRect().width).toBe(16)
     await expect(box.getBoundingClientRect().height).toBe(16)
     await expect(getComputedStyle(box, '::after').width).toBe('24px')
+    // The label starts 8px from the box: Atlassian's 4px gap after the 24px area.
+    await expect(
+      canvas.getByText('Remember me').getBoundingClientRect().left - box.getBoundingClientRect().right,
+    ).toBeCloseTo(8, 1)
     await expect(box).not.toBeChecked()
     await userEvent.click(box)
     await expect(box).toBeChecked()

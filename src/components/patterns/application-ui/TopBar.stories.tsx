@@ -55,5 +55,10 @@ export const WithNavigation: Story = {
   play: async ({ canvas }) => {
     const nav = canvas.getByRole('navigation', { name: 'Main' })
     await expect(within(nav).getByRole('link', { name: 'Projects' })).toHaveAttribute('aria-current', 'page')
+    // Atlassian's top nav: 12px at the sides, 8px between the groups, 4px between the items in a group.
+    const bar = nav.closest('header')!
+    await expect(getComputedStyle(bar).paddingLeft).toBe('12px')
+    await expect(getComputedStyle(bar).columnGap).toBe('8px')
+    await expect(getComputedStyle(bar.lastElementChild!).columnGap).toBe('4px')
   },
 }

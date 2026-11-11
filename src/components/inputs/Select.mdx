@@ -63,30 +63,31 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/select.json
   <Story of={SelectStories.Anatomy} />
 </Anatomy>
 
-The **options list** opens below the field, 4px away, at least as wide as
+The **options list** opens below the field, 8px away, at least as wide as
 the field. It renders in a portal at the end of `<body>`, so it is not
-marked above. Each **option** is inset by the field's own padding, so its
-text starts where the field's text does; the chosen one has a check
-before its label, in the brand colour. Open the list in the example at
+marked above. Each **option** is a 32px row with 12px at its sides, after Atlassian's
+Select; the chosen one has a check before its label, in the brand colour. Open the list in the example at
 the top of Overview to see it.
 
 ## Measurements
 
 The box is Text Input's: `sm` is 32px and `md` is 40px, one step taller
-than a Button, with the same padding, icon and type in both. An option is
-inset by the field's padding, so its check starts where the field's text
-does.
+than a Button, with the same padding, icon and type in both. A field that
+opens a list is roomier than one you type in, after Atlassian's Select:
+the value starts 8px inside the edge, not 6px, and the end has 10px, so
+the chevron's centre is 19px from the outer edge.
 
 <SpecTable
   caption="sm"
   rows={[
     { part: 'Container', property: 'Height', token: '--control-md' },
-    { part: 'Container', property: 'Inline padding', token: '--space-1-5' },
+    { part: 'Container', property: 'Inline padding, start', token: '--space-2' },
+    { part: 'Container', property: 'Inline padding, end', token: '--space-2-5' },
     { part: 'Container', property: 'Corner radius', token: '--control-md-radius-field' },
     { part: 'Container', property: 'Gap', token: '--space-2' },
     { part: 'Chevron', property: 'Size', token: '--icon-md' },
     { part: 'Value', property: 'Font size', token: '--text-body' },
-    { part: 'Option', property: 'Inline padding', token: '--space-1-5' },
+    { part: 'Option', property: 'Inline padding', token: '--space-3' },
   ]}
 />
 
@@ -94,24 +95,25 @@ does.
   caption="md"
   rows={[
     { part: 'Container', property: 'Height', token: '--control-lg' },
-    { part: 'Container', property: 'Inline padding', token: '--space-1-5' },
+    { part: 'Container', property: 'Inline padding, start', token: '--space-2' },
+    { part: 'Container', property: 'Inline padding, end', token: '--space-2-5' },
     { part: 'Container', property: 'Corner radius', token: '--control-md-radius-field' },
     { part: 'Container', property: 'Gap', token: '--space-2' },
     { part: 'Chevron', property: 'Size', token: '--icon-md' },
     { part: 'Value', property: 'Font size', token: '--text-body' },
-    { part: 'Option', property: 'Inline padding', token: '--space-1-5' },
+    { part: 'Option', property: 'Inline padding', token: '--space-3' },
   ]}
 />
 
 <SpecTable
   caption="Every size"
   rows={[
-    { part: 'Options list', property: 'Block padding', token: '--space-1' },
+    { part: 'Options list', property: 'Block padding', token: '--space-2' },
     { part: 'Options list', property: 'Corner radius', token: '--radius-lg' },
     { part: 'Options list', property: 'Shadow', token: '--shadow-overlay' },
     { part: 'Option', property: 'Minimum height', token: '--control-md' },
     { part: 'Option', property: 'Minimum height on touch screens', token: '--target-coarse' },
-    { part: 'Option', property: 'Block padding', token: '--space-2' },
+    { part: 'Option', property: 'Block padding', token: '--space-1-5' },
     { part: 'Option', property: 'Check column width', token: '--space-4' },
     { part: 'Option', property: 'Gap after the check', token: '--space-2' },
     { part: 'Check', property: 'Size', token: '--icon-md' },

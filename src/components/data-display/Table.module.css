@@ -27,8 +27,10 @@
   color: var(--card-foreground);
   font-variant-numeric: tabular-nums;
 }
+/* Atlassian's caption: 24px above it, 8px to the table. Inline, it lines
+   up with the cells' text. */
 .caption {
-  padding: var(--space-3) var(--space-2);
+  padding: var(--space-6) var(--space-2) var(--space-2);
   text-align: start;
   font-weight: 600;
   caption-side: top;

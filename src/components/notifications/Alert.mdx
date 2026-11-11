@@ -79,13 +79,13 @@ without a jump in size.
 <SpecTable
   caption="Every alert"
   rows={[
-    { part: 'Container', property: 'Padding', token: '--space-group' },
+    { part: 'Container', property: 'Padding, from the outer edge', token: '--space-group' },
     { part: 'Container', property: 'Corner radius', token: '--radius-lg' },
-    { part: 'Container', property: 'Gap, icon to text', token: '--space-inline' },
+    { part: 'Container', property: 'Gap, icon to text', token: '--space-group' },
     { part: 'Title and description', property: 'Font size', token: '--text-body' },
     { part: 'Title and description', property: 'Line height', token: '--leading-body' },
-    { part: 'Title and description', property: 'Gap', token: '--space-stack' },
-    { part: 'Action', property: 'Space above, and between actions', token: '--space-2' },
+    { part: 'Title and description', property: 'Gap', token: '--space-inline' },
+    { part: 'Action', property: 'Space above, and between actions', token: '--space-inline' },
     { part: 'Close button', property: 'Size', token: '--box-sm' },
     { part: 'Close button', property: 'Icon size', token: '--icon-md' },
     { part: 'Close button', property: 'Corner radius', token: '--radius-sm' },
@@ -96,7 +96,8 @@ without a jump in size.
 />
 
 The border is always there, 1px and transparent unless `outlined`, so
-switching appearance never moves the content. The close button is 24px on
+switching appearance never moves the content. The padding counts that
+pixel: the content sits 16px from the alert's edge. The close button is 24px on
 a 20px line: it is pulled 2px up and down, so it centres on the first line
 and a one-line alert is no taller for having it. No shadow: an alert is
 part of the page.
@@ -190,8 +191,9 @@ Every other `<div>` attribute passes through, including `ref`.
 
 ### Differences from the spec
 
-- **Sized after Atlassian's section message**: 16px padding, 8px corners,
-  no shadow, a semibold 14/20 title, a 24px close button.
+- **Sized after Atlassian's section message**: 16px padding, 16px from
+  the icon to the text, 8px between title, description and actions, 8px
+  corners, no shadow, a semibold 14/20 title, a 24px close button.
 
 - **Placed in the content, not at the top of the screen.** The spec
   describes a prominent message at the top; here an alert goes where the

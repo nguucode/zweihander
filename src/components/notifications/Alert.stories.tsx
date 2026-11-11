@@ -264,6 +264,14 @@ export const Anatomy: Story = {
     const found = await expectAnatomy(canvasElement, anatomyParts)
     await expect(found[2]).toHaveTextContent('Upload failed')
     await expect(found[4]).toHaveTextContent('Retry')
+    // Atlassian's section message: content 16px from the edge (15px padding and the 1px border),
+    // 16px from the icon to the text, 8px between title, description and actions.
+    const box = found[0].getBoundingClientRect()
+    await expect(Math.round(found[1].getBoundingClientRect().left - box.left)).toBe(16)
+    await expect(Math.round(found[2].getBoundingClientRect().top - box.top)).toBe(16)
+    await expect(Math.round(found[2].getBoundingClientRect().left - found[1].getBoundingClientRect().right)).toBe(16)
+    await expect(Math.round(found[3].getBoundingClientRect().top - found[2].getBoundingClientRect().bottom)).toBe(8)
+    await expect(Math.round(found[4].getBoundingClientRect().top - found[3].getBoundingClientRect().bottom)).toBe(8)
   },
 }
 

@@ -100,6 +100,18 @@ export const Default: Story = {
     const free = canvas.getByRole('radio', { name: 'Free' })
     await expect(free.getBoundingClientRect().width).toBe(16)
     await expect(getComputedStyle(free, '::after').width).toBe('24px')
+    // The label starts 8px from the circle: Atlassian's 4px gap after the 24px area.
+    const label = free.closest('label')!
+    const text = document.createRange()
+    text.selectNodeContents(label.lastChild!)
+    await expect(text.getBoundingClientRect().left - free.getBoundingClientRect().right).toBeCloseTo(8, 1)
+    // These options carry helper text, so they are 8px apart and each helper stays with its own
+    // option; without helpers they are 4px apart, one every 24px (the PlainOptions story).
+    const next = canvas.getByRole('radio', { name: 'Pro' }).closest('label')!
+    await expect(label.getBoundingClientRect().height).toBe(20)
+    await expect(
+      next.getBoundingClientRect().top - label.parentElement!.getBoundingClientRect().bottom,
+    ).toBeCloseTo(8, 1)
     await userEvent.click(canvas.getByRole('radio', { name: 'Pro' }))
     await expect(canvas.getByRole('radio', { name: 'Pro' })).toBeChecked()
     await expect(args.onValueChange).toHaveBeenLastCalledWith('pro')
@@ -110,6 +122,17 @@ export const Default: Story = {
     // One tab stop for the whole group: Tab leaves it.
     await userEvent.tab()
     await expect(canvas.getByRole('radio', { name: 'Free' })).not.toHaveFocus()
+  },
+}
+
+/** Options without helper text sit 4px apart: one every 24px, Atlassian's radio row. */
+export const PlainOptions: Story = {
+  tags: ['!dev'],
+  args: { options: plans.map(({ value, label }) => ({ value, label })) },
+  play: async ({ canvas }) => {
+    const row = (name: string) => canvas.getByRole('radio', { name }).closest('label')!.getBoundingClientRect()
+    await expect(row('Pro').top - row('Free').bottom).toBeCloseTo(4, 1)
+    await expect(row('Pro').top - row('Free').top).toBeCloseTo(24, 1)
   },
 }
 

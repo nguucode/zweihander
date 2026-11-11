@@ -51,7 +51,7 @@
 
 .footer {
   justify-content: space-between;
-  margin-block-start: var(--space-group);
+  margin-block-start: var(--space-container);
 }
 
 /* A lone child, usually a Pagination with its own summary, spans the bar so

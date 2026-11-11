@@ -24,8 +24,9 @@
 }
 
 /* ------------------------------------------------------------- parts */
+/* 16px round the calendar, as @atlaskit/calendar's panel. */
 .body {
-  padding: var(--space-cluster);
+  padding: var(--space-4);
 }
 
 /* ------------------------------------------------------------- range */

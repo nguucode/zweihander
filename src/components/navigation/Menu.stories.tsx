@@ -109,7 +109,15 @@ export const Default: Story = {
     await userEvent.keyboard('{ArrowDown}')
     await waitFor(() => expect(within(menu).getByRole('menuitem', { name: /Edit/ })).toHaveFocus())
     // A one-line item is 36px: 8px padding around a 20px line. offsetHeight, so the popup's opening scale does not count.
-    await expect(within(menu).getByRole<HTMLElement>('menuitem', { name: /Edit/ }).offsetHeight).toBe(36)
+    const edit = within(menu).getByRole<HTMLElement>('menuitem', { name: /Edit/ })
+    await expect(edit.offsetHeight).toBe(36)
+    // Atlassian's dropdown menu: items 12px inside the popup (11px padding and the 1px border), 12px
+    // inline padding and 12px between an item's parts, 2px between items.
+    await expect(getComputedStyle(menu).paddingLeft).toBe('11px')
+    await expect(getComputedStyle(edit).paddingLeft).toBe('12px')
+    await expect(getComputedStyle(edit).columnGap).toBe('12px')
+    const items = within(menu).getAllByRole<HTMLElement>('menuitem')
+    await expect(items[1].offsetTop - (items[0].offsetTop + items[0].offsetHeight)).toBe(2)
     await userEvent.keyboard('{ArrowDown}{Enter}')
     await expect(onDuplicate).toHaveBeenCalledOnce()
     await waitFor(() => expect(body().queryByRole('menu')).toBeNull())
@@ -267,7 +275,7 @@ export const Open: Story = {
 /** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
 export const anatomyParts = [
   { name: 'Trigger', selector: 'button[aria-haspopup="menu"]', description: 'The button that opens it. Menu merges its props onto your element.' },
-  { name: 'Popup', selector: '[role="menu"]', description: 'The surface: the same as the Select list, at least 12rem wide.' },
+  { name: 'Popup', selector: '[role="menu"]', description: 'The surface: a popover, at least 12rem wide.' },
   { name: 'Group label', selector: '[role="group"] > div:first-child', description: 'Optional. Names a group of items; muted and small.' },
   { name: 'Item', selector: '[role="menuitem"]', description: 'An action, a link or a submenu trigger. One control tier tall.' },
   { name: 'Icon', selector: '[role="menuitem"] > span:first-child', description: 'Optional. Decorative.' },
