@@ -32,8 +32,6 @@ configure({ asyncUtilTimeout: 3000 })
 // The Playground's Preview theme, sent as globals over the channel, wins over
 // the toolbar: a story shown in the Playground wears the theme picked there.
 const withTheme: Decorator = (Story, context) => {
-  // Density goes on <html>, so popups portalled to <body> follow it.
-  document.documentElement.dataset.density = context.globals.density === 'compact' ? 'compact' : 'default'
   const appearance = parsePreviewTheme('appearance', context.globals.appearance)
   if (appearance)
     return (
@@ -45,7 +43,6 @@ const withTheme: Decorator = (Story, context) => {
         canvas={parsePreviewTheme('canvas', context.globals.canvas)}
         contentStyle={parsePreviewTheme('contentStyle', context.globals.contentStyle)}
         font={parsePreviewTheme('font', context.globals.font)}
-        scaling={parsePreviewTheme('scaling', context.globals.scaling)}
       >
         <Story />
       </PreviewThemeScope>
@@ -71,19 +68,6 @@ const preview: Preview = {
         dynamicTitle: true,
       },
     },
-    density: {
-      name: 'Density',
-      description: 'Default or Compact: spacing roles, control tier, type and component sizes',
-      defaultValue: 'default',
-      toolbar: {
-        icon: 'component',
-        items: [
-          { value: 'default', title: 'Default' },
-          { value: 'compact', title: 'Compact' },
-        ],
-        dynamicTitle: true,
-      },
-    },
     // Set by the Playground over the channel (updateGlobals). Storybook drops
     // a global it was not told about, so it is declared, but with no toolbar:
     // in Storybook itself the toolbar's theme stays the one switch.
@@ -94,7 +78,6 @@ const preview: Preview = {
     gray: { description: "The Playground's Preview theme: gray ramp" },
     radius: { description: "The Playground's Preview theme: radius preset" },
     font: { description: "The Playground's Preview theme: font for body and headings" },
-    scaling: { description: "The Playground's Preview theme: spacing and type scale" },
   },
 
   parameters: {

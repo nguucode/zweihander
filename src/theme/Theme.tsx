@@ -27,11 +27,17 @@ const RADIUS_PRESETS: Record<Radius, Record<string, string>> = {
   'full-rounded': { 'radius-factor': '1.5', 'radius-full': '9999px' },
 }
 
+/** @deprecated The kit has one scale. Removed in the next release. */
 export const SCALINGS = ['90%', '95%', '100%', '105%', '110%'] as const
+/** @deprecated The kit has one scale. Removed in the next release. */
 export type Scaling = (typeof SCALINGS)[number]
 
+/** @deprecated The kit has one density. Removed in the next release. */
 export const DENSITIES = ['default', 'compact'] as const
+/** @deprecated The kit has one density. Removed in the next release. */
 export type Density = (typeof DENSITIES)[number]
+
+let hasWarned = false
 
 export const CANVASES = ['plain', 'neutral', 'tinted'] as const
 export type Canvas = (typeof CANVASES)[number]
@@ -49,13 +55,9 @@ export interface ThemeProps extends ComponentProps<'div'> {
   accentColor?: AccentColor
   /** The neutral ramp behind backgrounds, text, borders and muted surfaces. */
   grayColor?: GrayColor
-  /** Multiplies spacing and the type scale. */
+  /** @deprecated Does nothing: the kit has one scale. Removed in the next release. */
   scaling?: Scaling
-  /**
-   * Picks the numbers behind the spacing roles, the control tier, the type
-   * scale and component sizes: `compact` tightens each, keeping every size.
-   * Inherits when omitted. Independent of `scaling`, which multiplies.
-   */
+  /** @deprecated Does nothing: the kit has one density. Use a component's `size` where a tighter control is needed. Removed in the next release. */
   density?: Density
   /** Rescales rounding for this scope. Inherits when omitted. */
   radius?: Radius
@@ -102,13 +104,13 @@ export function Theme({
   style,
   ...props
 }: ThemeProps) {
-  // `tokens` is applied last so an explicit --radius-factor or --scaling can
-  // override whatever preset selected it.
-  const resolved = {
-    ...(radius && RADIUS_PRESETS[radius]),
-    ...(scaling && { scaling: String(Number.parseInt(scaling, 10) / 100) }),
-    ...tokens,
+  if (import.meta.env.DEV && !hasWarned && (scaling !== undefined || density !== undefined)) {
+    hasWarned = true
+    console.warn('Theme: `scaling` and `density` do nothing and will be removed in the next release.')
   }
+  // `tokens` is applied last so an explicit --radius-factor can override
+  // whatever preset selected it.
+  const resolved = { ...(radius && RADIUS_PRESETS[radius]), ...tokens }
   return useRender({
     render,
     defaultTagName: 'div',
@@ -119,7 +121,6 @@ export function Theme({
         // instead of restating them on every scope.
         'data-accent': accentColor,
         'data-gray': grayColor,
-        'data-density': density,
         'data-canvas': canvas,
         'data-content-style': contentStyle,
         className: cn(appearance !== 'inherit' && appearance, className),

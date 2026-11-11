@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect, userEvent, waitFor, within } from 'storybook/test'
 import { Icon } from '@/lib/icon'
-import { CANVASES, CONTENT_STYLES, Theme, type Canvas, type ContentStyle, type Density } from '@/theme/Theme'
+import { CANVASES, CONTENT_STYLES, Theme, type Canvas, type ContentStyle } from '@/theme/Theme'
 import { Kbd } from '@/components/atomic-elements/Kbd'
 import { Avatar } from '@/components/atomic-elements/Avatar'
 import { Button } from '@/components/buttons/Button'
@@ -147,8 +147,8 @@ const blocks = (
   </div>
 )
 
-/** A Theme around the story, for the canvas, the content style and density. */
-const themed = (props: { canvas?: Canvas; contentStyle?: ContentStyle; density?: Density }) => (Story: () => ReactNode) => (
+/** A Theme around the story, for the canvas and the content style. */
+const themed = (props: { canvas?: Canvas; contentStyle?: ContentStyle }) => (Story: () => ReactNode) => (
   <Theme {...props} style={{ blockSize: '100%' }}>
     {Story()}
   </Theme>
@@ -266,18 +266,6 @@ export const TopBarLayout: Story = {
     // Rendered once, and on the same centre line in either layout.
     await expect(canvasElement.querySelectorAll('[data-testid="brand"]')).toHaveLength(1)
     await expect(logoMiddle(canvasElement)).toBeCloseTo(28, 0)
-  },
-}
-
-/** Compact density: the bar, the sidebar's width and the logo's place all follow it. */
-export const Compact: Story = {
-  ...WithSidebar,
-  decorators: [themed({ density: 'compact' }), ...box(1100)],
-  play: async ({ canvasElement }) => {
-    await expect(logoOffset(canvasElement)).toBeCloseTo(0, 0)
-    // Rendered once, and on the same centre line in either layout.
-    await expect(canvasElement.querySelectorAll('[data-testid="brand"]')).toHaveLength(1)
-    await expect(logoMiddle(canvasElement)).toBeCloseTo(22, 0)
   },
 }
 

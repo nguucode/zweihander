@@ -157,32 +157,3 @@ export const Steps: Story = {
 export const Intent: Story = {
   render: () => <Intents />,
 }
-
-const SCALES = ['90%', '100%', '110%'] as const
-
-/* A corner that stayed put while the padding shrank would break the nesting
-   rule at every scaling but 100%, so the two have to move together. */
-export const Scaling: Story = {
-  render: () => (
-    <div className={docs.row}>
-      {SCALES.map((scaling) => (
-        <Theme key={scaling} scaling={scaling} className={docs.stack}>
-          <Button>{scaling}</Button>
-        </Theme>
-      ))}
-    </div>
-  ),
-  play: async ({ canvas }) => {
-    const measure = (scaling: string) => {
-      const style = getComputedStyle(canvas.getByRole('button', { name: scaling }))
-      return { radius: Number.parseFloat(style.borderTopLeftRadius), pad: Number.parseFloat(style.paddingLeft) }
-    }
-    const base = measure('100%')
-    for (const scaling of ['90%', '110%']) {
-      const { radius, pad } = measure(scaling)
-      await expect(radius / base.radius).toBeCloseTo(pad / base.pad, 2)
-      await expect(radius).not.toBe(base.radius)
-    }
-  },
-}
-

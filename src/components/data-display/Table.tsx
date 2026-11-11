@@ -74,7 +74,7 @@ export interface TableProps<Row> {
    * so copying a cell's text or opening a link in it from that menu is gone.
    */
   hasRowContextMenu?: boolean
-  /** Row height. `md` is `--row-height` (48px Default, 36px Compact density); `sm` is one `--space-inline` shorter (40, 32). */
+  /** Row height. `md` is `--row-height` (48px); `sm` is one `--space-inline` shorter (40px). */
   density?: 'sm' | 'md'
   /** Keep the header row in view while the table scrolls inside its container. */
   hasStickyHeader?: boolean

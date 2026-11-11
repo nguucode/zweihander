@@ -109,11 +109,11 @@ preview light/dark.
 
 ### Custom themes
 
-Customization is the point of the kit. `src/theme/Theme.tsx` scopes five
+Customization is the point of the kit. `src/theme/Theme.tsx` scopes four
 independent settings to any subtree:
 
 ```tsx
-<Theme accentColor="violet" grayColor="slate" appearance="dark" radius="full-rounded" scaling="105%">
+<Theme accentColor="violet" grayColor="slate" appearance="dark" radius="full-rounded">
 ```
 
 | Prop | Values |
@@ -122,7 +122,6 @@ independent settings to any subtree:
 | `grayColor` | 9 neutral ramps — surfaces, text, borders (default: gray) |
 | `appearance` | `light` / `dark` / `inherit` |
 | `radius` | `sharp` / `rounded` / `full-rounded` |
-| `scaling` | `90%` … `110%` — spacing and type together |
 
 Every accent's solid step and label colour are **computed** so each one
 clears WCAG AA (4.5:1) for its own label, and the focus ring clears 3:1

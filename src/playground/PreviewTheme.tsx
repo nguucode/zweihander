@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef, useSyncExternalStore, type ReactNode } from 'react'
-import { ACCENT_COLORS, CANVASES, CONTENT_STYLES, GRAY_COLORS, SCALINGS, Theme, type AccentColor, type Canvas, type ContentStyle, type GrayColor, type Radius, type Scaling } from '@/theme/Theme'
+import { ACCENT_COLORS, CANVASES, CONTENT_STYLES, GRAY_COLORS, Theme, type AccentColor, type Canvas, type ContentStyle, type GrayColor, type Radius } from '@/theme/Theme'
 
 /**
  * The Preview theme: how the Playground dresses the item in its frame. It
@@ -35,7 +35,6 @@ export interface PreviewTheme {
   canvas: Canvas
   contentStyle: ContentStyle
   font: PreviewFont
-  scaling: Scaling
   appearance: PreviewAppearance
 }
 
@@ -47,7 +46,6 @@ export const DEFAULT_PREVIEW_THEME: PreviewTheme = {
   canvas: 'neutral',
   contentStyle: 'flat',
   font: 'system',
-  scaling: '100%',
   appearance: 'system',
 }
 
@@ -59,7 +57,6 @@ export const PREVIEW_THEME_VALUES: { [K in keyof PreviewTheme]: readonly Preview
   canvas: CANVASES,
   contentStyle: CONTENT_STYLES,
   font: FONTS,
-  scaling: SCALINGS,
   appearance: APPEARANCES,
 }
 
@@ -80,7 +77,6 @@ export function themeCode(theme: PreviewTheme) {
     changed('radius') && `radius="${theme.radius}"`,
     changed('canvas') && `canvas="${theme.canvas}"`,
     changed('contentStyle') && `contentStyle="${theme.contentStyle}"`,
-    changed('scaling') && `scaling="${theme.scaling}"`,
     changed('appearance') && `appearance="${theme.appearance}"`,
     FONT_STACKS[theme.font] && `tokens={{ 'font-sans': ${JSON.stringify(FONT_STACKS[theme.font])} }}`,
   ].filter(Boolean)
@@ -116,7 +112,6 @@ export function PreviewThemeScope({
   canvas,
   contentStyle,
   font,
-  scaling,
   appearance,
   children,
 }: Partial<PreviewTheme> & Pick<PreviewTheme, 'appearance'> & { children: ReactNode }) {
@@ -140,7 +135,7 @@ export function PreviewThemeScope({
       for (const name of attributes) html.removeAttribute(name)
       for (const name of tokens) html.style.removeProperty(name)
     }
-  }, [resolved, accent, gray, radius, stack, scaling])
+  }, [resolved, accent, gray, radius, stack])
   // display: contents keeps the story's own layout; tokens still inherit.
   return (
     <Theme
@@ -151,7 +146,6 @@ export function PreviewThemeScope({
       radius={radius}
       canvas={canvas}
       contentStyle={contentStyle}
-      scaling={scaling}
       tokens={stack ? { 'font-sans': stack } : undefined}
       data-preview-theme=""
       style={{ display: 'contents' }}

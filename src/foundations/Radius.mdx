@@ -75,7 +75,7 @@ step up with the preset and stop there. Concretely, at the default base:
 The default input is 32px tall, so a pill would be 16px. `field` at
 `full-rounded` lands under that on purpose, and a test asserts it.
 
-## Three rules
+## Two rules
 
 ### 1. Radius is tier × intent
 
@@ -121,15 +121,6 @@ line up at one.
 The rule is for concentric shapes. A close button 12px inside a popover's
 corner is a free-standing control, not a nested shape, and keeps its own
 step.
-
-### 3. Radius scales with `--scaling`
-
-Every step is multiplied by `--scaling`, as padding is. At 110% a 32px
-button is 35.2px tall with 13.2px padding, and its 8px corner becomes
-8.8px. Without this, the nesting rule above would hold at 100% only:
-padding would shrink at 90% while the corners stayed put.
-
-<Canvas of={RadiusStories.Scaling} />
 
 ## Always round: `--radius-pill`
 

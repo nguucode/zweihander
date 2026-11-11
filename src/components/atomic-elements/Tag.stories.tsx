@@ -264,7 +264,8 @@ export const Numbers: Story = {
   ),
   play: async ({ canvasElement }) => {
     const [a, b] = [...canvasElement.querySelectorAll('span[class*="tag"]')].map((t) => t.getBoundingClientRect().width)
-    await expect(a).toBe(b)
+    // Not toBe: Firefox on macOS lays the two out a float's rounding apart.
+    await expect(a).toBeCloseTo(b, 2)
   },
 }
 

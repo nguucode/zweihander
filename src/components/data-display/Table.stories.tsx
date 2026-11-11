@@ -148,7 +148,7 @@ const meta = {
       table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
     },
     density: {
-      description: 'Row height. `md` is `--row-height` (48px Default, 36px Compact density); `sm` is one `--space-inline` shorter (40, 32).',
+      description: 'Row height. `md` is `--row-height` (48px); `sm` is one `--space-inline` shorter (40px).',
       control: 'inline-radio',
       options: ['sm', 'md'],
       table: { type: { summary: "'sm' | 'md'" }, defaultValue: { summary: "'md'" } },

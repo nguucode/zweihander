@@ -13,7 +13,7 @@
   list-style: none;
 }
 
-/* Rows pad and size as Table rows do, so the two line up at any density. */
+/* Rows pad and size as Table rows do, so the two line up. */
 .item {
   box-sizing: border-box;
   min-block-size: var(--row-height);

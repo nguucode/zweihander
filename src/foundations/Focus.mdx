@@ -28,8 +28,7 @@ A third value is a smell. The one exception is a selected colour swatch,
 which already carries a selection ring at `--focus-offset`, so its focus
 ring sits one pixel further out to stay visible.
 
-## Why the ring is not scaled
+## Why the ring is in pixels
 
-`--focus-width` and both offsets are plain pixels, not multiplied by
-`--scaling`. A ring is a stroke: at 90% scaling it should not thin to
-1.8px, and WCAG 2.4.13 measures it in CSS pixels.
+`--focus-width` and both offsets are plain pixels, not `rem`. A ring is a
+stroke, and WCAG 2.4.13 measures it in CSS pixels.

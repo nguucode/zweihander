@@ -52,7 +52,7 @@
 }
 @container (min-width: 80rem) {
   /* Side by side, each column scrolls on its own. As wide as the expanded
-     sidebar, so the frame is symmetric and follows density. */
+     sidebar, so the frame is symmetric. */
   .withAside {
     grid-template-rows: minmax(0, 1fr);
     grid-template-columns: minmax(0, 1fr) var(--sidebar-width);

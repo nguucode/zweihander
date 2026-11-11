@@ -88,7 +88,7 @@ export const Body: Story = {
     const el = canvas.getAllByText('Zweihänder')[1]
     // body is 14px, one step down from the 16px many interfaces start at.
     await expect(Number.parseFloat(getComputedStyle(el).fontSize)).toBe(14)
-    // Every body line sits on the 4px grid at 100% scaling.
+    // Every body line sits on the 4px grid.
     for (const sample of canvas.getAllByText('Zweihänder')) {
       await expect(Number.parseFloat(getComputedStyle(sample).lineHeight) % 4).toBeCloseTo(0, 5)
     }

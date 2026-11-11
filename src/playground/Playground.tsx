@@ -246,7 +246,6 @@ function readTheme(): PreviewTheme {
     canvas: read('canvas'),
     contentStyle: read('contentStyle'),
     font: read('font'),
-    scaling: read('scaling'),
     appearance: read('appearance'),
   }
 }
@@ -606,22 +605,13 @@ function ThemePopover({ theme, onChange }: { theme: PreviewTheme; onChange: (the
         </fieldset>
         <fieldset className={styles.themeSection}>
           <legend className={styles.themeLegend}>Typo</legend>
-          <div className={styles.themeRow}>
-            <Select
-              label="Font"
-              options={choices(PREVIEW_THEME_VALUES.font)}
-              value={theme.font}
-              onValueChange={(font) => font && set({ font: font as PreviewTheme['font'] })}
-              isFullWidth
-            />
-            <Select
-              label="Scaling"
-              options={choices(PREVIEW_THEME_VALUES.scaling)}
-              value={theme.scaling}
-              onValueChange={(scaling) => scaling && set({ scaling: scaling as PreviewTheme['scaling'] })}
-              isFullWidth
-            />
-          </div>
+          <Select
+            label="Font"
+            options={choices(PREVIEW_THEME_VALUES.font)}
+            value={theme.font}
+            onValueChange={(font) => font && set({ font: font as PreviewTheme['font'] })}
+            isFullWidth
+          />
         </fieldset>
         <RadioGroup
           label="Radius"
