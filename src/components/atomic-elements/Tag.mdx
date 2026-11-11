@@ -233,6 +233,8 @@ Every other `<span>` attribute passes through to the container, including
   label falls below 4.5:1. That is accepted on purpose.
 - **`startAvatar` wins over `startIcon`** if both are passed; the spec
   does not say.
+- **Digits are tabular.** Every digit takes the same width, so a tag
+  holding a count or a countdown does not change width as it ticks.
 - **The tag does not remove itself.** `onRemove` reports the click and
   the parent drops the tag from its list, so the list stays the one
   source of truth.

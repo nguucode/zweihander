@@ -254,6 +254,20 @@ export const Contrast: Story = {
   },
 }
 
+/** A countdown keeps its width as the digits change: digits are tabular. */
+export const Numbers: Story = {
+  render: (args) => (
+    <div style={row}>
+      <Tag {...args} text="11:11" />
+      <Tag {...args} text="00:00" />
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    const [a, b] = [...canvasElement.querySelectorAll('span[class*="tag"]')].map((t) => t.getBoundingClientRect().width)
+    await expect(a).toBe(b)
+  },
+}
+
 export const Truncated: Story = {
   args: { text: 'A tag whose text is far longer than the space it has been given' },
   render: (args) => (
