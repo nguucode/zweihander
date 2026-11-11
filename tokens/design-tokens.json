@@ -2483,6 +2483,11 @@
     "md": {
       "$type": "dimension",
       "$value": "1rem"
+    },
+    "lg": {
+      "$type": "dimension",
+      "$value": "1.25rem",
+      "$description": "Icon inside a md Button or ToggleButton: larger than the md control tier, still inside the 32px box."
     }
   },
   "text": {

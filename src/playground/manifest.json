@@ -1424,7 +1424,7 @@
               {
                 "part": "Icon",
                 "property": "Size",
-                "token": "--icon-md"
+                "token": "--icon-lg"
               },
               {
                 "part": "Label",
@@ -1904,7 +1904,7 @@
               {
                 "part": "Icon",
                 "property": "Size",
-                "token": "--icon-md"
+                "token": "--icon-lg"
               },
               {
                 "part": "Label",

@@ -13,7 +13,7 @@ Every component in the kit imports its icons from here and nowhere else.
 ## Why names say what an icon is for
 
 `close`, `danger`, `success` — not `x`, `alert-circle`, `check-circle`.
-The set is temporary: it is Google Material Symbols for now, and may be
+The set is temporary: it is Boxicons for now, and may be
 replaced by the kit's own set. Named by purpose, that swap is an edit to this one file.
 Named by shape, it would be a search through every component for which
 shape meant what. Navigation shapes (`chevron-down`, `search`, `plus`)
@@ -41,60 +41,58 @@ itself, to size it; never pass a colour.
 
 ## Source and licence
 
-Path data is copied from Google Material Symbols (`@material-symbols/svg-600`
-0.47.6): Rounded, weight 600 (400 drew too thin a stroke at 16px), grade 0, optical size 24, fill 0 unless the
-table says Fill 1. Apache 2.0. The licence notice is in the file header, so
-it travels with the file when the registry copies it into another project.
-There is no npm dependency on Material Symbols, and no icon font.
+Path data is copied from Boxicons free (`@boxicons/core` 1.0.6): the basic
+set, and the filled set where the table says *filled*. MIT. The licence
+notice is in the file header, so it travels with the file when the registry
+copies it into another project. There is no npm dependency on Boxicons, and
+no icon font.
 
-The paths use Material's own `0 -960 960 960` viewBox; keep it when adding
-icons.
+The paths use Boxicons' own `0 0 24 24` viewBox; keep it when adding icons.
 
-## Names in Material Symbols
+## Names in Boxicons
 
-Each purpose name in code is one Material Symbol, so designers can find the
-same glyph at [fonts.google.com/icons](https://fonts.google.com/icons) or
-in the Material Symbols Figma community file:
+Each purpose name in code is one Boxicon, so designers can find the same
+glyph at [boxicons.com](https://boxicons.com):
 
-| Code (`name`) | Material Symbol |
+| Code (`name`) | Boxicon |
 | --- | --- |
-| `calendar` | `calendar_today` |
-| `check` | `check` |
-| `chevron-down` | `keyboard_arrow_down` |
-| `chevron-left` | `keyboard_arrow_left` |
-| `chevron-right` | `keyboard_arrow_right` |
-| `chevron-up` | `keyboard_arrow_up` |
-| `chevrons-up-down` | `unfold_more` |
-| `clear` | `cancel` (filled) |
-| `close` | `close` |
-| `danger` | `error` |
-| `danger-filled` | `error (Fill 1)` |
-| `edit` | `edit` |
-| `external` | `open_in_new` |
-| `file` | `draft` |
-| `help` | `help` |
-| `info` | `info` |
-| `info-filled` | `info (Fill 1)` |
-| `menu` | `menu` |
-| `minus` | `remove` |
-| `more` | `more_horiz` |
-| `notifications` | `notifications` |
-| `pause` | `pause` |
-| `play` | `play_arrow` |
-| `plus` | `add` |
-| `search` | `search` |
-| `sidebar-collapse` | `left_panel_close` |
-| `sidebar-expand` | `left_panel_open` |
-| `star` | `star` |
-| `star-filled` | `star (Fill 1)` |
-| `success` | `check_circle` |
-| `success-filled` | `check_circle (Fill 1)` |
-| `upload` | `upload` |
-| `user` | `person` |
-| `warning` | `warning` |
-| `warning-filled` | `warning (Fill 1)` |
+| `calendar` | `bx-calendar` |
+| `check` | `bx-check` |
+| `chevron-down` | `bx-chevron-down` |
+| `chevron-left` | `bx-chevron-left` |
+| `chevron-right` | `bx-chevron-right` |
+| `chevron-up` | `bx-chevron-up` |
+| `chevrons-up-down` | `bx-chevrons-up-down` |
+| `clear` | `bx-x-circle` (filled) |
+| `close` | `bx-x` |
+| `danger` | `bx-alert-circle` |
+| `danger-filled` | `bx-alert-circle` (filled) |
+| `edit` | `bx-pencil` |
+| `external` | `bx-arrow-out-up-right-square` |
+| `file` | `bx-file` |
+| `help` | `bx-help-circle` |
+| `info` | `bx-info-circle` |
+| `info-filled` | `bx-info-circle` (filled) |
+| `menu` | `bx-menu` |
+| `minus` | `bx-minus` |
+| `more` | `bx-dots-horizontal-rounded` |
+| `notifications` | `bx-bell` |
+| `pause` | `bx-pause` |
+| `play` | `bx-play` |
+| `plus` | `bx-plus` |
+| `search` | `bx-search` |
+| `sidebar-collapse` | `bx-dock-left-arrow` |
+| `sidebar-expand` | `bx-dock-left-arrow` (chevron mirrored) |
+| `star` | `bx-star` |
+| `star-filled` | `bx-star` (filled) |
+| `success` | `bx-check-circle` |
+| `success-filled` | `bx-check-circle` (filled) |
+| `upload` | `bx-arrow-up-stroke` |
+| `user` | `bx-user` |
+| `warning` | `bx-alert-triangle` |
+| `warning-filled` | `bx-alert-triangle` (filled) |
 
-To add an icon: find it at fonts.google.com/icons, copy the `d`
-attribute(s) from `rounded/<name>.svg` (or `<name>-fill.svg`) in
-`@material-symbols/svg-600` into the `paths` map under a purpose name,
-add a row to this table, and add the name to the catalog story.
+To add an icon: find it at boxicons.com, copy the `d` attribute(s) from
+`svg/basic/<name>.svg` (or `svg/filled/<name>.svg`) in `@boxicons/core`
+into the `paths` map under a purpose name, add a row to this table, and add
+the name to the catalog story.

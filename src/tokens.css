@@ -923,6 +923,7 @@
   --icon-xs: 0.75rem;
   --icon-sm: 0.875rem;
   --icon-md: 1rem;
+  --icon-lg: 1.25rem;
 
   /* Type roles. Leading is a ratio of the size of the same name. */
   --text-heading-2xl: 2rem;

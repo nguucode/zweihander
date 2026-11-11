@@ -199,7 +199,9 @@ a[href].button {
 }
 
 .md {
-  --button-icon: var(--icon-md);
+  /* One step above the md tier: Boxicons draw edge to edge, and at 16px a
+     glyph read small next to a 14px label. The box stays --control-md. */
+  --button-icon: var(--icon-lg);
   block-size: var(--control-md);
   gap: var(--control-md-gap);
   padding-inline: var(--control-md-pad-spacious);
@@ -209,6 +211,8 @@ a[href].button {
 .iconOnly {
   aspect-ratio: 1;
   padding-inline: 0;
+  /* The icon is the child itself (1em), so size it like a leading icon. */
+  font-size: var(--button-icon);
 }
 
 .fullWidth {
