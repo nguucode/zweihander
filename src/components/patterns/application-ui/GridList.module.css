@@ -15,7 +15,7 @@
   padding: 0;
   /* The link's focus ring sits inside the panel's 1px border, so 1px less
      round than the panel. */
-  --list-item-focus-radius: calc(var(--radius-panel) - 1px);
+  --list-item-focus-radius: calc(var(--radius-lg) - 1px);
 }
 
 .cover {

@@ -70,7 +70,7 @@ export function PieChart({
       table={() => (
         <Table
           caption={title}
-          density="sm"
+          size="sm"
           rows={data}
           getRowId={(_, i) => String(i)}
           columns={[

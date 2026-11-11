@@ -20,9 +20,9 @@ Current state: early stage (0.x), not production-ready, palettes are placeholder
 
 Four things together, none of which a neighbour (shadcn, Radix Themes, Carbon) offers in this combination:
 
-- **Customization is the point.** One `<Theme>` scopes accent (17 hues), gray (9 ramps), radius preset, scaling, density and canvas to any subtree.
+- **Customization is the point.** One `<Theme>` scopes accent (17 hues), gray (9 ramps), radius preset and canvas to any subtree.
 - **Measured tokens.** The token generator computes OKLCH → sRGB → WCAG contrast, picks readable steps itself, and fails the build rather than ship an unreadable one. Code is the token source; Figma variables are synced from it.
-- **Enterprise density.** Default and Compact density across every component, an app shell (Top bar, Nav sidebar, App content), tables and Application UI rather than marketing blocks.
+- **One proven scale for application UI.** Spacing, box sizes, radius and elevation follow Atlassian Design's numbers, the same in every component: 32px controls, 40px fields, 28px table rows. Where a screen needs a tighter control (a button in a table row, a field in a toolbar) the component's `size="sm"` gives it, per view rather than as a theme mode. An app shell (Top bar, Nav sidebar, App content), tables and Application UI rather than marketing blocks.
 - **Cuts complexity.** Plain elements styled with CSS Modules, no CSS framework, flat props, Base UI only where focus/ARIA behaviour is hard.
 
 ## Operating Context
@@ -58,7 +58,7 @@ Four things together, none of which a neighbour (shadcn, Radix Themes, Carbon) o
 1. Code is the source of truth; Figma follows and must match.
 2. Every value is a token, and every colour pairing is measured, not eyeballed.
 3. Theming changes the whole kit from one place; a consumer should never need to override component CSS.
-4. Density and data first: application screens are the main job, marketing surfaces are secondary.
+4. Data first: application screens are the main job, marketing surfaces are secondary. How tight a view is belongs to the product (a component's `size`, a view setting), not to the theme.
 5. Fewer moving parts beat more options; add a prop only when a real screen needs it.
 
 ## Accessibility & Inclusion

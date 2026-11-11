@@ -115,7 +115,7 @@ gap between children.
 <SpecTable
   caption="Every size"
   rows={[
-    { part: 'Container', property: 'Corner radius', token: '--radius-panel' },
+    { part: 'Container', property: 'Corner radius', token: '--radius-lg' },
     { part: 'Content', property: 'Font size', token: '--text-body' },
     { part: 'Content', property: 'Line height', token: '--leading-body' },
     { part: 'Focus ring', property: 'Width', token: '--focus-width' },
@@ -125,6 +125,8 @@ gap between children.
 
 The border is 1px, transparent when `hasBorder` is off, so turning it on
 or off never moves the content. `isRounded={false}` gives square corners.
+The 8px corner and the two shadows (raised at rest, overlay on hover) are
+Atlassian's; the padding steps are the kit's own.
 
 ## Color
 
@@ -135,8 +137,8 @@ Switch the theme in the toolbar: the values follow.
   rows={[
     { part: 'Container', property: 'Background', token: '--card' },
     { part: 'Container', property: 'Border', token: '--border' },
-    { part: 'Container', property: 'Shadow', token: '--shadow-sm' },
-    { part: 'Container, hover', property: 'Shadow', token: '--shadow-md' },
+    { part: 'Container', property: 'Shadow', token: '--shadow-raised' },
+    { part: 'Container, hover', property: 'Shadow', token: '--shadow-overlay' },
     { part: 'Content', property: 'Colour', token: '--card-foreground' },
   ]}
 />
@@ -178,7 +180,7 @@ has these:
 
 - **Hover** never touches the surface: muted text sits on `--card` at
   4.5:1 with no margin to spare, and darkening it 6% took muted text to
-  3.9:1. An `elevated` card lifts to `--shadow-md`; an `outline` card's
+  3.9:1. An `elevated` card lifts to `--shadow-overlay`; an `outline` card's
   edge strengthens to `--control-border`, the 3:1 control border. An
   `unstyled` card has no hover look.
 - **Focus** is a 2px `--ring` outline, 2px outside the card.

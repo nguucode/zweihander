@@ -23,8 +23,8 @@
   padding: max(var(--space-group), 12dvh) var(--space-group) var(--space-group);
 }
 
-/* 40rem: room for a long command name and its shortcut, the Modal lg width
-   less a little, as in Linear, Raycast and Spotlight. */
+/* 40rem: room for a long command name and its shortcut, between the Modal md and lg
+   widths, as in Linear, Raycast and Spotlight. */
 .popup {
   box-sizing: border-box;
   display: flex;
@@ -36,7 +36,7 @@
   border: 1px solid var(--border);
   border-radius: var(--radius-panel);
   background: var(--popover);
-  box-shadow: var(--shadow-xl);
+  box-shadow: var(--shadow-overlay);
   color: var(--popover-foreground);
   font-family: var(--font-sans);
   font-size: var(--text-body);
@@ -57,7 +57,7 @@
    under it ends the row. Its inset is the list's plus an item's, so the
    search icon sits on the same column as the item icons. */
 .search {
-  --palette-pad: calc(var(--space-stack) + var(--control-md-pad));
+  --palette-pad: calc(var(--space-stack) + var(--space-3));
   display: flex;
   flex-shrink: 0;
   align-items: center;
@@ -114,20 +114,21 @@
 
 /* As a Menu's group label. */
 .groupLabel {
-  padding: var(--control-xs-pad) var(--control-md-pad) var(--control-xs-gap);
+  padding: var(--control-xs-pad) var(--space-3) var(--control-xs-gap);
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
-  font-weight: 500;
+  font-weight: 600;
   color: var(--muted-foreground);
 }
 
-/* As a Menu item: a row of tier md, the corner nested inside the popup's. */
+/* As a Menu item: 8px by 12px padding around a 20px line (36px), the
+   corner nested inside the popup's. */
 .item {
   display: flex;
   align-items: center;
   gap: var(--control-md-gap);
   min-block-size: var(--control-md);
-  padding: var(--space-stack) var(--control-md-pad);
+  padding: var(--space-2) var(--space-3);
   border-radius: calc(var(--radius-panel) - var(--palette-inset));
   cursor: default;
   user-select: none;
@@ -164,7 +165,7 @@
 }
 
 .empty {
-  padding: var(--space-6) var(--control-md-pad);
+  padding: var(--space-6) var(--space-3);
   color: var(--muted-foreground);
   text-align: center;
 }
@@ -179,7 +180,7 @@
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-group);
-  padding: var(--space-2) calc(var(--space-stack) + var(--control-md-pad));
+  padding: var(--space-2) calc(var(--space-stack) + var(--space-3));
   border-block-start: 1px solid var(--border);
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
@@ -201,7 +202,7 @@
   white-space: nowrap;
 }
 
-/* Rows are 32px; on touch they grow to 44px, edge to edge. */
+/* Rows are 36px; on touch they grow to 44px, edge to edge. */
 @media (pointer: coarse) {
   .item {
     min-block-size: var(--target-coarse);

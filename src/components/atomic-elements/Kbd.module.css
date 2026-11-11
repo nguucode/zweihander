@@ -9,7 +9,8 @@
   padding-inline: var(--space-1);
   border: 1px solid var(--border);
   border-block-end-width: 2px;
-  border-radius: var(--radius-sm);
+  /* 2px: a key cap is a mark smaller than a control. */
+  border-radius: var(--radius-xs);
   background: var(--muted);
   color: var(--muted-foreground);
   font-family: var(--font-sans);

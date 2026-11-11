@@ -87,7 +87,7 @@ export function Leads() {
             caption="Leads"
             rows={visible}
             getRowId={(l) => l.id}
-            density="sm"
+            size="sm"
             emptyState={<EmptyState size="sm" title="No leads match" description="Clear the search or pick another tab." />}
             columns={[
               { key: 'name', header: 'Lead', width: '13rem', isRowHeader: true, cell: (l) => (

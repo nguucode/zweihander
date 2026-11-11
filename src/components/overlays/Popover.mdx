@@ -65,8 +65,8 @@ trigger where it opens.
   caption="Container"
   rows={[
     { part: 'Container', property: 'Padding', token: '--space-group' },
-    { part: 'Container', property: 'Corner radius', token: '--radius-panel' },
-    { part: 'Container', property: 'Shadow', token: '--shadow-md' },
+    { part: 'Container', property: 'Corner radius', token: '--radius-lg' },
+    { part: 'Container', property: 'Shadow', token: '--shadow-overlay' },
     { part: 'Title', property: 'Font size', token: '--text-body' },
     { part: 'Title', property: 'Line height', token: '--leading-body' },
     { part: 'Title to close button', property: 'Gap', token: '--space-cluster' },
@@ -89,7 +89,8 @@ trigger where it opens.
 The container is as wide as its content, at most 22rem and never wider
 than the room beside the trigger. It has no arrow: it opens 6px from the
 trigger and lines up with it, which already ties the two. It has a 1px
-border and a semibold title. The close button is 20px: 2px around its icon,
+border and a semibold title. The 8px corner and the overlay shadow are
+Atlassian's popup; the 16px padding and the 22rem cap are the kit's own. The close button is 20px: 2px around its icon,
 one line of text tall. Popovers sit on the `--layer-overlay` layer and fade
 in over `--duration-fast`.
 

@@ -234,7 +234,7 @@ function Shown({ toasts, pending }: { toasts: ToastOptions[]; pending?: string }
  * the containing block of the fixed viewport, so the toasts sit in its corner
  * rather than the window's; as a size container, they fit its width.
  */
-function Preview({ toasts, pending, height = '7rem' }: { toasts: ToastOptions[]; pending?: string; height?: string }) {
+function Preview({ toasts, pending, height = '7.5rem' }: { toasts: ToastOptions[]; pending?: string; height?: string }) {
   // The layer must exist before the portal mounts into it.
   const [layer, setLayer] = useState<HTMLDivElement | null>(null)
   return (
@@ -242,7 +242,7 @@ function Preview({ toasts, pending, height = '7rem' }: { toasts: ToastOptions[];
       {/* Sets the width: a toast's, or less when there is less room. The
           fixed toasts give the box no width of their own, and a replaced
           element with a percentage max-width can shrink to fit. */}
-      <svg aria-hidden="true" style={{ display: 'block', inlineSize: '26rem', maxInlineSize: '100%', blockSize: 0 }} />
+      <svg aria-hidden="true" style={{ display: 'block', inlineSize: '27rem', maxInlineSize: '100%', blockSize: 0 }} />
       <div ref={setLayer} style={{ position: 'absolute', inset: 0, containerType: 'inline-size', transform: 'translateZ(0)' }}>
         {layer && (
           <ToastProvider container={layer} placement="top-left" limit={toasts.length + (pending ? 1 : 0)}>
@@ -270,7 +270,7 @@ export const Static: Story = {
 export const VariantsStatic: Story = {
   render: () => (
     <Preview
-      height="22rem"
+      height="24.5rem"
       toasts={(['default', 'info', 'success', 'warning', 'danger'] as const).map((variant) => ({
         variant,
         title: `${variant[0].toUpperCase()}${variant.slice(1)}`,
@@ -290,13 +290,13 @@ export const VariantsStatic: Story = {
 /** The States block's example: four side by side are narrow, so the title wraps. */
 export const StateExample: Story = {
   tags: ['!dev'],
-  render: () => <Preview toasts={[moved]} height="8.5rem" />,
+  render: () => <Preview toasts={[moved]} height="9rem" />,
 }
 
 /** While a `promise()` is pending: a spinner in place of the icon. */
 export const Pending: Story = {
   tags: ['!dev'],
-  render: () => <Preview toasts={[]} pending="Uploading 3 files…" height="5.5rem" />,
+  render: () => <Preview toasts={[]} pending="Uploading 3 files…" height="6rem" />,
 }
 
 /** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */

@@ -31,9 +31,9 @@
   /* A transparent piece on a plain canvas has nothing else marking its edge. */
   --shell-transparent-edge: var(--canvas-plain, var(--border)) var(--canvas-neutral, transparent)
     var(--canvas-tinted, transparent);
-  --shell-bar: calc(var(--control-md) + 2 * var(--space-cluster));
+  --shell-bar: calc(var(--control-md) + 2 * var(--space-inline));
   /* The logo lines up with the sidebar's icons: its padding plus an item's. */
-  --shell-logo-x: calc(2 * var(--space-inline));
+  --shell-logo-x: calc(var(--space-3) + var(--space-inline));
 
   position: relative;
   container-type: inline-size;

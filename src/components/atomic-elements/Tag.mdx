@@ -39,8 +39,6 @@ is the emphasis. Any variant takes any appearance.
 
 <Canvas of={TagStories.Colors} />
 
-<Canvas of={TagStories.Sizes} />
-
 <Canvas of={TagStories.RemovableList} />
 
 ## Resources
@@ -70,46 +68,39 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/tag.json
 
 ## Measurements
 
-A tag sits in a line of text, so each size reads the control tier below
-its name (Foundations / Sizing): `md` is tier sm, `sm` is tier xs. A 1px
-padding and a 1px border, transparent unless outlined, make up the tier's
-height, so appearances never shift the layout.
+One size, Atlassian's tag: 20px tall, control tier xs (Foundations /
+Sizing), so it sits in a line of text. The border is always there,
+transparent unless outlined, so appearances never shift the layout.
+
+`size` is deprecated. `sm` renders the same tag as `md`, warns once in
+development, and the prop will be removed in the next release.
 
 <SpecTable
-  caption="sm"
+  caption="Every tag"
   rows={[
-    { part: 'Container', property: 'Inline padding', token: '--control-xs-pad-spacious' },
+    { part: 'Container', property: 'Height', token: '--control-xs' },
+    { part: 'Container', property: 'Inline padding', token: '--space-1' },
     { part: 'Container', property: 'Corner radius', token: '--control-xs-radius' },
-    { part: 'Container', property: 'Gap', token: '--control-xs-gap' },
+    { part: 'Container', property: 'Gap', token: '--space-1' },
     { part: 'Icon, avatar and remove button', property: 'Size', token: '--icon-xs' },
     { part: 'Text', property: 'Font size', token: '--text-body-sm' },
     { part: 'Text', property: 'Line height', token: '--leading-body-sm' },
-  ]}
-/>
-
-<SpecTable
-  caption="md"
-  rows={[
-    { part: 'Container', property: 'Inline padding', token: '--control-sm-pad-spacious' },
-    { part: 'Container', property: 'Corner radius', token: '--control-sm-radius' },
-    { part: 'Container', property: 'Gap', token: '--control-sm-gap' },
-    { part: 'Icon, avatar and remove button', property: 'Size', token: '--icon-sm' },
-    { part: 'Text', property: 'Font size', token: '--text-body' },
-    { part: 'Text', property: 'Line height', token: '--leading-body' },
-  ]}
-/>
-
-<SpecTable
-  caption="Every size"
-  rows={[
     { part: 'Remove button', property: 'Focus ring width', token: '--focus-width' },
     { part: 'Remove button', property: 'Focus ring offset (inset)', token: '--focus-offset-inset' },
     { part: 'Remove button', property: 'Hit area on touch screens', token: '--target-coarse' },
   ]}
 />
 
-The corner follows the Theme's radius preset like every control: a pill
-under `radius="full-rounded"`.
+| Part | Property | Value |
+| --- | --- | --- |
+| Container | Maximum width | 180px |
+
+The maximum width is Atlassian's and has no token: no size step is that
+wide. Past it, and past the width of its parent, the text ends in an
+ellipsis.
+
+The corner is 4px and follows the Theme's radius preset like every
+control: a pill under `radius="full-rounded"`.
 
 ## Color
 
@@ -224,6 +215,9 @@ Every other `<span>` attribute passes through to the container, including
 - **The spec's four variants needed new tokens.** `info`, `success`,
   `warning` and `danger` were added to the token layer for Tag and are
   shared with Alert and Toast.
+- **One size.** The spec's sizes are gone: the tag takes Atlassian's box,
+  20px tall with 12/16 text and a 180px maximum width. `size` stays one
+  release as a deprecated prop that changes nothing.
 - **No `isRounded`.** The corner reads the control tier's radius, so it
   follows the Theme's radius preset with every other control, and turns
   into a pill under `radius="full-rounded"`.
@@ -260,8 +254,8 @@ Colour carries meaning here, so it is never the only signal: the text says
 what the status is.
 
 In a wrapped list of removable tags on touch, keep at least `--space-6`
-between rows. The remove button's touch area reaches 10px above and below
-a 24px tag, and neighbouring targets would overlap.
+between rows. The remove button's touch area reaches 12px above and below
+a 20px tag, and neighbouring targets would overlap.
 
 ## When not to use
 
@@ -279,8 +273,8 @@ a 24px tag, and neighbouring targets would overlap.
   so a list of tags does not read as a row of identical "Remove" buttons.
 - It is a native `<button>`: Tab to reach, Enter or Space to press.
 - On touch screens (`pointer: coarse`) its hit area grows to 44×44px
-  without changing how the tag looks. That area reaches 10px above and
-  below a 24px tag.
+  without changing how the tag looks. That area reaches 12px above and
+  below a 20px tag.
 - After a tag is removed, focus has nowhere to stay and drops to the page.
   If that matters, move it to the next tag's remove button, or to the
   field the tags belong to, in your `onRemove`.

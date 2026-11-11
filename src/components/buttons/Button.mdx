@@ -73,9 +73,11 @@ invisible, so the button keeps its width and its name.
 
 ## Measurements
 
-Each size is a control tier (Foundations / Sizing). Buttons take the
-spacious inline padding: a centred label needs more room either side than
-a field's left-aligned text.
+Each size is a control tier (Foundations / Sizing), with Atlassian
+Design's numbers: 32px by default, 24px for tables and dense rows. Buttons
+take the spacious inline padding, 12px at both sizes: a centred label
+needs more room either side than a field's left-aligned text. The label is
+14/20 at both sizes.
 
 <SpecTable
   caption="sm"
@@ -85,8 +87,8 @@ a field's left-aligned text.
     { part: 'Container', property: 'Corner radius', token: '--control-sm-radius' },
     { part: 'Container', property: 'Gap', token: '--control-sm-gap' },
     { part: 'Icon', property: 'Size', token: '--icon-sm' },
-    { part: 'Label', property: 'Font size', token: '--text-body-sm' },
-    { part: 'Label', property: 'Line height', token: '--leading-body-sm' },
+    { part: 'Label', property: 'Font size', token: '--text-body' },
+    { part: 'Label', property: 'Line height', token: '--leading-body' },
   ]}
 />
 
@@ -216,7 +218,7 @@ Every other `<button>` attribute passes through, including `ref`.
 
 ### Differences from the spec
 
-- **Two sizes, not four.** `sm` (24px) and `md` (32px) only, the compact control scale of the Claude apps. The spec's larger steps were dropped; a big call to action is `md` with more room around it, not a taller box.
+- **Two sizes, not four.** The sizes follow Atlassian Design: 32px (`md`) by default, 24px (`sm`) for tables and dense rows. Both take 12px inline padding, a 6px gap and a 14/20 label; `sm` is a shorter box, not smaller type. The spec's larger steps were dropped; a big call to action is `md` with more room around it, not a taller box.
 - **`disabled`, not `isDisabled`**: the native attribute keeps its name.
 - **`isIconOnly` is added.** The spec has no icon-only button, and a
   square button that still requires a name is common enough to need one.

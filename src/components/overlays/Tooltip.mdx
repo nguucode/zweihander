@@ -87,15 +87,15 @@ The hover card, open under its link:
 <SpecTable
   caption="Container"
   rows={[
-    { part: 'Container', property: 'Block padding', token: '--space-stack' },
-    { part: 'Container', property: 'Inline padding', token: '--space-inline' },
+    { part: 'Container', property: 'Block padding', token: '--space-1' },
+    { part: 'Container', property: 'Inline padding', token: '--space-1-5' },
     { part: 'Container', property: 'Corner radius', token: '--radius-sm' },
     { part: 'Text', property: 'Font size', token: '--text-body-sm' },
     { part: 'Text', property: 'Line height', token: '--leading-body-sm' },
   ]}
 />
 
-The container is as wide as its text, at most 20rem and never wider than
+The container is as wide as its text, at most 240px (15rem) and never wider than
 the room beside the trigger; longer text wraps. It opens 6px from the
 trigger, on the `--layer-tooltip` layer, above popovers and modals, so a
 tooltip on a control inside one still shows. It fades in over
@@ -105,8 +105,8 @@ tooltip on a control inside one still shows. It fades in over
   caption="Hover card"
   rows={[
     { part: 'Container', property: 'Padding', token: '--space-group' },
-    { part: 'Container', property: 'Corner radius', token: '--radius-panel' },
-    { part: 'Container', property: 'Shadow', token: '--shadow-md' },
+    { part: 'Container', property: 'Corner radius', token: '--radius-lg' },
+    { part: 'Container', property: 'Shadow', token: '--shadow-overlay' },
     { part: 'Avatar to text', property: 'Gap', token: '--space-cluster' },
     { part: 'Text to action', property: 'Gap', token: '--space-3' },
     { part: 'Name', property: 'Font size', token: '--text-body' },
@@ -114,7 +114,9 @@ tooltip on a control inside one still shows. It fades in over
   ]}
 />
 
-The hover card is as wide as its content, at most 20rem. It opens 6px
+The hover card is as wide as its content, at most 20rem. Atlassian has no
+hover card of this shape, so it takes Popover's surface: 16px padding, the
+8px popup corner and the overlay shadow. It opens 6px
 under the link, start-aligned, on the `--layer-overlay` layer with
 Popover, below tooltips.
 

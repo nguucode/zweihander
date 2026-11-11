@@ -41,7 +41,7 @@ const date = new Intl.DateTimeFormat('en', { dateStyle: 'medium' })
 const columns: TableColumn<Project>[] = [
   { key: 'name', header: 'Project', sortable: true, isRowHeader: true },
   { key: 'owner', header: 'Owner', sortable: true },
-  { key: 'status', header: 'Status', cell: (p) => <Tag size="sm" variant={tone[p.status]} text={p.status} /> },
+  { key: 'status', header: 'Status', cell: (p) => <Tag variant={tone[p.status]} text={p.status} /> },
   { key: 'updated', header: 'Updated', sortable: true, align: 'end', cell: (p) => date.format(p.updated) },
 ]
 

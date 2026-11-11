@@ -35,12 +35,18 @@ export interface TagProps extends Omit<ComponentProps<'span'>, 'children'> {
   startIcon?: ReactNode
   /** Image URL for a small avatar before the text, e.g. a person in a filter. */
   startAvatar?: string
+  /**
+   * One size: every tag is 20px tall.
+   * @deprecated `sm` renders the same tag as `md` and goes in the next release; drop the prop.
+   */
   size?: 'sm' | 'md'
   appearance?: 'subtle' | 'outlined' | 'solid'
   variant?: TagVariant
   hasRemoveButton?: boolean
   onRemove?: (event: MouseEvent<HTMLButtonElement>) => void
 }
+
+let hasWarned = false
 
 export function Tag({
   text,
@@ -54,11 +60,14 @@ export function Tag({
   className,
   ...props
 }: TagProps) {
+  if (import.meta.env.DEV && !hasWarned && size === 'sm') {
+    hasWarned = true
+    console.warn('Tag: `size="sm"` is deprecated and renders as `md`. `size` will be removed in the next release.')
+  }
   return (
     <span
       className={cn(
         styles.tag,
-        styles[size],
         styles[appearance],
         styles[variant],
         className,

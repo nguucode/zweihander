@@ -69,8 +69,9 @@ click target.
 
 ## Measurements
 
-One size. The circle is control tier xs (Foundations / Sizing) and sits
-centred on the first line of its label.
+One size. The circle is 16px, Atlassian's, inside a 24px hit area, and
+sits centred on the first line of its label, however many lines the
+label wraps to. The label starts 8px from the circle.
 
 <SpecTable
   caption="Every radio group"
@@ -86,6 +87,7 @@ centred on the first line of its label.
     { part: 'Option helper', property: 'Gap from the label', token: '--space-stack' },
     { part: 'Focus ring', property: 'Width', token: '--focus-width' },
     { part: 'Focus ring', property: 'Offset', token: '--focus-offset' },
+    { part: 'Hit area', property: 'Minimum', token: '--box-sm' },
     { part: 'Hit area', property: 'Minimum on touch screens', token: '--target-coarse' },
   ]}
 />
@@ -168,6 +170,8 @@ group is in error or success; only the group message takes that colour.
 
 ### Differences from the spec
 
+- **Atlassian's box.** A 16px circle with a 6px dot inside a 24px hit
+  area.
 - **The component is the group.** The spec describes a single radio, but
   a radio means nothing alone: selection, arrow keys and the single tab
   stop all belong to the group. Following the kit's "flat props"
@@ -221,7 +225,7 @@ about six options. Select the usual choice by default when there is one.
 - The unselected outline is `--control-border`, 3:1 on the page.
 - A hidden native input carries `name` and `required` into form
   submission and validation.
-- 44×44px touch target on each radio on coarse pointers.
+- Each radio's hit area is 24×24px, 44×44px on coarse pointers.
 
 </DocTab>
 </DocTabs>

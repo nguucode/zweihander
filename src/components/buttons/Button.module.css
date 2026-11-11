@@ -187,15 +187,15 @@ a[href].button {
 /* Each size is a control tier (see Foundations/Sizing): height, padding,
    gap, icon and radius all come from it. Buttons take the spacious pad: a
    centred label needs more room either side than a field's left-aligned
-   text. There is no xs: 20px is below the 24px target of WCAG 2.5.8. */
+   text. The label is 14/20 at both sizes, as in Atlassian Design: sm is
+   a shorter box, not smaller type. There is no xs: 20px is below the 24px
+   target of WCAG 2.5.8. */
 .sm {
   --button-icon: var(--icon-sm);
   block-size: var(--control-sm);
   gap: var(--control-sm-gap);
   padding-inline: var(--control-sm-pad-spacious);
   border-radius: var(--control-sm-radius);
-  font-size: var(--text-body-sm);
-  line-height: var(--leading-body-sm);
 }
 
 .md {

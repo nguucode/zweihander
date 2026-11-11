@@ -96,6 +96,10 @@ export const Default: Story = {
   play: async ({ canvas, userEvent, args }) => {
     const group = canvas.getByRole('radiogroup', { name: 'Plan' })
     await expect(group).toBeVisible()
+    // A 16px circle with a 6px dot, in a 24px hit area.
+    const free = canvas.getByRole('radio', { name: 'Free' })
+    await expect(free.getBoundingClientRect().width).toBe(16)
+    await expect(getComputedStyle(free, '::after').width).toBe('24px')
     await userEvent.click(canvas.getByRole('radio', { name: 'Pro' }))
     await expect(canvas.getByRole('radio', { name: 'Pro' })).toBeChecked()
     await expect(args.onValueChange).toHaveBeenLastCalledWith('pro')
@@ -217,7 +221,7 @@ export const InAForm: Story = {
 /** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
 export const anatomyParts = [
   { name: 'Legend', selector: '[role="radiogroup"] > :first-child', description: 'Names the group. Optional, but a group without one needs `aria-label`.' },
-  { name: 'Radio', selector: '[role="radio"]', description: 'The 20px circle: an outline when unselected.' },
+  { name: 'Radio', selector: '[role="radio"]', description: 'The 16px circle: an outline when unselected.' },
   { name: 'Dot', selector: '[role="radio"] > span', description: 'Shown in the selected radio, which fills with the variant.' },
   { name: 'Option label', selector: 'label > span:last-child', description: 'Names its radio. Part of the click target.' },
   { name: 'Option helper', selector: '[role="radiogroup"] p', description: 'Optional. Describes one option, indented under its label.' },

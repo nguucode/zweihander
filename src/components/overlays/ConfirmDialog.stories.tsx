@@ -164,7 +164,7 @@ export const TypeToConfirm: Story = {
 /** The dialog open in place, as a picture, not modal: it must not lock the docs page. */
 const picture = ({ height = '19rem', ...args }: ConfirmDialogProps & { height?: string }) => (
   <Pictured
-    style={{ position: 'relative', contain: 'layout paint', inlineSize: 'min(26rem, 100vw - 6rem)', blockSize: height, borderRadius: 'var(--radius-panel)' }}
+    style={{ position: 'relative', contain: 'layout paint', inlineSize: 'min(27rem, 100vw - 6rem)', blockSize: height, borderRadius: 'var(--radius-panel)' }}
   >
     {(container) => <ConfirmDialog {...args} trigger={undefined} open isModal={false} container={container} />}
   </Pictured>

@@ -72,35 +72,28 @@ is just the container.
 
 ## Measurements
 
-`md` is the xs control tier (Foundations / Sizing). Both sizes keep a
-single digit a circle: the minimum width equals the height. `sm` pads the
-count by 2px either side, below the spacing scale on purpose.
+One count badge, Atlassian's: 16px tall and at least 24px wide, so a
+column of one- and two-digit counts lines up. `size` picks the dot: 8px
+(`md`) or 6px (`sm`).
 
-<SpecTable
-  caption="sm"
-  rows={[
-    { part: 'Container', property: 'Height and minimum width', token: '--badge-sm' },
-    { part: 'Dot', property: 'Size', token: '--badge-dot-sm' },
-  ]}
-/>
+`size="sm"` on a count is deprecated. It renders the same badge as `md`
+and warns once in development; in the next release `sm` is for dots only.
 
 <SpecTable
   caption="md"
   rows={[
-    { part: 'Container', property: 'Height and minimum width', token: '--badge-md' },
-    { part: 'Container', property: 'Inline padding', token: '--control-xs-gap' },
+    { part: 'Container', property: 'Height', token: '--badge-md' },
+    { part: 'Container', property: 'Minimum width', token: '--box-sm' },
+    { part: 'Container', property: 'Inline padding', token: '--space-1' },
+    { part: 'Container', property: 'Corner radius', token: '--radius-xs' },
+    { part: 'Count', property: 'Font size', token: '--text-body-sm' },
+    { part: 'Count', property: 'Line height', token: '--leading-body-sm' },
     { part: 'Dot', property: 'Size', token: '--badge-dot-md' },
+    { part: 'Dot', property: 'Corner radius', token: '--radius-pill' },
   ]}
 />
 
-<SpecTable
-  caption="Every size"
-  rows={[
-    { part: 'Container', property: 'Corner radius', token: '--radius-pill' },
-    { part: 'Count', property: 'Font size', token: '--text-body-sm' },
-    { part: 'Count', property: 'Line height', token: '--leading-body-sm' },
-  ]}
-/>
+<SpecTable caption="sm" rows={[{ part: 'Dot', property: 'Size', token: '--badge-dot-sm' }]} />
 
 A floating badge is centred on its corner of the anchor, half in and half
 out, with a 2px ring.
@@ -161,7 +154,7 @@ out, with a 2px ring.
 
 A dot has no text to carry it, so it must reach 3:1 against the page on its
 own. That is why the `secondary` and `warning` dots step to a darker colour
-than their pill.
+than their count badge.
 
 ## States
 
@@ -192,6 +185,8 @@ anchor.
 
 ### Differences from the spec
 
+- **Atlassian's box, not a pill.** A count is 16px tall, at least 24px
+  wide, with a 2px corner, in one size. Only the dot is round.
 - **`children` is added.** A floating badge needs something to float on.
   The badge wraps it in a `position: relative` span rather than asking
   every consumer to position the anchor themselves.

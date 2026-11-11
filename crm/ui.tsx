@@ -7,7 +7,7 @@ export type Tone = 'danger' | 'warning' | 'success' | 'neutral' | 'info'
 const tagVariant: Record<Tone, TagVariant> = { danger: 'danger', warning: 'warning', success: 'success', neutral: 'neutral', info: 'info' }
 
 export const Pill = ({ tone = 'neutral', text, dot }: { tone?: Tone; text: string; dot?: boolean }) => (
-  <Tag size="sm" variant={tagVariant[tone]} text={text} startIcon={dot ? <span className="dot" /> : undefined} />
+  <Tag variant={tagVariant[tone]} text={text} startIcon={dot ? <span className="dot" /> : undefined} />
 )
 
 /** A titled outline card: the block every screen is built from. */

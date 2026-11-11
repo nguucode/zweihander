@@ -30,7 +30,7 @@
   flex-direction: column;
   inline-size: 100%;
   background: var(--popover);
-  box-shadow: var(--shadow-xl);
+  box-shadow: var(--shadow-overlay);
   color: var(--popover-foreground);
   font-family: var(--font-sans);
   font-size: var(--text-body);
@@ -68,14 +68,15 @@
 .popup[data-swipe-direction='left'][data-ending-style] {
   transform: translateX(-100%);
 }
+/* Atlassian's drawer widths: 360, 480 and 600px. */
 .sm {
-  max-inline-size: min(20rem, 100% - var(--target-coarse));
+  max-inline-size: min(22.5rem, 100% - var(--target-coarse));
 }
 .md {
-  max-inline-size: min(28rem, 100% - var(--target-coarse));
+  max-inline-size: min(30rem, 100% - var(--target-coarse));
 }
 .lg {
-  max-inline-size: min(40rem, 100% - var(--target-coarse));
+  max-inline-size: min(37.5rem, 100% - var(--target-coarse));
 }
 
 /* A bottom sheet is as tall as its content, up to the screen less a
@@ -101,14 +102,14 @@
   grid-template-columns: 1fr auto;
   align-items: start;
   column-gap: var(--space-group);
-  padding: var(--space-group);
+  padding: var(--space-container);
   border-block-end: 1px solid var(--border);
 }
 
 .title {
   margin: 0;
-  font-size: var(--text-heading-sm);
-  line-height: var(--leading-heading-sm);
+  font-size: var(--text-heading-md);
+  line-height: var(--leading-heading-md);
   font-family: var(--font-heading);
   font-weight: 600;
 }
@@ -123,7 +124,7 @@
 .body {
   flex: 1;
   min-block-size: 0;
-  padding: var(--space-group);
+  padding: var(--space-container);
   overflow-y: auto;
 }
 .body:focus-visible {
@@ -137,18 +138,16 @@
   justify-content: flex-end;
   gap: var(--space-inline);
   margin-block-start: auto;
-  padding: var(--space-group);
+  padding: var(--space-container);
   border-block-start: 1px solid var(--border);
 }
 
 .close {
   position: relative;
   display: inline-flex;
-  /* 4px around a 16px icon, centred on the title's 20px line: see Modal. */
+  /* 4px around a 16px icon, as tall as the title's 24px line: see Modal. */
   padding: var(--control-xs-gap);
-  margin: calc(var(--control-xs-gap) * -1);
-  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- see above */
-  margin-block-start: -2px;
+  margin: 0 calc(var(--control-xs-gap) * -1);
   border: 0;
   border-radius: var(--radius-sm);
   background: transparent;

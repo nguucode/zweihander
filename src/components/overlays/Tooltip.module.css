@@ -8,8 +8,8 @@
    in both modes, at the same 16:1 or more as body text. */
 .popup {
   box-sizing: border-box;
-  max-inline-size: min(20rem, var(--available-width));
-  padding: var(--space-stack) var(--space-inline);
+  max-inline-size: min(15rem, var(--available-width));
+  padding: var(--space-1) var(--space-1-5);
   border-radius: var(--radius-sm);
   background: var(--foreground);
   color: var(--background);
@@ -47,9 +47,9 @@
   max-inline-size: min(20rem, var(--available-width));
   padding: var(--space-group);
   border: 1px solid var(--border);
-  border-radius: var(--radius-panel);
+  border-radius: var(--radius-lg);
   background: var(--popover);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-overlay);
   color: var(--popover-foreground);
   font-family: var(--font-sans);
   font-size: var(--text-body);

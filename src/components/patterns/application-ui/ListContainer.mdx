@@ -66,8 +66,9 @@ attribute to `ListContainerItem`.
 ## Layout
 
 - Rows pad by `--space-inline` above and below and `--space-4` at the
-  sides, and are at least `--row-height` tall, so a list lines up with a
-  Table of the same row size.
+  sides, and are at least `--row-height` (48px) tall. A Table's rows are
+  as tall as their content, so a list and a Table do not share a row
+  height.
 - `footer` sits past a divider in `flat` and `card`, and after the gap in
   `separate`.
 - No breakpoints: the container is as wide as its column. Long words in a

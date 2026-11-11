@@ -15,10 +15,10 @@ const people: GridListItem[] = [
 ]
 
 const projects: GridListItem[] = [
-  { id: 'harbor', media: <Icon name="file" />, title: 'Harbor Lights', status: <Tag size="sm" variant="success" text="Active" />, description: 'Ines Okafor', meta: 'Due Nov 14', href: '#harbor' },
-  { id: 'ledger', media: <Icon name="file" />, title: 'Ledger migration', status: <Tag size="sm" variant="neutral" text="On hold" />, description: 'Tomas Lindqvist', meta: 'Due Dec 2', href: '#ledger' },
-  { id: 'audit', media: <Icon name="file" />, title: 'Year-end audit', status: <Tag size="sm" variant="danger" text="Expired" />, description: 'Noor Haddad', meta: 'Due Oct 1', href: '#audit' },
-  { id: 'vat', media: <Icon name="file" />, title: 'VAT return Q3', status: <Tag size="sm" variant="success" text="Active" />, description: 'Kenji Sato', meta: 'Due Oct 31', href: '#vat' },
+  { id: 'harbor', media: <Icon name="file" />, title: 'Harbor Lights', status: <Tag variant="success" text="Active" />, description: 'Ines Okafor', meta: 'Due Nov 14', href: '#harbor' },
+  { id: 'ledger', media: <Icon name="file" />, title: 'Ledger migration', status: <Tag variant="neutral" text="On hold" />, description: 'Tomas Lindqvist', meta: 'Due Dec 2', href: '#ledger' },
+  { id: 'audit', media: <Icon name="file" />, title: 'Year-end audit', status: <Tag variant="danger" text="Expired" />, description: 'Noor Haddad', meta: 'Due Oct 1', href: '#audit' },
+  { id: 'vat', media: <Icon name="file" />, title: 'VAT return Q3', status: <Tag variant="success" text="Active" />, description: 'Kenji Sato', meta: 'Due Oct 31', href: '#vat' },
 ]
 
 // A flat two-colour picture, so the story needs no network and the visual
@@ -207,7 +207,7 @@ export const LongContent: Story = {
       {
         media: <Avatar initials="MW" />,
         title: 'Maximiliana Wolfeschlegelsteinhausenbergerdorff',
-        status: <Tag size="sm" variant="neutral" text="Invited" />,
+        status: <Tag variant="neutral" text="Invited" />,
         description: 'Senior accounts payable specialist',
         meta: 'maximiliana.wolfeschlegelsteinhausenbergerdorff@northern-region.example.com',
         href: '#max',

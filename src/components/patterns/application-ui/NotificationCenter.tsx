@@ -81,7 +81,7 @@ export function NotificationPanel({
               label: (
                 <>
                   Unread
-                  {unread.length > 0 && <Badge size="sm" variant="secondary" count={unread.length} maxCount={99} />}
+                  {unread.length > 0 && <Badge variant="secondary" count={unread.length} maxCount={99} />}
                 </>
               ),
               content: feed(unread, emptyUnread),
@@ -135,7 +135,7 @@ export function NotificationCenter({
       trigger={
         <Button variant="secondary" appearance="ghost" isIconOnly aria-label={count ? `${label}, ${count} unread` : label}>
           {/* The count is in the button's name; the floating badge is hidden and only shows it. */}
-          <Badge isFloating count={count || undefined} maxCount={99} size="sm">
+          <Badge isFloating count={count || undefined} maxCount={99}>
             <Icon name="notifications" />
           </Badge>
         </Button>

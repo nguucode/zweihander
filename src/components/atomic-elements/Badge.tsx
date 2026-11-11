@@ -5,6 +5,11 @@ import styles from './Badge.module.css'
 export interface BadgeProps extends Omit<ComponentProps<'span'>, 'children'> {
   count?: number
   variant?: 'primary' | 'accent' | 'secondary' | 'destructive' | 'success' | 'warning'
+  /**
+   * Size of a dot: 8px (`md`) or 6px (`sm`). A count is 16px tall at either.
+   * `sm` on a count is deprecated: it renders the `md` badge. In the next
+   * release `sm` is for dots only.
+   */
   size?: 'sm' | 'md'
   /** A dot with no number: "something new", not "how many". */
   isDot?: boolean
@@ -16,6 +21,8 @@ export interface BadgeProps extends Omit<ComponentProps<'span'>, 'children'> {
   /** The element a floating badge is pinned to. */
   children?: ReactNode
 }
+
+let hasWarned = false
 
 export function Badge({
   count,
@@ -30,6 +37,10 @@ export function Badge({
   ...props
 }: BadgeProps) {
   const hasBadge = isDot || count !== undefined
+  if (import.meta.env.DEV && !hasWarned && size === 'sm' && hasBadge && !isDot) {
+    hasWarned = true
+    console.warn('Badge: `size="sm"` on a count is deprecated and renders as `md`. Keep it for dots only.')
+  }
   const badge = hasBadge && (
     <span
       // A labelled badge is an image of a state: a plain span may not carry

@@ -335,7 +335,7 @@ export function ImportDialog({
         <p className={styles.note}>
           {flow.files[0]?.name}: {sheet?.columns.length} columns, {count(rows.length)}. Choose the field each column goes into.
         </p>
-        <Table caption="Columns to map" columns={mapColumns} rows={sheet?.columns.map((_, i) => i) ?? []} getRowId={String} density="sm" />
+        <Table caption="Columns to map" columns={mapColumns} rows={sheet?.columns.map((_, i) => i) ?? []} getRowId={String} size="sm" />
         {missing.length > 0 && <InlineAlert variant="danger">Choose a column for {missing.map((f) => f.label).join(', ')}.</InlineAlert>}
       </>
     ),
@@ -350,7 +350,7 @@ export function ImportDialog({
           <InlineAlert variant="success">{valid.length === 1 ? `The ${noun[0]} is` : `All ${count(valid.length)} are`} ready to import.</InlineAlert>
         )}
         {skipped.length > 0 && (
-          <Switch size="sm" label="Only rows with problems" checked={flow.onlyProblems} onCheckedChange={(onlyProblems) => set({ onlyProblems })} />
+          <Switch label="Only rows with problems" checked={flow.onlyProblems} onCheckedChange={(onlyProblems) => set({ onlyProblems })} />
         )}
         {/* It scrolls, so it takes focus: the keyboard scrolls it too. */}
         <div className={styles.preview} data-testid="import-preview" role="region" aria-label="Rows to import" tabIndex={0}>
@@ -359,7 +359,7 @@ export function ImportDialog({
             columns={reviewColumns}
             rows={listed.slice(0, PREVIEW_ROWS)}
             getRowId={(c) => String(c.line)}
-            density="sm"
+            size="sm"
             hasStickyHeader
           />
         </div>

@@ -139,10 +139,16 @@ What components actually use.
 | Token | Used by | Pills at `full-rounded` |
 | --- | --- | --- |
 | `--radius-control` | the md tier of Button, ToggleButton, Tabs, Pagination | yes |
-| `--radius-field` | the md tier of every field, Select and Combobox lists, menus | no |
-| `--radius-panel` | Card, Modal, Popover, the date picker | no |
+| `--radius-field` | every field | no |
+| `--radius-panel` | Modal, Drawer, the command palette | no |
 
-A new component should pick the intent that matches its shape, not a step.
+Surfaces that float or frame content without being a dialog read a step,
+`--radius-lg` (8px): Card, Popover, Menu, the Select and Combobox lists,
+the date picker, Toast and Alert. They follow the preset's factor and never
+become a pill.
+
+A new control or field should pick the intent that matches its shape, not
+a step.
 Getting this wrong is invisible at the default preset and only shows up
 when someone sets `radius="full-rounded"` — which is exactly the kind of bug a
 token system exists to prevent.

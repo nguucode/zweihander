@@ -117,7 +117,7 @@ export function Overview() {
         <Panel title="Agent performance" icon={<Glyph name="users" />} description="Select an agent to see their day">
           <Table<Agent>
             caption="Agent performance"
-            density="sm"
+            size="sm"
             rows={agents}
             getRowId={(a) => a.initials}
             defaultSort={{ key: 'gci', direction: 'descending' }}

@@ -27,6 +27,11 @@
   gap: var(--space-stack);
   min-inline-size: 0;
 }
+/* At md each crumb sits in a 24px box, as Atlassian Design's breadcrumb
+   items; sm stays as tall as its 16px line, for dense rows. */
+.md .item {
+  min-block-size: var(--control-sm);
+}
 
 /* A crumb is a record's name more often than not: a long one wraps
    instead of pushing the page sideways. */

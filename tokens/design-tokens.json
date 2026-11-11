@@ -2329,7 +2329,7 @@
     }
   },
   "control": {
-    "$description": "Size tiers. Heights alias the box ramp (box.xs, box.sm, box.md). One tier binds a control's height, inline padding and icon-to-label gap; its icon is --icon-{tier} and its radius --control-{tier}-radius (generated, see Radius). md (32px) is the default control and the small field, lg (40px) the default field, sm (24px) the small inline control, xs (20px) only for compact parts: Tag sm, the slider thumb (the checkbox box, Badge, switch and Avatar have their own sizes, see size). Buttons and fields have no xs: a 20px button reads as a part, not a control. Fields have no sm either: the smallest field is 32px. The 24px floor of WCAG 2.5.8 is for the hit area: a box drawn smaller widens its hit area to 24px. pad is for fields and rows, whose text lines up with a label; pad-spacious is for buttons, whose centred label needs room. On touch screens components widen the hit area to 44px without growing the visible box.",
+    "$description": "Size tiers. Heights alias the box ramp (box.xs, box.sm, box.md, box.lg). One tier binds a control's height, inline padding and icon-to-label gap; its icon is --icon-{tier} and its radius --control-{tier}-radius (generated, see Radius). md (32px) is the default control and the small field, lg (40px) the default field, sm (24px) the small inline control, xs (20px) only for compact parts: Tag sm, the slider thumb (the checkbox box, Badge, switch and Avatar have their own sizes, see size). Buttons and fields have no xs: a 20px button reads as a part, not a control. Fields have no sm either: the smallest field is 32px. The 24px floor of WCAG 2.5.8 is for the hit area: a box drawn smaller widens its hit area to 24px. pad is for fields and rows, whose text lines up with a label; pad-spacious is for buttons, whose centred label needs room. On touch screens components widen the hit area to 44px without growing the visible box.",
     "xs": {
       "$type": "dimension",
       "$value": "{box.xs}"
@@ -2365,7 +2365,7 @@
     },
     "sm-pad-spacious": {
       "$type": "dimension",
-      "$value": "0.5rem"
+      "$value": "0.75rem"
     },
     "md-pad-spacious": {
       "$type": "dimension",
@@ -2381,7 +2381,7 @@
     },
     "md-gap": {
       "$type": "dimension",
-      "$value": "0.5rem"
+      "$value": "0.375rem"
     }
   },
   "row": {
@@ -2392,18 +2392,18 @@
     }
   },
   "size": {
-    "$description": "Component sizes, emitted unprefixed (--avatar-md).",
+    "$description": "Component sizes, emitted unprefixed (--avatar-md). After Atlassian: the checkbox and radio box is 16px, the switch has two tracks (32x16, and 40x20 at lg; sm is the same as md and deprecated) and a badge is 16px tall (md is the same as sm and deprecated).",
     "choice-box": {
       "$type": "dimension",
-      "$value": "1.25rem"
+      "$value": "1rem"
     },
     "radio-dot-size": {
       "$type": "dimension",
-      "$value": "0.5rem"
+      "$value": "0.375rem"
     },
     "switch-sm-w": {
       "$type": "dimension",
-      "$value": "1.75rem"
+      "$value": "2rem"
     },
     "switch-sm-h": {
       "$type": "dimension",
@@ -2411,19 +2411,19 @@
     },
     "switch-md-w": {
       "$type": "dimension",
-      "$value": "2.25rem"
+      "$value": "2rem"
     },
     "switch-md-h": {
       "$type": "dimension",
-      "$value": "1.25rem"
+      "$value": "1rem"
     },
     "switch-lg-w": {
       "$type": "dimension",
-      "$value": "2.75rem"
+      "$value": "2.5rem"
     },
     "switch-lg-h": {
       "$type": "dimension",
-      "$value": "1.5rem"
+      "$value": "1.25rem"
     },
     "progress-sm": {
       "$type": "dimension",
@@ -2459,7 +2459,7 @@
     },
     "badge-md": {
       "$type": "dimension",
-      "$value": "1.25rem"
+      "$value": "1rem"
     },
     "badge-dot-sm": {
       "$type": "dimension",

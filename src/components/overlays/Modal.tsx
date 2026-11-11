@@ -16,7 +16,7 @@ export interface ModalProps {
   children?: ReactNode
   /** Actions, right-aligned under the content: the main one last. */
   footer?: ReactNode
-  /** Max width: 24rem, 32rem, 48rem. Never wider than the screen. */
+  /** Max width: 400px, 600px, 800px. Never wider than the screen. */
   size?: 'sm' | 'md' | 'lg'
   /** Defaults to `true`, or `false` when `isAlert`. */
   hasCloseButton?: boolean

@@ -19,6 +19,10 @@ export interface SwitchProps {
   name?: string
   /** Submitted when on; "on" by default, like a checkbox. */
   value?: string
+  /**
+   * Track 32×16 (`md`) or 40×20px (`lg`).
+   * `sm` is deprecated: it draws the `md` track and goes in the next release.
+   */
   size?: 'sm' | 'md' | 'lg'
   /** Colour of the on state. */
   variant?: 'primary' | 'accent' | 'destructive'
@@ -30,6 +34,8 @@ export interface SwitchProps {
   className?: string
   'aria-label'?: string
 }
+
+let hasWarned = false
 
 export function Switch({
   label,
@@ -44,6 +50,10 @@ export function Switch({
   onCheckedChange,
   ...props
 }: SwitchProps) {
+  if (import.meta.env.DEV && !hasWarned && size === 'sm') {
+    hasWarned = true
+    console.warn('Switch: `size="sm"` is deprecated and renders as `md`. It will be removed in the next release.')
+  }
   return (
     <ChoiceField
       label={label}
@@ -52,7 +62,7 @@ export function Switch({
       required={required}
       disabled={disabled}
       name={name}
-      className={cn(styles[size], className)}
+      className={cn(styles[size === 'lg' ? 'lg' : 'md'], className)}
     >
       <BaseSwitch.Root
         {...props}

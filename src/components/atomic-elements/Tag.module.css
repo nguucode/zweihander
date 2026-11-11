@@ -1,9 +1,22 @@
+/* One size, Atlassian's tag: 20px tall (control tier xs, see
+   Foundations/Sizing), 12/16 text, 4px either side, and no wider than
+   180px before the text ellipsizes. The corner is the tier's, 4px, and
+   follows the Theme's radius preset like every control: a pill under
+   radius="full-rounded". The border is always there (transparent unless
+   outlined) so appearances never shift the layout. */
 .tag {
   display: inline-flex;
   align-items: center;
-  max-inline-size: 100%;
+  gap: var(--space-1);
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- 180px, Atlassian's cap for a tag; no size token is that wide */
+  max-inline-size: min(100%, 11.25rem);
+  block-size: var(--control-xs);
   box-sizing: border-box;
+  padding-inline: var(--space-1);
   border: 1px solid transparent;
+  border-radius: var(--control-xs-radius);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
   font-family: var(--font-sans);
   font-weight: 500;
   white-space: nowrap;
@@ -11,36 +24,6 @@
   /* Every digit takes the same width, so a tag holding a live count or a
      countdown keeps its width as the number changes. */
   font-variant-numeric: tabular-nums;
-}
-
-/* A tag sits in a line of text, so each size is the tier below its name
-   (see Foundations/Sizing): md reads tier sm, sm reads tier xs. Pad, gap,
-   icon and corner come from the tier; the corner follows the Theme's
-   radius preset like every control, a pill under radius="full-rounded".
-
-   Height is line-height + 1px padding + 1px border each side, which lands
-   on the tier's height: 24px at md, 20px at sm. The 1px is below the
-   spacing scale on purpose: the border is always there (transparent unless
-   outlined) so appearances never shift the layout, and 1px padding makes
-   up the rest. */
-.md {
-  --tag-icon: var(--icon-sm);
-  gap: var(--control-sm-gap);
-  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- hairline 1px, see above */
-  padding: 1px var(--control-sm-pad-spacious);
-  border-radius: var(--control-sm-radius);
-  font-size: var(--text-body);
-  line-height: var(--leading-body);
-}
-
-.sm {
-  --tag-icon: var(--icon-xs);
-  gap: var(--control-xs-gap);
-  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- hairline 1px, see above */
-  padding: 1px var(--control-xs-pad-spacious);
-  border-radius: var(--control-xs-radius);
-  font-size: var(--text-body-sm);
-  line-height: var(--leading-body-sm);
 }
 
 .text {
@@ -53,13 +36,13 @@
 .icon {
   display: inline-flex;
   flex-shrink: 0;
-  font-size: var(--tag-icon);
+  font-size: var(--icon-xs);
 }
 
 .avatar {
   flex-shrink: 0;
-  inline-size: var(--tag-icon);
-  block-size: var(--tag-icon);
+  inline-size: var(--icon-xs);
+  block-size: var(--icon-xs);
   border-radius: var(--radius-pill);
   object-fit: cover;
 }
@@ -241,13 +224,13 @@
   display: inline-flex;
   flex-shrink: 0;
   margin: 0;
-  margin-inline-end: calc(var(--space-1) * -1);
   padding: 0;
   border: 0;
-  border-radius: max(var(--radius-sm), var(--radius-full));
+  /* 2px: the button is a 12px mark, smaller than a control. */
+  border-radius: max(var(--radius-xs), var(--radius-full));
   background: transparent;
   color: inherit;
-  font-size: var(--tag-icon);
+  font-size: var(--icon-xs);
   cursor: var(--cursor-button);
 }
 
@@ -263,7 +246,7 @@
   outline-offset: var(--focus-offset-inset);
 }
 
-/* The visible button is 16px; on touch screens the hit area grows to 44px
+/* The visible button is 12px; on touch screens the hit area grows to 44px
    without the tag growing with it. */
 @media (pointer: coarse) {
   .remove::before {

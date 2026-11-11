@@ -126,7 +126,7 @@ export function ProjectDetail({ project: initialProject = sampleProjects[0], tea
             <div className={styles.titleRow}>
               <h1 className={styles.title}>{project.name}</h1>
               {statusTag(project.status)}
-              {project.isArchived && <Tag size="sm" text="Archived" />}
+              {project.isArchived && <Tag text="Archived" />}
             </div>
             <ul className={styles.meta} aria-label="Key facts">
               <li>
