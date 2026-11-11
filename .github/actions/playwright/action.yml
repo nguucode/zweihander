@@ -23,7 +23,19 @@ runs:
       run: |
         mkdir -p ~/.cache/playwright-debs
         sudo cp ~/.cache/playwright-debs/*.deb /var/cache/apt/archives/ 2>/dev/null || true
-        npx playwright install --with-deps chromium firefox webkit
+        # The runner's own resolver has stopped resolving Ubuntu's mirrors for
+        # hours at a time (2026-11-11: every *.ubuntu.com name failed while npm
+        # and Microsoft's apt repo resolved), and apt then cannot fetch a
+        # package the cache does not hold yet. A public resolver still answers.
+        if ! getent hosts archive.ubuntu.com security.ubuntu.com >/dev/null; then
+          echo "::warning::The runner cannot resolve Ubuntu's mirrors; using 1.1.1.1 and 8.8.8.8 for this job."
+          printf 'nameserver 1.1.1.1\nnameserver 8.8.8.8\n' | sudo tee /etc/resolv.conf >/dev/null
+        fi
+        # One more try after a pause: a mirror that drops out usually comes back.
+        npx playwright install --with-deps chromium firefox webkit || {
+          sleep 30
+          npx playwright install --with-deps chromium firefox webkit
+        }
         cp /var/cache/apt/archives/*.deb ~/.cache/playwright-debs/ 2>/dev/null || true
         # A non-empty .debs folder in the log shows apt kept what it fetched.
         du -sh ~/.cache/ms-playwright ~/.cache/playwright-debs
