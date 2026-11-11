@@ -88,7 +88,7 @@ export function OpenHome() {
               <ul className="attendees">
                 {people.map((p) => (
                   <li key={p.id}>
-                    <Avatar initials={p.initials} size="sm" />
+                    <Avatar initials={p.initials} />
                     <div className="row-main">
                       <strong>{p.name}</strong>
                       <span className="muted small">{p.status}</span>

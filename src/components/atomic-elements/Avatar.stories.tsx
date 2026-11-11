@@ -22,10 +22,11 @@ const meta = {
   // descriptions are the docs' API table and the Playground's props panel.
   argTypes: {
     size: {
-      description: '24, 32, 40 or 48px across. Initials step up from 12px to 16px with it.',
+      description:
+        '16, 24, 32, 40, 96 or 128px across: Atlassian\'s avatar sizes. Initials step up from 12px to 32px with it; `xs` shows the first letter only.',
       control: 'inline-radio',
-      options: ['xs', 'sm', 'md', 'lg'],
-      table: { type: { summary: "'xs' | 'sm' | 'md' | 'lg'" }, defaultValue: { summary: "'md'" } },
+      options: ['xs', 'sm', 'md', 'lg', 'xl', '2xl'],
+      table: { type: { summary: "'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl'" }, defaultValue: { summary: "'md'" } },
     },
     imageSrc: {
       description: 'The picture, cropped to fill the circle. If it fails to load, the initials or the silhouette show instead.',
@@ -38,7 +39,8 @@ const meta = {
       table: { type: { summary: 'string' } },
     },
     initials: {
-      description: 'One or two letters, shown when there is no image. Pass the letters, not a name: they are uppercased by style.',
+      description:
+        'One or two letters, shown when there is no image. Pass the letters, not a name: they are uppercased by style. `xs` shows the first only.',
       control: 'text',
       table: { type: { summary: 'string' } },
     },
@@ -74,13 +76,14 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 const row = { display: 'flex', gap: 'var(--space-4)', alignItems: 'center' }
+const SIZES = ['xs', 'sm', 'md', 'lg', 'xl', '2xl'] as const
 
 export const Default: Story = {
   play: async ({ canvas, canvasElement }) => {
     const avatar = canvas.getByRole('img', { name: 'Mary Thompson' })
     await expect(avatar).toBeVisible()
     // No size given: md, the house default.
-    await expect(avatar.getBoundingClientRect().width).toBe(40)
+    await expect(avatar.getBoundingClientRect().width).toBe(32)
     // The <img> itself is silent; the name is on the container.
     await expect(canvasElement.querySelector('img')).toHaveAttribute('alt', '')
   },
@@ -89,16 +92,37 @@ export const Default: Story = {
 export const Sizes: Story = {
   render: (args) => (
     <div style={row}>
-      {(['xs', 'sm', 'md', 'lg'] as const).map((size) => (
+      {SIZES.map((size) => (
         <Avatar key={size} {...args} size={size} imageAlt={size} />
       ))}
     </div>
   ),
   play: async ({ canvas }) => {
-    const widths = ['xs', 'sm', 'md', 'lg'].map(
-      (n) => canvas.getByRole('img', { name: n }).getBoundingClientRect().width,
-    )
-    await expect(widths).toEqual([24, 32, 40, 48])
+    const boxes = SIZES.map((n) => canvas.getByRole('img', { name: n }).getBoundingClientRect())
+    await expect(boxes.map((b) => b.width)).toEqual([16, 24, 32, 40, 96, 128])
+    // A circle at every size.
+    await expect(boxes.map((b) => b.height)).toEqual([16, 24, 32, 40, 96, 128])
+  },
+}
+
+/** Initials at every size: two letters, except `xs`, which has room for one. */
+export const InitialsSizes: Story = {
+  args: { imageSrc: undefined, initials: 'sr' },
+  render: (args) => (
+    <div style={row}>
+      {SIZES.map((size) => (
+        <Avatar key={size} {...args} size={size} imageAlt={size} />
+      ))}
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    const text = SIZES.map((n) => canvas.getByRole('img', { name: n }).firstElementChild!)
+    await expect(text.map((el) => el.textContent)).toEqual(['s', 'sr', 'sr', 'sr', 'sr', 'sr'])
+    await expect(text.map((el) => parseFloat(getComputedStyle(el).fontSize))).toEqual([12, 12, 12, 14, 28, 32])
+    // The letters fit inside the circle at every size.
+    for (const el of text) {
+      await expect(el.getBoundingClientRect().width).toBeLessThan(el.parentElement!.getBoundingClientRect().width)
+    }
   },
 }
 
@@ -190,7 +214,7 @@ export const Contrast: Story = {
                   <Avatar
                     key={variant + color + initials}
                     {...args}
-                    size="xs"
+                    size="sm"
                     variant={variant}
                     color={color}
                     initials={initials}
@@ -278,6 +302,34 @@ export const Status: Story = {
   },
 }
 
+/** The dot at every size: on the box's corner up to `lg`, on the curve at `xl` and `2xl`. */
+export const StatusSizes: Story = {
+  args: { status: 'online' },
+  render: (args) => (
+    <div style={row}>
+      {SIZES.map((size) => (
+        <Avatar key={size} {...args} size={size} imageAlt={size} />
+      ))}
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    await waitFor(() => {
+      const dots = SIZES.map((n) => {
+        const avatar = canvas.getByRole('img', { name: `${n}, Online` })
+        return { a: avatar.getBoundingClientRect(), d: avatar.lastElementChild!.getBoundingClientRect() }
+      })
+      // No dot at xs (16px), as in Atlassian; the name above still says "Online".
+      expect(dots.map(({ d }) => [d.width, d.height])).toEqual([[0, 0], [6, 6], [6, 6], [8, 8], [16, 16], [20, 20]])
+      for (const { a, d } of dots.slice(1, 4)) expect([d.right, d.bottom]).toEqual([a.right, a.bottom])
+      // xl and 2xl: the dot's centre is on the circle, so it overlaps the picture instead of floating off it.
+      for (const { a, d } of dots.slice(4)) {
+        const fromCentre = Math.hypot(d.left + d.width / 2 - (a.left + a.width / 2), d.top + d.height / 2 - (a.top + a.height / 2))
+        expect(Math.abs(fromCentre - a.width / 2)).toBeLessThan(1)
+      }
+    })
+  },
+}
+
 export const StatusLabel: Story = {
   tags: ['!dev'],
   args: { status: 'away', statusLabel: 'Vắng mặt' },
@@ -308,7 +360,7 @@ const PEOPLE = [
 export const Group: Story = {
   render: () => (
     <div style={{ display: 'grid', gap: 'var(--space-4)', justifyItems: 'start' }}>
-      {(['xs', 'sm', 'md', 'lg'] as const).map((size) => (
+      {SIZES.map((size) => (
         // The first asks for lg; the group's size wins.
         <AvatarGroup key={size} size={size} max={4} avatars={[{ ...PEOPLE[0], size: 'lg' }, ...PEOPLE.slice(1)]} data-testid={size} />
       ))}
@@ -331,6 +383,12 @@ export const Group: Story = {
       // Each tucks under the one before by a quarter of its size.
       expect(second.left - first.left).toBeCloseTo(first.width * 0.75)
     })
+    // The same quarter at the two ends of the scale.
+    for (const [size, px] of [['xs', 16], ['2xl', 128]] as const) {
+      const [first, second] = [...canvas.getByTestId(size).children].map((el) => el.getBoundingClientRect())
+      await expect(first.width).toBe(px)
+      await expect(second.left - first.left).toBeCloseTo(px * 0.75)
+    }
     // Earlier ones on top, so a status dot is never covered by the next.
     const z = [...group.children].map((el) => Number(getComputedStyle(el).zIndex))
     await expect(z).toEqual([...z].sort((a, b) => b - a))

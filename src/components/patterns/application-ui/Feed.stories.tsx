@@ -16,9 +16,9 @@ const events: FeedItem[] = [
 ]
 
 const people = {
-  ines: <Avatar size="sm" initials="IO" color="teal" />,
-  noor: <Avatar size="sm" initials="NH" color="violet" />,
-  me: <Avatar size="sm" initials="SR" color="amber" />,
+  ines: <Avatar initials="IO" color="teal" />,
+  noor: <Avatar initials="NH" color="violet" />,
+  me: <Avatar initials="SR" color="amber" />,
 }
 
 const conversation: FeedItem[] = [

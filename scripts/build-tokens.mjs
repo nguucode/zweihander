@@ -401,6 +401,8 @@ const OFF_RAMP = {
   'size.badge-dot-sm': 'a dot, under 12px',
   'size.badge-dot-md': 'a dot, under 12px',
   'size.sidebar-width': 'a column width for the expanded Sidebar, not a box',
+  'size.avatar-xl': 'a profile picture (96px), a region rather than a box in a row',
+  'size.avatar-2xl': 'a profile picture (128px), a region rather than a box in a row',
 }
 const px = (rem) => {
   const m = rem.match(/^([\d.]+)rem$/)

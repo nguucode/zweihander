@@ -112,7 +112,7 @@ export function Pipeline({ gate }: { gate: string | null }) {
             { key: 'suburb', header: 'Suburb', cell: (l) => l.suburb },
             { key: 'stage', header: 'Stage', sortable: true, sortValue: (l) => STAGES.indexOf(l.stage), cell: (l) => l.stage },
             { key: 'method', header: 'Method', cell: (l) => l.method },
-            { key: 'agent', header: 'Agent', cell: (l) => <Avatar size="xs" initials={l.agent} /> },
+            { key: 'agent', header: 'Agent', cell: (l) => <Avatar size="sm" initials={l.agent} /> },
             { key: 'commission', header: 'Gross', align: 'end', sortable: true, sortValue: (l) => l.commission, cell: (l) => fmt(l.commission) },
             { key: 'weighted', header: 'Weighted', align: 'end', sortable: true, sortValue: (l) => l.commission * l.probability, cell: (l) => fmt(l.commission * l.probability) },
             { key: 'flag', header: 'Flag', cell: (l) => (l.flag ? <Pill dot tone={l.flag.tone} text={l.flag.text} /> : null) },
@@ -169,7 +169,7 @@ export function Pipeline({ gate }: { gate: string | null }) {
                       {l.dom && <span className="muted small">{l.dom}</span>}
                     </div>
                     <span className="small with-icon">
-                      <Avatar size="xs" initials={l.agent} />
+                      <Avatar size="sm" initials={l.agent} />
                       {l.stage === 'Settled' ? `Commission ${fmt(l.commission)}` : `${fmt(l.commission)} × ${Math.round(l.probability * 100)}% = ${fmt(l.commission * l.probability)}`}
                     </span>
                     {l.flag && <span><Pill dot tone={l.flag.tone} text={l.flag.text} /></span>}

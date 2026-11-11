@@ -23,9 +23,9 @@ const formatTime = (at: Date) => {
 }
 
 const notifications: FeedItem[] = [
-  { id: 1, media: <Avatar size="sm" initials="LT" color="teal" />, actor: 'Linh Tran', action: <>approved <strong>PO-118</strong></>, at: ago(5), href: '#po-118', isUnread: true },
+  { id: 1, media: <Avatar initials="LT" color="teal" />, actor: 'Linh Tran', action: <>approved <strong>PO-118</strong></>, at: ago(5), href: '#po-118', isUnread: true },
   { id: 2, media: <Icon name="warning" />, actor: 'INV-2039', action: 'is 14 days overdue', at: ago(180), href: '#inv-2039', isUnread: true },
-  { id: 3, media: <Avatar size="sm" initials="NH" color="violet" />, actor: 'Noor Haddad', action: <>mentioned you on <strong>Harbor Lights</strong></>, at: ago(60 * 26), href: '#harbor-lights', comment: 'Can you check the second-phase budget before Friday?', isUnread: true },
+  { id: 3, media: <Avatar initials="NH" color="violet" />, actor: 'Noor Haddad', action: <>mentioned you on <strong>Harbor Lights</strong></>, at: ago(60 * 26), href: '#harbor-lights', comment: 'Can you check the second-phase budget before Friday?', isUnread: true },
   { id: 4, media: <Icon name="success" />, actor: 'September close', action: 'is ready to review', at: ago(60 * 24 * 3), href: '#close' },
   { id: 5, media: <Icon name="file" />, actor: 'Tomas Lindqvist', action: <>shared <strong>Q3 forecast.xlsx</strong></>, at: ago(60 * 24 * 6), href: '#q3-forecast' },
 ]

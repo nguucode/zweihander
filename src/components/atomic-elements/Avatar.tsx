@@ -18,11 +18,12 @@ const STATUS: Record<AvatarStatus, { variant: BadgeProps['variant']; label: stri
 }
 
 export interface AvatarProps extends ComponentProps<'span'> {
-  size?: 'xs' | 'sm' | 'md' | 'lg'
+  /** 16, 24, 32, 40, 96 or 128px across: Atlassian's avatar sizes. */
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl'
   imageSrc?: string
   /** Who this is. Without it the avatar is decorative and hidden from assistive tech. */
   imageAlt?: string
-  /** Shown when there is no image, or it fails to load. One or two letters. */
+  /** Shown when there is no image, or it fails to load. One or two letters; `xs` has room for the first only. */
   initials?: string
   /** Any accent hue. Unset is the neutral gray. */
   color?: AccentColor
@@ -51,6 +52,9 @@ export function Avatar({
   const [failedSrc, setFailedSrc] = useState<string>()
   // An empty string is no image, not a request for the page's own URL.
   const showImage = !!imageSrc && failedSrc !== imageSrc
+  // 16px holds one letter at the smallest type size. A count ("+3", "9+")
+  // stays whole: half of it would be a different number.
+  const letters = size === 'xs' && initials && !initials.includes('+') ? Array.from(initials)[0] : initials
 
   return (
     <span
@@ -63,7 +67,8 @@ export function Avatar({
       // The Theme's own palette switch: on the avatar it remaps --primary and
       // its tints to this hue, already measured for contrast.
       data-accent={color}
-      className={cn(styles.avatar, styles[size], styles[variant], status && styles.hasStatus, className)}
+      // A CSS class cannot start with a digit.
+      className={cn(styles.avatar, styles[size === '2xl' ? 'xxl' : size], styles[variant], status && styles.hasStatus, className)}
       {...props}
     >
       {showImage ? (
@@ -73,8 +78,8 @@ export function Avatar({
           className={styles.image}
           onError={() => setFailedSrc(imageSrc)}
         />
-      ) : initials ? (
-        <span className={styles.initials}>{initials}</span>
+      ) : letters ? (
+        <span className={styles.initials}>{letters}</span>
       ) : (
         // Drawn to the container's edge, not an icon with a margin: the body
         // runs off the bottom and the circle crops it.
@@ -87,7 +92,8 @@ export function Avatar({
         <Badge
           isDot
           variant={STATUS[status].variant}
-          size={size === 'xs' || size === 'sm' ? 'sm' : 'md'}
+          // 6px up to the 32px avatar, 8px on 40px; xl and 2xl size it in CSS.
+          size={size === 'xs' || size === 'sm' || size === 'md' ? 'sm' : 'md'}
           className={styles.status}
         />
       )}
@@ -134,10 +140,11 @@ export function AvatarGroup({
         .join(', ')
     : ''
   const more = hidden > 0 && (
-    // ponytail: past +99 the text outgrows an xs circle; shorten the count if a list that long turns up.
+    // A 16px circle holds two characters, so past nine the xs count reads "9+".
+    // ponytail: larger sizes are not capped; an sm circle outgrows +99.
     <Avatar
       size={size}
-      initials={`+${hidden}`}
+      initials={size === 'xs' && hidden > 9 ? '9+' : `+${hidden}`}
       imageAlt={isNamed ? moreLabel(hidden) : undefined}
       tabIndex={hiddenNames ? 0 : undefined}
     />

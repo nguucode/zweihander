@@ -88,8 +88,8 @@ export const WithStackedList: Story = {
       {...args}
       aria-label="Team"
       items={[
-        { id: 1, media: <Avatar initials="IO" color="teal" />, title: 'Ines Okafor', description: 'ines.okafor@example.com', meta: 'Finance lead', href: '#ines' },
-        { id: 2, media: <Avatar initials="TL" color="violet" />, title: 'Tomas Lindqvist', description: 'tomas.lindqvist@example.com', meta: 'Controller', actions: [{ label: 'Remove', isDestructive: true, onSelect: onRemove }] },
+        { id: 1, media: <Avatar size="lg" initials="IO" color="teal" />, title: 'Ines Okafor', description: 'ines.okafor@example.com', meta: 'Finance lead', href: '#ines' },
+        { id: 2, media: <Avatar size="lg" initials="TL" color="violet" />, title: 'Tomas Lindqvist', description: 'tomas.lindqvist@example.com', meta: 'Controller', actions: [{ label: 'Remove', isDestructive: true, onSelect: onRemove }] },
       ]}
       footer={<Link href="#team">View all</Link>}
     />

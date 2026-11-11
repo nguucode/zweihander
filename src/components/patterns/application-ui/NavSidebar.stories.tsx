@@ -65,7 +65,7 @@ const tenant = (
     trigger={
       <NavSidebarButton
         appearance="switcher"
-        icon={<Avatar size="xs" initials="KT" variant="solid" color="blue" />}
+        icon={<Avatar size="sm" initials="KT" variant="solid" color="blue" />}
         label="Kafka Trading Co."
         end={<Icon name="chevrons-up-down" />}
       />
@@ -113,7 +113,7 @@ const footer = (
     <Menu
       side="right"
       align="end"
-      trigger={<NavSidebarButton icon={<Avatar size="xs" initials="NN" variant="solid" />} label="Nguu Nguyen" />}
+      trigger={<NavSidebarButton icon={<Avatar size="sm" initials="NN" variant="solid" />} label="Nguu Nguyen" />}
       items={[{ label: 'Profile' }, { label: 'Settings' }, { type: 'separator' }, { label: 'Sign out' }]}
     />
   </>

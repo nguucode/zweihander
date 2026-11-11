@@ -82,6 +82,13 @@ Every other `<div>` attribute passes through to the root.
   value sits on the same line as the term or the cells beside it.
 - **The input is 32px at both sizes**, the field size that lines up with
   buttons in a row. `size="sm"` makes Save and Cancel 24px, centred on it.
+- **In a Table row (`size="sm"`) the value stays inside the row.** A row
+  of text is 28px: one 20px line and the cell's 4px above and below. The
+  value box is exactly that, so its hover fill is the row and never
+  overhangs the rows around it. While the input is open the row is 40px,
+  like any row that holds a 32px field, and goes back to 28px on save or
+  cancel. At `md` the value box is 32px, to line up with the fields of a
+  form or a description list.
 - **Save and Cancel sit at the end of the input**, aligned to its box; an
   error goes under the box and pushes the row taller, not the buttons down.
 - **The pencil does not take space away from the value** on hover: it has

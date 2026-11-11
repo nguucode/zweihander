@@ -335,7 +335,7 @@ export function ImportDialog({
         <p className={styles.note}>
           {flow.files[0]?.name}: {sheet?.columns.length} columns, {count(rows.length)}. Choose the field each column goes into.
         </p>
-        <Table caption="Columns to map" columns={mapColumns} rows={sheet?.columns.map((_, i) => i) ?? []} getRowId={String} size="sm" />
+        <Table caption="Columns to map" columns={mapColumns} rows={sheet?.columns.map((_, i) => i) ?? []} getRowId={String} />
         {missing.length > 0 && <InlineAlert variant="danger">Choose a column for {missing.map((f) => f.label).join(', ')}.</InlineAlert>}
       </>
     ),
@@ -359,7 +359,6 @@ export function ImportDialog({
             columns={reviewColumns}
             rows={listed.slice(0, PREVIEW_ROWS)}
             getRowId={(c) => String(c.line)}
-            size="sm"
             hasStickyHeader
           />
         </div>

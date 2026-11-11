@@ -15,18 +15,31 @@
   padding-inline: var(--space-1);
   border: 1px solid transparent;
   border-radius: var(--control-xs-radius);
-  font-size: var(--text-body-sm);
-  line-height: var(--leading-body-sm);
   font-family: var(--font-sans);
   font-weight: 500;
   white-space: nowrap;
-  vertical-align: middle;
   /* Every digit takes the same width, so a tag holding a live count or a
      countdown keeps its width as the number changes. */
   font-variant-numeric: tabular-nums;
 }
 
+/* In a line of text the tag is centred on that line, whatever its font.
+   Not `vertical-align: middle`: that centres on the text's x-height, a
+   pixel under the line's own centre, so a 20px tag made a 20px line 21px
+   (and a 28px table row 29px). Instead the tag's first item is an empty
+   line as tall as the tag, in the surrounding text's font size (the root
+   sets none), and the tag sits on the baseline: its baseline is then the
+   one a centred line of that text has. The gap after it is taken back. */
+.tag::before {
+  content: '\200b';
+  inline-size: 0;
+  margin-inline-end: calc(var(--space-1) * -1);
+  line-height: var(--control-xs);
+}
+
 .text {
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
   /* Lets a long text shrink and ellipsize once the tag hits max-inline-size. */
   min-inline-size: 0;
   overflow: hidden;

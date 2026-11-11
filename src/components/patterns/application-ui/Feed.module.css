@@ -18,25 +18,25 @@
 .item {
   position: relative;
   display: grid;
-  grid-template-columns: var(--avatar-sm) minmax(0, 1fr);
+  grid-template-columns: var(--avatar-md) minmax(0, 1fr);
   gap: var(--space-3);
 }
 
 /* The dot takes a column of its own at the end, so text never runs under it. */
 .item[data-unread] {
-  grid-template-columns: var(--avatar-sm) minmax(0, 1fr) auto;
+  grid-template-columns: var(--avatar-md) minmax(0, 1fr) auto;
 }
 
 /* Level with the media's centre, so it sits on the first line. */
 .unread {
-  margin-block-start: calc((var(--avatar-sm) - var(--badge-dot-md)) / 2);
+  margin-block-start: calc((var(--avatar-md) - var(--badge-dot-md)) / 2);
 }
 
 .connected .item:not(:last-child)::before {
   content: '';
   position: absolute;
-  inset-block: var(--avatar-sm) calc(-1 * var(--space-4));
-  inset-inline-start: calc(var(--avatar-sm) / 2);
+  inset-block: var(--avatar-md) calc(-1 * var(--space-4));
+  inset-inline-start: calc(var(--avatar-md) / 2);
   border-inline-start: 1px solid var(--border);
 }
 
@@ -44,8 +44,8 @@
 .media {
   display: grid;
   place-items: center;
-  inline-size: var(--avatar-sm);
-  block-size: var(--avatar-sm);
+  inline-size: var(--avatar-md);
+  block-size: var(--avatar-md);
   border-radius: var(--radius-full);
   background: var(--surface-filled);
   color: var(--muted-foreground);
@@ -56,7 +56,7 @@
   gap: var(--space-2);
   min-inline-size: 0;
   /* Centres a one-line sentence on the media. */
-  padding-block-start: calc((var(--avatar-sm) - var(--leading-body-sm)) / 2);
+  padding-block-start: calc((var(--avatar-md) - var(--leading-body-sm)) / 2);
 }
 
 .sentence {
@@ -119,5 +119,5 @@
 
 /* Lined up with the sentences, past the media column. */
 .composer {
-  margin-inline-start: calc(var(--avatar-sm) + var(--space-3));
+  margin-inline-start: calc(var(--avatar-md) + var(--space-3));
 }

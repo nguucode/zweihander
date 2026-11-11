@@ -155,7 +155,8 @@ hover and current fills never touch.
   ]}
 />
 
-Expanded, the sidebar is 16rem wide. The rail is one square row plus the
+Expanded, the sidebar is `--sidebar-width` wide: 20rem (320px), Atlassian
+Design's default side navigation width. The rail is one square row plus the
 padding either side: `--control-md` plus twice `--space-3`. A long label is
 cut with an ellipsis. Give the sidebar the height to fill; its body
 scrolls when the items do not fit.
@@ -248,7 +249,7 @@ item an icon if the sidebar can collapse.
 - **For actions.** A sidebar goes places. Put actions in
   [Buttons](?path=/docs/components-buttons-button--docs) or a
   [Menu](?path=/docs/components-navigation-menu--docs).
-- **On a phone, as is.** 16rem is most of a phone's width. In an
+- **On a phone, as is.** 20rem is most of a phone's width. In an
   [App Shell](?path=/docs/templates-application-ui-app-shell--docs) under
   64rem it is always the icon rail, with no collapse button; elsewhere,
   pass `isCollapsed`.

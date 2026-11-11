@@ -42,8 +42,8 @@ export function Contact() {
             <span className="muted small">Selling to upsize · Timeframe: 3 months · Hot</span>
           </div>
           <div className="tags muted small">
-            <span className="with-icon"><Avatar size="xs" initials="LT" />Agent: Liam Tran</span>
-            <span className="with-icon"><Avatar size="xs" initials="MC" />PM: Mia Castellano</span>
+            <span className="with-icon"><Avatar size="sm" initials="LT" />Agent: Liam Tran</span>
+            <span className="with-icon"><Avatar size="sm" initials="MC" />PM: Mia Castellano</span>
             <span className="with-icon"><Glyph name="phone" />0491 571 266</span>
           </div>
         </div>

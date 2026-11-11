@@ -33,7 +33,24 @@ image is transparent.
 Colour tells people apart in a list; it carries no meaning. Pick it from the
 person (a hash of their id), never from a status.
 
+### Sizes
+
+Atlassian's six. `md` is the default.
+
 <Canvas of={AvatarStories.Sizes} />
+
+| `size` | Across | Use for |
+| --- | --- | --- |
+| `xs` | 16px | Inline with a line of small text: a mention, a dense table cell. One initial. |
+| `sm` | 24px | Beside a name in a row, a field or a table cell. |
+| `md` | 32px | The default: a comment, a feed event, the account button in a top bar. |
+| `lg` | 40px | The leading visual of a list row or a card. |
+| `xl` | 96px | A profile header. |
+| `2xl` | 128px | A profile page, or the picture being edited. |
+
+With initials, `xs` shows the first letter only: two do not fit in 16px.
+
+<Canvas of={AvatarStories.InitialsSizes} />
 
 ### Status
 
@@ -41,6 +58,10 @@ person (a hash of their id), never from a status.
 colours: online, away, busy, offline.
 
 <Canvas of={AvatarStories.Status} />
+
+The dot grows with the avatar, and at `xl` and `2xl` it sits on the curve:
+
+<Canvas of={AvatarStories.StatusSizes} />
 
 ### Group
 
@@ -108,7 +129,7 @@ corner setting.
   caption="md"
   rows={[
     { part: 'Container', property: 'Size', token: '--avatar-md' },
-    { part: 'Initials', property: 'Font size', token: '--text-body' },
+    { part: 'Initials', property: 'Font size', token: '--text-body-sm' },
   ]}
 />
 
@@ -116,7 +137,25 @@ corner setting.
   caption="lg"
   rows={[
     { part: 'Container', property: 'Size', token: '--avatar-lg' },
-    { part: 'Initials', property: 'Font size', token: '--text-body-lg' },
+    { part: 'Initials', property: 'Font size', token: '--text-body' },
+  ]}
+/>
+
+<SpecTable
+  caption="xl"
+  rows={[
+    { part: 'Container', property: 'Size', token: '--avatar-xl' },
+    { part: 'Initials', property: 'Font size', token: '--text-heading-xl' },
+    { part: 'Status dot', property: 'Size', token: '--box-2xs' },
+  ]}
+/>
+
+<SpecTable
+  caption="2xl"
+  rows={[
+    { part: 'Container', property: 'Size', token: '--avatar-2xl' },
+    { part: 'Initials', property: 'Font size', token: '--text-heading-2xl' },
+    { part: 'Status dot', property: 'Size', token: '--box-xs' },
   ]}
 />
 
@@ -124,8 +163,17 @@ corner setting.
 
 The image and the silhouette fill the circle edge to edge.
 
-The status dot is a Badge dot: `sm` on the xs and sm avatars, `md` on md and
-lg. It sits on the corner of the avatar's box, outside the curve.
+Initials are 12px up to `md`, where `xs` keeps only the first letter, 14px
+on `lg`, then 28px and 32px: the type scale stops at 32px, so on `xl` and
+`2xl` the letters are a smaller share of the circle.
+
+An `xs` avatar draws no status dot, as in Atlassian: at 16px the dot would
+cover most of the picture, so the status is in the accessible name only.
+The status dot is a Badge dot: `sm` (6px) on the sm and md avatars,
+`md` (8px) on lg, sitting on the corner of the avatar's box, outside the
+curve. On `xl` and `2xl` that corner is far off the circle and a Badge dot
+is a speck, so the dot is 16px and 20px, and its centre sits on the circle
+at 45°.
 
 <SpecTable
   caption="Status dot and group"
@@ -136,7 +184,7 @@ lg. It sits on the corner of the avatar's box, outside the curve.
   ]}
 />
 
-The ring is 2px, as on a floating Badge.
+The ring is 2px at every size, as on a floating Badge.
 
 ## Color
 
@@ -232,6 +280,11 @@ Every other `<span>` attribute passes through to the row.
   not guess.
 - **A broken image falls back** to initials or the silhouette instead
   of showing the browser's broken-image icon.
+- **Sizes follow Atlassian Design**: 16, 24, 32, 40, 96 and
+  128px, with `md` (32px) the default, so an avatar lines up with the
+  kit's 32px controls. There is no 48px.
+- **`xs` shows one initial.** Two letters do not fit in 16px at the
+  smallest type size.
 - **No square, no `appearance`.** Always a circle, so a person never
   reads as a product or workspace logo.
 - **The placeholder is a silhouette**, not the outline `user` icon: it

@@ -137,8 +137,8 @@ links stay in the bar and scroll sideways when they do not fit.
 Three columns, after Tailwind UI's multi-column layouts: the sidebar, the
 page and an `aside` on the right for what supports the page, such as a
 summary, a status or recent activity. Pass it as `aside`, and name it with
-`asideLabel`. From 80rem of shell width it sits beside the page, as wide as
-the expanded sidebar (`--sidebar-width`), and each column scrolls on its
+`asideLabel`. From 80rem of shell width it sits beside the page, 16rem wide,
+and each column scrolls on its
 own, so the summary stays in view while the page scrolls. It takes the
 page's surface: a second card under `flat`, the canvas under `card`.
 
@@ -154,7 +154,7 @@ needs first in the page itself.
 ## On a phone
 
 Under 64rem of shell width the sidebar stays beside the page as the icon
-rail, and cannot expand: 16rem would cover most of a phone. The links keep
+rail, and cannot expand: 20rem would cover most of a phone. The links keep
 their names, as tooltips. There is no menu button and no drawer.
 
 <Canvas of={AppShellStories.Mobile} />
@@ -194,7 +194,8 @@ no sidebar, so there is no empty column.
   because the sidebar holds what the bar would. Below 64rem it is the icon
   rail and the top bar comes back in both layouts, for the logo, search and
   the account.
-- **An aside** sits right of the page from 80rem, `--sidebar-width` wide,
+- **An aside** sits right of the page from 80rem, 16rem wide (narrower
+  than the 20rem sidebar, so the page keeps about 42rem beside both),
   and the page and the aside each scroll on their own. Under 80rem it goes
   below the page and the two scroll together; below 48rem it is flush too,
   ruled off from a flat page at the top.

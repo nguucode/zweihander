@@ -8,10 +8,10 @@ import type { MenuEntry } from '@/components/navigation/Menu'
 import { GridList, type GridListItem } from './GridList'
 
 const people: GridListItem[] = [
-  { id: 1, media: <Avatar initials="IO" color="teal" />, title: 'Ines Okafor', description: 'Finance lead', meta: 'ines.okafor@example.com' },
-  { id: 2, media: <Avatar initials="TL" color="violet" />, title: 'Tomas Lindqvist', description: 'Controller', meta: 'tomas.lindqvist@example.com' },
-  { id: 3, media: <Avatar initials="NH" color="amber" />, title: 'Noor Haddad', description: 'Accountant', meta: 'noor.haddad@example.com' },
-  { id: 4, media: <Avatar initials="KS" color="blue" />, title: 'Kenji Sato', description: 'Payroll', meta: 'kenji.sato@example.com' },
+  { id: 1, media: <Avatar size="lg" initials="IO" color="teal" />, title: 'Ines Okafor', description: 'Finance lead', meta: 'ines.okafor@example.com' },
+  { id: 2, media: <Avatar size="lg" initials="TL" color="violet" />, title: 'Tomas Lindqvist', description: 'Controller', meta: 'tomas.lindqvist@example.com' },
+  { id: 3, media: <Avatar size="lg" initials="NH" color="amber" />, title: 'Noor Haddad', description: 'Accountant', meta: 'noor.haddad@example.com' },
+  { id: 4, media: <Avatar size="lg" initials="KS" color="blue" />, title: 'Kenji Sato', description: 'Payroll', meta: 'kenji.sato@example.com' },
 ]
 
 const projects: GridListItem[] = [
@@ -205,7 +205,7 @@ export const LongContent: Story = {
   args: {
     items: [
       {
-        media: <Avatar initials="MW" />,
+        media: <Avatar size="lg" initials="MW" />,
         title: 'Maximiliana Wolfeschlegelsteinhausenbergerdorff',
         status: <Tag variant="neutral" text="Invited" />,
         description: 'Senior accounts payable specialist',

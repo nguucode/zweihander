@@ -333,7 +333,7 @@
   color: var(--muted-foreground);
 }
 /* An Avatar in a NavSidebarButton is 20px: a row like the
-   others, not a profile card. Avatar xs is 24px. */
+   others, not a profile card. Avatar sm is 24px. */
 .button .icon > * {
   flex-shrink: 0;
   inline-size: var(--box-xs);

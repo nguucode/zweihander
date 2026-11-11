@@ -78,7 +78,7 @@ export function Shell({ current, children }: { current: string; children: ReactN
     <>
       <Menu
         align="start"
-        trigger={<NavSidebarButton appearance="switcher" icon={<Avatar size="xs" initials="NO" variant="solid" color="orange" />} label={office} end={<Icon name="chevrons-up-down" />} />}
+        trigger={<NavSidebarButton appearance="switcher" icon={<Avatar size="sm" initials="NO" variant="solid" color="orange" />} label={office} end={<Icon name="chevrons-up-down" />} />}
         items={[
           { type: 'radio', label: 'Offices', value: office, onValueChange: setOffice, options: [
             { value: 'Northcote Office', label: 'Northcote Office' },
@@ -118,7 +118,7 @@ export function Shell({ current, children }: { current: string; children: ReactN
       </Popover>
       <Menu
         align="end"
-        trigger={<Button variant="secondary" appearance="ghost" isIconOnly aria-label={`Account: ${ME.name}`}><Avatar size="sm" initials={ME.initials} color="orange" /></Button>}
+        trigger={<Button variant="secondary" appearance="ghost" isIconOnly aria-label={`Account: ${ME.name}`}><Avatar initials={ME.initials} color="orange" /></Button>}
         items={[{ label: ME.name, disabled: true }, { type: 'separator' }, { label: 'Your profile' }, { label: 'Sign out' }]}
       />
     </div>

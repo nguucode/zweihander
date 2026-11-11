@@ -24,6 +24,7 @@ export interface PaginationProps extends Omit<ComponentProps<'nav'>, 'children' 
   siblingCount?: number
   /** Pages always shown at each end. */
   boundaryCount?: number
+  /** @deprecated Pagination has one size, 32px controls: `sm` renders the same as `md`. Drop the prop; removed in the next release. */
   size?: 'sm' | 'md'
   /** Render links instead of buttons, for pages with their own URL. */
   getHref?: (page: number) => string
@@ -48,6 +49,8 @@ export function paginationItems(page: number, total: number, siblings = 1, bound
   ]
 }
 
+let hasWarned = false
+
 export function Pagination({
   totalPages,
   totalItems,
@@ -60,12 +63,16 @@ export function Pagination({
   onPageChange,
   siblingCount = 1,
   boundaryCount = 1,
-  size = 'md',
+  size,
   getHref,
   'aria-label': ariaLabel = 'Pagination',
   className,
   ...props
 }: PaginationProps) {
+  if (import.meta.env.DEV && !hasWarned && size !== undefined) {
+    hasWarned = true
+    console.warn('Pagination: `size` is deprecated and does nothing: Pagination has one size. It will be removed in the next release.')
+  }
   const [pageState, setPageState] = useState(defaultPage)
   const [pageSizeState, setPageSizeState] = useState(defaultPageSize)
   const pageSize = Math.max(1, pageSizeProp ?? pageSizeState)
@@ -116,7 +123,7 @@ export function Pagination({
   }
 
   return (
-    <nav aria-label={ariaLabel} className={cn(styles.pagination, styles[size], className)} {...props}>
+    <nav aria-label={ariaLabel} className={cn(styles.pagination, className)} {...props}>
       {totalItems !== undefined && (
         <p role="status" className={styles.summary}>
           {totalItems > 0
@@ -145,8 +152,7 @@ export function Pagination({
           <span aria-hidden="true">Rows per page</span>
           <Select
             aria-label="Rows per page"
-            // A field's sm is the 32px that lines up with the page buttons;
-            // there is no 24px field for the sm bar.
+            // A field's sm is the 32px that lines up with the page buttons.
             size="sm"
             className={styles.pageSizeSelect}
             options={pageSizeOptions.map(String)}

@@ -25,6 +25,7 @@ export interface InlineEditProps extends Omit<ComponentProps<'div'>, 'children' 
    * number input); check the format in `onSave`.
    */
   inputMode?: 'text' | 'email' | 'numeric' | 'decimal' | 'tel' | 'url'
+  /** `sm` in a Table row: the value is no taller than the row, and Save and Cancel are 24px. */
   size?: 'sm' | 'md'
 }
 
@@ -134,7 +135,7 @@ export function InlineEdit({
         if (typeof ref === 'function') ref(node)
         else if (ref) ref.current = node
       }}
-      className={cn(styles.inlineEdit, styles[size], className)}
+      className={cn(styles.inlineEdit, styles[size], isEditing && styles.editing, className)}
       {...props}
     >
       {isEditing ? (

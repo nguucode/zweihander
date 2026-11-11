@@ -15,7 +15,8 @@
 
 .table {
   /* Atlassian's cell: 4px block padding, and a row as tall as what it
-     holds. One 20px line of text makes a 28px row. */
+     holds. One 20px line of text makes a 28px row. Rows have no divider:
+     only the header ends on a rule. */
   --table-pad: var(--space-1);
   inline-size: 100%;
   border-collapse: separate;
@@ -26,10 +27,6 @@
   color: var(--card-foreground);
   font-variant-numeric: tabular-nums;
 }
-.sm {
-  --table-pad: var(--space-0-5);
-}
-
 .caption {
   padding: var(--space-3) var(--space-2);
   text-align: start;
@@ -44,12 +41,8 @@
 .actions {
   box-sizing: border-box;
   padding: var(--table-pad) var(--space-2);
-  border-block-end: 1px solid var(--border);
   text-align: start;
   vertical-align: middle;
-}
-tbody tr:last-child > * {
-  border-block-end: 0;
 }
 
 .th {
@@ -60,10 +53,11 @@ tbody tr:last-child > * {
   color: var(--muted-foreground);
   white-space: nowrap;
 }
-/* The header ends on a heavier rule than the rows' dividers. `.table`
-   outranks the cell classes' own bottom rule. */
+/* The only rule between rows: the header's. On the cells, so a sticky
+   header carries it along. Under .table: a bare element selector is global
+   in a CSS module and would rule every table on the page. */
 .table thead > tr > * {
-  border-block-end-width: var(--border-width-selected);
+  border-block-end: var(--border-width-selected) solid var(--border);
 }
 .sticky thead .th,
 .sticky thead .select,
@@ -149,12 +143,8 @@ tbody tr:last-child > * {
 tbody tr:hover > * {
   background: var(--accent);
 }
-/* --border is as light as --primary-subtle in light mode, so between two
-   selected rows it vanishes. The divider takes the tint's own text colour,
-   mixed down, to stay visible on it in both modes. */
 tbody tr.selected > * {
   background: var(--primary-subtle);
-  border-block-end-color: color-mix(in oklab, var(--primary-subtle) 75%, var(--primary-subtle-text));
 }
 
 /* The cell's inline padding, the 16px box, and the same again before the
@@ -223,13 +213,10 @@ thead .actions {
   text-align: end;
 }
 
-/* An open row and its content read as one block: no rule between them. */
-tbody tr.expanded > * {
-  border-block-end-color: transparent;
-}
+/* An open row and its content read as one block: the content's deeper
+   block-end padding sets the pair apart from the next row. */
 .expandedContent {
   padding: var(--space-2) var(--space-2) var(--space-4);
-  border-block-end: 1px solid var(--border);
 }
 /* The content row is not a record: it takes no hover tint of its own. */
 tbody tr.expandedRow:hover > * {
@@ -241,14 +228,12 @@ tbody tr.expanded:hover + tr.expandedRow > * {
 }
 tbody tr.selected.expanded + tr.expandedRow > * {
   background: var(--primary-subtle);
-  border-block-end-color: color-mix(in oklab, var(--primary-subtle) 75%, var(--primary-subtle-text));
 }
 
-/* The total row sits under a rule and ends the table, like the last row.
-   `.table` outranks the cell classes' own bottom rule. */
+/* The total row sits under the header's rule, turned over: with no
+   dividers between rows, that is what makes the sum read as a sum. */
 .table tfoot > tr > * {
-  border-block-start: 1px solid var(--border);
-  border-block-end: 0;
+  border-block-start: var(--border-width-selected) solid var(--border);
   font-weight: 600;
 }
 

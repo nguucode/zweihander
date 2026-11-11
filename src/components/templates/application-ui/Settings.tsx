@@ -67,7 +67,7 @@ export function Settings({ defaultSection = 'profile', onSave, onDeleteAccount, 
       <Menu
         align="start"
         trigger={
-          <Button variant="secondary" appearance="ghost" startIcon={<Avatar initials="IO" size="sm" />}>
+          <Button variant="secondary" appearance="ghost" startIcon={<Avatar initials="IO" />}>
             {saved.profile.name}
           </Button>
         }
