@@ -178,8 +178,9 @@ export const BoxRamp: Story = {
 }
 
 /* The point of a tier: a default Button and a small field both read md, so
-   they carry the same height, icon, corner and type, whoever built them. A
-   field is one step taller than a button, so its sm is the Button's md. */
+   they carry the same height, corner and type, whoever built them. A field
+   is one step taller than a button, so its sm is the Button's md. The
+   Button's icon is the larger --icon-lg (20px); a field's stays 16px. */
 export const SameTier: Story = {
   render: () => <ToolbarControls />,
   play: async ({ canvasElement }) => {
@@ -192,7 +193,7 @@ export const SameTier: Story = {
 
     for (const el of parts) {
       await expect(el.getBoundingClientRect().height).toBe(32)
-      await expect(iconOf(el)).toBe(16)
+      await expect(iconOf(el)).toBe(el === button ? 20 : 16)
       await expect(style(el).fontSize).toBe(style(button).fontSize)
       await expect(style(el).borderTopLeftRadius).toBe(style(button).borderTopLeftRadius)
     }
