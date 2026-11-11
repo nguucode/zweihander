@@ -212,6 +212,8 @@ a[href].button {
 .iconOnly {
   aspect-ratio: 1;
   padding-inline: 0;
+  /* The icon is the child itself (1em), so size it like a leading icon. */
+  font-size: var(--button-icon);
 }
 
 .fullWidth {
