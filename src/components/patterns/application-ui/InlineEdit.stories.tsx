@@ -99,7 +99,7 @@ const meta = {
       control: 'select',
       options: ['text', 'email', 'numeric', 'decimal', 'tel', 'url'],
     },
-    size: { description: '`sm` in a compact table row: Save and Cancel are 24px. The input is 32px at both sizes.', control: 'inline-radio', options: ['sm', 'md'], table: { defaultValue: { summary: 'md' } } },
+    size: { description: '`sm` in a Table row: the value and its hover fill are as tall as a 28px row, and Save and Cancel are 24px. The input is 32px at both sizes, so the row is 40px while it is open.', control: 'inline-radio', options: ['sm', 'md'], table: { defaultValue: { summary: 'md' } } },
   },
   args: { value: 'Acme Corp', label: 'Company', onSave: fn() },
   decorators: [(Story) => <div style={{ maxInlineSize: '40rem' }}>{Story()}</div>],
@@ -129,7 +129,7 @@ export const Default: Story = {
   },
 }
 
-/** A column of a table, at `sm`. The value lines up with the text in the cells beside it. */
+/** A column of a table, at `sm`. The value lines up with the text in the cells beside it, and stays inside its row. */
 export const InTable: Story = {
   render: () => <Invoices />,
   play: async ({ canvas }) => {
@@ -138,7 +138,17 @@ export const InTable: Story = {
     const header = canvas.getByRole('columnheader', { name: 'PO reference' })
     const headerText = header.getBoundingClientRect().left + parseFloat(getComputedStyle(header).paddingInlineStart)
     await expect(Math.abs(text.left - headerText)).toBeLessThan(2)
+    // Reading, the row is a row of text, 28px, and the value's hover fill is the row: it overhangs neither neighbour.
+    const row = (id: string) => canvas.getByRole('rowheader', { name: id }).closest('tr')!.getBoundingClientRect()
+    await expect(row('INV-1040').height).toBe(28)
+    await expect([cell.getBoundingClientRect().top, cell.getBoundingClientRect().bottom]).toEqual([row('INV-1040').top, row('INV-1040').bottom])
     await userEvent.click(canvas.getByRole('button', { name: 'Edit PO reference for INV-1041: Add' }))
+    // Editing, the 32px input sits inside its row, which grows to 40px; the rows around it stay 28px.
+    const input = canvas.getByRole('textbox', { name: 'PO reference for INV-1041' }).parentElement!.getBoundingClientRect()
+    await expect(input.height).toBe(32)
+    await expect([row('INV-1040').height, row('INV-1041').height, row('INV-1042').height]).toEqual([28, 40, 28])
+    await expect(input.top).toBeGreaterThanOrEqual(row('INV-1041').top)
+    await expect(input.bottom).toBeLessThanOrEqual(row('INV-1041').bottom)
     await userEvent.keyboard('PO-2300{Enter}')
     await expect(await canvas.findByRole('button', { name: 'Edit PO reference for INV-1041: PO-2300' })).toBeVisible()
   },

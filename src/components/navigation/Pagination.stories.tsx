@@ -42,10 +42,9 @@ const meta = {
       table: { type: { summary: 'number' }, defaultValue: { summary: '1' } },
     },
     size: {
-      description: '24px (`sm`) or 32px (`md`) controls, from the control tiers.',
-      control: 'inline-radio',
-      options: ['sm', 'md'],
-      table: { type: { summary: "'sm' | 'md'" }, defaultValue: { summary: "'md'" } },
+      description: 'Deprecated: Pagination has one size, 32px controls, and `sm` renders the same as `md`. Drop the prop; it will be removed in the next release.',
+      control: false,
+      table: { type: { summary: "'sm' | 'md'" } },
     },
     getHref: {
       description: 'Render links instead of buttons, for pages with their own URL: they can be opened in a new tab and shared.',
@@ -110,11 +109,14 @@ export const Default: Story = {
 
 export const Middle: Story = { args: { defaultPage: 6, totalPages: 20 } }
 
-export const Small: Story = {
+/** `size` is deprecated: for one release it is accepted, and `sm` renders as `md`. */
+export const DeprecatedSize: Story = {
+  tags: ['!dev'],
   args: { size: 'sm', defaultPage: 4 },
   play: async ({ canvas }) => {
     const page = canvas.getByRole('button', { name: 'Page 4' })
-    await expect(page.getBoundingClientRect().height).toBe(24)
+    await expect(page.getBoundingClientRect().height).toBe(32)
+    await expect(getComputedStyle(page).fontSize).toBe('14px')
     // 44px on coarse pointers. The runner's pointer is fine, so read the rule the media query applies.
     await expect(mediaRules('pointer: coarse', page).find((r) => r.style.blockSize)?.style.blockSize).toBe('var(--target-coarse)')
   },
@@ -171,6 +173,9 @@ export const WithSummary: Story = {
     await expect(args.onPageChange).toHaveBeenLastCalledWith(7)
     await expect(status).toHaveTextContent('301–340 of 340')
     await expect(within(nav).queryByRole('button', { name: 'Page 8' })).not.toBeInTheDocument()
+    // The select is as tall as the page buttons: one 32px row.
+    const heights = [within(nav).getByRole('combobox', { name: 'Rows per page' }), within(nav).getByRole('button', { name: 'Page 7' })]
+    await expect(heights.map((el) => el.getBoundingClientRect().height)).toEqual([32, 32])
   },
 }
 

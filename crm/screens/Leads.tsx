@@ -87,25 +87,24 @@ export function Leads() {
             caption="Leads"
             rows={visible}
             getRowId={(l) => l.id}
-            size="sm"
             emptyState={<EmptyState size="sm" title="No leads match" description="Clear the search or pick another tab." />}
             columns={[
               { key: 'name', header: 'Lead', width: '13rem', isRowHeader: true, cell: (l) => (
                 <button type="button" className={`lead-cell ${l.id === selectedId ? 'is-selected' : ''}`} onClick={() => setSelectedId(l.id)} aria-pressed={l.id === selectedId}>
-                  <Avatar size="sm" initials={l.initials} />
+                  <Avatar initials={l.initials} />
                   <span><strong>{l.name}</strong><span className="muted small">{l.kind}</span></span>
                 </button>
               ) },
               { key: 'status', header: 'Status', cell: (l) => <Pill dot tone={tone(l.status)} text={l.status} /> },
               { key: 'enquiry', header: 'Enquiry', width: '16rem', cell: (l) => <span className="clip"><span>{l.enquiry}</span><span className="muted small">{l.message}</span></span> },
               { key: 'source', header: 'Source', cell: (l) => l.source },
-              { key: 'owner', header: 'Owner', cell: (l) => (l.owner ? <span className="with-icon"><Avatar size="xs" initials={l.ownerInitials} />{l.owner}</span> : <span className="with-icon muted"><span className="dashed-avatar" />Unassigned</span>) },
+              { key: 'owner', header: 'Owner', cell: (l) => (l.owner ? <span className="with-icon"><Avatar size="sm" initials={l.ownerInitials} />{l.owner}</span> : <span className="with-icon muted"><span className="dashed-avatar" />Unassigned</span>) },
               { key: 'response', header: 'First response', cell: (l) => <span className="clip"><span className={l.responseTone ? `text-${l.responseTone}` : ''}>{l.response}</span><span className="muted small">{l.responseAt}</span></span> },
             ]}
           />
           <div className="row-split">
             <span className="muted small">Showing {visible.length} of {filtered.length}</span>
-            <Pagination totalPages={pages} page={page} onPageChange={setPage} size="sm" />
+            <Pagination totalPages={pages} page={page} onPageChange={setPage} />
           </div>
         </section>
 

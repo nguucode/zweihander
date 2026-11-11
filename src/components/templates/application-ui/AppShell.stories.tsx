@@ -43,7 +43,7 @@ const sidebarFooter = (
     <Menu
       side="right"
       align="end"
-      trigger={<NavSidebarButton icon={<Avatar initials="AS" size="xs" variant="solid" />} label="Ana Silva" />}
+      trigger={<NavSidebarButton icon={<Avatar initials="AS" size="sm" variant="solid" />} label="Ana Silva" />}
       items={[{ label: 'Your profile' }, { label: 'Settings' }, { type: 'separator' }, { label: 'Sign out' }]}
     />
   </>
@@ -55,7 +55,7 @@ const sidebarHeader = (onDeepCanvas = false) => (
   <>
     <NavSidebarButton
       appearance="switcher"
-      icon={<Avatar initials="AC" size="xs" variant={onDeepCanvas ? 'subtle' : 'solid'} color="blue" />}
+      icon={<Avatar initials="AC" size="sm" variant={onDeepCanvas ? 'subtle' : 'solid'} color="blue" />}
       label="Acme Corp"
       end={<Icon name="chevrons-up-down" />}
     />
@@ -81,7 +81,7 @@ const headerEnd = (
     <NotificationCenter
       items={[
         { id: 1, media: <Icon name="warning" />, actor: 'INV-2039', action: 'is 14 days overdue', at: new Date(2026, 9, 27, 9), href: '#inv-2039', isUnread: true },
-        { id: 2, media: <Avatar initials="LT" size="sm" />, actor: 'Linh Tran', action: 'approved PO-118', at: new Date(2026, 9, 26, 16), href: '#po-118', isUnread: true },
+        { id: 2, media: <Avatar initials="LT" />, actor: 'Linh Tran', action: 'approved PO-118', at: new Date(2026, 9, 26, 16), href: '#po-118', isUnread: true },
         { id: 3, media: <Icon name="success" />, actor: 'September close', action: 'is ready to review', at: new Date(2026, 9, 24, 10), href: '#close' },
       ]}
     />
@@ -89,7 +89,7 @@ const headerEnd = (
       align="end"
       trigger={
         <Button variant="secondary" appearance="ghost" isIconOnly aria-label="Account">
-          <Avatar initials="AS" size="sm" />
+          <Avatar initials="AS" />
         </Button>
       }
       items={[{ label: 'Your profile' }, { label: 'Settings' }, { type: 'separator' }, { label: 'Sign out' }]}
@@ -211,7 +211,7 @@ const meta = {
     sidebar: { control: false },
     header: { control: false },
     aside: {
-      description: 'A column beside the page for a summary, a status or activity, in an `aside` landmark. Right of the page from 80rem of shell width, as wide as the expanded sidebar, each column scrolling on its own; below the page under 80rem.',
+      description: 'A column beside the page for a summary, a status or activity, in an `aside` landmark. Right of the page from 80rem of shell width, 16rem wide, each column scrolling on its own; below the page under 80rem.',
       control: false,
     },
     asideLabel: { description: "The aside's accessible name. Give one when the page has more than one `aside`.", control: 'text' },
@@ -427,7 +427,7 @@ export const Mobile: Story = {
     const nav = canvas.getByRole('navigation', { name: 'Main' })
     // The shell measures its width after the first layout.
     await waitFor(() => expect(nav.getBoundingClientRect().width).toBeLessThan(100))
-    // A rail on a phone cannot expand: 16rem would cover the page.
+    // A rail on a phone cannot expand: 20rem would cover the page.
     await expect(within(nav).queryByRole('button', { name: /sidebar/ })).toBeNull()
     await expect(within(nav).getByRole('link', { name: 'Projects, 12' })).toBeVisible()
     await expect(canvas.queryByRole('button', { name: /navigation/ })).toBeNull()
@@ -565,8 +565,8 @@ const asideContent = (
 
 /**
  * Three columns: the sidebar, the page and an aside for a summary, a status
- * or activity. From 80rem the aside sits beside the page, as wide as the
- * expanded sidebar, and each column scrolls on its own.
+ * or activity. From 80rem the aside sits beside the page, 16rem wide, and
+ * each column scrolls on its own.
  */
 export const WithAside: Story = {
   args: { brand, sidebar: sidebar(), aside: asideContent, asideLabel: 'Invoice summary', children: longPage },
@@ -575,10 +575,13 @@ export const WithAside: Story = {
     const main = canvas.getByRole('main')
     const aside = canvas.getByRole('complementary', { name: 'Invoice summary' })
     const nav = canvas.getByRole('navigation', { name: 'Main' })
-    // Beside the page, after it in reading order, as wide as the sidebar.
+    // Beside the page, after it in reading order: 16rem, beside a 20rem (--sidebar-width) sidebar.
     await waitFor(() => expect(aside.getBoundingClientRect().left).toBeGreaterThanOrEqual(main.getBoundingClientRect().right))
     await expect(main.compareDocumentPosition(aside) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
-    await expect(aside.getBoundingClientRect().width).toBeCloseTo(nav.getBoundingClientRect().width, 0)
+    await expect(aside.getBoundingClientRect().width).toBeCloseTo(256, 0)
+    await expect(nav.getBoundingClientRect().width).toBeCloseTo(320, 0)
+    // Both expanded, the page is still wider than either column.
+    await expect(main.getBoundingClientRect().width).toBeGreaterThan(640)
     // A long word wraps inside the column.
     await expect(aside.scrollWidth).toBeLessThanOrEqual(aside.clientWidth)
     // The page scrolls on its own: the aside stays put.

@@ -5,7 +5,6 @@ import { Icon } from '@/lib/icon'
 import { Avatar } from '../../atomic-elements/Avatar'
 import { Badge } from '../../atomic-elements/Badge'
 import { Button } from '../../buttons/Button'
-import { ToggleButton } from '../../buttons/ToggleButton'
 import { BarChart } from '../../charts/BarChart'
 import { ColumnChooser } from '../../data-display/ColumnChooser'
 import { sortRows, Table, type TableColumn, type TableSort } from '../../data-display/Table'
@@ -41,7 +40,7 @@ const columns: TableColumn<Project>[] = [
     cell: (p) =>
       p.pm ? (
         // The avatar alone, as in most list screens; its name is the person's.
-        <Avatar size="sm" initials={p.pm.initials} imageAlt={p.pm.name} />
+        <Avatar initials={p.pm.initials} imageAlt={p.pm.name} />
       ) : (
         <span className={styles.muted}>Unassigned</span>
       ),
@@ -176,7 +175,6 @@ export function Projects({ projects: initialProjects = sampleProjects, ...props 
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(PAGE_SIZES[0])
   const [selected, setSelected] = useState<string[]>([])
-  const [isCompact, setIsCompact] = useState(false)
   const searchRef = useRef<HTMLInputElement>(null)
 
   // Any change to the rows shown starts again at the first page and drops
@@ -246,7 +244,6 @@ export function Projects({ projects: initialProjects = sampleProjects, ...props 
         rows={pageRows}
         getRowId={(p) => p.id}
         caption={`${active.label} projects`}
-        size={isCompact ? 'sm' : 'md'}
         sort={state.sort}
         onSortChange={(sort) => update({ sort })}
         isSelectable
@@ -281,7 +278,6 @@ export function Projects({ projects: initialProjects = sampleProjects, ...props 
               goTo(1)
             }}
             pageSizeOptions={PAGE_SIZES}
-            size="sm"
             aria-label="Project pages"
           />
         </TableFooter>
@@ -295,7 +291,7 @@ export function Projects({ projects: initialProjects = sampleProjects, ...props 
       <Menu
         align="start"
         trigger={
-          <Button variant="secondary" appearance="ghost" startIcon={<Avatar initials="IO" size="sm" />}>
+          <Button variant="secondary" appearance="ghost" startIcon={<Avatar initials="IO" />}>
             Ines Okafor
           </Button>
         }
@@ -440,16 +436,6 @@ export function Projects({ projects: initialProjects = sampleProjects, ...props 
                 onClearAll={() => update({ status: [], health: [] })}
               />
               <div className={styles.tableSettings}>
-                <ToggleButton
-                  isIconOnly
-                  aria-label="Compact rows"
-                  variant="secondary"
-                  appearance="outlined"
-                  pressed={isCompact}
-                  onPressedChange={setIsCompact}
-                >
-                  <Icon name="menu" />
-                </ToggleButton>
                 <ColumnChooser columns={columns} visibleKeys={state.columns} onVisibleKeysChange={(keys) => update({ columns: keys })} />
               </div>
             </TableToolbar>

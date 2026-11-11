@@ -20,21 +20,17 @@ holds.
 
 ## Variants
 
-Pagination has one look. What changes is the size, how many numbers show,
-whether the pages are buttons or links, and the two optional ends.
+Pagination has one look and one size. What changes is how many numbers
+show, whether the pages are buttons or links, and the two optional ends.
 
 | Form | Use for |
 | --- | --- |
-| `md` | Under a table or a list of results. The default. |
-| `sm` | Dense places: a card, a side panel, a compact table footer. |
 | `getHref` | Pages with their own URL: each page is a link that can be opened in a new tab and shared. |
 | Buttons | Pages that only exist in this view's state, such as a filtered list in a dialog. The default. |
 | `totalItems` | A table footer, where the reader needs to know how many rows there are: adds the summary at the start. |
 | `pageSizeOptions` | Long tables where readers scan in bulk: adds a "Rows per page" select at the end. |
 
 <Canvas of={PaginationStories.WithSummary} />
-
-<Canvas of={PaginationStories.Small} />
 
 <Canvas of={PaginationStories.FewPages} />
 
@@ -78,27 +74,13 @@ pages and the select to the end; on a narrow screen the row wraps.
 
 ## Measurements
 
-Each size is a control tier (Foundations / Sizing), with Atlassian
-Design's numbers: 32px by default, 24px for tables and dense rows.
-Atlassian Design has no small pagination; `sm` is the kit's own and keeps
-its 12/16 label, so a three-digit page number still fits a 24px square. A control is square
-at its minimum; the inline padding only shows on a page number of three
-digits or more. Previous and next have no padding, so they stay square.
+One size, Atlassian Design's: the `md` control tier (Foundations /
+Sizing), 32px. A control is square at its minimum; the inline padding only
+shows on a page number of three digits or more. Previous and next have no
+padding, so they stay square.
 
 <SpecTable
-  caption="sm"
-  rows={[
-    { part: 'Control', property: 'Height and minimum width', token: '--control-sm' },
-    { part: 'Control', property: 'Inline padding', token: '--control-sm-pad' },
-    { part: 'Control', property: 'Corner radius', token: '--control-sm-radius' },
-    { part: 'Previous, Next', property: 'Icon size', token: '--icon-sm' },
-    { part: 'Label', property: 'Font size', token: '--text-body-sm' },
-    { part: 'Label', property: 'Line height', token: '--leading-body-sm' },
-  ]}
-/>
-
-<SpecTable
-  caption="md"
+  caption="Every pagination"
   rows={[
     { part: 'Control', property: 'Height and minimum width', token: '--control-md' },
     { part: 'Control', property: 'Inline padding', token: '--control-md-pad' },
@@ -106,12 +88,6 @@ digits or more. Previous and next have no padding, so they stay square.
     { part: 'Previous, Next', property: 'Icon size', token: '--icon-md' },
     { part: 'Label', property: 'Font size', token: '--text-body' },
     { part: 'Label', property: 'Line height', token: '--leading-body' },
-  ]}
-/>
-
-<SpecTable
-  caption="Every size"
-  rows={[
     { part: 'List', property: 'Gap between controls', token: '--space-stack' },
     { part: 'Summary, List, Rows per page', property: 'Gap between them', token: '--space-inline' },
     { part: 'Ellipsis', property: 'Minimum width', token: '--space-6' },
@@ -127,7 +103,7 @@ One colour set: the current page is the only fill. Switch the theme and
 the accent in the toolbar: the values follow.
 
 <SpecTable
-  caption="Every size"
+  caption="Every pagination"
   rows={[
     { part: 'Page, Previous, Next', property: 'Colour', token: '--foreground' },
     { part: 'Page, Previous, Next, hover', property: 'Background', token: '--accent' },
@@ -169,10 +145,13 @@ At rest a control has no fill.
 </div>
 
 The rows-per-page select is a [Select](?path=/docs/components-inputs-select--docs)
-at `size="sm"`, 32px: level with the `md` controls, and the tallest thing
-in an `sm` bar, since a field has no 24px size. Changing it moves to the page that holds the first row
+at `size="sm"`, 32px: level with the page controls. Changing it moves to the page that holds the first row
 shown before, so the reader does not lose their place; it calls
 `onPageSizeChange`, then `onPageChange` if the page moved.
+
+`size` is deprecated. Pagination has one size, as Atlassian's does:
+`size="sm"` renders the same 32px controls as `md`. It is still accepted
+for one release, with a console warning in development; drop it.
 
 Every other `<nav>` attribute passes through. `paginationItems(page,
 total, siblings, boundary)` is exported too, for building your own.
@@ -232,8 +211,8 @@ tab, bookmarked and shared.
   visible label is `aria-hidden` so the name is not read twice.
 - The ellipsis is `aria-hidden`: the page names already say which numbers
   are there.
-- Controls are 24px (`sm`) or 32px (`md`) and grow to 44px on touch
-  screens (`pointer: coarse`).
+- Controls are 32px and grow to 44px on touch screens (`pointer:
+  coarse`).
 - Focus ring: 2px `--ring`, 2px offset.
 
 </DocTab>

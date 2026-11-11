@@ -36,7 +36,7 @@ export interface AppShellProps extends ComponentProps<'div'> {
   /**
    * A column beside the page for a summary, a status or activity, in an
    * `aside` landmark. From 80rem of shell width it sits right of the page,
-   * as wide as the expanded sidebar, and each column scrolls on its own;
+   * 16rem wide, and each column scrolls on its own;
    * below that it follows the page and the two scroll as one.
    */
   aside?: ReactNode

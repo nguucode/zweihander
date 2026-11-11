@@ -12,7 +12,7 @@ const end = (
       <Icon name="info" />
     </Button>
     <Button variant="secondary" appearance="ghost" isIconOnly aria-label="Account">
-      <Avatar initials="AS" size="sm" />
+      <Avatar initials="AS" />
     </Button>
   </>
 )

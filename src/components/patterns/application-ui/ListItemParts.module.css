@@ -15,8 +15,8 @@
   display: grid;
   flex: none;
   place-items: center;
-  inline-size: var(--avatar-md);
-  block-size: var(--avatar-md);
+  inline-size: var(--avatar-lg);
+  block-size: var(--avatar-lg);
   border-radius: var(--radius-full);
   background: var(--surface-filled);
   color: var(--muted-foreground);

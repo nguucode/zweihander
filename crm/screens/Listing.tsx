@@ -32,7 +32,7 @@ const DETAILS: Record<string, Detail> = {
     title: '14 Ruby Street, Northcote VIC 3070',
     facts: 'House · 3 bed · 2 bath · 1 car · 168 m² internal · 412 m² land',
     status: <><Pill tone="success" dot text="On market · 20 DOM" /><Pill text="Auction Sat 21/11/2026 11:00am" /><span className="muted small">in 10 days</span></>,
-    people: <><span className="with-icon"><Avatar size="xs" initials="RA" /><Avatar size="xs" initials="TA" /><a href="#/customers/rachel">Vendors: Rachel &amp; Tom Ashdown</a></span><span className="with-icon"><Avatar size="xs" initials="LT" />Agent: Liam Tran</span></>,
+    people: <><span className="with-icon"><Avatar size="sm" initials="RA" /><Avatar size="sm" initials="TA" /><a href="#/customers/rachel">Vendors: Rachel &amp; Tom Ashdown</a></span><span className="with-icon"><Avatar size="sm" initials="LT" />Agent: Liam Tran</span></>,
     buyers: 48,
     openHomes: 5,
   },
@@ -41,7 +41,7 @@ const DETAILS: Record<string, Detail> = {
     title: '5/27 Albert Street, Brunswick VIC 3056',
     facts: 'Apartment · 2 bed · 1 bath · 1 car · 78 m² internal · Strata (OC)',
     status: <><Pill tone="success" dot text="On market · 46 DOM" /><Pill text="Private sale · $640,000" /></>,
-    people: <><span className="with-icon"><Avatar size="xs" initials="GH" />Vendors: Vendor (private)</span><span className="with-icon"><Avatar size="xs" initials="PR" />Agent: Priya Raman</span></>,
+    people: <><span className="with-icon"><Avatar size="sm" initials="GH" />Vendors: Vendor (private)</span><span className="with-icon"><Avatar size="sm" initials="PR" />Agent: Priya Raman</span></>,
     buyers: 31,
     openHomes: 6,
   },
@@ -55,7 +55,7 @@ export function ListingPage({ id, tab = 'overview' }: { id: string; tab?: string
     title: `${listing.street}, ${listing.suburb}`,
     facts: listing.method,
     status: <Pill tone="success" dot text={`${listing.stage}${listing.dom ? ` · ${listing.dom}` : ''}`} />,
-    people: <span className="with-icon"><Avatar size="xs" initials={listing.agent} />Agent</span>,
+    people: <span className="with-icon"><Avatar size="sm" initials={listing.agent} />Agent</span>,
     buyers: 12,
     openHomes: 2,
   })
@@ -333,7 +333,6 @@ function Offers() {
             caption="Offers on 5/27 Albert Street"
             rows={rows}
             getRowId={(o) => o.id}
-            size="sm"
             columns={[
               { key: 'id', header: 'Offer', isRowHeader: true, cell: (o) => (
                 <label className="offer-pick">

@@ -117,13 +117,12 @@ export function Overview() {
         <Panel title="Agent performance" icon={<Glyph name="users" />} description="Select an agent to see their day">
           <Table<Agent>
             caption="Agent performance"
-            size="sm"
             rows={agents}
             getRowId={(a) => a.initials}
             defaultSort={{ key: 'gci', direction: 'descending' }}
             columns={[
               { key: 'name', header: 'Agent', isRowHeader: true, sortable: true, sortValue: (a) => a.name, cell: (a) => (
-                <a href="#/home" className="with-icon"><Avatar size="xs" initials={a.initials} />{a.name}</a>
+                <a href="#/home" className="with-icon"><Avatar size="sm" initials={a.initials} />{a.name}</a>
               ), footer: 'Office' },
               { key: 'appraisals', header: 'Appr.', align: 'end', sortable: true, sortValue: (a) => a.appraisals, cell: (a) => a.appraisals, footer: office.appraisals },
               { key: 'won', header: 'Won', align: 'end', sortable: true, sortValue: (a) => a.won, cell: (a) => a.won, footer: office.won },

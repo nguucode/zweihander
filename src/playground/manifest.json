@@ -15,10 +15,12 @@
             "xs",
             "sm",
             "md",
-            "lg"
+            "lg",
+            "xl",
+            "2xl"
           ],
           "default": "md",
-          "description": "24, 32, 40 or 48px across. Initials step up from 12px to 16px with it."
+          "description": "16, 24, 32, 40, 96 or 128px across: Atlassian's avatar sizes. Initials step up from 12px to 32px with it; `xs` shows the first letter only."
         },
         {
           "name": "imageSrc",
@@ -35,7 +37,7 @@
         {
           "name": "initials",
           "control": "text",
-          "description": "One or two letters, shown when there is no image. Pass the letters, not a name: they are uppercased by style."
+          "description": "One or two letters, shown when there is no image. Pass the letters, not a name: they are uppercased by style. `xs` shows the first only."
         },
         {
           "name": "variant",
@@ -134,7 +136,7 @@
               {
                 "part": "Initials",
                 "property": "Font size",
-                "token": "--text-body"
+                "token": "--text-body-sm"
               }
             ]
           },
@@ -149,7 +151,47 @@
               {
                 "part": "Initials",
                 "property": "Font size",
-                "token": "--text-body-lg"
+                "token": "--text-body"
+              }
+            ]
+          },
+          {
+            "caption": "xl",
+            "rows": [
+              {
+                "part": "Container",
+                "property": "Size",
+                "token": "--avatar-xl"
+              },
+              {
+                "part": "Initials",
+                "property": "Font size",
+                "token": "--text-heading-xl"
+              },
+              {
+                "part": "Status dot",
+                "property": "Size",
+                "token": "--box-2xs"
+              }
+            ]
+          },
+          {
+            "caption": "2xl",
+            "rows": [
+              {
+                "part": "Container",
+                "property": "Size",
+                "token": "--avatar-2xl"
+              },
+              {
+                "part": "Initials",
+                "property": "Font size",
+                "token": "--text-heading-2xl"
+              },
+              {
+                "part": "Status dot",
+                "property": "Size",
+                "token": "--box-xs"
               }
             ]
           },
@@ -5478,16 +5520,6 @@
           "description": "Also opens a row's `rowActions` on right click or long press, at the pointer. Off by default: the row then loses the browser's own menu (copy a cell's text, open a link in a new tab)."
         },
         {
-          "name": "size",
-          "control": "inline-radio",
-          "options": [
-            "sm",
-            "md"
-          ],
-          "default": "md",
-          "description": "Cell padding; a row is as tall as what it holds. `md` is 4px above and below, a 28px row for one line of text; `sm` is 2px (24px), for long lists of plain text."
-        },
-        {
           "name": "hasStickyHeader",
           "control": "boolean",
           "default": false,
@@ -5525,7 +5557,7 @@
           {
             "name": "Row",
             "selector": "tbody tr",
-            "description": "As tall as what it holds: 28px for one line of text (24px at sm). Divided by --border, tinted when hovered or selected."
+            "description": "As tall as what it holds: 28px for one line of text. No divider: tinted when hovered or selected."
           },
           {
             "name": "Row checkbox",
@@ -5550,17 +5582,17 @@
           {
             "name": "Expanded row",
             "selector": "tbody td[colspan]",
-            "description": "One cell spanning every column, under its row, with no rule between them. Holds any layout."
+            "description": "One cell spanning every column, under its row. Holds any layout."
           },
           {
             "name": "Total row",
             "selector": "tfoot tr",
-            "description": "With a footer on any column: a semibold row under a rule, outside the sort."
+            "description": "With a footer on any column: a semibold row under a 2px rule, outside the sort."
           }
         ],
         "measurements": [
           {
-            "caption": "md",
+            "caption": "Every table",
             "rows": [
               {
                 "part": "Row",
@@ -5571,27 +5603,7 @@
                 "part": "Header row",
                 "property": "Cell block padding",
                 "token": "--space-1"
-              }
-            ]
-          },
-          {
-            "caption": "sm",
-            "rows": [
-              {
-                "part": "Row",
-                "property": "Cell block padding",
-                "token": "--space-0-5"
               },
-              {
-                "part": "Header row",
-                "property": "Cell block padding",
-                "token": "--space-0-5"
-              }
-            ]
-          },
-          {
-            "caption": "Every size",
-            "rows": [
               {
                 "part": "Cell",
                 "property": "Inline padding",
@@ -5600,6 +5612,11 @@
               {
                 "part": "Header row",
                 "property": "Rule under it",
+                "token": "--border-width-selected"
+              },
+              {
+                "part": "Total row",
+                "property": "Rule above it",
                 "token": "--border-width-selected"
               },
               {
@@ -5743,6 +5760,11 @@
                 "part": "Sort icon, sorted column",
                 "property": "Colour",
                 "token": "--foreground"
+              },
+              {
+                "part": "Header row",
+                "property": "Rule under it",
+                "token": "--border"
               }
             ]
           },
@@ -5758,11 +5780,6 @@
                 "part": "Cell",
                 "property": "Colour",
                 "token": "--card-foreground"
-              },
-              {
-                "part": "Divider",
-                "property": "Colour",
-                "token": "--border"
               },
               {
                 "part": "Total row",
@@ -5798,16 +5815,6 @@
                 "part": "Row",
                 "property": "Background",
                 "token": "--primary-subtle"
-              }
-            ]
-          },
-          {
-            "caption": "Expanded",
-            "rows": [
-              {
-                "part": "Expanded row",
-                "property": "Divider under it",
-                "token": "--border"
               }
             ]
           },
@@ -11687,16 +11694,6 @@
           "control": "number",
           "default": 1,
           "description": "Pages always shown at each end."
-        },
-        {
-          "name": "size",
-          "control": "inline-radio",
-          "options": [
-            "sm",
-            "md"
-          ],
-          "default": "md",
-          "description": "24px (`sm`) or 32px (`md`) controls, from the control tiers."
         }
       ],
       "specs": {
@@ -11739,42 +11736,7 @@
         ],
         "measurements": [
           {
-            "caption": "sm",
-            "rows": [
-              {
-                "part": "Control",
-                "property": "Height and minimum width",
-                "token": "--control-sm"
-              },
-              {
-                "part": "Control",
-                "property": "Inline padding",
-                "token": "--control-sm-pad"
-              },
-              {
-                "part": "Control",
-                "property": "Corner radius",
-                "token": "--control-sm-radius"
-              },
-              {
-                "part": "Previous, Next",
-                "property": "Icon size",
-                "token": "--icon-sm"
-              },
-              {
-                "part": "Label",
-                "property": "Font size",
-                "token": "--text-body-sm"
-              },
-              {
-                "part": "Label",
-                "property": "Line height",
-                "token": "--leading-body-sm"
-              }
-            ]
-          },
-          {
-            "caption": "md",
+            "caption": "Every pagination",
             "rows": [
               {
                 "part": "Control",
@@ -11805,12 +11767,7 @@
                 "part": "Label",
                 "property": "Line height",
                 "token": "--leading-body"
-              }
-            ]
-          },
-          {
-            "caption": "Every size",
-            "rows": [
+              },
               {
                 "part": "List",
                 "property": "Gap between controls",
@@ -11846,7 +11803,7 @@
         ],
         "color": [
           {
-            "caption": "Every size",
+            "caption": "Every pagination",
             "rows": [
               {
                 "part": "Page, Previous, Next",
@@ -11918,7 +11875,7 @@
           {
             "title": "Accessibility",
             "blocks": [
-              "- A `<nav>` landmark named \"Pagination\", around a list.\n- Each page control is named \"Page 3\"; the current one has\n  `aria-current=\"page\"`. Previous and next are named \"Previous page\" and\n  \"Next page\".\n- At either end, Previous or Next is disabled. As links they lose their\n  `href` (the only thing that stops an `<a>` navigating) and keep\n  `role=\"link\"` with `aria-disabled`, so they are still announced as a\n  disabled link.\n- With `getHref`, each control is a real `<a href>`; without it, a native\n  `<button>`. Both are in the tab order and activate with Enter (buttons\n  with Space too).\n- The summary has `role=\"status\"`, a polite live region, so \"21–40 of 340\"\n  is read out after a page or size change.\n- The rows-per-page select is a combobox named \"Rows per page\"; its\n  visible label is `aria-hidden` so the name is not read twice.\n- The ellipsis is `aria-hidden`: the page names already say which numbers\n  are there.\n- Controls are 24px (`sm`) or 32px (`md`) and grow to 44px on touch\n  screens (`pointer: coarse`).\n- Focus ring: 2px `--ring`, 2px offset."
+              "- A `<nav>` landmark named \"Pagination\", around a list.\n- Each page control is named \"Page 3\"; the current one has\n  `aria-current=\"page\"`. Previous and next are named \"Previous page\" and\n  \"Next page\".\n- At either end, Previous or Next is disabled. As links they lose their\n  `href` (the only thing that stops an `<a>` navigating) and keep\n  `role=\"link\"` with `aria-disabled`, so they are still announced as a\n  disabled link.\n- With `getHref`, each control is a real `<a href>`; without it, a native\n  `<button>`. Both are in the tab order and activate with Enter (buttons\n  with Space too).\n- The summary has `role=\"status\"`, a polite live region, so \"21–40 of 340\"\n  is read out after a page or size change.\n- The rows-per-page select is a combobox named \"Rows per page\"; its\n  visible label is `aria-hidden` so the name is not read twice.\n- The ellipsis is `aria-hidden`: the page names already say which numbers\n  are there.\n- Controls are 32px and grow to 44px on touch screens (`pointer:\n  coarse`).\n- Focus ring: 2px `--ring`, 2px offset."
             ]
           }
         ]
@@ -15831,7 +15788,7 @@
           {
             "title": "Layout",
             "blocks": [
-              "- The media column is as wide as a small Avatar; an Icon sits in a\n  filled circle of that size, and an Avatar covers it.\n- The line runs down the centre of that column, from one media to the\n  next, and stops at the last.\n- The time follows the sentence instead of taking a column at the end,\n  so the feed fits a narrow aside: it wraps whole, never mid-date.\n- Long names, links and comments break anywhere rather than overflow."
+              "- The media column is as wide as a medium Avatar; an Icon sits in a\n  filled circle of that size, and an Avatar covers it.\n- The line runs down the centre of that column, from one media to the\n  next, and stops at the last.\n- The time follows the sentence instead of taking a column at the end,\n  so the feed fits a narrow aside: it wraps whole, never mid-date.\n- Long names, links and comments break anywhere rather than overflow."
             ]
           },
           {
@@ -16038,7 +15995,7 @@
           {
             "title": "Layout",
             "blocks": [
-              "- **The value lines up with the text around it.** The root pulls back by\n  the field's inline padding, so the value's text starts where a plain\n  cell's text does, and the input's text starts in the same place: entering\n  edit mode does not shift it. It pulls back by the extra height too, so the\n  value sits on the same line as the term or the cells beside it.\n- **The input is 32px at both sizes**, the field size that lines up with\n  buttons in a row. `size=\"sm\"` makes Save and Cancel 24px, centred on it.\n- **Save and Cancel sit at the end of the input**, aligned to its box; an\n  error goes under the box and pushes the row taller, not the buttons down.\n- **The pencil does not take space away from the value** on hover: it has\n  its place from the start, hidden until hover or focus. On a touch screen,\n  where nothing hovers, it always shows.\n- **On a touch screen** the value's hit area grows to 44px without the value\n  growing."
+              "- **The value lines up with the text around it.** The root pulls back by\n  the field's inline padding, so the value's text starts where a plain\n  cell's text does, and the input's text starts in the same place: entering\n  edit mode does not shift it. It pulls back by the extra height too, so the\n  value sits on the same line as the term or the cells beside it.\n- **The input is 32px at both sizes**, the field size that lines up with\n  buttons in a row. `size=\"sm\"` makes Save and Cancel 24px, centred on it.\n- **In a Table row (`size=\"sm\"`) the value stays inside the row.** A row\n  of text is 28px: one 20px line and the cell's 4px above and below. The\n  value box is exactly that, so its hover fill is the row and never\n  overhangs the rows around it. While the input is open the row is 40px,\n  like any row that holds a 32px field, and goes back to 28px on save or\n  cancel. At `md` the value box is 32px, to line up with the fields of a\n  form or a description list.\n- **Save and Cancel sit at the end of the input**, aligned to its box; an\n  error goes under the box and pushes the row taller, not the buttons down.\n- **The pencil does not take space away from the value** on hover: it has\n  its place from the start, hidden until hover or focus. On a touch screen,\n  where nothing hovers, it always shows.\n- **On a touch screen** the value's hit area grows to 44px without the value\n  growing."
             ]
           },
           {
@@ -16487,7 +16444,7 @@
           "Use a NavSidebar for an app's main navigation when it has more than five or\nso destinations, or will grow: the list runs down and does not wrap. Name\ngroups by what is in them, keep labels to a word or two, and give every\nitem an icon if the sidebar can collapse."
         ],
         "whenNotToUse": [
-          "- **For three to five sections of one page or object.** Use\n  [Tabs](?path=/docs/components-navigation-tabs--docs) across the top.\n- **For actions.** A sidebar goes places. Put actions in\n  [Buttons](?path=/docs/components-buttons-button--docs) or a\n  [Menu](?path=/docs/components-navigation-menu--docs).\n- **On a phone, as is.** 16rem is most of a phone's width. In an\n  [App Shell](?path=/docs/templates-application-ui-app-shell--docs) under\n  64rem it is always the icon rail, with no collapse button; elsewhere,\n  pass `isCollapsed`."
+          "- **For three to five sections of one page or object.** Use\n  [Tabs](?path=/docs/components-navigation-tabs--docs) across the top.\n- **For actions.** A sidebar goes places. Put actions in\n  [Buttons](?path=/docs/components-buttons-button--docs) or a\n  [Menu](?path=/docs/components-navigation-menu--docs).\n- **On a phone, as is.** 20rem is most of a phone's width. In an\n  [App Shell](?path=/docs/templates-application-ui-app-shell--docs) under\n  64rem it is always the icon rail, with no collapse button; elsewhere,\n  pass `isCollapsed`."
         ],
         "doDont": [
           {
@@ -16694,7 +16651,7 @@
           {
             "title": "Layout",
             "blocks": [
-              "- The media column is as wide as a medium Avatar; an Icon sits in a\n  filled circle of that size, and an Avatar covers it.\n- `meta` sits at the end of the row while the title fits beside it, and\n  wraps under the text when it does not. The list has no breakpoint of\n  its own, so it works in a narrow aside as on a full page.\n- Long titles, emails and paths break anywhere rather than overflow.\n- Rows pad by `--space-inline` above and below and are at least\n  `--row-height` (48px) tall, with or without media. A Table's rows are\n  as tall as their content, so the two do not share a row height."
+              "- The media column is as wide as a large Avatar; an Icon sits in a\n  filled circle of that size, and an Avatar covers it.\n- `meta` sits at the end of the row while the title fits beside it, and\n  wraps under the text when it does not. The list has no breakpoint of\n  its own, so it works in a narrow aside as on a full page.\n- Long titles, emails and paths break anywhere rather than overflow.\n- Rows pad by `--space-inline` above and below and are at least\n  `--row-height` (48px) tall, with or without media. A Table's rows are\n  as tall as their content, so the two do not share a row height."
             ]
           },
           {
@@ -16909,7 +16866,7 @@
           {
             "title": "Layout",
             "blocks": [
-              "- **The shell fills the viewport** (`block-size: 100dvh`) and only the\n  page scrolls, so the sidebar and the header stay in place. Set\n  `block-size` on it to put it in a smaller box.\n- **The sidebar sits beside the page at every width.** From 64rem, in\n  `layout=\"sidebar\"`, it runs the full height and the top bar is hidden,\n  because the sidebar holds what the bar would. Below 64rem it is the icon\n  rail and the top bar comes back in both layouts, for the logo, search and\n  the account.\n- **An aside** sits right of the page from 80rem, `--sidebar-width` wide,\n  and the page and the aside each scroll on their own. Under 80rem it goes\n  below the page and the two scroll together; below 48rem it is flush too,\n  ruled off from a flat page at the top.\n- **Below 48rem** a flat page drops its 8px inset, edge and rounding and\n  goes flush, since a frame around it only costs width on a phone.\n- **Everything reads a token**: the top bar is `--control-md` plus two\n  `--space-inline` tall, the sidebar is `--sidebar-width` wide, the page\n  padding is `--space-section`.\n- **Breakpoints are the shell's own width**, which in an app is the\n  viewport's. That is also what lets the stories show the phone layout in\n  a 390px box.\n- **The shell is a size container** (`container-type: inline-size`), so\n  it takes its width from where it sits, never from its content. In a\n  block it fills the line as usual; as a flex or grid item that would\n  otherwise shrink to fit, give it a width (`inline-size: 100%` or\n  `flex: 1`), or it collapses."
+              "- **The shell fills the viewport** (`block-size: 100dvh`) and only the\n  page scrolls, so the sidebar and the header stay in place. Set\n  `block-size` on it to put it in a smaller box.\n- **The sidebar sits beside the page at every width.** From 64rem, in\n  `layout=\"sidebar\"`, it runs the full height and the top bar is hidden,\n  because the sidebar holds what the bar would. Below 64rem it is the icon\n  rail and the top bar comes back in both layouts, for the logo, search and\n  the account.\n- **An aside** sits right of the page from 80rem, 16rem wide (narrower\n  than the 20rem sidebar, so the page keeps about 42rem beside both),\n  and the page and the aside each scroll on their own. Under 80rem it goes\n  below the page and the two scroll together; below 48rem it is flush too,\n  ruled off from a flat page at the top.\n- **Below 48rem** a flat page drops its 8px inset, edge and rounding and\n  goes flush, since a frame around it only costs width on a phone.\n- **Everything reads a token**: the top bar is `--control-md` plus two\n  `--space-inline` tall, the sidebar is `--sidebar-width` wide, the page\n  padding is `--space-section`.\n- **Breakpoints are the shell's own width**, which in an app is the\n  viewport's. That is also what lets the stories show the phone layout in\n  a 390px box.\n- **The shell is a size container** (`container-type: inline-size`), so\n  it takes its width from where it sits, never from its content. In a\n  block it fills the line as usual; as a flex or grid item that would\n  otherwise shrink to fit, give it a width (`inline-size: 100%` or\n  `flex: 1`), or it collapses."
             ]
           },
           {
@@ -17009,7 +16966,7 @@
           {
             "title": "Layout",
             "blocks": [
-              "- From 48rem of page width the nav is a column as wide as the app's\n  sidebar and stays in view while the section scrolls. Below that it\n  stacks above the section, every link still showing: a settings nav is a\n  handful of links, and folding it into a menu would hide where else to go.\n- Form Sections split (title and description beside the fields) from\n  48rem of their own width, and stack below."
+              "- From 48rem of page width the nav is a 16rem column and stays in view\n  while the section scrolls. Below that it\n  stacks above the section, every link still showing: a settings nav is a\n  handful of links, and folding it into a menu would hide where else to go.\n- Form Sections split (title and description beside the fields) from\n  48rem of their own width, and stack below."
             ]
           },
           {
@@ -17491,7 +17448,7 @@
           {
             "title": "What works",
             "blocks": [
-              "- **Views** are predefined (All, Risk, On hold, Potential risk, On track,\n  Archived) or saved. A view holds the filters, the columns and the sort;\n  the search is not part of it. Each count is the rows the view shows\n  with the current search; the view in force counts its unsaved changes\n  too, so its count always matches the table.\n- **Modified**: a filter, a column or a sort that differs from the view\n  marks it modified. Discard puts it back; Save writes it into a saved\n  view; on a predefined view, Save as new view keeps it under a new name.\n  Manage views deletes saved views.\n- **Search** matches the project name and the PM.\n- **Filters** are checkbox menus, Status and Health; each choice shows as\n  a chip that removes on its own, and Clear all removes them all.\n- **Sort** by name, PM, last update, resources, timeline or estimation.\n  The sort covers every page, not only the one shown.\n- **Pages** of 10, 25 or 50. Any change to what is listed goes back to\n  the first page.\n- **Chart** shows the estimation of the same projects by status, under\n  the same view, search and filters.\n- **Selection** turns the toolbar into an Archive action; archived\n  projects move to the Archived view. Changing the page, the view, the\n  search or a filter clears it, so you never act on rows you cannot see.\n- **Clear filters**, in the empty state, clears the search and puts the\n  view's own filters back; it does not leave the view.\n- **Expand** a row to see its activity: status changes with their note,\n  estimation changes, and when it was created.\n- **Import** reads a CSV of projects through the [Import\n  Export](?path=/docs/patterns-application-ui-import-export--docs) dialog:\n  the headings map to Project name, PM, Status and Estimation, an unknown\n  status or an estimation that is not a number skips its row, and the\n  rest join the list on track and unscheduled.\n- **Export** downloads a CSV of the current view, the selected projects\n  or all of them, with the columns on screen ticked; dates are ISO and\n  money a bare number, for a spreadsheet to read.\n- **Compact rows** switches the table to its small size, and\n  **Columns** hides the ones you do not need."
+              "- **Views** are predefined (All, Risk, On hold, Potential risk, On track,\n  Archived) or saved. A view holds the filters, the columns and the sort;\n  the search is not part of it. Each count is the rows the view shows\n  with the current search; the view in force counts its unsaved changes\n  too, so its count always matches the table.\n- **Modified**: a filter, a column or a sort that differs from the view\n  marks it modified. Discard puts it back; Save writes it into a saved\n  view; on a predefined view, Save as new view keeps it under a new name.\n  Manage views deletes saved views.\n- **Search** matches the project name and the PM.\n- **Filters** are checkbox menus, Status and Health; each choice shows as\n  a chip that removes on its own, and Clear all removes them all.\n- **Sort** by name, PM, last update, resources, timeline or estimation.\n  The sort covers every page, not only the one shown.\n- **Pages** of 10, 25 or 50. Any change to what is listed goes back to\n  the first page.\n- **Chart** shows the estimation of the same projects by status, under\n  the same view, search and filters.\n- **Selection** turns the toolbar into an Archive action; archived\n  projects move to the Archived view. Changing the page, the view, the\n  search or a filter clears it, so you never act on rows you cannot see.\n- **Clear filters**, in the empty state, clears the search and puts the\n  view's own filters back; it does not leave the view.\n- **Expand** a row to see its activity: status changes with their note,\n  estimation changes, and when it was created.\n- **Import** reads a CSV of projects through the [Import\n  Export](?path=/docs/patterns-application-ui-import-export--docs) dialog:\n  the headings map to Project name, PM, Status and Estimation, an unknown\n  status or an estimation that is not a number skips its row, and the\n  rest join the list on track and unscheduled.\n- **Export** downloads a CSV of the current view, the selected projects\n  or all of them, with the columns on screen ticked; dates are ISO and\n  money a bare number, for a spreadsheet to read.\n- **Columns** hides the ones you do not need."
             ]
           },
           {

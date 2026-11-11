@@ -33,7 +33,7 @@ const teamColumns: TableColumn<TeamMember>[] = [
     isRowHeader: true,
     cell: (m) => (
       <span className={styles.person}>
-        <Avatar size="sm" initials={m.person.initials} />
+        <Avatar initials={m.person.initials} />
         {m.person.name}
       </span>
     ),
@@ -67,7 +67,7 @@ export function ProjectDetail({ project: initialProject = sampleProjects[0], tea
       <Menu
         align="start"
         trigger={
-          <Button variant="secondary" appearance="ghost" startIcon={<Avatar initials="IO" size="sm" />}>
+          <Button variant="secondary" appearance="ghost" startIcon={<Avatar initials="IO" />}>
             {ME}
           </Button>
         }

@@ -58,8 +58,8 @@ export function VendorReport() {
 
       <article className="report">
         <header className="report-band">
-          <span className="with-icon"><Avatar size="sm" initials="K&V" variant="solid" color="orange" /> <strong>{AGENCY}</strong></span>
-          <span className="report-agent"><span><strong>{ME.name}</strong><br /><span className="small">{ME.phone}</span></span><Avatar size="sm" initials={ME.initials} /></span>
+          <span className="with-icon"><Avatar initials="K&V" variant="solid" color="orange" /> <strong>{AGENCY}</strong></span>
+          <span className="report-agent"><span><strong>{ME.name}</strong><br /><span className="small">{ME.phone}</span></span><Avatar initials={ME.initials} /></span>
         </header>
 
         <div className="report-body">

@@ -1,4 +1,5 @@
-/* Each size is a control tier (see Foundations/Sizing). Page numbers are
+/* One size, Atlassian's: the md control tier (see Foundations/Sizing),
+   32px. Page numbers are
    centred like a button's label, but they are short and the box is square
    at its minimum, so the normal pad is enough: it only shows on a page
    number of three digits or more. */
@@ -14,15 +15,6 @@
   font-family: var(--font-sans);
   font-size: var(--text-body);
   line-height: var(--leading-body);
-}
-
-.sm {
-  --pagination-size: var(--control-sm);
-  --pagination-pad: var(--control-sm-pad);
-  --pagination-icon: var(--icon-sm);
-  --pagination-radius: var(--control-sm-radius);
-  font-size: var(--text-body-sm);
-  line-height: var(--leading-body-sm);
 }
 
 /* The summary leads and pushes the pages and the select to the end. */
@@ -117,7 +109,7 @@ a.control[href] {
   color: var(--muted-foreground);
 }
 
-/* 32px at md is below the 44px touch target; grow it on coarse pointers. */
+/* 32px is below the 44px touch target; grow it on coarse pointers. */
 @media (pointer: coarse) {
   .control {
     min-inline-size: var(--target-coarse);

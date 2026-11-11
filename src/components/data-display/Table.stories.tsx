@@ -148,14 +148,12 @@ const meta = {
       table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
     },
     size: {
-      description:
-        'Cell padding; a row is as tall as what it holds. `md` is 4px above and below, a 28px row for one line of text; `sm` is 2px (24px), for long lists of plain text.',
-      control: 'inline-radio',
-      options: ['sm', 'md'],
-      table: { type: { summary: "'sm' | 'md'" }, defaultValue: { summary: "'md'" } },
+      description: 'Deprecated: Table has one size, and `sm` renders the same table as `md`. Drop the prop; it will be removed in the next release.',
+      control: false,
+      table: { type: { summary: "'sm' | 'md'" } },
     },
     density: {
-      description: 'Deprecated: use `size`, which takes the same values. Will be removed in the next release.',
+      description: 'Deprecated: does nothing, like `size`. Will be removed in the next release.',
       control: false,
       table: { type: { summary: "'sm' | 'md'" } },
     },
@@ -197,7 +195,7 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-/** Heights of a row's cell and its header cell, without the rule under them. */
+/** Heights of a row's cell and its header cell, without the header's rule. */
 const cellHeights = (canvas: ReturnType<typeof within>) =>
   [canvas.getAllByRole('rowheader')[0], canvas.getAllByRole('columnheader')[0]].map((c: HTMLElement) => c.clientHeight)
 
@@ -212,9 +210,13 @@ export const Default: Story = {
     await expect(within(table).getAllByRole('row')).toHaveLength(5)
     // 4px above and below the header's 16px line: the sort button adds nothing.
     await expect(cellHeights(canvas)[1]).toBe(24)
-    // The header ends on a 2px rule, the rows on a 1px divider.
+    // The header ends on a 2px rule; the rows have no divider.
     await expect(getComputedStyle(canvas.getAllByRole('columnheader')[0]).borderBottomWidth).toBe('2px')
-    await expect(getComputedStyle(canvas.getAllByRole('rowheader')[0]).borderBottomWidth).toBe('1px')
+    await expect(getComputedStyle(canvas.getAllByRole('rowheader')[0]).borderBottomWidth).toBe('0px')
+    // So a one-line row is 28px all told, and the Tag in it adds nothing.
+    const atlas = canvas.getByRole('rowheader', { name: 'Atlas' }).closest('tr')!
+    await expect(within(atlas).getByText('Active')).toBeVisible()
+    await expect(atlas.getBoundingClientRect().height).toBe(28)
     await expect(names(canvas)).toEqual(['Atlas', 'Billing revamp', 'Onboarding', 'Design tokens'])
     // Sort: ascending, descending, then back to unsorted. aria-sort follows.
     const files = canvas.getByRole('columnheader', { name: /Files/ })
@@ -302,21 +304,13 @@ export const EmptyValuesSortLast: Story = {
   },
 }
 
-export const Compact: Story = {
-  args: { size: 'sm', showCaption: true },
-  play: async ({ canvas }) => {
-    // sm: 2px above and below the header's 16px line.
-    await expect(cellHeights(canvas)[1]).toBe(20)
-  },
-}
-
-/** `density` is deprecated: for one release it still sets the size. */
-export const DeprecatedDensity: Story = {
+/** `size` and `density` are deprecated: for one release they are accepted, and `sm` renders as `md`. */
+export const DeprecatedSize: Story = {
   tags: ['!dev'],
-  args: { density: 'sm', columns: textColumns },
+  args: { size: 'sm', density: 'sm', columns: textColumns },
   play: async ({ canvas }) => {
-    // sm: 2px above and below one 20px line of text.
-    await expect(cellHeights(canvas)).toEqual([24, 20])
+    // 4px above and below one 20px line of text, and the header's 16px line.
+    await expect(cellHeights(canvas)).toEqual([28, 24])
   },
 }
 
@@ -533,6 +527,8 @@ export const RowWithControl: Story = {
     const [atlas, billing] = canvas.getAllByRole('rowheader')
     await expect([atlas.clientHeight, billing.clientHeight]).toEqual([40, 28])
     await expect(cellHeights(canvas)[1]).toBe(24)
+    // No divider: the row is exactly as tall as its cells.
+    await expect(billing.closest('tr')!.getBoundingClientRect().height).toBe(28)
   },
 }
 
@@ -610,6 +606,10 @@ export const TotalRow: Story = {
     await expect(within(foot).getAllByRole('cell').map((c) => c.textContent)).toContain('1,464')
     // One cell per column, the checkbox and expand columns included, so it lines up.
     await expect(within(foot).getByRole('row').children).toHaveLength(canvas.getAllByRole('columnheader').length)
+    // The header's 2px rule, over the total: 28px of row under it.
+    const total = within(foot).getByRole('rowheader', { name: 'Total' })
+    await expect(getComputedStyle(total).borderTopWidth).toBe('2px')
+    await expect(total.clientHeight).toBe(28)
     // Sorting moves the rows, never the total.
     await userEvent.click(within(canvas.getByRole('columnheader', { name: /Files/ })).getByRole('button'))
     await expect(canvas.getAllByRole('row').at(-1)).toHaveTextContent('Total')
@@ -702,7 +702,7 @@ export const anatomyParts = [
   { name: 'Header row', selector: 'thead tr', description: 'Small muted labels on --surface-filled. Stays in view with hasStickyHeader.' },
   { name: 'Sort button', selector: 'th[aria-sort] button', description: 'The whole header label, with an icon for the sort. Only on sortable columns.' },
   { name: 'Select all', selector: 'thead [role="checkbox"]', description: 'With isSelectable. Selects or clears every row shown, and shows mixed when some are selected.' },
-  { name: 'Row', selector: 'tbody tr', description: 'As tall as what it holds: 28px for one line of text (24px at sm). Divided by --border, tinted when hovered or selected.' },
+  { name: 'Row', selector: 'tbody tr', description: 'As tall as what it holds: 28px for one line of text. No divider: tinted when hovered or selected.' },
   { name: 'Row checkbox', selector: 'tbody [role="checkbox"]', description: 'Named after the row header: "Select Atlas".' },
   { name: 'Expand button', selector: 'tbody [aria-expanded]', description: 'With expandedContent: a ghost icon button. The chevron turns down when open.' },
   { name: 'Row header', selector: 'tbody th[scope="row"]', description: 'The column marked isRowHeader, medium weight: the name a row is known by.' },
@@ -710,9 +710,9 @@ export const anatomyParts = [
   {
     name: 'Expanded row',
     selector: 'tbody td[colspan]',
-    description: 'One cell spanning every column, under its row, with no rule between them. Holds any layout.',
+    description: 'One cell spanning every column, under its row. Holds any layout.',
   },
-  { name: 'Total row', selector: 'tfoot tr', description: 'With a footer on any column: a semibold row under a rule, outside the sort.' },
+  { name: 'Total row', selector: 'tfoot tr', description: 'With a footer on any column: a semibold row under a 2px rule, outside the sort.' },
 ]
 
 /** Every part present: caption shown, a sortable column, selection, one row open, row actions, a total. */

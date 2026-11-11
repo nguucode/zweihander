@@ -140,7 +140,6 @@ function ProjectsTable({ isSelectable = false, initialQuery = '' }: { isSelectab
             pageSize={pageSize}
             onPageSizeChange={setPageSize}
             pageSizeOptions={PAGE_SIZES}
-            size="sm"
             aria-label="Projects pages"
           />
         </TableFooter>

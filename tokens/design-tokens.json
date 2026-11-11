@@ -2392,7 +2392,7 @@
     }
   },
   "size": {
-    "$description": "Component sizes, emitted unprefixed (--avatar-md). After Atlassian: the checkbox and radio box is 16px, the switch has two tracks (32x16, and 40x20 at lg; sm is the same as md and deprecated) and a badge is 16px tall (sm on a count is the same as md and deprecated).",
+    "$description": "Component sizes, emitted unprefixed (--avatar-md). After Atlassian: avatars are 16, 24, 32 (md, the default), 40, 96 and 128px, the checkbox and radio box is 16px, the switch has two tracks (32x16, and 40x20 at lg; sm is the same as md and deprecated) and a badge is 16px tall (sm on a count is the same as md and deprecated).",
     "choice-box": {
       "$type": "dimension",
       "$value": "1rem"
@@ -2439,19 +2439,27 @@
     },
     "avatar-xs": {
       "$type": "dimension",
-      "$value": "1.5rem"
+      "$value": "1rem"
     },
     "avatar-sm": {
       "$type": "dimension",
-      "$value": "2rem"
+      "$value": "1.5rem"
     },
     "avatar-md": {
       "$type": "dimension",
-      "$value": "2.5rem"
+      "$value": "2rem"
     },
     "avatar-lg": {
       "$type": "dimension",
-      "$value": "3rem"
+      "$value": "2.5rem"
+    },
+    "avatar-xl": {
+      "$type": "dimension",
+      "$value": "6rem"
+    },
+    "avatar-2xl": {
+      "$type": "dimension",
+      "$value": "8rem"
     },
     "badge-sm": {
       "$type": "dimension",
@@ -2471,7 +2479,7 @@
     },
     "sidebar-width": {
       "$type": "dimension",
-      "$value": "16rem",
+      "$value": "20rem",
       "$description": "An expanded Sidebar, and the brand cell above it in an AppShell's top bar, so the logo sits in the same place in either layout."
     }
   },

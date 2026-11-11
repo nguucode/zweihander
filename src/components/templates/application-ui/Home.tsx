@@ -121,7 +121,7 @@ export function Home({
       <Menu
         align="start"
         trigger={
-          <Button variant="secondary" appearance="ghost" startIcon={<Avatar initials={ME.initials} size="sm" />}>
+          <Button variant="secondary" appearance="ghost" startIcon={<Avatar initials={ME.initials} />}>
             {ME.name}
           </Button>
         }

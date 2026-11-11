@@ -111,6 +111,37 @@ export const Colors: Story = {
   ),
 }
 
+const lines = [
+  ['heading', 'var(--text-heading-lg)', 'var(--leading-heading-lg)', 28],
+  ['body', 'var(--text-body)', 'var(--leading-body)', 20],
+  ['small', 'var(--text-body-sm)', 'var(--leading-body-sm)', 20],
+] as const
+
+/**
+ * In a line of text the tag is centred on that line. A line as tall as the
+ * tag or taller keeps its height; a 16px line grows to the tag's 20px.
+ */
+export const InText: Story = {
+  render: (args) => (
+    <div style={{ fontFamily: 'var(--font-sans)', color: 'var(--foreground)' }}>
+      {lines.map(([name, fontSize, lineHeight]) => (
+        <div key={name} data-testid={name} style={{ fontSize, lineHeight }}>
+          <span>Invoice 1041</span> <Tag {...args} />
+        </div>
+      ))}
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    for (const [name, , , height] of lines) {
+      const line = canvas.getByTestId(name)
+      const centre = (el: Element) => el.getBoundingClientRect().top + el.getBoundingClientRect().height / 2
+      await expect(line.getBoundingClientRect().height).toBe(height)
+      // The tag's centre is the text's: the middle of its line, not of its x-height.
+      await expect(Math.abs(centre(line.querySelector('span[class*="tag"]')!) - centre(line.querySelector('span')!))).toBeLessThan(0.51)
+    }
+  },
+}
+
 /** `size` is deprecated: both values render the one 20px tag. Hidden until the prop goes. */
 export const Sizes: Story = {
   tags: ['!dev'],

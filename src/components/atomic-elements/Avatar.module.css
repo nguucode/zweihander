@@ -22,6 +22,7 @@
 
   inline-size: var(--avatar-size);
   block-size: var(--avatar-size);
+  /* One letter: the component drops the second at this size. */
   font-size: var(--text-body-sm);
 }
 
@@ -38,7 +39,7 @@
 
   inline-size: var(--avatar-size);
   block-size: var(--avatar-size);
-  font-size: var(--text-body);
+  font-size: var(--text-body-sm);
 }
 
 .lg {
@@ -46,7 +47,27 @@
 
   inline-size: var(--avatar-size);
   block-size: var(--avatar-size);
-  font-size: var(--text-body-lg);
+  font-size: var(--text-body);
+}
+
+/* The profile sizes. The type scale tops out at 32px, so the initials are a
+   smaller share of the circle here than on the row sizes. */
+.xl {
+  --avatar-size: var(--avatar-xl);
+  --avatar-status-size: var(--box-2xs);
+
+  inline-size: var(--avatar-size);
+  block-size: var(--avatar-size);
+  font-size: var(--text-heading-xl);
+}
+
+.xxl {
+  --avatar-size: var(--avatar-2xl);
+  --avatar-status-size: var(--box-xs);
+
+  inline-size: var(--avatar-size);
+  block-size: var(--avatar-size);
+  font-size: var(--text-heading-2xl);
 }
 
 .image {
@@ -123,6 +144,17 @@
   inset-block-end: 0;
   inset-inline-end: 0;
   box-shadow: 0 0 0 2px var(--background);
+}
+
+/* At 96px and up the box's corner is far off the curve, and a Badge dot is
+   a speck: the dot grows and its centre sits on the circle at 45 degrees,
+   which is (1 - 1/sqrt(2)) / 2 = 0.1464 of the size in from each edge. */
+.xl > .status,
+.xxl > .status {
+  inset-block-end: calc(var(--avatar-size) * 0.1464 - var(--avatar-status-size) / 2);
+  inset-inline-end: calc(var(--avatar-size) * 0.1464 - var(--avatar-status-size) / 2);
+  inline-size: var(--avatar-status-size);
+  block-size: var(--avatar-status-size);
 }
 
 .group {

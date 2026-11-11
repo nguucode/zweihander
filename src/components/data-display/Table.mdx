@@ -19,13 +19,13 @@ acted on, and a total row can sum them up.
 
 ## Variants
 
-Any table takes any of these together: a selectable table can also expand
-its rows and keep its header in view.
+Table has one size: 4px above and below each cell, so a row of text is
+28px, and a row that holds a button or a field grows to fit it. Any table
+takes any of these together: a selectable table can also expand its rows
+and keep its header in view.
 
 | Variant | Use for |
 | --- | --- |
-| `size="md"` | The default: 4px above and below each cell, so a row of text is 28px. Most tables, and rows that hold a Tag or a button. |
-| `size="sm"` | 2px above and below, a 24px row of text: long lists of plain text where seeing more rows at once matters. |
 | `isSelectable` | Acting on several rows at once: archive, export, assign. |
 | `expandedContent` | Details that belong to one row but do not fit in a column: a description, a timeline, line items. |
 | `hasStickyHeader` | Long tables that scroll inside a fixed height, so the column names stay in view. |
@@ -35,8 +35,6 @@ its rows and keep its header in view.
 | `emptyState` | Saying why there are no rows, and what to do: clear a search, add the first one. |
 
 <Canvas of={TableStories.Default} />
-
-<Canvas of={TableStories.Compact} />
 
 Rows with details open under themselves. Expansion is independent of
 selection and survives sorting:
@@ -110,43 +108,29 @@ The total row is a `<tfoot>`, so it stays at the bottom whatever the sort.
 
 ## Measurements
 
-Each size is a cell's block padding. A row has no height of its own: it
-is as tall as what its cells hold. Everything else is the same in both.
+A row has no height of its own: it is as tall as what its cells hold.
+
+| What the row holds | Row height |
+| --- | --- |
+| One line of text (20px), or a Tag | 28px |
+| A checkbox, an expand button or an actions button (24px) | 28px |
+| A 24px button | 32px |
+| A 32px button or field | 40px |
+| Header (one 16px line) | 24px |
+
+A body row is exactly that tall: there is no divider under it. The header
+and the total row add their 2px rule. The checkbox, expand and actions
+columns take 2px less block padding than the other cells, so their 24px
+buttons do not make a row of text taller.
 
 <SpecTable
-  caption="md"
+  caption="Every table"
   rows={[
     { part: 'Row', property: 'Cell block padding', token: '--space-1' },
     { part: 'Header row', property: 'Cell block padding', token: '--space-1' },
-  ]}
-/>
-
-<SpecTable
-  caption="sm"
-  rows={[
-    { part: 'Row', property: 'Cell block padding', token: '--space-0-5' },
-    { part: 'Header row', property: 'Cell block padding', token: '--space-0-5' },
-  ]}
-/>
-
-| What the row holds | `md` | `sm` |
-| --- | --- | --- |
-| One line of text (20px) | 28px | 24px |
-| A checkbox, an expand button or an actions button (24px) | 28px | 24px |
-| A 24px button | 32px | 28px |
-| A 32px button or field | 40px | 36px |
-| Header (one 16px line) | 24px | 20px |
-
-Each height is without the rule under the row: 1px under a body row, 2px
-under the header. The checkbox, expand and actions columns take 2px less
-block padding than the other cells, so their 24px buttons do not make a
-row of text taller.
-
-<SpecTable
-  caption="Every size"
-  rows={[
     { part: 'Cell', property: 'Inline padding', token: '--space-2' },
     { part: 'Header row', property: 'Rule under it', token: '--border-width-selected' },
+    { part: 'Total row', property: 'Rule above it', token: '--border-width-selected' },
     { part: 'Cell', property: 'Font size', token: '--text-body' },
     { part: 'Cell', property: 'Line height', token: '--leading-body' },
     { part: 'Header cell', property: 'Font size', token: '--text-body-sm' },
@@ -179,13 +163,14 @@ row of text taller.
   ]}
 />
 
-The handle line is 1px at rest, like the row dividers; no token covers
-a hairline. Its strip is 16px wide (44px on touch screens), at the
+The handle line is 1px at rest; no token covers a hairline. Its strip is 16px wide (44px on touch screens), at the
 header's end, over the header's own padding. A column is 48px to 1200px wide; the arrow
 keys move it 16px at a time.
 
-Rows are divided by a 1px rule; the last row has none. The header ends on
-a 2px rule and its labels are semibold. The sort button pulls itself out
+Rows have no divider between them: the hover tint and the selection fill
+tell them apart. The header ends on a 2px rule and its labels are
+semibold; the total row sits under the same rule, so the sum reads as a
+sum. The sort button pulls itself out
 by its own padding, so its label lines up with the cells below and its
 hover fill adds nothing to the header's height. The control columns are
 32px wide: the cell's 8px inline padding and a 24px button, or the 16px
@@ -202,6 +187,7 @@ Switch the theme and the accent in the toolbar: the values follow.
     { part: 'Header row', property: 'Background', token: '--surface-filled' },
     { part: 'Header label', property: 'Colour', token: '--muted-foreground' },
     { part: 'Sort icon, sorted column', property: 'Colour', token: '--foreground' },
+    { part: 'Header row', property: 'Rule under it', token: '--border' },
   ]}
 />
 
@@ -210,7 +196,6 @@ Switch the theme and the accent in the toolbar: the values follow.
   rows={[
     { part: 'Container', property: 'Background', token: '--card' },
     { part: 'Cell', property: 'Colour', token: '--card-foreground' },
-    { part: 'Divider', property: 'Colour', token: '--border' },
     { part: 'Total row', property: 'Rule above it', token: '--border' },
   ]}
 />
@@ -232,13 +217,6 @@ Switch the theme and the accent in the toolbar: the values follow.
 />
 
 <SpecTable
-  caption="Expanded"
-  rows={[
-    { part: 'Expanded row', property: 'Divider under it', token: '--border' },
-  ]}
-/>
-
-<SpecTable
   caption="Resize handle"
   rows={[
     { part: 'Handle line', property: 'Colour', token: '--border' },
@@ -248,14 +226,15 @@ Switch the theme and the accent in the toolbar: the values follow.
 
 <SpecTable caption="Every part" rows={[{ part: 'Focus ring', property: 'Colour', token: '--ring' }]} />
 
-- Rows are not striped: the dividers separate them.
+- Rows are not striped, and have no divider: hover and selection tint
+  the row under the pointer or the checkbox.
 - The sort icon of a column that is not sorted is the label's colour at 60%
   opacity.
-- **Between two selected rows** the divider is mixed from the tint:
-  `--primary-subtle` with a quarter of `--primary-subtle-text`. `--border`
-  is as light as the tint in light mode and would vanish.
-- **An open row and its content read as one block**: no divider between
-  them, and the content row shares its row's hover and selected tint.
+- **Two selected rows next to each other** read as one filled block;
+  each row's checkbox says which are in it.
+- **An open row and its content read as one block**: the content row
+  shares its row's hover and selected tint, and its 16px block-end padding
+  sets the pair apart from the next row.
 
 ## States
 
@@ -331,8 +310,10 @@ it is the one under the pointer or the keyboard.
 `TableSort` is `{ key, direction }`, with direction `ascending` or
 `descending`.
 
-`density` is deprecated: it was renamed `size`, takes the same values, and
-still works for one release with a console warning in development.
+`size` and `density` are deprecated. Table has one size, as Atlassian's
+does: `size="sm"` (and `density="sm"`) renders the same table as `md`.
+Both are still accepted for one release, with a console warning in
+development; drop them.
 
 With `sort` controlled, the table leaves the order to you. `sortRows(rows,
 columns, sort)` returns the rows in the order the table would sort them,
@@ -344,14 +325,14 @@ template does.
 
 Cell sizing follows Atlassian's dynamic table.
 
-- **No row height.** A cell has 4px block and 8px inline padding and the
-  row is as tall as its content; rows were a fixed 48px and 40px before.
-  The `density` prop that picked a row height is now `size`.
-- **`sm` is ours.** Atlassian's table has one size. `sm` halves the block
-  padding for long lists of plain text.
-- **Rows keep a 1px divider and a hover tint.** Atlassian draws only the
-  2px rule under the header; the divider is kept, so a row takes 1px
-  more than its content.
+- **No row height, and one size.** A cell has 4px block and 8px inline
+  padding and the row is as tall as its content; rows were a fixed 48px
+  and 40px before, picked by `density` and then `size`, which are
+  deprecated.
+- **No row dividers.** Only the 2px rule under the header, as Atlassian
+  draws it; rows are told apart by the hover tint and the selection fill.
+- **The total row has a 2px rule above it.** Atlassian's table has no
+  total row; the rule is the header's, turned over.
 - **The header keeps its `--surface-filled` background**, which
   Atlassian's header does not have.
 

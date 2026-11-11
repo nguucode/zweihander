@@ -11,9 +11,9 @@ import type { MenuEntry } from '@/components/navigation/Menu'
 import { StackedList, type StackedListItem } from './StackedList'
 
 const people: StackedListItem[] = [
-  { id: 1, media: <Avatar initials="IO" color="teal" />, title: 'Ines Okafor', description: 'ines.okafor@example.com', meta: 'Finance lead' },
-  { id: 2, media: <Avatar initials="TL" color="violet" />, title: 'Tomas Lindqvist', description: 'tomas.lindqvist@example.com', meta: 'Controller' },
-  { id: 3, media: <Avatar initials="NH" color="amber" />, title: 'Noor Haddad', description: 'noor.haddad@example.com', meta: 'Accountant' },
+  { id: 1, media: <Avatar size="lg" initials="IO" color="teal" />, title: 'Ines Okafor', description: 'ines.okafor@example.com', meta: 'Finance lead' },
+  { id: 2, media: <Avatar size="lg" initials="TL" color="violet" />, title: 'Tomas Lindqvist', description: 'tomas.lindqvist@example.com', meta: 'Controller' },
+  { id: 3, media: <Avatar size="lg" initials="NH" color="amber" />, title: 'Noor Haddad', description: 'noor.haddad@example.com', meta: 'Accountant' },
 ]
 
 const projects: StackedListItem[] = [
@@ -174,7 +174,7 @@ function Paged() {
       role="region"
       aria-label="Team"
       items={all.slice((page - 1) * 3, page * 3)}
-      footer={<Pagination totalItems={all.length} pageSize={3} page={page} onPageChange={setPage} size="sm" aria-label="Team pages" />}
+      footer={<Pagination totalItems={all.length} pageSize={3} page={page} onPageChange={setPage} aria-label="Team pages" />}
     />
   )
 }
@@ -216,7 +216,7 @@ export const LongContent: Story = {
   args: {
     items: [
       {
-        media: <Avatar initials="MW" />,
+        media: <Avatar size="lg" initials="MW" />,
         title: 'Maximiliana Wolfeschlegelsteinhausenbergerdorff',
         status: <Tag variant="neutral" text="Invited" />,
         description: 'maximiliana.wolfeschlegelsteinhausenbergerdorff@northern-region.example.com',
