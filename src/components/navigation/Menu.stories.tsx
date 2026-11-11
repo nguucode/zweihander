@@ -275,7 +275,7 @@ export const Open: Story = {
 /** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
 export const anatomyParts = [
   { name: 'Trigger', selector: 'button[aria-haspopup="menu"]', description: 'The button that opens it. Menu merges its props onto your element.' },
-  { name: 'Popup', selector: '[role="menu"]', description: 'The surface: the same as the Select list, at least 12rem wide.' },
+  { name: 'Popup', selector: '[role="menu"]', description: 'The surface: a popover, at least 12rem wide.' },
   { name: 'Group label', selector: '[role="group"] > div:first-child', description: 'Optional. Names a group of items; muted and small.' },
   { name: 'Item', selector: '[role="menuitem"]', description: 'An action, a link or a submenu trigger. One control tier tall.' },
   { name: 'Icon', selector: '[role="menuitem"] > span:first-child', description: 'Optional. Decorative.' },

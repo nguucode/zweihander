@@ -15,7 +15,7 @@
   max-block-size: var(--available-height);
   overflow-y: auto;
   padding: calc(var(--menu-inset) - var(--border-width));
-  border: 1px solid var(--border);
+  border: var(--border-width) solid var(--border);
   border-radius: var(--radius-lg);
   background: var(--popover);
   box-shadow: var(--shadow-overlay);
@@ -37,7 +37,8 @@
 /* Rows sit 2px apart, in the popup and inside a group. A margin, not a
    flex gap: a flex column would squeeze the rows instead of scrolling. */
 .popup > * + *,
-.group > * + * {
+.group > * + *,
+.group > [role='radiogroup'] > * + * {
   margin-block-start: var(--space-0-5);
 }
 
@@ -128,7 +129,9 @@
    rule above, so its margin wins. */
 .separator {
   block-size: 1px;
-  margin: var(--menu-inset) calc(var(--menu-inset) * -1);
+  /* Out by the popup's padding, which is the inset less its border: 1px
+     more would make the popup scroll sideways. */
+  margin: var(--menu-inset) calc(var(--border-width) - var(--menu-inset));
   background: var(--border);
 }
 .separator + * {

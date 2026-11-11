@@ -17,6 +17,17 @@
   padding: 0;
   border: 0;
 }
+/* Two cases keep the wider 8px: an option with its own helper text, so the
+   helper stays nearer its option than the next one; and touch screens, where
+   the 44px hit areas would otherwise reach well into the neighbouring circle. */
+.group:has(.optionHelper) {
+  row-gap: var(--space-inline);
+}
+@media (pointer: coarse) {
+  .group {
+    row-gap: var(--space-inline);
+  }
+}
 
 .vertical {
   flex-direction: column;

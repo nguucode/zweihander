@@ -33,7 +33,7 @@
   /* Atlassian's modal: content 24px from the edge. The padding gives back
      the border's pixel. */
   padding: calc(var(--space-container) - var(--border-width));
-  border: 1px solid var(--border);
+  border: var(--border-width) solid var(--border);
   border-radius: var(--radius-panel);
   background: var(--popover);
   box-shadow: var(--shadow-overlay);

@@ -106,6 +106,9 @@
   position: absolute;
   inset-block-end: 0;
   inset-inline: var(--tab-pad) 0;
+  /* Under the tabs, so it never draws through a tab's focus ring. */
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- local stacking under the tabs, not a global layer */
+  z-index: -1;
   block-size: var(--border-width);
   background: var(--border);
 }

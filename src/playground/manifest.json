@@ -10938,7 +10938,7 @@
             "rows": [
               {
                 "part": "Popup",
-                "property": "Padding",
+                "property": "Padding, from the outer edge",
                 "token": "--space-3"
               },
               {
@@ -11299,7 +11299,7 @@
           {
             "name": "Popup",
             "selector": "[role=\"menu\"]",
-            "description": "The surface: the same as the Select list, at least 12rem wide."
+            "description": "The surface: a popover, at least 12rem wide."
           },
           {
             "name": "Group label",
@@ -11343,7 +11343,7 @@
             "rows": [
               {
                 "part": "Popup",
-                "property": "Padding",
+                "property": "Padding, from the outer edge",
                 "token": "--space-3"
               },
               {
@@ -12738,7 +12738,7 @@
             "rows": [
               {
                 "part": "Container",
-                "property": "Padding",
+                "property": "Padding, from the outer edge",
                 "token": "--space-group"
               },
               {
@@ -13242,7 +13242,7 @@
             "rows": [
               {
                 "part": "Container",
-                "property": "Padding",
+                "property": "Padding, from the outer edge",
                 "token": "--space-group"
               },
               {
@@ -13499,7 +13499,7 @@
           },
           {
             "name": "Consequence",
-            "selector": "._description_vaat0_81",
+            "selector": "._description_19qrb_81",
             "description": "What happens, to what, and that it cannot be undone."
           },
           {
@@ -13509,12 +13509,12 @@
           },
           {
             "name": "Cancel",
-            "selector": "._footer_vaat0_100 > :first-child",
+            "selector": "._footer_19qrb_100 > :first-child",
             "description": "The safe choice. Focus starts here, or in the field."
           },
           {
             "name": "Confirm",
-            "selector": "._footer_vaat0_100 > :last-child",
+            "selector": "._footer_19qrb_100 > :last-child",
             "description": "`destructive`, named after what it does."
           }
         ],
@@ -13953,7 +13953,7 @@
         "anatomy": [
           {
             "name": "Backdrop",
-            "selector": "._backdrop_vaat0_5",
+            "selector": "._backdrop_19qrb_5",
             "description": "A scrim over the whole page. It blocks the page until the modal closes."
           },
           {
@@ -13973,17 +13973,17 @@
           },
           {
             "name": "Description",
-            "selector": "._description_vaat0_81",
+            "selector": "._description_19qrb_81",
             "description": "Optional. What the modal is for, or what will happen."
           },
           {
             "name": "Body",
-            "selector": "._body_vaat0_87",
+            "selector": "._body_19qrb_87",
             "description": "children. Scrolls when the modal is taller than the screen."
           },
           {
             "name": "Footer",
-            "selector": "._footer_vaat0_100",
+            "selector": "._footer_19qrb_100",
             "description": "Actions, right-aligned, the main one last."
           }
         ],
@@ -13993,7 +13993,7 @@
             "rows": [
               {
                 "part": "Container",
-                "property": "Padding",
+                "property": "Padding, from the outer edge",
                 "token": "--space-container"
               },
               {
