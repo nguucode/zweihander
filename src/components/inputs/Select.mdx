@@ -27,7 +27,7 @@ validation state.
 | Size | Use for |
 | --- | --- |
 | `md` | Forms and dialogs: the default. |
-| `sm` | Dense places: toolbars, table filters. The list keeps 32px options. |
+| `sm` | Dense places: toolbars, table filters. As tall as a default Button, and as its own options. |
 
 <Canvas of={SelectStories.Validation} />
 
@@ -72,31 +72,34 @@ the top of Overview to see it.
 
 ## Measurements
 
-Each size is a control tier, as on Text Input.
+The box is Text Input's: `sm` is 32px and `md` is 40px, one step taller
+than a Button, with the same padding, icon and type in both. An option is
+inset by the field's padding, so its check starts where the field's text
+does.
 
 <SpecTable
   caption="sm"
   rows={[
-    { part: 'Container', property: 'Height', token: '--control-sm' },
-    { part: 'Container', property: 'Inline padding', token: '--control-sm-pad' },
-    { part: 'Container', property: 'Corner radius', token: '--control-sm-radius-field' },
-    { part: 'Container', property: 'Gap', token: '--control-sm-gap' },
-    { part: 'Chevron', property: 'Size', token: '--icon-sm' },
-    { part: 'Value', property: 'Font size', token: '--text-body-sm' },
-    { part: 'Option', property: 'Inline padding', token: '--control-sm-pad' },
+    { part: 'Container', property: 'Height', token: '--control-md' },
+    { part: 'Container', property: 'Inline padding', token: '--space-1-5' },
+    { part: 'Container', property: 'Corner radius', token: '--control-md-radius-field' },
+    { part: 'Container', property: 'Gap', token: '--control-md-gap' },
+    { part: 'Chevron', property: 'Size', token: '--icon-md' },
+    { part: 'Value', property: 'Font size', token: '--text-body' },
+    { part: 'Option', property: 'Inline padding', token: '--space-1-5' },
   ]}
 />
 
 <SpecTable
   caption="md"
   rows={[
-    { part: 'Container', property: 'Height', token: '--control-md' },
-    { part: 'Container', property: 'Inline padding', token: '--control-md-pad' },
+    { part: 'Container', property: 'Height', token: '--control-lg' },
+    { part: 'Container', property: 'Inline padding', token: '--space-1-5' },
     { part: 'Container', property: 'Corner radius', token: '--control-md-radius-field' },
     { part: 'Container', property: 'Gap', token: '--control-md-gap' },
     { part: 'Chevron', property: 'Size', token: '--icon-md' },
     { part: 'Value', property: 'Font size', token: '--text-body' },
-    { part: 'Option', property: 'Inline padding', token: '--control-md-pad' },
+    { part: 'Option', property: 'Inline padding', token: '--space-1-5' },
   ]}
 />
 
@@ -198,7 +201,7 @@ too; no other attributes are.
 ### Differences from the spec
 
 - **Outlined only.** The spec's filled, underlined and unstyled appearances were dropped to match the Claude apps, where every select is the white outlined box.
-- **Two sizes, not three.** `sm` (24px) and `md` (32px) only, the compact control scale of the Claude apps. The spec's larger steps were dropped; a big call to action is `md` with more room around it, not a taller box.
+- **Two sizes, not three.** `sm` (32px) and `md` (40px), after Atlassian Design: a field is one step taller than a button, so `sm` lines up with a Button in a toolbar. The spec's largest step was dropped; a big call to action is `md` with more room around it, not a taller box.
 - **`onValueChange` with the value**, Base UI's name, instead of
   `onChange`.
 - **Native names** for `disabled`, `readOnly`, `required`.

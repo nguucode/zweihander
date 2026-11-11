@@ -71,27 +71,28 @@ textarea's, in `--muted-foreground`.
 ## Measurements
 
 A textarea grows, so it has no height token: it takes block padding
-instead, which puts the first line where a single-line field of the same
-size puts its text. The starting height is `minRows` lines (3 by default)
+instead, 4px in `sm` and 8px in `md`, which puts the first line within a
+pixel of where a single-line field of the same size puts its text. Both
+sizes take body type and the field's 6px of inline padding. The starting height is `minRows` lines (3 by default)
 plus that padding. The padding sits on the textarea, not the box, so the
 resize handle lands in the field's corner.
 
 <SpecTable
   caption="sm"
   rows={[
-    { part: 'Input', property: 'Block padding', token: '--control-xs-pad' },
-    { part: 'Input', property: 'Inline padding', token: '--control-sm-pad' },
-    { part: 'Input', property: 'Font size', token: '--text-body-sm' },
-    { part: 'Input', property: 'Line height', token: '--leading-body-sm' },
-    { part: 'Container', property: 'Corner radius', token: '--control-sm-radius-field' },
+    { part: 'Input', property: 'Block padding', token: '--space-1' },
+    { part: 'Input', property: 'Inline padding', token: '--space-1-5' },
+    { part: 'Input', property: 'Font size', token: '--text-body' },
+    { part: 'Input', property: 'Line height', token: '--leading-body' },
+    { part: 'Container', property: 'Corner radius', token: '--control-md-radius-field' },
   ]}
 />
 
 <SpecTable
   caption="md"
   rows={[
-    { part: 'Input', property: 'Block padding', token: '--control-sm-pad' },
-    { part: 'Input', property: 'Inline padding', token: '--control-md-pad' },
+    { part: 'Input', property: 'Block padding', token: '--space-2' },
+    { part: 'Input', property: 'Inline padding', token: '--space-1-5' },
     { part: 'Input', property: 'Font size', token: '--text-body' },
     { part: 'Input', property: 'Line height', token: '--leading-body' },
     { part: 'Container', property: 'Corner radius', token: '--control-md-radius-field' },
@@ -101,8 +102,8 @@ resize handle lands in the field's corner.
 <SpecTable
   caption="Every size"
   rows={[
-    { part: 'Label and helper text', property: 'Font size', token: '--text-body' },
-    { part: 'Label, container, helper', property: 'Gap between', token: '--control-sm-gap' },
+    { part: 'Label and helper text', property: 'Font size', token: '--text-body-sm' },
+    { part: 'Label, container, helper', property: 'Gap between', token: '--space-stack' },
     { part: 'Focus ring', property: 'Width', token: '--focus-width' },
     { part: 'Focus ring', property: 'Offset', token: '--focus-offset' },
   ]}

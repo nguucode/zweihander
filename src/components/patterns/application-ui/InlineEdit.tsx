@@ -144,7 +144,7 @@ export function InlineEdit({
             aria-label={label}
             inputMode={inputMode}
             autoComplete="off"
-            size={size}
+            size="sm"
             isFullWidth
             className={styles.field}
             value={draft}

@@ -415,7 +415,7 @@ const pxOf = (v) => {
   const ramp = entries(semantic.box).map(([, v]) => pxOf(v))
   const sizes = [
     // Only the tier heights: pad and gap are spacing, not sizes.
-    ...['xs', 'sm', 'md'].map((k) => [`control.${k}`, semantic.control[k]]),
+    ...['xs', 'sm', 'md', 'lg'].map((k) => [`control.${k}`, semantic.control[k]]),
     ...entries(semantic.size).map(([k, v]) => [`size.${k}`, v]),
     ...entries(semantic.row).map(([k, v]) => [`row.${k}`, v]),
   ]

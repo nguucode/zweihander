@@ -386,13 +386,14 @@ export function ColorPanel({
       <div className={styles.fields}>
         <Select
           aria-label="Colour format"
+          size="sm"
           className={styles.format}
           options={formats}
           value={format}
           disabled={disabled}
           onValueChange={(v) => v && setFormat(v as ColorFormat)}
         />
-        <span className={cn(boxClass('md'), styles.channels)} data-disabled={disabled || undefined}>
+        <span className={cn(boxClass('sm'), styles.channels)} data-disabled={disabled || undefined}>
           {format === 'hex' ? (
             <ChannelInput
               label="Hex"

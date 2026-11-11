@@ -2414,7 +2414,7 @@
             "md"
           ],
           "default": "md",
-          "description": "The field: 24px (`sm`) or 32px (`md`), as on Text Input. The panel is the same at both."
+          "description": "The field: 32px (`sm`) or 40px (`md`), as on Text Input. The panel is the same at both."
         },
         {
           "name": "isFullWidth",
@@ -2509,12 +2509,12 @@
               {
                 "part": "Field",
                 "property": "Height",
-                "token": "--control-sm"
+                "token": "--control-md"
               },
               {
                 "part": "Field",
                 "property": "Corner radius",
-                "token": "--control-sm-radius-field"
+                "token": "--control-md-radius-field"
               }
             ]
           },
@@ -2524,7 +2524,7 @@
               {
                 "part": "Field",
                 "property": "Height",
-                "token": "--control-md"
+                "token": "--control-lg"
               },
               {
                 "part": "Field",
@@ -5975,7 +5975,7 @@
             "md"
           ],
           "default": "md",
-          "description": "24px (`sm`) or 32px (`md`) tall, from the control tiers."
+          "description": "32px (`sm`) or 40px (`md`) tall: one step taller than a Button, so `sm` lines up with a default Button."
         },
         {
           "name": "isFullWidth",
@@ -6055,37 +6055,37 @@
               {
                 "part": "Field",
                 "property": "Height",
-                "token": "--control-sm"
+                "token": "--control-md"
               },
               {
                 "part": "Field",
                 "property": "Inline padding",
-                "token": "--control-sm-pad"
+                "token": "--space-1-5"
               },
               {
                 "part": "Field",
                 "property": "Corner radius",
-                "token": "--control-sm-radius-field"
+                "token": "--control-md-radius-field"
               },
               {
                 "part": "Field",
                 "property": "Gap",
-                "token": "--control-sm-gap"
+                "token": "--control-md-gap"
               },
               {
                 "part": "Icons and buttons",
                 "property": "Size",
-                "token": "--icon-sm"
+                "token": "--icon-md"
               },
               {
                 "part": "Input",
                 "property": "Font size",
-                "token": "--text-body-sm"
+                "token": "--text-body"
               },
               {
                 "part": "Input",
                 "property": "Line height",
-                "token": "--leading-body-sm"
+                "token": "--leading-body"
               }
             ]
           },
@@ -6095,12 +6095,12 @@
               {
                 "part": "Field",
                 "property": "Height",
-                "token": "--control-md"
+                "token": "--control-lg"
               },
               {
                 "part": "Field",
                 "property": "Inline padding",
-                "token": "--control-md-pad"
+                "token": "--space-1-5"
               },
               {
                 "part": "Field",
@@ -6135,17 +6135,17 @@
               {
                 "part": "Label and helper",
                 "property": "Gap to the field",
-                "token": "--control-sm-gap"
+                "token": "--space-stack"
               },
               {
                 "part": "Label and helper",
                 "property": "Font size",
-                "token": "--text-body"
+                "token": "--text-body-sm"
               },
               {
                 "part": "Clear and open buttons",
-                "property": "Gap between them",
-                "token": "--control-xs-gap"
+                "property": "Width and height",
+                "token": "--control-sm"
               },
               {
                 "part": "Options list",
@@ -6358,7 +6358,7 @@
             "md"
           ],
           "default": "md",
-          "description": "24px (`sm`) or 32px (`md`) tall, from the control tiers."
+          "description": "32px (`sm`) or 40px (`md`) tall: one step taller than a Button, so `sm` lines up with a default Button."
         },
         {
           "name": "locale",
@@ -6433,37 +6433,37 @@
               {
                 "part": "Field",
                 "property": "Height",
-                "token": "--control-sm"
+                "token": "--control-md"
               },
               {
                 "part": "Field",
                 "property": "Inline padding",
-                "token": "--control-sm-pad"
+                "token": "--space-1-5"
               },
               {
                 "part": "Field",
                 "property": "Corner radius",
-                "token": "--control-sm-radius-field"
+                "token": "--control-md-radius-field"
               },
               {
                 "part": "Field",
                 "property": "Gap",
-                "token": "--control-sm-gap"
+                "token": "--control-md-gap"
               },
               {
                 "part": "Calendar button",
                 "property": "Icon size",
-                "token": "--icon-sm"
+                "token": "--icon-md"
               },
               {
                 "part": "Input",
                 "property": "Font size",
-                "token": "--text-body-sm"
+                "token": "--text-body"
               },
               {
                 "part": "Input",
                 "property": "Line height",
-                "token": "--leading-body-sm"
+                "token": "--leading-body"
               }
             ]
           },
@@ -6473,12 +6473,12 @@
               {
                 "part": "Field",
                 "property": "Height",
-                "token": "--control-md"
+                "token": "--control-lg"
               },
               {
                 "part": "Field",
                 "property": "Inline padding",
-                "token": "--control-md-pad"
+                "token": "--space-1-5"
               },
               {
                 "part": "Field",
@@ -6513,12 +6513,12 @@
               {
                 "part": "Label and helper",
                 "property": "Gap to the field",
-                "token": "--control-sm-gap"
+                "token": "--space-stack"
               },
               {
                 "part": "Label and helper",
                 "property": "Font size",
-                "token": "--text-body"
+                "token": "--text-body-sm"
               },
               {
                 "part": "Popover",
@@ -6539,6 +6539,11 @@
                 "part": "Focus ring",
                 "property": "Offset",
                 "token": "--focus-offset"
+              },
+              {
+                "part": "Calendar button",
+                "property": "Width and height",
+                "token": "--control-sm"
               },
               {
                 "part": "Calendar button",
@@ -6699,7 +6704,7 @@
             "md"
           ],
           "default": "md",
-          "description": "24px (`sm`) or 32px (`md`) tall, from the control tiers."
+          "description": "32px (`sm`) or 40px (`md`) tall: one step taller than a Button, so `sm` lines up with a default Button."
         },
         {
           "name": "helperText",
@@ -6777,27 +6782,27 @@
               {
                 "part": "Field",
                 "property": "Height",
-                "token": "--control-sm"
+                "token": "--control-md"
               },
               {
                 "part": "Field",
                 "property": "Inline padding",
-                "token": "--control-sm-pad"
+                "token": "--space-1-5"
               },
               {
                 "part": "Field",
                 "property": "Corner radius",
-                "token": "--control-sm-radius-field"
+                "token": "--control-md-radius-field"
               },
               {
                 "part": "Calendar button",
                 "property": "Icon size",
-                "token": "--icon-sm"
+                "token": "--icon-md"
               },
               {
                 "part": "Input",
                 "property": "Font size",
-                "token": "--text-body-sm"
+                "token": "--text-body"
               }
             ]
           },
@@ -6807,12 +6812,12 @@
               {
                 "part": "Field",
                 "property": "Height",
-                "token": "--control-md"
+                "token": "--control-lg"
               },
               {
                 "part": "Field",
                 "property": "Inline padding",
-                "token": "--control-md-pad"
+                "token": "--space-1-5"
               },
               {
                 "part": "Field",
@@ -7083,17 +7088,17 @@
               {
                 "part": "Label and helper text",
                 "property": "Font size",
-                "token": "--text-body"
+                "token": "--text-body-sm"
               },
               {
                 "part": "Label and helper text",
                 "property": "Line height",
-                "token": "--leading-body"
+                "token": "--leading-body-sm"
               },
               {
                 "part": "Label, control, helper",
                 "property": "Gap between",
-                "token": "--control-sm-gap"
+                "token": "--space-stack"
               },
               {
                 "part": "Label and info button",
@@ -7420,6 +7425,11 @@
             "caption": "File list",
             "rows": [
               {
+                "part": "Label",
+                "property": "Font size",
+                "token": "--text-body-sm"
+              },
+              {
                 "part": "Label, drop zone, errors, list",
                 "property": "Gap",
                 "token": "--control-sm-gap"
@@ -7656,7 +7666,7 @@
             "md"
           ],
           "default": "md",
-          "description": "24px (`sm`) or 32px (`md`) tall, from the control tiers. The steppers are 16 or 24px."
+          "description": "32px (`sm`) or 40px (`md`) tall: one step taller than a Button, so `sm` lines up with a default Button. The steppers are 24px in both."
         },
         {
           "name": "isFullWidth",
@@ -7728,27 +7738,27 @@
               {
                 "part": "Container",
                 "property": "Height",
-                "token": "--control-sm"
+                "token": "--control-md"
               },
               {
                 "part": "Container",
                 "property": "Inline padding, start",
-                "token": "--control-sm-pad"
+                "token": "--space-1-5"
               },
               {
                 "part": "Container",
                 "property": "Corner radius",
-                "token": "--control-sm-radius-field"
+                "token": "--control-md-radius-field"
               },
               {
                 "part": "Stepper",
                 "property": "Icon size",
-                "token": "--icon-xs"
+                "token": "--icon-md"
               },
               {
                 "part": "Input",
                 "property": "Font size",
-                "token": "--text-body-sm"
+                "token": "--text-body"
               }
             ]
           },
@@ -7758,12 +7768,12 @@
               {
                 "part": "Container",
                 "property": "Height",
-                "token": "--control-md"
+                "token": "--control-lg"
               },
               {
                 "part": "Container",
                 "property": "Inline padding, start",
-                "token": "--control-md-pad"
+                "token": "--space-1-5"
               },
               {
                 "part": "Container",
@@ -7792,8 +7802,8 @@
               },
               {
                 "part": "Stepper",
-                "property": "Inset from top and bottom",
-                "token": "--control-xs-gap"
+                "property": "Width and height",
+                "token": "--control-sm"
               },
               {
                 "part": "Stepper",
@@ -7808,7 +7818,7 @@
               {
                 "part": "Label and helper text",
                 "property": "Font size",
-                "token": "--text-body"
+                "token": "--text-body-sm"
               },
               {
                 "part": "Focus ring",
@@ -8029,7 +8039,7 @@
             "md"
           ],
           "default": "md",
-          "description": "Square cells of 24px (`sm`) or 32px (`md`), from the control tiers."
+          "description": "Square cells of 32px (`sm`) or 40px (`md`), as tall as a Text Input of the same size."
         },
         {
           "name": "disabled",
@@ -8085,17 +8095,17 @@
               {
                 "part": "Cell",
                 "property": "Width and height",
-                "token": "--control-sm"
+                "token": "--control-md"
               },
               {
                 "part": "Cell",
                 "property": "Corner radius",
-                "token": "--control-sm-radius-field"
+                "token": "--control-md-radius-field"
               },
               {
                 "part": "Cell",
                 "property": "Font size",
-                "token": "--text-body-sm"
+                "token": "--text-body"
               }
             ]
           },
@@ -8105,7 +8115,7 @@
               {
                 "part": "Cell",
                 "property": "Width and height",
-                "token": "--control-md"
+                "token": "--control-lg"
               },
               {
                 "part": "Cell",
@@ -8289,7 +8299,7 @@
             "md"
           ],
           "default": "md",
-          "description": "The field's height, from the control tiers."
+          "description": "The field's height: 32px (`sm`) or 40px (`md`), as on Text Input."
         },
         {
           "name": "isFullWidth",
@@ -8423,7 +8433,7 @@
             "md"
           ],
           "default": "md",
-          "description": "24px (`sm`) or 32px (`md`) tall, from the control tiers. Match the toolbar or form it sits in."
+          "description": "32px (`sm`) or 40px (`md`) tall: one step taller than a Button, so `sm` lines up with a default Button."
         },
         {
           "name": "isFullWidth",
@@ -8490,32 +8500,32 @@
               {
                 "part": "Container",
                 "property": "Height",
-                "token": "--control-sm"
+                "token": "--control-md"
               },
               {
                 "part": "Container",
                 "property": "Inline padding",
-                "token": "--control-sm-pad"
+                "token": "--space-1-5"
               },
               {
                 "part": "Container",
                 "property": "Corner radius",
-                "token": "--control-sm-radius-field"
+                "token": "--control-md-radius-field"
               },
               {
                 "part": "Container",
                 "property": "Gap",
-                "token": "--control-sm-gap"
+                "token": "--control-md-gap"
               },
               {
                 "part": "Search icon and clear button",
                 "property": "Size",
-                "token": "--icon-sm"
+                "token": "--icon-md"
               },
               {
                 "part": "Input",
                 "property": "Font size",
-                "token": "--text-body-sm"
+                "token": "--text-body"
               }
             ]
           },
@@ -8525,12 +8535,12 @@
               {
                 "part": "Container",
                 "property": "Height",
-                "token": "--control-md"
+                "token": "--control-lg"
               },
               {
                 "part": "Container",
                 "property": "Inline padding",
-                "token": "--control-md-pad"
+                "token": "--space-1-5"
               },
               {
                 "part": "Container",
@@ -8557,6 +8567,11 @@
           {
             "caption": "Every size",
             "rows": [
+              {
+                "part": "Clear button",
+                "property": "Width and height",
+                "token": "--control-sm"
+              },
               {
                 "part": "Clear button",
                 "property": "Hit area on touch screens",
@@ -8714,7 +8729,7 @@
             "md"
           ],
           "default": "md",
-          "description": "24px (`sm`) or 32px (`md`) tall, from the control tiers. Options are 32px either way."
+          "description": "32px (`sm`) or 40px (`md`) tall: one step taller than a Button, so `sm` lines up with a default Button. Options are 32px either way."
         },
         {
           "name": "isFullWidth",
@@ -8782,52 +8797,12 @@
               {
                 "part": "Container",
                 "property": "Height",
-                "token": "--control-sm"
-              },
-              {
-                "part": "Container",
-                "property": "Inline padding",
-                "token": "--control-sm-pad"
-              },
-              {
-                "part": "Container",
-                "property": "Corner radius",
-                "token": "--control-sm-radius-field"
-              },
-              {
-                "part": "Container",
-                "property": "Gap",
-                "token": "--control-sm-gap"
-              },
-              {
-                "part": "Chevron",
-                "property": "Size",
-                "token": "--icon-sm"
-              },
-              {
-                "part": "Value",
-                "property": "Font size",
-                "token": "--text-body-sm"
-              },
-              {
-                "part": "Option",
-                "property": "Inline padding",
-                "token": "--control-sm-pad"
-              }
-            ]
-          },
-          {
-            "caption": "md",
-            "rows": [
-              {
-                "part": "Container",
-                "property": "Height",
                 "token": "--control-md"
               },
               {
                 "part": "Container",
                 "property": "Inline padding",
-                "token": "--control-md-pad"
+                "token": "--space-1-5"
               },
               {
                 "part": "Container",
@@ -8852,7 +8827,47 @@
               {
                 "part": "Option",
                 "property": "Inline padding",
-                "token": "--control-md-pad"
+                "token": "--space-1-5"
+              }
+            ]
+          },
+          {
+            "caption": "md",
+            "rows": [
+              {
+                "part": "Container",
+                "property": "Height",
+                "token": "--control-lg"
+              },
+              {
+                "part": "Container",
+                "property": "Inline padding",
+                "token": "--space-1-5"
+              },
+              {
+                "part": "Container",
+                "property": "Corner radius",
+                "token": "--control-md-radius-field"
+              },
+              {
+                "part": "Container",
+                "property": "Gap",
+                "token": "--control-md-gap"
+              },
+              {
+                "part": "Chevron",
+                "property": "Size",
+                "token": "--icon-md"
+              },
+              {
+                "part": "Value",
+                "property": "Font size",
+                "token": "--text-body"
+              },
+              {
+                "part": "Option",
+                "property": "Inline padding",
+                "token": "--space-1-5"
               }
             ]
           },
@@ -9098,7 +9113,7 @@
             "md"
           ],
           "default": "md",
-          "description": "Text and padding from the `sm` or `md` control tier: 12px text and 6px block padding, or 14px and 8px."
+          "description": "Block padding of 4px (`sm`) or 8px (`md`), which matches a Text Input of the same size. Both take 14px text."
         },
         {
           "name": "isFullWidth",
@@ -9189,27 +9204,27 @@
               {
                 "part": "Input",
                 "property": "Block padding",
-                "token": "--control-xs-pad"
+                "token": "--space-1"
               },
               {
                 "part": "Input",
                 "property": "Inline padding",
-                "token": "--control-sm-pad"
+                "token": "--space-1-5"
               },
               {
                 "part": "Input",
                 "property": "Font size",
-                "token": "--text-body-sm"
+                "token": "--text-body"
               },
               {
                 "part": "Input",
                 "property": "Line height",
-                "token": "--leading-body-sm"
+                "token": "--leading-body"
               },
               {
                 "part": "Container",
                 "property": "Corner radius",
-                "token": "--control-sm-radius-field"
+                "token": "--control-md-radius-field"
               }
             ]
           },
@@ -9219,12 +9234,12 @@
               {
                 "part": "Input",
                 "property": "Block padding",
-                "token": "--control-sm-pad"
+                "token": "--space-2"
               },
               {
                 "part": "Input",
                 "property": "Inline padding",
-                "token": "--control-md-pad"
+                "token": "--space-1-5"
               },
               {
                 "part": "Input",
@@ -9249,12 +9264,12 @@
               {
                 "part": "Label and helper text",
                 "property": "Font size",
-                "token": "--text-body"
+                "token": "--text-body-sm"
               },
               {
                 "part": "Label, container, helper",
                 "property": "Gap between",
-                "token": "--control-sm-gap"
+                "token": "--space-stack"
               },
               {
                 "part": "Focus ring",
@@ -9425,7 +9440,7 @@
             "md"
           ],
           "default": "md",
-          "description": "24px (`sm`) or 32px (`md`) tall, from the control tiers. `sm` takes a 12px value."
+          "description": "32px (`sm`) or 40px (`md`) tall: one step taller than a Button, so `sm` lines up with a default Button. Both take a 14px value."
         },
         {
           "name": "isFullWidth",
@@ -9502,57 +9517,12 @@
               {
                 "part": "Container",
                 "property": "Height",
-                "token": "--control-sm"
-              },
-              {
-                "part": "Container",
-                "property": "Inline padding",
-                "token": "--control-sm-pad"
-              },
-              {
-                "part": "Container",
-                "property": "Corner radius",
-                "token": "--control-sm-radius-field"
-              },
-              {
-                "part": "Container",
-                "property": "Gap",
-                "token": "--control-sm-gap"
-              },
-              {
-                "part": "Prefix, suffix and button icon",
-                "property": "Size",
-                "token": "--icon-sm"
-              },
-              {
-                "part": "Add-on",
-                "property": "Inline padding",
-                "token": "--control-sm-pad"
-              },
-              {
-                "part": "Input",
-                "property": "Font size",
-                "token": "--text-body-sm"
-              },
-              {
-                "part": "Input",
-                "property": "Line height",
-                "token": "--leading-body-sm"
-              }
-            ]
-          },
-          {
-            "caption": "md",
-            "rows": [
-              {
-                "part": "Container",
-                "property": "Height",
                 "token": "--control-md"
               },
               {
                 "part": "Container",
                 "property": "Inline padding",
-                "token": "--control-md-pad"
+                "token": "--space-1-5"
               },
               {
                 "part": "Container",
@@ -9572,7 +9542,52 @@
               {
                 "part": "Add-on",
                 "property": "Inline padding",
-                "token": "--control-md-pad"
+                "token": "--space-1-5"
+              },
+              {
+                "part": "Input",
+                "property": "Font size",
+                "token": "--text-body"
+              },
+              {
+                "part": "Input",
+                "property": "Line height",
+                "token": "--leading-body"
+              }
+            ]
+          },
+          {
+            "caption": "md",
+            "rows": [
+              {
+                "part": "Container",
+                "property": "Height",
+                "token": "--control-lg"
+              },
+              {
+                "part": "Container",
+                "property": "Inline padding",
+                "token": "--space-1-5"
+              },
+              {
+                "part": "Container",
+                "property": "Corner radius",
+                "token": "--control-md-radius-field"
+              },
+              {
+                "part": "Container",
+                "property": "Gap",
+                "token": "--control-md-gap"
+              },
+              {
+                "part": "Prefix, suffix and button icon",
+                "property": "Size",
+                "token": "--icon-md"
+              },
+              {
+                "part": "Add-on",
+                "property": "Inline padding",
+                "token": "--space-1-5"
               },
               {
                 "part": "Input",
@@ -9592,17 +9607,22 @@
               {
                 "part": "Label and helper text",
                 "property": "Font size",
-                "token": "--text-body"
+                "token": "--text-body-sm"
               },
               {
                 "part": "Label and helper text",
                 "property": "Line height",
-                "token": "--leading-body"
+                "token": "--leading-body-sm"
+              },
+              {
+                "part": "Button",
+                "property": "Width and height",
+                "token": "--control-sm"
               },
               {
                 "part": "Label, container, helper",
                 "property": "Gap between",
-                "token": "--control-sm-gap"
+                "token": "--space-stack"
               },
               {
                 "part": "Focus ring",
@@ -9764,7 +9784,7 @@
           {
             "title": "Accessibility",
             "blocks": [
-              "- The label is a real `<label>` for the input: clicking it focuses the\n  input, and it is the input's accessible name.\n- `helperText` is the input's description (`aria-describedby`), so a\n  screen reader reads it after the name.\n- `validationState=\"error\"` sets `aria-invalid=\"true\"` on the input.\n  Colour is never the only signal: the helper text carries the message.\n- `required` sets the native `required`; the asterisk is `aria-hidden`, so\n  it is not read as \"star\".\n- Do not rely on the placeholder as a label: it is not reliably announced\n  and disappears as soon as anyone types. Without a visible label, pass\n  `aria-label`.\n- Pressing the field's padding, a prefix or a text add-on focuses the\n  input, as a click anywhere on a native field does.\n- A `TextInputButton` is a native `<button>` after the input in the tab\n  order, pressed with Enter or Space. An icon-only one needs `aria-label`.\n  Pressing it does not move focus to the input.\n- `TextInputButton` is disabled with the field. In a read-only field it\n  stays enabled, since opening or copying a fixed value is what it is for.\n- **The edge is `--field-border`, about 1.5:1, a deliberate exception to\n  WCAG 1.4.11** (approved 2026-10-08), for the light hairline of the\n  Claude apps. The field is a white `--card` box with a faint drop on the\n  off-white page, and the label, placeholder and focus ring mark it too.\n  If your audience needs 3:1, set `--field-border: var(--control-border)`.\n- Focus ring: 2px, 2px offset, on click and keyboard alike.\n- Heights are 24 and 32px, at or above WCAG 2.5.8's 24px minimum. The\n  label is part of the target, since clicking it focuses the input."
+              "- The label is a real `<label>` for the input: clicking it focuses the\n  input, and it is the input's accessible name.\n- `helperText` is the input's description (`aria-describedby`), so a\n  screen reader reads it after the name.\n- `validationState=\"error\"` sets `aria-invalid=\"true\"` on the input.\n  Colour is never the only signal: the helper text carries the message.\n- `required` sets the native `required`; the asterisk is `aria-hidden`, so\n  it is not read as \"star\".\n- Do not rely on the placeholder as a label: it is not reliably announced\n  and disappears as soon as anyone types. Without a visible label, pass\n  `aria-label`.\n- Pressing the field's padding, a prefix or a text add-on focuses the\n  input, as a click anywhere on a native field does.\n- A `TextInputButton` is a native `<button>` after the input in the tab\n  order, pressed with Enter or Space. An icon-only one needs `aria-label`.\n  Pressing it does not move focus to the input.\n- `TextInputButton` is disabled with the field. In a read-only field it\n  stays enabled, since opening or copying a fixed value is what it is for.\n- **The edge is `--field-border`, about 1.5:1, a deliberate exception to\n  WCAG 1.4.11** (approved 2026-10-08), for the light hairline of the\n  Claude apps. The field is a white `--card` box on the off-white page, and the label, placeholder and focus ring mark it too.\n  If your audience needs 3:1, set `--field-border: var(--control-border)`.\n- Focus ring: 2px, 2px offset, on click and keyboard alike.\n- Heights are 32 and 40px, above WCAG 2.5.8's 24px minimum; a button in\n  the field is a 24px target. The\n  label is part of the target, since clicking it focuses the input."
             ]
           }
         ]
@@ -16038,7 +16058,7 @@
           {
             "title": "Layout",
             "blocks": [
-              "- **The value lines up with the text around it.** The root pulls back by\n  the field's inline padding, so the value's text starts where a plain\n  cell's text does, and the input's text starts in the same place: entering\n  edit mode does not shift it. It pulls back by the extra height too, so the\n  value sits on the same line as the term or the cells beside it.\n- **Save and Cancel sit at the end of the input**, aligned to its box; an\n  error goes under the box and pushes the row taller, not the buttons down.\n- **The pencil does not take space away from the value** on hover: it has\n  its place from the start, hidden until hover or focus. On a touch screen,\n  where nothing hovers, it always shows.\n- **On a touch screen** the value's hit area grows to 44px without the value\n  growing."
+              "- **The value lines up with the text around it.** The root pulls back by\n  the field's inline padding, so the value's text starts where a plain\n  cell's text does, and the input's text starts in the same place: entering\n  edit mode does not shift it. It pulls back by the extra height too, so the\n  value sits on the same line as the term or the cells beside it.\n- **The input is 32px at both sizes**, the field size that lines up with\n  buttons in a row. `size=\"sm\"` makes Save and Cancel 24px, centred on it.\n- **Save and Cancel sit at the end of the input**, aligned to its box; an\n  error goes under the box and pushes the row taller, not the buttons down.\n- **The pencil does not take space away from the value** on hover: it has\n  its place from the start, hidden until hover or focus. On a touch screen,\n  where nothing hovers, it always shows.\n- **On a touch screen** the value's hit area grows to 44px without the value\n  growing."
             ]
           },
           {

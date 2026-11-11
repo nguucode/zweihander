@@ -40,7 +40,7 @@ const meta = {
       table: { type: { summary: "'default' | 'success' | 'error'" }, defaultValue: { summary: "'default'" } },
     },
     size: {
-      description: "The field's height, from the control tiers.",
+      description: "The field's height: 32px (`sm`) or 40px (`md`), as on Text Input.",
       control: 'inline-radio',
       options: ['sm', 'md'],
       table: { type: { summary: "'sm' | 'md'" }, defaultValue: { summary: "'md'" } },

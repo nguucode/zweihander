@@ -30,7 +30,7 @@ visible label.
 | Size | Use for |
 | --- | --- |
 | `md` | Above a list or a page of results: the default. |
-| `sm` | Toolbars and table headers, beside `sm` buttons. |
+| `sm` | Toolbars and table headers: as tall as a default Button. |
 
 <Canvas of={SearchStories.WithLabel} />
 
@@ -74,32 +74,32 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/search.json
 
 The placeholder is the input's, "Search" unless given. The browser's own
 clear control is hidden, so there are not two. Not numbered above: with `shortcut`, a
-[Kbd](?path=/docs/components-atomic-elements-kbd--docs) key cap of the
-field's size sits where the clear button goes, while the field is empty and
+[Kbd](?path=/docs/components-atomic-elements-kbd--docs) key cap sits where the clear button goes, while the field is empty and
 not focused; the two never show at once.
 
 ## Measurements
 
-Each size is a control tier, as on Text Input. The search icon and the
-clear button both take the tier's icon size.
+The box is Text Input's: `sm` is 32px and `md` is 40px, one step taller
+than a Button. The search icon and the clear button's icon are 16px in
+both; the clear button is a 24px target round its icon.
 
 <SpecTable
   caption="sm"
   rows={[
-    { part: 'Container', property: 'Height', token: '--control-sm' },
-    { part: 'Container', property: 'Inline padding', token: '--control-sm-pad' },
-    { part: 'Container', property: 'Corner radius', token: '--control-sm-radius-field' },
-    { part: 'Container', property: 'Gap', token: '--control-sm-gap' },
-    { part: 'Search icon and clear button', property: 'Size', token: '--icon-sm' },
-    { part: 'Input', property: 'Font size', token: '--text-body-sm' },
+    { part: 'Container', property: 'Height', token: '--control-md' },
+    { part: 'Container', property: 'Inline padding', token: '--space-1-5' },
+    { part: 'Container', property: 'Corner radius', token: '--control-md-radius-field' },
+    { part: 'Container', property: 'Gap', token: '--control-md-gap' },
+    { part: 'Search icon and clear button', property: 'Size', token: '--icon-md' },
+    { part: 'Input', property: 'Font size', token: '--text-body' },
   ]}
 />
 
 <SpecTable
   caption="md"
   rows={[
-    { part: 'Container', property: 'Height', token: '--control-md' },
-    { part: 'Container', property: 'Inline padding', token: '--control-md-pad' },
+    { part: 'Container', property: 'Height', token: '--control-lg' },
+    { part: 'Container', property: 'Inline padding', token: '--space-1-5' },
     { part: 'Container', property: 'Corner radius', token: '--control-md-radius-field' },
     { part: 'Container', property: 'Gap', token: '--control-md-gap' },
     { part: 'Search icon and clear button', property: 'Size', token: '--icon-md' },
@@ -110,6 +110,7 @@ clear button both take the tier's icon size.
 <SpecTable
   caption="Every size"
   rows={[
+    { part: 'Clear button', property: 'Width and height', token: '--control-sm' },
     { part: 'Clear button', property: 'Hit area on touch screens', token: '--target-coarse' },
     { part: 'Clear button', property: 'Corner radius', token: '--radius-sm' },
     { part: 'Focus ring', property: 'Width', token: '--focus-width' },
@@ -181,7 +182,7 @@ Every other `<input>` attribute passes through, including `ref`, `name`,
 ### Differences from the spec
 
 - **No `filled` appearance.** The spec's filled field (a tinted box with a bottom rule) was dropped to match the Claude apps, where every field is the white outlined box.
-- **Two sizes, not three.** `sm` (24px) and `md` (32px) only, the compact control scale of the Claude apps. The spec's larger steps were dropped; a big call to action is `md` with more room around it, not a taller box.
+- **Two sizes, not three.** `sm` (32px) and `md` (40px), after Atlassian Design: a field is one step taller than a button, so `sm` lines up with a Button in a toolbar. The spec's largest step was dropped; a big call to action is `md` with more room around it, not a taller box.
 - **`label` and `size` are added**, from the shared field,
   so a search box can match the form or toolbar it sits in.
 - **`value` is added** for a controlled query.

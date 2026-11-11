@@ -145,7 +145,9 @@ export function Pagination({
           <span aria-hidden="true">Rows per page</span>
           <Select
             aria-label="Rows per page"
-            size={size}
+            // A field's sm is the 32px that lines up with the page buttons;
+            // there is no 24px field for the sm bar.
+            size="sm"
             className={styles.pageSizeSelect}
             options={pageSizeOptions.map(String)}
             value={String(pageSize)}

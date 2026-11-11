@@ -104,7 +104,7 @@ export const WithInput: Story = {
           onSubmit(new FormData(e.currentTarget).get('email'))
         }}
       >
-        <TextInput label="New email" name="email" type="email" autoComplete="email" />
+        <TextInput size="sm" label="New email" name="email" type="email" autoComplete="email" />
         <Button type="submit">Send link</Button>
       </form>
     ),

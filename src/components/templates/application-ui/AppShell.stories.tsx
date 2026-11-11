@@ -97,7 +97,7 @@ const headerEnd = (
   </>
 )
 
-const topBar = <TopBar start={<Search aria-label="Search" placeholder="Search" />} end={headerEnd} />
+const topBar = <TopBar start={<Search size="sm" aria-label="Search" placeholder="Search" />} end={headerEnd} />
 
 /** The page's own title; the shell has no heading of its own. */
 const heading = (

@@ -30,7 +30,7 @@ const meta = {
       table: { type: { summary: 'string' }, defaultValue: { summary: "'Search'" } },
     },
     size: {
-      description: '24px (`sm`) or 32px (`md`) tall, from the control tiers. Match the toolbar or form it sits in.',
+      description: '32px (`sm`) or 40px (`md`) tall: one step taller than a Button, so `sm` lines up with a default Button.',
       control: 'inline-radio',
       options: ['sm', 'md'],
       table: { type: { summary: "'sm' | 'md'" }, defaultValue: { summary: "'md'" } },

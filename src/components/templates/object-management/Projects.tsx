@@ -410,6 +410,7 @@ export function Projects({ projects: initialProjects = sampleProjects, ...props 
                 aria-label="Project filters"
                 search={
                   <Search
+                    size="sm"
                     ref={searchRef}
                     aria-label="Search projects"
                     placeholder="Search projects or PMs"

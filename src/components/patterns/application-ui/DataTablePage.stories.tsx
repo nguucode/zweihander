@@ -94,8 +94,9 @@ function ProjectsTable({ isSelectable = false, initialQuery = '' }: { isSelectab
         }
       >
         <TableToolbarGroup>
-          <Search ref={searchRef} aria-label="Search projects" placeholder="Search projects" value={query} onChange={(e) => filter(() => setQuery(e.target.value))} />
+          <Search ref={searchRef} size="sm" aria-label="Search projects" placeholder="Search projects" value={query} onChange={(e) => filter(() => setQuery(e.target.value))} />
           <Select
+            size="sm"
             aria-label="Status"
             options={['All', 'Active', 'Paused', 'Archived']}
             value={status}

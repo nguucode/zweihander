@@ -461,6 +461,7 @@ export function EventCalendar({
         </div>
         {views.length > 1 && (
           <Select
+            size="sm"
             aria-label="View"
             className={styles.viewSelect}
             options={views.map((v) => ({ value: v, label: VIEW_LABEL[v] }))}

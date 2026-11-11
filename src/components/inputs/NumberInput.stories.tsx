@@ -29,7 +29,7 @@ const meta = {
       table: { type: { summary: "'default' | 'success' | 'error'" }, defaultValue: { summary: "'default'" } },
     },
     size: {
-      description: '24px (`sm`) or 32px (`md`) tall, from the control tiers. The steppers are 16 or 24px.',
+      description: '32px (`sm`) or 40px (`md`) tall: one step taller than a Button, so `sm` lines up with a default Button. The steppers are 24px in both.',
       control: 'inline-radio',
       options: ['sm', 'md'],
       table: { type: { summary: "'sm' | 'md'" }, defaultValue: { summary: "'md'" } },
@@ -199,6 +199,19 @@ export const Sizes: Story = {
       ))}
     </div>
   ),
+  play: async ({ canvas }) => {
+    // 32 and 40px boxes; the steppers are 24px in both, centred in the box.
+    for (const [name, height] of [['sm', 32], ['md', 40]] as const) {
+      const group = canvas.getByLabelText(name).parentElement!
+      const box = group.getBoundingClientRect()
+      await expect(box.height).toBe(height)
+      for (const step of group.querySelectorAll('button')) {
+        const r = step.getBoundingClientRect()
+        await expect([r.width, r.height]).toEqual([24, 24])
+        await expect(r.top - box.top).toBe(box.bottom - r.bottom)
+      }
+    }
+  },
 }
 
 export const Validation: Story = {

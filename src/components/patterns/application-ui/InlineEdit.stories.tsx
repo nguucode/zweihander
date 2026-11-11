@@ -99,7 +99,7 @@ const meta = {
       control: 'select',
       options: ['text', 'email', 'numeric', 'decimal', 'tel', 'url'],
     },
-    size: { description: '`sm` in a compact table row.', control: 'inline-radio', options: ['sm', 'md'], table: { defaultValue: { summary: 'md' } } },
+    size: { description: '`sm` in a compact table row: Save and Cancel are 24px. The input is 32px at both sizes.', control: 'inline-radio', options: ['sm', 'md'], table: { defaultValue: { summary: 'md' } } },
   },
   args: { value: 'Acme Corp', label: 'Company', onSave: fn() },
   decorators: [(Story) => <div style={{ maxInlineSize: '40rem' }}>{Story()}</div>],

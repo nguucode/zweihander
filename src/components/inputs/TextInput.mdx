@@ -26,7 +26,7 @@ size, what sits beside the value, and the validation state.
 | Size | Use for |
 | --- | --- |
 | `md` | Forms and dialogs: the default. |
-| `sm` | Dense places: toolbars, table filters, inline edits. |
+| `sm` | Dense places: toolbars, table filters, inline edits. As tall as a default Button. |
 
 <Canvas of={TextInputStories.PrefixSuffix} />
 
@@ -93,33 +93,34 @@ asterisk follows the label.
 
 ## Measurements
 
-Each size is a control tier (Foundations / Sizing). Fields take the normal
-inline padding, not Button's spacious one, so the value lines up with the
-label above it, and the field radius, which never becomes a pill.
+A field is one step taller than a Button, after Atlassian Design: `sm` is
+32px and `md` is 40px (Foundations / Sizing). The sizes share the rest:
+6px of inline padding, the 16px icon, the field radius, which never
+becomes a pill, and body type.
 
 <SpecTable
   caption="sm"
   rows={[
-    { part: 'Container', property: 'Height', token: '--control-sm' },
-    { part: 'Container', property: 'Inline padding', token: '--control-sm-pad' },
-    { part: 'Container', property: 'Corner radius', token: '--control-sm-radius-field' },
-    { part: 'Container', property: 'Gap', token: '--control-sm-gap' },
-    { part: 'Prefix, suffix and button icon', property: 'Size', token: '--icon-sm' },
-    { part: 'Add-on', property: 'Inline padding', token: '--control-sm-pad' },
-    { part: 'Input', property: 'Font size', token: '--text-body-sm' },
-    { part: 'Input', property: 'Line height', token: '--leading-body-sm' },
+    { part: 'Container', property: 'Height', token: '--control-md' },
+    { part: 'Container', property: 'Inline padding', token: '--space-1-5' },
+    { part: 'Container', property: 'Corner radius', token: '--control-md-radius-field' },
+    { part: 'Container', property: 'Gap', token: '--control-md-gap' },
+    { part: 'Prefix, suffix and button icon', property: 'Size', token: '--icon-md' },
+    { part: 'Add-on', property: 'Inline padding', token: '--space-1-5' },
+    { part: 'Input', property: 'Font size', token: '--text-body' },
+    { part: 'Input', property: 'Line height', token: '--leading-body' },
   ]}
 />
 
 <SpecTable
   caption="md"
   rows={[
-    { part: 'Container', property: 'Height', token: '--control-md' },
-    { part: 'Container', property: 'Inline padding', token: '--control-md-pad' },
+    { part: 'Container', property: 'Height', token: '--control-lg' },
+    { part: 'Container', property: 'Inline padding', token: '--space-1-5' },
     { part: 'Container', property: 'Corner radius', token: '--control-md-radius-field' },
     { part: 'Container', property: 'Gap', token: '--control-md-gap' },
     { part: 'Prefix, suffix and button icon', property: 'Size', token: '--icon-md' },
-    { part: 'Add-on', property: 'Inline padding', token: '--control-md-pad' },
+    { part: 'Add-on', property: 'Inline padding', token: '--space-1-5' },
     { part: 'Input', property: 'Font size', token: '--text-body' },
     { part: 'Input', property: 'Line height', token: '--leading-body' },
   ]}
@@ -128,16 +129,18 @@ label above it, and the field radius, which never becomes a pill.
 <SpecTable
   caption="Every size"
   rows={[
-    { part: 'Label and helper text', property: 'Font size', token: '--text-body' },
-    { part: 'Label and helper text', property: 'Line height', token: '--leading-body' },
-    { part: 'Label, container, helper', property: 'Gap between', token: '--control-sm-gap' },
+    { part: 'Label and helper text', property: 'Font size', token: '--text-body-sm' },
+    { part: 'Label and helper text', property: 'Line height', token: '--leading-body-sm' },
+    { part: 'Button', property: 'Width and height', token: '--control-sm' },
+    { part: 'Label, container, helper', property: 'Gap between', token: '--space-stack' },
     { part: 'Focus ring', property: 'Width', token: '--focus-width' },
     { part: 'Focus ring', property: 'Offset', token: '--focus-offset' },
   ]}
 />
 
-The label and helper stay at body size in `sm` too: only the box gets
-smaller. The field is 20rem wide, capped at its container; with
+The label and helper are 12px in both sizes, the label in semibold: only
+the box changes height. A button in `prefix` or `suffix` is a 24px target
+round its icon. The field is 20rem wide, capped at its container; with
 `isFullWidth` it fills the container. The edge is 1px. An add-on runs
 the full height of the box, and its 1px divider takes the edge's colour,
 so a field in the error state is red all round, divider included.
@@ -230,7 +233,7 @@ Every other `<input>` attribute passes through to the input, including
 ### Differences from the spec
 
 - **No `filled` appearance.** The spec's filled field (a tinted box with a bottom rule) was dropped to match the Claude apps, where every field is the white outlined box.
-- **Two sizes, not three.** `sm` (24px) and `md` (32px) only, the compact control scale of the Claude apps. The spec's larger steps were dropped; a big call to action is `md` with more room around it, not a taller box.
+- **Two sizes, not three.** `sm` (32px) and `md` (40px), after Atlassian Design: a field is one step taller than a button, so `sm` lines up with a Button in a toolbar. The spec's largest step was dropped; a big call to action is `md` with more room around it, not a taller box.
 - **Native names** for native attributes: `disabled`, `required`,
   `readOnly` rather than `isDisabled`, `isRequired`, `isReadOnly`.
 - **`onChange` is the native event**, not a value: the kit's rule for
@@ -313,11 +316,11 @@ the value to read.
   stays enabled, since opening or copying a fixed value is what it is for.
 - **The edge is `--field-border`, about 1.5:1, a deliberate exception to
   WCAG 1.4.11** (approved 2026-10-08), for the light hairline of the
-  Claude apps. The field is a white `--card` box with a faint drop on the
-  off-white page, and the label, placeholder and focus ring mark it too.
+  Claude apps. The field is a white `--card` box on the off-white page, and the label, placeholder and focus ring mark it too.
   If your audience needs 3:1, set `--field-border: var(--control-border)`.
 - Focus ring: 2px, 2px offset, on click and keyboard alike.
-- Heights are 24 and 32px, at or above WCAG 2.5.8's 24px minimum. The
+- Heights are 32 and 40px, above WCAG 2.5.8's 24px minimum; a button in
+  the field is a 24px target. The
   label is part of the target, since clicking it focuses the input.
 
 </DocTab>

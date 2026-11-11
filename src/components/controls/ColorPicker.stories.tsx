@@ -70,7 +70,7 @@ const meta = {
       table: { type: { summary: "'default' | 'success' | 'error'" }, defaultValue: { summary: "'default'" } },
     },
     size: {
-      description: 'The field: 24px (`sm`) or 32px (`md`), as on Text Input. The panel is the same at both.',
+      description: 'The field: 32px (`sm`) or 40px (`md`), as on Text Input. The panel is the same at both.',
       control: 'inline-radio',
       options: ['sm', 'md'],
       table: { type: { summary: "'sm' | 'md'" }, defaultValue: { summary: "'md'" } },

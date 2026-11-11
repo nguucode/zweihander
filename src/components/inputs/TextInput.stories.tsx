@@ -35,7 +35,7 @@ const meta = {
       table: { type: { summary: "'default' | 'success' | 'error'" }, defaultValue: { summary: "'default'" } },
     },
     size: {
-      description: '24px (`sm`) or 32px (`md`) tall, from the control tiers. `sm` takes a 12px value.',
+      description: '32px (`sm`) or 40px (`md`) tall: one step taller than a Button, so `sm` lines up with a default Button. Both take a 14px value.',
       control: 'inline-radio',
       options: ['sm', 'md'],
       table: { type: { summary: "'sm' | 'md'" }, defaultValue: { summary: "'md'" } },
@@ -152,7 +152,7 @@ export const Sizes: Story = {
     const heights = ['sm', 'md', 'sm with add-ons', 'md with add-ons'].map(
       (n) => canvas.getByLabelText(n).parentElement!.getBoundingClientRect().height,
     )
-    await expect(heights).toEqual([24, 32, 24, 32])
+    await expect(heights).toEqual([32, 40, 32, 40])
   },
 }
 

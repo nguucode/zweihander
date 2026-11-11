@@ -7,7 +7,6 @@ import { cn } from '@/lib/utils'
 import {
   InputField,
   boxClass,
-  popupInset,
   inputStyles as s,
   type InputSize,
   type ValidationState,
@@ -128,9 +127,7 @@ export function Combobox({
         required={required}
         autoHighlight
       >
-        <BaseCombobox.InputGroup
-          className={cn(boxClass(size), styles.group)}
-        >
+        <BaseCombobox.InputGroup className={boxClass(size)}>
           <BaseCombobox.Input
             ref={(el) => {
               inputRef.current = el
@@ -162,10 +159,7 @@ export function Combobox({
         </BaseCombobox.InputGroup>
         <BaseCombobox.Portal container={container}>
           <BaseCombobox.Positioner className={s.positioner} sideOffset={4}>
-            <BaseCombobox.Popup
-              className={s.popup}
-              style={popupInset(size)}
-            >
+            <BaseCombobox.Popup className={s.popup}>
               {isLoading ? (
                 <BaseCombobox.Status className={s.status}>Loading…</BaseCombobox.Status>
               ) : (

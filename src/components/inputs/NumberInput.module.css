@@ -10,14 +10,14 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* Square, inset 4px top and bottom: 24px in md, 16px in sm. */
+/* A 24px square in either size: the in-field button, centred in the box. */
 .step {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  inline-size: calc(var(--field-size) - 2 * var(--control-xs-gap));
-  block-size: calc(var(--field-size) - 2 * var(--control-xs-gap));
+  inline-size: var(--control-sm);
+  block-size: var(--control-sm);
   margin: 0;
   padding: 0;
   border: 0;
@@ -29,12 +29,6 @@
   transition:
     background-color var(--duration-base),
     color var(--duration-base);
-}
-
-/* The one icon below its tier: an sm stepper is a 16px button, and a 14px
-   chevron would fill it edge to edge. */
-.sm .step {
-  font-size: var(--icon-xs);
 }
 
 .step:hover {

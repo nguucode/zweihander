@@ -49,7 +49,7 @@ const meta = {
       control: 'inline-radio',
       options: ['default', 'success', 'error'],
     },
-    size: { description: '24px (`sm`) or 32px (`md`) tall, from the control tiers.', control: 'inline-radio', options: ['sm', 'md'] },
+    size: { description: '32px (`sm`) or 40px (`md`) tall: one step taller than a Button, so `sm` lines up with a default Button.', control: 'inline-radio', options: ['sm', 'md'] },
     min: { description: 'Earliest allowed date. Days before it are disabled in the calendar and rejected when typed.', control: false },
     max: { description: 'Latest allowed date, as `min`.', control: false },
     isDateDisabled: { description: 'Return `true` to disable a day, e.g. weekends. Checked when typing too.', control: false },

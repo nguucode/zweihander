@@ -2,7 +2,7 @@
 .field {
   --field-edge: var(--field-border);
   display: inline-grid;
-  gap: var(--control-sm-gap);
+  gap: var(--space-stack);
   inline-size: 20rem;
   max-inline-size: 100%;
   font-family: var(--font-sans);
@@ -21,9 +21,9 @@
 }
 
 .label {
-  font-size: var(--text-body);
-  line-height: var(--leading-body);
-  font-weight: 500;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  font-weight: 600;
   color: var(--foreground);
 }
 
@@ -59,8 +59,8 @@
 
 .helper {
   margin: 0;
-  font-size: var(--text-body);
-  line-height: var(--leading-body);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
   color: var(--muted-foreground);
 }
 
@@ -84,8 +84,8 @@
    --field-border, a light hairline (about 1.5:1, as in the Claude apps),
    not the 3:1 --control-border: a deliberate exception to WCAG 1.4.11,
    approved 2026-10-08. The outlined field makes up for it by being a white
-   card on the off-white page with a faint drop, and the label, placeholder
-   and focus ring still mark it. Checkbox, radio and switch keep 3:1. */
+   card on the off-white page, and the label, placeholder and focus ring
+   still mark it. Checkbox, radio and switch keep 3:1. */
 .box {
   display: flex;
   align-items: center;
@@ -102,35 +102,28 @@
     box-shadow var(--duration-base);
 }
 
-/* Each size is a control tier (see Foundations/Sizing). Fields take the
-   normal pad, so the value lines up with the label above it, and the field
-   radius, which never becomes a pill. Every icon in the box (affix, chevron,
-   clear, stepper, spinner) reads --field-icon, so a field and a Button of
-   the same size carry the same icon. There is no xs: 20px is below the 24px
-   target of WCAG 2.5.8. */
-.sm {
-  --field-size: var(--control-sm);
-  --field-pad: var(--control-sm-pad);
-  --field-icon: var(--icon-sm);
-  min-block-size: var(--control-sm);
-  gap: var(--control-sm-gap);
-  padding-inline: var(--field-pad);
-  --field-radius: var(--control-sm-radius-field);
-  border-radius: var(--field-radius);
-  font-size: var(--text-body-sm);
-  line-height: var(--leading-body-sm);
-}
+/* A field is one step taller than a button, after Atlassian: md is
+   --control-lg (40px) and sm is --control-md (32px), which lines up with a
+   Button in a toolbar. Both sizes share the rest: 6px of padding inside the
+   edge, the md icon and gap, the field radius (which never becomes a pill)
+   and body type. Every icon in the box (affix, chevron, clear, stepper,
+   spinner) reads --field-icon. */
+.sm,
 .md {
-  --field-size: var(--control-md);
-  --field-pad: var(--control-md-pad);
+  --field-pad: var(--space-1-5);
   --field-icon: var(--icon-md);
-  min-block-size: var(--control-md);
+  --field-radius: var(--control-md-radius-field);
   gap: var(--control-md-gap);
   padding-inline: var(--field-pad);
-  --field-radius: var(--control-md-radius-field);
   border-radius: var(--field-radius);
   font-size: var(--text-body);
   line-height: var(--leading-body);
+}
+.sm {
+  min-block-size: var(--control-md);
+}
+.md {
+  min-block-size: var(--control-lg);
 }
 
 /* The ring is on the box, drawn when the control inside has keyboard or
@@ -304,9 +297,9 @@
   align-items: center;
   gap: var(--space-2);
   min-block-size: var(--control-md);
-  /* --field-inset is the field's own padding (popupInset), so the option's
-     content starts where the field's text does. */
-  padding: var(--space-stack) var(--field-inset, var(--control-md-pad));
+  /* The field's own inline padding, so the option's content starts where
+     the field's text does. */
+  padding: var(--space-stack) var(--space-1-5);
   cursor: default;
   user-select: none;
   outline: none;
@@ -340,7 +333,7 @@
 
 .empty,
 .status {
-  padding: var(--space-2) var(--field-inset, var(--control-md-pad));
+  padding: var(--space-2) var(--space-1-5);
   color: var(--muted-foreground);
 }
 
@@ -360,8 +353,8 @@
 /* A field that is a button (Select) or has buttons in it (Combobox). */
 .trigger {
   justify-content: space-between;
-  /* The trigger is a <button>: WebKit's default block padding made sm 27px
-     tall instead of 24. The box sets its own inline padding. */
+  /* The trigger is a <button>: WebKit's default block padding made it
+     taller than its tier. The box sets its own inline padding. */
   padding-block: 0;
   text-align: start;
   /* The family only: `font: inherit` also reset the size and leading the
@@ -416,6 +409,23 @@
 .iconButton:focus-visible {
   outline: var(--focus-width) solid var(--ring);
   outline-offset: var(--focus-offset);
+}
+/* In the box (clear, open, calendar, a button in a prefix or suffix) the
+   target is 24px, which fits inside either size. It is pulled out by the
+   difference, so its icon sits where a plain icon would, 6px from the edge,
+   and two buttons side by side touch without overlapping. */
+.box > .iconButton,
+.affix > .iconButton {
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--control-sm);
+  block-size: var(--control-sm);
+  margin-inline: calc((var(--field-icon) - var(--control-sm)) / 2);
+}
+/* Inside the target, so the ring is not cut by the box's edge. */
+.box > .iconButton:focus-visible,
+.affix > .iconButton:focus-visible {
+  outline-offset: var(--focus-offset-inset);
 }
 @media (pointer: coarse) {
   .iconButton::after {

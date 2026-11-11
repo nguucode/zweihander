@@ -71,27 +71,28 @@ in a panel. Its days, header and paging buttons are specified there.
 
 ## Measurements
 
-The field is the kit's field: each size is a control tier, with the
-normal inline padding and the field radius.
+The field is the kit's field: `sm` is 32px and `md` is 40px, one step
+taller than a Button, with the same padding, icon and type in both. The
+calendar button is a 24px target round its icon.
 
 <SpecTable
   caption="sm"
   rows={[
-    { part: 'Field', property: 'Height', token: '--control-sm' },
-    { part: 'Field', property: 'Inline padding', token: '--control-sm-pad' },
-    { part: 'Field', property: 'Corner radius', token: '--control-sm-radius-field' },
-    { part: 'Field', property: 'Gap', token: '--control-sm-gap' },
-    { part: 'Calendar button', property: 'Icon size', token: '--icon-sm' },
-    { part: 'Input', property: 'Font size', token: '--text-body-sm' },
-    { part: 'Input', property: 'Line height', token: '--leading-body-sm' },
+    { part: 'Field', property: 'Height', token: '--control-md' },
+    { part: 'Field', property: 'Inline padding', token: '--space-1-5' },
+    { part: 'Field', property: 'Corner radius', token: '--control-md-radius-field' },
+    { part: 'Field', property: 'Gap', token: '--control-md-gap' },
+    { part: 'Calendar button', property: 'Icon size', token: '--icon-md' },
+    { part: 'Input', property: 'Font size', token: '--text-body' },
+    { part: 'Input', property: 'Line height', token: '--leading-body' },
   ]}
 />
 
 <SpecTable
   caption="md"
   rows={[
-    { part: 'Field', property: 'Height', token: '--control-md' },
-    { part: 'Field', property: 'Inline padding', token: '--control-md-pad' },
+    { part: 'Field', property: 'Height', token: '--control-lg' },
+    { part: 'Field', property: 'Inline padding', token: '--space-1-5' },
     { part: 'Field', property: 'Corner radius', token: '--control-md-radius-field' },
     { part: 'Field', property: 'Gap', token: '--control-md-gap' },
     { part: 'Calendar button', property: 'Icon size', token: '--icon-md' },
@@ -103,12 +104,13 @@ normal inline padding and the field radius.
 <SpecTable
   caption="Every size"
   rows={[
-    { part: 'Label and helper', property: 'Gap to the field', token: '--control-sm-gap' },
-    { part: 'Label and helper', property: 'Font size', token: '--text-body' },
+    { part: 'Label and helper', property: 'Gap to the field', token: '--space-stack' },
+    { part: 'Label and helper', property: 'Font size', token: '--text-body-sm' },
     { part: 'Popover', property: 'Padding', token: '--space-cluster' },
     { part: 'Popover', property: 'Corner radius', token: '--radius-panel' },
     { part: 'Focus ring', property: 'Width', token: '--focus-width' },
     { part: 'Focus ring', property: 'Offset', token: '--focus-offset' },
+    { part: 'Calendar button', property: 'Width and height', token: '--control-sm' },
     { part: 'Calendar button', property: 'Minimum on touch screens', token: '--target-coarse' },
   ]}
 />

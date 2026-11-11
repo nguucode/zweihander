@@ -1,8 +1,3 @@
-/* The clear and open buttons sit at the end of the field, 4px apart. */
-.group.group {
-  gap: var(--control-xs-gap);
-}
-
 /* The matched part of an option: heavier and underlined, in the option's
    own colour. A brand colour would drop under 4.5:1 on the highlighted
    row's --accent fill; weight and underline carry the match without
