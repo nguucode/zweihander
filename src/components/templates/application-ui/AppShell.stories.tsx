@@ -97,7 +97,7 @@ const headerEnd = (
   </>
 )
 
-const topBar = <TopBar start={<Search aria-label="Search" placeholder="Search" />} end={headerEnd} />
+const topBar = <TopBar start={<Search size="sm" aria-label="Search" placeholder="Search" />} end={headerEnd} />
 
 /** The page's own title; the shell has no heading of its own. */
 const heading = (
@@ -159,7 +159,7 @@ const logoOffset = (canvasElement: HTMLElement) => {
   const icon = canvasElement.querySelector('nav[aria-label="Main"] a svg')!
   return canvasElement.querySelector('[data-testid="brand"]')!.getBoundingClientRect().left - icon.getBoundingClientRect().left
 }
-/** The logo's centre line, from the shell's top: half a top bar (--control-md plus two --space-cluster) in either layout. */
+/** The logo's centre line, from the shell's top: half a top bar (--control-md plus two --space-inline, 48px) in either layout. */
 const logoMiddle = (canvasElement: HTMLElement) => {
   const shell = canvasElement.querySelector('main')!.closest('[class*="shell"]')!
   const logo = canvasElement.querySelector('[data-testid="brand"]')!.getBoundingClientRect()
@@ -234,11 +234,11 @@ export const WithSidebar: Story = {
     // Wide: the sidebar holds what the top bar would, so there is no top bar.
     // The shell's header is the only <header>, hidden in this layout.
     await expect(canvasElement.querySelector('header')).not.toBeVisible()
-    // The logo lines up with the sidebar's icons: two --space-inline in.
+    // The logo lines up with the sidebar's icons: the sidebar's padding plus an item's in.
     await expect(logoOffset(canvasElement)).toBeCloseTo(0, 0)
     // Rendered once, and on the same centre line in either layout.
     await expect(canvasElement.querySelectorAll('[data-testid="brand"]')).toHaveLength(1)
-    await expect(logoMiddle(canvasElement)).toBeCloseTo(28, 0)
+    await expect(logoMiddle(canvasElement)).toBeCloseTo(24, 0)
     // The skip link targets the shell's own main, and moves focus to it.
     const main = canvas.getByRole('main')
     const skip = canvas.getByRole('link', { name: 'Skip to content' })
@@ -265,7 +265,7 @@ export const TopBarLayout: Story = {
     await expect(logoOffset(canvasElement)).toBeCloseTo(0, 0)
     // Rendered once, and on the same centre line in either layout.
     await expect(canvasElement.querySelectorAll('[data-testid="brand"]')).toHaveLength(1)
-    await expect(logoMiddle(canvasElement)).toBeCloseTo(28, 0)
+    await expect(logoMiddle(canvasElement)).toBeCloseTo(24, 0)
   },
 }
 
@@ -380,7 +380,7 @@ export const CollapsedRail: Story = {
     await expect(narrow).toBeLessThan(100)
     // The logo keeps its place in the rail, cut to the rail's width.
     await expect(logoOffset(canvasElement)).toBeCloseTo(0, 0)
-    await expect(logoMiddle(canvasElement)).toBeCloseTo(28, 0)
+    await expect(logoMiddle(canvasElement)).toBeCloseTo(24, 0)
     // Collapsed, the links keep their names.
     await expect(within(nav).getByRole('link', { name: 'Projects, 12' })).toBeVisible()
     await userEvent.click(within(nav).getByRole('button', { name: /Expand/ }))

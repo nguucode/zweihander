@@ -138,7 +138,7 @@ button.legendItem[aria-pressed='false'] .swatch {
 }
 
 .axis {
-  font-size: var(--text-body-xs);
+  font-size: var(--text-body-sm);
   font-variant-numeric: tabular-nums;
   fill: var(--muted-foreground);
 }
@@ -238,7 +238,7 @@ button.legendItem[aria-pressed='false'] .swatch {
   border: 1px solid var(--border);
   border-radius: var(--radius-field);
   background: var(--popover);
-  box-shadow: var(--elevation-md);
+  box-shadow: var(--shadow-overlay);
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
   color: var(--popover-foreground);

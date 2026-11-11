@@ -68,7 +68,6 @@ export function Leads() {
           <div className="toolbar">
             <Tabs
               appearance="pills"
-              size="sm"
               aria-label="Status"
               value={tab}
               onValueChange={(v) => { setTab(v); setPage(1) }}
@@ -77,10 +76,10 @@ export function Leads() {
             <div className="toolbar-end">
               <Search aria-label="Search leads" placeholder="Search" size="sm" value={query} onChange={(e) => { setQuery(e.target.value); setPage(1) }} />
               <Menu
-                trigger={<Button size="sm" variant="secondary" appearance="outlined" startIcon={<Glyph name="filter" />}>Lead: {kind}</Button>}
+                trigger={<Button variant="secondary" appearance="outlined" startIcon={<Glyph name="filter" />}>Lead: {kind}</Button>}
                 items={[{ type: 'radio', label: 'Lead type', value: kind, onValueChange: (v) => { setKind(v); setPage(1) }, options: ['All', 'Buyer', 'Vendor', 'Landlord', 'Tenant'].map((v) => ({ value: v, label: v })) }]}
               />
-              <Button size="sm" variant="secondary" appearance="outlined" startIcon={<Glyph name="download" />} onClick={() => toast.add({ title: `Exported ${filtered.length} leads`, description: 'leads.csv' })}>Export</Button>
+              <Button variant="secondary" appearance="outlined" startIcon={<Glyph name="download" />} onClick={() => toast.add({ title: `Exported ${filtered.length} leads`, description: 'leads.csv' })}>Export</Button>
             </div>
           </div>
 
@@ -88,7 +87,7 @@ export function Leads() {
             caption="Leads"
             rows={visible}
             getRowId={(l) => l.id}
-            density="sm"
+            size="sm"
             emptyState={<EmptyState size="sm" title="No leads match" description="Clear the search or pick another tab." />}
             columns={[
               { key: 'name', header: 'Lead', width: '13rem', isRowHeader: true, cell: (l) => (

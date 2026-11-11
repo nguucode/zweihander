@@ -237,8 +237,12 @@ for (const g of GRAYS) {
  */
 const { alphaScale, alphaMax } = semantic.shadow.$extensions.dark
 const SHADOW_STEPS = entries(semantic.shadow)
+const shadowAlias = (v) => v.$value.match(/^\{shadow\.([\w-]+)\}$/)?.[1]
 const shadowDecls = (mode, indent = '  ') =>
   SHADOW_STEPS.map(([k, v]) => {
+    // An old step name that now reads one of the two levels.
+    const alias = shadowAlias(v)
+    if (alias) return `${indent}--${k}: var(--${alias});`
     const value =
       mode === 'light'
         ? v.$value
@@ -258,7 +262,7 @@ const shadowDecls = (mode, indent = '  ') =>
 const LAYER = /^(-?\d+)px (-?\d+)px (-?\d+)px (-?\d+)px rgb\(0 0 0 \/ ([\d.]+)\)$/
 const shadowLayers = (mode) =>
   Object.fromEntries(
-    SHADOW_STEPS.filter(([k]) => k !== 'elevation-none').map(([k]) => {
+    SHADOW_STEPS.filter(([k, v]) => k !== 'elevation-none' && !shadowAlias(v)).map(([k]) => {
       const css = shadowDecls(mode, '').split('\n').find((l) => l.startsWith(`--${k}:`))
       const value = css.slice(`--${k}: `.length, -1)
       return [
@@ -346,7 +350,7 @@ const rootDerived = Object.fromEntries(entries(semantic.root).filter(isDerived))
 /* Unscaled groups go on :root next to the root literals, named group-key
    (--duration-fast, --layer-overlay). They read nothing, so they never need
    recomputing per element. */
-const ROOT_GROUPS = ['duration', 'focus', 'layer', 'target']
+const ROOT_GROUPS = ['duration', 'focus', 'border', 'layer', 'target']
 const groupDecls = ROOT_GROUPS.map((g) =>
   entries(semantic[g])
     .map(([k, v]) => `  --${g}-${k}: ${v.$value};`)
@@ -411,7 +415,7 @@ const pxOf = (v) => {
   const ramp = entries(semantic.box).map(([, v]) => pxOf(v))
   const sizes = [
     // Only the tier heights: pad and gap are spacing, not sizes.
-    ...['xs', 'sm', 'md'].map((k) => [`control.${k}`, semantic.control[k]]),
+    ...['xs', 'sm', 'md', 'lg'].map((k) => [`control.${k}`, semantic.control[k]]),
     ...entries(semantic.size).map(([k, v]) => [`size.${k}`, v]),
     ...entries(semantic.row).map(([k, v]) => [`row.${k}`, v]),
   ]
@@ -578,10 +582,12 @@ ${grayScopeDecls()}
    inherits, which is what makes scoping work. */
 * {
   /* Radius steps — the base scale multiplied by the preset's factor. */
-  --radius-sm: calc((var(--radius) - 4px) * var(--radius-factor));
-  --radius-md: calc((var(--radius) - 2px) * var(--radius-factor));
-  --radius-lg: calc(var(--radius) * var(--radius-factor));
-  --radius-xl: calc((var(--radius) + 4px) * var(--radius-factor));
+  --radius-xs: calc(var(--radius) / 3 * var(--radius-factor));
+  --radius-sm: calc(var(--radius) * 2 / 3 * var(--radius-factor));
+  --radius-md: calc(var(--radius) * var(--radius-factor));
+  --radius-lg: calc(var(--radius) * 4 / 3 * var(--radius-factor));
+  --radius-xl: calc(var(--radius) * 2 * var(--radius-factor));
+  --radius-2xl: calc(var(--radius) * 8 / 3 * var(--radius-factor));
 
   /* Radius intent — what components actually use.
 
@@ -598,7 +604,7 @@ ${grayScopeDecls()}
   --radius-field: max(var(--radius-md), min(var(--radius-lg), var(--radius-full)));
   --radius-panel: max(
     var(--radius-xl),
-    min(calc((var(--radius) + 8px) * var(--radius-factor)), var(--radius-full))
+    min(var(--radius-2xl), var(--radius-full))
   );
 
   /* Radius by size tier. The tier picks the step (xs and sm the small one,
@@ -737,6 +743,7 @@ const dtcg = {
   radius: { radius: semantic.root.radius, pill: semantic.root['radius-pill'] },
   duration: semantic.duration,
   focus: semantic.focus,
+  border: semantic.border,
   layer: semantic.layer,
   target: semantic.target,
   shadow: {
@@ -763,6 +770,7 @@ for (const mode of ['light', 'dark']) {
       // The authored form uses CSS shorthand where a trailing value is zero.
       .replace(/^0px /, '0 ')
       .replace(/, 0px /g, ', 0 ')
+      .replace(/(^|, )0 0px /g, '$10 0 ')
       .replace(/ 0px rgb/g, ' 0 rgb')
     if (rebuilt !== authored[`elevation-${step}`])
       throw new Error(

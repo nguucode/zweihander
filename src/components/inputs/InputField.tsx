@@ -1,6 +1,6 @@
 'use client'
 
-import { useId, type CSSProperties, type MouseEvent, type ReactNode, type Ref } from 'react'
+import { useId, type MouseEvent, type ReactNode, type Ref } from 'react'
 import { Field } from '@base-ui/react/field'
 import { Popover } from '@base-ui/react/popover'
 import { Icon } from '@/lib/icon'
@@ -20,15 +20,6 @@ export const inputStyles = styles
 /** The class list for a field box of this size. */
 export function boxClass(size: InputSize) {
   return cn(styles.box, styles[size])
-}
-
-/**
- * Style for an option list's popup: it renders in a portal, so it cannot
- * read the field's padding. Options are inset by it, so their content starts
- * where the field's text does.
- */
-export function popupInset(size: InputSize) {
-  return { '--field-inset': `var(--control-${size}-pad)` } as CSSProperties
 }
 
 /**

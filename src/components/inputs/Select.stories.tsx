@@ -47,7 +47,7 @@ const meta = {
       table: { type: { summary: "'default' | 'success' | 'error'" }, defaultValue: { summary: "'default'" } },
     },
     size: {
-      description: '24px (`sm`) or 32px (`md`) tall, from the control tiers. Options are 32px either way.',
+      description: '32px (`sm`) or 40px (`md`) tall: one step taller than a Button, so `sm` lines up with a default Button. Options are 32px either way.',
       control: 'inline-radio',
       options: ['sm', 'md'],
       table: { type: { summary: "'sm' | 'md'" }, defaultValue: { summary: "'md'" } },
@@ -187,7 +187,7 @@ export const Sizes: Story = {
   ),
   play: async ({ canvas }) => {
     const heights = ['sm', 'md'].map((n) => canvas.getByRole('combobox', { name: n }).getBoundingClientRect().height)
-    await expect(heights).toEqual([24, 32])
+    await expect(heights).toEqual([32, 40])
   },
 }
 

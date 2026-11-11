@@ -124,7 +124,7 @@ export function Search({
         />
         {/* Where the clear button goes: the two never show at once. */}
         {key && current === '' && (
-          <Kbd size={size} aria-hidden="true" className={styles.shortcut}>
+          <Kbd aria-hidden="true" className={styles.shortcut}>
             {key}
           </Kbd>
         )}

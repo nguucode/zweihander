@@ -42,7 +42,7 @@ type Story = StoryObj<typeof meta>
 
 /** Search in the middle, notifications and the account at the end. */
 export const Default: Story = {
-  args: { children: <Search aria-label="Search" placeholder="Search" />, end },
+  args: { children: <Search size="sm" aria-label="Search" placeholder="Search" />, end },
   play: async ({ canvasElement }) => {
     const bar = canvasElement.querySelector('header')!
     await expect(within(bar).getByRole('searchbox', { name: 'Search' })).toBeVisible()

@@ -69,26 +69,26 @@ and a fill only on hover.
 
 ## Measurements
 
-Each size is a control tier, as on Text Input. A stepper is square and
-inset 4px (`--space-1`) from the box's top and bottom, so it is the field's
-height minus 8px: 16px in `sm`, 24px in `md`.
+The box is Text Input's: `sm` is 32px and `md` is 40px, one step taller
+than a Button. A stepper is a 24px square in both, centred in the box and
+4px from its end.
 
 <SpecTable
   caption="sm"
   rows={[
-    { part: 'Container', property: 'Height', token: '--control-sm' },
-    { part: 'Container', property: 'Inline padding, start', token: '--control-sm-pad' },
-    { part: 'Container', property: 'Corner radius', token: '--control-sm-radius-field' },
-    { part: 'Stepper', property: 'Icon size', token: '--icon-xs' },
-    { part: 'Input', property: 'Font size', token: '--text-body-sm' },
+    { part: 'Container', property: 'Height', token: '--control-md' },
+    { part: 'Container', property: 'Inline padding, start', token: '--space-1-5' },
+    { part: 'Container', property: 'Corner radius', token: '--control-md-radius-field' },
+    { part: 'Stepper', property: 'Icon size', token: '--icon-md' },
+    { part: 'Input', property: 'Font size', token: '--text-body' },
   ]}
 />
 
 <SpecTable
   caption="md"
   rows={[
-    { part: 'Container', property: 'Height', token: '--control-md' },
-    { part: 'Container', property: 'Inline padding, start', token: '--control-md-pad' },
+    { part: 'Container', property: 'Height', token: '--control-lg' },
+    { part: 'Container', property: 'Inline padding, start', token: '--space-1-5' },
     { part: 'Container', property: 'Corner radius', token: '--control-md-radius-field' },
     { part: 'Stepper', property: 'Icon size', token: '--icon-md' },
     { part: 'Input', property: 'Font size', token: '--text-body' },
@@ -98,17 +98,16 @@ height minus 8px: 16px in `sm`, 24px in `md`.
 <SpecTable
   caption="Every size"
   rows={[
-    { part: 'Container', property: 'Inline padding, end', token: '--control-xs-gap' },
-    { part: 'Stepper', property: 'Inset from top and bottom', token: '--control-xs-gap' },
+    { part: 'Container', property: 'Inline padding, end', token: '--space-0-5' },
+    { part: 'Stepper', property: 'Width and height', token: '--control-sm' },
     { part: 'Stepper', property: 'Corner radius', token: '--radius-sm' },
     { part: 'Stepper', property: 'Width on touch screens', token: '--target-coarse' },
-    { part: 'Label and helper text', property: 'Font size', token: '--text-body' },
+    { part: 'Label and helper text', property: 'Font size', token: '--text-body-sm' },
     { part: 'Focus ring', property: 'Width', token: '--focus-width' },
   ]}
 />
 
-The two steppers are 2px apart. The `sm` stepper's icon is one step below
-its tier: a 14px icon would fill a 16px button edge to edge. The input
+The two steppers are 2px apart. The input
 uses tabular figures, so digits do not shift as the value changes.
 
 ## Color
@@ -185,7 +184,7 @@ other attributes are.
 ### Differences from the spec
 
 - **No `filled` appearance.** The spec's filled field (a tinted box with a bottom rule) was dropped to match the Claude apps, where every field is the white outlined box.
-- **Two sizes, not three.** `sm` (24px) and `md` (32px) only, the compact control scale of the Claude apps. The spec's larger steps were dropped; a big call to action is `md` with more room around it, not a taller box.
+- **Two sizes, not three.** `sm` (32px) and `md` (40px), after Atlassian Design: a field is one step taller than a button, so `sm` lines up with a Button in a toolbar. The spec's largest step was dropped; a big call to action is `md` with more room around it, not a taller box.
 - **`onValueChange` with a number**, not `onChange`: built on Base UI, it
   takes Base UI's name, and the value arrives parsed rather than as text.
 - **`max` is optional with no default.** The spec marks it required with a

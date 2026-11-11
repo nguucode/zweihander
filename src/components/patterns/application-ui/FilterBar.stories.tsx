@@ -71,7 +71,7 @@ function InvoiceFilters({ initial = none, longLabel, label }: { initial?: Filter
   return (
     <FilterBar
       aria-label={label}
-      search={<Search aria-label="Search invoices" placeholder="Search invoices" value={query} onChange={(e) => setQuery(e.target.value)} />}
+      search={<Search size="sm" aria-label="Search invoices" placeholder="Search invoices" value={query} onChange={(e) => setQuery(e.target.value)} />}
       filters={
         <>
           {(Object.keys(FIELDS) as Field[]).map((field) => (

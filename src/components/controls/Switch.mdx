@@ -62,21 +62,15 @@ The label wraps the track, so the whole label is part of the click target.
 
 ## Measurements
 
-Track heights are 16, 20 and 24px; `md` and `lg` are control tiers xs and
-sm (Foundations / Sizing). Each track is about one and three quarter
-heights wide, so the thumb travels most of a thumb-width. The thumb sits
-2px inside the track at every size.
+Two tracks, Atlassian's: 32×16px (`md`, the default) and 40×20px (`lg`).
+Each is twice as wide as it is tall, so the thumb travels one track
+height. The thumb sits 2px inside the track at both sizes.
+
+`size="sm"` is deprecated. It draws the `md` track, warns once in
+development, and will be removed in the next release: drop the prop.
 
 <SpecTable
-  caption="sm, 28×16px"
-  rows={[
-    { part: 'Track', property: 'Height', token: '--switch-sm-h' },
-    { part: 'Track', property: 'Width', token: '--switch-sm-w' },
-  ]}
-/>
-
-<SpecTable
-  caption="md, 36×20px"
+  caption="md, 32×16px"
   rows={[
     { part: 'Track', property: 'Height', token: '--switch-md-h' },
     { part: 'Track', property: 'Width', token: '--switch-md-w' },
@@ -84,7 +78,7 @@ heights wide, so the thumb travels most of a thumb-width. The thumb sits
 />
 
 <SpecTable
-  caption="lg, 44×24px"
+  caption="lg, 40×20px"
   rows={[
     { part: 'Track', property: 'Height', token: '--switch-lg-h' },
     { part: 'Track', property: 'Width', token: '--switch-lg-w' },
@@ -102,6 +96,7 @@ heights wide, so the thumb travels most of a thumb-width. The thumb sits
     { part: 'Thumb', property: 'Slide duration', token: '--duration-base' },
     { part: 'Focus ring', property: 'Width', token: '--focus-width' },
     { part: 'Focus ring', property: 'Offset', token: '--focus-offset' },
+    { part: 'Hit area', property: 'Minimum', token: '--box-sm' },
     { part: 'Hit area', property: 'Minimum on touch screens', token: '--target-coarse' },
   ]}
 />
@@ -191,6 +186,8 @@ and the thumb its label colour, measured at 4.5:1 against it.
 
 ### Differences from the spec
 
+- **Atlassian's two tracks.** 32×16px and 40×20px; `sm` is deprecated and
+  draws the `md` track.
 - **Base UI's names:** `checked`, `defaultChecked`, `onCheckedChange` for
   the spec's `defaultValue` and `onChange`; native `disabled`,
   `required`, `readOnly` for `isDisabled`, `isRequired`, `isReadOnly`.
@@ -235,7 +232,7 @@ like a light switch: dark mode, notifications, auto-save.
 - A hidden `<input type="checkbox">` carries `name`, `value` and
   `required` into native form submission and validation.
 - On is the end side: in a right-to-left page the thumb travels left.
-- 44×44px touch target on coarse pointers.
+- The hit area is at least 24px tall, 44×44px on coarse pointers.
 
 </DocTab>
 </DocTabs>

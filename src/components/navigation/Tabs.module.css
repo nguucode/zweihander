@@ -1,8 +1,10 @@
-/* Each size is a control tier (see Foundations/Sizing). A tab is a button
-   in a row, so it takes the spacious pad and the control radius. */
+/* Each size is a control tier (see Foundations/Sizing): height, gap, icon
+   and radius come from it. The inline padding is 8px at both sizes, as
+   Atlassian Design's tabs: tabs sit in a row with a gap, so they need less
+   room either side than a button. The label is 14/20 at both sizes. */
 .tabs {
   --tab-height: var(--control-md);
-  --tab-pad: var(--control-md-pad-spacious);
+  --tab-pad: var(--space-2);
   --tab-gap: var(--control-md-gap);
   --tab-icon: var(--icon-md);
   --tab-radius: var(--control-md-radius);
@@ -18,13 +20,10 @@
 
 .sm {
   --tab-height: var(--control-sm);
-  --tab-pad: var(--control-sm-pad-spacious);
   --tab-gap: var(--control-sm-gap);
   --tab-icon: var(--icon-sm);
   --tab-radius: var(--control-sm-radius);
   --tab-track-radius: var(--control-sm-radius-field);
-  font-size: var(--text-body-sm);
-  line-height: var(--leading-body-sm);
 }
 
 .vertical {
@@ -99,9 +98,6 @@
 .underline.vertical .list {
   box-shadow: inset -1px 0 var(--border);
 }
-.underline .tab {
-  border-radius: var(--radius-sm);
-}
 .underline .tab[data-active] {
   color: var(--primary-text);
 }
@@ -110,7 +106,7 @@
   inset-inline-start: var(--active-tab-left);
   inset-block-end: 0;
   inline-size: var(--active-tab-width);
-  block-size: 2px;
+  block-size: var(--border-width-selected);
   background: var(--primary);
   transition:
     inset-inline-start var(--duration-slow),
@@ -121,7 +117,7 @@
   inset-inline-end: 0;
   inset-block-start: var(--active-tab-top);
   inset-block-end: auto;
-  inline-size: 2px;
+  inline-size: var(--border-width-selected);
   block-size: var(--active-tab-height);
   transition:
     inset-block-start var(--duration-slow),
@@ -168,7 +164,7 @@
   border: 1px solid var(--border);
   border-radius: calc(var(--tab-track-radius) - 2px);
   background: var(--card);
-  box-shadow: var(--shadow-xs);
+  box-shadow: var(--shadow-raised);
   transition:
     inset-inline-start var(--duration-slow),
     inset-block-start var(--duration-slow),

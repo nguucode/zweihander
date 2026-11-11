@@ -30,11 +30,11 @@
   flex-direction: column;
   inline-size: 100%;
   max-block-size: calc(100dvh - 2 * var(--space-group));
-  padding: var(--space-group);
+  padding: var(--space-container);
   border: 1px solid var(--border);
   border-radius: var(--radius-panel);
   background: var(--popover);
-  box-shadow: var(--shadow-xl);
+  box-shadow: var(--shadow-overlay);
   color: var(--popover-foreground);
   font-family: var(--font-sans);
   font-size: var(--text-body);
@@ -50,14 +50,15 @@
   scale: 0.97;
 }
 
+/* Atlassian's modal widths: 400, 600 and 800px. */
 .sm {
-  max-inline-size: 24rem;
+  max-inline-size: 25rem;
 }
 .md {
-  max-inline-size: 32rem;
+  max-inline-size: 37.5rem;
 }
 .lg {
-  max-inline-size: 48rem;
+  max-inline-size: 50rem;
 }
 
 .header {
@@ -69,10 +70,10 @@
 .title {
   flex: 1;
   margin: 0;
-  font-size: var(--text-heading-sm);
-  line-height: var(--leading-heading-sm);
+  font-size: var(--text-heading-md);
+  line-height: var(--leading-heading-md);
   font-family: var(--font-heading);
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .description {
@@ -87,7 +88,7 @@
      drawn outside the field: pad by the ring and pull back by as much, so
      the content stays where it was and the ring shows whole. */
   padding: calc(var(--focus-width) + var(--focus-offset));
-  margin: calc(var(--space-group) - var(--focus-width) - var(--focus-offset)) calc(-1 * (var(--focus-width) + var(--focus-offset)))
+  margin: calc(var(--space-container) - var(--focus-width) - var(--focus-offset)) calc(-1 * (var(--focus-width) + var(--focus-offset)))
     calc(-1 * (var(--focus-width) + var(--focus-offset)));
   overflow-y: auto;
 }
@@ -97,19 +98,17 @@
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: var(--space-inline);
-  margin-block-start: var(--space-group);
+  margin-block-start: var(--space-container);
 }
 
 .close {
   position: relative;
   display: inline-flex;
   flex-shrink: 0;
-  /* 4px around a 16px icon. The title's line is 20px, so the 24px box
-     overhangs it by 2px top and bottom: the icon centres on the line. */
+  /* 4px around a 16px icon: a 24px box, the height of the title's line,
+     pulled 4px into the corner so the icon lines up with the padding. */
   padding: var(--control-xs-gap);
-  margin: calc(var(--control-xs-gap) * -1);
-  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- see above */
-  margin-block-start: -2px;
+  margin: 0 calc(var(--control-xs-gap) * -1);
   border: 0;
   border-radius: var(--radius-sm);
   background: transparent;

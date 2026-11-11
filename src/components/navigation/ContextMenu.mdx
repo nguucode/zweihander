@@ -67,7 +67,7 @@ anatomy.
 
 ## Measurements
 
-The popup is Menu's, with the same items of the md control tier. It opens
+The popup is Menu's, with the same 36px items. It opens
 with its top-left corner on the pointer, as the operating system's menus
 do. Near the bottom of the window it flips above the pointer; near the
 right edge it slides left to stay on screen. On
@@ -77,11 +77,11 @@ touch it opens at the finger after a 500ms press.
   caption="Popup"
   rows={[
     { part: 'Popup', property: 'Padding', token: '--space-stack' },
-    { part: 'Popup', property: 'Corner radius', token: '--radius-field' },
-    { part: 'Popup', property: 'Shadow', token: '--shadow-md' },
+    { part: 'Popup', property: 'Corner radius', token: '--radius-lg' },
+    { part: 'Popup', property: 'Shadow', token: '--shadow-overlay' },
     { part: 'Popup', property: 'Layer', token: '--layer-overlay' },
-    { part: 'Item', property: 'Height', token: '--control-md' },
-    { part: 'Item', property: 'Inline padding', token: '--control-md-pad' },
+    { part: 'Item', property: 'Minimum height', token: '--control-md' },
+    { part: 'Item', property: 'Inline padding', token: '--space-3' },
     { part: 'Area, open', property: 'Outline width', token: '--focus-width' },
   ]}
 />

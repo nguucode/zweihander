@@ -108,6 +108,8 @@ export const Default: Story = {
     // Keyboard: arrows move, disabled items are skipped, Enter selects and closes.
     await userEvent.keyboard('{ArrowDown}')
     await waitFor(() => expect(within(menu).getByRole('menuitem', { name: /Edit/ })).toHaveFocus())
+    // A one-line item is 36px: 8px padding around a 20px line. offsetHeight, so the popup's opening scale does not count.
+    await expect(within(menu).getByRole<HTMLElement>('menuitem', { name: /Edit/ }).offsetHeight).toBe(36)
     await userEvent.keyboard('{ArrowDown}{Enter}')
     await expect(onDuplicate).toHaveBeenCalledOnce()
     await waitFor(() => expect(body().queryByRole('menu')).toBeNull())

@@ -33,7 +33,7 @@ marks the match; the chosen option carries a check.
 | Size | Use for |
 | --- | --- |
 | `md` | Forms and settings: the default. |
-| `sm` | Dense places: a toolbar filter, a table row, beside `sm` buttons. |
+| `sm` | Dense places: a toolbar filter, a table row. As tall as a default Button. |
 
 <Canvas of={ComboboxStories.Validation} />
 
@@ -79,30 +79,32 @@ The options list opens under the field, at least as wide as it:
 
 ## Measurements
 
-Each size is a control tier (Foundations / Sizing). Fields take the normal
-inline padding, so the value lines up with the label above it, and the
-field radius, which never becomes a pill.
+A field is one step taller than a Button, after Atlassian Design: `sm` is
+32px and `md` is 40px (Foundations / Sizing). The sizes share the rest:
+6px of inline padding, the 16px icon, the field radius, which never
+becomes a pill, and body type. The clear and open buttons are 24px
+targets round their icons, side by side.
 
 <SpecTable
   caption="sm"
   rows={[
-    { part: 'Field', property: 'Height', token: '--control-sm' },
-    { part: 'Field', property: 'Inline padding', token: '--control-sm-pad' },
-    { part: 'Field', property: 'Corner radius', token: '--control-sm-radius-field' },
-    { part: 'Field', property: 'Gap', token: '--control-sm-gap' },
-    { part: 'Icons and buttons', property: 'Size', token: '--icon-sm' },
-    { part: 'Input', property: 'Font size', token: '--text-body-sm' },
-    { part: 'Input', property: 'Line height', token: '--leading-body-sm' },
+    { part: 'Field', property: 'Height', token: '--control-md' },
+    { part: 'Field', property: 'Inline padding', token: '--space-1-5' },
+    { part: 'Field', property: 'Corner radius', token: '--control-md-radius-field' },
+    { part: 'Field', property: 'Gap', token: '--space-2' },
+    { part: 'Icons and buttons', property: 'Size', token: '--icon-md' },
+    { part: 'Input', property: 'Font size', token: '--text-body' },
+    { part: 'Input', property: 'Line height', token: '--leading-body' },
   ]}
 />
 
 <SpecTable
   caption="md"
   rows={[
-    { part: 'Field', property: 'Height', token: '--control-md' },
-    { part: 'Field', property: 'Inline padding', token: '--control-md-pad' },
+    { part: 'Field', property: 'Height', token: '--control-lg' },
+    { part: 'Field', property: 'Inline padding', token: '--space-1-5' },
     { part: 'Field', property: 'Corner radius', token: '--control-md-radius-field' },
-    { part: 'Field', property: 'Gap', token: '--control-md-gap' },
+    { part: 'Field', property: 'Gap', token: '--space-2' },
     { part: 'Icons and buttons', property: 'Size', token: '--icon-md' },
     { part: 'Input', property: 'Font size', token: '--text-body' },
     { part: 'Input', property: 'Line height', token: '--leading-body' },
@@ -112,11 +114,11 @@ field radius, which never becomes a pill.
 <SpecTable
   caption="Every size"
   rows={[
-    { part: 'Label and helper', property: 'Gap to the field', token: '--control-sm-gap' },
-    { part: 'Label and helper', property: 'Font size', token: '--text-body' },
-    { part: 'Clear and open buttons', property: 'Gap between them', token: '--control-xs-gap' },
+    { part: 'Label and helper', property: 'Gap to the field', token: '--space-stack' },
+    { part: 'Label and helper', property: 'Font size', token: '--text-body-sm' },
+    { part: 'Clear and open buttons', property: 'Width and height', token: '--control-sm' },
     { part: 'Options list', property: 'Block padding', token: '--space-1' },
-    { part: 'Options list', property: 'Corner radius', token: '--radius-field' },
+    { part: 'Options list', property: 'Corner radius', token: '--radius-lg' },
     { part: 'Option', property: 'Minimum height', token: '--control-md' },
     { part: 'Check', property: 'Size', token: '--icon-md' },
     { part: 'Focus ring', property: 'Width', token: '--focus-width' },
@@ -136,7 +138,6 @@ options).
   rows={[
     { part: 'Field', property: 'Background', token: '--card' },
     { part: 'Field', property: 'Border', token: '--field-border' },
-    { part: 'Field', property: 'Shadow', token: '--shadow-2xs' },
     { part: 'Label, input', property: 'Colour', token: '--foreground' },
     { part: 'Placeholder, helper, icons', property: 'Colour', token: '--muted-foreground' },
     { part: 'Required asterisk', property: 'Colour', token: '--danger-text' },
@@ -158,7 +159,7 @@ options).
   rows={[
     { part: 'List', property: 'Background', token: '--popover' },
     { part: 'List', property: 'Border', token: '--border' },
-    { part: 'List', property: 'Shadow', token: '--shadow-md' },
+    { part: 'List', property: 'Shadow', token: '--shadow-overlay' },
     { part: 'Option', property: 'Colour', token: '--popover-foreground' },
     { part: 'Option, highlighted', property: 'Background', token: '--accent' },
     { part: 'Option, highlighted', property: 'Colour', token: '--accent-foreground' },

@@ -13,7 +13,8 @@
   list-style: none;
 }
 
-/* Rows pad and size as Table rows do, so the two line up. */
+/* A row is at least --row-height tall, whatever sits in it. A Table's rows
+   are as tall as their content, so the two do not share a row height. */
 .item {
   box-sizing: border-box;
   min-block-size: var(--row-height);
@@ -34,7 +35,7 @@
   /* stylelint-disable-next-line zweihander/no-token-shadow -- what sits on the panel reads its colour */
   --background: var(--card);
   border: 1px solid var(--border);
-  border-radius: var(--radius-panel);
+  border-radius: var(--radius-lg);
   background: var(--card);
   overflow: clip;
 }

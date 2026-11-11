@@ -65,8 +65,10 @@ The last item has no separator after it.
 
 ## Measurements
 
-Breadcrumbs is text, not a row of controls: its height is the line height
-of its size.
+Breadcrumbs is text, not a row of controls. At `md` each item sits in a
+24px box around its 14/20 text, as Atlassian Design's breadcrumb items.
+Atlassian Design has no small breadcrumb; `sm` is the kit's own, and its
+height is its line height.
 
 <SpecTable
   caption="sm"
@@ -79,6 +81,7 @@ of its size.
 <SpecTable
   caption="md"
   rows={[
+    { part: 'Item', property: 'Minimum height', token: '--control-sm' },
     { part: 'Text', property: 'Font size', token: '--text-body' },
     { part: 'Text', property: 'Line height', token: '--leading-body' },
   ]}

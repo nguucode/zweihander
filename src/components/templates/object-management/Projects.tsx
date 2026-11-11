@@ -246,7 +246,7 @@ export function Projects({ projects: initialProjects = sampleProjects, ...props 
         rows={pageRows}
         getRowId={(p) => p.id}
         caption={`${active.label} projects`}
-        density={isCompact ? 'sm' : 'md'}
+        size={isCompact ? 'sm' : 'md'}
         sort={state.sort}
         onSortChange={(sort) => update({ sort })}
         isSelectable
@@ -410,6 +410,7 @@ export function Projects({ projects: initialProjects = sampleProjects, ...props 
                 aria-label="Project filters"
                 search={
                   <Search
+                    size="sm"
                     ref={searchRef}
                     aria-label="Search projects"
                     placeholder="Search projects or PMs"

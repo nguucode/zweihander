@@ -333,7 +333,7 @@ function Offers() {
             caption="Offers on 5/27 Albert Street"
             rows={rows}
             getRowId={(o) => o.id}
-            density="sm"
+            size="sm"
             columns={[
               { key: 'id', header: 'Offer', isRowHeader: true, cell: (o) => (
                 <label className="offer-pick">

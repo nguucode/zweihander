@@ -16,7 +16,7 @@ const meta = {
     description: 'Anyone you invite can view and comment.',
     children: (
       <div style={{ display: 'flex', gap: 'var(--space-2)', alignItems: 'end' }}>
-        <TextInput label="Email" placeholder="name@company.com" />
+        <TextInput size="sm" label="Email" placeholder="name@company.com" />
         <Button>Invite</Button>
       </div>
     ),

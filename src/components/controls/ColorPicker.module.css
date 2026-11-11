@@ -125,8 +125,8 @@
 }
 
 /* ---------------------------------------------------------------- fields
-   Format Select, then the channels in one md (32px) field box, both the
-   kit's own inputs. */
+   Format Select, then the channels in one sm (32px) field box, both the
+   kit's own inputs: a row in a panel, not a form. */
 .fields {
   display: flex;
   gap: var(--space-inline);
@@ -173,7 +173,7 @@
   text-align: end;
 }
 .unit {
-  padding-inline-end: var(--control-sm-pad);
+  padding-inline-end: var(--space-1-5);
 }
 
 /* -------------------------------------------------------------- swatches */
@@ -225,15 +225,23 @@
 }
 
 /* ---------------------------------------------------------------- field */
-/* A tier xs swatch (see Foundations/Sizing), like a checkbox box. */
-.trigger {
+/* A tier xs swatch (see Foundations/Sizing). Doubled, so it outranks the
+   field's own in-box button rule, which would make it a 24px target pulled
+   out by a negative margin. */
+.trigger.trigger {
   inline-size: var(--control-xs);
   block-size: var(--control-xs);
+  margin-inline: 0;
   border-radius: var(--radius-sm);
   background:
     linear-gradient(var(--swatch), var(--swatch)),
     var(--checker);
   box-shadow: inset 0 0 0 1px var(--control-border);
+}
+
+/* Outside the swatch, so the ring is not drawn over the colour. */
+.trigger.trigger:focus-visible {
+  outline-offset: var(--focus-offset);
 }
 
 .hexInput {
@@ -250,9 +258,9 @@
   box-sizing: border-box;
   padding: var(--space-3);
   border: 1px solid var(--border);
-  border-radius: var(--radius-panel);
+  border-radius: var(--radius-lg);
   background: var(--popover);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-overlay);
   color: var(--popover-foreground);
   outline: none;
   transform-origin: var(--transform-origin);

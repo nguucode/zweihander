@@ -45,8 +45,11 @@
 }
 
 /* Shared control plumbing: every control is centred on the first line of
-   its label, and gets a 44px hit area on touch screens without growing. */
+   its label, and gets a hit area larger than what is drawn without growing:
+   24px (Atlassian's layout box around a 16px control), 44px on touch
+   screens. */
 .control {
+  --choice-hit: var(--box-sm);
   position: relative;
   flex-shrink: 0;
   box-sizing: border-box;
@@ -60,13 +63,17 @@
   outline: var(--focus-width) solid var(--ring);
 }
 
+.control::after {
+  content: '';
+  position: absolute;
+  inset: 50% auto auto 50%;
+  inline-size: max(100%, var(--choice-hit));
+  block-size: max(100%, var(--choice-hit));
+  translate: -50% -50%;
+}
+
 @media (pointer: coarse) {
-  .control::after {
-    content: '';
-    position: absolute;
-    inset: 50% auto auto 50%;
-    inline-size: max(100%, var(--target-coarse));
-    block-size: max(100%, var(--target-coarse));
-    translate: -50% -50%;
+  .control {
+    --choice-hit: var(--target-coarse);
   }
 }

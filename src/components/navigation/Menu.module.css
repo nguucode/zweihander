@@ -14,9 +14,9 @@
   overflow-y: auto;
   padding: var(--menu-inset);
   border: 1px solid var(--border);
-  border-radius: var(--radius-field);
+  border-radius: var(--radius-lg);
   background: var(--popover);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-overlay);
   color: var(--popover-foreground);
   font-family: var(--font-sans);
   font-size: var(--text-body);
@@ -33,17 +33,18 @@
   scale: 0.98;
 }
 
-/* An item is a row of tier md (see Foundations/Sizing): left-aligned text,
-   so the normal pad. Its corner nests inside the popup's: the popup radius
-   minus the inset, so the highlight runs parallel to the popup edge at
-   every preset (8 - 4 = 4px at the default). */
+/* An item follows Atlassian Design's dropdown item: 8px block and 12px
+   inline padding around a 20px line, so one line is 36px. The box ramp has
+   no 36, so the floor is tier md (32px) and the padding makes the rest.
+   Its corner nests inside the popup's: the popup radius minus the inset,
+   so the highlight runs parallel to the popup edge (8 - 4 = 4px). */
 .item {
   display: flex;
   align-items: center;
   gap: var(--control-md-gap);
   min-block-size: var(--control-md);
-  padding: var(--space-stack) var(--control-md-pad);
-  border-radius: calc(var(--radius-field) - var(--menu-inset));
+  padding: var(--space-2) var(--space-3);
+  border-radius: calc(var(--radius-lg) - var(--menu-inset));
   color: inherit;
   text-decoration: none;
   cursor: default;
@@ -121,14 +122,14 @@
 }
 
 .groupLabel {
-  padding: var(--control-xs-pad) var(--control-md-pad) var(--control-xs-gap);
+  padding: var(--control-xs-pad) var(--space-3) var(--control-xs-gap);
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
-  font-weight: 500;
+  font-weight: 600;
   color: var(--muted-foreground);
 }
 
-/* Items are 32px; on touch they grow to 44px. */
+/* Items are 36px; on touch they grow to 44px. */
 @media (pointer: coarse) {
   .item {
     min-block-size: var(--target-coarse);

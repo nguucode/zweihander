@@ -51,7 +51,7 @@
   font-family: var(--font-heading);
   font-size: var(--text-heading-lg);
   line-height: var(--leading-heading-lg);
-  font-weight: 500;
+  font-weight: 600;
   overflow-wrap: anywhere;
 }
 

@@ -24,7 +24,6 @@ const BODY = [
   { token: 'body-lg', px: '16 / 24' },
   { token: 'body', px: '14 / 20' },
   { token: 'body-sm', px: '12 / 16' },
-  { token: 'body-xs', px: '11 / 16' },
 ] as const
 
 function Row({ token, px, weight }: { token: string; px: string; weight: number }) {
@@ -64,14 +63,14 @@ export const Headings: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
       {HEADINGS.map((h) => (
-        <Row key={h.token} {...h} weight={700} />
+        <Row key={h.token} {...h} weight={600} />
       ))}
     </div>
   ),
   play: async ({ canvas }) => {
     const el = canvas.getAllByText('Zweihänder')[0]
     // A heading role carries its weight, not just its size.
-    await expect(getComputedStyle(el).fontWeight).toBe('700')
+    await expect(getComputedStyle(el).fontWeight).toBe('600')
     await expect(Number.parseFloat(getComputedStyle(el).fontSize)).toBe(32)
   },
 }

@@ -9,15 +9,16 @@
 
 /* Square at the control tier, so a code field lines up with the other
    fields in a form row. */
-.sm {
-  --otp-cell: var(--control-sm);
-  --otp-radius: var(--control-sm-radius-field);
-  font-size: var(--text-body-sm);
-}
+.sm,
 .md {
-  --otp-cell: var(--control-md);
   --otp-radius: var(--control-md-radius-field);
   font-size: var(--text-body);
+}
+.sm {
+  --otp-cell: var(--control-md);
+}
+.md {
+  --otp-cell: var(--control-lg);
 }
 
 .cell {
@@ -29,16 +30,13 @@
   border: 1px solid var(--field-edge);
   border-radius: var(--otp-radius);
   background: var(--card);
-  box-shadow: var(--shadow-2xs);
   color: var(--foreground);
   font-family: var(--font-sans);
   font-size: inherit;
   font-variant-numeric: tabular-nums;
   text-align: center;
   caret-color: var(--ring);
-  transition:
-    border-color var(--duration-base),
-    box-shadow var(--duration-base);
+  transition: border-color var(--duration-base);
 }
 
 .cell:focus {

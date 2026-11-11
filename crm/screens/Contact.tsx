@@ -36,7 +36,7 @@ export function Contact() {
         <Avatar size="lg" initials="RA" />
         <div className="page-heading">
           <div className="breadcrumb"><a href="#/customers">Customers</a> / C-10231</div>
-          <h1 className="with-icon">Rachel Ashdown <Tag size="sm" variant="neutral" appearance="outlined" text="+ Tom Ashdown" startIcon={<Glyph name="users" />} /></h1>
+          <h1 className="with-icon">Rachel Ashdown <Tag variant="neutral" appearance="outlined" text="+ Tom Ashdown" startIcon={<Glyph name="users" />} /></h1>
           <div className="tags">
             <Pill tone="danger" dot text="Vendor" /><Pill dot text="Buyer" /><Pill dot text="Landlord" />
             <span className="muted small">Selling to upsize · Timeframe: 3 months · Hot</span>
@@ -112,7 +112,7 @@ export function Contact() {
         <div className="stack">
           <Panel title="Buyer requirements" icon={<Glyph name="home" />}>
             <div className="tags">
-              {reqs.map((r) => <Tag key={r} size="sm" variant="neutral" text={r} hasRemoveButton onRemove={() => setReqs((all) => all.filter((x) => x !== r))} />)}
+              {reqs.map((r) => <Tag key={r} variant="neutral" text={r} hasRemoveButton onRemove={() => setReqs((all) => all.filter((x) => x !== r))} />)}
             </div>
             <h3 className="section-title">Live matches</h3>
             <div className="match is-hot">

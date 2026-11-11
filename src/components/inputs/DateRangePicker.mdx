@@ -72,25 +72,25 @@ The popover holds:
 
 ## Measurements
 
-The field is Date Picker's: each size is a control tier, with the normal
-inline padding and the field radius.
+The field is Date Picker's: `sm` is 32px and `md` is 40px, with the same
+padding, icon and type in both.
 
 <SpecTable
   caption="sm"
   rows={[
-    { part: 'Field', property: 'Height', token: '--control-sm' },
-    { part: 'Field', property: 'Inline padding', token: '--control-sm-pad' },
-    { part: 'Field', property: 'Corner radius', token: '--control-sm-radius-field' },
-    { part: 'Calendar button', property: 'Icon size', token: '--icon-sm' },
-    { part: 'Input', property: 'Font size', token: '--text-body-sm' },
+    { part: 'Field', property: 'Height', token: '--control-md' },
+    { part: 'Field', property: 'Inline padding', token: '--space-1-5' },
+    { part: 'Field', property: 'Corner radius', token: '--control-md-radius-field' },
+    { part: 'Calendar button', property: 'Icon size', token: '--icon-md' },
+    { part: 'Input', property: 'Font size', token: '--text-body' },
   ]}
 />
 
 <SpecTable
   caption="md"
   rows={[
-    { part: 'Field', property: 'Height', token: '--control-md' },
-    { part: 'Field', property: 'Inline padding', token: '--control-md-pad' },
+    { part: 'Field', property: 'Height', token: '--control-lg' },
+    { part: 'Field', property: 'Inline padding', token: '--space-1-5' },
     { part: 'Field', property: 'Corner radius', token: '--control-md-radius-field' },
     { part: 'Calendar button', property: 'Icon size', token: '--icon-md' },
     { part: 'Input', property: 'Font size', token: '--text-body' },
@@ -100,7 +100,7 @@ inline padding and the field radius.
 <SpecTable
   caption="Popover, every size"
   rows={[
-    { part: 'Popover', property: 'Corner radius', token: '--radius-panel' },
+    { part: 'Popover', property: 'Corner radius', token: '--radius-lg' },
     { part: 'Each month', property: 'Padding', token: '--space-cluster' },
     { part: 'Presets', property: 'Padding', token: '--space-2' },
     { part: 'Preset', property: 'Minimum height', token: '--control-md' },
@@ -134,7 +134,7 @@ it room or `isFullWidth`.
   rows={[
     { part: 'Panel', property: 'Background', token: '--popover' },
     { part: 'Panel', property: 'Border', token: '--border' },
-    { part: 'Panel', property: 'Shadow', token: '--shadow-md' },
+    { part: 'Panel', property: 'Shadow', token: '--shadow-overlay' },
     { part: 'Dividers between presets and months', property: 'Colour', token: '--border' },
     { part: 'Preset', property: 'Colour', token: '--foreground' },
     { part: 'Preset, hover and pressed', property: 'Background', token: '--accent' },

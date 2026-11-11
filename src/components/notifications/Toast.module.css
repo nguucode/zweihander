@@ -8,7 +8,7 @@
   gap: var(--space-inline);
   /* 100cqi is the window's width, unless the toasts render into a size
      container (a preview): then they fit that instead. */
-  inline-size: min(24rem, calc(100cqi - 2 * var(--space-4)));
+  inline-size: min(25rem, calc(100cqi - 2 * var(--space-4)));
   margin: 0;
   padding: 0;
   outline: none;
@@ -38,11 +38,11 @@
   align-items: flex-start;
   gap: var(--space-cluster);
   box-sizing: border-box;
-  padding: var(--space-cluster) var(--space-group);
+  padding: var(--space-group);
   border: 1px solid var(--border);
-  border-radius: var(--radius-panel);
+  border-radius: var(--radius-lg);
   background: var(--popover);
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow-overlay);
   color: var(--popover-foreground);
   font-family: var(--font-sans);
   font-size: var(--text-body);
@@ -145,10 +145,16 @@
   position: relative;
   display: inline-flex;
   flex-shrink: 0;
-  margin: 0 calc(var(--space-1) * -1) 0 0;
-  /* 2px around a 16px icon: a 20px button, one line tall. */
-  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- see above */
-  padding: 2px;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  /* A 24px button on a 20px line: pulled up and down by the 2px it is
+     taller, so it centres on the first line and adds no height. */
+  margin-block: calc((var(--leading-body) * var(--text-body) - var(--box-sm)) / 2);
+  margin-inline-end: calc(var(--space-1) * -1);
+  inline-size: var(--box-sm);
+  block-size: var(--box-sm);
+  padding: 0;
   border: 0;
   border-radius: var(--radius-sm);
   background: transparent;

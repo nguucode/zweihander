@@ -34,7 +34,7 @@ const meta = {
       control: 'inline-radio',
       options: ['default', 'success', 'error'],
     },
-    size: { description: '24px (`sm`) or 32px (`md`) tall, from the control tiers.', control: 'inline-radio', options: ['sm', 'md'] },
+    size: { description: '32px (`sm`) or 40px (`md`) tall: one step taller than a Button, so `sm` lines up with a default Button.', control: 'inline-radio', options: ['sm', 'md'] },
     isFullWidth: { description: 'Fills the width of its container instead of 20rem.', control: 'boolean' },
     isLoading: { description: 'Options are still arriving: a spinner in the field, "Loading…" in the list.', control: 'boolean' },
     isClearable: { description: 'Shows a button that clears the selection.', control: 'boolean' },
@@ -132,6 +132,21 @@ export const Sizes: Story = {
       ))}
     </div>
   ),
+  play: async ({ canvas }) => {
+    // 32 and 40px boxes; in each the clear and open buttons are 24px targets
+    // that touch without overlapping and stay inside the box's edge.
+    const boxes = ['sm', 'md'].map((n) => canvas.getByRole('combobox', { name: n }).parentElement!)
+    await waitFor(() => expect(boxes.map((b) => b.getBoundingClientRect().height)).toEqual([32, 40]))
+    for (const box of boxes) {
+      const edge = box.getBoundingClientRect()
+      const [clear, open] = [...box.querySelectorAll(':scope > button')].map((b) => b.getBoundingClientRect())
+      for (const r of [clear, open]) await expect([r.width, r.height]).toEqual([24, 24])
+      await expect(clear.right).toBe(open.left)
+      await expect(open.right).toBeLessThan(edge.right)
+      await expect(open.top).toBeGreaterThan(edge.top)
+      await expect(open.bottom).toBeLessThan(edge.bottom)
+    }
+  },
 }
 
 export const Validation: Story = {

@@ -74,7 +74,9 @@ export interface TableProps<Row> {
    * so copying a cell's text or opening a link in it from that menu is gone.
    */
   hasRowContextMenu?: boolean
-  /** Row height. `md` is `--row-height` (48px); `sm` is one `--space-inline` shorter (40px). */
+  /** Cell padding; a row is as tall as what it holds. `md` is 4px above and below (a 28px one-line row); `sm` is 2px (24px), for long lists of plain text. */
+  size?: 'sm' | 'md'
+  /** @deprecated Use `size`. Removed in the next release. */
   density?: 'sm' | 'md'
   /** Keep the header row in view while the table scrolls inside its container. */
   hasStickyHeader?: boolean
@@ -194,6 +196,8 @@ export function sortRows<Row>(rows: Row[], columns: TableColumn<Row>[], sort: Ta
   })
 }
 
+let hasWarned = false
+
 export function Table<Row>({
   columns,
   rows,
@@ -213,7 +217,8 @@ export function Table<Row>({
   onExpandedChange,
   rowActions,
   hasRowContextMenu = false,
-  density = 'md',
+  size: sizeProp,
+  density,
   hasStickyHeader = false,
   emptyState,
   isResizable = false,
@@ -221,6 +226,11 @@ export function Table<Row>({
   onColumnWidthsChange,
   className,
 }: TableProps<Row>) {
+  if (import.meta.env.DEV && !hasWarned && density !== undefined) {
+    hasWarned = true
+    console.warn('Table: `density` is deprecated. Use `size`; `density` will be removed in the next release.')
+  }
+  const size = sizeProp ?? density ?? 'md'
   const [sortState, setSortState] = useState(defaultSort)
   const [selectedState, setSelectedState] = useState(defaultSelectedIds)
   const sort = sortProp !== undefined ? sortProp : sortState
@@ -315,7 +325,7 @@ export function Table<Row>({
       {...(isScrollRegion && { tabIndex: 0, role: 'region', 'aria-labelledby': `${baseId}-caption` })}
       onBlur={checkScrollRegion}
     >
-      <table className={cn(styles.table, styles[density], isResizable && styles.resizable)}>
+      <table className={cn(styles.table, styles[size], isResizable && styles.resizable)}>
         <caption id={`${baseId}-caption`} className={showCaption ? styles.caption : styles.srOnly}>
           {caption}
         </caption>

@@ -14,7 +14,9 @@
 }
 
 .table {
-  --table-row: var(--row-height);
+  /* Atlassian's cell: 4px block padding, and a row as tall as what it
+     holds. One 20px line of text makes a 28px row. */
+  --table-pad: var(--space-1);
   inline-size: 100%;
   border-collapse: separate;
   border-spacing: 0;
@@ -25,11 +27,11 @@
   font-variant-numeric: tabular-nums;
 }
 .sm {
-  --table-row: calc(var(--row-height) - var(--space-inline));
+  --table-pad: var(--space-0-5);
 }
 
 .caption {
-  padding: var(--space-3) var(--space-4);
+  padding: var(--space-3) var(--space-2);
   text-align: start;
   font-weight: 600;
   caption-side: top;
@@ -41,8 +43,7 @@
 .expand,
 .actions {
   box-sizing: border-box;
-  block-size: var(--table-row);
-  padding: 0 var(--space-group);
+  padding: var(--table-pad) var(--space-2);
   border-block-end: 1px solid var(--border);
   text-align: start;
   vertical-align: middle;
@@ -55,9 +56,14 @@ tbody tr:last-child > * {
   background: var(--surface-filled);
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
-  font-weight: 500;
+  font-weight: 600;
   color: var(--muted-foreground);
   white-space: nowrap;
+}
+/* The header ends on a heavier rule than the rows' dividers. `.table`
+   outranks the cell classes' own bottom rule. */
+.table thead > tr > * {
+  border-block-end-width: var(--border-width-selected);
 }
 .sticky thead .th,
 .sticky thead .select,
@@ -81,13 +87,19 @@ tbody tr:last-child > * {
   text-align: end;
 }
 
-/* The whole header is the sort button, so the target is the full cell. */
+/* The label is the sort button; its hit area below is at least 24px. */
 .sortButton {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);
-  margin: 0 calc(var(--control-sm-pad) * -1);
-  padding: var(--control-xs-gap) var(--control-sm-pad);
+  /* Pulled out by its own padding both ways: the label lines up with the
+     cells below, and the hover fill adds nothing to the header's height. */
+  margin: calc(var(--space-0-5) * -1) calc(var(--space-1) * -1);
+  padding: var(--space-0-5) var(--space-1);
+  /* Not on the baseline: reversed (end-aligned), the icon would set it and
+     push the line taller. */
+  vertical-align: top;
   border: 0;
   border-radius: var(--radius-sm);
   background: transparent;
@@ -107,19 +119,20 @@ tbody tr:last-child > * {
   outline-offset: var(--focus-offset-inset);
 }
 
-/* The sort button is one text line tall. On touch screens its hit area
-   grows to 44px without the header row growing with it. */
+/* The sort button is one text line and its padding tall (20px). Its hit
+   area is 24px (WCAG 2.5.8), and 44px on touch screens, without the header
+   row growing with it. */
+.sortButton::after {
+  content: '';
+  position: absolute;
+  inset: 50% auto auto 50%;
+  inline-size: max(100%, var(--table-sort-hit, var(--box-sm)));
+  block-size: max(100%, var(--table-sort-hit, var(--box-sm)));
+  translate: -50% -50%;
+}
 @media (pointer: coarse) {
   .sortButton {
-    position: relative;
-  }
-  .sortButton::after {
-    content: '';
-    position: absolute;
-    inset: 50% auto auto 50%;
-    inline-size: max(100%, var(--target-coarse));
-    block-size: max(100%, var(--target-coarse));
-    translate: -50% -50%;
+    --table-sort-hit: var(--target-coarse);
   }
 }
 
@@ -144,8 +157,9 @@ tbody tr.selected > * {
   border-block-end-color: color-mix(in oklab, var(--primary-subtle) 75%, var(--primary-subtle-text));
 }
 
+/* The cell's inline padding, the 16px box, and the same again before the
+   next column. */
 .select {
-  inline-size: var(--space-10);
   padding-inline-end: 0;
 }
 thead .select,
@@ -154,10 +168,30 @@ thead .actions {
   background: var(--surface-filled);
 }
 
-/* Just wide enough for the icon button. */
+/* The control columns: just wide enough for the checkbox or the icon
+   button. 2px less block padding, so the 24px button (and the checkbox's
+   20px line, in the header) leaves a one-line row at its own height. No
+   line of text here, so the control alone sets the cell's height. */
+.select,
+.expand,
+.actions {
+  inline-size: var(--box-md);
+  padding-block: calc(var(--table-pad) - var(--space-0-5));
+  line-height: 0;
+}
+.expand > *,
+.actions > * {
+  vertical-align: top;
+}
+/* Inside the control: the cell has no room for an outset ring, and the
+   scroll container would clip one on the first and last rows. */
+.select :focus-visible,
+.expand :focus-visible,
+.actions :focus-visible {
+  outline-offset: var(--focus-offset-inset);
+}
 .expand {
-  inline-size: var(--space-10);
-  padding-inline: var(--space-inline) 0;
+  padding-inline-end: 0;
 }
 .expandIcon {
   display: inline-flex;
@@ -185,8 +219,7 @@ thead .actions {
 
 /* The expand column's mirror at the row's end. */
 .actions {
-  inline-size: var(--space-10);
-  padding-inline: 0 var(--space-inline);
+  padding-inline-start: 0;
   text-align: end;
 }
 
@@ -195,7 +228,7 @@ tbody tr.expanded > * {
   border-block-end-color: transparent;
 }
 .expandedContent {
-  padding: var(--space-2) var(--space-4) var(--space-4);
+  padding: var(--space-2) var(--space-2) var(--space-4);
   border-block-end: 1px solid var(--border);
 }
 /* The content row is not a record: it takes no hover tint of its own. */
@@ -260,7 +293,7 @@ tbody tr.selected.expanded + tr.expandedRow > * {
 .resizeHandle::before {
   content: '';
   position: absolute;
-  inset-block: var(--space-2);
+  inset-block: var(--space-1);
   inset-inline-end: 0;
   inline-size: 1px;
   background: var(--border);

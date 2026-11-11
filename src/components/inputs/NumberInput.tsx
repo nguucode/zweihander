@@ -79,7 +79,7 @@ export function NumberInput({
         }
         onValueChange={onValueChange && ((next) => onValueChange(next))}
       >
-        <NumberField.Group className={cn(boxClass(size), styles.group, styles[size])}>
+        <NumberField.Group className={cn(boxClass(size), styles.group)}>
           <NumberField.Input
             ref={ref}
             placeholder={placeholder}

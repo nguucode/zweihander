@@ -71,19 +71,22 @@ across.
 
 ## Measurements
 
-Each size is a control tier (Foundations / Sizing). A tab is a button in a
-row, so it takes the spacious inline padding.
+Each size is a control tier (Foundations / Sizing). `md` follows Atlassian
+Design's tabs: 32px tall, 8px inline padding, a 14/20 label and a 2px
+indicator. Atlassian Design has no small tab; `sm` is the kit's own, the
+same tab in a 24px box for dense panels.
 
 <SpecTable
   caption="sm"
   rows={[
     { part: 'Tab', property: 'Height', token: '--control-sm' },
-    { part: 'Tab', property: 'Inline padding', token: '--control-sm-pad-spacious' },
+    { part: 'Tab', property: 'Inline padding', token: '--space-2' },
     { part: 'Tab', property: 'Gap between icon and label', token: '--control-sm-gap' },
+    { part: 'Tab', property: 'Corner radius (the focus ring follows it)', token: '--control-sm-radius' },
     { part: 'Tab, pills', property: 'Track corner radius', token: '--control-sm-radius-field' },
     { part: 'Icon', property: 'Size', token: '--icon-sm' },
-    { part: 'Label', property: 'Font size', token: '--text-body-sm' },
-    { part: 'Label', property: 'Line height', token: '--leading-body-sm' },
+    { part: 'Label', property: 'Font size', token: '--text-body' },
+    { part: 'Label', property: 'Line height', token: '--leading-body' },
   ]}
 />
 
@@ -91,8 +94,9 @@ row, so it takes the spacious inline padding.
   caption="md"
   rows={[
     { part: 'Tab', property: 'Height', token: '--control-md' },
-    { part: 'Tab', property: 'Inline padding', token: '--control-md-pad-spacious' },
+    { part: 'Tab', property: 'Inline padding', token: '--space-2' },
     { part: 'Tab', property: 'Gap between icon and label', token: '--control-md-gap' },
+    { part: 'Tab', property: 'Corner radius (the focus ring follows it)', token: '--control-md-radius' },
     { part: 'Tab, pills', property: 'Track corner radius', token: '--control-md-radius-field' },
     { part: 'Icon', property: 'Size', token: '--icon-md' },
     { part: 'Label', property: 'Font size', token: '--text-body' },
@@ -105,7 +109,7 @@ row, so it takes the spacious inline padding.
   rows={[
     { part: 'Tab list', property: 'Gap between tabs', token: '--space-stack' },
     { part: 'Tab list', property: 'Gap to the panel', token: '--space-group' },
-    { part: 'Tab, underline', property: 'Corner radius (the focus ring follows it)', token: '--radius-sm' },
+    { part: 'Indicator, underline', property: 'Thickness', token: '--border-width-selected' },
     { part: 'Tab', property: 'Focus ring offset (inside the tab)', token: '--focus-offset-inset' },
     { part: 'Panel', property: 'Focus ring offset', token: '--focus-offset' },
     { part: 'Focus ring', property: 'Width', token: '--focus-width' },
@@ -113,7 +117,7 @@ row, so it takes the spacious inline padding.
   ]}
 />
 
-The underline indicator is 2px. In `pills`, the track has a 2px inset
+In `pills`, the track has a 2px inset
 and the chip's corner is the track's minus 2px, so the two stay concentric
 at every size.
 
@@ -141,7 +145,7 @@ and the accent in the toolbar: the values follow.
     { part: 'Tab, hover, and selected tab', property: 'Label colour', token: '--foreground' },
     { part: 'Indicator', property: 'Background', token: '--card' },
     { part: 'Indicator', property: 'Border', token: '--border' },
-    { part: 'Indicator', property: 'Shadow', token: '--shadow-xs' },
+    { part: 'Indicator', property: 'Shadow', token: '--shadow-raised' },
   ]}
 />
 

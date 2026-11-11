@@ -14,7 +14,7 @@ const Slide = ({ title, i, note = `Template ${i + 1}` }: { title: string; i: num
       alignContent: 'end',
       blockSize: '10rem',
       padding: 'var(--space-4)',
-      borderRadius: 'var(--radius-panel)',
+      borderRadius: 'var(--radius-lg)',
       background: hues[i % hues.length],
       color: '#0a0a0a',
     }}

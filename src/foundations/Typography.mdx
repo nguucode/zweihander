@@ -17,7 +17,7 @@ that belong together:
 .heading {
   font-size: var(--text-heading-lg);
   line-height: var(--leading-heading-lg);
-  font-weight: 700;
+  font-weight: 600;
 }
 ```
 
@@ -69,7 +69,7 @@ the semantic weight of the text, not about being large.
 
 ## Body
 
-Four steps. `--text-body` is the default at 14px — one step down from the
+Three steps. `--text-body` is the default at 14px — one step down from the
 16px a lot of interfaces start at, which is deliberate for dense product
 UI and worth knowing before you reach for it in long-form content.
 
@@ -80,7 +80,6 @@ UI and worth knowing before you reach for it in long-form content.
 | `--text-body-lg` | 1rem / 16px | 24px |
 | `--text-body` | 0.875rem / 14px | 20px |
 | `--text-body-sm` | 0.75rem / 12px | 16px |
-| `--text-body-xs` | 0.6875rem / 11px | 16px |
 
 **Every component uses these.** Button, the field label, the input itself,
 and the helper and error text are all `--text-body`; only the large Button
@@ -90,11 +89,11 @@ steps up to `--text-body-lg`.
 size tiers, see [Sizing](?path=/docs/foundations-sizing--docs)), and
 secondary text: helper text in a menu, shortcuts, captions.
 
-`--text-body-xs` is for dense metadata only: badge counts, timestamps,
-table footnotes. Badge is the one component that reads it. Nothing a user
-has to read in full or act on belongs at 11px.
+12px is the smallest text size in the kit. `--text-body-xs` used to be
+11px; it is now the same as `--text-body-sm` and deprecated, kept so
+existing styles keep working.
 
-Every body line height is a multiple of 4px (24, 20, 16, 16), so body text
+Every body line height is a multiple of 4px (24, 20, 16), so body text
 of any size sits on the same 4px grid as the spacing and control heights.
 
 ## Weights
@@ -109,6 +108,9 @@ Four. Anything outside this set is not part of the system.
 | medium | 500 |
 | semibold | 600 |
 | bold | 700 |
+
+Headings are semibold (600). A label beside an icon, such as a button's
+or a tab's, is medium (500).
 
 {/* docs:check allow --font-weight-medium -- the paragraph explains why weights are not tokens */}
 

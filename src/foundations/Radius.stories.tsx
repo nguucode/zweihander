@@ -12,7 +12,7 @@ const COL: React.CSSProperties = {
   gap: 'var(--space-2)',
 }
 
-const STEPS = ['radius-sm', 'radius-md', 'radius-lg', 'radius-xl'] as const
+const STEPS = ['radius-xs', 'radius-sm', 'radius-md', 'radius-lg', 'radius-xl', 'radius-2xl'] as const
 
 function StepScale() {
   return (

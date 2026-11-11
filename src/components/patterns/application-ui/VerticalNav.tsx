@@ -51,7 +51,7 @@ function Item({ item, current }: { item: VerticalNavItem; current: boolean }) {
             </span>
           )}
           <span className={styles.label}>{item.label}</span>
-          {item.badge !== undefined && <Badge count={item.badge} size="sm" variant="secondary" />}
+          {item.badge !== undefined && <Badge count={item.badge} variant="secondary" />}
         </>
       ),
     },

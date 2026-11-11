@@ -204,7 +204,7 @@ const linkSharing = {
 
 /** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
 export const anatomyParts = [
-  { name: 'Container', selector: '[role="tooltip"]', description: 'Inverted surface with the text, 6px from the trigger. At most 20rem wide.' },
+  { name: 'Container', selector: '[role="tooltip"]', description: 'Inverted surface with the text, 6px from the trigger. At most 240px wide.' },
   { name: 'Trigger', selector: 'button[aria-describedby]', description: 'One focusable element. While the tooltip is open, its aria-describedby points at it.' },
 ]
 

@@ -67,22 +67,23 @@ The label wraps the box, so the whole label is part of the click target.
 
 ## Measurements
 
-One size. The box is control tier xs (Foundations / Sizing) and sits
-centred on the first line of its label, however many lines the label
-wraps to.
+One size. The box is 16px, Atlassian's, inside a 24px hit area, and
+sits centred on the first line of its label, however many lines the
+label wraps to. The label starts 8px from the box.
 
 <SpecTable
   caption="Every checkbox"
   rows={[
     { part: 'Container', property: 'Size', token: '--choice-box' },
-    { part: 'Container', property: 'Corner radius', token: '--radius-sm' },
-    { part: 'Check mark', property: 'Size', token: '--icon-md' },
+    { part: 'Container', property: 'Corner radius', token: '--radius-xs' },
+    { part: 'Check mark', property: 'Size', token: '--icon-xs' },
     { part: 'Label', property: 'Gap from the box', token: '--space-inline' },
     { part: 'Label', property: 'Font size', token: '--text-body' },
     { part: 'Label', property: 'Line height', token: '--leading-body' },
     { part: 'Helper text', property: 'Gap from the label', token: '--space-1' },
     { part: 'Focus ring', property: 'Width', token: '--focus-width' },
     { part: 'Focus ring', property: 'Offset', token: '--focus-offset' },
+    { part: 'Hit area', property: 'Minimum', token: '--box-sm' },
     { part: 'Hit area', property: 'Minimum on touch screens', token: '--target-coarse' },
   ]}
 />
@@ -164,6 +165,9 @@ that turned round under `radius="full-rounded"` would read as a radio.
 
 ### Differences from the spec
 
+- **Atlassian's box.** 16px with a 2px corner inside a 24px hit area, and
+  a 12px mark: the kit's own step, since Atlassian draws the mark as part
+  of the box.
 - **Base UI's and HTML's names:** `defaultChecked` and `onCheckedChange`
   for the spec's `defaultValue` (a string there, which reads as the
   submitted value: that is `value`) and `onChange`; native `disabled`,
@@ -216,7 +220,8 @@ Write the label so that checked means yes.
   gray ramp.
 - A hidden native input carries `name`, `value` and `required` into form
   submission and validation.
-- 44×44px touch target on coarse pointers, without the box growing.
+- The hit area is 24×24px, 44×44px on coarse pointers, without the box
+  growing.
 
 </DocTab>
 </DocTabs>

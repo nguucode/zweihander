@@ -93,7 +93,7 @@ export function SavedViews({
   }
 
   const countBadge = (view: SavedView) =>
-    view.count !== undefined && <Badge count={view.count} size="sm" variant="secondary" />
+    view.count !== undefined && <Badge count={view.count} variant="secondary" />
 
   const viewActions: MenuEntry[] = [
     ...(onSaveAs ? [{ label: 'Save as new view…', onSelect: () => setDialog('save-as') }] : []),
@@ -329,8 +329,8 @@ function ManageDialog({
         {views.map((view) => (
           <li key={view.id}>
             <span className={styles.name}>{view.label}</span>
-            {view.isPredefined && <Tag text="Predefined" variant="neutral" size="sm" />}
-            {view.isShared && <Tag text="Shared" variant="neutral" size="sm" />}
+            {view.isPredefined && <Tag text="Predefined" variant="neutral" />}
+            {view.isShared && <Tag text="Shared" variant="neutral" />}
             {!view.isPredefined && (
               <Button
                 variant="destructive"

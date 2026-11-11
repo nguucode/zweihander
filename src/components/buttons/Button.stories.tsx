@@ -27,7 +27,7 @@ const meta = {
       table: { type: { summary: "'contained' | 'outlined' | 'ghost'" }, defaultValue: { summary: "'contained'" } },
     },
     size: {
-      description: '24px (`sm`) or 32px (`md`) tall, from the control tiers. `sm` takes a 12px label.',
+      description: '32px (`md`) or 24px (`sm`, for tables and dense rows) tall, from the control tiers. The label is 14/20 at both sizes.',
       control: 'inline-radio',
       options: ['sm', 'md'],
       table: { type: { summary: "'sm' | 'md'" }, defaultValue: { summary: "'md'" } },

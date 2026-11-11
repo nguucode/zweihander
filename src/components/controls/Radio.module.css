@@ -1,4 +1,4 @@
-/* The circle is --choice-box: 20px. */
+/* The circle is --choice-box: 16px, as Atlassian draws it. */
 .field {
   --choice-control: var(--choice-box);
   gap: var(--space-2);
@@ -97,7 +97,7 @@ label:hover > .radio[data-checked]:not([data-disabled], [data-readonly]) {
   background: color-mix(in oklab, var(--radio-fill) 88%, var(--radio-dot));
 }
 
-/* 8px: a dot reads as "selected" without crowding the ring. */
+/* 6px: a dot reads as "selected" without crowding the 16px ring. */
 .dot {
   inline-size: var(--radio-dot-size);
   block-size: var(--radio-dot-size);

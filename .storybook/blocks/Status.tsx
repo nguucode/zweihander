@@ -10,5 +10,5 @@ const VARIANTS: Record<string, TagVariant> = { stable: 'success', beta: 'info', 
 export function Status({ of }: { of: { default: { tags?: string[] } } }) {
   const status = of.default.tags?.find((tag) => tag in VARIANTS)
   if (!status) return null
-  return <Tag text={status[0].toUpperCase() + status.slice(1)} variant={VARIANTS[status]} size="sm" />
+  return <Tag text={status[0].toUpperCase() + status.slice(1)} variant={VARIANTS[status]} />
 }

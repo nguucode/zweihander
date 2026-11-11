@@ -24,8 +24,8 @@ its rows and keep its header in view.
 
 | Variant | Use for |
 | --- | --- |
-| `density="md"` | The default, 48px rows: most tables, and rows that hold a Tag or a button. |
-| `density="sm"` | 40px rows, for long lists of plain text where seeing more rows at once matters. |
+| `size="md"` | The default: 4px above and below each cell, so a row of text is 28px. Most tables, and rows that hold a Tag or a button. |
+| `size="sm"` | 2px above and below, a 24px row of text: long lists of plain text where seeing more rows at once matters. |
 | `isSelectable` | Acting on several rows at once: archive, export, assign. |
 | `expandedContent` | Details that belong to one row but do not fit in a column: a description, a timeline, line items. |
 | `hasStickyHeader` | Long tables that scroll inside a fixed height, so the column names stay in view. |
@@ -110,46 +110,59 @@ The total row is a `<tfoot>`, so it stays at the bottom whatever the sort.
 
 ## Measurements
 
-Each density is a row height. Everything else is the same in both.
+Each size is a cell's block padding. A row has no height of its own: it
+is as tall as what its cells hold. Everything else is the same in both.
 
 <SpecTable
   caption="md"
   rows={[
-    { part: 'Row', property: 'Height', token: '--row-height' },
-    { part: 'Header row', property: 'Height', token: '--row-height' },
+    { part: 'Row', property: 'Cell block padding', token: '--space-1' },
+    { part: 'Header row', property: 'Cell block padding', token: '--space-1' },
   ]}
 />
 
 <SpecTable
   caption="sm"
   rows={[
-    { part: 'Row', property: 'Height, minus --space-inline', token: '--row-height' },
-    { part: 'Header row', property: 'Height, minus --space-inline', token: '--row-height' },
+    { part: 'Row', property: 'Cell block padding', token: '--space-0-5' },
+    { part: 'Header row', property: 'Cell block padding', token: '--space-0-5' },
   ]}
 />
 
+| What the row holds | `md` | `sm` |
+| --- | --- | --- |
+| One line of text (20px) | 28px | 24px |
+| A checkbox, an expand button or an actions button (24px) | 28px | 24px |
+| A 24px button | 32px | 28px |
+| A 32px button or field | 40px | 36px |
+| Header (one 16px line) | 24px | 20px |
+
+Each height is without the rule under the row: 1px under a body row, 2px
+under the header. The checkbox, expand and actions columns take 2px less
+block padding than the other cells, so their 24px buttons do not make a
+row of text taller.
+
 <SpecTable
-  caption="Every density"
+  caption="Every size"
   rows={[
-    { part: 'Cell', property: 'Inline padding', token: '--space-group' },
+    { part: 'Cell', property: 'Inline padding', token: '--space-2' },
+    { part: 'Header row', property: 'Rule under it', token: '--border-width-selected' },
     { part: 'Cell', property: 'Font size', token: '--text-body' },
     { part: 'Cell', property: 'Line height', token: '--leading-body' },
     { part: 'Header cell', property: 'Font size', token: '--text-body-sm' },
     { part: 'Header cell', property: 'Line height', token: '--leading-body-sm' },
-    { part: 'Sort button', property: 'Block padding', token: '--control-xs-gap' },
-    { part: 'Sort button', property: 'Inline padding', token: '--control-sm-pad' },
+    { part: 'Sort button', property: 'Block padding', token: '--space-0-5' },
+    { part: 'Sort button', property: 'Inline padding', token: '--space-1' },
     { part: 'Sort button', property: 'Gap', token: '--space-1' },
     { part: 'Sort button', property: 'Corner radius', token: '--radius-sm' },
     { part: 'Sort icon', property: 'Size', token: '--icon-md' },
-    { part: 'Selection and expand columns', property: 'Width', token: '--space-10' },
-    { part: 'Expand column', property: 'Inline start padding', token: '--space-inline' },
+    { part: 'Selection and expand columns', property: 'Width', token: '--box-md' },
     { part: 'Expand icon', property: 'Size', token: '--icon-md' },
-    { part: 'Actions column', property: 'Width', token: '--space-10' },
-    { part: 'Actions column', property: 'Inline end padding', token: '--space-inline' },
-    { part: 'Expanded row', property: 'Block start padding', token: '--space-2' },
-    { part: 'Expanded row', property: 'Inline and block end padding', token: '--space-4' },
+    { part: 'Actions column', property: 'Width', token: '--box-md' },
+    { part: 'Expanded row', property: 'Block start and inline padding', token: '--space-2' },
+    { part: 'Expanded row', property: 'Block end padding', token: '--space-4' },
     { part: 'Caption', property: 'Block padding', token: '--space-3' },
-    { part: 'Caption', property: 'Inline padding', token: '--space-4' },
+    { part: 'Caption', property: 'Inline padding', token: '--space-2' },
     { part: 'Focus ring', property: 'Width', token: '--focus-width' },
     { part: 'Focus ring', property: 'Offset, inside the button', token: '--focus-offset-inset' },
     { part: 'Sort button', property: 'Hit area on touch screens', token: '--target-coarse' },
@@ -160,7 +173,7 @@ Each density is a row height. Everything else is the same in both.
   caption="Resize handle (isResizable)"
   rows={[
     { part: 'Handle', property: 'Width', token: '--box-2xs' },
-    { part: 'Handle line', property: 'Inset from the header edges', token: '--space-2' },
+    { part: 'Handle line', property: 'Inset from the header edges', token: '--space-1' },
     { part: 'Handle line, hover and drag', property: 'Width', token: '--focus-width' },
     { part: 'Handle', property: 'Hit area on touch screens', token: '--target-coarse' },
   ]}
@@ -171,9 +184,13 @@ a hairline. Its strip is 16px wide (44px on touch screens), at the
 header's end, over the header's own padding. A column is 48px to 1200px wide; the arrow
 keys move it 16px at a time.
 
-Rows are divided by a 1px rule; the last row has none. The sort button
-pulls itself out by its own inline padding, so its label lines up with the
-cells below. Figures are tabular, so numbers line up column-wide.
+Rows are divided by a 1px rule; the last row has none. The header ends on
+a 2px rule and its labels are semibold. The sort button pulls itself out
+by its own padding, so its label lines up with the cells below and its
+hover fill adds nothing to the header's height. The control columns are
+32px wide: the cell's 8px inline padding and a 24px button, or the 16px
+checkbox and 8px after it. Figures are tabular, so numbers line up
+column-wide.
 
 ## Color
 
@@ -314,11 +331,29 @@ it is the one under the pointer or the keyboard.
 `TableSort` is `{ key, direction }`, with direction `ascending` or
 `descending`.
 
+`density` is deprecated: it was renamed `size`, takes the same values, and
+still works for one release with a console warning in development.
+
 With `sort` controlled, the table leaves the order to you. `sortRows(rows,
 columns, sort)` returns the rows in the order the table would sort them,
 so you can sort every row before slicing out a page, as the
 [Projects](?path=/docs/templates-object-management-projects--docs)
 template does.
+
+### Differences from the spec
+
+Cell sizing follows Atlassian's dynamic table.
+
+- **No row height.** A cell has 4px block and 8px inline padding and the
+  row is as tall as its content; rows were a fixed 48px and 40px before.
+  The `density` prop that picked a row height is now `size`.
+- **`sm` is ours.** Atlassian's table has one size. `sm` halves the block
+  padding for long lists of plain text.
+- **Rows keep a 1px divider and a hover tint.** Atlassian draws only the
+  2px rule under the header; the divider is kept, so a row takes 1px
+  more than its content.
+- **The header keeps its `--surface-filled` background**, which
+  Atlassian's header does not have.
 
 </DocTab>
 <DocTab value="guidelines">

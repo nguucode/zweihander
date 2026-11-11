@@ -28,7 +28,7 @@ share 24px, so separate sections with a card edge or a rule, not with
 extra white space. AppShell applies `--space-section` to the page edge
 from 64rem up; below that the edge stays at its narrow value.
 
-The numeric steps (`--space-1` to `--space-12`) still exist for the few
+The numeric steps (`--space-0-5` to `--space-20`) still exist for the few
 places no role fits, such as the size of an icon disc.
 
 ## Controls
@@ -36,12 +36,16 @@ places no role fits, such as the size of an icon disc.
 The control tier binds a control's height, padding and icon gap, so a
 control never reads a spacing role for its own box.
 
-| Control token | md | sm | xs |
-| --- | --- | --- | --- |
-| `--control-{tier}` height | 32 | 24 | 20 |
-| `--control-{tier}-pad` (fields, rows) | 10 | 8 | 6 |
-| `--control-{tier}-pad-spacious` (buttons) | 12 | 8 | 6 |
-| `--control-{tier}-gap` (icon to label) | 8 | 6 | 4 |
+| Control token | lg | md | sm | xs |
+| --- | --- | --- | --- | --- |
+| `--control-{tier}` height | 40 | 32 | 24 | 20 |
+| `--control-{tier}-pad` (rows, menu items) | – | 10 | 8 | 6 |
+| `--control-{tier}-pad-spacious` (buttons) | – | 12 | 8 | 6 |
+| `--control-{tier}-gap` (icon to label) | – | 8 | 6 | 4 |
+
+A field is `lg` tall by default and `md` at `size="sm"`, one step above a
+button. It takes the numeric step `--space-1-5` (6px) inside its edge at
+both sizes, and `--space-stack` between its label, box and helper text.
 
 A small control inside a component (a table's sort button, a modal's
 close button, a badge, the number input's steppers) reads the control tier

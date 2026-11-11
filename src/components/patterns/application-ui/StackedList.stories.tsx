@@ -17,9 +17,9 @@ const people: StackedListItem[] = [
 ]
 
 const projects: StackedListItem[] = [
-  { id: 'harbor', media: <Icon name="file" />, title: 'Harbor Lights', status: <Tag size="sm" variant="success" text="Active" />, description: 'Ines Okafor', meta: 'Due Nov 14', href: '#harbor' },
-  { id: 'ledger', media: <Icon name="file" />, title: 'Ledger migration', status: <Tag size="sm" variant="neutral" text="On hold" />, description: 'Tomas Lindqvist', meta: 'Due Dec 2', href: '#ledger' },
-  { id: 'audit', media: <Icon name="file" />, title: 'Year-end audit', status: <Tag size="sm" variant="danger" text="Expired" />, description: 'Noor Haddad', meta: 'Due Oct 1', href: '#audit' },
+  { id: 'harbor', media: <Icon name="file" />, title: 'Harbor Lights', status: <Tag variant="success" text="Active" />, description: 'Ines Okafor', meta: 'Due Nov 14', href: '#harbor' },
+  { id: 'ledger', media: <Icon name="file" />, title: 'Ledger migration', status: <Tag variant="neutral" text="On hold" />, description: 'Tomas Lindqvist', meta: 'Due Dec 2', href: '#ledger' },
+  { id: 'audit', media: <Icon name="file" />, title: 'Year-end audit', status: <Tag variant="danger" text="Expired" />, description: 'Noor Haddad', meta: 'Due Oct 1', href: '#audit' },
 ]
 
 const onDelete = fn()
@@ -140,7 +140,7 @@ export const LinkedWithActions: Story = {
     'aria-label': 'Projects',
     items: projects.map((p, i) => ({
       ...p,
-      status: i === 0 ? <>{p.status}<Badge count={3} size="sm" aria-label="3 unread comments" /></> : p.status,
+      status: i === 0 ? <>{p.status}<Badge count={3} aria-label="3 unread comments" /></> : p.status,
       actions: actions(p.title as string),
     })),
   },
@@ -218,7 +218,7 @@ export const LongContent: Story = {
       {
         media: <Avatar initials="MW" />,
         title: 'Maximiliana Wolfeschlegelsteinhausenbergerdorff',
-        status: <Tag size="sm" variant="neutral" text="Invited" />,
+        status: <Tag variant="neutral" text="Invited" />,
         description: 'maximiliana.wolfeschlegelsteinhausenbergerdorff@northern-region.example.com',
         meta: 'Senior accounts payable specialist',
         href: '#max',

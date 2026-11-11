@@ -28,7 +28,7 @@ const meta = {
       },
     },
     size: {
-      description: '16px (`sm`) or 20px (`md`) tall. Dots are 6px and 8px.',
+      description: 'Size of a dot: 8px (`md`) or 6px (`sm`). A count is 16px tall at either size; `sm` on a count is deprecated and renders the `md` badge.',
       control: 'inline-radio',
       options: ['sm', 'md'],
       table: { type: { summary: "'sm' | 'md'" }, defaultValue: { summary: "'md'" } },
@@ -125,10 +125,15 @@ export const Sizes: Story = {
   ),
   play: async ({ canvas }) => {
     const [sm, md] = canvas.getAllByText('3')
+    // One count badge: sm is deprecated on a count and renders the md badge.
     await expect(sm.getBoundingClientRect().height).toBe(16)
-    await expect(md.getBoundingClientRect().height).toBe(20)
-    // A single digit stays a circle, not an oval.
-    await expect(md.getBoundingClientRect().width).toBe(20)
+    await expect(md.getBoundingClientRect().height).toBe(16)
+    // A single digit keeps the minimum width, so a column of counts lines up.
+    await expect(sm.getBoundingClientRect().width).toBe(24)
+    await expect(md.getBoundingClientRect().width).toBe(24)
+    // Dots keep their two sizes, and stay round.
+    const dots = [...md.parentElement!.children].slice(2).map((d) => d.getBoundingClientRect())
+    await expect(dots.map((d) => [d.width, d.height])).toEqual([[6, 6], [8, 8]])
   },
 }
 
@@ -217,7 +222,7 @@ export const Zero: Story = {
 /** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
 export const anatomyParts = [
   { name: 'Anchor', selector: 'span:has(> button)', description: 'Wraps the element a floating badge pins to.' },
-  { name: 'Container', selector: 'button + span', description: 'The pill and its count, in tabular figures. Past maxCount, a "+" follows. Floating, it gets a ring in the page colour.' },
+  { name: 'Container', selector: 'button + span', description: 'The box and its count, in tabular figures. Past maxCount, a "+" follows. Floating, it gets a ring in the page colour.' },
   { name: 'Dot', selector: 'span:has(> button) + span', description: 'The container with no count: something new, not how many.' },
 ]
 

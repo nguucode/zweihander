@@ -9,7 +9,7 @@
   box-sizing: border-box;
   inline-size: var(--sidebar-width);
   block-size: 100%;
-  padding: var(--space-inline);
+  padding: var(--space-3);
   border-inline-end: var(--sidebar-border, 1px solid var(--border));
   background: var(--sidebar-background, var(--surface-filled));
   font-family: var(--font-sans);
@@ -28,7 +28,7 @@
   position: relative;
   display: flex;
   flex-shrink: 0;
-  inline-size: calc(var(--control-md) + 2 * var(--space-inline));
+  inline-size: calc(var(--control-md) + 2 * var(--space-3));
 }
 
 /* The hover preview: the full sidebar over the page, on an opaque fill (the
@@ -39,7 +39,7 @@
   inset-inline-start: 0;
   z-index: var(--layer-sticky);
   background: var(--sidebar-peek-background, var(--sidebar-background, var(--surface-filled)));
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow-overlay);
   animation: peek-in var(--duration-base) ease-out;
 }
 @keyframes peek-in {
@@ -57,12 +57,12 @@
 /* The rail: one square row plus the padding either side. */
 .collapsed {
   /* stylelint-disable-next-line zweihander/no-token-shadow -- the rail narrows the token, and the AppShell top bar reads it */
-  --sidebar-width: calc(var(--control-md) + 2 * var(--space-inline));
+  --sidebar-width: calc(var(--control-md) + 2 * var(--space-3));
 }
 
 /* The top row: the logo and the collapse button. As tall as the AppShell's
    top bar from the very top (it cancels the sidebar's padding), with the
-   logo two --space-inline in, so the logo sits where it would in the
+   logo an item's padding in, so the logo sits where it would in the
    top-bar layout and lines up with the nav icons. */
 .brandRow {
   display: flex;
@@ -73,8 +73,8 @@
 }
 .withBrand {
   justify-content: space-between;
-  margin-block: calc(-1 * var(--space-inline)) 0;
-  block-size: calc(var(--control-md) + 2 * var(--space-cluster));
+  margin-block: calc(-1 * var(--space-3)) 0;
+  block-size: calc(var(--control-md) + 2 * var(--space-inline));
 }
 .brand {
   display: flex;
@@ -147,8 +147,10 @@
   min-block-size: 0;
   /* The body reaches through the sidebar's end padding, so its scrollbar
      sits against the sidebar's edge as in the Claude apps; the gutter is
-     always kept, so rows keep their width whether or not the list scrolls. */
-  margin-inline-end: calc(-1 * var(--space-inline));
+     always kept, so rows keep their width whether or not the list scrolls.
+     The gutter is 8px of the 12px padding; the body pads the rest back. */
+  margin-inline-end: calc(-1 * var(--space-3));
+  padding-inline-end: var(--space-1);
   overflow-y: auto;
   scrollbar-gutter: stable;
   --thumb: transparent;
@@ -184,6 +186,7 @@
 /* The rail is too narrow to give up a gutter: it scrolls with no bar. */
 .collapsed .body {
   margin-inline-end: 0;
+  padding-inline-end: 0;
   scrollbar-gutter: auto;
   scrollbar-width: none;
 }
@@ -335,7 +338,7 @@
   flex-shrink: 0;
   inline-size: var(--box-xs);
   block-size: var(--box-xs);
-  font-size: var(--text-body-xs);
+  font-size: var(--text-body-sm);
 }
 .current .icon,
 .item:hover .icon {

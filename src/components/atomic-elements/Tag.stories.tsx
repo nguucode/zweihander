@@ -40,7 +40,7 @@ const meta = {
       table: { type: { summary: "'subtle' | 'outlined' | 'solid'" }, defaultValue: { summary: "'subtle'" } },
     },
     size: {
-      description: '20px (`sm`) or 24px (`md`) tall: the control tier below its name, to sit in a line of text.',
+      description: 'Deprecated. Every tag is 20px tall; `sm` renders the same tag as `md` and will be removed in the next release.',
       control: 'inline-radio',
       options: ['sm', 'md'],
       table: { type: { summary: "'sm' | 'md'" }, defaultValue: { summary: "'md'" } },
@@ -111,7 +111,9 @@ export const Colors: Story = {
   ),
 }
 
+/** `size` is deprecated: both values render the one 20px tag. Hidden until the prop goes. */
 export const Sizes: Story = {
+  tags: ['!dev'],
   render: (args) => (
     <div style={row}>
       <Tag {...args} size="sm" startIcon={<Icon name="success" />} hasRemoveButton />
@@ -122,7 +124,8 @@ export const Sizes: Story = {
     const [sm, md] = [...canvasElement.querySelectorAll('span[class*="tag"]')].map(
       (t) => t.getBoundingClientRect().height,
     )
-    await expect([sm, md]).toEqual([20, 24])
+    // One size: sm is deprecated and renders the md tag.
+    await expect([sm, md]).toEqual([20, 20])
   },
 }
 
@@ -206,13 +209,16 @@ export const TouchTarget: Story = {
     await expect([area.style.inlineSize, area.style.blockSize]).toEqual(['var(--target-coarse)', 'var(--target-coarse)'])
     // …and the token is the 44px WCAG 2.5.5 asks for.
     await expect(getComputedStyle(remove).getPropertyValue('--target-coarse').trim()).toBe('44px')
+    // On a fine pointer the hit area is the 24px of WCAG 2.5.8.
+    const before = getComputedStyle(remove, '::before')
+    await expect([before.inlineSize, before.blockSize]).toEqual(['24px', '24px'])
     // Absolutely placed and unpainted: the tag looks and measures the same.
-    await expect(area.style.position).toBe('absolute')
-    await expect(area.style.background).toBe('')
-    // Centred on the button, so past a 24px tag it reaches (44 - 24) / 2 = 10px each side.
+    await expect(before.position).toBe('absolute')
+    await expect(before.backgroundColor).toBe('rgba(0, 0, 0, 0)')
+    // Centred on the button, so past a 20px tag it reaches (44 - 20) / 2 = 12px each side.
     const tag = remove.parentElement!.getBoundingClientRect()
     const button = remove.getBoundingClientRect()
-    await expect(tag.height).toBe(24)
+    await expect(tag.height).toBe(20)
     await expect(button.top + button.height / 2).toBeCloseTo(tag.top + tag.height / 2, 0)
   },
 }
@@ -231,7 +237,6 @@ export const Contrast: Story = {
               <Tag
                 key={appearance + variant}
                 {...args}
-                size="sm"
                 appearance={appearance}
                 variant={variant}
                 text="Aa"

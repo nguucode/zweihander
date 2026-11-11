@@ -1,12 +1,8 @@
 /* Sizes are set on the field so the helper text can indent by the track's
    width. Doubled classes outrank ChoiceField's default, whichever
-   stylesheet loads first. Track heights are 16/20/24px, md and lg being
-   tiers xs and sm (see Foundations/Sizing); widths are about one and three
-   quarter heights, so the thumb travels most of a thumb-width. */
-.sm.sm {
-  --choice-control: var(--switch-sm-w);
-  --choice-control-block: var(--switch-sm-h);
-}
+   stylesheet loads first. Two tracks, Atlassian's: 32×16 (md) and 40×20px
+   (lg), each twice as wide as tall, so the thumb travels its own track
+   height. sm is deprecated and draws the md track. */
 .md.md {
   --choice-control: var(--switch-md-w);
   --choice-control-block: var(--switch-md-h);

@@ -56,7 +56,7 @@ const meta = {
       table: { type: { summary: 'ReactNode' } },
     },
     size: {
-      description: 'Max width: 24rem (`sm`), 32rem (`md`) or 48rem (`lg`). Never wider than the screen.',
+      description: 'Max width: 400px (`sm`), 600px (`md`) or 800px (`lg`). Never wider than the screen.',
       control: 'inline-radio',
       options: ['sm', 'md', 'lg'],
       table: { type: { summary: "'sm' | 'md' | 'lg'" }, defaultValue: { summary: "'md'" } },
@@ -245,10 +245,10 @@ export const Long: Story = {
  * fill the frame, not the window. On a phone the full-size picture is drawn
  * at 75%: a form modal is wider than a docs example has room for.
  */
-const picture = ({ width, height = '20rem', ...args }: ModalProps & { width?: string; height?: string }) => (
+const picture = ({ width, height = '23rem', ...args }: ModalProps & { width?: string; height?: string }) => (
   <Pictured
     data-modal-picture={width ? undefined : ''}
-    style={{ position: 'relative', contain: 'layout paint', inlineSize: width ?? 'min(34rem, 100vw - 10rem)', blockSize: height, borderRadius: 'var(--radius-panel)' }}
+    style={{ position: 'relative', contain: 'layout paint', inlineSize: width ?? 'min(39.5rem, 100vw - 10rem)', blockSize: height, borderRadius: 'var(--radius-panel)' }}
   >
     {(container) => (
       <>
@@ -322,7 +322,7 @@ export const DoNameTheActions: Story = {
       </>
     ),
   },
-  render: (args) => picture({ ...args, width: 'min(22rem, 100vw - 10rem)', height: '15rem' }),
+  render: (args) => picture({ ...args, width: 'min(22rem, 100vw - 10rem)', height: '17rem' }),
 }
 
 /** Guidelines, Don't: OK and Cancel make the reader go back to the question. */
@@ -337,5 +337,5 @@ export const DontOkCancel: Story = {
       </>
     ),
   },
-  render: (args) => picture({ ...args, width: 'min(22rem, 100vw - 10rem)', height: '15rem' }),
+  render: (args) => picture({ ...args, width: 'min(22rem, 100vw - 10rem)', height: '17rem' }),
 }

@@ -95,6 +95,10 @@ const stack = { display: 'grid', gap: 'var(--space-4)', justifyItems: 'start' }
 export const Default: Story = {
   play: async ({ canvas, userEvent, args }) => {
     const box = canvas.getByRole('checkbox', { name: 'Remember me' })
+    // A 16px box in a 24px hit area.
+    await expect(box.getBoundingClientRect().width).toBe(16)
+    await expect(box.getBoundingClientRect().height).toBe(16)
+    await expect(getComputedStyle(box, '::after').width).toBe('24px')
     await expect(box).not.toBeChecked()
     await userEvent.click(box)
     await expect(box).toBeChecked()
@@ -228,7 +232,7 @@ export const InAForm: Story = {
 
 /** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
 export const anatomyParts = [
-  { name: 'Container', selector: '[role="checkbox"]', description: 'The 20px box: an outline when unchecked, filled with the variant when checked.' },
+  { name: 'Container', selector: '[role="checkbox"]', description: 'The 16px box: an outline when unchecked, filled with the variant when checked.' },
   { name: 'Check mark', selector: '[role="checkbox"] > span', description: '`check` when checked, `minus` when indeterminate. Absent when unchecked.' },
   { name: 'Label', selector: 'label > span:last-child', description: 'Names the box. Part of the click target.' },
   { name: 'Helper text', selector: 'p', description: 'Optional. Indented under the label; the error message in the error state.' },

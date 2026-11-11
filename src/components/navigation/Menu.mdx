@@ -68,17 +68,19 @@ a check where an action shows its icon, so their labels line up.
 
 ## Measurements
 
-The popup is the Select list's surface. Each item is a row of the md
-control tier, with the normal pad: its text is left-aligned. The item's
-corner nests inside the popup's: the popup radius minus the popup padding,
-so the highlight runs parallel to the popup edge.
+The item follows Atlassian Design's dropdown item: 8px block and 12px
+inline padding around a 20px line, so a one-line item is 36px tall. The
+box ramp has no 36px step, so the md control tier (32px) is the floor and
+the padding makes the rest. The item's corner nests inside the popup's:
+the popup radius minus the popup padding (8 − 4 = 4px), so the highlight
+runs parallel to the popup edge.
 
 <SpecTable
   caption="Popup"
   rows={[
     { part: 'Popup', property: 'Padding', token: '--space-stack' },
-    { part: 'Popup', property: 'Corner radius', token: '--radius-field' },
-    { part: 'Popup', property: 'Shadow', token: '--shadow-md' },
+    { part: 'Popup', property: 'Corner radius', token: '--radius-lg' },
+    { part: 'Popup', property: 'Shadow', token: '--shadow-overlay' },
     { part: 'Popup', property: 'Layer', token: '--layer-overlay' },
     { part: 'Separator', property: 'Margin', token: '--space-1' },
   ]}
@@ -87,9 +89,9 @@ so the highlight runs parallel to the popup edge.
 <SpecTable
   caption="Item"
   rows={[
-    { part: 'Item', property: 'Height', token: '--control-md' },
-    { part: 'Item', property: 'Inline padding', token: '--control-md-pad' },
-    { part: 'Item', property: 'Block padding', token: '--space-stack' },
+    { part: 'Item', property: 'Minimum height', token: '--control-md' },
+    { part: 'Item', property: 'Inline padding', token: '--space-3' },
+    { part: 'Item', property: 'Block padding', token: '--space-2' },
     { part: 'Item', property: 'Gap', token: '--control-md-gap' },
     { part: 'Icon, check, chevron', property: 'Size', token: '--icon-md' },
     { part: 'Label', property: 'Font size', token: '--text-body' },
@@ -226,7 +228,7 @@ destructive actions the last place, after a separator.
   the item. Give `textValue` when a label is not plain text, or typeahead
   cannot find it.
 - A disabled link has no `href`, so it cannot be followed.
-- Items are 32px tall, 44px on touch screens (`pointer: coarse`).
+- Items are 36px tall, 44px on touch screens (`pointer: coarse`).
 - `isModal` (the default) makes the rest of the page inert while the menu
   is open, so a screen reader stays in the menu.
 

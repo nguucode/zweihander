@@ -87,9 +87,9 @@ own.
   wraps under the text when it does not. The list has no breakpoint of
   its own, so it works in a narrow aside as on a full page.
 - Long titles, emails and paths break anywhere rather than overflow.
-- Rows pad by `--space-inline` above and below, as Table rows do, and
-  are at least `--row-height` tall: a one-line row without media lines up
-  with a Table row of the same size.
+- Rows pad by `--space-inline` above and below and are at least
+  `--row-height` (48px) tall, with or without media. A Table's rows are
+  as tall as their content, so the two do not share a row height.
 
 <Canvas of={StackedListStories.LongContent} />
 

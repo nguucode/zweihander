@@ -27,8 +27,8 @@ record, a short form.
 
 <Canvas of={DrawerStories.Sides} />
 
-`size` sets the width of a side drawer: `sm` (20rem) for filters, `md`
-(28rem) for a form, `lg` (40rem) for a record with a lot to show. A side
+`size` sets the width of a side drawer: `sm` (360px) for filters, `md`
+(480px) for a form, `lg` (600px) for a record with a lot to show. A side
 drawer always leaves a touch target's width of backdrop, so on a phone it
 is nearly full width and can still be tapped away. For short content on
 a phone, pick `bottom` yourself: the side does not change with the
@@ -74,12 +74,12 @@ inert, so they do not lock this page or take its focus.
 <SpecTable
   caption="Container"
   rows={[
-    { part: 'Header, body, footer', property: 'Padding', token: '--space-group' },
-    { part: 'Container', property: 'Shadow', token: '--shadow-xl' },
+    { part: 'Header, body, footer', property: 'Padding', token: '--space-container' },
+    { part: 'Container', property: 'Shadow', token: '--shadow-overlay' },
     { part: 'Bottom sheet', property: 'Top corner radius', token: '--radius-panel' },
     { part: 'Backdrop left beside it', property: 'Minimum', token: '--target-coarse' },
-    { part: 'Title', property: 'Font size', token: '--text-heading-sm' },
-    { part: 'Title', property: 'Line height', token: '--leading-heading-sm' },
+    { part: 'Title', property: 'Font size', token: '--text-heading-md' },
+    { part: 'Title', property: 'Line height', token: '--leading-heading-md' },
     { part: 'Title to close button', property: 'Gap', token: '--space-group' },
     { part: 'Title to description', property: 'Gap', token: '--space-inline' },
     { part: 'Footer', property: 'Gap between actions', token: '--space-inline' },
@@ -98,8 +98,9 @@ inert, so they do not lock this page or take its focus.
   ]}
 />
 
-A side drawer is full height and at most 20rem (`sm`), 28rem (`md`) or
-40rem (`lg`) wide. A bottom sheet is full width and as tall as its content,
+A side drawer is full height and at most 360px (`sm`), 480px (`md`) or
+600px (`lg`) wide, set in rem (22.5, 30, 37.5): three of Atlassian's
+drawer widths, with Modal's 24px padding and 20/24 semibold title. A bottom sheet is full width and as tall as its content,
 up to the screen less `--target-coarse`. Borders are 1px: on the edge that
 faces the page, under the header and over the footer. Backdrop and drawer
 sit on the `--layer-overlay` layer and slide in over `--duration-base`.

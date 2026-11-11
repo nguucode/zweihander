@@ -232,7 +232,7 @@ button.event:hover {
   --event-columns: var(--event-gutter) repeat(var(--days), minmax(6rem, 1fr));
   overflow-x: auto;
   border: 1px solid var(--border);
-  border-radius: var(--radius-control);
+  border-radius: var(--radius-lg);
 }
 .root[data-view='day'] .timeGrid {
   --event-columns: var(--event-gutter) minmax(0, 1fr);

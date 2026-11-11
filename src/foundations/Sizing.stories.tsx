@@ -8,7 +8,9 @@ import { TextInput } from '@/components/inputs/TextInput'
 import { Icon } from '@/lib/icon'
 import docs from './docs.module.css'
 
-const TIERS = ['xs', 'sm', 'md'] as const
+// lg is a height only: the default field, which borrows the rest from md.
+const TIERS = ['xs', 'sm', 'md', 'lg'] as const
+const hasToken = (label: string, tier: string) => tier !== 'lg' || label === 'Height'
 
 /* Each cell is a token, read back in pixels: a probe element takes the token
    as a length and the table shows what it resolves to here, so the numbers
@@ -62,21 +64,25 @@ function TierTable() {
         {ROWS.map((row) => (
           <tr key={row.label}>
             <td>{row.label}</td>
-            {TIERS.map((t) => (
-              <td key={t} data-token={row.token(t)}>
-                <span
-                  data-probe={row.token(t)}
-                  data-prop={row.prop}
-                  aria-hidden="true"
-                  style={{
-                    position: 'absolute',
-                    visibility: 'hidden',
-                    [row.prop]: `var(${row.token(t)})`,
-                  }}
-                />
-                <code>{values[row.token(t)]}</code>
-              </td>
-            ))}
+            {TIERS.map((t) =>
+              hasToken(row.label, t) ? (
+                <td key={t} data-token={row.token(t)}>
+                  <span
+                    data-probe={row.token(t)}
+                    data-prop={row.prop}
+                    aria-hidden="true"
+                    style={{
+                      position: 'absolute',
+                      visibility: 'hidden',
+                      [row.prop]: `var(${row.token(t)})`,
+                    }}
+                  />
+                  <code>{values[row.token(t)]}</code>
+                </td>
+              ) : (
+                <td key={t}>–</td>
+              ),
+            )}
             <td>
               <code>{row.token('{tier}')}</code>
             </td>
@@ -126,10 +132,10 @@ function BoxRampTable() {
   )
 }
 
-function SmallControls() {
+function ToolbarControls() {
   return (
     <div className={docs.row} style={{ flexWrap: 'wrap' }}>
-      <Button size="sm" startIcon={<Icon name="plus" />}>
+      <Button startIcon={<Icon name="plus" />}>
         Button
       </Button>
       <TextInput size="sm" aria-label="Text input" placeholder="Text input" prefix={<Icon name="search" />} />
@@ -154,6 +160,7 @@ export const Tiers: Story = {
     await expect(value('--control-xs')).toBe('20px')
     await expect(value('--control-sm')).toBe('24px')
     await expect(value('--control-md')).toBe('32px')
+    await expect(value('--control-lg')).toBe('40px')
     await expect(value('--icon-xs')).toBe('12px')
     await expect(value('--icon-sm')).toBe('14px')
     await expect(value('--icon-md')).toBe('16px')
@@ -170,10 +177,12 @@ export const BoxRamp: Story = {
   },
 }
 
-/* The point of a tier: a Button, a text field and a select of the same size
-   carry the same icon, corner and type, whoever built them. */
+/* The point of a tier: a default Button and a small field both read md, so
+   they carry the same height, corner and type, whoever built them. A field
+   is one step taller than a button, so its sm is the Button's md. The
+   Button's icon is the larger --icon-lg (20px); a field's stays 16px. */
 export const SameTier: Story = {
-  render: () => <SmallControls />,
+  render: () => <ToolbarControls />,
   play: async ({ canvasElement }) => {
     const button = canvasElement.querySelector('button:not([role="combobox"])')!
     const field = canvasElement.querySelector('input')!.parentElement!
@@ -183,8 +192,8 @@ export const SameTier: Story = {
     const style = (el: Element) => getComputedStyle(el)
 
     for (const el of parts) {
-      await expect(el.getBoundingClientRect().height).toBe(24)
-      await expect(iconOf(el)).toBe(14)
+      await expect(el.getBoundingClientRect().height).toBe(32)
+      await expect(iconOf(el)).toBe(el === button ? 20 : 16)
       await expect(style(el).fontSize).toBe(style(button).fontSize)
       await expect(style(el).borderTopLeftRadius).toBe(style(button).borderTopLeftRadius)
     }

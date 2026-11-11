@@ -31,7 +31,7 @@ const tone = { Active: 'success', Paused: 'warning', Archived: 'info' } as const
 const columns: TableColumn<Project>[] = [
   { key: 'name', header: 'Project', sortable: true, isRowHeader: true },
   { key: 'owner', header: 'Owner', sortable: true },
-  { key: 'status', header: 'Status', cell: (p) => <Tag size="sm" variant={tone[p.status]} text={p.status} /> },
+  { key: 'status', header: 'Status', cell: (p) => <Tag variant={tone[p.status]} text={p.status} /> },
   { key: 'files', header: 'Files', sortable: true, align: 'end', cell: (p) => p.files.toLocaleString('en') },
   { key: 'updated', header: 'Updated', sortable: true, align: 'end', cell: (p) => date.format(p.updated) },
 ]
@@ -147,11 +147,17 @@ const meta = {
       control: 'boolean',
       table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
     },
-    density: {
-      description: 'Row height. `md` is `--row-height` (48px); `sm` is one `--space-inline` shorter (40px).',
+    size: {
+      description:
+        'Cell padding; a row is as tall as what it holds. `md` is 4px above and below, a 28px row for one line of text; `sm` is 2px (24px), for long lists of plain text.',
       control: 'inline-radio',
       options: ['sm', 'md'],
       table: { type: { summary: "'sm' | 'md'" }, defaultValue: { summary: "'md'" } },
+    },
+    density: {
+      description: 'Deprecated: use `size`, which takes the same values. Will be removed in the next release.',
+      control: false,
+      table: { type: { summary: "'sm' | 'md'" } },
     },
     hasStickyHeader: {
       description: 'Keeps the header row in view while the table scrolls inside its container, when something limits the container\'s height.',
@@ -191,12 +197,24 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
+/** Heights of a row's cell and its header cell, without the rule under them. */
+const cellHeights = (canvas: ReturnType<typeof within>) =>
+  [canvas.getAllByRole('rowheader')[0], canvas.getAllByRole('columnheader')[0]].map((c: HTMLElement) => c.clientHeight)
+
+/** Text only: a row of these is one 20px line tall. */
+const textColumns = columns.filter((c) => c.key !== 'status')
+
 const names = (canvas: ReturnType<typeof within>) => canvas.getAllByRole('rowheader').map((c: HTMLElement) => c.textContent)
 
 export const Default: Story = {
   play: async ({ args, canvas }) => {
     const table = canvas.getByRole('table', { name: 'Projects' })
     await expect(within(table).getAllByRole('row')).toHaveLength(5)
+    // 4px above and below the header's 16px line: the sort button adds nothing.
+    await expect(cellHeights(canvas)[1]).toBe(24)
+    // The header ends on a 2px rule, the rows on a 1px divider.
+    await expect(getComputedStyle(canvas.getAllByRole('columnheader')[0]).borderBottomWidth).toBe('2px')
+    await expect(getComputedStyle(canvas.getAllByRole('rowheader')[0]).borderBottomWidth).toBe('1px')
     await expect(names(canvas)).toEqual(['Atlas', 'Billing revamp', 'Onboarding', 'Design tokens'])
     // Sort: ascending, descending, then back to unsorted. aria-sort follows.
     const files = canvas.getByRole('columnheader', { name: /Files/ })
@@ -284,7 +302,23 @@ export const EmptyValuesSortLast: Story = {
   },
 }
 
-export const Compact: Story = { args: { density: 'sm', showCaption: true } }
+export const Compact: Story = {
+  args: { size: 'sm', showCaption: true },
+  play: async ({ canvas }) => {
+    // sm: 2px above and below the header's 16px line.
+    await expect(cellHeights(canvas)[1]).toBe(20)
+  },
+}
+
+/** `density` is deprecated: for one release it still sets the size. */
+export const DeprecatedDensity: Story = {
+  tags: ['!dev'],
+  args: { density: 'sm', columns: textColumns },
+  play: async ({ canvas }) => {
+    // sm: 2px above and below one 20px line of text.
+    await expect(cellHeights(canvas)).toEqual([24, 20])
+  },
+}
 
 export const Empty: Story = {
   args: {
@@ -482,6 +516,26 @@ const actions = (p: Project): MenuEntry[] =>
         { label: 'Archive', isDestructive: true, onSelect: () => onAction('archive', p.id) },
       ]
 
+/**
+ * A row is as tall as what it holds. One line of text is 28px, and the
+ * checkbox, the expand button and the actions button all fit in that; a
+ * 32px button in a cell makes its row 40px.
+ */
+export const RowWithControl: Story = {
+  tags: ['!dev'],
+  args: {
+    isSelectable: true,
+    expandedContent: details,
+    rowActions: actions,
+    columns: [...textColumns, { key: 'open', header: 'Open', cell: (p) => (p.id === 'p1' ? <Button appearance="outlined">Open</Button> : null) }],
+  },
+  play: async ({ canvas }) => {
+    const [atlas, billing] = canvas.getAllByRole('rowheader')
+    await expect([atlas.clientHeight, billing.clientHeight]).toEqual([40, 28])
+    await expect(cellHeights(canvas)[1]).toBe(24)
+  },
+}
+
 /** The menu renders into <body>, outside the story's canvas. */
 const page = (el: HTMLElement) => within(el.ownerDocument.body)
 
@@ -648,7 +702,7 @@ export const anatomyParts = [
   { name: 'Header row', selector: 'thead tr', description: 'Small muted labels on --surface-filled. Stays in view with hasStickyHeader.' },
   { name: 'Sort button', selector: 'th[aria-sort] button', description: 'The whole header label, with an icon for the sort. Only on sortable columns.' },
   { name: 'Select all', selector: 'thead [role="checkbox"]', description: 'With isSelectable. Selects or clears every row shown, and shows mixed when some are selected.' },
-  { name: 'Row', selector: 'tbody tr', description: '48px tall (40px at sm), divided by --border. Tinted when hovered or selected.' },
+  { name: 'Row', selector: 'tbody tr', description: 'As tall as what it holds: 28px for one line of text (24px at sm). Divided by --border, tinted when hovered or selected.' },
   { name: 'Row checkbox', selector: 'tbody [role="checkbox"]', description: 'Named after the row header: "Select Atlas".' },
   { name: 'Expand button', selector: 'tbody [aria-expanded]', description: 'With expandedContent: a ghost icon button. The chevron turns down when open.' },
   { name: 'Row header', selector: 'tbody th[scope="row"]', description: 'The column marked isRowHeader, medium weight: the name a row is known by.' },

@@ -335,7 +335,7 @@ export function CartesianChart({
       table={() => (
         <Table
           caption={title}
-          density="sm"
+          size="sm"
           hasStickyHeader
           rows={data}
           getRowId={(_, i) => String(i)}

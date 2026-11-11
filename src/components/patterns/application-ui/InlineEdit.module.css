@@ -2,9 +2,10 @@
    field's padding, inline and block, so in a table cell or a description
    list the value lines up with the text around it (start and baseline),
    the row is no taller than a line of text, and edit mode does not shift
-   it. */
+   it. The input is the toolbar field (sm, 32px) at both sizes: the value
+   box copies its height, padding and radius. */
 .inlineEdit {
-  --inline-edit-pad: var(--control-md-pad);
+  --inline-edit-pad: var(--space-1-5);
   --inline-edit-size: var(--control-md);
   --inline-edit-radius: var(--control-md-radius-field);
   margin-inline: calc(-1 * var(--inline-edit-pad));
@@ -15,10 +16,10 @@
   color: var(--foreground);
 }
 
-.sm {
-  --inline-edit-pad: var(--control-sm-pad);
-  --inline-edit-size: var(--control-sm);
-  --inline-edit-radius: var(--control-sm-radius-field);
+/* sm only makes Save and Cancel 24px, for a table row: centred on the
+   input's box, which has no 24px size. */
+.sm .editor > button {
+  margin-block: calc((var(--inline-edit-size) - var(--control-sm)) / 2);
 }
 
 .value {

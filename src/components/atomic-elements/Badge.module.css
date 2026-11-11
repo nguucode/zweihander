@@ -5,45 +5,34 @@
   gap: var(--space-2);
 }
 
-/* Always a pill, whatever the Theme's radius preset: a squared-off count
-   reads as a key cap, not a badge. --radius-pill ignores the preset. */
+/* One count badge, Atlassian's: 16px tall, at least 24px wide, 4px either
+   side, 12/16 text and a 2px corner. The step, not a control radius: it
+   follows the preset's factor and never becomes a pill. */
 .badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
   box-sizing: border-box;
-  border-radius: var(--radius-pill);
+  block-size: var(--badge-md);
+  min-inline-size: var(--box-sm);
+  padding-inline: var(--space-1);
+  border-radius: var(--radius-xs);
   font-family: var(--font-sans);
-  font-size: var(--text-body-xs);
-  line-height: var(--leading-body-xs);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
   font-weight: 500;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 
-/* --badge-sm (16px) and --badge-md (20px). min-inline-size equal to the height keeps a single
-   digit a circle rather than an oval. The tier's pad is not used: a count
-   is one or two digits in a pill, and 6px either side would turn "9" into
-   an oval. */
-.sm {
-  block-size: var(--badge-sm);
-  min-inline-size: var(--badge-sm);
-  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- 2px, below the spacing scale on purpose */
-  padding-inline: 0.125rem;
-}
-
-.md {
-  block-size: var(--badge-md);
-  min-inline-size: var(--badge-md);
-  padding-inline: var(--control-xs-gap);
-}
-
+/* A dot stays round, and keeps its two sizes: 8px, or 6px at sm. */
 .dot {
   min-inline-size: 0;
   padding: 0;
   inline-size: var(--badge-dot-md);
   block-size: var(--badge-dot-md);
+  border-radius: var(--radius-pill);
 }
 
 .dot.sm {

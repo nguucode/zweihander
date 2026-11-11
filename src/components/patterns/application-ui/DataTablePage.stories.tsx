@@ -41,7 +41,7 @@ const date = new Intl.DateTimeFormat('en', { dateStyle: 'medium' })
 const columns: TableColumn<Project>[] = [
   { key: 'name', header: 'Project', sortable: true, isRowHeader: true },
   { key: 'owner', header: 'Owner', sortable: true },
-  { key: 'status', header: 'Status', cell: (p) => <Tag size="sm" variant={tone[p.status]} text={p.status} /> },
+  { key: 'status', header: 'Status', cell: (p) => <Tag variant={tone[p.status]} text={p.status} /> },
   { key: 'updated', header: 'Updated', sortable: true, align: 'end', cell: (p) => date.format(p.updated) },
 ]
 
@@ -94,8 +94,9 @@ function ProjectsTable({ isSelectable = false, initialQuery = '' }: { isSelectab
         }
       >
         <TableToolbarGroup>
-          <Search ref={searchRef} aria-label="Search projects" placeholder="Search projects" value={query} onChange={(e) => filter(() => setQuery(e.target.value))} />
+          <Search ref={searchRef} size="sm" aria-label="Search projects" placeholder="Search projects" value={query} onChange={(e) => filter(() => setQuery(e.target.value))} />
           <Select
+            size="sm"
             aria-label="Status"
             options={['All', 'Active', 'Paused', 'Archived']}
             value={status}

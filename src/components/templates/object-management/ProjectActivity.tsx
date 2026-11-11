@@ -22,7 +22,7 @@ export const healthLabel: Record<ProjectHealth, string> = { risk: 'Risk', 'poten
 /** Every health, worst first, in the order a picker lists them. */
 export const HEALTHS = Object.keys(healthLabel) as ProjectHealth[]
 
-export const statusTag = (status: ProjectStatus) => <Tag size="sm" variant={statusTone[status]} text={status} />
+export const statusTag = (status: ProjectStatus) => <Tag variant={statusTone[status]} text={status} />
 
 export const fullMoment = new Intl.DateTimeFormat('en', { dateStyle: 'medium', timeStyle: 'short' })
 export const money = new Intl.NumberFormat('en', { style: 'currency', currency: 'USD', notation: 'compact', maximumFractionDigits: 1 })

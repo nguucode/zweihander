@@ -1,10 +1,10 @@
 /* Set on the field so the helper text indents by the box's width. The box
-   is --choice-box: 20px. */
+   is --choice-box: 16px, as Atlassian draws it. */
 .field {
   --choice-control: var(--choice-box);
 }
 
-/* 20px box, a --control-border outline (3:1 on the page). Checked and
+/* 16px box, a --control-border outline (3:1 on the page). Checked and
    indeterminate fill with the variant and show the mark in its label
    colour. */
 .box {
@@ -17,8 +17,9 @@
   block-size: var(--choice-control);
   border: 1px solid var(--control-border);
   /* The step, not --control-xs-radius: a box that turned round at
-     radius="full-rounded" would read as a radio. */
-  border-radius: var(--radius-sm);
+     radius="full-rounded" would read as a radio. 2px, Atlassian's corner
+     for a 16px box. */
+  border-radius: var(--radius-xs);
   background: var(--background);
   cursor: var(--cursor-button);
 }
@@ -55,8 +56,9 @@ label:hover > .box:is([data-checked], [data-indeterminate]):not([data-disabled],
   background: color-mix(in oklab, var(--checkbox-fill) 88%, var(--checkbox-mark));
 }
 
-/* The mark is 16px in a 20px box: it has to read at a glance. */
+/* The mark is 12px in a 16px box: 14px is left inside the border, and the
+   next icon step up would touch it. */
 .indicator {
   display: inline-flex;
-  font-size: var(--icon-md);
+  font-size: var(--icon-xs);
 }

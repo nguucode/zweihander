@@ -37,7 +37,7 @@ const meta = {
       table: { type: { summary: 'ReactNode' } },
     },
     size: {
-      description: 'Track 28×16 (`sm`), 36×20 (`md`) or 44×24px (`lg`).',
+      description: 'Track 32×16 (`md`) or 40×20px (`lg`). `sm` is deprecated: it draws the `md` track and will be removed in the next release.',
       control: 'inline-radio',
       options: ['sm', 'md', 'lg'],
       table: { type: { summary: "'sm' | 'md' | 'lg'" }, defaultValue: { summary: "'md'" } },
@@ -127,7 +127,8 @@ export const Sizes: Story = {
     const widths = ['sm', 'md', 'lg'].map(
       (n) => canvas.getByRole('switch', { name: n }).getBoundingClientRect().width,
     )
-    await expect(widths).toEqual([28, 36, 44])
+    // sm is deprecated and draws the md track.
+    await expect(widths).toEqual([32, 32, 40])
   },
 }
 

@@ -28,7 +28,7 @@ const meta = {
       table: { type: { summary: "'default' | 'success' | 'error'" }, defaultValue: { summary: "'default'" } },
     },
     size: {
-      description: 'Square cells of 24px (`sm`) or 32px (`md`), from the control tiers.',
+      description: 'Square cells of 32px (`sm`) or 40px (`md`), as tall as a Text Input of the same size.',
       control: 'inline-radio',
       options: ['sm', 'md'],
       table: { type: { summary: "'sm' | 'md'" }, defaultValue: { summary: "'md'" } },

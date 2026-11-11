@@ -66,7 +66,7 @@ const meta = {
       table: { type: { summary: "'right' | 'left' | 'bottom'" }, defaultValue: { summary: "'right'" } },
     },
     size: {
-      description: 'Width of a side drawer: 20rem (`sm`), 28rem (`md`) or 40rem (`lg`), always leaving a touch target of backdrop. Ignored at the bottom.',
+      description: 'Width of a side drawer: 360px (`sm`), 480px (`md`) or 600px (`lg`), always leaving a touch target of backdrop. Ignored at the bottom.',
       control: 'inline-radio',
       options: ['sm', 'md', 'lg'],
       table: { type: { summary: "'sm' | 'md' | 'lg'" }, defaultValue: { summary: "'md'" } },
@@ -332,7 +332,7 @@ export const Long: Story = {
  * the docs page. The frame contains layout, so the fixed backdrop and
  * viewport fill the frame, not the window.
  */
-const picture = ({ width = 'min(40rem, 100vw - 10rem)', height = '24rem', ...args }: DrawerProps & { width?: string; height?: string }) => (
+const picture = ({ width = 'min(40rem, 100vw - 10rem)', height = '29rem', ...args }: DrawerProps & { width?: string; height?: string }) => (
   <Pictured style={{ position: 'relative', contain: 'layout paint', inlineSize: width, blockSize: height, borderRadius: 'var(--radius-panel)' }}>
     {(container) => <Drawer {...args} trigger={undefined} open isModal={false} container={container} />}
   </Pictured>
@@ -417,7 +417,7 @@ const record = (
 export const DoQuickView: Story = {
   tags: ['!dev'],
   args: { size: 'sm', title: 'Invoice INV-0042', description: undefined, children: record, footer: <Button appearance="outlined">Open invoice</Button> },
-  render: (args) => picture({ ...args, width: 'min(26rem, 100vw - 10rem)', height: '16rem' }),
+  render: (args) => picture({ ...args, width: 'min(26rem, 100vw - 10rem)', height: '19rem' }),
 }
 
 /** Guidelines, Don't: a yes-or-no decision pushed to the edge of the screen. */

@@ -106,7 +106,7 @@ export function Shell({ current, children }: { current: string; children: ReactN
         trigger={
           <Button variant="secondary" appearance="ghost" isIconOnly aria-label="Notifications, 27 unread" className="has-badge">
             <Icon name="notifications" />
-            <Badge count={27} variant="primary" size="sm" isFloating />
+            <Badge count={27} variant="primary" isFloating />
           </Button>
         }
       >

@@ -7,9 +7,9 @@
   box-sizing: border-box;
   max-inline-size: calc(100vw - 2 * var(--space-4));
   border: 1px solid var(--border);
-  border-radius: var(--radius-panel);
+  border-radius: var(--radius-lg);
   background: var(--popover);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-overlay);
   color: var(--popover-foreground);
   outline: none;
   transform-origin: var(--transform-origin);

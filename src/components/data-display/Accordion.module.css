@@ -22,7 +22,7 @@
 
 .outlined {
   border: 1px solid var(--border);
-  border-radius: var(--radius-panel);
+  border-radius: var(--radius-lg);
   overflow: hidden;
 }
 

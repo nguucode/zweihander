@@ -93,10 +93,10 @@
 /* ---------------------------------------------------------------- card */
 .card {
   border: 1px solid var(--border);
-  border-radius: var(--radius-panel);
+  border-radius: var(--radius-lg);
   background: var(--card);
   color: var(--card-foreground);
-  box-shadow: var(--shadow-xs);
+  box-shadow: var(--shadow-raised);
   overflow: hidden;
 }
 .card > .fields {

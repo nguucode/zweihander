@@ -70,22 +70,22 @@ helper text are Text Input's.
 
 ## Measurements
 
-Each size is a control tier, as on Text Input, and a cell is a square of
-that tier.
+A cell is a square as tall as a Text Input of the same size: 32px in
+`sm`, 40px in `md`, with body type in both.
 
 <SpecTable
   caption="sm"
   rows={[
-    { part: 'Cell', property: 'Width and height', token: '--control-sm' },
-    { part: 'Cell', property: 'Corner radius', token: '--control-sm-radius-field' },
-    { part: 'Cell', property: 'Font size', token: '--text-body-sm' },
+    { part: 'Cell', property: 'Width and height', token: '--control-md' },
+    { part: 'Cell', property: 'Corner radius', token: '--control-md-radius-field' },
+    { part: 'Cell', property: 'Font size', token: '--text-body' },
   ]}
 />
 
 <SpecTable
   caption="md"
   rows={[
-    { part: 'Cell', property: 'Width and height', token: '--control-md' },
+    { part: 'Cell', property: 'Width and height', token: '--control-lg' },
     { part: 'Cell', property: 'Corner radius', token: '--control-md-radius-field' },
     { part: 'Cell', property: 'Font size', token: '--text-body' },
   ]}
@@ -112,7 +112,6 @@ button is a small ghost [Button](?path=/docs/components-buttons-button--docs).
   rows={[
     { part: 'Cell', property: 'Background', token: '--card' },
     { part: 'Cell', property: 'Border', token: '--field-edge' },
-    { part: 'Cell', property: 'Shadow', token: '--shadow-2xs' },
     { part: 'Character', property: 'Colour', token: '--foreground' },
     { part: 'Caret', property: 'Colour', token: '--ring' },
     { part: 'Group separator', property: 'Colour', token: '--muted-foreground' },

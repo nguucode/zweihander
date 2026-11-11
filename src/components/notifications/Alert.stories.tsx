@@ -164,6 +164,9 @@ export const Dismissible: Story = {
     // Keyboard focus shows the 2px ring in --ring.
     const { outlineStyle, outlineWidth, outlineColor } = getComputedStyle(close)
     await expect([outlineStyle, outlineWidth, outlineColor]).toEqual(['solid', '2px', ringColour(canvasElement)])
+    // A 24px button that adds nothing to the alert's first 20px line.
+    const { width, height } = close.getBoundingClientRect()
+    await expect([width, height]).toEqual([24, 24])
     // A 44px touch target on coarse pointers.
     await expect(mediaRules('pointer: coarse', close, '::before').map((r) => [r.style.inlineSize, r.style.blockSize])[0]).toEqual(['var(--target-coarse)', 'var(--target-coarse)'])
     await userEvent.keyboard('{Enter}')

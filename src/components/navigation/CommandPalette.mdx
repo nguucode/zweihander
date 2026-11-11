@@ -68,7 +68,7 @@ inert, so they do not lock this page or take its focus.
   caption="Container"
   rows={[
     { part: 'Container', property: 'Corner radius', token: '--radius-panel' },
-    { part: 'Container', property: 'Shadow', token: '--shadow-xl' },
+    { part: 'Container', property: 'Shadow', token: '--shadow-overlay' },
     { part: 'Container', property: 'Margin to the screen edge', token: '--space-group' },
     { part: 'Search row', property: 'Height', token: '--box-xl' },
     { part: 'Search row', property: 'Gap, icon to input', token: '--control-md-gap' },
@@ -77,15 +77,16 @@ inert, so they do not lock this page or take its focus.
     { part: 'List', property: 'Inset from the container', token: '--space-stack' },
     { part: 'Empty text', property: 'Block padding', token: '--space-6' },
     { part: 'Key hints', property: 'Gap between hints', token: '--space-group' },
-    { part: 'Key hints', property: 'Font size', token: '--text-body-xs' },
+    { part: 'Key hints', property: 'Font size', token: '--text-body-sm' },
   ]}
 />
 
 <SpecTable
   caption="Item and group label"
   rows={[
-    { part: 'Item', property: 'Height', token: '--control-md' },
-    { part: 'Item', property: 'Inline padding', token: '--control-md-pad' },
+    { part: 'Item', property: 'Minimum height', token: '--control-md' },
+    { part: 'Item', property: 'Inline padding', token: '--space-3' },
+    { part: 'Item', property: 'Block padding', token: '--space-2' },
     { part: 'Item', property: 'Gap', token: '--control-md-gap' },
     { part: 'Icon', property: 'Size', token: '--icon-md' },
     { part: 'Group label', property: 'Font size', token: '--text-body-sm' },
@@ -93,6 +94,9 @@ inert, so they do not lock this page or take its focus.
     { part: 'Item', property: 'Minimum height on touch screens', token: '--target-coarse' },
   ]}
 />
+
+An item is Menu's: 8px block and 12px inline padding around a 20px line,
+36px for one line, after Atlassian Design's dropdown item.
 
 The container is at most 40rem wide and never wider than the screen. It
 sits near the top, at 12% of the screen height, not centred: the list

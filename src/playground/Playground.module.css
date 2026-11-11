@@ -31,7 +31,7 @@
   margin: 0;
   font-family: var(--font-heading);
   font-size: var(--text-heading-xs);
-  font-weight: 500;
+  font-weight: 600;
   line-height: var(--leading-heading-xs);
 }
 
@@ -136,7 +136,7 @@
   margin: 0;
   font-family: var(--font-heading);
   font-size: var(--text-heading-2xs);
-  font-weight: 500;
+  font-weight: 600;
   line-height: var(--leading-heading-2xs);
 }
 
@@ -201,7 +201,7 @@
   overflow: hidden;
   font-family: var(--font-heading);
   font-size: var(--text-heading-2xs);
-  font-weight: 500;
+  font-weight: 600;
   line-height: var(--leading-heading-2xs);
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -352,7 +352,7 @@
 }
 .specToken {
   font-family: var(--font-mono);
-  font-size: var(--text-body-xs);
+  font-size: var(--text-body-sm);
 }
 .specSwatch {
   flex: none;

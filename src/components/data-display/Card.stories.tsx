@@ -48,7 +48,7 @@ const meta = {
       table: { type: { summary: "'vertical' | 'horizontal'" }, defaultValue: { summary: "'vertical'" } },
     },
     isRounded: {
-      description: 'Rounds the corners with `--radius-panel`. Off: square corners.',
+      description: 'Rounds the corners with `--radius-lg`. Off: square corners.',
       control: 'boolean',
       table: { type: { summary: 'boolean' }, defaultValue: { summary: 'true' } },
     },

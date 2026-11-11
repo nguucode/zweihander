@@ -80,7 +80,7 @@
   border: 2px solid var(--primary-text);
   border-radius: var(--radius-pill);
   background: var(--background);
-  box-shadow: var(--shadow-xs);
+  box-shadow: var(--shadow-raised);
   cursor: grab;
   transition: scale var(--duration-fast);
 }

@@ -66,7 +66,8 @@ The parts are Button's: an icon can sit at the start or the end, and while
 
 ## Measurements
 
-The same as Button: each size is a control tier.
+The same as Button: each size is a control tier, 32px by default and 24px
+for tables and dense rows, with a 14/20 label at both.
 
 <SpecTable
   caption="sm"
@@ -76,7 +77,7 @@ The same as Button: each size is a control tier.
     { part: 'Container', property: 'Corner radius', token: '--control-sm-radius' },
     { part: 'Container', property: 'Gap', token: '--control-sm-gap' },
     { part: 'Icon', property: 'Size', token: '--icon-sm' },
-    { part: 'Label', property: 'Font size', token: '--text-body-sm' },
+    { part: 'Label', property: 'Font size', token: '--text-body' },
   ]}
 />
 
@@ -192,7 +193,7 @@ Every other `<button>` attribute passes through, including `ref`.
 
 ### Differences from the spec
 
-- **Two sizes, not four.** `sm` (24px) and `md` (32px) only, the compact control scale of the Claude apps. The spec's larger steps were dropped; a big call to action is `md` with more room around it, not a taller box.
+- **Two sizes, not four.** The sizes follow Atlassian Design: 32px (`md`) by default, 24px (`sm`) for tables and dense rows. Both take 12px inline padding, a 6px gap and a 14/20 label; `sm` is a shorter box, not smaller type. The spec's larger steps were dropped; a big call to action is `md` with more room around it, not a taller box.
 - **`pressed`, `defaultPressed`, `onPressedChange`** instead of
   `isSelected`: Base UI's names, per the kit's convention for components
   built on it. "Pressed" is also the ARIA word (`aria-pressed`).

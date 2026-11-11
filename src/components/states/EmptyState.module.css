@@ -36,7 +36,7 @@
   font-size: var(--text-heading-md);
   line-height: var(--leading-heading-md);
   font-family: var(--font-heading);
-  font-weight: 500;
+  font-weight: 600;
 }
 .sm .title {
   font-size: var(--text-heading-sm);

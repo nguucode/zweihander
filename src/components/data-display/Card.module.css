@@ -39,7 +39,7 @@
 }
 
 .rounded {
-  border-radius: var(--radius-panel);
+  border-radius: var(--radius-lg);
 }
 
 /* The card's own border is the non-interactive one; a clickable card still
@@ -52,7 +52,7 @@
   /* stylelint-disable-next-line zweihander/no-token-shadow -- what sits on the card reads its colour */
   --background: var(--card);
   background: var(--card);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-raised);
 }
 
 .outline {
@@ -69,17 +69,17 @@
   /* stylelint-disable-next-line zweihander/no-token-shadow -- what sits on the surface reads its colour */
   --background: var(--card);
   background: var(--content-card, var(--card)) var(--content-flat, transparent);
-  box-shadow: var(--content-card, var(--shadow-sm)) var(--content-flat, none);
+  box-shadow: var(--content-card, var(--shadow-raised)) var(--content-flat, none);
 }
 .surface.rounded {
-  border-radius: var(--content-card, var(--radius-panel)) var(--content-flat, 0);
+  border-radius: var(--content-card, var(--radius-lg)) var(--content-flat, 0);
 }
 .surface.bordered {
   border-color: var(--content-card, var(--border)) var(--content-flat, transparent);
   border-block-start-color: var(--border);
 }
 .surface.interactive:hover {
-  box-shadow: var(--content-card, var(--shadow-md)) var(--content-flat, none);
+  box-shadow: var(--content-card, var(--shadow-overlay)) var(--content-flat, none);
   /* Flat has no shadow to lift: the rule above strengthens, as outline's edge does. */
   border-block-start-color: var(--content-card, var(--border)) var(--content-flat, var(--control-border));
 }
@@ -108,7 +108,7 @@ a[href].interactive {
    lifts to a larger shadow; the others strengthen their edge to the 3:1
    control border. */
 .elevated.interactive:hover {
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-overlay);
 }
 
 .outline.interactive:hover {

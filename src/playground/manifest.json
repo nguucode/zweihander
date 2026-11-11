@@ -324,7 +324,7 @@
             "md"
           ],
           "default": "md",
-          "description": "16px (`sm`) or 20px (`md`) tall. Dots are 6px and 8px."
+          "description": "Size of a dot: 8px (`md`) or 6px (`sm`). A count is 16px tall at either size; `sm` on a count is deprecated and renders the `md` badge."
         },
         {
           "name": "isDot",
@@ -366,7 +366,7 @@
           {
             "name": "Container",
             "selector": "button + span",
-            "description": "The pill and its count, in tabular figures. Past maxCount, a \"+\" follows. Floating, it gets a ring in the page colour."
+            "description": "The box and its count, in tabular figures. Past maxCount, a \"+\" follows. Floating, it gets a ring in the page colour."
           },
           {
             "name": "Dot",
@@ -376,57 +376,57 @@
         ],
         "measurements": [
           {
-            "caption": "sm",
-            "rows": [
-              {
-                "part": "Container",
-                "property": "Height and minimum width",
-                "token": "--badge-sm"
-              },
-              {
-                "part": "Dot",
-                "property": "Size",
-                "token": "--badge-dot-sm"
-              }
-            ]
-          },
-          {
             "caption": "md",
             "rows": [
               {
                 "part": "Container",
-                "property": "Height and minimum width",
+                "property": "Height",
                 "token": "--badge-md"
               },
               {
                 "part": "Container",
+                "property": "Minimum width",
+                "token": "--box-sm"
+              },
+              {
+                "part": "Container",
                 "property": "Inline padding",
-                "token": "--control-xs-gap"
+                "token": "--space-1"
+              },
+              {
+                "part": "Container",
+                "property": "Corner radius",
+                "token": "--radius-xs"
+              },
+              {
+                "part": "Count",
+                "property": "Font size",
+                "token": "--text-body-sm"
+              },
+              {
+                "part": "Count",
+                "property": "Line height",
+                "token": "--leading-body-sm"
               },
               {
                 "part": "Dot",
                 "property": "Size",
                 "token": "--badge-dot-md"
+              },
+              {
+                "part": "Dot",
+                "property": "Corner radius",
+                "token": "--radius-pill"
               }
             ]
           },
           {
-            "caption": "Every size",
+            "caption": "sm",
             "rows": [
               {
-                "part": "Container",
-                "property": "Corner radius",
-                "token": "--radius-pill"
-              },
-              {
-                "part": "Count",
-                "property": "Font size",
-                "token": "--text-body-xs"
-              },
-              {
-                "part": "Count",
-                "property": "Line height",
-                "token": "--leading-body-xs"
+                "part": "Dot",
+                "property": "Size",
+                "token": "--badge-dot-sm"
               }
             ]
           }
@@ -766,17 +766,17 @@
               {
                 "part": "Key",
                 "property": "Corner radius",
-                "token": "--radius-sm"
+                "token": "--radius-xs"
               },
               {
                 "part": "Key",
                 "property": "Font size",
-                "token": "--text-body-xs"
+                "token": "--text-body-sm"
               },
               {
                 "part": "Key",
                 "property": "Line height",
-                "token": "--leading-body-xs"
+                "token": "--leading-body-sm"
               },
               {
                 "part": "Group",
@@ -868,7 +868,7 @@
             "md"
           ],
           "default": "md",
-          "description": "20px (`sm`) or 24px (`md`) tall: the control tier below its name, to sit in a line of text."
+          "description": "Deprecated. Every tag is 20px tall; `sm` renders the same tag as `md` and will be removed in the next release."
         },
         {
           "name": "appearance",
@@ -943,12 +943,17 @@
         ],
         "measurements": [
           {
-            "caption": "sm",
+            "caption": "Every tag",
             "rows": [
               {
                 "part": "Container",
+                "property": "Height",
+                "token": "--control-xs"
+              },
+              {
+                "part": "Container",
                 "property": "Inline padding",
-                "token": "--control-xs-pad-spacious"
+                "token": "--space-1"
               },
               {
                 "part": "Container",
@@ -958,7 +963,7 @@
               {
                 "part": "Container",
                 "property": "Gap",
-                "token": "--control-xs-gap"
+                "token": "--space-1"
               },
               {
                 "part": "Icon, avatar and remove button",
@@ -974,56 +979,11 @@
                 "part": "Text",
                 "property": "Line height",
                 "token": "--leading-body-sm"
-              }
-            ]
-          },
-          {
-            "caption": "md",
-            "rows": [
-              {
-                "part": "Container",
-                "property": "Inline padding",
-                "token": "--control-sm-pad-spacious"
               },
-              {
-                "part": "Container",
-                "property": "Corner radius",
-                "token": "--control-sm-radius"
-              },
-              {
-                "part": "Container",
-                "property": "Gap",
-                "token": "--control-sm-gap"
-              },
-              {
-                "part": "Icon, avatar and remove button",
-                "property": "Size",
-                "token": "--icon-sm"
-              },
-              {
-                "part": "Text",
-                "property": "Font size",
-                "token": "--text-body"
-              },
-              {
-                "part": "Text",
-                "property": "Line height",
-                "token": "--leading-body"
-              }
-            ]
-          },
-          {
-            "caption": "Every size",
-            "rows": [
               {
                 "part": "Remove button",
                 "property": "Focus ring width",
                 "token": "--focus-width"
-              },
-              {
-                "part": "Remove button",
-                "property": "Focus ring offset (inset)",
-                "token": "--focus-offset-inset"
               },
               {
                 "part": "Remove button",
@@ -1235,7 +1195,7 @@
         "whenToUse": [
           "Use a Tag to label or categorise: a status on a row, the categories of an\nitem, the filters applied to a list, the people picked in a field. Where a\ntag has to pass AA, use `subtle` or `outlined`: solid hue tags keep one\nwhite label across hues, which the warm ones carry under 4.5:1.",
           "Colour carries meaning here, so it is never the only signal: the text says\nwhat the status is.",
-          "In a wrapped list of removable tags on touch, keep at least `--space-6`\nbetween rows. The remove button's touch area reaches 10px above and below\na 24px tag, and neighbouring targets would overlap."
+          "In a wrapped list of removable tags on touch, keep at least `--space-6`\nbetween rows. The remove button's touch area reaches 12px above and below\na 20px tag, and neighbouring targets would overlap."
         ],
         "whenNotToUse": [
           "- **For an action.** A tag is a label; its only control is remove. Use a\n  [Button](?path=/docs/components-buttons-button--docs).\n- **For a choice the user toggles on and off.** Use a\n  [Toggle Button](?path=/docs/components-buttons-togglebutton--docs) or a\n  Checkbox.\n- **For a count.** Use a\n  [Badge](?path=/docs/components-atomic-elements-badge--docs)."
@@ -1256,7 +1216,7 @@
           {
             "title": "Accessibility",
             "blocks": [
-              "- The remove button is named **\"Remove `text`\"** (e.g. \"Remove Design\"),\n  so a list of tags does not read as a row of identical \"Remove\" buttons.\n- It is a native `<button>`: Tab to reach, Enter or Space to press.\n- On touch screens (`pointer: coarse`) its hit area grows to 44×44px\n  without changing how the tag looks. That area reaches 10px above and\n  below a 24px tag.\n- After a tag is removed, focus has nowhere to stay and drops to the page.\n  If that matters, move it to the next tag's remove button, or to the\n  field the tags belong to, in your `onRemove`.\n- The icon and the avatar are decorative.\n- Every label clears 4.5:1 in both themes, measured by the `Contrast`\n  story, except solid hue tags (see Differences from the spec)."
+              "- The remove button is named **\"Remove `text`\"** (e.g. \"Remove Design\"),\n  so a list of tags does not read as a row of identical \"Remove\" buttons.\n- It is a native `<button>`: Tab to reach, Enter or Space to press.\n- On touch screens (`pointer: coarse`) its hit area grows to 44×44px\n  without changing how the tag looks. That area reaches 12px above and\n  below a 20px tag.\n- After a tag is removed, focus has nowhere to stay and drops to the page.\n  If that matters, move it to the next tag's remove button, or to the\n  field the tags belong to, in your `onRemove`.\n- The icon and the avatar are decorative.\n- Every label clears 4.5:1 in both themes, measured by the `Contrast`\n  story, except solid hue tags (see Differences from the spec)."
             ]
           }
         ]
@@ -1307,7 +1267,7 @@
             "md"
           ],
           "default": "md",
-          "description": "24px (`sm`) or 32px (`md`) tall, from the control tiers. `sm` takes a 12px label."
+          "description": "32px (`md`) or 24px (`sm`, for tables and dense rows) tall, from the control tiers. The label is 14/20 at both sizes."
         },
         {
           "name": "isLoading",
@@ -1389,12 +1349,12 @@
               {
                 "part": "Label",
                 "property": "Font size",
-                "token": "--text-body-sm"
+                "token": "--text-body"
               },
               {
                 "part": "Label",
                 "property": "Line height",
-                "token": "--leading-body-sm"
+                "token": "--leading-body"
               }
             ]
           },
@@ -1567,11 +1527,6 @@
                 "part": "Focus ring",
                 "property": "Colour",
                 "token": "--ring"
-              },
-              {
-                "part": "Container, contained",
-                "property": "Drop shadow",
-                "token": "--shadow-xs"
               }
             ]
           }
@@ -1879,7 +1834,7 @@
               {
                 "part": "Label",
                 "property": "Font size",
-                "token": "--text-body-sm"
+                "token": "--text-body"
               }
             ]
           },
@@ -2178,7 +2133,7 @@
           {
             "name": "Container",
             "selector": "[role=\"checkbox\"]",
-            "description": "The 20px box: an outline when unchecked, filled with the variant when checked."
+            "description": "The 16px box: an outline when unchecked, filled with the variant when checked."
           },
           {
             "name": "Check mark",
@@ -2208,12 +2163,12 @@
               {
                 "part": "Container",
                 "property": "Corner radius",
-                "token": "--radius-sm"
+                "token": "--radius-xs"
               },
               {
                 "part": "Check mark",
                 "property": "Size",
-                "token": "--icon-md"
+                "token": "--icon-xs"
               },
               {
                 "part": "Label",
@@ -2244,6 +2199,11 @@
                 "part": "Focus ring",
                 "property": "Offset",
                 "token": "--focus-offset"
+              },
+              {
+                "part": "Hit area",
+                "property": "Minimum",
+                "token": "--box-sm"
               },
               {
                 "part": "Hit area",
@@ -2375,7 +2335,7 @@
           {
             "title": "Accessibility",
             "blocks": [
-              "- `role=\"checkbox\"` with `aria-checked`, `mixed` when indeterminate.\n  Space toggles it.\n- The label wraps the box, so it names it and clicking it toggles the box.\n- `helperText` is the box's description; the error state sets\n  `aria-invalid`.\n- The unchecked outline is `--control-border`, 3:1 on the page on every\n  gray ramp.\n- A hidden native input carries `name`, `value` and `required` into form\n  submission and validation.\n- 44×44px touch target on coarse pointers, without the box growing."
+              "- `role=\"checkbox\"` with `aria-checked`, `mixed` when indeterminate.\n  Space toggles it.\n- The label wraps the box, so it names it and clicking it toggles the box.\n- `helperText` is the box's description; the error state sets\n  `aria-invalid`.\n- The unchecked outline is `--control-border`, 3:1 on the page on every\n  gray ramp.\n- A hidden native input carries `name`, `value` and `required` into form\n  submission and validation.\n- The hit area is 24×24px, 44×44px on coarse pointers, without the box\n  growing."
             ]
           }
         ]
@@ -2419,7 +2379,7 @@
             "md"
           ],
           "default": "md",
-          "description": "The field: 24px (`sm`) or 32px (`md`), as on Text Input. The panel is the same at both."
+          "description": "The field: 32px (`sm`) or 40px (`md`), as on Text Input. The panel is the same at both."
         },
         {
           "name": "isFullWidth",
@@ -2514,12 +2474,12 @@
               {
                 "part": "Field",
                 "property": "Height",
-                "token": "--control-sm"
+                "token": "--control-md"
               },
               {
                 "part": "Field",
                 "property": "Corner radius",
-                "token": "--control-sm-radius-field"
+                "token": "--control-md-radius-field"
               }
             ]
           },
@@ -2529,7 +2489,7 @@
               {
                 "part": "Field",
                 "property": "Height",
-                "token": "--control-md"
+                "token": "--control-lg"
               },
               {
                 "part": "Field",
@@ -2559,7 +2519,7 @@
               {
                 "part": "Popover",
                 "property": "Corner radius",
-                "token": "--radius-panel"
+                "token": "--radius-lg"
               },
               {
                 "part": "Panel",
@@ -2640,7 +2600,7 @@
               {
                 "part": "Popover",
                 "property": "Shadow",
-                "token": "--shadow-md"
+                "token": "--shadow-overlay"
               },
               {
                 "part": "Swatch button",
@@ -2783,7 +2743,7 @@
           {
             "name": "Radio",
             "selector": "[role=\"radio\"]",
-            "description": "The 20px circle: an outline when unselected."
+            "description": "The 16px circle: an outline when unselected."
           },
           {
             "name": "Dot",
@@ -2864,6 +2824,11 @@
                 "part": "Focus ring",
                 "property": "Offset",
                 "token": "--focus-offset"
+              },
+              {
+                "part": "Hit area",
+                "property": "Minimum",
+                "token": "--box-sm"
               },
               {
                 "part": "Hit area",
@@ -2994,7 +2959,7 @@
           {
             "title": "Accessibility",
             "blocks": [
-              "- A `<fieldset>` with a `<legend>`, exposed as a `radiogroup` named by\n  the legend.\n- **One tab stop for the group.** Tab enters at the selected radio (or\n  the first), arrow keys move and select, Tab leaves. Disabled options\n  are skipped.\n- Each option's helper text is its own description. Plain group help\n  describes the group once; an error message reaches every radio, so\n  whichever has focus says what is wrong.\n- The unselected outline is `--control-border`, 3:1 on the page.\n- A hidden native input carries `name` and `required` into form\n  submission and validation.\n- 44×44px touch target on each radio on coarse pointers."
+              "- A `<fieldset>` with a `<legend>`, exposed as a `radiogroup` named by\n  the legend.\n- **One tab stop for the group.** Tab enters at the selected radio (or\n  the first), arrow keys move and select, Tab leaves. Disabled options\n  are skipped.\n- Each option's helper text is its own description. Plain group help\n  describes the group once; an error message reaches every radio, so\n  whichever has focus says what is wrong.\n- The unselected outline is `--control-border`, 3:1 on the page.\n- A hidden native input carries `name` and `required` into form\n  submission and validation.\n- Each radio's hit area is 24×24px, 44×44px on coarse pointers."
             ]
           }
         ]
@@ -3362,7 +3327,7 @@
               {
                 "part": "Thumb",
                 "property": "Shadow",
-                "token": "--shadow-xs"
+                "token": "--shadow-raised"
               },
               {
                 "part": "Label",
@@ -3512,7 +3477,7 @@
             "lg"
           ],
           "default": "md",
-          "description": "Track 28×16 (`sm`), 36×20 (`md`) or 44×24px (`lg`)."
+          "description": "Track 32×16 (`md`) or 40×20px (`lg`). `sm` is deprecated: it draws the `md` track and will be removed in the next release."
         },
         {
           "name": "variant",
@@ -3580,22 +3545,7 @@
         ],
         "measurements": [
           {
-            "caption": "sm, 28×16px",
-            "rows": [
-              {
-                "part": "Track",
-                "property": "Height",
-                "token": "--switch-sm-h"
-              },
-              {
-                "part": "Track",
-                "property": "Width",
-                "token": "--switch-sm-w"
-              }
-            ]
-          },
-          {
-            "caption": "md, 36×20px",
+            "caption": "md, 32×16px",
             "rows": [
               {
                 "part": "Track",
@@ -3610,7 +3560,7 @@
             ]
           },
           {
-            "caption": "lg, 44×24px",
+            "caption": "lg, 40×20px",
             "rows": [
               {
                 "part": "Track",
@@ -3666,6 +3616,11 @@
                 "part": "Focus ring",
                 "property": "Offset",
                 "token": "--focus-offset"
+              },
+              {
+                "part": "Hit area",
+                "property": "Minimum",
+                "token": "--box-sm"
               },
               {
                 "part": "Hit area",
@@ -3800,7 +3755,7 @@
           {
             "title": "Accessibility",
             "blocks": [
-              "- `role=\"switch\"` with `aria-checked`; Space toggles it.\n- The label wraps the control, so it names it and clicking it toggles it.\n- `helperText` is the switch's description (`aria-describedby`); in the\n  error state the switch has `aria-invalid`.\n- The off track is `--control-border`, measured at 3:1 on the page on\n  every gray ramp; the thumb is 4.5:1 or more against its track in both\n  states.\n- A hidden `<input type=\"checkbox\">` carries `name`, `value` and\n  `required` into native form submission and validation.\n- On is the end side: in a right-to-left page the thumb travels left.\n- 44×44px touch target on coarse pointers."
+              "- `role=\"switch\"` with `aria-checked`; Space toggles it.\n- The label wraps the control, so it names it and clicking it toggles it.\n- `helperText` is the switch's description (`aria-describedby`); in the\n  error state the switch has `aria-invalid`.\n- The off track is `--control-border`, measured at 3:1 on the page on\n  every gray ramp; the thumb is 4.5:1 or more against its track in both\n  states.\n- A hidden `<input type=\"checkbox\">` carries `name`, `value` and\n  `required` into native form submission and validation.\n- On is the end side: in a right-to-left page the thumb travels left.\n- The hit area is at least 24px tall, 44×44px on coarse pointers."
             ]
           }
         ]
@@ -4025,7 +3980,7 @@
               {
                 "part": "Container, outlined",
                 "property": "Corner radius",
-                "token": "--radius-panel"
+                "token": "--radius-lg"
               },
               {
                 "part": "Focus ring",
@@ -4539,7 +4494,7 @@
           "name": "isRounded",
           "control": "boolean",
           "default": true,
-          "description": "Rounds the corners with `--radius-panel`. Off: square corners."
+          "description": "Rounds the corners with `--radius-lg`. Off: square corners."
         },
         {
           "name": "hasBorder",
@@ -4633,7 +4588,7 @@
               {
                 "part": "Container",
                 "property": "Corner radius",
-                "token": "--radius-panel"
+                "token": "--radius-lg"
               },
               {
                 "part": "Content",
@@ -4675,12 +4630,12 @@
               {
                 "part": "Container",
                 "property": "Shadow",
-                "token": "--shadow-sm"
+                "token": "--shadow-raised"
               },
               {
                 "part": "Container, hover",
                 "property": "Shadow",
-                "token": "--shadow-md"
+                "token": "--shadow-overlay"
               },
               {
                 "part": "Content",
@@ -5523,14 +5478,14 @@
           "description": "Also opens a row's `rowActions` on right click or long press, at the pointer. Off by default: the row then loses the browser's own menu (copy a cell's text, open a link in a new tab)."
         },
         {
-          "name": "density",
+          "name": "size",
           "control": "inline-radio",
           "options": [
             "sm",
             "md"
           ],
           "default": "md",
-          "description": "Row height. `md` is `--row-height` (48px); `sm` is one `--space-inline` shorter (40px)."
+          "description": "Cell padding; a row is as tall as what it holds. `md` is 4px above and below, a 28px row for one line of text; `sm` is 2px (24px), for long lists of plain text."
         },
         {
           "name": "hasStickyHeader",
@@ -5570,7 +5525,7 @@
           {
             "name": "Row",
             "selector": "tbody tr",
-            "description": "48px tall (40px at sm), divided by --border. Tinted when hovered or selected."
+            "description": "As tall as what it holds: 28px for one line of text (24px at sm). Divided by --border, tinted when hovered or selected."
           },
           {
             "name": "Row checkbox",
@@ -5609,13 +5564,13 @@
             "rows": [
               {
                 "part": "Row",
-                "property": "Height",
-                "token": "--row-height"
+                "property": "Cell block padding",
+                "token": "--space-1"
               },
               {
                 "part": "Header row",
-                "property": "Height",
-                "token": "--row-height"
+                "property": "Cell block padding",
+                "token": "--space-1"
               }
             ]
           },
@@ -5624,23 +5579,28 @@
             "rows": [
               {
                 "part": "Row",
-                "property": "Height, minus --space-inline",
-                "token": "--row-height"
+                "property": "Cell block padding",
+                "token": "--space-0-5"
               },
               {
                 "part": "Header row",
-                "property": "Height, minus --space-inline",
-                "token": "--row-height"
+                "property": "Cell block padding",
+                "token": "--space-0-5"
               }
             ]
           },
           {
-            "caption": "Every density",
+            "caption": "Every size",
             "rows": [
               {
                 "part": "Cell",
                 "property": "Inline padding",
-                "token": "--space-group"
+                "token": "--space-2"
+              },
+              {
+                "part": "Header row",
+                "property": "Rule under it",
+                "token": "--border-width-selected"
               },
               {
                 "part": "Cell",
@@ -5665,12 +5625,12 @@
               {
                 "part": "Sort button",
                 "property": "Block padding",
-                "token": "--control-xs-gap"
+                "token": "--space-0-5"
               },
               {
                 "part": "Sort button",
                 "property": "Inline padding",
-                "token": "--control-sm-pad"
+                "token": "--space-1"
               },
               {
                 "part": "Sort button",
@@ -5690,12 +5650,7 @@
               {
                 "part": "Selection and expand columns",
                 "property": "Width",
-                "token": "--space-10"
-              },
-              {
-                "part": "Expand column",
-                "property": "Inline start padding",
-                "token": "--space-inline"
+                "token": "--box-md"
               },
               {
                 "part": "Expand icon",
@@ -5705,21 +5660,16 @@
               {
                 "part": "Actions column",
                 "property": "Width",
-                "token": "--space-10"
-              },
-              {
-                "part": "Actions column",
-                "property": "Inline end padding",
-                "token": "--space-inline"
+                "token": "--box-md"
               },
               {
                 "part": "Expanded row",
-                "property": "Block start padding",
+                "property": "Block start and inline padding",
                 "token": "--space-2"
               },
               {
                 "part": "Expanded row",
-                "property": "Inline and block end padding",
+                "property": "Block end padding",
                 "token": "--space-4"
               },
               {
@@ -5730,7 +5680,7 @@
               {
                 "part": "Caption",
                 "property": "Inline padding",
-                "token": "--space-4"
+                "token": "--space-2"
               },
               {
                 "part": "Focus ring",
@@ -5760,7 +5710,7 @@
               {
                 "part": "Handle line",
                 "property": "Inset from the header edges",
-                "token": "--space-2"
+                "token": "--space-1"
               },
               {
                 "part": "Handle line, hover and drag",
@@ -5980,7 +5930,7 @@
             "md"
           ],
           "default": "md",
-          "description": "24px (`sm`) or 32px (`md`) tall, from the control tiers."
+          "description": "32px (`sm`) or 40px (`md`) tall: one step taller than a Button, so `sm` lines up with a default Button."
         },
         {
           "name": "isFullWidth",
@@ -6060,52 +6010,12 @@
               {
                 "part": "Field",
                 "property": "Height",
-                "token": "--control-sm"
-              },
-              {
-                "part": "Field",
-                "property": "Inline padding",
-                "token": "--control-sm-pad"
-              },
-              {
-                "part": "Field",
-                "property": "Corner radius",
-                "token": "--control-sm-radius-field"
-              },
-              {
-                "part": "Field",
-                "property": "Gap",
-                "token": "--control-sm-gap"
-              },
-              {
-                "part": "Icons and buttons",
-                "property": "Size",
-                "token": "--icon-sm"
-              },
-              {
-                "part": "Input",
-                "property": "Font size",
-                "token": "--text-body-sm"
-              },
-              {
-                "part": "Input",
-                "property": "Line height",
-                "token": "--leading-body-sm"
-              }
-            ]
-          },
-          {
-            "caption": "md",
-            "rows": [
-              {
-                "part": "Field",
-                "property": "Height",
                 "token": "--control-md"
               },
               {
                 "part": "Field",
                 "property": "Inline padding",
-                "token": "--control-md-pad"
+                "token": "--space-1-5"
               },
               {
                 "part": "Field",
@@ -6115,7 +6025,47 @@
               {
                 "part": "Field",
                 "property": "Gap",
-                "token": "--control-md-gap"
+                "token": "--space-2"
+              },
+              {
+                "part": "Icons and buttons",
+                "property": "Size",
+                "token": "--icon-md"
+              },
+              {
+                "part": "Input",
+                "property": "Font size",
+                "token": "--text-body"
+              },
+              {
+                "part": "Input",
+                "property": "Line height",
+                "token": "--leading-body"
+              }
+            ]
+          },
+          {
+            "caption": "md",
+            "rows": [
+              {
+                "part": "Field",
+                "property": "Height",
+                "token": "--control-lg"
+              },
+              {
+                "part": "Field",
+                "property": "Inline padding",
+                "token": "--space-1-5"
+              },
+              {
+                "part": "Field",
+                "property": "Corner radius",
+                "token": "--control-md-radius-field"
+              },
+              {
+                "part": "Field",
+                "property": "Gap",
+                "token": "--space-2"
               },
               {
                 "part": "Icons and buttons",
@@ -6140,17 +6090,17 @@
               {
                 "part": "Label and helper",
                 "property": "Gap to the field",
-                "token": "--control-sm-gap"
+                "token": "--space-stack"
               },
               {
                 "part": "Label and helper",
                 "property": "Font size",
-                "token": "--text-body"
+                "token": "--text-body-sm"
               },
               {
                 "part": "Clear and open buttons",
-                "property": "Gap between them",
-                "token": "--control-xs-gap"
+                "property": "Width and height",
+                "token": "--control-sm"
               },
               {
                 "part": "Options list",
@@ -6160,7 +6110,7 @@
               {
                 "part": "Options list",
                 "property": "Corner radius",
-                "token": "--radius-field"
+                "token": "--radius-lg"
               },
               {
                 "part": "Option",
@@ -6203,11 +6153,6 @@
                 "part": "Field",
                 "property": "Border",
                 "token": "--field-border"
-              },
-              {
-                "part": "Field",
-                "property": "Shadow",
-                "token": "--shadow-2xs"
               },
               {
                 "part": "Label, input",
@@ -6267,7 +6212,7 @@
               {
                 "part": "List",
                 "property": "Shadow",
-                "token": "--shadow-md"
+                "token": "--shadow-overlay"
               },
               {
                 "part": "Option",
@@ -6368,7 +6313,7 @@
             "md"
           ],
           "default": "md",
-          "description": "24px (`sm`) or 32px (`md`) tall, from the control tiers."
+          "description": "32px (`sm`) or 40px (`md`) tall: one step taller than a Button, so `sm` lines up with a default Button."
         },
         {
           "name": "locale",
@@ -6443,52 +6388,12 @@
               {
                 "part": "Field",
                 "property": "Height",
-                "token": "--control-sm"
-              },
-              {
-                "part": "Field",
-                "property": "Inline padding",
-                "token": "--control-sm-pad"
-              },
-              {
-                "part": "Field",
-                "property": "Corner radius",
-                "token": "--control-sm-radius-field"
-              },
-              {
-                "part": "Field",
-                "property": "Gap",
-                "token": "--control-sm-gap"
-              },
-              {
-                "part": "Calendar button",
-                "property": "Icon size",
-                "token": "--icon-sm"
-              },
-              {
-                "part": "Input",
-                "property": "Font size",
-                "token": "--text-body-sm"
-              },
-              {
-                "part": "Input",
-                "property": "Line height",
-                "token": "--leading-body-sm"
-              }
-            ]
-          },
-          {
-            "caption": "md",
-            "rows": [
-              {
-                "part": "Field",
-                "property": "Height",
                 "token": "--control-md"
               },
               {
                 "part": "Field",
                 "property": "Inline padding",
-                "token": "--control-md-pad"
+                "token": "--space-1-5"
               },
               {
                 "part": "Field",
@@ -6498,7 +6403,47 @@
               {
                 "part": "Field",
                 "property": "Gap",
-                "token": "--control-md-gap"
+                "token": "--space-2"
+              },
+              {
+                "part": "Calendar button",
+                "property": "Icon size",
+                "token": "--icon-md"
+              },
+              {
+                "part": "Input",
+                "property": "Font size",
+                "token": "--text-body"
+              },
+              {
+                "part": "Input",
+                "property": "Line height",
+                "token": "--leading-body"
+              }
+            ]
+          },
+          {
+            "caption": "md",
+            "rows": [
+              {
+                "part": "Field",
+                "property": "Height",
+                "token": "--control-lg"
+              },
+              {
+                "part": "Field",
+                "property": "Inline padding",
+                "token": "--space-1-5"
+              },
+              {
+                "part": "Field",
+                "property": "Corner radius",
+                "token": "--control-md-radius-field"
+              },
+              {
+                "part": "Field",
+                "property": "Gap",
+                "token": "--space-2"
               },
               {
                 "part": "Calendar button",
@@ -6523,12 +6468,12 @@
               {
                 "part": "Label and helper",
                 "property": "Gap to the field",
-                "token": "--control-sm-gap"
+                "token": "--space-stack"
               },
               {
                 "part": "Label and helper",
                 "property": "Font size",
-                "token": "--text-body"
+                "token": "--text-body-sm"
               },
               {
                 "part": "Popover",
@@ -6538,7 +6483,7 @@
               {
                 "part": "Popover",
                 "property": "Corner radius",
-                "token": "--radius-panel"
+                "token": "--radius-lg"
               },
               {
                 "part": "Focus ring",
@@ -6549,6 +6494,11 @@
                 "part": "Focus ring",
                 "property": "Offset",
                 "token": "--focus-offset"
+              },
+              {
+                "part": "Calendar button",
+                "property": "Width and height",
+                "token": "--control-sm"
               },
               {
                 "part": "Calendar button",
@@ -6571,11 +6521,6 @@
                 "part": "Field",
                 "property": "Border",
                 "token": "--field-border"
-              },
-              {
-                "part": "Field",
-                "property": "Shadow",
-                "token": "--shadow-2xs"
               },
               {
                 "part": "Label, input",
@@ -6635,7 +6580,7 @@
               {
                 "part": "Panel",
                 "property": "Shadow",
-                "token": "--shadow-md"
+                "token": "--shadow-overlay"
               }
             ]
           }
@@ -6714,7 +6659,7 @@
             "md"
           ],
           "default": "md",
-          "description": "24px (`sm`) or 32px (`md`) tall, from the control tiers."
+          "description": "32px (`sm`) or 40px (`md`) tall: one step taller than a Button, so `sm` lines up with a default Button."
         },
         {
           "name": "helperText",
@@ -6792,27 +6737,27 @@
               {
                 "part": "Field",
                 "property": "Height",
-                "token": "--control-sm"
+                "token": "--control-md"
               },
               {
                 "part": "Field",
                 "property": "Inline padding",
-                "token": "--control-sm-pad"
+                "token": "--space-1-5"
               },
               {
                 "part": "Field",
                 "property": "Corner radius",
-                "token": "--control-sm-radius-field"
+                "token": "--control-md-radius-field"
               },
               {
                 "part": "Calendar button",
                 "property": "Icon size",
-                "token": "--icon-sm"
+                "token": "--icon-md"
               },
               {
                 "part": "Input",
                 "property": "Font size",
-                "token": "--text-body-sm"
+                "token": "--text-body"
               }
             ]
           },
@@ -6822,12 +6767,12 @@
               {
                 "part": "Field",
                 "property": "Height",
-                "token": "--control-md"
+                "token": "--control-lg"
               },
               {
                 "part": "Field",
                 "property": "Inline padding",
-                "token": "--control-md-pad"
+                "token": "--space-1-5"
               },
               {
                 "part": "Field",
@@ -6852,7 +6797,7 @@
               {
                 "part": "Popover",
                 "property": "Corner radius",
-                "token": "--radius-panel"
+                "token": "--radius-lg"
               },
               {
                 "part": "Each month",
@@ -6944,7 +6889,7 @@
               {
                 "part": "Panel",
                 "property": "Shadow",
-                "token": "--shadow-md"
+                "token": "--shadow-overlay"
               },
               {
                 "part": "Dividers between presets and months",
@@ -7098,17 +7043,17 @@
               {
                 "part": "Label and helper text",
                 "property": "Font size",
-                "token": "--text-body"
+                "token": "--text-body-sm"
               },
               {
                 "part": "Label and helper text",
                 "property": "Line height",
-                "token": "--leading-body"
+                "token": "--leading-body-sm"
               },
               {
                 "part": "Label, control, helper",
                 "property": "Gap between",
-                "token": "--control-sm-gap"
+                "token": "--space-stack"
               },
               {
                 "part": "Label and info button",
@@ -7138,7 +7083,7 @@
               {
                 "part": "Info note",
                 "property": "Corner radius",
-                "token": "--radius-field"
+                "token": "--radius-lg"
               }
             ]
           }
@@ -7180,7 +7125,7 @@
               {
                 "part": "Info note",
                 "property": "Shadow",
-                "token": "--shadow-md"
+                "token": "--shadow-overlay"
               }
             ]
           },
@@ -7435,6 +7380,11 @@
             "caption": "File list",
             "rows": [
               {
+                "part": "Label",
+                "property": "Font size",
+                "token": "--text-body-sm"
+              },
+              {
                 "part": "Label, drop zone, errors, list",
                 "property": "Gap",
                 "token": "--control-sm-gap"
@@ -7671,7 +7621,7 @@
             "md"
           ],
           "default": "md",
-          "description": "24px (`sm`) or 32px (`md`) tall, from the control tiers. The steppers are 16 or 24px."
+          "description": "32px (`sm`) or 40px (`md`) tall: one step taller than a Button, so `sm` lines up with a default Button. The steppers are 24px in both."
         },
         {
           "name": "isFullWidth",
@@ -7743,27 +7693,27 @@
               {
                 "part": "Container",
                 "property": "Height",
-                "token": "--control-sm"
+                "token": "--control-md"
               },
               {
                 "part": "Container",
                 "property": "Inline padding, start",
-                "token": "--control-sm-pad"
+                "token": "--space-1-5"
               },
               {
                 "part": "Container",
                 "property": "Corner radius",
-                "token": "--control-sm-radius-field"
+                "token": "--control-md-radius-field"
               },
               {
                 "part": "Stepper",
                 "property": "Icon size",
-                "token": "--icon-xs"
+                "token": "--icon-md"
               },
               {
                 "part": "Input",
                 "property": "Font size",
-                "token": "--text-body-sm"
+                "token": "--text-body"
               }
             ]
           },
@@ -7773,12 +7723,12 @@
               {
                 "part": "Container",
                 "property": "Height",
-                "token": "--control-md"
+                "token": "--control-lg"
               },
               {
                 "part": "Container",
                 "property": "Inline padding, start",
-                "token": "--control-md-pad"
+                "token": "--space-1-5"
               },
               {
                 "part": "Container",
@@ -7803,12 +7753,12 @@
               {
                 "part": "Container",
                 "property": "Inline padding, end",
-                "token": "--control-xs-gap"
+                "token": "--space-0-5"
               },
               {
                 "part": "Stepper",
-                "property": "Inset from top and bottom",
-                "token": "--control-xs-gap"
+                "property": "Width and height",
+                "token": "--control-sm"
               },
               {
                 "part": "Stepper",
@@ -7823,7 +7773,7 @@
               {
                 "part": "Label and helper text",
                 "property": "Font size",
-                "token": "--text-body"
+                "token": "--text-body-sm"
               },
               {
                 "part": "Focus ring",
@@ -8044,7 +7994,7 @@
             "md"
           ],
           "default": "md",
-          "description": "Square cells of 24px (`sm`) or 32px (`md`), from the control tiers."
+          "description": "Square cells of 32px (`sm`) or 40px (`md`), as tall as a Text Input of the same size."
         },
         {
           "name": "disabled",
@@ -8100,17 +8050,17 @@
               {
                 "part": "Cell",
                 "property": "Width and height",
-                "token": "--control-sm"
+                "token": "--control-md"
               },
               {
                 "part": "Cell",
                 "property": "Corner radius",
-                "token": "--control-sm-radius-field"
+                "token": "--control-md-radius-field"
               },
               {
                 "part": "Cell",
                 "property": "Font size",
-                "token": "--text-body-sm"
+                "token": "--text-body"
               }
             ]
           },
@@ -8120,7 +8070,7 @@
               {
                 "part": "Cell",
                 "property": "Width and height",
-                "token": "--control-md"
+                "token": "--control-lg"
               },
               {
                 "part": "Cell",
@@ -8178,11 +8128,6 @@
                 "part": "Cell",
                 "property": "Border",
                 "token": "--field-edge"
-              },
-              {
-                "part": "Cell",
-                "property": "Shadow",
-                "token": "--shadow-2xs"
               },
               {
                 "part": "Character",
@@ -8309,7 +8254,7 @@
             "md"
           ],
           "default": "md",
-          "description": "The field's height, from the control tiers."
+          "description": "The field's height: 32px (`sm`) or 40px (`md`), as on Text Input."
         },
         {
           "name": "isFullWidth",
@@ -8443,7 +8388,7 @@
             "md"
           ],
           "default": "md",
-          "description": "24px (`sm`) or 32px (`md`) tall, from the control tiers. Match the toolbar or form it sits in."
+          "description": "32px (`sm`) or 40px (`md`) tall: one step taller than a Button, so `sm` lines up with a default Button."
         },
         {
           "name": "isFullWidth",
@@ -8510,47 +8455,12 @@
               {
                 "part": "Container",
                 "property": "Height",
-                "token": "--control-sm"
-              },
-              {
-                "part": "Container",
-                "property": "Inline padding",
-                "token": "--control-sm-pad"
-              },
-              {
-                "part": "Container",
-                "property": "Corner radius",
-                "token": "--control-sm-radius-field"
-              },
-              {
-                "part": "Container",
-                "property": "Gap",
-                "token": "--control-sm-gap"
-              },
-              {
-                "part": "Search icon and clear button",
-                "property": "Size",
-                "token": "--icon-sm"
-              },
-              {
-                "part": "Input",
-                "property": "Font size",
-                "token": "--text-body-sm"
-              }
-            ]
-          },
-          {
-            "caption": "md",
-            "rows": [
-              {
-                "part": "Container",
-                "property": "Height",
                 "token": "--control-md"
               },
               {
                 "part": "Container",
                 "property": "Inline padding",
-                "token": "--control-md-pad"
+                "token": "--space-1-5"
               },
               {
                 "part": "Container",
@@ -8560,7 +8470,42 @@
               {
                 "part": "Container",
                 "property": "Gap",
-                "token": "--control-md-gap"
+                "token": "--space-2"
+              },
+              {
+                "part": "Search icon and clear button",
+                "property": "Size",
+                "token": "--icon-md"
+              },
+              {
+                "part": "Input",
+                "property": "Font size",
+                "token": "--text-body"
+              }
+            ]
+          },
+          {
+            "caption": "md",
+            "rows": [
+              {
+                "part": "Container",
+                "property": "Height",
+                "token": "--control-lg"
+              },
+              {
+                "part": "Container",
+                "property": "Inline padding",
+                "token": "--space-1-5"
+              },
+              {
+                "part": "Container",
+                "property": "Corner radius",
+                "token": "--control-md-radius-field"
+              },
+              {
+                "part": "Container",
+                "property": "Gap",
+                "token": "--space-2"
               },
               {
                 "part": "Search icon and clear button",
@@ -8577,6 +8522,11 @@
           {
             "caption": "Every size",
             "rows": [
+              {
+                "part": "Clear button",
+                "property": "Width and height",
+                "token": "--control-sm"
+              },
               {
                 "part": "Clear button",
                 "property": "Hit area on touch screens",
@@ -8613,11 +8563,6 @@
                 "part": "Container",
                 "property": "Border",
                 "token": "--field-border"
-              },
-              {
-                "part": "Container",
-                "property": "Shadow",
-                "token": "--shadow-2xs"
               },
               {
                 "part": "Input",
@@ -8739,7 +8684,7 @@
             "md"
           ],
           "default": "md",
-          "description": "24px (`sm`) or 32px (`md`) tall, from the control tiers. Options are 32px either way."
+          "description": "32px (`sm`) or 40px (`md`) tall: one step taller than a Button, so `sm` lines up with a default Button. Options are 32px either way."
         },
         {
           "name": "isFullWidth",
@@ -8807,52 +8752,12 @@
               {
                 "part": "Container",
                 "property": "Height",
-                "token": "--control-sm"
-              },
-              {
-                "part": "Container",
-                "property": "Inline padding",
-                "token": "--control-sm-pad"
-              },
-              {
-                "part": "Container",
-                "property": "Corner radius",
-                "token": "--control-sm-radius-field"
-              },
-              {
-                "part": "Container",
-                "property": "Gap",
-                "token": "--control-sm-gap"
-              },
-              {
-                "part": "Chevron",
-                "property": "Size",
-                "token": "--icon-sm"
-              },
-              {
-                "part": "Value",
-                "property": "Font size",
-                "token": "--text-body-sm"
-              },
-              {
-                "part": "Option",
-                "property": "Inline padding",
-                "token": "--control-sm-pad"
-              }
-            ]
-          },
-          {
-            "caption": "md",
-            "rows": [
-              {
-                "part": "Container",
-                "property": "Height",
                 "token": "--control-md"
               },
               {
                 "part": "Container",
                 "property": "Inline padding",
-                "token": "--control-md-pad"
+                "token": "--space-1-5"
               },
               {
                 "part": "Container",
@@ -8862,7 +8767,7 @@
               {
                 "part": "Container",
                 "property": "Gap",
-                "token": "--control-md-gap"
+                "token": "--space-2"
               },
               {
                 "part": "Chevron",
@@ -8877,7 +8782,47 @@
               {
                 "part": "Option",
                 "property": "Inline padding",
-                "token": "--control-md-pad"
+                "token": "--space-1-5"
+              }
+            ]
+          },
+          {
+            "caption": "md",
+            "rows": [
+              {
+                "part": "Container",
+                "property": "Height",
+                "token": "--control-lg"
+              },
+              {
+                "part": "Container",
+                "property": "Inline padding",
+                "token": "--space-1-5"
+              },
+              {
+                "part": "Container",
+                "property": "Corner radius",
+                "token": "--control-md-radius-field"
+              },
+              {
+                "part": "Container",
+                "property": "Gap",
+                "token": "--space-2"
+              },
+              {
+                "part": "Chevron",
+                "property": "Size",
+                "token": "--icon-md"
+              },
+              {
+                "part": "Value",
+                "property": "Font size",
+                "token": "--text-body"
+              },
+              {
+                "part": "Option",
+                "property": "Inline padding",
+                "token": "--space-1-5"
               }
             ]
           },
@@ -8892,12 +8837,12 @@
               {
                 "part": "Options list",
                 "property": "Corner radius",
-                "token": "--radius-field"
+                "token": "--radius-lg"
               },
               {
                 "part": "Options list",
                 "property": "Shadow",
-                "token": "--shadow-md"
+                "token": "--shadow-overlay"
               },
               {
                 "part": "Option",
@@ -8912,7 +8857,7 @@
               {
                 "part": "Option",
                 "property": "Block padding",
-                "token": "--space-stack"
+                "token": "--space-2"
               },
               {
                 "part": "Option",
@@ -9123,7 +9068,7 @@
             "md"
           ],
           "default": "md",
-          "description": "Text and padding from the `sm` or `md` control tier: 12px text and 6px block padding, or 14px and 8px."
+          "description": "Block padding of 4px (`sm`) or 8px (`md`), which puts the first line within a pixel of a Text Input of the same size. Both take 14px text."
         },
         {
           "name": "isFullWidth",
@@ -9214,27 +9159,27 @@
               {
                 "part": "Input",
                 "property": "Block padding",
-                "token": "--control-xs-pad"
+                "token": "--space-1"
               },
               {
                 "part": "Input",
                 "property": "Inline padding",
-                "token": "--control-sm-pad"
+                "token": "--space-1-5"
               },
               {
                 "part": "Input",
                 "property": "Font size",
-                "token": "--text-body-sm"
+                "token": "--text-body"
               },
               {
                 "part": "Input",
                 "property": "Line height",
-                "token": "--leading-body-sm"
+                "token": "--leading-body"
               },
               {
                 "part": "Container",
                 "property": "Corner radius",
-                "token": "--control-sm-radius-field"
+                "token": "--control-md-radius-field"
               }
             ]
           },
@@ -9244,12 +9189,12 @@
               {
                 "part": "Input",
                 "property": "Block padding",
-                "token": "--control-sm-pad"
+                "token": "--space-2"
               },
               {
                 "part": "Input",
                 "property": "Inline padding",
-                "token": "--control-md-pad"
+                "token": "--space-1-5"
               },
               {
                 "part": "Input",
@@ -9274,12 +9219,12 @@
               {
                 "part": "Label and helper text",
                 "property": "Font size",
-                "token": "--text-body"
+                "token": "--text-body-sm"
               },
               {
                 "part": "Label, container, helper",
                 "property": "Gap between",
-                "token": "--control-sm-gap"
+                "token": "--space-stack"
               },
               {
                 "part": "Focus ring",
@@ -9307,11 +9252,6 @@
                 "part": "Container",
                 "property": "Border",
                 "token": "--field-border"
-              },
-              {
-                "part": "Container",
-                "property": "Shadow",
-                "token": "--shadow-2xs"
               },
               {
                 "part": "Label and input",
@@ -9455,7 +9395,7 @@
             "md"
           ],
           "default": "md",
-          "description": "24px (`sm`) or 32px (`md`) tall, from the control tiers. `sm` takes a 12px value."
+          "description": "32px (`sm`) or 40px (`md`) tall: one step taller than a Button, so `sm` lines up with a default Button. Both take a 14px value."
         },
         {
           "name": "isFullWidth",
@@ -9532,57 +9472,12 @@
               {
                 "part": "Container",
                 "property": "Height",
-                "token": "--control-sm"
-              },
-              {
-                "part": "Container",
-                "property": "Inline padding",
-                "token": "--control-sm-pad"
-              },
-              {
-                "part": "Container",
-                "property": "Corner radius",
-                "token": "--control-sm-radius-field"
-              },
-              {
-                "part": "Container",
-                "property": "Gap",
-                "token": "--control-sm-gap"
-              },
-              {
-                "part": "Prefix, suffix and button icon",
-                "property": "Size",
-                "token": "--icon-sm"
-              },
-              {
-                "part": "Add-on",
-                "property": "Inline padding",
-                "token": "--control-sm-pad"
-              },
-              {
-                "part": "Input",
-                "property": "Font size",
-                "token": "--text-body-sm"
-              },
-              {
-                "part": "Input",
-                "property": "Line height",
-                "token": "--leading-body-sm"
-              }
-            ]
-          },
-          {
-            "caption": "md",
-            "rows": [
-              {
-                "part": "Container",
-                "property": "Height",
                 "token": "--control-md"
               },
               {
                 "part": "Container",
                 "property": "Inline padding",
-                "token": "--control-md-pad"
+                "token": "--space-1-5"
               },
               {
                 "part": "Container",
@@ -9592,7 +9487,7 @@
               {
                 "part": "Container",
                 "property": "Gap",
-                "token": "--control-md-gap"
+                "token": "--space-2"
               },
               {
                 "part": "Prefix, suffix and button icon",
@@ -9602,7 +9497,52 @@
               {
                 "part": "Add-on",
                 "property": "Inline padding",
-                "token": "--control-md-pad"
+                "token": "--space-1-5"
+              },
+              {
+                "part": "Input",
+                "property": "Font size",
+                "token": "--text-body"
+              },
+              {
+                "part": "Input",
+                "property": "Line height",
+                "token": "--leading-body"
+              }
+            ]
+          },
+          {
+            "caption": "md",
+            "rows": [
+              {
+                "part": "Container",
+                "property": "Height",
+                "token": "--control-lg"
+              },
+              {
+                "part": "Container",
+                "property": "Inline padding",
+                "token": "--space-1-5"
+              },
+              {
+                "part": "Container",
+                "property": "Corner radius",
+                "token": "--control-md-radius-field"
+              },
+              {
+                "part": "Container",
+                "property": "Gap",
+                "token": "--space-2"
+              },
+              {
+                "part": "Prefix, suffix and button icon",
+                "property": "Size",
+                "token": "--icon-md"
+              },
+              {
+                "part": "Add-on",
+                "property": "Inline padding",
+                "token": "--space-1-5"
               },
               {
                 "part": "Input",
@@ -9622,17 +9562,22 @@
               {
                 "part": "Label and helper text",
                 "property": "Font size",
-                "token": "--text-body"
+                "token": "--text-body-sm"
               },
               {
                 "part": "Label and helper text",
                 "property": "Line height",
-                "token": "--leading-body"
+                "token": "--leading-body-sm"
+              },
+              {
+                "part": "Button",
+                "property": "Width and height",
+                "token": "--control-sm"
               },
               {
                 "part": "Label, container, helper",
                 "property": "Gap between",
-                "token": "--control-sm-gap"
+                "token": "--space-stack"
               },
               {
                 "part": "Focus ring",
@@ -9660,11 +9605,6 @@
                 "part": "Container",
                 "property": "Border",
                 "token": "--field-border"
-              },
-              {
-                "part": "Container",
-                "property": "Shadow",
-                "token": "--shadow-2xs"
               },
               {
                 "part": "Label and input",
@@ -9799,7 +9739,7 @@
           {
             "title": "Accessibility",
             "blocks": [
-              "- The label is a real `<label>` for the input: clicking it focuses the\n  input, and it is the input's accessible name.\n- `helperText` is the input's description (`aria-describedby`), so a\n  screen reader reads it after the name.\n- `validationState=\"error\"` sets `aria-invalid=\"true\"` on the input.\n  Colour is never the only signal: the helper text carries the message.\n- `required` sets the native `required`; the asterisk is `aria-hidden`, so\n  it is not read as \"star\".\n- Do not rely on the placeholder as a label: it is not reliably announced\n  and disappears as soon as anyone types. Without a visible label, pass\n  `aria-label`.\n- Pressing the field's padding, a prefix or a text add-on focuses the\n  input, as a click anywhere on a native field does.\n- A `TextInputButton` is a native `<button>` after the input in the tab\n  order, pressed with Enter or Space. An icon-only one needs `aria-label`.\n  Pressing it does not move focus to the input.\n- `TextInputButton` is disabled with the field. In a read-only field it\n  stays enabled, since opening or copying a fixed value is what it is for.\n- **The edge is `--field-border`, about 1.5:1, a deliberate exception to\n  WCAG 1.4.11** (approved 2026-10-08), for the light hairline of the\n  Claude apps. The field is a white `--card` box with a faint drop on the\n  off-white page, and the label, placeholder and focus ring mark it too.\n  If your audience needs 3:1, set `--field-border: var(--control-border)`.\n- Focus ring: 2px, 2px offset, on click and keyboard alike.\n- Heights are 24 and 32px, at or above WCAG 2.5.8's 24px minimum. The\n  label is part of the target, since clicking it focuses the input."
+              "- The label is a real `<label>` for the input: clicking it focuses the\n  input, and it is the input's accessible name.\n- `helperText` is the input's description (`aria-describedby`), so a\n  screen reader reads it after the name.\n- `validationState=\"error\"` sets `aria-invalid=\"true\"` on the input.\n  Colour is never the only signal: the helper text carries the message.\n- `required` sets the native `required`; the asterisk is `aria-hidden`, so\n  it is not read as \"star\".\n- Do not rely on the placeholder as a label: it is not reliably announced\n  and disappears as soon as anyone types. Without a visible label, pass\n  `aria-label`.\n- Pressing the field's padding, a prefix or a text add-on focuses the\n  input, as a click anywhere on a native field does.\n- A `TextInputButton` is a native `<button>` after the input in the tab\n  order, pressed with Enter or Space. An icon-only one needs `aria-label`.\n  Pressing it does not move focus to the input.\n- `TextInputButton` is disabled with the field. In a read-only field it\n  stays enabled, since opening or copying a fixed value is what it is for.\n- **The edge is `--field-border`, about 1.5:1, a deliberate exception to\n  WCAG 1.4.11** (approved 2026-10-08), for the light hairline of the\n  Claude apps. The field is a white `--card` box on the off-white page, and the label, placeholder and focus ring mark it too.\n  If your audience needs 3:1, set `--field-border: var(--control-border)`.\n- Focus ring: 2px, 2px offset, on click and keyboard alike.\n- Heights are 32 and 40px, above WCAG 2.5.8's 24px minimum; a button in\n  the field is a 24px target. The\n  label is part of the target, since clicking it focuses the input."
             ]
           }
         ]
@@ -10477,6 +10417,11 @@
             "caption": "md",
             "rows": [
               {
+                "part": "Item",
+                "property": "Minimum height",
+                "token": "--control-sm"
+              },
+              {
                 "part": "Text",
                 "property": "Font size",
                 "token": "--text-body"
@@ -10673,7 +10618,7 @@
           },
           {
             "name": "Group label",
-            "selector": "._groupLabel_p7h3x_116",
+            "selector": "._groupLabel_1t4fu_116",
             "description": "Names a group: Recent, Commands, an object type. It names the group for a screen reader too."
           },
           {
@@ -10683,7 +10628,7 @@
           },
           {
             "name": "Icon",
-            "selector": "._icon_p7h3x_145",
+            "selector": "._icon_1t4fu_146",
             "description": "Optional. What kind of thing the item is."
           },
           {
@@ -10693,7 +10638,7 @@
           },
           {
             "name": "Key hints",
-            "selector": "._footer_p7h3x_176",
+            "selector": "._footer_1t4fu_177",
             "description": "The keys that work here. Read once, as the input's description."
           }
         ],
@@ -10709,7 +10654,7 @@
               {
                 "part": "Container",
                 "property": "Shadow",
-                "token": "--shadow-xl"
+                "token": "--shadow-overlay"
               },
               {
                 "part": "Container",
@@ -10754,7 +10699,7 @@
               {
                 "part": "Key hints",
                 "property": "Font size",
-                "token": "--text-body-xs"
+                "token": "--text-body-sm"
               }
             ]
           },
@@ -10763,13 +10708,18 @@
             "rows": [
               {
                 "part": "Item",
-                "property": "Height",
+                "property": "Minimum height",
                 "token": "--control-md"
               },
               {
                 "part": "Item",
                 "property": "Inline padding",
-                "token": "--control-md-pad"
+                "token": "--space-3"
+              },
+              {
+                "part": "Item",
+                "property": "Block padding",
+                "token": "--space-2"
               },
               {
                 "part": "Item",
@@ -10927,12 +10877,12 @@
               {
                 "part": "Popup",
                 "property": "Corner radius",
-                "token": "--radius-field"
+                "token": "--radius-lg"
               },
               {
                 "part": "Popup",
                 "property": "Shadow",
-                "token": "--shadow-md"
+                "token": "--shadow-overlay"
               },
               {
                 "part": "Popup",
@@ -10941,13 +10891,13 @@
               },
               {
                 "part": "Item",
-                "property": "Height",
+                "property": "Minimum height",
                 "token": "--control-md"
               },
               {
                 "part": "Item",
                 "property": "Inline padding",
-                "token": "--control-md-pad"
+                "token": "--space-3"
               },
               {
                 "part": "Area, open",
@@ -11332,12 +11282,12 @@
               {
                 "part": "Popup",
                 "property": "Corner radius",
-                "token": "--radius-field"
+                "token": "--radius-lg"
               },
               {
                 "part": "Popup",
                 "property": "Shadow",
-                "token": "--shadow-md"
+                "token": "--shadow-overlay"
               },
               {
                 "part": "Popup",
@@ -11356,18 +11306,18 @@
             "rows": [
               {
                 "part": "Item",
-                "property": "Height",
+                "property": "Minimum height",
                 "token": "--control-md"
               },
               {
                 "part": "Item",
                 "property": "Inline padding",
-                "token": "--control-md-pad"
+                "token": "--space-3"
               },
               {
                 "part": "Item",
                 "property": "Block padding",
-                "token": "--space-stack"
+                "token": "--space-2"
               },
               {
                 "part": "Item",
@@ -11515,7 +11465,7 @@
           {
             "title": "Accessibility",
             "blocks": [
-              "- The trigger has `aria-haspopup=\"menu\"` and `aria-expanded`; the popup\n  is a `role=\"menu\"` of `menuitem`, `menuitemcheckbox` and\n  `menuitemradio`, with `aria-checked` on the toggles and\n  `aria-disabled` on disabled items.\n- Keyboard: Enter, Space or Arrow Down on the trigger opens it; arrows\n  move (disabled items are skipped), typing a few letters jumps to the\n  matching item, Enter selects, Arrow Right opens a submenu and Arrow\n  Left closes it, Escape closes and returns focus to the trigger.\n- Toggles keep the menu open, so several can be changed in one go;\n  actions close it and focus returns to the trigger.\n- The icon and shortcut are hidden from assistive tech; the label names\n  the item. Give `textValue` when a label is not plain text, or typeahead\n  cannot find it.\n- A disabled link has no `href`, so it cannot be followed.\n- Items are 32px tall, 44px on touch screens (`pointer: coarse`).\n- `isModal` (the default) makes the rest of the page inert while the menu\n  is open, so a screen reader stays in the menu."
+              "- The trigger has `aria-haspopup=\"menu\"` and `aria-expanded`; the popup\n  is a `role=\"menu\"` of `menuitem`, `menuitemcheckbox` and\n  `menuitemradio`, with `aria-checked` on the toggles and\n  `aria-disabled` on disabled items.\n- Keyboard: Enter, Space or Arrow Down on the trigger opens it; arrows\n  move (disabled items are skipped), typing a few letters jumps to the\n  matching item, Enter selects, Arrow Right opens a submenu and Arrow\n  Left closes it, Escape closes and returns focus to the trigger.\n- Toggles keep the menu open, so several can be changed in one go;\n  actions close it and focus returns to the trigger.\n- The icon and shortcut are hidden from assistive tech; the label names\n  the item. Give `textValue` when a label is not plain text, or typeahead\n  cannot find it.\n- A disabled link has no `href`, so it cannot be followed.\n- Items are 36px tall, 44px on touch screens (`pointer: coarse`).\n- `isModal` (the default) makes the rest of the page inert while the menu\n  is open, so a screen reader stays in the menu."
             ]
           }
         ]
@@ -12427,12 +12377,17 @@
               {
                 "part": "Tab",
                 "property": "Inline padding",
-                "token": "--control-sm-pad-spacious"
+                "token": "--space-2"
               },
               {
                 "part": "Tab",
                 "property": "Gap between icon and label",
                 "token": "--control-sm-gap"
+              },
+              {
+                "part": "Tab",
+                "property": "Corner radius (the focus ring follows it)",
+                "token": "--control-sm-radius"
               },
               {
                 "part": "Tab, pills",
@@ -12447,12 +12402,12 @@
               {
                 "part": "Label",
                 "property": "Font size",
-                "token": "--text-body-sm"
+                "token": "--text-body"
               },
               {
                 "part": "Label",
                 "property": "Line height",
-                "token": "--leading-body-sm"
+                "token": "--leading-body"
               }
             ]
           },
@@ -12467,12 +12422,17 @@
               {
                 "part": "Tab",
                 "property": "Inline padding",
-                "token": "--control-md-pad-spacious"
+                "token": "--space-2"
               },
               {
                 "part": "Tab",
                 "property": "Gap between icon and label",
                 "token": "--control-md-gap"
+              },
+              {
+                "part": "Tab",
+                "property": "Corner radius (the focus ring follows it)",
+                "token": "--control-md-radius"
               },
               {
                 "part": "Tab, pills",
@@ -12510,9 +12470,9 @@
                 "token": "--space-group"
               },
               {
-                "part": "Tab, underline",
-                "property": "Corner radius (the focus ring follows it)",
-                "token": "--radius-sm"
+                "part": "Indicator, underline",
+                "property": "Thickness",
+                "token": "--border-width-selected"
               },
               {
                 "part": "Tab",
@@ -12599,7 +12559,7 @@
               {
                 "part": "Indicator",
                 "property": "Shadow",
-                "token": "--shadow-xs"
+                "token": "--shadow-raised"
               }
             ]
           },
@@ -12747,12 +12707,12 @@
               {
                 "part": "Container",
                 "property": "Padding",
-                "token": "--space-cluster"
+                "token": "--space-group"
               },
               {
                 "part": "Container",
                 "property": "Corner radius",
-                "token": "--radius-md"
+                "token": "--radius-lg"
               },
               {
                 "part": "Container",
@@ -12778,6 +12738,11 @@
                 "part": "Action",
                 "property": "Space above, and between actions",
                 "token": "--space-2"
+              },
+              {
+                "part": "Close button",
+                "property": "Size",
+                "token": "--box-sm"
               },
               {
                 "part": "Close button",
@@ -13245,18 +13210,13 @@
             "rows": [
               {
                 "part": "Container",
-                "property": "Block padding",
-                "token": "--space-cluster"
-              },
-              {
-                "part": "Container",
-                "property": "Inline padding",
+                "property": "Padding",
                 "token": "--space-group"
               },
               {
                 "part": "Container",
                 "property": "Corner radius",
-                "token": "--radius-panel"
+                "token": "--radius-lg"
               },
               {
                 "part": "Container",
@@ -13277,6 +13237,11 @@
                 "part": "Title and description",
                 "property": "Gap",
                 "token": "--space-stack"
+              },
+              {
+                "part": "Close button",
+                "property": "Size",
+                "token": "--box-sm"
               },
               {
                 "part": "Close button",
@@ -13338,7 +13303,7 @@
               {
                 "part": "Container",
                 "property": "Shadow",
-                "token": "--shadow-lg"
+                "token": "--shadow-overlay"
               },
               {
                 "part": "Title",
@@ -13497,7 +13462,7 @@
           },
           {
             "name": "Consequence",
-            "selector": "._description_1rh1t_78",
+            "selector": "._description_h7odl_79",
             "description": "What happens, to what, and that it cannot be undone."
           },
           {
@@ -13507,12 +13472,12 @@
           },
           {
             "name": "Cancel",
-            "selector": "._footer_1rh1t_95 > :first-child",
+            "selector": "._footer_h7odl_96 > :first-child",
             "description": "The safe choice. Focus starts here, or in the field."
           },
           {
             "name": "Confirm",
-            "selector": "._footer_1rh1t_95 > :last-child",
+            "selector": "._footer_h7odl_96 > :last-child",
             "description": "`destructive`, named after what it does."
           }
         ],
@@ -13623,7 +13588,7 @@
             "lg"
           ],
           "default": "md",
-          "description": "Width of a side drawer: 20rem (`sm`), 28rem (`md`) or 40rem (`lg`), always leaving a touch target of backdrop. Ignored at the bottom."
+          "description": "Width of a side drawer: 360px (`sm`), 480px (`md`) or 600px (`lg`), always leaving a touch target of backdrop. Ignored at the bottom."
         },
         {
           "name": "hasCloseButton",
@@ -13660,7 +13625,7 @@
         "anatomy": [
           {
             "name": "Backdrop",
-            "selector": "._backdrop_svovo_3",
+            "selector": "._backdrop_1f99l_3",
             "description": "A scrim over the page. It blocks the page until the drawer closes."
           },
           {
@@ -13670,7 +13635,7 @@
           },
           {
             "name": "Header",
-            "selector": "._header_svovo_99",
+            "selector": "._header_1f99l_100",
             "description": "Title, close button and description. Stays in view."
           },
           {
@@ -13685,17 +13650,17 @@
           },
           {
             "name": "Description",
-            "selector": "._description_svovo_116",
+            "selector": "._description_1f99l_117",
             "description": "Optional. What the drawer is for."
           },
           {
             "name": "Body",
-            "selector": "._body_svovo_123",
+            "selector": "._body_1f99l_124",
             "description": "children. Scrolls between header and footer."
           },
           {
             "name": "Footer",
-            "selector": "._footer_svovo_134",
+            "selector": "._footer_1f99l_135",
             "description": "Actions, pinned to the bottom, right-aligned, the main one last."
           }
         ],
@@ -13706,12 +13671,12 @@
               {
                 "part": "Header, body, footer",
                 "property": "Padding",
-                "token": "--space-group"
+                "token": "--space-container"
               },
               {
                 "part": "Container",
                 "property": "Shadow",
-                "token": "--shadow-xl"
+                "token": "--shadow-overlay"
               },
               {
                 "part": "Bottom sheet",
@@ -13726,12 +13691,12 @@
               {
                 "part": "Title",
                 "property": "Font size",
-                "token": "--text-heading-sm"
+                "token": "--text-heading-md"
               },
               {
                 "part": "Title",
                 "property": "Line height",
-                "token": "--leading-heading-sm"
+                "token": "--leading-heading-md"
               },
               {
                 "part": "Title to close button",
@@ -13909,7 +13874,7 @@
             "lg"
           ],
           "default": "md",
-          "description": "Max width: 24rem (`sm`), 32rem (`md`) or 48rem (`lg`). Never wider than the screen."
+          "description": "Max width: 400px (`sm`), 600px (`md`) or 800px (`lg`). Never wider than the screen."
         },
         {
           "name": "hasCloseButton",
@@ -13951,7 +13916,7 @@
         "anatomy": [
           {
             "name": "Backdrop",
-            "selector": "._backdrop_1rh1t_5",
+            "selector": "._backdrop_h7odl_5",
             "description": "A scrim over the whole page. It blocks the page until the modal closes."
           },
           {
@@ -13971,17 +13936,17 @@
           },
           {
             "name": "Description",
-            "selector": "._description_1rh1t_78",
+            "selector": "._description_h7odl_79",
             "description": "Optional. What the modal is for, or what will happen."
           },
           {
             "name": "Body",
-            "selector": "._body_1rh1t_84",
+            "selector": "._body_h7odl_85",
             "description": "children. Scrolls when the modal is taller than the screen."
           },
           {
             "name": "Footer",
-            "selector": "._footer_1rh1t_95",
+            "selector": "._footer_h7odl_96",
             "description": "Actions, right-aligned, the main one last."
           }
         ],
@@ -13992,7 +13957,7 @@
               {
                 "part": "Container",
                 "property": "Padding",
-                "token": "--space-group"
+                "token": "--space-container"
               },
               {
                 "part": "Container",
@@ -14002,7 +13967,7 @@
               {
                 "part": "Container",
                 "property": "Shadow",
-                "token": "--shadow-xl"
+                "token": "--shadow-overlay"
               },
               {
                 "part": "Container",
@@ -14012,12 +13977,12 @@
               {
                 "part": "Title",
                 "property": "Font size",
-                "token": "--text-heading-sm"
+                "token": "--text-heading-md"
               },
               {
                 "part": "Title",
                 "property": "Line height",
-                "token": "--leading-heading-sm"
+                "token": "--leading-heading-md"
               },
               {
                 "part": "Title to close button",
@@ -14032,7 +13997,7 @@
               {
                 "part": "Body, footer",
                 "property": "Gap above",
-                "token": "--space-group"
+                "token": "--space-container"
               },
               {
                 "part": "Footer",
@@ -14265,12 +14230,12 @@
           },
           {
             "name": "Description",
-            "selector": "._description_1ldkm_47",
+            "selector": "._description_1o7kz_47",
             "description": "Optional. What the popover is for."
           },
           {
             "name": "Body",
-            "selector": "._body_1ldkm_52",
+            "selector": "._body_1o7kz_52",
             "description": "children: the content."
           }
         ],
@@ -14286,12 +14251,12 @@
               {
                 "part": "Container",
                 "property": "Corner radius",
-                "token": "--radius-panel"
+                "token": "--radius-lg"
               },
               {
                 "part": "Container",
                 "property": "Shadow",
-                "token": "--shadow-md"
+                "token": "--shadow-overlay"
               },
               {
                 "part": "Title",
@@ -14501,7 +14466,7 @@
           {
             "name": "Container",
             "selector": "[role=\"tooltip\"]",
-            "description": "Inverted surface with the text, 6px from the trigger. At most 20rem wide."
+            "description": "Inverted surface with the text, 6px from the trigger. At most 240px wide."
           },
           {
             "name": "Trigger",
@@ -14516,12 +14481,12 @@
               {
                 "part": "Container",
                 "property": "Block padding",
-                "token": "--space-stack"
+                "token": "--space-1"
               },
               {
                 "part": "Container",
                 "property": "Inline padding",
-                "token": "--space-inline"
+                "token": "--space-1-5"
               },
               {
                 "part": "Container",
@@ -14551,12 +14516,12 @@
               {
                 "part": "Container",
                 "property": "Corner radius",
-                "token": "--radius-panel"
+                "token": "--radius-lg"
               },
               {
                 "part": "Container",
                 "property": "Shadow",
-                "token": "--shadow-md"
+                "token": "--shadow-overlay"
               },
               {
                 "part": "Avatar to text",
@@ -16041,7 +16006,7 @@
           {
             "title": "Layout",
             "blocks": [
-              "- The import is a large Modal (48rem), never wider than the window; the\n  export a medium one.\n- The review scrolls inside the dialog under its sticky heading row,\n  so the summary above it and the buttons under it stay in view. It\n  lists the first 100 rows and says how many more there are; the import\n  still takes them all.\n- Long values with no spaces break rather than widen the table."
+              "- The import is a large Modal (50rem), never wider than the window; the\n  export a medium one.\n- The review scrolls inside the dialog under its sticky heading row,\n  so the summary above it and the buttons under it stay in view. It\n  lists the first 100 rows and says how many more there are; the import\n  still takes them all.\n- Long values with no spaces break rather than widen the table."
             ]
           },
           {
@@ -16073,7 +16038,7 @@
           {
             "title": "Layout",
             "blocks": [
-              "- **The value lines up with the text around it.** The root pulls back by\n  the field's inline padding, so the value's text starts where a plain\n  cell's text does, and the input's text starts in the same place: entering\n  edit mode does not shift it. It pulls back by the extra height too, so the\n  value sits on the same line as the term or the cells beside it.\n- **Save and Cancel sit at the end of the input**, aligned to its box; an\n  error goes under the box and pushes the row taller, not the buttons down.\n- **The pencil does not take space away from the value** on hover: it has\n  its place from the start, hidden until hover or focus. On a touch screen,\n  where nothing hovers, it always shows.\n- **On a touch screen** the value's hit area grows to 44px without the value\n  growing."
+              "- **The value lines up with the text around it.** The root pulls back by\n  the field's inline padding, so the value's text starts where a plain\n  cell's text does, and the input's text starts in the same place: entering\n  edit mode does not shift it. It pulls back by the extra height too, so the\n  value sits on the same line as the term or the cells beside it.\n- **The input is 32px at both sizes**, the field size that lines up with\n  buttons in a row. `size=\"sm\"` makes Save and Cancel 24px, centred on it.\n- **Save and Cancel sit at the end of the input**, aligned to its box; an\n  error goes under the box and pushes the row taller, not the buttons down.\n- **The pencil does not take space away from the value** on hover: it has\n  its place from the start, hidden until hover or focus. On a touch screen,\n  where nothing hovers, it always shows.\n- **On a touch screen** the value's hit area grows to 44px without the value\n  growing."
             ]
           },
           {
@@ -16128,7 +16093,7 @@
           {
             "title": "Layout",
             "blocks": [
-              "- Rows pad by `--space-inline` above and below and `--space-4` at the\n  sides, and are at least `--row-height` tall, so a list lines up with a\n  Table of the same row size.\n- `footer` sits past a divider in `flat` and `card`, and after the gap in\n  `separate`.\n- No breakpoints: the container is as wide as its column. Long words in a\n  row break anywhere rather than overflow."
+              "- Rows pad by `--space-inline` above and below and `--space-4` at the\n  sides, and are at least `--row-height` (48px) tall. A Table's rows are\n  as tall as their content, so a list and a Table do not share a row\n  height.\n- `footer` sits past a divider in `flat` and `card`, and after the gap in\n  `separate`.\n- No breakpoints: the container is as wide as its column. Long words in a\n  row break anywhere rather than overflow."
             ]
           },
           {
@@ -16304,7 +16269,7 @@
               {
                 "part": "NavSidebar",
                 "property": "Padding",
-                "token": "--space-inline"
+                "token": "--space-3"
               },
               {
                 "part": "NavSidebar",
@@ -16314,7 +16279,7 @@
               {
                 "part": "Brand row",
                 "property": "Height from the top edge: --control-md plus twice",
-                "token": "--space-cluster"
+                "token": "--space-inline"
               },
               {
                 "part": "Header",
@@ -16675,7 +16640,7 @@
           {
             "title": "Layout",
             "blocks": [
-              "- **Session Timeout** is a small (24rem) modal, never wider than the\n  screen. The buttons sit at the end of the footer, Stay signed in last.\n- **Signed Out** follows the Auth Layout: one 25rem column centred on the\n  canvas, in a card by default. A long account breaks anywhere instead of\n  pushing the page sideways at 320px."
+              "- **Session Timeout** is a small (25rem) modal, never wider than the\n  screen. The buttons sit at the end of the footer, Stay signed in last.\n- **Signed Out** follows the Auth Layout: one 25rem column centred on the\n  canvas, in a card by default. A long account breaks anywhere instead of\n  pushing the page sideways at 320px."
             ]
           },
           {
@@ -16729,7 +16694,7 @@
           {
             "title": "Layout",
             "blocks": [
-              "- The media column is as wide as a medium Avatar; an Icon sits in a\n  filled circle of that size, and an Avatar covers it.\n- `meta` sits at the end of the row while the title fits beside it, and\n  wraps under the text when it does not. The list has no breakpoint of\n  its own, so it works in a narrow aside as on a full page.\n- Long titles, emails and paths break anywhere rather than overflow.\n- Rows pad by `--space-inline` above and below, as Table rows do, and\n  are at least `--row-height` tall: a one-line row without media lines up\n  with a Table row of the same size."
+              "- The media column is as wide as a medium Avatar; an Icon sits in a\n  filled circle of that size, and an Avatar covers it.\n- `meta` sits at the end of the row while the title fits beside it, and\n  wraps under the text when it does not. The list has no breakpoint of\n  its own, so it works in a narrow aside as on a full page.\n- Long titles, emails and paths break anywhere rather than overflow.\n- Rows pad by `--space-inline` above and below and are at least\n  `--row-height` (48px) tall, with or without media. A Table's rows are\n  as tall as their content, so the two do not share a row height."
             ]
           },
           {
@@ -16834,7 +16799,7 @@
           {
             "title": "Layout",
             "blocks": [
-              "- The bar is one row, `--control-md` plus two `--space-cluster` tall. Its fill and edge come from the App Shell's top cell\n  (solid or transparent), not from the bar.\n- In the shell's top-bar layout with a sidebar, the brand takes a cell as\n  wide as the sidebar (`--sidebar-width`), so the logo sits where it sits\n  in the sidebar layout.\n- Breakpoints read the container, which in an app is the shell."
+              "- The bar is one row, `--control-md` plus two `--space-inline` tall (48px), padded `--space-3` at the sides, its items\n  `--space-inline` apart; controls in it are 32px (`md` buttons, `sm` fields). Its fill and edge come from the App Shell's top cell\n  (solid or transparent), not from the bar.\n- In the shell's top-bar layout with a sidebar, the brand takes a cell as\n  wide as the sidebar (`--sidebar-width`), so the logo sits where it sits\n  in the sidebar layout.\n- Breakpoints read the container, which in an app is the shell."
             ]
           },
           {
@@ -16944,7 +16909,7 @@
           {
             "title": "Layout",
             "blocks": [
-              "- **The shell fills the viewport** (`block-size: 100dvh`) and only the\n  page scrolls, so the sidebar and the header stay in place. Set\n  `block-size` on it to put it in a smaller box.\n- **The sidebar sits beside the page at every width.** From 64rem, in\n  `layout=\"sidebar\"`, it runs the full height and the top bar is hidden,\n  because the sidebar holds what the bar would. Below 64rem it is the icon\n  rail and the top bar comes back in both layouts, for the logo, search and\n  the account.\n- **An aside** sits right of the page from 80rem, `--sidebar-width` wide,\n  and the page and the aside each scroll on their own. Under 80rem it goes\n  below the page and the two scroll together; below 48rem it is flush too,\n  ruled off from a flat page at the top.\n- **Below 48rem** a flat page drops its 8px inset, edge and rounding and\n  goes flush, since a frame around it only costs width on a phone.\n- **Everything reads a token**: the top bar is `--control-md` plus two\n  `--space-cluster` tall, the sidebar is `--sidebar-width` wide, the page\n  padding is `--space-section`.\n- **Breakpoints are the shell's own width**, which in an app is the\n  viewport's. That is also what lets the stories show the phone layout in\n  a 390px box.\n- **The shell is a size container** (`container-type: inline-size`), so\n  it takes its width from where it sits, never from its content. In a\n  block it fills the line as usual; as a flex or grid item that would\n  otherwise shrink to fit, give it a width (`inline-size: 100%` or\n  `flex: 1`), or it collapses."
+              "- **The shell fills the viewport** (`block-size: 100dvh`) and only the\n  page scrolls, so the sidebar and the header stay in place. Set\n  `block-size` on it to put it in a smaller box.\n- **The sidebar sits beside the page at every width.** From 64rem, in\n  `layout=\"sidebar\"`, it runs the full height and the top bar is hidden,\n  because the sidebar holds what the bar would. Below 64rem it is the icon\n  rail and the top bar comes back in both layouts, for the logo, search and\n  the account.\n- **An aside** sits right of the page from 80rem, `--sidebar-width` wide,\n  and the page and the aside each scroll on their own. Under 80rem it goes\n  below the page and the two scroll together; below 48rem it is flush too,\n  ruled off from a flat page at the top.\n- **Below 48rem** a flat page drops its 8px inset, edge and rounding and\n  goes flush, since a frame around it only costs width on a phone.\n- **Everything reads a token**: the top bar is `--control-md` plus two\n  `--space-inline` tall, the sidebar is `--sidebar-width` wide, the page\n  padding is `--space-section`.\n- **Breakpoints are the shell's own width**, which in an app is the\n  viewport's. That is also what lets the stories show the phone layout in\n  a 390px box.\n- **The shell is a size container** (`container-type: inline-size`), so\n  it takes its width from where it sits, never from its content. In a\n  block it fills the line as usual; as a flex or grid item that would\n  otherwise shrink to fit, give it a width (`inline-size: 100%` or\n  `flex: 1`), or it collapses."
             ]
           },
           {
@@ -17526,7 +17491,7 @@
           {
             "title": "What works",
             "blocks": [
-              "- **Views** are predefined (All, Risk, On hold, Potential risk, On track,\n  Archived) or saved. A view holds the filters, the columns and the sort;\n  the search is not part of it. Each count is the rows the view shows\n  with the current search; the view in force counts its unsaved changes\n  too, so its count always matches the table.\n- **Modified**: a filter, a column or a sort that differs from the view\n  marks it modified. Discard puts it back; Save writes it into a saved\n  view; on a predefined view, Save as new view keeps it under a new name.\n  Manage views deletes saved views.\n- **Search** matches the project name and the PM.\n- **Filters** are checkbox menus, Status and Health; each choice shows as\n  a chip that removes on its own, and Clear all removes them all.\n- **Sort** by name, PM, last update, resources, timeline or estimation.\n  The sort covers every page, not only the one shown.\n- **Pages** of 10, 25 or 50. Any change to what is listed goes back to\n  the first page.\n- **Chart** shows the estimation of the same projects by status, under\n  the same view, search and filters.\n- **Selection** turns the toolbar into an Archive action; archived\n  projects move to the Archived view. Changing the page, the view, the\n  search or a filter clears it, so you never act on rows you cannot see.\n- **Clear filters**, in the empty state, clears the search and puts the\n  view's own filters back; it does not leave the view.\n- **Expand** a row to see its activity: status changes with their note,\n  estimation changes, and when it was created.\n- **Import** reads a CSV of projects through the [Import\n  Export](?path=/docs/patterns-application-ui-import-export--docs) dialog:\n  the headings map to Project name, PM, Status and Estimation, an unknown\n  status or an estimation that is not a number skips its row, and the\n  rest join the list on track and unscheduled.\n- **Export** downloads a CSV of the current view, the selected projects\n  or all of them, with the columns on screen ticked; dates are ISO and\n  money a bare number, for a spreadsheet to read.\n- **Compact rows** switches the table to its small density, and\n  **Columns** hides the ones you do not need."
+              "- **Views** are predefined (All, Risk, On hold, Potential risk, On track,\n  Archived) or saved. A view holds the filters, the columns and the sort;\n  the search is not part of it. Each count is the rows the view shows\n  with the current search; the view in force counts its unsaved changes\n  too, so its count always matches the table.\n- **Modified**: a filter, a column or a sort that differs from the view\n  marks it modified. Discard puts it back; Save writes it into a saved\n  view; on a predefined view, Save as new view keeps it under a new name.\n  Manage views deletes saved views.\n- **Search** matches the project name and the PM.\n- **Filters** are checkbox menus, Status and Health; each choice shows as\n  a chip that removes on its own, and Clear all removes them all.\n- **Sort** by name, PM, last update, resources, timeline or estimation.\n  The sort covers every page, not only the one shown.\n- **Pages** of 10, 25 or 50. Any change to what is listed goes back to\n  the first page.\n- **Chart** shows the estimation of the same projects by status, under\n  the same view, search and filters.\n- **Selection** turns the toolbar into an Archive action; archived\n  projects move to the Archived view. Changing the page, the view, the\n  search or a filter clears it, so you never act on rows you cannot see.\n- **Clear filters**, in the empty state, clears the search and puts the\n  view's own filters back; it does not leave the view.\n- **Expand** a row to see its activity: status changes with their note,\n  estimation changes, and when it was created.\n- **Import** reads a CSV of projects through the [Import\n  Export](?path=/docs/patterns-application-ui-import-export--docs) dialog:\n  the headings map to Project name, PM, Status and Estimation, an unknown\n  status or an estimation that is not a number skips its row, and the\n  rest join the list on track and unscheduled.\n- **Export** downloads a CSV of the current view, the selected projects\n  or all of them, with the columns on screen ticked; dates are ISO and\n  money a bare number, for a spreadsheet to read.\n- **Compact rows** switches the table to its small size, and\n  **Columns** hides the ones you do not need."
             ]
           },
           {
