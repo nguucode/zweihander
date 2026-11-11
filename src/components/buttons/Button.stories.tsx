@@ -140,6 +140,12 @@ export const Sizes: Story = {
       (n) => canvas.getByRole('button', { name: n }).getBoundingClientRect().height,
     )
     await expect(heights).toEqual([24, 32])
+    // 12px from the outer edge to the label at both sizes, border included: Atlassian's inline padding.
+    for (const name of ['sm', 'md']) {
+      const style = getComputedStyle(canvas.getByRole('button', { name }))
+      await expect(parseFloat(style.borderInlineStartWidth) + parseFloat(style.paddingInlineStart)).toBe(12)
+      await expect(parseFloat(style.borderInlineEndWidth) + parseFloat(style.paddingInlineEnd)).toBe(12)
+    }
   },
 }
 
@@ -147,7 +153,15 @@ export const WithIcons: Story = {
   args: { startIcon: <Icon name="plus" />, endIcon: <Icon name="chevron-down" />, children: 'Add product' },
   play: async ({ canvas }) => {
     // Icons are decoration; the name is the label alone.
-    await expect(canvas.getByRole('button')).toHaveAccessibleName('Add product')
+    const button = canvas.getByRole('button')
+    await expect(button).toHaveAccessibleName('Add product')
+    // An icon keeps the same 12px from the outer edge, and sits 6px from the label.
+    const box = button.getBoundingClientRect()
+    const icons = [...button.querySelectorAll(':scope > [aria-hidden="true"]')].map((el) => el.getBoundingClientRect())
+    await expect(icons).toHaveLength(2)
+    await expect(icons[0].left - box.left).toBeCloseTo(12, 1)
+    await expect(box.right - icons[1].right).toBeCloseTo(12, 1)
+    await expect(getComputedStyle(button).columnGap).toBe('6px')
   },
 }
 

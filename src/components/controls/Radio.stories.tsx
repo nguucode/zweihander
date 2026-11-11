@@ -100,6 +100,17 @@ export const Default: Story = {
     const free = canvas.getByRole('radio', { name: 'Free' })
     await expect(free.getBoundingClientRect().width).toBe(16)
     await expect(getComputedStyle(free, '::after').width).toBe('24px')
+    // The label starts 8px from the circle: Atlassian's 4px gap after the 24px area.
+    const label = free.closest('label')!
+    const text = document.createRange()
+    text.selectNodeContents(label.lastChild!)
+    await expect(text.getBoundingClientRect().left - free.getBoundingClientRect().right).toBeCloseTo(8, 1)
+    // Options are 4px apart: with a 20px label line, one option every 24px, so the hit areas meet.
+    const next = canvas.getByRole('radio', { name: 'Pro' }).closest('label')!
+    await expect(label.getBoundingClientRect().height).toBe(20)
+    await expect(
+      next.getBoundingClientRect().top - label.parentElement!.getBoundingClientRect().bottom,
+    ).toBeCloseTo(4, 1)
     await userEvent.click(canvas.getByRole('radio', { name: 'Pro' }))
     await expect(canvas.getByRole('radio', { name: 'Pro' })).toBeChecked()
     await expect(args.onValueChange).toHaveBeenLastCalledWith('pro')

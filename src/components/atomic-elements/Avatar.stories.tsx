@@ -380,14 +380,14 @@ export const Group: Story = {
       const [first, second] = [...group.children].map((el) => el.getBoundingClientRect())
       // The group's size wins over each avatar's.
       expect(first.width).toBe(group.lastElementChild!.getBoundingClientRect().width)
-      // Each tucks under the one before by a quarter of its size.
-      expect(second.left - first.left).toBeCloseTo(first.width * 0.75)
+      // Each tucks under the one before by 4px, Atlassian's stack.
+      expect(second.left - first.left).toBeCloseTo(first.width - 4)
     })
-    // The same quarter at the two ends of the scale.
-    for (const [size, px] of [['xs', 16], ['2xl', 128]] as const) {
+    // The same 4px at the two ends of the scale; at sm (24px) the circles only touch.
+    for (const [size, px, overlap] of [['xs', 16, 4], ['sm', 24, 0], ['2xl', 128, 4]] as const) {
       const [first, second] = [...canvas.getByTestId(size).children].map((el) => el.getBoundingClientRect())
       await expect(first.width).toBe(px)
-      await expect(second.left - first.left).toBeCloseTo(px * 0.75)
+      await expect(second.left - first.left).toBeCloseTo(px - overlap)
     }
     // Earlier ones on top, so a status dot is never covered by the next.
     const z = [...group.children].map((el) => Number(getComputedStyle(el).zIndex))
@@ -441,7 +441,7 @@ export const anatomyParts = [
   { name: 'Initials', selector: '[role="img"] > span', description: 'Shown when there is no image, or it fails to load.' },
   { name: 'Silhouette', selector: 'svg', description: 'A head and shoulders, when there is neither.' },
   { name: 'Status dot', selector: '[role="img"] > span:last-child:empty', description: 'Optional. Presence, on the bottom-end corner, in a ring of the page colour. Part of the name.' },
-  { name: 'Group', selector: '[data-part="group"]', description: 'Optional. Avatars overlapping by a quarter, each ringed in the page colour.' },
+  { name: 'Group', selector: '[data-part="group"]', description: 'Optional. Avatars overlapping by 4px, each ringed in the page colour.' },
   { name: 'More', selector: '[data-part="group"] > :last-child', description: 'A neutral avatar with "+n" for the people past `max`. Named only when the avatars are.' },
 ]
 

@@ -77,7 +77,8 @@ pages and the select to the end; on a narrow screen the row wraps.
 One size, Atlassian Design's: the `md` control tier (Foundations /
 Sizing), 32px. A control is square at its minimum; the inline padding only
 shows on a page number of three digits or more. Previous and next have no
-padding, so they stay square.
+padding, so they stay square. The controls sit side by side with no gap,
+and the ellipsis has 8px either side, as Atlassian's.
 
 <SpecTable
   caption="Every pagination"
@@ -88,9 +89,8 @@ padding, so they stay square.
     { part: 'Previous, Next', property: 'Icon size', token: '--icon-md' },
     { part: 'Label', property: 'Font size', token: '--text-body' },
     { part: 'Label', property: 'Line height', token: '--leading-body' },
-    { part: 'List', property: 'Gap between controls', token: '--space-stack' },
     { part: 'Summary, List, Rows per page', property: 'Gap between them', token: '--space-inline' },
-    { part: 'Ellipsis', property: 'Minimum width', token: '--space-6' },
+    { part: 'Ellipsis', property: 'Inline padding', token: '--space-2' },
     { part: 'Focus ring', property: 'Width', token: '--focus-width' },
     { part: 'Focus ring', property: 'Offset', token: '--focus-offset' },
     { part: 'Control', property: 'Height and minimum width on touch screens', token: '--target-coarse' },

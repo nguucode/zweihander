@@ -105,6 +105,18 @@ export const Default: Story = {
     await expect(overview).toHaveAttribute('aria-controls', overviewPanel.id)
     // 32px tall at md.
     await expect(overview.getBoundingClientRect().height).toBe(32)
+    // Atlassian's tabs: 8px inline padding, no gap between tabs, the list pulled out by the padding
+    // so the first label lines up with the panel, and the indicator as wide as the label.
+    const tabs = canvas.getAllByRole('tab')
+    await expect(getComputedStyle(overview).paddingLeft).toBe('8px')
+    await expect(Math.round(tabs[1].getBoundingClientRect().left - tabs[0].getBoundingClientRect().right)).toBe(0)
+    await expect(Math.round(overviewPanel.getBoundingClientRect().left - overview.getBoundingClientRect().left)).toBe(8)
+    const indicator = canvas.getByRole('tablist').querySelector(':scope > span[role="presentation"]')!
+    await waitFor(() => {
+      const bar = indicator.getBoundingClientRect()
+      const tab = overview.getBoundingClientRect()
+      expect([Math.round(bar.left - tab.left), Math.round(tab.right - bar.right)]).toEqual([8, 8])
+    })
     // One tab stop: Tab enters on the selected tab, the next Tab leaves for the panel.
     await userEvent.tab()
     await expect(overview).toHaveFocus()

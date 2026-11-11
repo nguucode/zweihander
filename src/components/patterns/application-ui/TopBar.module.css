@@ -15,10 +15,12 @@
   min-inline-size: 0;
 }
 
+/* Atlassian's top nav: 8px between the start, middle and end groups, 4px
+   between the items inside the start and end groups. */
 .start {
   display: flex;
   align-items: center;
-  gap: var(--space-inline);
+  gap: var(--space-stack);
   min-inline-size: 0;
 }
 .center {
@@ -28,7 +30,7 @@
 .end {
   display: flex;
   align-items: center;
-  gap: var(--space-inline);
+  gap: var(--space-stack);
   margin-inline-start: auto;
 }
 

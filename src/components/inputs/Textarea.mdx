@@ -71,17 +71,17 @@ textarea's, in `--muted-foreground`.
 ## Measurements
 
 A textarea grows, so it has no height token: it takes block padding
-instead, 4px in `sm` and 8px in `md`, which puts the first line within a
-pixel of where a single-line field of the same size puts its text. Both
-sizes take body type and the field's 6px of inline padding. The starting height is `minRows` lines (3 by default)
+instead, after Atlassian's textarea: 2px in `sm` and 6px in `md`. Both
+sizes take body type and 7px of inline padding, the field's 6px plus the
+1px border width, so the text starts 8px from the outer edge. The starting height is `minRows` lines (3 by default)
 plus that padding. The padding sits on the textarea, not the box, so the
 resize handle lands in the field's corner.
 
 <SpecTable
   caption="sm"
   rows={[
-    { part: 'Input', property: 'Block padding', token: '--space-1' },
-    { part: 'Input', property: 'Inline padding', token: '--space-1-5' },
+    { part: 'Input', property: 'Block padding', token: '--space-0-5' },
+    { part: 'Input', property: 'Inline padding, plus the border width', token: '--space-1-5' },
     { part: 'Input', property: 'Font size', token: '--text-body' },
     { part: 'Input', property: 'Line height', token: '--leading-body' },
     { part: 'Container', property: 'Corner radius', token: '--control-md-radius-field' },
@@ -91,8 +91,8 @@ resize handle lands in the field's corner.
 <SpecTable
   caption="md"
   rows={[
-    { part: 'Input', property: 'Block padding', token: '--space-2' },
-    { part: 'Input', property: 'Inline padding', token: '--space-1-5' },
+    { part: 'Input', property: 'Block padding', token: '--space-1-5' },
+    { part: 'Input', property: 'Inline padding, plus the border width', token: '--space-1-5' },
     { part: 'Input', property: 'Font size', token: '--text-body' },
     { part: 'Input', property: 'Line height', token: '--leading-body' },
     { part: 'Container', property: 'Corner radius', token: '--control-md-radius-field' },

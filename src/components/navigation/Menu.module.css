@@ -4,15 +4,17 @@
   outline: none;
 }
 
-/* The same surface as the Select list. --menu-inset is the gap between the
-   popup's edge and its items; the item corner is derived from it below. */
+/* --menu-inset is the gap between the popup's edge and its items: 12px, as
+   the group padding of Atlassian Design's dropdown menu (its newer menu,
+   behind platform-dst-new-menu). The padding gives back the border's
+   pixel. */
 .popup {
-  --menu-inset: var(--space-stack);
+  --menu-inset: var(--space-3);
   box-sizing: border-box;
   min-inline-size: max(12rem, var(--anchor-width));
   max-block-size: var(--available-height);
   overflow-y: auto;
-  padding: var(--menu-inset);
+  padding: calc(var(--menu-inset) - var(--border-width));
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   background: var(--popover);
@@ -32,19 +34,24 @@
   opacity: 0;
   scale: 0.98;
 }
+/* Rows sit 2px apart, in the popup and inside a group. A margin, not a
+   flex gap: a flex column would squeeze the rows instead of scrolling. */
+.popup > * + *,
+.group > * + * {
+  margin-block-start: var(--space-0-5);
+}
 
 /* An item follows Atlassian Design's dropdown item: 8px block and 12px
-   inline padding around a 20px line, so one line is 36px. The box ramp has
-   no 36, so the floor is tier md (32px) and the padding makes the rest.
-   Its corner nests inside the popup's: the popup radius minus the inset,
-   so the highlight runs parallel to the popup edge (8 - 4 = 4px). */
+   inline padding around a 20px line, so one line is 36px, 12px between
+   its parts and a 6px corner. The box ramp has no 36, so the floor is tier
+   md (32px) and the padding makes the rest. */
 .item {
   display: flex;
   align-items: center;
-  gap: var(--control-md-gap);
+  gap: var(--space-3);
   min-block-size: var(--control-md);
   padding: var(--space-2) var(--space-3);
-  border-radius: calc(var(--radius-lg) - var(--menu-inset));
+  border-radius: var(--radius-md);
   color: inherit;
   text-decoration: none;
   cursor: default;
@@ -75,8 +82,11 @@
   color: var(--danger-text);
 }
 
+/* 12px after the label, on top of the item's gap: a shortcut or a chevron
+   sits 24px from the text, as Atlassian's. */
 .label {
   flex: 1;
+  padding-inline-end: var(--space-3);
 }
 
 .icon,
@@ -106,7 +116,6 @@
 }
 
 .shortcut {
-  margin-inline-start: var(--space-group);
   font-family: inherit;
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
@@ -114,15 +123,22 @@
   letter-spacing: 0.05em;
 }
 
-/* Inset 8px from the popup edge (4px popup padding + 4px). */
+/* Edge to edge, 12px above and below: Atlassian draws it as the next
+   group's top border, between two groups' 12px padding. After the row
+   rule above, so its margin wins. */
 .separator {
   block-size: 1px;
-  margin: var(--space-1);
+  margin: var(--menu-inset) calc(var(--menu-inset) * -1);
   background: var(--border);
 }
+.separator + * {
+  margin-block-start: 0;
+}
 
+/* Atlassian's group title: 8px block, 12px before, 24px after. */
 .groupLabel {
-  padding: var(--control-xs-pad) var(--space-3) var(--control-xs-gap);
+  padding-block: var(--space-2);
+  padding-inline: var(--space-3) var(--space-6);
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
   font-weight: 600;

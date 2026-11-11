@@ -111,20 +111,22 @@ each category starts with a rule instead of its label.
 
 ## Measurements
 
-Items are rows of the md control tier, 2px apart, so
-hover and current fills never touch.
+Items are rows of the md control tier, one under the other with no gap,
+as Atlassian's side nav items; the icon sits 8px in and the label 8px
+after it. A category label is a 32px row, its text 6px in, and
+categories sit 12px apart.
 
 <SpecTable
   caption="Sidebar"
   rows={[
     { part: 'NavSidebar', property: 'Padding', token: '--space-3' },
-    { part: 'NavSidebar', property: 'Gap between groups', token: '--space-group' },
+    { part: 'NavSidebar', property: 'Gap between groups', token: '--space-3' },
     { part: 'Brand row', property: 'Height from the top edge: --control-md plus twice', token: '--space-inline' },
     { part: 'Header', property: 'Gap between rows', token: '--space-inline' },
     { part: 'Header', property: 'Space below', token: '--space-inline' },
     { part: 'Collapse button', property: 'Size', token: '--control-md' },
-    { part: 'Category label row', property: 'Height', token: '--box-sm' },
-    { part: 'Items, footer rows', property: 'Gap', token: '--space-0-5' },
+    { part: 'Category label row', property: 'Height', token: '--control-md' },
+    { part: 'Category label', property: 'Inline start padding', token: '--space-1-5' },
     { part: 'Footer', property: 'Space above', token: '--space-inline' },
   ]}
 />

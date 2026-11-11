@@ -86,7 +86,7 @@
           {
             "name": "Group",
             "selector": "[data-part=\"group\"]",
-            "description": "Optional. Avatars overlapping by a quarter, each ringed in the page colour."
+            "description": "Optional. Avatars overlapping by 4px, each ringed in the page colour."
           },
           {
             "name": "More",
@@ -220,8 +220,8 @@
               },
               {
                 "part": "Group",
-                "property": "Overlap: a quarter of the size, md shown",
-                "token": "--avatar-md"
+                "property": "Overlap, every size but sm",
+                "token": "--space-1"
               }
             ]
           }
@@ -994,7 +994,7 @@
               },
               {
                 "part": "Container",
-                "property": "Inline padding",
+                "property": "Inline padding, from the outer edge",
                 "token": "--space-1"
               },
               {
@@ -1370,7 +1370,7 @@
               },
               {
                 "part": "Container",
-                "property": "Inline padding",
+                "property": "Inline padding, from the outer edge",
                 "token": "--control-sm-pad-spacious"
               },
               {
@@ -1410,7 +1410,7 @@
               },
               {
                 "part": "Container",
-                "property": "Inline padding",
+                "property": "Inline padding, from the outer edge",
                 "token": "--control-md-pad-spacious"
               },
               {
@@ -1855,7 +1855,7 @@
               },
               {
                 "part": "Container",
-                "property": "Inline padding",
+                "property": "Inline padding, from the outer edge",
                 "token": "--control-sm-pad-spacious"
               },
               {
@@ -1890,7 +1890,7 @@
               },
               {
                 "part": "Container",
-                "property": "Inline padding",
+                "property": "Inline padding, from the outer edge",
                 "token": "--control-md-pad-spacious"
               },
               {
@@ -2845,7 +2845,7 @@
               {
                 "part": "Options",
                 "property": "Gap, vertical",
-                "token": "--space-inline"
+                "token": "--space-1"
               },
               {
                 "part": "Options",
@@ -5691,12 +5691,12 @@
               },
               {
                 "part": "Caption",
-                "property": "Block padding",
-                "token": "--space-3"
+                "property": "Block start padding",
+                "token": "--space-6"
               },
               {
                 "part": "Caption",
-                "property": "Inline padding",
+                "property": "Block end and inline padding",
                 "token": "--space-2"
               },
               {
@@ -6021,8 +6021,13 @@
               },
               {
                 "part": "Field",
-                "property": "Inline padding",
-                "token": "--space-1-5"
+                "property": "Inline padding, start",
+                "token": "--space-2"
+              },
+              {
+                "part": "Field",
+                "property": "Inline padding, end",
+                "token": "--space-2-5"
               },
               {
                 "part": "Field",
@@ -6061,8 +6066,13 @@
               },
               {
                 "part": "Field",
-                "property": "Inline padding",
-                "token": "--space-1-5"
+                "property": "Inline padding, start",
+                "token": "--space-2"
+              },
+              {
+                "part": "Field",
+                "property": "Inline padding, end",
+                "token": "--space-2-5"
               },
               {
                 "part": "Field",
@@ -6112,7 +6122,17 @@
               {
                 "part": "Options list",
                 "property": "Block padding",
-                "token": "--space-1"
+                "token": "--space-2"
+              },
+              {
+                "part": "Option",
+                "property": "Block padding",
+                "token": "--space-1-5"
+              },
+              {
+                "part": "Option",
+                "property": "Inline padding",
+                "token": "--space-3"
               },
               {
                 "part": "Options list",
@@ -6399,8 +6419,13 @@
               },
               {
                 "part": "Field",
-                "property": "Inline padding",
-                "token": "--space-1-5"
+                "property": "Inline padding, start",
+                "token": "--space-2"
+              },
+              {
+                "part": "Field",
+                "property": "Inline padding, end",
+                "token": "--space-2-5"
               },
               {
                 "part": "Field",
@@ -6439,8 +6464,13 @@
               },
               {
                 "part": "Field",
-                "property": "Inline padding",
-                "token": "--space-1-5"
+                "property": "Inline padding, start",
+                "token": "--space-2"
+              },
+              {
+                "part": "Field",
+                "property": "Inline padding, end",
+                "token": "--space-2-5"
               },
               {
                 "part": "Field",
@@ -6485,7 +6515,7 @@
               {
                 "part": "Popover",
                 "property": "Padding",
-                "token": "--space-cluster"
+                "token": "--space-4"
               },
               {
                 "part": "Popover",
@@ -6748,8 +6778,13 @@
               },
               {
                 "part": "Field",
-                "property": "Inline padding",
-                "token": "--space-1-5"
+                "property": "Inline padding, start",
+                "token": "--space-2"
+              },
+              {
+                "part": "Field",
+                "property": "Inline padding, end",
+                "token": "--space-2-5"
               },
               {
                 "part": "Field",
@@ -6778,8 +6813,13 @@
               },
               {
                 "part": "Field",
-                "property": "Inline padding",
-                "token": "--space-1-5"
+                "property": "Inline padding, start",
+                "token": "--space-2"
+              },
+              {
+                "part": "Field",
+                "property": "Inline padding, end",
+                "token": "--space-2-5"
               },
               {
                 "part": "Field",
@@ -6809,7 +6849,7 @@
               {
                 "part": "Each month",
                 "property": "Padding",
-                "token": "--space-cluster"
+                "token": "--space-4"
               },
               {
                 "part": "Presets",
@@ -8312,7 +8352,7 @@
               {
                 "part": "Rule",
                 "property": "Gap between tick and text",
-                "token": "--space-inline"
+                "token": "--space-1-5"
               },
               {
                 "part": "Tick",
@@ -8763,8 +8803,13 @@
               },
               {
                 "part": "Container",
-                "property": "Inline padding",
-                "token": "--space-1-5"
+                "property": "Inline padding, start",
+                "token": "--space-2"
+              },
+              {
+                "part": "Container",
+                "property": "Inline padding, end",
+                "token": "--space-2-5"
               },
               {
                 "part": "Container",
@@ -8789,7 +8834,7 @@
               {
                 "part": "Option",
                 "property": "Inline padding",
-                "token": "--space-1-5"
+                "token": "--space-3"
               }
             ]
           },
@@ -8803,8 +8848,13 @@
               },
               {
                 "part": "Container",
-                "property": "Inline padding",
-                "token": "--space-1-5"
+                "property": "Inline padding, start",
+                "token": "--space-2"
+              },
+              {
+                "part": "Container",
+                "property": "Inline padding, end",
+                "token": "--space-2-5"
               },
               {
                 "part": "Container",
@@ -8829,7 +8879,7 @@
               {
                 "part": "Option",
                 "property": "Inline padding",
-                "token": "--space-1-5"
+                "token": "--space-3"
               }
             ]
           },
@@ -8839,7 +8889,7 @@
               {
                 "part": "Options list",
                 "property": "Block padding",
-                "token": "--space-1"
+                "token": "--space-2"
               },
               {
                 "part": "Options list",
@@ -8864,7 +8914,7 @@
               {
                 "part": "Option",
                 "property": "Block padding",
-                "token": "--space-2"
+                "token": "--space-1-5"
               },
               {
                 "part": "Option",
@@ -9075,7 +9125,7 @@
             "md"
           ],
           "default": "md",
-          "description": "Block padding of 4px (`sm`) or 8px (`md`), which puts the first line within a pixel of a Text Input of the same size. Both take 14px text."
+          "description": "Block padding of 2px (`sm`) or 6px (`md`), after Atlassian. Both take 14px text."
         },
         {
           "name": "isFullWidth",
@@ -9166,11 +9216,11 @@
               {
                 "part": "Input",
                 "property": "Block padding",
-                "token": "--space-1"
+                "token": "--space-0-5"
               },
               {
                 "part": "Input",
-                "property": "Inline padding",
+                "property": "Inline padding, plus the border width",
                 "token": "--space-1-5"
               },
               {
@@ -9196,11 +9246,11 @@
               {
                 "part": "Input",
                 "property": "Block padding",
-                "token": "--space-2"
+                "token": "--space-1-5"
               },
               {
                 "part": "Input",
-                "property": "Inline padding",
+                "property": "Inline padding, plus the border width",
                 "token": "--space-1-5"
               },
               {
@@ -10446,7 +10496,7 @@
               {
                 "part": "Item",
                 "property": "Gap between items, and around the separator",
-                "token": "--space-stack"
+                "token": "--space-inline"
               },
               {
                 "part": "Ellipsis",
@@ -10625,7 +10675,7 @@
           },
           {
             "name": "Group label",
-            "selector": "._groupLabel_1t4fu_116",
+            "selector": "._groupLabel_ckv5w_123",
             "description": "Names a group: Recent, Commands, an object type. It names the group for a screen reader too."
           },
           {
@@ -10635,7 +10685,7 @@
           },
           {
             "name": "Icon",
-            "selector": "._icon_1t4fu_146",
+            "selector": "._icon_ckv5w_154",
             "description": "Optional. What kind of thing the item is."
           },
           {
@@ -10645,7 +10695,7 @@
           },
           {
             "name": "Key hints",
-            "selector": "._footer_1t4fu_177",
+            "selector": "._footer_ckv5w_185",
             "description": "The keys that work here. Read once, as the input's description."
           }
         ],
@@ -10676,7 +10726,7 @@
               {
                 "part": "Search row",
                 "property": "Gap, icon to input",
-                "token": "--control-md-gap"
+                "token": "--space-3"
               },
               {
                 "part": "Search icon",
@@ -10691,7 +10741,7 @@
               {
                 "part": "List",
                 "property": "Inset from the container",
-                "token": "--space-stack"
+                "token": "--space-3"
               },
               {
                 "part": "Empty text",
@@ -10731,7 +10781,17 @@
               {
                 "part": "Item",
                 "property": "Gap",
-                "token": "--control-md-gap"
+                "token": "--space-3"
+              },
+              {
+                "part": "Item",
+                "property": "Corner radius",
+                "token": "--radius-md"
+              },
+              {
+                "part": "Item",
+                "property": "Space between items",
+                "token": "--space-0-5"
               },
               {
                 "part": "Icon",
@@ -10745,8 +10805,8 @@
               },
               {
                 "part": "Group label",
-                "property": "Padding above",
-                "token": "--control-xs-pad"
+                "property": "Block padding",
+                "token": "--space-2"
               },
               {
                 "part": "Item",
@@ -10879,7 +10939,7 @@
               {
                 "part": "Popup",
                 "property": "Padding",
-                "token": "--space-stack"
+                "token": "--space-3"
               },
               {
                 "part": "Popup",
@@ -11284,7 +11344,7 @@
               {
                 "part": "Popup",
                 "property": "Padding",
-                "token": "--space-stack"
+                "token": "--space-3"
               },
               {
                 "part": "Popup",
@@ -11303,8 +11363,8 @@
               },
               {
                 "part": "Separator",
-                "property": "Margin",
-                "token": "--space-1"
+                "property": "Space above and below",
+                "token": "--space-3"
               }
             ]
           },
@@ -11329,7 +11389,17 @@
               {
                 "part": "Item",
                 "property": "Gap",
-                "token": "--control-md-gap"
+                "token": "--space-3"
+              },
+              {
+                "part": "Item",
+                "property": "Corner radius",
+                "token": "--radius-md"
+              },
+              {
+                "part": "Item",
+                "property": "Space between items",
+                "token": "--space-0-5"
               },
               {
                 "part": "Icon, check, chevron",
@@ -11352,9 +11422,19 @@
                 "token": "--text-body-sm"
               },
               {
-                "part": "Shortcut",
-                "property": "Space before",
-                "token": "--space-group"
+                "part": "Label",
+                "property": "Space after",
+                "token": "--space-3"
+              },
+              {
+                "part": "Group label",
+                "property": "Block padding",
+                "token": "--space-2"
+              },
+              {
+                "part": "Group label",
+                "property": "Inline end padding",
+                "token": "--space-6"
               },
               {
                 "part": "Hit area",
@@ -11769,19 +11849,14 @@
                 "token": "--leading-body"
               },
               {
-                "part": "List",
-                "property": "Gap between controls",
-                "token": "--space-stack"
-              },
-              {
                 "part": "Summary, List, Rows per page",
                 "property": "Gap between them",
                 "token": "--space-inline"
               },
               {
                 "part": "Ellipsis",
-                "property": "Minimum width",
-                "token": "--space-6"
+                "property": "Inline padding",
+                "token": "--space-2"
               },
               {
                 "part": "Focus ring",
@@ -12417,7 +12492,7 @@
             "caption": "Every size",
             "rows": [
               {
-                "part": "Tab list",
+                "part": "Tab list, pills",
                 "property": "Gap between tabs",
                 "token": "--space-stack"
               },
@@ -12674,7 +12749,7 @@
               {
                 "part": "Container",
                 "property": "Gap, icon to text",
-                "token": "--space-inline"
+                "token": "--space-group"
               },
               {
                 "part": "Title and description",
@@ -12689,12 +12764,12 @@
               {
                 "part": "Title and description",
                 "property": "Gap",
-                "token": "--space-stack"
+                "token": "--space-inline"
               },
               {
                 "part": "Action",
                 "property": "Space above, and between actions",
-                "token": "--space-2"
+                "token": "--space-inline"
               },
               {
                 "part": "Close button",
@@ -13177,8 +13252,8 @@
               },
               {
                 "part": "Container",
-                "property": "Gap, between parts",
-                "token": "--space-cluster"
+                "property": "Gap, icon to text",
+                "token": "--space-group"
               },
               {
                 "part": "Title and description",
@@ -13193,7 +13268,12 @@
               {
                 "part": "Title and description",
                 "property": "Gap",
-                "token": "--space-stack"
+                "token": "--space-inline"
+              },
+              {
+                "part": "Action",
+                "property": "Height",
+                "token": "--control-sm"
               },
               {
                 "part": "Close button",
@@ -13419,7 +13499,7 @@
           },
           {
             "name": "Consequence",
-            "selector": "._description_h7odl_79",
+            "selector": "._description_vaat0_81",
             "description": "What happens, to what, and that it cannot be undone."
           },
           {
@@ -13429,12 +13509,12 @@
           },
           {
             "name": "Cancel",
-            "selector": "._footer_h7odl_96 > :first-child",
+            "selector": "._footer_vaat0_100 > :first-child",
             "description": "The safe choice. Focus starts here, or in the field."
           },
           {
             "name": "Confirm",
-            "selector": "._footer_h7odl_96 > :last-child",
+            "selector": "._footer_vaat0_100 > :last-child",
             "description": "`destructive`, named after what it does."
           }
         ],
@@ -13873,7 +13953,7 @@
         "anatomy": [
           {
             "name": "Backdrop",
-            "selector": "._backdrop_h7odl_5",
+            "selector": "._backdrop_vaat0_5",
             "description": "A scrim over the whole page. It blocks the page until the modal closes."
           },
           {
@@ -13893,17 +13973,17 @@
           },
           {
             "name": "Description",
-            "selector": "._description_h7odl_79",
+            "selector": "._description_vaat0_81",
             "description": "Optional. What the modal is for, or what will happen."
           },
           {
             "name": "Body",
-            "selector": "._body_h7odl_85",
+            "selector": "._body_vaat0_87",
             "description": "children. Scrolls when the modal is taller than the screen."
           },
           {
             "name": "Footer",
-            "selector": "._footer_h7odl_96",
+            "selector": "._footer_vaat0_100",
             "description": "Actions, right-aligned, the main one last."
           }
         ],
@@ -13954,7 +14034,7 @@
               {
                 "part": "Body, footer",
                 "property": "Gap above",
-                "token": "--space-container"
+                "token": "--space-group"
               },
               {
                 "part": "Footer",
@@ -14719,7 +14799,7 @@
               {
                 "part": "Icon disc",
                 "property": "Space below",
-                "token": "--space-group"
+                "token": "--space-container"
               },
               {
                 "part": "Title",
@@ -14734,7 +14814,7 @@
               {
                 "part": "Description",
                 "property": "Space above",
-                "token": "--space-inline"
+                "token": "--space-group"
               },
               {
                 "part": "Action",
@@ -14764,7 +14844,7 @@
               {
                 "part": "Action",
                 "property": "Gap between buttons",
-                "token": "--space-inline"
+                "token": "--space-stack"
               }
             ]
           }
@@ -14940,6 +15020,16 @@
                 "token": "--space-10"
               },
               {
+                "part": "Icon disc",
+                "property": "Space below",
+                "token": "--space-group"
+              },
+              {
+                "part": "Description",
+                "property": "Space above",
+                "token": "--space-inline"
+              },
+              {
                 "part": "Title",
                 "property": "Font size",
                 "token": "--text-heading-sm"
@@ -14975,6 +15065,16 @@
                 "token": "--space-12"
               },
               {
+                "part": "Icon disc",
+                "property": "Space below",
+                "token": "--space-container"
+              },
+              {
+                "part": "Description",
+                "property": "Space above",
+                "token": "--space-group"
+              },
+              {
                 "part": "Title",
                 "property": "Font size",
                 "token": "--text-heading-md"
@@ -14994,11 +15094,6 @@
           {
             "caption": "Every size",
             "rows": [
-              {
-                "part": "Icon disc",
-                "property": "Space below",
-                "token": "--space-group"
-              },
               {
                 "part": "Description",
                 "property": "Font size",
@@ -15189,6 +15284,16 @@
                 "token": "--space-10"
               },
               {
+                "part": "Icon disc",
+                "property": "Space below",
+                "token": "--space-group"
+              },
+              {
+                "part": "Description",
+                "property": "Space above",
+                "token": "--space-inline"
+              },
+              {
                 "part": "Title",
                 "property": "Font size",
                 "token": "--text-heading-sm"
@@ -15224,6 +15329,16 @@
                 "token": "--space-12"
               },
               {
+                "part": "Icon disc",
+                "property": "Space below",
+                "token": "--space-container"
+              },
+              {
+                "part": "Description",
+                "property": "Space above",
+                "token": "--space-group"
+              },
+              {
                 "part": "Title",
                 "property": "Font size",
                 "token": "--text-heading-md"
@@ -15244,16 +15359,6 @@
             "caption": "Every size",
             "rows": [
               {
-                "part": "Icon disc",
-                "property": "Space below",
-                "token": "--space-group"
-              },
-              {
-                "part": "Description",
-                "property": "Space above",
-                "token": "--space-inline"
-              },
-              {
                 "part": "Description",
                 "property": "Font size",
                 "token": "--text-body"
@@ -15261,7 +15366,7 @@
               {
                 "part": "Action",
                 "property": "Gap between buttons",
-                "token": "--space-inline"
+                "token": "--space-stack"
               }
             ]
           }
@@ -16231,7 +16336,7 @@
               {
                 "part": "NavSidebar",
                 "property": "Gap between groups",
-                "token": "--space-group"
+                "token": "--space-3"
               },
               {
                 "part": "Brand row",
@@ -16256,12 +16361,12 @@
               {
                 "part": "Category label row",
                 "property": "Height",
-                "token": "--box-sm"
+                "token": "--control-md"
               },
               {
-                "part": "Items, footer rows",
-                "property": "Gap",
-                "token": "--space-0-5"
+                "part": "Category label",
+                "property": "Inline start padding",
+                "token": "--space-1-5"
               },
               {
                 "part": "Footer",
@@ -16756,7 +16861,7 @@
           {
             "title": "Layout",
             "blocks": [
-              "- The bar is one row, `--control-md` plus two `--space-inline` tall (48px), padded `--space-3` at the sides, its items\n  `--space-inline` apart; controls in it are 32px (`md` buttons, `sm` fields). Its fill and edge come from the App Shell's top cell\n  (solid or transparent), not from the bar.\n- In the shell's top-bar layout with a sidebar, the brand takes a cell as\n  wide as the sidebar (`--sidebar-width`), so the logo sits where it sits\n  in the sidebar layout.\n- Breakpoints read the container, which in an app is the shell."
+              "- The bar is one row, `--control-md` plus two `--space-inline` tall (48px), padded `--space-3` at the sides, its start, middle and end\n  `--space-inline` apart and the items inside the start and the end `--space-stack` apart, as Atlassian's top nav; controls in it are 32px (`md` buttons, `sm` fields). Its fill and edge come from the App Shell's top cell\n  (solid or transparent), not from the bar.\n- In the shell's top-bar layout with a sidebar, the brand takes a cell as\n  wide as the sidebar (`--sidebar-width`), so the logo sits where it sits\n  in the sidebar layout.\n- Breakpoints read the container, which in an app is the shell."
             ]
           },
           {
@@ -16794,7 +16899,7 @@
           {
             "title": "Layout",
             "blocks": [
-              "- **No width of its own.** It fills the column the page gives it; the\n  page decides the column's width and what happens on a narrow screen\n  (the Settings template stacks it above the content).\n- **Long labels wrap** rather than truncate: a cut-off section name hides\n  which section it is. A word with no spaces breaks anywhere.\n- Rows are `--control-md` tall at least, as in the Nav Sidebar, and\n  `--target-coarse` under a coarse pointer."
+              "- **No width of its own.** It fills the column the page gives it; the\n  page decides the column's width and what happens on a narrow screen\n  (the Settings template stacks it above the content).\n- **Long labels wrap** rather than truncate: a cut-off section name hides\n  which section it is. A word with no spaces breaks anywhere.\n- Rows are `--control-md` tall at least, as in the Nav Sidebar, and\n  `--target-coarse` under a coarse pointer. They sit one under the other\n  with no gap, a group label is a 32px row with its text 6px in, and\n  groups are 12px apart, as Atlassian's side nav."
             ]
           },
           {

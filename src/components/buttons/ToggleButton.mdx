@@ -73,7 +73,7 @@ for tables and dense rows, with a 14/20 label at both.
   caption="sm"
   rows={[
     { part: 'Container', property: 'Height', token: '--control-sm' },
-    { part: 'Container', property: 'Inline padding', token: '--control-sm-pad-spacious' },
+    { part: 'Container', property: 'Inline padding, from the outer edge', token: '--control-sm-pad-spacious' },
     { part: 'Container', property: 'Corner radius', token: '--control-sm-radius' },
     { part: 'Container', property: 'Gap', token: '--control-sm-gap' },
     { part: 'Icon', property: 'Size', token: '--icon-sm' },
@@ -85,7 +85,7 @@ for tables and dense rows, with a 14/20 label at both.
   caption="md"
   rows={[
     { part: 'Container', property: 'Height', token: '--control-md' },
-    { part: 'Container', property: 'Inline padding', token: '--control-md-pad-spacious' },
+    { part: 'Container', property: 'Inline padding, from the outer edge', token: '--control-md-pad-spacious' },
     { part: 'Container', property: 'Corner radius', token: '--control-md-radius' },
     { part: 'Container', property: 'Gap', token: '--control-md-gap' },
     { part: 'Icon', property: 'Size', token: '--icon-lg' },
@@ -193,7 +193,7 @@ Every other `<button>` attribute passes through, including `ref`.
 
 ### Differences from the spec
 
-- **Two sizes, not four.** The sizes follow Atlassian Design: 32px (`md`) by default, 24px (`sm`) for tables and dense rows. Both take 12px inline padding, a 6px gap and a 14/20 label; `sm` is a shorter box, not smaller type. The spec's larger steps were dropped; a big call to action is `md` with more room around it, not a taller box.
+- **Two sizes, not four.** The sizes follow Atlassian Design: 32px (`md`) by default, 24px (`sm`) for tables and dense rows. Both take 12px from the outer edge to the label, a 6px gap and a 14/20 label; `sm` is a shorter box, not smaller type. The spec's larger steps were dropped; a big call to action is `md` with more room around it, not a taller box.
 - **`pressed`, `defaultPressed`, `onPressedChange`** instead of
   `isSelected`: Base UI's names, per the kit's convention for components
   built on it. "Pressed" is also the ARIA word (`aria-pressed`).

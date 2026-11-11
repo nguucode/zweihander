@@ -103,7 +103,8 @@
 /* A field is one step taller than a button, after Atlassian: md is
    --control-lg (40px) and sm is --control-md (32px), which lines up with a
    Button in a toolbar. Both sizes share the rest: 6px of padding inside the
-   edge, the md icon and gap, the field radius (which never becomes a pill)
+   edge, as @atlaskit/textfield's input (so text starts 7px from the outer
+   edge), the md icon and gap, the field radius (which never becomes a pill)
    and body type. Every icon in the box (affix, chevron, clear, stepper,
    spinner) reads --field-icon. */
 .sm,
@@ -124,6 +125,17 @@
 }
 .md {
   min-block-size: var(--control-lg);
+}
+
+/* A field that opens a list or a calendar (Select, Combobox, Date Picker) is
+   Atlassian's Select, which is roomier than its Textfield. The value sits
+   8px inside the edge (@atlaskit/react-select: 6px on the value container
+   plus 2px round the value), 9px from the outer edge. The end is 10px, which
+   puts the centre of the chevron or calendar icon 19px from the outer edge,
+   where Atlassian's indicator has it (4 + 2 + 6px and half a 12px icon).
+   After .sm and .md, so it wins at equal specificity. */
+.picker {
+  padding-inline: var(--space-2) var(--space-2-5);
 }
 
 /* The ring is on the box, drawn when the control inside has keyboard or
@@ -270,7 +282,8 @@
      the field. The rest scrolls. */
   max-block-size: min(var(--available-height), 20rem);
   overflow-y: auto;
-  padding-block: var(--space-1);
+  /* 8px above and below the options, as Atlassian's Select menu. */
+  padding-block: var(--space-2);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   background: var(--popover);
@@ -297,10 +310,9 @@
   align-items: center;
   gap: var(--space-2);
   min-block-size: var(--control-md);
-  /* The field's own inline padding, so the option's content starts where
-     the field's text does. */
-  /* 8px above and below a 20px line: a 36px option, as a Menu item. */
-  padding: var(--space-2) var(--space-1-5);
+  /* Atlassian's Select option: 6px above and below a 20px line, a 32px
+     row, and 12px at the sides. */
+  padding: var(--space-1-5) var(--space-3);
   cursor: default;
   user-select: none;
   outline: none;
@@ -334,7 +346,7 @@
 
 .empty,
 .status {
-  padding: var(--space-2) var(--space-1-5);
+  padding: var(--space-2) var(--space-3);
   color: var(--muted-foreground);
 }
 

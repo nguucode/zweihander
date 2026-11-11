@@ -120,6 +120,14 @@ export const Anatomy: Story = {
   play: async ({ canvasElement }) => {
     const found = await expectAnatomy(canvasElement, anatomyParts)
     await expect(found[4]).toContainElement(canvasElement.querySelector('button'))
+    // md keeps Atlassian's empty state: 48px above, 24px under the image, 16px under the heading, 24px above the buttons.
+    const top = (el: Element) => el.getBoundingClientRect().top
+    const bottom = (el: Element) => el.getBoundingClientRect().bottom
+    await expect(Math.round(top(found[1]) - top(found[0]))).toBe(48)
+    await expect(Math.round(top(found[2]) - bottom(found[1]))).toBe(24)
+    await expect(getComputedStyle(found[3]).paddingTop).toBe('16px')
+    await expect(getComputedStyle(found[4]).paddingTop).toBe('24px')
+    await expect(getComputedStyle(found[3]).maxWidth).toBe('464px')
   },
 }
 

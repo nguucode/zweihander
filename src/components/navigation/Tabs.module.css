@@ -1,7 +1,7 @@
 /* Each size is a control tier (see Foundations/Sizing): height, gap, icon
    and radius come from it. The inline padding is 8px at both sizes, as
-   Atlassian Design's tabs: tabs sit in a row with a gap, so they need less
-   room either side than a button. The label is 14/20 at both sizes. */
+   Atlassian Design's tabs: tabs sit side by side with no gap, so two
+   labels are 16px apart. The label is 14/20 at both sizes. */
 .tabs {
   --tab-height: var(--control-md);
   --tab-pad: var(--space-2);
@@ -34,7 +34,6 @@
   position: relative;
   z-index: 0;
   display: flex;
-  gap: var(--space-stack);
 }
 .vertical .list {
   flex-direction: column;
@@ -95,6 +94,21 @@
 .underline .list {
   box-shadow: inset 0 -1px var(--border);
 }
+/* Atlassian's tab list is pulled out by a tab's padding, so the first
+   label lines up with the content under it; the rule starts at the label,
+   not at the tab's edge. ::before, so it sits under the indicator. */
+.underline.horizontal .list {
+  margin-inline-start: calc(var(--tab-pad) * -1);
+  box-shadow: none;
+}
+.underline.horizontal .list::before {
+  content: '';
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline: var(--tab-pad) 0;
+  block-size: var(--border-width);
+  background: var(--border);
+}
 .underline.vertical .list {
   box-shadow: inset -1px 0 var(--border);
 }
@@ -103,9 +117,11 @@
 }
 .underline .indicator {
   position: absolute;
-  inset-inline-start: var(--active-tab-left);
+  /* As wide as the label: inset by the tab's padding either side, as
+     Atlassian's. */
+  inset-inline-start: calc(var(--active-tab-left) + var(--tab-pad));
   inset-block-end: 0;
-  inline-size: var(--active-tab-width);
+  inline-size: calc(var(--active-tab-width) - 2 * var(--tab-pad));
   block-size: var(--border-width-selected);
   background: var(--primary);
   transition:
@@ -130,6 +146,7 @@
    track's minus 2px: concentric at every preset, never a pill in a track
    that is not one. */
 .pills .list {
+  gap: var(--space-stack);
   /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- 2px track inset, below the spacing scale on purpose */
   padding: 2px;
   border-radius: var(--tab-track-radius);

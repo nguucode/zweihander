@@ -117,6 +117,8 @@ export const DeprecatedSize: Story = {
     const page = canvas.getByRole('button', { name: 'Page 4' })
     await expect(page.getBoundingClientRect().height).toBe(32)
     await expect(getComputedStyle(page).fontSize).toBe('14px')
+    // No gap between controls, as Atlassian's pagination.
+    await expect(getComputedStyle(page.closest('ul, ol')!).columnGap).toBe('0px')
     // 44px on coarse pointers. The runner's pointer is fine, so read the rule the media query applies.
     await expect(mediaRules('pointer: coarse', page).find((r) => r.style.blockSize)?.style.blockSize).toBe('var(--target-coarse)')
   },

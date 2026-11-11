@@ -181,7 +181,14 @@ export const OtherCalendars: Story = {
 export const Required: Story = {
   args: { required: true, defaultValue: null },
   play: async ({ canvas }) => {
-    await expect(canvas.getByRole('textbox', { name: /Start date/ })).toBeRequired()
+    const input = canvas.getByRole('textbox', { name: /Start date/ })
+    await expect(input).toBeRequired()
+    // As Atlassian's date picker: the date starts 9px from the box's outer
+    // edge, and the calendar icon's centre is 19px from the end.
+    const edge = input.parentElement!.getBoundingClientRect()
+    const button = canvas.getByRole('button', { name: 'Choose date' }).getBoundingClientRect()
+    await expect(input.getBoundingClientRect().left - edge.left).toBe(9)
+    await expect(edge.right - (button.left + button.right) / 2).toBe(19)
   },
 }
 

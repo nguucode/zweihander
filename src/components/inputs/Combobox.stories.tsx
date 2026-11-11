@@ -145,6 +145,10 @@ export const Sizes: Story = {
       await expect(open.right).toBeLessThan(edge.right)
       await expect(open.top).toBeGreaterThan(edge.top)
       await expect(open.bottom).toBeLessThan(edge.bottom)
+      // As Atlassian's Select: the value starts 9px from the outer edge and
+      // the open icon's centre is 19px from the end.
+      await expect(box.querySelector('input')!.getBoundingClientRect().left - edge.left).toBe(9)
+      await expect(edge.right - (open.left + open.right) / 2).toBe(19)
     }
   },
 }

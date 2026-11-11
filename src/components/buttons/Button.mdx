@@ -76,14 +76,17 @@ invisible, so the button keeps its width and its name.
 Each size is a control tier (Foundations / Sizing), with Atlassian
 Design's numbers: 32px by default, 24px for tables and dense rows. Buttons
 take the spacious inline padding, 12px at both sizes: a centred label
-needs more room either side than a field's left-aligned text. The label is
-14/20 at both sizes.
+needs more room either side than a field's left-aligned text. The 12px is
+measured from the button's outer edge to its label or icon, border
+included, as in Atlassian Design, and is the same with or without an icon
+on that side; icon and label sit 6px apart. The label is 14/20 at both
+sizes.
 
 <SpecTable
   caption="sm"
   rows={[
     { part: 'Container', property: 'Height', token: '--control-sm' },
-    { part: 'Container', property: 'Inline padding', token: '--control-sm-pad-spacious' },
+    { part: 'Container', property: 'Inline padding, from the outer edge', token: '--control-sm-pad-spacious' },
     { part: 'Container', property: 'Corner radius', token: '--control-sm-radius' },
     { part: 'Container', property: 'Gap', token: '--control-sm-gap' },
     { part: 'Icon', property: 'Size', token: '--icon-sm' },
@@ -96,7 +99,7 @@ needs more room either side than a field's left-aligned text. The label is
   caption="md"
   rows={[
     { part: 'Container', property: 'Height', token: '--control-md' },
-    { part: 'Container', property: 'Inline padding', token: '--control-md-pad-spacious' },
+    { part: 'Container', property: 'Inline padding, from the outer edge', token: '--control-md-pad-spacious' },
     { part: 'Container', property: 'Corner radius', token: '--control-md-radius' },
     { part: 'Container', property: 'Gap', token: '--control-md-gap' },
     { part: 'Icon', property: 'Size', token: '--icon-lg' },
@@ -218,7 +221,7 @@ Every other `<button>` attribute passes through, including `ref`.
 
 ### Differences from the spec
 
-- **Two sizes, not four.** The sizes follow Atlassian Design: 32px (`md`) by default, 24px (`sm`) for tables and dense rows. Both take 12px inline padding, a 6px gap and a 14/20 label; `sm` is a shorter box, not smaller type. The spec's larger steps were dropped; a big call to action is `md` with more room around it, not a taller box.
+- **Two sizes, not four.** The sizes follow Atlassian Design: 32px (`md`) by default, 24px (`sm`) for tables and dense rows. Both take 12px from the outer edge to the label, a 6px gap and a 14/20 label; `sm` is a shorter box, not smaller type. The spec's larger steps were dropped; a big call to action is `md` with more room around it, not a taller box.
 - **`disabled`, not `isDisabled`**: the native attribute keeps its name.
 - **`isIconOnly` is added.** The spec has no icon-only button, and a
   square button that still requires a name is common enough to need one.

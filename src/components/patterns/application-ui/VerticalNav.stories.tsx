@@ -95,7 +95,11 @@ export const Grouped: Story = {
   args: { items: grouped, currentHref: '#profile' },
   play: async ({ canvas }) => {
     const workspace = canvas.getByRole('list', { name: 'Workspace' })
-    await expect(within(workspace).getAllByRole('listitem')).toHaveLength(4)
+    const rows = within(workspace).getAllByRole('listitem')
+    await expect(rows).toHaveLength(4)
+    // As Atlassian's side nav: rows one under the other with no gap, groups 12px apart.
+    await expect(Math.round(rows[1].getBoundingClientRect().top - rows[0].getBoundingClientRect().bottom)).toBe(0)
+    await expect(getComputedStyle(canvas.getByRole('navigation')).rowGap).toBe('12px')
     await expect(within(workspace).getByRole('link', { name: 'Integrations, 3' })).toBeVisible()
     await expect(canvas.getByRole('list', { name: 'Account' })).toBeVisible()
     await expect(canvas.queryByRole('heading')).toBeNull()

@@ -54,14 +54,15 @@
 
 /* The search row: taller than a field (box xl, 48px), so it reads as the
    palette's one input. No box of its own: the popup is the box, a rule
-   under it ends the row. Its inset is the list's plus an item's, so the
-   search icon sits on the same column as the item icons. */
+   under it ends the row. Its inset is the list's plus an item's (12 + 12px),
+   so the search icon sits on the same column as the item icons, and its
+   gap is an item's. */
 .search {
-  --palette-pad: calc(var(--space-stack) + var(--space-3));
+  --palette-pad: var(--space-6);
   display: flex;
   flex-shrink: 0;
   align-items: center;
-  gap: var(--control-md-gap);
+  gap: var(--space-3);
   min-block-size: var(--box-xl);
   padding-inline: var(--palette-pad);
   border-block-end: 1px solid var(--border);
@@ -92,8 +93,10 @@
 }
 
 /* About ten rows, then it scrolls; the search row and the hints stay. */
+/* The list is spaced as a Menu, after Atlassian's dropdown menu: 12px
+   inside the edge, rows 2px apart. */
 .results {
-  --palette-inset: var(--space-stack);
+  --palette-inset: var(--space-3);
   min-block-size: 0;
   max-block-size: 24rem;
   overflow-y: auto;
@@ -109,27 +112,32 @@
 }
 
 .group + .group {
-  margin-block-start: var(--space-1);
+  margin-block-start: var(--space-3);
+}
+.list > * + *,
+.group > * + * {
+  margin-block-start: var(--space-0-5);
 }
 
 /* As a Menu's group label. */
 .groupLabel {
-  padding: var(--control-xs-pad) var(--space-3) var(--control-xs-gap);
+  padding-block: var(--space-2);
+  padding-inline: var(--space-3) var(--space-6);
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
   font-weight: 600;
   color: var(--muted-foreground);
 }
 
-/* As a Menu item: 8px by 12px padding around a 20px line (36px), the
-   corner nested inside the popup's. */
+/* As a Menu item: 8px by 12px padding around a 20px line (36px), 12px
+   between its parts, a 6px corner. */
 .item {
   display: flex;
   align-items: center;
-  gap: var(--control-md-gap);
+  gap: var(--space-3);
   min-block-size: var(--control-md);
   padding: var(--space-2) var(--space-3);
-  border-radius: calc(var(--radius-panel) - var(--palette-inset));
+  border-radius: var(--radius-md);
   cursor: default;
   user-select: none;
   outline: none;
@@ -180,7 +188,7 @@
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-group);
-  padding: var(--space-2) calc(var(--space-stack) + var(--space-3));
+  padding: var(--space-2) var(--space-6);
   border-block-start: 1px solid var(--border);
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);

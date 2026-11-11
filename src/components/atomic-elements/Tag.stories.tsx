@@ -162,10 +162,17 @@ export const Sizes: Story = {
 
 export const WithIcon: Story = {
   args: { startIcon: <Icon name="success" />, variant: 'success' },
-  play: async ({ canvas, canvasElement }) => {
+  play: async ({ canvas, canvasElement, args }) => {
     // Decorative: hidden, so the tag reads as its text alone.
     await expect(canvasElement.querySelector('svg')!.closest('[aria-hidden="true"]')).not.toBeNull()
     await expect(canvas.queryByRole('img')).toBeNull()
+    // 4px from the tag's outer edge to its content, border included, and 4px between icon and text: Atlassian's tag.
+    const tag = canvasElement.querySelector('span[class*="tag"]')!
+    const icon = tag.querySelector(':scope > [aria-hidden="true"]')!.getBoundingClientRect()
+    const text = canvas.getByText(String(args.text)).getBoundingClientRect()
+    await expect(icon.left - tag.getBoundingClientRect().left).toBeCloseTo(4, 1)
+    await expect(tag.getBoundingClientRect().right - text.right).toBeCloseTo(4, 1)
+    await expect(text.left - icon.right).toBeCloseTo(4, 1)
   },
 }
 

@@ -1,6 +1,8 @@
 /* One size, Atlassian's tag: 20px tall (control tier xs, see
-   Foundations/Sizing), 12/16 text, 4px either side, and no wider than
-   180px before the text ellipsizes. The corner is the tier's, 4px, and
+   Foundations/Sizing), 12/16 text, 4px from the outer edge to the content
+   (Atlassian's 3px padding inside a 1px border, so the padding here is
+   --space-1 less --border-width), and no wider than 180px before the text
+   ellipsizes. The corner is the tier's, 4px, and
    follows the Theme's radius preset like every control: a pill under
    radius="full-rounded". The border is always there (transparent unless
    outlined) so appearances never shift the layout. */
@@ -12,8 +14,8 @@
   max-inline-size: min(100%, 11.25rem);
   block-size: var(--control-xs);
   box-sizing: border-box;
-  padding-inline: var(--space-1);
-  border: 1px solid transparent;
+  padding-inline: calc(var(--space-1) - var(--border-width));
+  border: var(--border-width) solid transparent;
   border-radius: var(--control-xs-radius);
   font-family: var(--font-sans);
   font-weight: 500;

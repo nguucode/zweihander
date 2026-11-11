@@ -7,7 +7,7 @@
   margin: 0;
   /* Always present, transparent unless outlined or contained, so switching
      appearance never shifts the layout by a pixel. */
-  border: 1px solid transparent;
+  border: var(--border-width) solid transparent;
   font-family: var(--font-sans);
   font-size: var(--text-body);
   line-height: var(--leading-body);
@@ -187,14 +187,17 @@ a[href].button {
 /* Each size is a control tier (see Foundations/Sizing): height, padding,
    gap, icon and radius all come from it. Buttons take the spacious pad: a
    centred label needs more room either side than a field's left-aligned
-   text. The label is 14/20 at both sizes, as in Atlassian Design: sm is
-   a shorter box, not smaller type. There is no xs: 20px is below the 24px
-   target of WCAG 2.5.8. */
+   text. The pad is measured from the button's outer edge, as in Atlassian
+   Design, whose button has no border of its own (it draws one on ::after):
+   12px from edge to label, with or without an icon on that side. This
+   button's border is real, so the padding is the pad less --border-width.
+   The label is 14/20 at both sizes: sm is a shorter box, not smaller type.
+   There is no xs: 20px is below the 24px target of WCAG 2.5.8. */
 .sm {
   --button-icon: var(--icon-sm);
   block-size: var(--control-sm);
   gap: var(--control-sm-gap);
-  padding-inline: var(--control-sm-pad-spacious);
+  padding-inline: calc(var(--control-sm-pad-spacious) - var(--border-width));
   border-radius: var(--control-sm-radius);
 }
 
@@ -204,7 +207,7 @@ a[href].button {
   --button-icon: var(--icon-lg);
   block-size: var(--control-md);
   gap: var(--control-md-gap);
-  padding-inline: var(--control-md-pad-spacious);
+  padding-inline: calc(var(--control-md-pad-spacious) - var(--border-width));
   border-radius: var(--control-md-radius);
 }
 

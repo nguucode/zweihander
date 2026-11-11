@@ -153,6 +153,13 @@ export const Sizes: Story = {
       (n) => canvas.getByLabelText(n).parentElement!.getBoundingClientRect().height,
     )
     await expect(heights).toEqual([32, 40, 32, 40])
+    // The text starts 7px from the box's outer edge in both sizes, as
+    // Atlassian's Textfield: the 1px edge and 6px of padding.
+    for (const n of ['sm', 'md']) {
+      const input = canvas.getByLabelText(n)
+      await expect(parseFloat(getComputedStyle(input).paddingLeft)).toBe(0)
+      await expect(input.getBoundingClientRect().left - input.parentElement!.getBoundingClientRect().left).toBe(7)
+    }
   },
 }
 
@@ -254,6 +261,11 @@ export const WithHelperText: Story = {
   args: { helperText: 'We only use this for account recovery.' },
   play: async ({ canvas }) => {
     await expect(canvas.getByLabelText('Email')).toHaveAccessibleDescription('We only use this for account recovery.')
+    // 4px from the label to the box and from the box to the helper, as
+    // Atlassian's Label and HelperMessage.
+    const box = canvas.getByLabelText('Email').parentElement!.getBoundingClientRect()
+    await expect(box.top - canvas.getByText('Email').getBoundingClientRect().bottom).toBe(4)
+    await expect(canvas.getByText('We only use this for account recovery.').getBoundingClientRect().top - box.bottom).toBe(4)
   },
 }
 

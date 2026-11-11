@@ -34,7 +34,7 @@ const meta = {
       table: { type: { summary: "'default' | 'success' | 'error'" }, defaultValue: { summary: "'default'" } },
     },
     size: {
-      description: 'Block padding of 4px (`sm`) or 8px (`md`), which puts the first line within a pixel of a Text Input of the same size. Both take 14px text.',
+      description: 'Block padding of 2px (`sm`) or 6px (`md`), after Atlassian. Both take 14px text.',
       control: 'inline-radio',
       options: ['sm', 'md'],
       table: { type: { summary: "'sm' | 'md'" }, defaultValue: { summary: "'md'" } },
@@ -128,6 +128,18 @@ export const Sizes: Story = {
       ))}
     </div>
   ),
+  play: async ({ canvas }) => {
+    // Atlassian's textarea padding: 2px (sm) or 6px (md) above and below,
+    // 7px at the sides, inside the 1px edge.
+    const pads = ['sm', 'md'].map((n) => {
+      const { paddingTop, paddingBottom, paddingLeft, paddingRight } = getComputedStyle(canvas.getByLabelText(n))
+      return [paddingTop, paddingBottom, paddingLeft, paddingRight]
+    })
+    await expect(pads).toEqual([
+      ['2px', '2px', '7px', '7px'],
+      ['6px', '6px', '7px', '7px'],
+    ])
+  },
 }
 
 export const Rows: Story = {

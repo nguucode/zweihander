@@ -30,7 +30,9 @@
   flex-direction: column;
   inline-size: 100%;
   max-block-size: calc(100dvh - 2 * var(--space-group));
-  padding: var(--space-container);
+  /* Atlassian's modal: content 24px from the edge. The padding gives back
+     the border's pixel. */
+  padding: calc(var(--space-container) - var(--border-width));
   border: 1px solid var(--border);
   border-radius: var(--radius-panel);
   background: var(--popover);
@@ -88,7 +90,9 @@
      drawn outside the field: pad by the ring and pull back by as much, so
      the content stays where it was and the ring shows whole. */
   padding: calc(var(--focus-width) + var(--focus-offset));
-  margin: calc(var(--space-container) - var(--focus-width) - var(--focus-offset)) calc(-1 * (var(--focus-width) + var(--focus-offset)))
+  /* 16px under the title, as Atlassian's modal header (24px around, 16px
+     to the body). */
+  margin: calc(var(--space-group) - var(--focus-width) - var(--focus-offset)) calc(-1 * (var(--focus-width) + var(--focus-offset)))
     calc(-1 * (var(--focus-width) + var(--focus-offset)));
   overflow-y: auto;
 }
@@ -98,7 +102,8 @@
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: var(--space-inline);
-  margin-block-start: var(--space-container);
+  /* Atlassian's modal footer: 16px above the buttons, 8px between them. */
+  margin-block-start: var(--space-group);
 }
 
 .close {

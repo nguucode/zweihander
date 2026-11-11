@@ -170,16 +170,22 @@
   vertical-align: middle;
 }
 
-/* Each one tucks under the one before by a quarter, ringed in the page
-   colour so the circles stay apart whatever their colour. Earlier ones sit
-   on top (z-index set inline), so a status dot on the bottom-end corner is
-   never covered by the next avatar. */
+/* Each one tucks under the one before by 4px, Atlassian's stack, at every
+   size but sm (24px), where the circles only touch, as Atlassian's small
+   stack does. Each is ringed in the page colour so the circles stay apart
+   whatever their colour. Earlier ones sit on top
+   (z-index set inline), so a status dot on the bottom-end corner is never
+   covered by the next avatar. */
 .group > .avatar {
   box-shadow: 0 0 0 2px var(--background);
 }
 
 .group > .avatar + .avatar {
-  margin-inline-start: calc(var(--avatar-size) / -4);
+  margin-inline-start: calc(var(--space-1) * -1);
+}
+
+.group > .sm + .sm {
+  margin-inline-start: 0;
 }
 
 /* Only a group's "+n" with tooltips takes focus. */

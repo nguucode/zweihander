@@ -732,6 +732,11 @@ export const Anatomy: Story = {
     await expect(found[7]).toHaveTextContent('Atlas')
     await expect(found[9]).toHaveTextContent(/Sam Rivera owns Atlas/)
     await expect(found[10]).toHaveTextContent('Total')
+    // Atlassian's dynamic table: cells padded 4px by 8px, the caption 24px from the top and 8px from the table.
+    const cell = getComputedStyle(found[7])
+    await expect([cell.paddingTop, cell.paddingRight, cell.paddingBottom, cell.paddingLeft]).toEqual(['4px', '8px', '4px', '8px'])
+    const caption = getComputedStyle(found[0])
+    await expect([caption.paddingTop, caption.paddingBottom]).toEqual(['24px', '8px'])
     await expect(canvas.getByRole('columnheader', { name: 'Actions' })).toBeInTheDocument()
     // The expand column is announced like the others, by a hidden header.
     await expect(canvas.getByRole('columnheader', { name: 'Details' })).toBeInTheDocument()

@@ -15,7 +15,8 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-stack);
+  /* 8px either side of the separator, as Atlassian's breadcrumbs. */
+  gap: var(--space-inline);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -24,7 +25,7 @@
 .item {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-stack);
+  gap: var(--space-inline);
   min-inline-size: 0;
 }
 /* At md each crumb sits in a 24px box, as Atlassian Design's breadcrumb

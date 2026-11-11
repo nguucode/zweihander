@@ -127,7 +127,7 @@ export function Combobox({
         required={required}
         autoHighlight
       >
-        <BaseCombobox.InputGroup className={boxClass(size)}>
+        <BaseCombobox.InputGroup className={cn(boxClass(size), s.picker)}>
           <BaseCombobox.Input
             ref={(el) => {
               inputRef.current = el
@@ -158,7 +158,7 @@ export function Combobox({
           </BaseCombobox.Trigger>
         </BaseCombobox.InputGroup>
         <BaseCombobox.Portal container={container}>
-          <BaseCombobox.Positioner className={s.positioner} sideOffset={4}>
+          <BaseCombobox.Positioner className={s.positioner} sideOffset={8}>
             <BaseCombobox.Popup className={s.popup}>
               {isLoading ? (
                 <BaseCombobox.Status className={s.status}>Loading…</BaseCombobox.Status>

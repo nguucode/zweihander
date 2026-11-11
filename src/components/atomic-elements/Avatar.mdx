@@ -180,11 +180,12 @@ at 45°.
   rows={[
     { part: 'Status dot', property: 'Ring', token: '--background' },
     { part: 'Group', property: 'Ring around each avatar', token: '--background' },
-    { part: 'Group', property: 'Overlap: a quarter of the size, md shown', token: '--avatar-md' },
+    { part: 'Group', property: 'Overlap, every size but sm', token: '--space-1' },
   ]}
 />
 
-The ring is 2px at every size, as on a floating Badge.
+The ring is 2px at every size, as on a floating Badge. The overlap is
+Atlassian's: 4px, and none at `sm`, where the 24px circles only touch.
 
 ## Color
 

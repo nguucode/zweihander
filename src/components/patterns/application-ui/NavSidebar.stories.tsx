@@ -208,7 +208,14 @@ export const Default: Story = {
     await expect(within(nav).getByRole('link', { name: 'Inbox, 12' })).not.toHaveAttribute('aria-current')
     await expect(within(nav).getByTestId('brand')).toBeVisible()
     // A category's name names its list; its add action is opt-in, off here.
-    await expect(within(nav).getByRole('list', { name: 'Pinned' })).toBeVisible()
+    const pinned = within(nav).getByRole('list', { name: 'Pinned' })
+    await expect(pinned).toBeVisible()
+    // Atlassian's side nav: 12px padding, 32px rows one under the other with no gap, the icon 8px in.
+    await expect(getComputedStyle(nav).paddingLeft).toBe('12px')
+    const rows = within(pinned).getAllByRole('listitem')
+    await expect(rows[0].getBoundingClientRect().height).toBe(32)
+    await expect(Math.round(rows[1].getBoundingClientRect().top - rows[0].getBoundingClientRect().bottom)).toBe(0)
+    await expect(getComputedStyle(within(rows[0]).getByRole('link')).paddingLeft).toBe('8px')
     await expect(within(nav).queryByRole('button', { name: 'Add to Pinned' })).toBeNull()
     // The header and footer rows are buttons named by their text.
     await expect(within(nav).getByRole('button', { name: 'Kafka Trading Co.' })).toBeVisible()

@@ -72,8 +72,12 @@ across.
 ## Measurements
 
 Each size is a control tier (Foundations / Sizing). `md` follows Atlassian
-Design's tabs: 32px tall, 8px inline padding, a 14/20 label and a 2px
-indicator. Atlassian Design has no small tab; `sm` is the kit's own, the
+Design's tabs: 32px tall, 8px inline padding, no gap between tabs, a
+14/20 label and a 2px indicator as wide as the label (8px in from the
+tab's edges). The `underline` list is pulled out by those 8px, so the
+first label lines up with the content below it. The 16px from the list
+to the panel is the kit's own: Atlassian leaves that to the panel's
+content. Atlassian Design has no small tab; `sm` is the kit's own, the
 same tab in a 24px box for dense panels.
 
 <SpecTable
@@ -107,7 +111,7 @@ same tab in a 24px box for dense panels.
 <SpecTable
   caption="Every size"
   rows={[
-    { part: 'Tab list', property: 'Gap between tabs', token: '--space-stack' },
+    { part: 'Tab list, pills', property: 'Gap between tabs', token: '--space-stack' },
     { part: 'Tab list', property: 'Gap to the panel', token: '--space-group' },
     { part: 'Indicator, underline', property: 'Thickness', token: '--border-width-selected' },
     { part: 'Tab', property: 'Focus ring offset (inside the tab)', token: '--focus-offset-inset' },

@@ -65,21 +65,24 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/date-picker.json
   <Story of={DatePickerStories.Anatomy} />
 </Anatomy>
 
-The calendar opens in a popover 4px under the field, aligned to its
+The calendar opens in a popover 8px under the field, aligned to its
 start: a [Calendar](?path=/docs/components-data-display-calendar--docs)
 in a panel. Its days, header and paging buttons are specified there.
 
 ## Measurements
 
 The field is the kit's field: `sm` is 32px and `md` is 40px, one step
-taller than a Button, with the same padding, icon and type in both. The
-calendar button is a 24px target round its icon.
+taller than a Button, with the same padding, icon and type in both. As
+Atlassian's date picker, which is its Select, the date starts 8px inside
+the edge and the end has 10px. The calendar button is a 24px target round
+its icon.
 
 <SpecTable
   caption="sm"
   rows={[
     { part: 'Field', property: 'Height', token: '--control-md' },
-    { part: 'Field', property: 'Inline padding', token: '--space-1-5' },
+    { part: 'Field', property: 'Inline padding, start', token: '--space-2' },
+    { part: 'Field', property: 'Inline padding, end', token: '--space-2-5' },
     { part: 'Field', property: 'Corner radius', token: '--control-md-radius-field' },
     { part: 'Field', property: 'Gap', token: '--space-2' },
     { part: 'Calendar button', property: 'Icon size', token: '--icon-md' },
@@ -92,7 +95,8 @@ calendar button is a 24px target round its icon.
   caption="md"
   rows={[
     { part: 'Field', property: 'Height', token: '--control-lg' },
-    { part: 'Field', property: 'Inline padding', token: '--space-1-5' },
+    { part: 'Field', property: 'Inline padding, start', token: '--space-2' },
+    { part: 'Field', property: 'Inline padding, end', token: '--space-2-5' },
     { part: 'Field', property: 'Corner radius', token: '--control-md-radius-field' },
     { part: 'Field', property: 'Gap', token: '--space-2' },
     { part: 'Calendar button', property: 'Icon size', token: '--icon-md' },
@@ -106,7 +110,7 @@ calendar button is a 24px target round its icon.
   rows={[
     { part: 'Label and helper', property: 'Gap to the field', token: '--space-stack' },
     { part: 'Label and helper', property: 'Font size', token: '--text-body-sm' },
-    { part: 'Popover', property: 'Padding', token: '--space-cluster' },
+    { part: 'Popover', property: 'Padding', token: '--space-4' },
     { part: 'Popover', property: 'Corner radius', token: '--radius-lg' },
     { part: 'Focus ring', property: 'Width', token: '--focus-width' },
     { part: 'Focus ring', property: 'Offset', token: '--focus-offset' },

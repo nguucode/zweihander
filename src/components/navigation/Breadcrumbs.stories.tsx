@@ -61,6 +61,9 @@ export const Default: Story = {
     await expect(within(nav).getAllByRole('link')).toHaveLength(3)
     // The last item is the current page: marked, and not a link.
     await expect(within(nav).getByText('Settings')).toHaveAttribute('aria-current', 'page')
+    // 8px either side of the separator, as Atlassian's breadcrumbs.
+    await expect(getComputedStyle(within(nav).getByRole('list')).columnGap).toBe('8px')
+    await expect(getComputedStyle(items[0]).columnGap).toBe('8px')
   },
 }
 

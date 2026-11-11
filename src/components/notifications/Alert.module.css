@@ -1,9 +1,12 @@
 .alert {
   display: flex;
   align-items: flex-start;
-  gap: var(--space-inline);
+  /* Atlassian's section message: 16px around and 16px from the icon to the
+     text. The padding gives back the border's pixel, so the content sits
+     16px from the edge. */
+  gap: var(--space-group);
   box-sizing: border-box;
-  padding: var(--space-group);
+  padding: calc(var(--space-group) - var(--border-width));
   /* Always present, transparent unless outlined, so appearances never
      shift the layout. */
   border: 1px solid transparent;
@@ -73,7 +76,8 @@
 .body {
   display: grid;
   flex: 1;
-  gap: var(--space-stack);
+  /* 8px between title, description and actions, as Atlassian's. */
+  gap: var(--space-inline);
   min-inline-size: 0;
 }
 
@@ -84,8 +88,7 @@
 .action {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-2);
-  margin-block-start: var(--space-2);
+  gap: var(--space-inline);
 }
 
 .close {

@@ -188,6 +188,15 @@ export const Sizes: Story = {
   play: async ({ canvas }) => {
     const heights = ['sm', 'md'].map((n) => canvas.getByRole('combobox', { name: n }).getBoundingClientRect().height)
     await expect(heights).toEqual([32, 40])
+    // As Atlassian's Select: the value starts 9px from the outer edge (the
+    // 1px edge and 8px), and the chevron's centre is 19px from the end.
+    for (const n of ['sm', 'md']) {
+      const trigger = canvas.getByRole('combobox', { name: n })
+      const edge = trigger.getBoundingClientRect()
+      const [value, chevron] = [...trigger.children].map((c) => c.getBoundingClientRect())
+      await expect(value.left - edge.left).toBe(9)
+      await expect(edge.right - (chevron.left + chevron.right) / 2).toBe(19)
+    }
   },
 }
 

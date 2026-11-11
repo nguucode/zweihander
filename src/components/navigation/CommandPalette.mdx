@@ -71,10 +71,10 @@ inert, so they do not lock this page or take its focus.
     { part: 'Container', property: 'Shadow', token: '--shadow-overlay' },
     { part: 'Container', property: 'Margin to the screen edge', token: '--space-group' },
     { part: 'Search row', property: 'Height', token: '--box-xl' },
-    { part: 'Search row', property: 'Gap, icon to input', token: '--control-md-gap' },
+    { part: 'Search row', property: 'Gap, icon to input', token: '--space-3' },
     { part: 'Search icon', property: 'Size', token: '--icon-md' },
     { part: 'Search input', property: 'Font size', token: '--text-body-lg' },
-    { part: 'List', property: 'Inset from the container', token: '--space-stack' },
+    { part: 'List', property: 'Inset from the container', token: '--space-3' },
     { part: 'Empty text', property: 'Block padding', token: '--space-6' },
     { part: 'Key hints', property: 'Gap between hints', token: '--space-group' },
     { part: 'Key hints', property: 'Font size', token: '--text-body-sm' },
@@ -87,16 +87,21 @@ inert, so they do not lock this page or take its focus.
     { part: 'Item', property: 'Minimum height', token: '--control-md' },
     { part: 'Item', property: 'Inline padding', token: '--space-3' },
     { part: 'Item', property: 'Block padding', token: '--space-2' },
-    { part: 'Item', property: 'Gap', token: '--control-md-gap' },
+    { part: 'Item', property: 'Gap', token: '--space-3' },
+    { part: 'Item', property: 'Corner radius', token: '--radius-md' },
+    { part: 'Item', property: 'Space between items', token: '--space-0-5' },
     { part: 'Icon', property: 'Size', token: '--icon-md' },
     { part: 'Group label', property: 'Font size', token: '--text-body-sm' },
-    { part: 'Group label', property: 'Padding above', token: '--control-xs-pad' },
+    { part: 'Group label', property: 'Block padding', token: '--space-2' },
     { part: 'Item', property: 'Minimum height on touch screens', token: '--target-coarse' },
   ]}
 />
 
 An item is Menu's: 8px block and 12px inline padding around a 20px line,
-36px for one line, after Atlassian Design's dropdown item.
+36px for one line, after Atlassian Design's dropdown item. The list is
+spaced as Menu's popup too: 12px inside the edge, rows 2px apart, 12px
+between icon and label. Atlassian has no command palette; the search row
+and the hints line up with the items (24px from the edge).
 
 The container is at most 40rem wide and never wider than the screen. It
 sits near the top, at 12% of the screen height, not centred: the list

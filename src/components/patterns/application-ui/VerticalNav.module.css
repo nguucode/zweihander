@@ -4,7 +4,8 @@
 .nav {
   display: flex;
   flex-direction: column;
-  gap: var(--space-group);
+  /* 12px between groups, as Atlassian's spacer between top-level blocks. */
+  gap: var(--space-3);
   font-family: var(--font-sans);
   font-size: var(--text-body);
   line-height: var(--leading-body);
@@ -14,10 +15,12 @@
 .group {
   display: flex;
   flex-direction: column;
-  gap: var(--space-stack);
 }
+/* Atlassian's section heading: 8px above and below a 16px line (a 32px
+   row), 6px in. The first item follows with no gap. */
 .groupLabel {
-  padding: 0 var(--space-inline);
+  padding-block: var(--space-2);
+  padding-inline: var(--space-1-5) var(--space-inline);
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
   color: var(--muted-foreground);
@@ -26,8 +29,7 @@
 .list {
   display: flex;
   flex-direction: column;
-  /* 2px, so hover and current fills never touch. */
-  gap: var(--space-0-5);
+  /* No gap: Atlassian's side nav items are 32px rows one under the other. */
   margin: 0;
   padding: 0;
   list-style: none;

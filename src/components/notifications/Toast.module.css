@@ -36,9 +36,11 @@
   --toast-accent: var(--foreground);
   display: flex;
   align-items: flex-start;
-  gap: var(--space-cluster);
+  /* Atlassian's flag: 16px around and 16px from the icon to the text. The
+     padding gives back the border's pixel. */
+  gap: var(--space-group);
   box-sizing: border-box;
-  padding: var(--space-group);
+  padding: calc(var(--space-group) - var(--border-width));
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   background: var(--popover);
@@ -111,7 +113,8 @@
 .content {
   display: grid;
   flex: 1;
-  gap: var(--space-stack);
+  /* 8px from the title to what follows it, as Atlassian's flag. */
+  gap: var(--space-inline);
   min-inline-size: 0;
 }
 
@@ -128,7 +131,9 @@
 
 .action {
   justify-self: start;
-  margin: var(--space-1) 0 0;
+  /* Atlassian's flag action: a 24px row. */
+  min-block-size: var(--control-sm);
+  margin: 0;
   padding: 0;
   border: 0;
   border-radius: var(--radius-sm);
@@ -141,6 +146,12 @@
   cursor: var(--cursor-button);
 }
 
+/* The flag's actions follow its description with no gap: the row's own
+   2px above the text is the space. */
+.description + .action {
+  margin-block-start: calc(var(--space-inline) * -1);
+}
+
 .close {
   position: relative;
   display: inline-flex;
@@ -151,7 +162,8 @@
   /* A 24px button on a 20px line: pulled up and down by the 2px it is
      taller, so it centres on the first line and adds no height. */
   margin-block: calc((var(--leading-body) * var(--text-body) - var(--box-sm)) / 2);
-  margin-inline-end: calc(var(--space-1) * -1);
+  /* 8px from the text, as Atlassian's flag: half the toast's own gap. */
+  margin-inline: calc(var(--space-inline) - var(--space-group)) calc(var(--space-1) * -1);
   inline-size: var(--box-sm);
   block-size: var(--box-sm);
   padding: 0;
