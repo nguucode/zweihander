@@ -36,9 +36,7 @@
   font-variant-numeric: tabular-nums;
   text-align: center;
   caret-color: var(--ring);
-  transition:
-    border-color var(--duration-base),
-    box-shadow var(--duration-base);
+  transition: border-color var(--duration-base);
 }
 
 .cell:focus {

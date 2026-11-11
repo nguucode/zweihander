@@ -34,7 +34,7 @@ const meta = {
       table: { type: { summary: "'default' | 'success' | 'error'" }, defaultValue: { summary: "'default'" } },
     },
     size: {
-      description: 'Block padding of 4px (`sm`) or 8px (`md`), which matches a Text Input of the same size. Both take 14px text.',
+      description: 'Block padding of 4px (`sm`) or 8px (`md`), which puts the first line within a pixel of a Text Input of the same size. Both take 14px text.',
       control: 'inline-radio',
       options: ['sm', 'md'],
       table: { type: { summary: "'sm' | 'md'" }, defaultValue: { summary: "'md'" } },

@@ -41,9 +41,9 @@
   max-inline-size: min(22rem, var(--available-width));
   padding: var(--space-2) var(--space-3);
   border: 1px solid var(--border);
-  border-radius: var(--radius-field);
+  border-radius: var(--radius-lg);
   background: var(--popover);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-overlay);
   color: var(--popover-foreground);
   font-family: var(--font-sans);
   font-size: var(--text-body);
@@ -97,9 +97,7 @@
   background: var(--card);
   color: var(--foreground);
   cursor: text;
-  transition:
-    border-color var(--duration-base),
-    box-shadow var(--duration-base);
+  transition: border-color var(--duration-base);
 }
 
 /* A field is one step taller than a button, after Atlassian: md is
@@ -113,7 +111,9 @@
   --field-pad: var(--space-1-5);
   --field-icon: var(--icon-md);
   --field-radius: var(--control-md-radius-field);
-  gap: var(--control-md-gap);
+  /* 8px, not the control tier's 6px gap: a 24px button in the box is pulled
+     out 4px each side, so two of them touch and an icon keeps 8px from text. */
+  gap: var(--space-2);
   padding-inline: var(--field-pad);
   border-radius: var(--field-radius);
   font-size: var(--text-body);
@@ -272,9 +272,9 @@
   overflow-y: auto;
   padding-block: var(--space-1);
   border: 1px solid var(--border);
-  border-radius: var(--radius-field);
+  border-radius: var(--radius-lg);
   background: var(--popover);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-overlay);
   color: var(--popover-foreground);
   font-family: var(--font-sans);
   font-size: var(--text-body);
@@ -299,7 +299,8 @@
   min-block-size: var(--control-md);
   /* The field's own inline padding, so the option's content starts where
      the field's text does. */
-  padding: var(--space-stack) var(--space-1-5);
+  /* 8px above and below a 20px line: a 36px option, as a Menu item. */
+  padding: var(--space-2) var(--space-1-5);
   cursor: default;
   user-select: none;
   outline: none;
@@ -414,8 +415,9 @@
    target is 24px, which fits inside either size. It is pulled out by the
    difference, so its icon sits where a plain icon would, 6px from the edge,
    and two buttons side by side touch without overlapping. */
-.box > .iconButton,
-.affix > .iconButton {
+/* :where keeps this at one class, so a component's own trigger can still
+   size itself (ColorPicker's swatch). */
+:where(.box, .affix) > .iconButton {
   align-items: center;
   justify-content: center;
   inline-size: var(--control-sm);
@@ -423,8 +425,7 @@
   margin-inline: calc((var(--field-icon) - var(--control-sm)) / 2);
 }
 /* Inside the target, so the ring is not cut by the box's edge. */
-.box > .iconButton:focus-visible,
-.affix > .iconButton:focus-visible {
+:where(.box, .affix) > .iconButton:focus-visible {
   outline-offset: var(--focus-offset-inset);
 }
 @media (pointer: coarse) {

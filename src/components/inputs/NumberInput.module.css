@@ -3,7 +3,8 @@
 .group.group {
   /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- 2px between stepper buttons, below the spacing scale on purpose */
   gap: 2px;
-  padding-inline-end: var(--control-xs-gap);
+  /* 2px, so the chevron sits 7px from the edge, as in the other fields. */
+  padding-inline-end: var(--space-0-5);
 }
 
 .input {

@@ -6,7 +6,6 @@
    whichever stylesheet loads first. */
 .multiline.multiline {
   align-items: stretch;
-  min-block-size: 0;
   padding: 0;
 }
 .pad-sm {
