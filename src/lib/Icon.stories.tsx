@@ -17,7 +17,7 @@ const names = [
   'search', 'sidebar-collapse', 'sidebar-expand', 'star', 'star-filled', 'success', 'success-filled', 'upload', 'user', 'warning', 'warning-filled',
 ] satisfies IconName[]
 
-/** Every icon the kit ships, by the name components use. Google Material Symbols, Apache 2.0. */
+/** Every icon the kit ships, by the name components use. Boxicons, MIT. */
 export const Catalog: Story = {
   render: () => (
     <div
