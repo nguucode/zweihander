@@ -181,8 +181,8 @@
   gap: var(--space-group);
   padding: var(--space-2) calc(var(--space-stack) + var(--control-md-pad));
   border-block-start: 1px solid var(--border);
-  font-size: var(--text-body-xs);
-  line-height: var(--leading-body-xs);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
   color: var(--muted-foreground);
 }
 

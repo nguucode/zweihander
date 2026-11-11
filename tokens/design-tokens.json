@@ -2229,6 +2229,10 @@
       "$type": "dimension",
       "$value": "1rem"
     },
+    "5": {
+      "$type": "dimension",
+      "$value": "1.25rem"
+    },
     "6": {
       "$type": "dimension",
       "$value": "1.5rem"
@@ -2244,6 +2248,14 @@
     "12": {
       "$type": "dimension",
       "$value": "3rem"
+    },
+    "16": {
+      "$type": "dimension",
+      "$value": "4rem"
+    },
+    "20": {
+      "$type": "dimension",
+      "$value": "5rem"
     },
     "$description": "Two kinds. The six roles (stack to section) are what layout and component spacing read: pick by what the gap does, and each role has one value. The numeric steps are raw multiples of 0.25rem for the few places no role fits.",
     "0-5": {
@@ -2547,16 +2559,18 @@
     },
     "body-xs": {
       "$type": "dimension",
-      "$value": "0.6875rem",
+      "$value": "0.75rem",
+      "$description": "Deprecated: the same as body-sm. 12px is the smallest text size; use body-sm.",
       "$extensions": {
-        "leading": "16 / 11"
+        "leading": "16 / 12"
       }
     }
   },
   "radius": {
     "radius": {
       "$type": "dimension",
-      "$value": "0.625rem"
+      "$value": "0.375rem",
+      "$description": "The md step (6px): buttons and fields. The scale is cut from it: xs a third (2px), sm two thirds (4px), lg four thirds (8px), xl twice (12px), 2xl eight thirds (16px)."
     },
     "pill": {
       "$type": "dimension",
@@ -2601,6 +2615,17 @@
       "$value": "-2px"
     }
   },
+  "border": {
+    "$description": "Stroke widths, in whole pixels: a stroke does not follow the root font size. width is every border and rule; width-selected marks the selected or current item (a tab's indicator, a table header's rule).",
+    "width": {
+      "$type": "dimension",
+      "$value": "1px"
+    },
+    "width-selected": {
+      "$type": "dimension",
+      "$value": "2px"
+    }
+  },
   "layer": {
     "$description": "Stacking order for everything that leaves the flow. Popovers, menus, listboxes and modals share overlay: they are portalled, so a later one (a menu opened inside a modal) paints above an earlier one. Values inside a single component (-1, 1, 2) are local and stay literal.",
     "sticky": {
@@ -2630,257 +2655,81 @@
   "shadow": {
     "$description": "Elevation as structured layers rather than CSS strings, which is the shape the token spec defines and the shape an effect-style importer can read. Figma maps these to effect styles, not to variables, so they import separately from everything above.",
     "light": {
-      "2xs": {
+      "raised": {
         "$type": "shadow",
         "$value": [
           {
-            "color": "rgb(0 0 0 / 0.033)",
+            "color": "rgb(0 0 0 / 0.25)",
             "offsetX": "0px",
             "offsetY": "1px",
-            "blur": "2px",
+            "blur": "1px",
+            "spread": "0px"
+          },
+          {
+            "color": "rgb(0 0 0 / 0.31)",
+            "offsetX": "0px",
+            "offsetY": "0px",
+            "blur": "1px",
             "spread": "0px"
           }
         ]
       },
-      "xs": {
+      "overlay": {
         "$type": "shadow",
         "$value": [
           {
-            "color": "rgb(0 0 0 / 0.039)",
-            "offsetX": "0px",
-            "offsetY": "2px",
-            "blur": "4px",
-            "spread": "-1px"
-          },
-          {
-            "color": "rgb(0 0 0 / 0.026)",
-            "offsetX": "0px",
-            "offsetY": "1px",
-            "blur": "2px",
-            "spread": "-1px"
-          }
-        ]
-      },
-      "sm": {
-        "$type": "shadow",
-        "$value": [
-          {
-            "color": "rgb(0 0 0 / 0.052)",
-            "offsetX": "0px",
-            "offsetY": "4px",
-            "blur": "8px",
-            "spread": "-2px"
-          },
-          {
-            "color": "rgb(0 0 0 / 0.033)",
-            "offsetX": "0px",
-            "offsetY": "2px",
-            "blur": "4px",
-            "spread": "-2px"
-          }
-        ]
-      },
-      "md": {
-        "$type": "shadow",
-        "$value": [
-          {
-            "color": "rgb(0 0 0 / 0.058)",
+            "color": "rgb(0 0 0 / 0.15)",
             "offsetX": "0px",
             "offsetY": "8px",
-            "blur": "16px",
-            "spread": "-4px"
-          },
-          {
-            "color": "rgb(0 0 0 / 0.039)",
-            "offsetX": "0px",
-            "offsetY": "4px",
-            "blur": "8px",
-            "spread": "-4px"
-          }
-        ]
-      },
-      "lg": {
-        "$type": "shadow",
-        "$value": [
-          {
-            "color": "rgb(0 0 0 / 0.065)",
-            "offsetX": "0px",
-            "offsetY": "12px",
-            "blur": "24px",
-            "spread": "-6px"
-          },
-          {
-            "color": "rgb(0 0 0 / 0.046)",
-            "offsetX": "0px",
-            "offsetY": "6px",
             "blur": "12px",
-            "spread": "-6px"
-          }
-        ]
-      },
-      "xl": {
-        "$type": "shadow",
-        "$value": [
-          {
-            "color": "rgb(0 0 0 / 0.078)",
-            "offsetX": "0px",
-            "offsetY": "20px",
-            "blur": "40px",
-            "spread": "-10px"
+            "spread": "0px"
           },
           {
-            "color": "rgb(0 0 0 / 0.052)",
+            "color": "rgb(0 0 0 / 0.31)",
             "offsetX": "0px",
-            "offsetY": "10px",
-            "blur": "20px",
-            "spread": "-10px"
-          }
-        ]
-      },
-      "2xl": {
-        "$type": "shadow",
-        "$value": [
-          {
-            "color": "rgb(0 0 0 / 0.104)",
-            "offsetX": "0px",
-            "offsetY": "32px",
-            "blur": "64px",
-            "spread": "-16px"
-          },
-          {
-            "color": "rgb(0 0 0 / 0.065)",
-            "offsetX": "0px",
-            "offsetY": "16px",
-            "blur": "32px",
-            "spread": "-16px"
+            "offsetY": "0px",
+            "blur": "1px",
+            "spread": "0px"
           }
         ]
       }
     },
     "dark": {
-      "2xs": {
+      "raised": {
         "$type": "shadow",
         "$value": [
           {
-            "color": "rgb(0 0 0 / 0.132)",
+            "color": "rgb(0 0 0 / 0.6)",
             "offsetX": "0px",
             "offsetY": "1px",
-            "blur": "2px",
+            "blur": "1px",
+            "spread": "0px"
+          },
+          {
+            "color": "rgb(0 0 0 / 0.6)",
+            "offsetX": "0px",
+            "offsetY": "0px",
+            "blur": "1px",
             "spread": "0px"
           }
         ]
       },
-      "xs": {
+      "overlay": {
         "$type": "shadow",
         "$value": [
           {
-            "color": "rgb(0 0 0 / 0.156)",
-            "offsetX": "0px",
-            "offsetY": "2px",
-            "blur": "4px",
-            "spread": "-1px"
-          },
-          {
-            "color": "rgb(0 0 0 / 0.104)",
-            "offsetX": "0px",
-            "offsetY": "1px",
-            "blur": "2px",
-            "spread": "-1px"
-          }
-        ]
-      },
-      "sm": {
-        "$type": "shadow",
-        "$value": [
-          {
-            "color": "rgb(0 0 0 / 0.208)",
-            "offsetX": "0px",
-            "offsetY": "4px",
-            "blur": "8px",
-            "spread": "-2px"
-          },
-          {
-            "color": "rgb(0 0 0 / 0.132)",
-            "offsetX": "0px",
-            "offsetY": "2px",
-            "blur": "4px",
-            "spread": "-2px"
-          }
-        ]
-      },
-      "md": {
-        "$type": "shadow",
-        "$value": [
-          {
-            "color": "rgb(0 0 0 / 0.232)",
+            "color": "rgb(0 0 0 / 0.6)",
             "offsetX": "0px",
             "offsetY": "8px",
-            "blur": "16px",
-            "spread": "-4px"
-          },
-          {
-            "color": "rgb(0 0 0 / 0.156)",
-            "offsetX": "0px",
-            "offsetY": "4px",
-            "blur": "8px",
-            "spread": "-4px"
-          }
-        ]
-      },
-      "lg": {
-        "$type": "shadow",
-        "$value": [
-          {
-            "color": "rgb(0 0 0 / 0.26)",
-            "offsetX": "0px",
-            "offsetY": "12px",
-            "blur": "24px",
-            "spread": "-6px"
-          },
-          {
-            "color": "rgb(0 0 0 / 0.184)",
-            "offsetX": "0px",
-            "offsetY": "6px",
             "blur": "12px",
-            "spread": "-6px"
-          }
-        ]
-      },
-      "xl": {
-        "$type": "shadow",
-        "$value": [
-          {
-            "color": "rgb(0 0 0 / 0.312)",
-            "offsetX": "0px",
-            "offsetY": "20px",
-            "blur": "40px",
-            "spread": "-10px"
+            "spread": "0px"
           },
           {
-            "color": "rgb(0 0 0 / 0.208)",
+            "color": "rgb(0 0 0 / 0.6)",
             "offsetX": "0px",
-            "offsetY": "10px",
-            "blur": "20px",
-            "spread": "-10px"
-          }
-        ]
-      },
-      "2xl": {
-        "$type": "shadow",
-        "$value": [
-          {
-            "color": "rgb(0 0 0 / 0.416)",
-            "offsetX": "0px",
-            "offsetY": "32px",
-            "blur": "64px",
-            "spread": "-16px"
-          },
-          {
-            "color": "rgb(0 0 0 / 0.26)",
-            "offsetX": "0px",
-            "offsetY": "16px",
-            "blur": "32px",
-            "spread": "-16px"
+            "offsetY": "0px",
+            "blur": "1px",
+            "spread": "0px"
           }
         ]
       }

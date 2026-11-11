@@ -335,7 +335,7 @@
   flex-shrink: 0;
   inline-size: var(--box-xs);
   block-size: var(--box-xs);
-  font-size: var(--text-body-xs);
+  font-size: var(--text-body-sm);
 }
 .current .icon,
 .item:hover .icon {

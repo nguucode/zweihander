@@ -77,8 +77,8 @@ wide as its line.
 
 ## Measurements
 
-Thickness is whole pixels, not a token: the token layer has no
-border-width scale, and a rule is a stroke in whole pixels.
+Thickness is whole pixels, not a token: `--border-width` covers 1px and
+`--border-width-selected` 2px, and a divider's three weights stay its own.
 
 | Size | Thickness |
 | --- | --- |
@@ -130,8 +130,9 @@ Every other `<hr>` attribute passes through, including `ref` and
 - **`appearance`, not `variant`.** In this kit `variant` always means a
   colour by intent (primary, destructive…) and `appearance` means a style.
   Solid versus dashed is a style.
-- **Thickness is raw px.** The token layer has no border-width scale, and
-  a divider is the only component that needs three.
+- **Thickness is raw px.** `--border-width` and `--border-width-selected`
+  cover 1px and 2px strokes; a divider is the only component that needs a
+  third, so its three weights stay its own.
 
 </DocTab>
 <DocTab value="guidelines">

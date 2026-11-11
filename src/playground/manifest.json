@@ -421,12 +421,12 @@
               {
                 "part": "Count",
                 "property": "Font size",
-                "token": "--text-body-xs"
+                "token": "--text-body-sm"
               },
               {
                 "part": "Count",
                 "property": "Line height",
-                "token": "--leading-body-xs"
+                "token": "--leading-body-sm"
               }
             ]
           }
@@ -771,12 +771,12 @@
               {
                 "part": "Key",
                 "property": "Font size",
-                "token": "--text-body-xs"
+                "token": "--text-body-sm"
               },
               {
                 "part": "Key",
                 "property": "Line height",
-                "token": "--leading-body-xs"
+                "token": "--leading-body-sm"
               },
               {
                 "part": "Group",
@@ -1567,11 +1567,6 @@
                 "part": "Focus ring",
                 "property": "Colour",
                 "token": "--ring"
-              },
-              {
-                "part": "Container, contained",
-                "property": "Drop shadow",
-                "token": "--shadow-xs"
               }
             ]
           }
@@ -3362,7 +3357,7 @@
               {
                 "part": "Thumb",
                 "property": "Shadow",
-                "token": "--shadow-xs"
+                "token": "--shadow-raised"
               },
               {
                 "part": "Label",
@@ -6205,11 +6200,6 @@
                 "token": "--field-border"
               },
               {
-                "part": "Field",
-                "property": "Shadow",
-                "token": "--shadow-2xs"
-              },
-              {
                 "part": "Label, input",
                 "property": "Colour",
                 "token": "--foreground"
@@ -6571,11 +6561,6 @@
                 "part": "Field",
                 "property": "Border",
                 "token": "--field-border"
-              },
-              {
-                "part": "Field",
-                "property": "Shadow",
-                "token": "--shadow-2xs"
               },
               {
                 "part": "Label, input",
@@ -8180,11 +8165,6 @@
                 "token": "--field-edge"
               },
               {
-                "part": "Cell",
-                "property": "Shadow",
-                "token": "--shadow-2xs"
-              },
-              {
                 "part": "Character",
                 "property": "Colour",
                 "token": "--foreground"
@@ -8613,11 +8593,6 @@
                 "part": "Container",
                 "property": "Border",
                 "token": "--field-border"
-              },
-              {
-                "part": "Container",
-                "property": "Shadow",
-                "token": "--shadow-2xs"
               },
               {
                 "part": "Input",
@@ -9309,11 +9284,6 @@
                 "token": "--field-border"
               },
               {
-                "part": "Container",
-                "property": "Shadow",
-                "token": "--shadow-2xs"
-              },
-              {
                 "part": "Label and input",
                 "property": "Colour",
                 "token": "--foreground"
@@ -9660,11 +9630,6 @@
                 "part": "Container",
                 "property": "Border",
                 "token": "--field-border"
-              },
-              {
-                "part": "Container",
-                "property": "Shadow",
-                "token": "--shadow-2xs"
               },
               {
                 "part": "Label and input",
@@ -10673,7 +10638,7 @@
           },
           {
             "name": "Group label",
-            "selector": "._groupLabel_p7h3x_116",
+            "selector": "._groupLabel_gefyx_116",
             "description": "Names a group: Recent, Commands, an object type. It names the group for a screen reader too."
           },
           {
@@ -10683,7 +10648,7 @@
           },
           {
             "name": "Icon",
-            "selector": "._icon_p7h3x_145",
+            "selector": "._icon_gefyx_145",
             "description": "Optional. What kind of thing the item is."
           },
           {
@@ -10693,7 +10658,7 @@
           },
           {
             "name": "Key hints",
-            "selector": "._footer_p7h3x_176",
+            "selector": "._footer_gefyx_176",
             "description": "The keys that work here. Read once, as the input's description."
           }
         ],
@@ -10754,7 +10719,7 @@
               {
                 "part": "Key hints",
                 "property": "Font size",
-                "token": "--text-body-xs"
+                "token": "--text-body-sm"
               }
             ]
           },
@@ -12599,7 +12564,7 @@
               {
                 "part": "Indicator",
                 "property": "Shadow",
-                "token": "--shadow-xs"
+                "token": "--shadow-raised"
               }
             ]
           },
@@ -13497,7 +13462,7 @@
           },
           {
             "name": "Consequence",
-            "selector": "._description_1rh1t_78",
+            "selector": "._description_3aoib_78",
             "description": "What happens, to what, and that it cannot be undone."
           },
           {
@@ -13507,12 +13472,12 @@
           },
           {
             "name": "Cancel",
-            "selector": "._footer_1rh1t_95 > :first-child",
+            "selector": "._footer_3aoib_95 > :first-child",
             "description": "The safe choice. Focus starts here, or in the field."
           },
           {
             "name": "Confirm",
-            "selector": "._footer_1rh1t_95 > :last-child",
+            "selector": "._footer_3aoib_95 > :last-child",
             "description": "`destructive`, named after what it does."
           }
         ],
@@ -13660,7 +13625,7 @@
         "anatomy": [
           {
             "name": "Backdrop",
-            "selector": "._backdrop_svovo_3",
+            "selector": "._backdrop_2dxmj_3",
             "description": "A scrim over the page. It blocks the page until the drawer closes."
           },
           {
@@ -13670,7 +13635,7 @@
           },
           {
             "name": "Header",
-            "selector": "._header_svovo_99",
+            "selector": "._header_2dxmj_99",
             "description": "Title, close button and description. Stays in view."
           },
           {
@@ -13685,17 +13650,17 @@
           },
           {
             "name": "Description",
-            "selector": "._description_svovo_116",
+            "selector": "._description_2dxmj_116",
             "description": "Optional. What the drawer is for."
           },
           {
             "name": "Body",
-            "selector": "._body_svovo_123",
+            "selector": "._body_2dxmj_123",
             "description": "children. Scrolls between header and footer."
           },
           {
             "name": "Footer",
-            "selector": "._footer_svovo_134",
+            "selector": "._footer_2dxmj_134",
             "description": "Actions, pinned to the bottom, right-aligned, the main one last."
           }
         ],
@@ -13951,7 +13916,7 @@
         "anatomy": [
           {
             "name": "Backdrop",
-            "selector": "._backdrop_1rh1t_5",
+            "selector": "._backdrop_3aoib_5",
             "description": "A scrim over the whole page. It blocks the page until the modal closes."
           },
           {
@@ -13971,17 +13936,17 @@
           },
           {
             "name": "Description",
-            "selector": "._description_1rh1t_78",
+            "selector": "._description_3aoib_78",
             "description": "Optional. What the modal is for, or what will happen."
           },
           {
             "name": "Body",
-            "selector": "._body_1rh1t_84",
+            "selector": "._body_3aoib_84",
             "description": "children. Scrolls when the modal is taller than the screen."
           },
           {
             "name": "Footer",
-            "selector": "._footer_1rh1t_95",
+            "selector": "._footer_3aoib_95",
             "description": "Actions, right-aligned, the main one last."
           }
         ],

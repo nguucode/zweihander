@@ -258,7 +258,7 @@
   },
 
   "shadow": {
-    "$description": "Elevation, as a height `h` in pixels. Every step is the same two layers: an ambient layer `0 h 2h -h/2` for the spread of light around a raised object, under a tighter contact layer `0 h/2 h -h/2` for where it meets the surface. h doubles through the lower steps and eases off at the top, so the scale reads as distance rather than as seven unrelated blurs.\n\nOnly the light values are written. The generator derives dark from them, because a black shadow has little left to darken on a dark surface — see $extensions.",
+    "$description": "Elevation has two levels. raised is for a surface that can be picked up and moved (a dragged card); overlay is for anything that floats above the page: menus, popovers, modals, toasts. A card that stays put has no shadow: it is a surface with a border. Each level is a soft directional layer over a 1px ambient edge. The seven step names (2xs to 2xl) are aliases of the two levels, kept so existing styles keep working: 2xs to sm read raised, md to 2xl read overlay.\n\nOnly the light values are written. The generator derives dark from them, because a black shadow has little left to darken on a dark surface — see $extensions.",
     "$extensions": {
       "dark": {
         "alphaScale": 4,
@@ -267,18 +267,20 @@
       }
     },
     "elevation-none": { "$type": "shadow", "$value": "0 0 #0000" },
-    "elevation-2xs": { "$type": "shadow", "$value": "0 1px 2px 0 rgb(0 0 0 / 0.033)" },
-    "elevation-xs": { "$type": "shadow", "$value": "0 2px 4px -1px rgb(0 0 0 / 0.039), 0 1px 2px -1px rgb(0 0 0 / 0.026)" },
-    "elevation-sm": { "$type": "shadow", "$value": "0 4px 8px -2px rgb(0 0 0 / 0.052), 0 2px 4px -2px rgb(0 0 0 / 0.033)" },
-    "elevation-md": { "$type": "shadow", "$value": "0 8px 16px -4px rgb(0 0 0 / 0.058), 0 4px 8px -4px rgb(0 0 0 / 0.039)" },
-    "elevation-lg": { "$type": "shadow", "$value": "0 12px 24px -6px rgb(0 0 0 / 0.065), 0 6px 12px -6px rgb(0 0 0 / 0.046)" },
-    "elevation-xl": { "$type": "shadow", "$value": "0 20px 40px -10px rgb(0 0 0 / 0.078), 0 10px 20px -10px rgb(0 0 0 / 0.052)" },
-    "elevation-2xl": { "$type": "shadow", "$value": "0 32px 64px -16px rgb(0 0 0 / 0.104), 0 16px 32px -16px rgb(0 0 0 / 0.065)" }
+    "elevation-raised": { "$type": "shadow", "$value": "0 1px 1px 0 rgb(0 0 0 / 0.25), 0 0 1px 0 rgb(0 0 0 / 0.31)" },
+    "elevation-overlay": { "$type": "shadow", "$value": "0 8px 12px 0 rgb(0 0 0 / 0.15), 0 0 1px 0 rgb(0 0 0 / 0.31)" },
+    "elevation-2xs": { "$type": "shadow", "$value": "{shadow.elevation-raised}" },
+    "elevation-xs": { "$type": "shadow", "$value": "{shadow.elevation-raised}" },
+    "elevation-sm": { "$type": "shadow", "$value": "{shadow.elevation-raised}" },
+    "elevation-md": { "$type": "shadow", "$value": "{shadow.elevation-overlay}" },
+    "elevation-lg": { "$type": "shadow", "$value": "{shadow.elevation-overlay}" },
+    "elevation-xl": { "$type": "shadow", "$value": "{shadow.elevation-overlay}" },
+    "elevation-2xl": { "$type": "shadow", "$value": "{shadow.elevation-overlay}" }
   },
 
   "root": {
     "$description": "Appearance-independent. These live on :root alone — never on .light — so a nested light scope inherits them instead of resetting them.",
-    "radius": { "$type": "dimension", "$value": "0.625rem" },
+    "radius": { "$type": "dimension", "$value": "0.375rem", "$description": "The md step (6px): buttons and fields. The scale is cut from it: xs a third (2px), sm two thirds (4px), lg four thirds (8px), xl twice (12px), 2xl eight thirds (16px)." },
     "radius-factor": { "$type": "number", "$value": 1 },
     "radius-full": { "$type": "dimension", "$value": "0px" },
     "radius-pill": { "$type": "dimension", "$value": "9999px" },
@@ -306,10 +308,13 @@
     "2-5": { "$type": "dimension", "$value": "0.625rem" },
     "3": { "$type": "dimension", "$value": "0.75rem" },
     "4": { "$type": "dimension", "$value": "1rem" },
+    "5": { "$type": "dimension", "$value": "1.25rem" },
     "6": { "$type": "dimension", "$value": "1.5rem" },
     "8": { "$type": "dimension", "$value": "2rem" },
     "10": { "$type": "dimension", "$value": "2.5rem" },
     "12": { "$type": "dimension", "$value": "3rem" },
+    "16": { "$type": "dimension", "$value": "4rem" },
+    "20": { "$type": "dimension", "$value": "5rem" },
     "stack": { "$type": "dimension", "$value": "0.25rem", "$description": "Lines of text under each other: title to description, label to value." },
     "inline": { "$type": "dimension", "$value": "0.5rem", "$description": "Small things side by side: icon to text, label to value on one line, sidebar items." },
     "cluster": { "$type": "dimension", "$value": "0.75rem", "$description": "Controls or parts that sit together: filters in a toolbar, an avatar to its content, the parts of a page heading, inside a small card." },
@@ -396,6 +401,12 @@
     "offset-inset": { "$type": "dimension", "$value": "-2px" }
   },
 
+  "border": {
+    "$description": "Stroke widths, in whole pixels: a stroke does not follow the root font size. width is every border and rule; width-selected marks the selected or current item (a tab's indicator, a table header's rule).",
+    "width": { "$type": "dimension", "$value": "1px" },
+    "width-selected": { "$type": "dimension", "$value": "2px" }
+  },
+
   "layer": {
     "$description": "Stacking order for everything that leaves the flow. Popovers, menus, listboxes and modals share overlay: they are portalled, so a later one (a menu opened inside a modal) paints above an earlier one. Values inside a single component (-1, 1, 2) are local and stay literal.",
     "sticky": { "$type": "number", "$value": 10 },
@@ -421,6 +432,6 @@
     "body-lg": { "$type": "dimension", "$value": "1rem", "$extensions": { "leading": "24 / 16" } },
     "body": { "$type": "dimension", "$value": "0.875rem", "$extensions": { "leading": "20 / 14" } },
     "body-sm": { "$type": "dimension", "$value": "0.75rem", "$extensions": { "leading": "16 / 12" } },
-    "body-xs": { "$type": "dimension", "$value": "0.6875rem", "$extensions": { "leading": "16 / 11" } }
+    "body-xs": { "$type": "dimension", "$value": "0.75rem", "$description": "Deprecated: the same as body-sm. 12px is the smallest text size; use body-sm.", "$extensions": { "leading": "16 / 12" } }
   }
 }

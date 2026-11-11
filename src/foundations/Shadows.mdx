@@ -5,45 +5,30 @@ import * as ShadowsStories from './Shadows.stories'
 
 # Shadows
 
-Seven elevation steps and an off switch. They read as `var(--shadow-2xs)`
-through `var(--shadow-2xl)`, and each resolves per appearance rather than
-being a fixed value.
+Elevation has two levels and an off switch, after Atlassian's elevation
+model. Each resolves per appearance rather than being a fixed value.
 
 <Canvas of={ShadowsStories.Scale} />
 
-## The scale is one shape at seven heights
-
-A step is not a blur radius someone liked. Each one is a **height `h`**,
-and both of its layers fall out of that number:
-
-```
-ambient  0  h     2h    -h/2     the spread of light around a raised object
-contact  0  h/2   h     -h/2     the tighter dark where it meets the surface
-```
-
-Two layers because one cannot do both jobs. A single soft shadow floats
-without touching down; a single tight one reads as a border. The negative
-spread pulls both layers in as they rise, which is what keeps a tall step
-from bleeding sideways into whatever sits next to it.
-
-| Token | h | Light |
+| Token | Use for | Light |
 | --- | --- | --- |
-| `--shadow-none` | — | `0 0 #0000` |
-| `--shadow-2xs` | 1 | 1px drop, 3.3% |
-| `--shadow-xs` | 2 | 2px + 1px, 3.9% / 2.6% |
-| `--shadow-sm` | 4 | 4px + 2px, 5.2% / 3.3% |
-| `--shadow-md` | 8 | 8px + 4px, 5.8% / 3.9% |
-| `--shadow-lg` | 12 | 12px + 6px, 6.5% / 4.6% |
-| `--shadow-xl` | 20 | 20px + 10px, 7.8% / 5.2% |
-| `--shadow-2xl` | 32 | 32px + 16px, 10.4% / 6.5% |
+| `--shadow-none` | Turning elevation off | `0 0 #0000` |
+| `--shadow-raised` | A surface that can be picked up and moved, such as a card being dragged | `0 1px 1px` 25% over a 1px edge at 31% |
+| `--shadow-overlay` | Anything that floats above the page: menus, popovers, modals, toasts | `0 8px 12px` 15% over a 1px edge at 31% |
 
-The alphas are deliberately faint: a panel separates from the page by
-being lighter (white on the gray-50 page) and by its border, so a shadow
-is reserved for things that genuinely float — menus, popovers, dialogs.
+Each level is two layers: a soft directional layer that says how far the
+surface floats, over a 1px ambient edge that keeps its outline when the
+surface behind it is the same colour.
 
-`h` doubles through the lower steps and eases off at the top, because the
-difference between 1px and 2px of lift is legible and the difference
-between 40px and 48px is not.
+**A surface that stays put needs no shadow.** It separates from the page
+by its surface and its border. Controls are flat: buttons and fields
+carry borders, not shadows. Card's `elevated` appearance is the one
+resting surface on `raised`, and lifts to `overlay` on hover when
+clickable.
+
+The seven step names from before (`--shadow-2xs` to `--shadow-2xl`) still
+resolve: `2xs`, `xs` and `sm` read `raised`; `md`, `lg`, `xl` and `2xl`
+read `overlay`. Use the two level names in new styles.
 
 `--shadow-none` exists so that turning elevation off is a token rather
 than a literal. `box-shadow: none` also works, but it cannot be swapped by
@@ -57,57 +42,17 @@ them**: every alpha is multiplied by 4 and clamped at 0.6.
 
 <Canvas of={ShadowsStories.Modes} />
 
-Look at the dark half. The shadows are nearly invisible, and multiplying
-the alpha by four is not what fixes it — nothing fixes it. Here is the
-measurement, sampling the darkest pixel each shadow can produce:
-
-| | Page | Darkest shadow pixel | Range |
-| --- | --- | --- | --- |
-| Light, `--shadow-md` | 255 | 232 | **23 levels** |
-| Light, `--shadow-2xl` | 255 | 214 | **41 levels** |
-| Dark, `--shadow-md` | 10 | 6 | **4 levels** |
-| Dark, `--shadow-2xl` | 10 | 4 | **6 levels** |
-
-A drop shadow works by darkening what is under it. The dark page is
-already at 10 of 255, so **the entire budget is 10 levels** — even a
-pure-black shadow at full opacity could not do better. Light mode has 255
-to spend. That is a 25× difference in available range, and no choice of
-alpha closes it.
-
-So the multiplier is not rescuing dark mode; it is spending a small budget
-well rather than leaving it unspent. What actually carries elevation in
-dark mode is the surface: `--card` sits at **23** against a background of
-**10**, a 13-level lift — two to three times stronger than any shadow on
-this page.
+A drop shadow works by darkening what is under it, and a dark page has
+almost nothing left to darken. So the multiplier spends a small budget
+well; it does not rescue dark mode.
 
 **In dark mode, surface lightness is the primary elevation signal and the
 shadow is a secondary cue.** In light mode it is the other way around. If
 you are building a floating surface and it does not read as raised in dark
 mode, reach for a lighter surface token, not a heavier shadow.
 
-The **clamp** at 0.6 is therefore housekeeping rather than tuning — it
-stops a large light alpha from generating a nonsensical dark one, and
-between `--shadow-2xl` uncapped and capped there is about one level in it.
-
-Deriving rather than retyping closes a different gap. When both modes were
-written by hand there were fourteen numbers and nothing checking that they
-told the same story; editing a step meant remembering to edit its twin.
-Now editing a step edits both, and the `Modes` story asserts the two did
-not collapse into the same value — set the multiplier to 1 and that test
-fails.
-
-## Who uses them
-
-Controls are flat: Button, Text Input and the rest carry borders, not
-shadows. **Card** is the first surface on the scale — `elevated` rests on
-`--shadow-sm` and lifts to `--shadow-md` on hover when clickable. The
-remaining steps are for the surfaces still to come (popover, dropdown,
-modal, toast), documented now so they adopt a shared scale instead of each
-inventing a `box-shadow`.
-
-That also means the steps are **untested against real components.** The
-geometry is consistent, but consistent is not the same as tuned. Treat
-them as a starting point to adjust when the first floating surface lands.
+Deriving rather than retyping means editing a level edits both modes, and
+the `Modes` story asserts the two did not collapse into the same value.
 
 ## A note on rings and shadows
 
@@ -124,8 +69,7 @@ focus ring at once, and neither needs to know about the other.
 
 **Inset shadows.** For recessed wells and pressed states. They are a real
 gap, but the kit has no recessed surface and no pressed treatment yet, so
-they would be a step nothing reads — and this page already carries seven
-of those. Add them as `elevation-inset-*` in `tokens/semantic.json` when
+they would be a step nothing reads. Add them as `elevation-inset-*` in `tokens/semantic.json` when
 the first one lands; the alpha derivation applies unchanged.
 
 **Coloured shadows.** A shadow tinted toward the accent instead of black.
@@ -134,12 +78,12 @@ how it behaves in dark mode, not a mechanical port.
 
 ## Customization
 
-The raw values are `--elevation-none` through `--elevation-2xl` in `:root`
-and `.dark`; the `*` block maps them onto `--shadow-*` and does not need to
+The raw values are `--elevation-raised` and `--elevation-overlay` in
+`:root` and `.dark`; the `*` block maps them onto `--shadow-*` and does not need to
 change.
 
-Change a step by editing `tokens/semantic.json` and running `npm run
-tokens` — light and dark regenerate together. Overriding `--shadow-md`
+Change a level by editing `tokens/semantic.json` and running `npm run
+tokens` — light and dark regenerate together. Overriding `--shadow-overlay`
 directly on a `Theme` scope also works and skips the derivation, which is
 the right tool for a one-off surface and the wrong one for changing the
 scale.

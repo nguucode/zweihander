@@ -29,7 +29,6 @@
   border: 1px solid var(--field-edge);
   border-radius: var(--otp-radius);
   background: var(--card);
-  box-shadow: var(--shadow-2xs);
   color: var(--foreground);
   font-family: var(--font-sans);
   font-size: inherit;

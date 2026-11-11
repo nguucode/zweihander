@@ -168,7 +168,7 @@
   border: 1px solid var(--border);
   border-radius: calc(var(--tab-track-radius) - 2px);
   background: var(--card);
-  box-shadow: var(--shadow-xs);
+  box-shadow: var(--shadow-raised);
   transition:
     inset-inline-start var(--duration-slow),
     inset-block-start var(--duration-slow),

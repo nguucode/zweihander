@@ -15,8 +15,8 @@
   box-sizing: border-box;
   border-radius: var(--radius-pill);
   font-family: var(--font-sans);
-  font-size: var(--text-body-xs);
-  line-height: var(--leading-body-xs);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
   font-weight: 500;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;

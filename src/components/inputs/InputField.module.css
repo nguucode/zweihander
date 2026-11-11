@@ -95,7 +95,6 @@
   min-inline-size: 0;
   border: 1px solid var(--field-edge);
   background: var(--card);
-  box-shadow: var(--shadow-2xs);
   color: var(--foreground);
   cursor: text;
   transition:

@@ -3,13 +3,11 @@ import { expect } from 'storybook/test'
 import { Theme } from '@/theme/Theme'
 import docs from './docs.module.css'
 
-const STEPS = ['2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl'] as const
+const STEPS = ['raised', 'overlay'] as const
 
 function Swatch({ step }: { step: string }) {
   return (
-    // The caption clears the largest step's reach rather than sitting inside
-    // it: 2xl extends about 3rem below the box, so a tighter gap puts the
-    // label in the shadow and both read as mud.
+    // The caption clears the shadow's reach rather than sitting inside it.
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--space-12)' }}>
       <div
         style={{
@@ -74,7 +72,7 @@ export const Modes: Story = {
             {appearance}
           </div>
           <div className={docs.rowWrap} style={{ gap: 'var(--space-8)' }}>
-            {(['xs', 'md', '2xl'] as const).map((step) => (
+            {STEPS.map((step) => (
               <Swatch key={step} step={step} />
             ))}
           </div>
@@ -86,7 +84,7 @@ export const Modes: Story = {
     // The point of the alpha scale: the same token is not the same value in
     // both modes. If someone copies the light values into .dark, this fails.
     const shadows = (['light', 'dark'] as const).map((mode) =>
-      getComputedStyle(canvas.getByText(mode).parentElement!).getPropertyValue('--shadow-md').trim(),
+      getComputedStyle(canvas.getByText(mode).parentElement!).getPropertyValue('--shadow-overlay').trim(),
     )
     await expect(shadows[0]).not.toBe(shadows[1])
     await expect(shadows.every(Boolean)).toBe(true)
