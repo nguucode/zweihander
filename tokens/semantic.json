@@ -377,7 +377,8 @@
     "$description": "Icon sizes, one per control tier.",
     "xs": { "$type": "dimension", "$value": "0.75rem" },
     "sm": { "$type": "dimension", "$value": "0.875rem" },
-    "md": { "$type": "dimension", "$value": "1rem" }
+    "md": { "$type": "dimension", "$value": "1rem" },
+    "lg": { "$type": "dimension", "$value": "1.25rem", "$description": "Icon inside a md Button or ToggleButton: larger than the md control tier, still inside the 32px box." }
   },
 
   "duration": {
