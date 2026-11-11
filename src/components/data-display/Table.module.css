@@ -60,8 +60,8 @@ tbody tr:last-child > * {
   color: var(--muted-foreground);
   white-space: nowrap;
 }
-/* The header ends on a heavier rule than the rows' dividers. */
-/* `.table` outranks the cell classes' own bottom rule. */
+/* The header ends on a heavier rule than the rows' dividers. `.table`
+   outranks the cell classes' own bottom rule. */
 .table thead > tr > * {
   border-block-end-width: var(--border-width-selected);
 }
@@ -87,8 +87,9 @@ tbody tr:last-child > * {
   text-align: end;
 }
 
-/* The whole header is the sort button, so the target is the full cell. */
+/* The label is the sort button; its hit area below is at least 24px. */
 .sortButton {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: var(--space-1);
@@ -118,19 +119,20 @@ tbody tr:last-child > * {
   outline-offset: var(--focus-offset-inset);
 }
 
-/* The sort button is one text line and its padding tall. On touch screens its hit area
-   grows to 44px without the header row growing with it. */
+/* The sort button is one text line and its padding tall (20px). Its hit
+   area is 24px (WCAG 2.5.8), and 44px on touch screens, without the header
+   row growing with it. */
+.sortButton::after {
+  content: '';
+  position: absolute;
+  inset: 50% auto auto 50%;
+  inline-size: max(100%, var(--table-sort-hit, var(--box-sm)));
+  block-size: max(100%, var(--table-sort-hit, var(--box-sm)));
+  translate: -50% -50%;
+}
 @media (pointer: coarse) {
   .sortButton {
-    position: relative;
-  }
-  .sortButton::after {
-    content: '';
-    position: absolute;
-    inset: 50% auto auto 50%;
-    inline-size: max(100%, var(--target-coarse));
-    block-size: max(100%, var(--target-coarse));
-    translate: -50% -50%;
+    --table-sort-hit: var(--target-coarse);
   }
 }
 
@@ -180,6 +182,13 @@ thead .actions {
 .expand > *,
 .actions > * {
   vertical-align: top;
+}
+/* Inside the control: the cell has no room for an outset ring, and the
+   scroll container would clip one on the first and last rows. */
+.select :focus-visible,
+.expand :focus-visible,
+.actions :focus-visible {
+  outline-offset: var(--focus-offset-inset);
 }
 .expand {
   padding-inline-end: 0;

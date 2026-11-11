@@ -209,9 +209,12 @@ export const TouchTarget: Story = {
     await expect([area.style.inlineSize, area.style.blockSize]).toEqual(['var(--target-coarse)', 'var(--target-coarse)'])
     // …and the token is the 44px WCAG 2.5.5 asks for.
     await expect(getComputedStyle(remove).getPropertyValue('--target-coarse').trim()).toBe('44px')
+    // On a fine pointer the hit area is the 24px of WCAG 2.5.8.
+    const before = getComputedStyle(remove, '::before')
+    await expect([before.inlineSize, before.blockSize]).toEqual(['24px', '24px'])
     // Absolutely placed and unpainted: the tag looks and measures the same.
-    await expect(area.style.position).toBe('absolute')
-    await expect(area.style.background).toBe('')
+    await expect(before.position).toBe('absolute')
+    await expect(before.backgroundColor).toBe('rgba(0, 0, 0, 0)')
     // Centred on the button, so past a 20px tag it reaches (44 - 20) / 2 = 12px each side.
     const tag = remove.parentElement!.getBoundingClientRect()
     const button = remove.getBoundingClientRect()

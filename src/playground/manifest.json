@@ -987,11 +987,6 @@
               },
               {
                 "part": "Remove button",
-                "property": "Focus ring offset (inset)",
-                "token": "--focus-offset-inset"
-              },
-              {
-                "part": "Remove button",
                 "property": "Hit area on touch screens",
                 "token": "--target-coarse"
               }

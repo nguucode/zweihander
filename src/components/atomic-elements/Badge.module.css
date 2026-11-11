@@ -6,8 +6,8 @@
 }
 
 /* One count badge, Atlassian's: 16px tall, at least 24px wide, 4px either
-   side, 12/16 text and a 2px corner. The step, not a control radius: the
-   corner stays 2px whatever the Theme's radius preset. */
+   side, 12/16 text and a 2px corner. The step, not a control radius: it
+   follows the preset's factor and never becomes a pill. */
 .badge {
   display: inline-flex;
   align-items: center;

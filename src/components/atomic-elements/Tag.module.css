@@ -240,21 +240,26 @@
   background: color-mix(in oklch, currentColor 15%, transparent);
 }
 
-/* Same ring as every control, drawn inset so it stays inside a 20px tag. */
+/* Same ring as every control, hugging the 12px mark: inset it would cover
+   the glyph, and 2px out it still sits inside the 20px tag. */
 .remove:focus-visible {
   outline: var(--focus-width) solid var(--ring);
-  outline-offset: var(--focus-offset-inset);
+  outline-offset: 0;
 }
 
-/* The visible button is 12px; on touch screens the hit area grows to 44px
-   without the tag growing with it. */
+/* The visible button is 12px; its hit area is 24px (WCAG 2.5.8), and 44px
+   on touch screens, without the tag growing with it. */
+.remove::before {
+  content: '';
+  position: absolute;
+  inset: 50% auto auto 50%;
+  inline-size: var(--box-sm);
+  block-size: var(--box-sm);
+  translate: -50% -50%;
+}
 @media (pointer: coarse) {
   .remove::before {
-    content: '';
-    position: absolute;
-    inset: 50% auto auto 50%;
     inline-size: var(--target-coarse);
     block-size: var(--target-coarse);
-    translate: -50% -50%;
   }
 }
