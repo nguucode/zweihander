@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite'
 import { expect } from 'storybook/test'
 import { Button } from '@/components/buttons/Button'
 import { TextInput } from '@/components/inputs/TextInput'
-import { ACCENT_COLORS, GRAY_COLORS, SCALINGS, Theme } from '@/theme/Theme'
+import { ACCENT_COLORS, GRAY_COLORS, Theme } from '@/theme/Theme'
 import docs from './docs.module.css'
 
 function Panel({ label }: { label: string }) {
@@ -79,28 +79,6 @@ export const GrayColor: Story = {
       ))}
     </div>
   ),
-}
-
-export const Scaling: Story = {
-  render: () => (
-    <div className={docs.stackWide} style={{ gap: 'var(--space-4)' }}>
-      {SCALINGS.map((scaling) => (
-        <Theme key={scaling} scaling={scaling} className={docs.row} style={{ gap: 'var(--space-3)' }}>
-          <span className={docs.caption} style={{ width: '3rem', flexShrink: 0 }}>{scaling}</span>
-          <Button>Button</Button>
-          <div style={{ width: '10rem' }}>
-            <TextInput aria-label="Input" placeholder="Input" isFullWidth />
-          </div>
-        </Theme>
-      ))}
-    </div>
-  ),
-  play: async ({ canvas }) => {
-    const h = (label: string) =>
-      canvas.getByText(label).parentElement!.querySelector('button')!.getBoundingClientRect().height
-    // Scaling drives --spacing, so the control height has to follow it.
-    await expect(h('90%')).toBeLessThan(h('110%'))
-  },
 }
 
 export const Appearance: Story = {

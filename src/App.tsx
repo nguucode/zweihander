@@ -336,7 +336,7 @@ export default function App() {
         <aside className={styles.aside}>
           <h1 className={styles.wordmark}>zweihänder</h1>
           <p className={styles.lede}>
-            Plain CSS over custom properties, keyboard handling from Base UI, and one <code>&lt;Theme&gt;</code> wrapper for accent, gray, radius and density.
+            Plain CSS over custom properties, keyboard handling from Base UI, and one <code>&lt;Theme&gt;</code> wrapper for accent, gray and radius.
           </p>
           <CopyCommand command="npm install zweihander" />
         </aside>

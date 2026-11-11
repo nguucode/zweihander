@@ -75,7 +75,7 @@ not documentation.
 - **[Typography](?path=/docs/foundations-typography--docs)** — the
   role-based type scale, and the system font stack behind it.
 - **[Spacing](?path=/docs/foundations-spacing--docs)** — six roles,
-  and the two densities that set their numbers.
+  one value each.
 - **[Breakpoints](?path=/docs/foundations-breakpoints--docs)** — the
   responsive range, and the kit's lack of opinion about it.
 - **[Radius](?path=/docs/foundations-radius--docs)** — four steps off one
@@ -111,12 +111,12 @@ against those values.
 ```tsx
 import { Theme } from 'zweihander/theme'
 
-<Theme accentColor="violet" grayColor="slate" appearance="dark" radius="full-rounded" scaling="105%">
-  <Button>Inside a violet, slate, dark, rounder, roomier scope</Button>
+<Theme accentColor="violet" grayColor="slate" appearance="dark" radius="full-rounded">
+  <Button>Inside a violet, slate, dark, rounder scope</Button>
 </Theme>
 ```
 
-Five settings, each independent:
+Four settings, each independent:
 
 | Prop | Values |
 | --- | --- |
@@ -124,7 +124,6 @@ Five settings, each independent:
 | `grayColor` | 9 neutral ramps — drives backgrounds, text, borders |
 | `appearance` | `light`, `dark`, `inherit` |
 | `radius` | `sharp`, `rounded`, `full-rounded` |
-| `scaling` | `90%` … `110%` — spacing and type together |
 
 ### Accent color
 
@@ -147,17 +146,6 @@ differences are subtle and cumulative; they read most clearly in dark
 mode, which is how they are shown here.
 
 <Canvas of={OverviewStories.GrayColor} />
-
-### Scaling
-
-One multiplier over both spacing and the type scale, so density is a
-single setting rather than a per-component decision. Line heights are
-unitless ratios and follow the font size on their own.
-
-<Canvas of={OverviewStories.Scaling} />
-
-Note that control heights scale too — at `90%` the default control is
-about 29px. Touch hit areas stay 44px regardless.
 
 ### Radius
 

@@ -1,4 +1,4 @@
-/* --sidebar-width is a token (it follows density, and an AppShell sizes the
+/* --sidebar-width is a token (an AppShell sizes the
    logo's cell in its top bar by it). An AppShell sets --sidebar-background
    and --sidebar-border to draw the fill and edge itself, and the
    --sidebar-* colours below for its surfaces (white: a brand-tint current
@@ -274,7 +274,7 @@
 .list {
   display: flex;
   flex-direction: column;
-  /* 2px in every density, so hover and current fills never touch. */
+  /* 2px, so hover and current fills never touch. */
   gap: var(--space-0-5);
   margin: 0;
   padding: 0;
@@ -329,8 +329,8 @@
   font-size: var(--icon-md);
   color: var(--muted-foreground);
 }
-/* An Avatar in a NavSidebarButton is 20px in every density: a row like the
-   others, not a profile card. Avatar xs is 24px at Default. */
+/* An Avatar in a NavSidebarButton is 20px: a row like the
+   others, not a profile card. Avatar xs is 24px. */
 .button .icon > * {
   flex-shrink: 0;
   inline-size: var(--box-xs);

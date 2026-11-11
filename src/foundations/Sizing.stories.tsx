@@ -12,7 +12,7 @@ const TIERS = ['xs', 'sm', 'md'] as const
 
 /* Each cell is a token, read back in pixels: a probe element takes the token
    as a length and the table shows what it resolves to here, so the numbers
-   follow the Theme's scaling and radius preset and are never retyped. */
+   follow the Theme's radius preset and are never retyped. */
 const ROWS = [
   { label: 'Height', token: (t: string) => `--control-${t}`, prop: 'inlineSize' },
   { label: 'Padding, pad', token: (t: string) => `--control-${t}-pad`, prop: 'inlineSize' },
@@ -88,10 +88,8 @@ function TierTable() {
 }
 
 const STEPS = ['2xs', 'xs', 'sm', 'md', 'lg', 'xl'] as const
-const DENSITIES = ['default', 'compact'] as const
 
-/* The ramp in both densities at once: each column's probes sit inside their
-   own [data-density], so the table never depends on the toolbar. */
+/* The ramp, each step read back from its token. */
 function BoxRampTable() {
   const { ref, values } = useProbes()
 
@@ -100,9 +98,7 @@ function BoxRampTable() {
       <thead>
         <tr>
           <th>Step</th>
-          {DENSITIES.map((d) => (
-            <th key={d}>{d === 'default' ? 'Default' : 'Compact'}</th>
-          ))}
+          <th>Size</th>
           <th>Token</th>
         </tr>
       </thead>
@@ -112,16 +108,14 @@ function BoxRampTable() {
             <td>
               <code>{step}</code>
             </td>
-            {DENSITIES.map((d) => (
-              <td key={d} data-density={d} data-token={`--box-${step}@${d}`}>
-                <span
-                  data-probe={`--box-${step}@${d}`}
-                  aria-hidden="true"
-                  style={{ position: 'absolute', visibility: 'hidden', inlineSize: `var(--box-${step})` }}
-                />
-                <code>{values[`--box-${step}@${d}`]}</code>
-              </td>
-            ))}
+            <td data-token={`--box-${step}`}>
+              <span
+                data-probe={`--box-${step}`}
+                aria-hidden="true"
+                style={{ position: 'absolute', visibility: 'hidden', inlineSize: `var(--box-${step})` }}
+              />
+              <code>{values[`--box-${step}`]}</code>
+            </td>
             <td>
               <code>--box-{step}</code>
             </td>
@@ -171,10 +165,8 @@ export const Tiers: Story = {
 export const BoxRamp: Story = {
   render: () => <BoxRampTable />,
   play: async ({ canvasElement }) => {
-    const column = (d: string) =>
-      STEPS.map((step) => canvasElement.querySelector(`[data-token="--box-${step}@${d}"] code`)!.textContent)
-    await expect(column('default')).toEqual(['16px', '20px', '24px', '32px', '40px', '48px'])
-    await expect(column('compact')).toEqual(['16px', '20px', '22px', '28px', '36px', '44px'])
+    const sizes = STEPS.map((step) => canvasElement.querySelector(`[data-token="--box-${step}"] code`)!.textContent)
+    await expect(sizes).toEqual(['16px', '20px', '24px', '32px', '40px', '48px'])
   },
 }
 

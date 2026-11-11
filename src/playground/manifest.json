@@ -5530,7 +5530,7 @@
             "md"
           ],
           "default": "md",
-          "description": "Row height. `md` is `--row-height` (48px Default, 36px Compact density); `sm` is one `--space-inline` shorter (40, 32)."
+          "description": "Row height. `md` is `--row-height` (48px); `sm` is one `--space-inline` shorter (40px)."
         },
         {
           "name": "hasStickyHeader",
@@ -16128,7 +16128,7 @@
           {
             "title": "Layout",
             "blocks": [
-              "- Rows pad by `--space-inline` above and below and `--space-4` at the\n  sides, and are at least `--row-height` tall, so a list lines up with a\n  Table of the same density.\n- `footer` sits past a divider in `flat` and `card`, and after the gap in\n  `separate`.\n- No breakpoints: the container is as wide as its column. Long words in a\n  row break anywhere rather than overflow."
+              "- Rows pad by `--space-inline` above and below and `--space-4` at the\n  sides, and are at least `--row-height` tall, so a list lines up with a\n  Table of the same row size.\n- `footer` sits past a divider in `flat` and `card`, and after the gap in\n  `separate`.\n- No breakpoints: the container is as wide as its column. Long words in a\n  row break anywhere rather than overflow."
             ]
           },
           {
@@ -16729,7 +16729,7 @@
           {
             "title": "Layout",
             "blocks": [
-              "- The media column is as wide as a medium Avatar; an Icon sits in a\n  filled circle of that size, and an Avatar covers it.\n- `meta` sits at the end of the row while the title fits beside it, and\n  wraps under the text when it does not. The list has no breakpoint of\n  its own, so it works in a narrow aside as on a full page.\n- Long titles, emails and paths break anywhere rather than overflow.\n- Rows pad by `--space-inline` above and below, as Table rows do, and\n  are at least `--row-height` tall: a one-line row without media lines up\n  with a Table row of the same density."
+              "- The media column is as wide as a medium Avatar; an Icon sits in a\n  filled circle of that size, and an Avatar covers it.\n- `meta` sits at the end of the row while the title fits beside it, and\n  wraps under the text when it does not. The list has no breakpoint of\n  its own, so it works in a narrow aside as on a full page.\n- Long titles, emails and paths break anywhere rather than overflow.\n- Rows pad by `--space-inline` above and below, as Table rows do, and\n  are at least `--row-height` tall: a one-line row without media lines up\n  with a Table row of the same size."
             ]
           },
           {
@@ -16834,7 +16834,7 @@
           {
             "title": "Layout",
             "blocks": [
-              "- The bar is one row, `--control-md` plus two `--space-cluster` tall, so\n  it follows density. Its fill and edge come from the App Shell's top cell\n  (solid or transparent), not from the bar.\n- In the shell's top-bar layout with a sidebar, the brand takes a cell as\n  wide as the sidebar (`--sidebar-width`), so the logo sits where it sits\n  in the sidebar layout.\n- Breakpoints read the container, which in an app is the shell."
+              "- The bar is one row, `--control-md` plus two `--space-cluster` tall. Its fill and edge come from the App Shell's top cell\n  (solid or transparent), not from the bar.\n- In the shell's top-bar layout with a sidebar, the brand takes a cell as\n  wide as the sidebar (`--sidebar-width`), so the logo sits where it sits\n  in the sidebar layout.\n- Breakpoints read the container, which in an app is the shell."
             ]
           },
           {
@@ -16944,7 +16944,7 @@
           {
             "title": "Layout",
             "blocks": [
-              "- **The shell fills the viewport** (`block-size: 100dvh`) and only the\n  page scrolls, so the sidebar and the header stay in place. Set\n  `block-size` on it to put it in a smaller box.\n- **The sidebar sits beside the page at every width.** From 64rem, in\n  `layout=\"sidebar\"`, it runs the full height and the top bar is hidden,\n  because the sidebar holds what the bar would. Below 64rem it is the icon\n  rail and the top bar comes back in both layouts, for the logo, search and\n  the account.\n- **An aside** sits right of the page from 80rem, `--sidebar-width` wide,\n  and the page and the aside each scroll on their own. Under 80rem it goes\n  below the page and the two scroll together; below 48rem it is flush too,\n  ruled off from a flat page at the top.\n- **Below 48rem** a flat page drops its 8px inset, edge and rounding and\n  goes flush, since a frame around it only costs width on a phone.\n- **Everything follows density**: the top bar is `--control-md` plus two\n  `--space-cluster` tall, the sidebar is `--sidebar-width` wide, the page\n  padding is `--space-section`. The 8px inset of a flat page does not\n  change.\n- **Breakpoints are the shell's own width**, which in an app is the\n  viewport's. That is also what lets the stories show the phone layout in\n  a 390px box.\n- **The shell is a size container** (`container-type: inline-size`), so\n  it takes its width from where it sits, never from its content. In a\n  block it fills the line as usual; as a flex or grid item that would\n  otherwise shrink to fit, give it a width (`inline-size: 100%` or\n  `flex: 1`), or it collapses."
+              "- **The shell fills the viewport** (`block-size: 100dvh`) and only the\n  page scrolls, so the sidebar and the header stay in place. Set\n  `block-size` on it to put it in a smaller box.\n- **The sidebar sits beside the page at every width.** From 64rem, in\n  `layout=\"sidebar\"`, it runs the full height and the top bar is hidden,\n  because the sidebar holds what the bar would. Below 64rem it is the icon\n  rail and the top bar comes back in both layouts, for the logo, search and\n  the account.\n- **An aside** sits right of the page from 80rem, `--sidebar-width` wide,\n  and the page and the aside each scroll on their own. Under 80rem it goes\n  below the page and the two scroll together; below 48rem it is flush too,\n  ruled off from a flat page at the top.\n- **Below 48rem** a flat page drops its 8px inset, edge and rounding and\n  goes flush, since a frame around it only costs width on a phone.\n- **Everything reads a token**: the top bar is `--control-md` plus two\n  `--space-cluster` tall, the sidebar is `--sidebar-width` wide, the page\n  padding is `--space-section`.\n- **Breakpoints are the shell's own width**, which in an app is the\n  viewport's. That is also what lets the stories show the phone layout in\n  a 390px box.\n- **The shell is a size container** (`container-type: inline-size`), so\n  it takes its width from where it sits, never from its content. In a\n  block it fills the line as usual; as a flex or grid item that would\n  otherwise shrink to fit, give it a width (`inline-size: 100%` or\n  `flex: 1`), or it collapses."
             ]
           },
           {

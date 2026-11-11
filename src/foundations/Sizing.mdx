@@ -14,8 +14,7 @@ things only: which padding it takes, and whether it becomes a pill at
 <Canvas of={SizingStories.Tiers} />
 
 The table reads each token back from the page, so it shows what the
-current scaling and radius preset resolve to. Every length here, the
-radius included, is multiplied by `--scaling`.
+current radius preset resolves to.
 
 ## The box ramp
 
@@ -26,14 +25,12 @@ item is as tall as the button beside it.
 
 <Canvas of={SizingStories.BoxRamp} />
 
-`md` (32px) is the default. Density maps the whole ramp with one rule:
-16 and 20 stay, every larger step drops one notch (24 to 22, 32 to 28,
-40 to 36, 48 to 44). The control tiers below are the ramp's `xs`, `sm`
-and `md` under another name.
+`md` (32px) is the default. The control tiers below are the ramp's `xs`,
+`sm` and `md` under another name.
 
 ### Which step a role takes
 
-| Role | Step | Default |
+| Role | Step | Size |
 | --- | --- | --- |
 | The default control: field, button, tab, pagination and menu item, calendar day, an icon button in the app frame (sidebar toggle, carousel arrows), a nav item | `md` | 32px |
 | A small inline control; a close button inside a surface (Modal, Popover, Toast, Alert); the small Stepper marker; the medium spinner | `sm` | 24px |
@@ -51,7 +48,7 @@ The rules that go with the table:
   picks only its `size`, and `size` points at a step.
 - **Composite boxes take no free number.** A row, a Tag or a top bar is
   the box inside it plus a spacing role on each side: `--row-height` is
-  `box-md` plus `--space-inline` above and below (48 / 36px). Text boxes
+  `box-md` plus `--space-inline` above and below (48px). Text boxes
   are a line tall (`--leading-*` × `--text-*`); an icon beside text sits
   in a box one line tall.
 - **A box that grows with its content** uses `min-block-size` at a step,
@@ -64,22 +61,20 @@ Off the ramp, each for a reason: 1–2px strokes, dots and bars under
 12px (radio dot, Badge dot, progress bar), switch track widths, region
 sizes (ColorPicker, a vertical Slider, overlay widths), the 44px touch
 target and icons sized in `em` inside text. `npm run tokens` stops when a
-control, size or row token leaves the ramp of its density without a
+control, size or row token leaves the ramp without a
 listed reason, and when `--row-height` stops being the sum above.
 
 ## Who reads which tier
 
-| Tier | Height (Default / Compact) | Components |
+| Tier | Height | Components |
 | --- | --- | --- |
-| `md` | 32 / 28px | the default: Button, ToggleButton, every field (TextInput, Search, Select, Combobox, NumberInput, DatePicker, Textarea), Tabs, Pagination, Menu item |
-| `sm` | 24 / 22px | the small inline size of the same components, Tag `size="md"`, and the Menubar trigger |
-| `xs` | 20 / 20px | compact parts only: Tag `size="sm"`, the slider thumb |
+| `md` | 32px | the default: Button, ToggleButton, every field (TextInput, Search, Select, Combobox, NumberInput, DatePicker, Textarea), Tabs, Pagination, Menu item |
+| `sm` | 24px | the small inline size of the same components, Tag `size="md"`, and the Menubar trigger |
+| `xs` | 20px | compact parts only: Tag `size="sm"`, the slider thumb |
 
-Density keeps every tier and tightens each; see
-[Spacing](?path=/docs/foundations-spacing--docs#density). The checkbox and
-radio box, the switch tracks, Badge and Avatar have their own size tokens
-(`--choice-box`, `--switch-md-w`, `--badge-md`, `--avatar-md`), which follow
-density too.
+The checkbox and radio box, the switch tracks, Badge and Avatar have
+their own size tokens (`--choice-box`, `--switch-md-w`, `--badge-md`,
+`--avatar-md`).
 
 A component's `size` prop points at a tier; the names need not match.
 Tag `size="md"` reads tier `sm`, because a tag sits in a line of text and
@@ -89,8 +84,8 @@ a 32px tag would push it apart.
 not a control.
 
 **The 24px floor is for the hit area, not the drawn box.** WCAG 2.5.8
-asks for a 24×24px target. A box drawn smaller (Compact `sm` is 22px, the
-checkbox 20px) keeps its look and widens its hit area to 24px with a
+asks for a 24×24px target. A box drawn smaller (the checkbox is
+20px) keeps its look and widens its hit area to 24px with a
 `::before`. On touch screens every tier grows its hit area to
 `--target-coarse` (44px) the same way, without growing the visible box.
 

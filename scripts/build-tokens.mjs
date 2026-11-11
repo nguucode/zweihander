@@ -361,34 +361,29 @@ const TIER_RADIUS = [
   ['md', 'md', 'lg'],
 ]
 
-/* A token with a Compact value ($extensions.compact) reads both through the
-   density switches, the way [data-accent] reads --use-light / --use-dark:
-   exactly one of the two var()s resolves, the other is empty. */
-const byDensity = (def, compact) =>
-  compact === undefined ? def : `var(--density-default, ${def}) var(--density-compact, ${compact})`
-/* The CSS prefix of each scaled group. An alias such as {box.md} becomes
-   var(--box-md): the target already carries density and scaling. */
+/* The CSS prefix of each length group. An alias such as {box.md} becomes
+   var(--box-md). */
 const PREFIX = { space: 'space-', box: 'box-', control: 'control-', row: 'row-', size: '', icon: 'icon-', text: 'text-' }
 const aliasOf = (v) => v.$value.match(/^\{(\w+)\.([\w-]+)\}$/)
-const scaled = (v) => {
+const lengthOf = (v) => {
   const ref = aliasOf(v)
   if (ref) return `var(--${PREFIX[ref[1]]}${ref[2]})`
-  return `calc(${byDensity(v.$value, v.$extensions?.compact?.$value)} * var(--scaling))`
+  return v.$value
 }
-const scaledDecls = (group) =>
+const lengthDecls = (group) =>
   entries(semantic[group])
-    .map(([k, v]) => `  --${PREFIX[group]}${k}: ${scaled(v)};`)
+    .map(([k, v]) => `  --${PREFIX[group]}${k}: ${lengthOf(v)};`)
     .join('\n')
-const spaceDecls = scaledDecls('space')
-const boxDecls = scaledDecls('box')
-const controlDecls = scaledDecls('control')
-const rowDecls = scaledDecls('row')
-const sizeDecls = scaledDecls('size')
-const iconDecls = scaledDecls('icon')
-const textDecls = scaledDecls('text')
+const spaceDecls = lengthDecls('space')
+const boxDecls = lengthDecls('box')
+const controlDecls = lengthDecls('control')
+const rowDecls = lengthDecls('row')
+const sizeDecls = lengthDecls('size')
+const iconDecls = lengthDecls('icon')
+const textDecls = lengthDecls('text')
 
 /* The box ramp is the rule for fixed sizes: every control height, size token
-   and row height stands on the ramp of its density, or is listed here with
+   and row height stands on the ramp, or is listed here with
    the reason it may not. A value off the ramp stops the build, the way an
    unreadable label does. */
 const OFF_RAMP = {
@@ -402,26 +397,18 @@ const OFF_RAMP = {
   'size.badge-dot-sm': 'a dot, under 12px',
   'size.badge-dot-md': 'a dot, under 12px',
   'size.sidebar-width': 'a column width for the expanded Sidebar, not a box',
-  // ponytail: temporary. The size group still steps down a whole size in
-  // Compact; box-sizing ticket 03 moves it onto the ramp and deletes these.
-  'size.avatar-sm@compact': 'box-sizing ticket 03',
-  'size.avatar-md@compact': 'box-sizing ticket 03',
-  'size.avatar-lg@compact': 'box-sizing ticket 03',
-  'size.badge-sm@compact': 'box-sizing ticket 03',
-  'size.switch-sm-h@compact': 'box-sizing ticket 03',
 }
 const px = (rem) => {
   const m = rem.match(/^([\d.]+)rem$/)
   if (!m) throw new Error(`box ramp: expected a rem length, got "${rem}"`)
   return Number(m[1]) * 16
 }
-const pxAt = (v, density) => {
+const pxOf = (v) => {
   const ref = aliasOf(v)
-  if (ref) return pxAt(semantic[ref[1]][ref[2]], density)
-  return px(density === 'compact' ? (v.$extensions?.compact?.$value ?? v.$value) : v.$value)
+  return ref ? pxOf(semantic[ref[1]][ref[2]]) : px(v.$value)
 }
-for (const density of ['default', 'compact']) {
-  const ramp = entries(semantic.box).map(([, v]) => pxAt(v, density))
+{
+  const ramp = entries(semantic.box).map(([, v]) => pxOf(v))
   const sizes = [
     // Only the tier heights: pad and gap are spacing, not sizes.
     ...['xs', 'sm', 'md'].map((k) => [`control.${k}`, semantic.control[k]]),
@@ -429,25 +416,20 @@ for (const density of ['default', 'compact']) {
     ...entries(semantic.row).map(([k, v]) => [`row.${k}`, v]),
   ]
   for (const [name, v] of sizes) {
-    const value = pxAt(v, density)
-    if (OFF_RAMP[`${name}@${density}`] && ramp.includes(value))
-      throw new Error(`box ramp: ${name} is back on the ramp in ${density}; delete its OFF_RAMP entry.`)
-    if (OFF_RAMP[name] || OFF_RAMP[`${name}@${density}`]) continue
+    if (OFF_RAMP[name]) continue
+    const value = pxOf(v)
     if (!ramp.includes(value))
       throw new Error(
-        `box ramp: ${name} is ${value}px in ${density}, not on the ramp (${ramp.join(', ')}). Use a box step, or list it in OFF_RAMP with a reason.`,
+        `box ramp: ${name} is ${value}px, not on the ramp (${ramp.join(', ')}). Use a box step, or list it in OFF_RAMP with a reason.`,
       )
   }
-  const row = pxAt(semantic.row.height, density)
-  const derived = pxAt(semantic.box.md, density) + 2 * pxAt(semantic.space.inline, density)
+  const row = pxOf(semantic.row.height)
+  const derived = pxOf(semantic.box.md) + 2 * pxOf(semantic.space.inline)
   if (row !== derived)
-    throw new Error(`box ramp: row.height is ${row}px in ${density}, but box-md + 2 × space-inline is ${derived}px.`)
+    throw new Error(`box ramp: row.height is ${row}px, but box-md + 2 × space-inline is ${derived}px.`)
 }
 const leadingDecls = entries(semantic.text)
-  .map(([k, v]) => {
-    const c = v.$extensions.compact?.leading
-    return `  --leading-${k}: calc(${byDensity(v.$extensions.leading, c && `(${c})`)});`
-  })
+  .map(([k, v]) => `  --leading-${k}: calc(${v.$extensions.leading});`)
   .join('\n')
 
 const css = `/*
@@ -532,22 +514,6 @@ ${shadowDecls('dark')}
   --use-dark: initial;
 }
 
-/* Density works like appearance: each scope sets two switches, and every
-   token with a Compact value picks its number from them. \`initial\` makes a
-   custom property invalid, so var(--density-default, X) gives X in a Default
-   scope and nothing in a Compact one. The switches inherit, so the nearest
-   [data-density] wins at any depth. */
-:root,
-[data-density='default'] {
-  --density-default: initial;
-  --density-compact: ;
-}
-
-[data-density='compact'] {
-  --density-default: ;
-  --density-compact: initial;
-}
-
 /* Canvas and content style, set by Theme for an AppShell. Same switch idiom:
    the nearest [data-canvas] / [data-content-style] wins at any depth. The
    colours themselves are resolved where they are used (the shell, a surface
@@ -607,18 +573,15 @@ ${grayScopeDecls()}
 
 /* Derived tokens are declared on \`*\`, not \`:root\`, and that is load-bearing
    for the same reason as above: on :root they would freeze at the document
-   root, so a Theme that sets --scaling or --radius-factor further down would
+   root, so a Theme that sets --radius-factor further down would
    change nothing. On \`*\` every element recomputes them from what it
    inherits, which is what makes scoping work. */
 * {
-  /* Radius steps — the base scale multiplied by the preset's factor and by
-     --scaling, like padding. A corner that stayed put while the padding
-     around it shrank would break the nesting rule (inner = outer − inset)
-     at every scaling but 100%. */
-  --radius-sm: calc((var(--radius) - 4px) * var(--radius-factor) * var(--scaling));
-  --radius-md: calc((var(--radius) - 2px) * var(--radius-factor) * var(--scaling));
-  --radius-lg: calc(var(--radius) * var(--radius-factor) * var(--scaling));
-  --radius-xl: calc((var(--radius) + 4px) * var(--radius-factor) * var(--scaling));
+  /* Radius steps — the base scale multiplied by the preset's factor. */
+  --radius-sm: calc((var(--radius) - 4px) * var(--radius-factor));
+  --radius-md: calc((var(--radius) - 2px) * var(--radius-factor));
+  --radius-lg: calc(var(--radius) * var(--radius-factor));
+  --radius-xl: calc((var(--radius) + 4px) * var(--radius-factor));
 
   /* Radius intent — what components actually use.
 
@@ -635,7 +598,7 @@ ${grayScopeDecls()}
   --radius-field: max(var(--radius-md), min(var(--radius-lg), var(--radius-full)));
   --radius-panel: max(
     var(--radius-xl),
-    min(calc((var(--radius) + 8px) * var(--radius-factor) * var(--scaling)), var(--radius-full))
+    min(calc((var(--radius) + 8px) * var(--radius-factor)), var(--radius-full))
   );
 
   /* Radius by size tier. The tier picks the step (xs and sm the small one,
@@ -650,8 +613,7 @@ ${TIER_RADIUS.map(
   /* Font roles, read from whichever faces the scope sets. */
 ${decls(rootDerived)}
 
-  /* Spacing — one multiplier over every gap and pad in the kit; the six
-     roles also follow density. */
+  /* Spacing — the numeric steps and the six roles. */
 ${spaceDecls}
 
   /* The box ramp — every fixed height and square stands on one of these. */
@@ -660,14 +622,14 @@ ${boxDecls}
   /* Control heights — one scale for every button, field, tab and menu row. */
 ${controlDecls}
 
-  /* Row height and the component sizes that follow density. */
+  /* Row height and component sizes. */
 ${rowDecls}
 ${sizeDecls}
 
   /* Icon sizes — one per control tier. */
 ${iconDecls}
 
-  /* Type roles. Leading is a ratio, so it follows the size under --scaling. */
+  /* Type roles. Leading is a ratio of the size of the same name. */
 ${textDecls}
 
 ${leadingDecls}

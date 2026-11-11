@@ -123,18 +123,6 @@ drawn face: where one is missing the browser synthesises it, and
 synthesised weights look noticeably worse. 400 and 500 are safe
 everywhere; verify 600 on the platforms you support.
 
-## Scaling
-
-Every size above is `calc(<base> * var(--scaling))`, so the
-[`scaling`](?path=/docs/foundations-overview--docs) setting moves type and
-spacing together. Line heights are stored as *ratios* — `calc(20 / 14)`
-rather than `1.25rem` — so they follow the font size instead of having to
-be rescaled themselves.
-
-The 4px grid above holds at 100% only. At 110% a 16px line is 17.6px: the
-ratio keeps type in proportion to the controls around it, which matters
-more than whole pixels, and it is the trade-off Radix Themes makes too.
-
 ## What is not here
 
 **A metric role for large figures.** Its sizes would be identical to three

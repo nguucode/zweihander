@@ -118,7 +118,7 @@ const meta = {
       table: { type: { summary: 'string' } },
     },
     container: {
-      description: 'Where the popup renders instead of `<body>`, e.g. an element in fullscreen or a scope with its own density.',
+      description: 'Where the popup renders instead of `<body>`, e.g. an element in fullscreen or a scope with its own theme.',
       control: false,
       table: { type: { summary: 'HTMLElement | null' } },
     },

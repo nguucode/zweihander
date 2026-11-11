@@ -1,5 +1,5 @@
 /* Set on the field so the helper text indents by the box's width. The box
-   is --choice-box: 20px, 16px in Compact density. */
+   is --choice-box: 20px. */
 .field {
   --choice-control: var(--choice-box);
 }

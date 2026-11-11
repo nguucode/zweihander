@@ -43,7 +43,7 @@ export interface ComboboxProps {
   required?: boolean
   autoFocus?: boolean
   id?: string
-  /** Where the popup renders instead of `<body>`, e.g. an element in fullscreen or a scope with its own density. */
+  /** Where the popup renders instead of `<body>`, e.g. an element in fullscreen or a scope with its own theme. */
   container?: HTMLElement | null
   className?: string
   'aria-label'?: string

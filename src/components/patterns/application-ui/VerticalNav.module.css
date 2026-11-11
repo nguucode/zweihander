@@ -26,7 +26,7 @@
 .list {
   display: flex;
   flex-direction: column;
-  /* 2px in every density, so hover and current fills never touch. */
+  /* 2px, so hover and current fills never touch. */
   gap: var(--space-0-5);
   margin: 0;
   padding: 0;

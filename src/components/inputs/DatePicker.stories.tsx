@@ -66,7 +66,7 @@ const meta = {
     required: { description: 'Marks the label with an asterisk and blocks an empty form submit.', control: 'boolean' },
     id: { description: 'For the input, e.g. to point an outside label at it.', control: false },
     container: {
-      description: 'Where the popup renders instead of `<body>`, e.g. an element in fullscreen or a scope with its own density.',
+      description: 'Where the popup renders instead of `<body>`, e.g. an element in fullscreen or a scope with its own theme.',
       control: false,
       table: { type: { summary: 'HTMLElement | null' } },
     },
