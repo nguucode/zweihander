@@ -8,6 +8,9 @@
   font-weight: 500;
   white-space: nowrap;
   vertical-align: middle;
+  /* Every digit takes the same width, so a tag holding a live count or a
+     countdown keeps its width as the number changes. */
+  font-variant-numeric: tabular-nums;
 }
 
 /* A tag sits in a line of text, so each size is the tier below its name
