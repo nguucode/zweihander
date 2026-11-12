@@ -98,12 +98,13 @@
    label lines up with the content under it; the rule starts at the label,
    not at the tab's edge. ::before, so it sits under the indicator. Child
    combinators, so a Tabs nested in a panel keeps its own list. A container
-   that clips needs 8px of room on that side, as with Atlassian's. */
-.underline.horizontal > .list {
+   that clips needs 8px of room on that side, as with Atlassian's. Not at
+   full width, where each label is centred in its share of the row. */
+.underline.horizontal:not(.fullWidth) > .list {
   margin-inline-start: calc(var(--tab-pad) * -1);
   box-shadow: none;
 }
-.underline.horizontal > .list::before {
+.underline.horizontal:not(.fullWidth) > .list::before {
   content: '';
   position: absolute;
   inset-block-end: 0;

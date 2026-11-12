@@ -12,11 +12,15 @@
   color: var(--foreground);
 }
 
-/* More tabs than fit scroll sideways instead of widening the page. The
-   tab's focus ring is drawn inside it, so the scroll box does not clip it. */
+/* More tabs than fit scroll sideways instead of widening the page. The tab
+   list starts 8px out of its box, as Atlassian's, and a scroll box clips:
+   so the box itself moves out by those 8px and pads them back, and the
+   first tab keeps its whole fill and focus ring. */
 .views {
   flex: 1 1 16rem;
   min-inline-size: 0;
+  margin-inline-start: calc(var(--space-2) * -1);
+  padding-inline-start: var(--space-2);
   overflow-x: auto;
 }
 
