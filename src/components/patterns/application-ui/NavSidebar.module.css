@@ -63,8 +63,8 @@
 }
 
 /* Atlassian's SideNavHeader: 12px above, 4px below (the body's own 12px
-   follows), the sidebar's 12px either side. It holds the logo row and the
-   header rows, 8px apart. */
+   follows), the sidebar's 12px either side, whatever it holds. It holds the
+   logo row and the header rows, 8px apart. */
 .head {
   display: flex;
   flex-direction: column;
@@ -72,22 +72,19 @@
   gap: var(--space-inline);
   padding-block: var(--space-3) var(--space-1);
 }
-/* The top row: the logo and the collapse button. With a logo it is as tall
-   as the AppShell's top bar from the very top (so the head drops its top
-   padding), with the logo an item's padding in: the logo sits where it
-   would in the top-bar layout and lines up with the nav icons. */
+/* The top row: the logo and the collapse button, a control row like the
+   header rows under it (the logo centred on it at its own height). The logo
+   is an item's padding in, so it lines up with the nav icons, and with the
+   logo in the AppShell's top-bar layout. */
 .brandRow {
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: var(--space-2);
-}
-.head:has(> .withBrand) {
-  padding-block-start: 0;
+  min-block-size: var(--control-md);
 }
 .withBrand {
   justify-content: space-between;
-  block-size: calc(var(--control-md) + 2 * var(--space-inline));
 }
 .brand {
   display: flex;

@@ -220,6 +220,11 @@ export const Default: Story = {
     // The header ends on a 2px rule; the rows have no divider.
     await expect(getComputedStyle(canvas.getAllByRole('columnheader')[0]).borderBottomWidth).toBe('2px')
     await expect(getComputedStyle(canvas.getAllByRole('rowheader')[0]).borderBottomWidth).toBe('0px')
+    // A table with rows closes on the same rule, as Atlassian's: 2px, the header's colour, right under the last row.
+    const closing = getComputedStyle(table)
+    await expect(closing.borderBottomWidth).toBe('2px')
+    await expect(closing.borderBottomColor).toBe(getComputedStyle(canvas.getAllByRole('columnheader')[0]).borderBottomColor)
+    await expect(table.getBoundingClientRect().bottom - within(table).getAllByRole('row').at(-1)!.getBoundingClientRect().bottom).toBe(2)
     // So a one-line row is 28px all told, and the Tag in it adds nothing.
     const atlas = canvas.getByRole('rowheader', { name: 'Atlas' }).closest('tr')!
     await expect(within(atlas).getByText('Active')).toBeVisible()
@@ -377,6 +382,8 @@ export const Empty: Story = {
   play: async ({ canvas }) => {
     await expect(canvas.getByRole('heading', { name: 'No projects match “zeta”' })).toBeVisible()
     await expect(canvas.getAllByRole('rowgroup')).toHaveLength(2)
+    // No rows, no closing rule: only the header's.
+    await expect(getComputedStyle(canvas.getByRole('table')).borderBottomWidth).toBe('0px')
   },
 }
 
@@ -677,6 +684,10 @@ export const TotalRow: Story = {
     // The header's 2px rule, over the total: 28px of row under it.
     const total = within(foot).getByRole('rowheader', { name: 'Total' })
     await expect(getComputedStyle(total).borderTopWidth).toBe('2px')
+    // The table's closing rule sits under the total row.
+    const table = canvas.getByRole('table')
+    await expect(getComputedStyle(table).borderBottomWidth).toBe('2px')
+    await expect(table.getBoundingClientRect().bottom - total.getBoundingClientRect().bottom).toBe(2)
     await expect(total.clientHeight).toBe(28)
     // Sorting moves the rows, never the total.
     await userEvent.click(within(canvas.getByRole('columnheader', { name: /Files/ })).getByRole('button'))

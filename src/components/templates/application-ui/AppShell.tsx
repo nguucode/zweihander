@@ -24,7 +24,7 @@ export interface AppShellProps extends ComponentProps<'div'> {
   topBarSurface?: AppShellSurface
   /** The sidebar: `solid` on the card colour, or `transparent` on the canvas. */
   sidebarSurface?: AppShellSurface
-  /** The logo. The shell places it, in the same spot in either layout. */
+  /** The logo. The shell places it, on the sidebar icons' column in either layout. */
   brand?: ReactNode
   /** A NavSidebar. Beside the page at every width; below 64rem it is the icon rail. */
   sidebar?: ReactNode

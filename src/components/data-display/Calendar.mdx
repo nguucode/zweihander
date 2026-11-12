@@ -88,16 +88,19 @@ round a 16px line of bold 12px. The header keeps 8px at each end and sits
 12px above the grid; its arrows are 24px round a 12px chevron. In a Date
 Picker the panel adds 16px round all of it.
 
-The kit keeps its own header (the month at the start and one pair of
-arrows at the end, where Atlassian centres the month between month and
-year arrows) and its own looks for today and the selected day.
+The header is one row, as Atlassian's: previous year and previous month
+at the start, 8px apart; the month and year centred between the two
+pairs, in the 14px heading size; next month and next year at the end. A
+year arrow is a double chevron. The kit keeps its own looks for today and
+the selected day.
 
 <SpecTable
   caption="Header"
   rows={[
-    { part: 'Header', property: 'Gap', token: '--space-stack' },
     { part: 'Header', property: 'Inline padding', token: '--space-inline' },
-    { part: 'Month', property: 'Font size', token: '--text-body' },
+    { part: 'Previous and next', property: 'Gap, year to month', token: '--space-inline' },
+    { part: 'Month', property: 'Font size', token: '--text-heading-xs' },
+    { part: 'Month', property: 'Line height', token: '--leading-heading-xs' },
     { part: 'Previous and next', property: 'Size', token: '--control-sm' },
     { part: 'Previous and next', property: 'Minimum on touch screens', token: '--target-coarse' },
     { part: 'Previous and next', property: 'Corner radius', token: '--radius-control' },
@@ -135,9 +138,11 @@ year arrows) and its own looks for today and the selected day.
 Figures are tabular, so the columns of dates line up. On touch screens
 (`pointer: coarse`) days grow to 44px square, the touch target: they
 touch, so a larger invisible area would lie over the next day. The
-previous and next buttons stay 24px and grow an invisible 44px area
-instead; the two areas overlap, as two buttons side by side in a field
-do.
+four previous and next buttons stay 24px and grow an invisible 44px area
+instead. The header makes room for them: it pads 10px (half of 44px less
+24px), a pair sits 20px apart and the month keeps 10px clear at each
+side, so the four areas meet without lying over each other, the month or
+the calendar's edge.
 
 ## Color
 
@@ -246,8 +251,8 @@ one under the pointer or the keyboard.
 - **Pressed** has no look of its own: the click selects the day, and the
   selected look follows.
 - **Disabled** is per day: before `min`, after `max`, or ruled out by
-  `isDateDisabled`. The previous and next buttons disable at the limits,
-  at 50% opacity.
+  `isDateDisabled`. The previous and next buttons, year and month alike,
+  disable in the month of `min` or `max`, at 50% opacity.
 - **Selected** is the brand fill, with the control's corners; **today** is the orange pill,
   round-ended. With `range`, both ends are selected and the days between are
   banded.
@@ -262,6 +267,30 @@ one under the pointer or the keyboard.
 Also exported, for working with the same plain dates: `isSameDay`,
 `addDays`, `addMonths`, `startOfDay`, `firstDayOfWeek` and the `DateRange`
 type. Every date is local midnight; times are ignored.
+
+### Differences from the spec
+
+The header follows `@atlaskit/calendar`: the order of its four buttons,
+their size and gaps, the centred month and year.
+
+- **The buttons disable at `min` and `max`.** Atlassian's stay enabled and
+  page into months with nothing to pick. A year step that would pass a
+  limit stops at the limit's month, so a year button is off only where
+  its month button is.
+- **Fixed button names.** "Previous year", "Previous month", "Next month"
+  and "Next year", in English like the kit's other built-in labels.
+  Atlassian takes them as props and adds the month they lead to
+  ("Previous year, September 2025").
+- **The month is not a heading.** Atlassian's is one, with a level prop; a
+  calendar can sit anywhere in a page's outline, so here it is a plain
+  live region, and the grid is named with the same text.
+- **Always a live region.** Atlassian turns `aria-live` on after the first
+  press of a header button; here it is there from the start, which
+  announces nothing until the month changes.
+- **The double chevron is drawn from two chevrons.** The icon set has no
+  double chevron yet.
+- **Semibold is 600**, as the kit's other headings; Atlassian's heading
+  weight is 653.
 
 </DocTab>
 <DocTab value="guidelines">
@@ -310,13 +339,18 @@ February, not 3 March.
   Down a year. Enter or Space selects. Moving past the month shows the
   next one.
 - Right to left, the arrows follow the screen (ArrowLeft is the next day)
-  and the previous and next chevrons are mirrored.
+  and the previous and next chevrons, single and double, are mirrored.
 
   <Canvas of={CalendarStories.Keyboard} />
 
-- The month and year are a polite live region, so paging is announced.
-- The previous and next buttons are named "Previous month" and "Next
-  month", and are disabled at `min` and `max`.
+- The month and year are a polite live region, so paging is announced,
+  by a month or by a year.
+- The header's buttons are ordinary buttons in the tab order, before the
+  grid: "Previous year", "Previous month", then after the month "Next
+  month" and "Next year". The year buttons move the month shown by twelve
+  months, or to the month of `min` or `max` when that is nearer.
+- All four are disabled at the limits: the previous pair in the month of
+  `min`, the next pair in the month of `max`.
 - Unavailable days stay focusable with `aria-disabled`, so they are found
   and announced as unavailable rather than skipped. Enter on one does
   nothing.

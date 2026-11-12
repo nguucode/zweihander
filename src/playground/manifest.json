@@ -4213,9 +4213,9 @@
       "specs": {
         "anatomy": [
           {
-            "name": "Month",
-            "selector": "[aria-live=\"polite\"]",
-            "description": "The month and year, short, at the start. Announced as it changes."
+            "name": "Previous year",
+            "selector": "button[aria-label=\"Previous year\"]",
+            "description": "A double chevron: twelve months back, or to the month of min. Disabled there."
           },
           {
             "name": "Previous month",
@@ -4223,9 +4223,19 @@
             "description": "Disabled in the month of min. Mirrored right to left."
           },
           {
+            "name": "Month",
+            "selector": "[aria-live=\"polite\"]",
+            "description": "The month and year in full, centred between the buttons. Announced as it changes."
+          },
+          {
             "name": "Next month",
             "selector": "button[aria-label=\"Next month\"]",
             "description": "Disabled in the month of max."
+          },
+          {
+            "name": "Next year",
+            "selector": "button[aria-label=\"Next year\"]",
+            "description": "A double chevron: twelve months on, or to the month of max. Disabled there."
           },
           {
             "name": "Weekdays",
@@ -4259,18 +4269,23 @@
             "rows": [
               {
                 "part": "Header",
-                "property": "Gap",
-                "token": "--space-stack"
+                "property": "Inline padding",
+                "token": "--space-inline"
               },
               {
-                "part": "Header",
-                "property": "Inline padding",
+                "part": "Previous and next",
+                "property": "Gap, year to month",
                 "token": "--space-inline"
               },
               {
                 "part": "Month",
                 "property": "Font size",
-                "token": "--text-body"
+                "token": "--text-heading-xs"
+              },
+              {
+                "part": "Month",
+                "property": "Line height",
+                "token": "--leading-heading-xs"
               },
               {
                 "part": "Previous and next",
@@ -4518,8 +4533,8 @@
           {
             "title": "Accessibility",
             "blocks": [
-              "- A `role=\"grid\"` named by the month and year (\"September 2026\"), with\n  column headers that carry the full weekday name in `abbr`.\n- Each day is a button named by its full date (\"Friday 18 September\n  2026\"). The selected cell has `aria-selected`, and with `range` every\n  cell from one end to the other does. Today has `aria-current=\"date\"`.\n- One tab stop: the selected day, or today when nothing is selected.\n- Arrow keys move a day or a week, Home and End go to the week's ends,\n  Page Up and Page Down move a month, and Shift+Page Up and Shift+Page\n  Down a year. Enter or Space selects. Moving past the month shows the\n  next one.\n- Right to left, the arrows follow the screen (ArrowLeft is the next day)\n  and the previous and next chevrons are mirrored.",
-              "- The month and year are a polite live region, so paging is announced.\n- The previous and next buttons are named \"Previous month\" and \"Next\n  month\", and are disabled at `min` and `max`.\n- Unavailable days stay focusable with `aria-disabled`, so they are found\n  and announced as unavailable rather than skipped. Enter on one does\n  nothing.\n- Days of the months either side are not buttons and are hidden from\n  assistive tech.\n- Today's figure measures at least 4.5:1 on its pill, in both modes, on\n  its own and inside a range."
+              "- A `role=\"grid\"` named by the month and year (\"September 2026\"), with\n  column headers that carry the full weekday name in `abbr`.\n- Each day is a button named by its full date (\"Friday 18 September\n  2026\"). The selected cell has `aria-selected`, and with `range` every\n  cell from one end to the other does. Today has `aria-current=\"date\"`.\n- One tab stop: the selected day, or today when nothing is selected.\n- Arrow keys move a day or a week, Home and End go to the week's ends,\n  Page Up and Page Down move a month, and Shift+Page Up and Shift+Page\n  Down a year. Enter or Space selects. Moving past the month shows the\n  next one.\n- Right to left, the arrows follow the screen (ArrowLeft is the next day)\n  and the previous and next chevrons, single and double, are mirrored.",
+              "- The month and year are a polite live region, so paging is announced,\n  by a month or by a year.\n- The header's buttons are ordinary buttons in the tab order, before the\n  grid: \"Previous year\", \"Previous month\", then after the month \"Next\n  month\" and \"Next year\". The year buttons move the month shown by twelve\n  months, or to the month of `min` or `max` when that is nearer.\n- All four are disabled at the limits: the previous pair in the month of\n  `min`, the next pair in the month of `max`.\n- Unavailable days stay focusable with `aria-disabled`, so they are found\n  and announced as unavailable rather than skipped. Enter on one does\n  nothing.\n- Days of the months either side are not buttons and are hidden from\n  assistive tech.\n- Today's figure measures at least 4.5:1 on its pill, in both modes, on\n  its own and inside a range."
             ]
           }
         ]
@@ -5652,6 +5667,11 @@
               {
                 "part": "Total row",
                 "property": "Rule above it",
+                "token": "--border-width-selected"
+              },
+              {
+                "part": "Table",
+                "property": "Rule under it, with rows",
                 "token": "--border-width-selected"
               },
               {
@@ -16395,7 +16415,7 @@
               },
               {
                 "part": "Head",
-                "property": "Block start padding, without a logo",
+                "property": "Block start padding",
                 "token": "--space-3"
               },
               {
@@ -16415,8 +16435,8 @@
               },
               {
                 "part": "Brand row",
-                "property": "Height from the top edge: --control-md plus twice",
-                "token": "--space-inline"
+                "property": "Minimum height",
+                "token": "--control-md"
               },
               {
                 "part": "Header",
@@ -16941,7 +16961,7 @@
           {
             "title": "Layout",
             "blocks": [
-              "- The bar is one row, `--control-md` plus two `--space-inline` tall (48px), padded `--space-3` at the sides, its start, middle and end\n  `--space-inline` apart and the items inside the start and the end `--space-stack` apart, as Atlassian's top nav; controls in it are 32px (`md` buttons, `sm` fields). Its fill and edge come from the App Shell's top cell\n  (solid or transparent), not from the bar.\n- In the shell's top-bar layout with a sidebar, the brand takes a cell as\n  wide as the sidebar (`--sidebar-width`), so the logo sits where it sits\n  in the sidebar layout.\n- Breakpoints read the container, which in an app is the shell."
+              "- The bar is one row, `--control-md` plus two `--space-inline` tall (48px), padded `--space-3` at the sides, its start, middle and end\n  `--space-inline` apart and the items inside the start and the end `--space-stack` apart, as Atlassian's top nav; controls in it are 32px (`md` buttons, `sm` fields). Its fill and edge come from the App Shell's top cell\n  (solid or transparent), not from the bar.\n- In the shell's top-bar layout with a sidebar, the brand takes a cell as\n  wide as the sidebar (`--sidebar-width`), so the logo's left edge is where\n  it is in the sidebar layout, on the nav icons' column. It is centred on\n  the bar, 24px from the top; in the sidebar layout it sits in Atlassian's\n  side nav header instead, centred 28px from the top.\n- Breakpoints read the container, which in an app is the shell."
             ]
           },
           {

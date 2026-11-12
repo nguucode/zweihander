@@ -97,7 +97,6 @@ export function Calendar({
   const fmt = useMemo(() => {
     return {
       title: new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric', calendar: 'gregory' }),
-      titleShort: new Intl.DateTimeFormat(locale, { month: 'short', year: 'numeric', calendar: 'gregory' }),
       weekday: new Intl.DateTimeFormat(locale, { weekday: 'short', calendar: 'gregory' }),
       weekdayNarrow: new Intl.DateTimeFormat(locale, { weekday: 'narrow', calendar: 'gregory' }),
       weekdayLong: new Intl.DateTimeFormat(locale, { weekday: 'long', calendar: 'gregory' }),
@@ -171,35 +170,51 @@ export function Calendar({
     const short = fmt.weekday.format(d)
     return weekdays.every((w) => fmt.weekday.format(w).length <= 4) ? short.slice(0, 2) : fmt.weekdayNarrow.format(d)
   }
-  const prevDisabled = !!min && startOfMonth(min) >= month
-  const nextDisabled = !!max && startOfMonth(max) <= month
+  const minMonth = min ? startOfMonth(min) : null
+  const maxMonth = max ? startOfMonth(max) : null
+  // A year step stops at the month of `min` or `max` instead of refusing, so
+  // the year arrows are off exactly where the month arrows are.
+  const nav = (label: string, months: number) => {
+    const back = months < 0
+    const icon = <Icon name={back ? 'chevron-left' : 'chevron-right'} className={styles.dirIcon} />
+    return (
+      <button
+        type="button"
+        className={styles.nav}
+        aria-label={label}
+        disabled={back ? !!minMonth && minMonth >= month : !!maxMonth && maxMonth <= month}
+        onClick={() => setMonth(clamp(addMonths(month, months), minMonth, maxMonth))}
+      >
+        {Math.abs(months) === 1 ? (
+          icon
+        ) : (
+          <span className={styles.double}>
+            {icon}
+            {icon}
+          </span>
+        )}
+      </button>
+    )
+  }
 
   return (
     <div className={cn(styles.calendar, className)}>
+      {/* As @atlaskit/calendar's header: year and month back at the start,
+          the month centred, month and year on at the end. */}
       <div className={styles.header}>
+        <div className={styles.navs}>
+          {nav('Previous year', -12)}
+          {nav('Previous month', -1)}
+        </div>
         {/* Not a heading: a calendar can sit anywhere in a page's outline.
             It announces the month as it changes. */}
         <div className={styles.title} aria-live="polite">
-          {fmt.titleShort.format(month)}
+          {fmt.title.format(month)}
         </div>
-        <button
-          type="button"
-          className={styles.nav}
-          aria-label="Previous month"
-          disabled={prevDisabled}
-          onClick={() => setMonth(addMonths(month, -1))}
-        >
-          <Icon name="chevron-left" className={styles.dirIcon} />
-        </button>
-        <button
-          type="button"
-          className={styles.nav}
-          aria-label="Next month"
-          disabled={nextDisabled}
-          onClick={() => setMonth(addMonths(month, 1))}
-        >
-          <Icon name="chevron-right" className={styles.dirIcon} />
-        </button>
+        <div className={styles.navs}>
+          {nav('Next month', 1)}
+          {nav('Next year', 12)}
+        </div>
       </div>
       <table ref={gridRef} role="grid" aria-label={fmt.title.format(month)} className={styles.grid} onKeyDown={onKeyDown}>
         <thead>

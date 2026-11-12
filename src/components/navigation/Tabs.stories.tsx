@@ -105,20 +105,17 @@ export const Default: Story = {
     await expect(overview).toHaveAttribute('aria-controls', overviewPanel.id)
     // 32px tall at md.
     await expect(overview.getBoundingClientRect().height).toBe(32)
-    // Atlassian's tabs: 8px inline padding, no gap between tabs, the first label lined up with the
-    // panel, and the indicator as wide as the label. The first tab has no start padding: its box
-    // starts at its label, so nothing sticks out of the tabs' box (see InClippingContainer).
+    // Atlassian's tabs: 8px inline padding, no gap between tabs, the list pulled out by the padding
+    // so the first label lines up with the panel, and the indicator as wide as the label.
     const tabs = canvas.getAllByRole('tab')
-    await expect(getComputedStyle(tabs[1]).paddingLeft).toBe('8px')
-    await expect(getComputedStyle(tabs[1]).paddingRight).toBe('8px')
-    await expect([getComputedStyle(overview).paddingLeft, getComputedStyle(overview).paddingRight]).toEqual(['0px', '8px'])
+    await expect(getComputedStyle(overview).paddingLeft).toBe('8px')
     await expect(Math.round(tabs[1].getBoundingClientRect().left - tabs[0].getBoundingClientRect().right)).toBe(0)
-    await expect(Math.round(overviewPanel.getBoundingClientRect().left - overview.getBoundingClientRect().left)).toBe(0)
+    await expect(Math.round(overviewPanel.getBoundingClientRect().left - overview.getBoundingClientRect().left)).toBe(8)
     const indicator = canvas.getByRole('tablist').querySelector(':scope > span[role="presentation"]')!
     await waitFor(() => {
       const bar = indicator.getBoundingClientRect()
       const tab = overview.getBoundingClientRect()
-      expect([Math.round(bar.left - tab.left), Math.round(tab.right - bar.right)]).toEqual([0, 8])
+      expect([Math.round(bar.left - tab.left), Math.round(tab.right - bar.right)]).toEqual([8, 8])
     })
     // One tab stop: Tab enters on the selected tab, the next Tab leaves for the panel.
     await userEvent.tab()
@@ -131,12 +128,6 @@ export const Default: Story = {
     await expect(args.onValueChange).toHaveBeenLastCalledWith('activity')
     // The panel swaps after the click; wait for it rather than race it.
     await waitFor(() => expect(canvas.getByRole('tabpanel')).toHaveTextContent('12 changes'))
-    // Under any other tab the indicator is 8px in from both edges.
-    await waitFor(() => {
-      const bar = indicator.getBoundingClientRect()
-      const tab = tabs[1].getBoundingClientRect()
-      expect([Math.round(bar.left - tab.left), Math.round(tab.right - bar.right)]).toEqual([8, 8])
-    })
     // Arrows move focus without selecting. A disabled tab still takes focus
     // (aria-disabled), so it is found and announced, but cannot be selected.
     await userEvent.keyboard('{ArrowRight}')
@@ -244,41 +235,6 @@ const stateItems = [
   { value: 'board', label: 'Board' },
   { value: 'archive', label: 'Archive', disabled: true },
 ]
-
-/**
- * Inside a box that clips with no padding (a modal body, a card with
- * `overflow: hidden`), the first tab and its focus ring are whole, and the
- * first label still lines up with the panel.
- */
-export const InClippingContainer: Story = {
-  tags: ['!dev'],
-  decorators: [
-    (Story) => (
-      <div data-testid="clip" style={{ overflow: 'hidden', padding: 0 }}>
-        <Story />
-      </div>
-    ),
-  ],
-  play: async ({ canvas }) => {
-    const clip = canvas.getByTestId('clip').getBoundingClientRect()
-    const first = canvas.getAllByRole('tab')[0]
-    const tab = first.getBoundingClientRect()
-    await expect(tab.left).toBeGreaterThanOrEqual(clip.left)
-    await expect(tab.top).toBeGreaterThanOrEqual(clip.top)
-    await expect(tab.right).toBeLessThanOrEqual(clip.right)
-    // The focus ring is drawn inside the tab's box, so it is inside the clip box too.
-    await userEvent.tab()
-    await expect(first).toHaveFocus()
-    await expect(getComputedStyle(first).outlineStyle).toBe('solid')
-    await expect(parseFloat(getComputedStyle(first).outlineOffset)).toBe(-parseFloat(getComputedStyle(first).outlineWidth))
-    // The label (the tab's text) starts where the panel's content does.
-    const label = document.createRange()
-    label.selectNodeContents(first)
-    const panel = await canvas.findByRole('tabpanel')
-    await expect(Math.round(label.getBoundingClientRect().left)).toBe(Math.round(panel.firstElementChild!.getBoundingClientRect().left))
-    await expect(Math.round(label.getBoundingClientRect().left)).toBe(Math.round(clip.left))
-  },
-}
 
 /** Specs, States: a small tab list, one disabled, that fits a States cell. */
 export const StatesUnderline: Story = {

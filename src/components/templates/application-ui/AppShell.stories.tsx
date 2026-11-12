@@ -159,7 +159,11 @@ const logoOffset = (canvasElement: HTMLElement) => {
   const icon = canvasElement.querySelector('nav[aria-label="Main"] a svg')!
   return canvasElement.querySelector('[data-testid="brand"]')!.getBoundingClientRect().left - icon.getBoundingClientRect().left
 }
-/** The logo's centre line, from the shell's top: half a top bar (--control-md plus two --space-inline, 48px) in either layout. */
+/**
+ * The logo's centre line, from the shell's top. In the top bar: half the bar (--control-md plus two --space-inline,
+ * 48px), so 24px. In the sidebar's head: Atlassian's side nav header padding (--space-3) plus half a --control-md
+ * row, so 28px.
+ */
 const logoMiddle = (canvasElement: HTMLElement) => {
   const shell = canvasElement.querySelector('main')!.closest('[class*="shell"]')!
   const logo = canvasElement.querySelector('[data-testid="brand"]')!.getBoundingClientRect()
@@ -206,7 +210,7 @@ const meta = {
       options: ['solid', 'transparent'],
       table: { type: { summary: "'solid' | 'transparent'" }, defaultValue: { summary: "'transparent'" } },
     },
-    brand: { description: 'The logo. The shell places it in the same spot in either layout.', control: false },
+    brand: { description: "The logo. The shell places it on the sidebar icons' column in either layout.", control: false },
     children: { control: false },
     sidebar: { control: false },
     header: { control: false },
@@ -236,9 +240,9 @@ export const WithSidebar: Story = {
     await expect(canvasElement.querySelector('header')).not.toBeVisible()
     // The logo lines up with the sidebar's icons: the sidebar's padding plus an item's in.
     await expect(logoOffset(canvasElement)).toBeCloseTo(0, 0)
-    // Rendered once, and on the same centre line in either layout.
+    // Rendered once, in the sidebar's head: 12px of padding, then centred on a 32px row.
     await expect(canvasElement.querySelectorAll('[data-testid="brand"]')).toHaveLength(1)
-    await expect(logoMiddle(canvasElement)).toBeCloseTo(24, 0)
+    await expect(logoMiddle(canvasElement)).toBeCloseTo(28, 0)
     // The skip link targets the shell's own main, and moves focus to it.
     const main = canvas.getByRole('main')
     const skip = canvas.getByRole('link', { name: 'Skip to content' })
@@ -248,7 +252,7 @@ export const WithSidebar: Story = {
   },
 }
 
-/** The header runs the full width above the sidebar; the logo stays where it was in the sidebar layout. */
+/** The header runs the full width above the sidebar; the logo, in the bar, keeps the sidebar icons' column. */
 export const TopBarLayout: Story = {
   args: {
     layout: 'top-bar',
@@ -263,7 +267,7 @@ export const TopBarLayout: Story = {
     const shell = canvasElement.querySelector('main')!.closest('[class*="shell"]')!
     await expect(bar.getBoundingClientRect().width).toBeCloseTo(shell.getBoundingClientRect().width, 0)
     await expect(logoOffset(canvasElement)).toBeCloseTo(0, 0)
-    // Rendered once, and on the same centre line in either layout.
+    // Rendered once, centred on the 48px bar.
     await expect(canvasElement.querySelectorAll('[data-testid="brand"]')).toHaveLength(1)
     await expect(logoMiddle(canvasElement)).toBeCloseTo(24, 0)
   },
@@ -380,7 +384,7 @@ export const CollapsedRail: Story = {
     await expect(narrow).toBeLessThan(100)
     // The logo keeps its place in the rail, cut to the rail's width.
     await expect(logoOffset(canvasElement)).toBeCloseTo(0, 0)
-    await expect(logoMiddle(canvasElement)).toBeCloseTo(24, 0)
+    await expect(logoMiddle(canvasElement)).toBeCloseTo(28, 0)
     // Collapsed, the links keep their names.
     await expect(within(nav).getByRole('link', { name: 'Projects, 12' })).toBeVisible()
     await userEvent.click(within(nav).getByRole('button', { name: /Expand/ }))

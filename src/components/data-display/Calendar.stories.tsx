@@ -65,17 +65,17 @@ const meta = {
       table: { type: { summary: 'Date' }, defaultValue: { summary: "the value's or today's" } },
     },
     onMonthChange: {
-      description: 'Called with the first day of the new month, whether the arrows or the keyboard moved it.',
+      description: 'Called with the first day of the new month, whether the month or year buttons or the keyboard moved it.',
       control: false,
       table: { type: { summary: '(month: Date) => void' } },
     },
     min: {
-      description: 'The first day that can be picked. Days before it are unavailable, the keyboard stops at it, and Previous month is disabled in its month.',
+      description: 'The first day that can be picked. Days before it are unavailable, the keyboard stops at it, and Previous month and Previous year are disabled in its month.',
       control: false,
       table: { type: { summary: 'Date | null' } },
     },
     max: {
-      description: 'The last day that can be picked. Days after it are unavailable, the keyboard stops at it, and Next month is disabled in its month.',
+      description: 'The last day that can be picked. Days after it are unavailable, the keyboard stops at it, and Next month and Next year are disabled in its month.',
       control: false,
       table: { type: { summary: 'Date | null' } },
     },
@@ -116,6 +116,9 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
+/** The header's buttons, in the order they sit and take focus. */
+const HEADER_BUTTONS = ['Previous year', 'Previous month', 'Next month', 'Next year']
+
 const focused = () => document.activeElement?.getAttribute('aria-label')
 
 export const Default: Story = {
@@ -145,18 +148,92 @@ export const Default: Story = {
     await expect(getComputedStyle(weekday).fontWeight).toBe('600')
     await expect(rect(1).top).toBe(weekday.getBoundingClientRect().bottom)
     // The header is 12px above the grid; its arrows are 24px round a 12px chevron.
-    const next = canvas.getByRole('button', { name: 'Next month' })
-    const header = next.parentElement!.getBoundingClientRect()
+    const title = canvas.getByText('September 2026')
+    const header = title.parentElement!.getBoundingClientRect()
     await expect(grid.getBoundingClientRect().top - header.bottom).toBe(12)
-    for (const name of ['Previous month', 'Next month']) {
+    for (const name of HEADER_BUTTONS) {
       const nav = canvas.getByRole('button', { name })
       await expect([nav.getBoundingClientRect().width, nav.getBoundingClientRect().height]).toEqual([24, 24])
-      await expect(nav.querySelector(':scope > svg')!.getBoundingClientRect().width).toBe(12)
+      // One chevron for a month, two for a year.
+      const chevrons = nav.querySelectorAll('svg')
+      await expect(chevrons).toHaveLength(name.endsWith('year') ? 2 : 1)
+      for (const svg of chevrons) await expect(svg.getBoundingClientRect().width).toBe(12)
     }
     // The focused day's ring lies over its neighbours, so it is lifted above them.
     selected.focus()
     await waitFor(() => expect(selected).toHaveFocus())
     if (selected.matches(':focus-visible')) await expect(getComputedStyle(selected).zIndex).toBe('1')
+  },
+}
+
+/** As @atlaskit/calendar's header: year and month back, the month centred, month and year on. */
+export const Header: Story = {
+  play: async ({ args, canvas }) => {
+    // In that order, in the DOM and so in the tab order, all before the grid.
+    const [prevYear, prevMonth, nextMonth, nextYear] = HEADER_BUTTONS.map((name) => canvas.getByRole('button', { name }))
+    const title = canvas.getByText('September 2026')
+    const order = [prevYear, prevMonth, title, nextMonth, nextYear, canvas.getByRole('grid')]
+    for (let i = 1; i < order.length; i++)
+      await expect(order[i - 1].compareDocumentPosition(order[i]) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    prevYear.focus()
+    await userEvent.tab()
+    await expect(prevMonth).toHaveFocus()
+    await userEvent.tab()
+    await expect(nextMonth).toHaveFocus()
+    await userEvent.tab()
+    await expect(nextYear).toHaveFocus()
+    await userEvent.tab()
+    await expect(canvas.getByRole('button', { name: day(2026, 9, 18) })).toHaveFocus()
+    // 8px inside the grid's edges, 8px between a year and a month button.
+    const box = (el: Element) => el.getBoundingClientRect()
+    const grid = box(canvas.getByRole('grid'))
+    await waitFor(() => expect(box(prevYear).left - grid.left).toBe(8))
+    await expect(grid.right - box(nextYear).right).toBe(8)
+    await expect(box(prevMonth).left - box(prevYear).right).toBe(8)
+    await expect(box(nextYear).left - box(nextMonth).right).toBe(8)
+    // The month's text is centred between the two pairs, and so on the grid.
+    const text = document.createRange()
+    text.selectNodeContents(title)
+    const centre = (r: DOMRect) => (r.left + r.right) / 2
+    const textCentre = centre(text.getBoundingClientRect())
+    await expect(Math.abs(textCentre - (box(prevMonth).right + box(nextMonth).left) / 2)).toBeLessThanOrEqual(1)
+    await expect(Math.abs(textCentre - centre(grid))).toBeLessThanOrEqual(1)
+    await expect(getComputedStyle(title).fontSize).toBe('14px')
+    await expect(getComputedStyle(title).fontWeight).toBe('600')
+    // A year button moves twelve months and the live region says so, as a month button does.
+    await expect(title).toHaveAttribute('aria-live', 'polite')
+    await userEvent.click(nextYear)
+    await expect(title).toHaveTextContent('September 2027')
+    await expect(canvas.getByRole('grid', { name: 'September 2027' })).toBeVisible()
+    await expect(args.onMonthChange).toHaveBeenLastCalledWith(new Date(2027, 8, 1))
+    await userEvent.click(prevYear)
+    await userEvent.click(prevYear)
+    await expect(title).toHaveTextContent('September 2025')
+    await expect(args.onMonthChange).toHaveBeenLastCalledWith(new Date(2025, 8, 1))
+    await userEvent.click(nextMonth)
+    await expect(title).toHaveTextContent('October 2025')
+    await userEvent.click(prevMonth)
+    await expect(title).toHaveTextContent('September 2025')
+  },
+}
+
+/** A year step that would pass `min` or `max` stops at its month; there, the year button is off like the month's. */
+export const YearAtLimits: Story = {
+  args: { min: new Date(2026, 5, 10), max: new Date(2027, 1, 20) },
+  play: async ({ args, canvas }) => {
+    const [prevYear, prevMonth, nextMonth, nextYear] = HEADER_BUTTONS.map((name) => canvas.getByRole('button', { name }))
+    for (const button of [prevYear, prevMonth, nextMonth, nextYear]) await expect(button).toBeEnabled()
+    await userEvent.click(nextYear)
+    await expect(canvas.getByRole('grid', { name: 'February 2027' })).toBeVisible()
+    await expect(args.onMonthChange).toHaveBeenLastCalledWith(new Date(2027, 1, 1))
+    await expect(nextYear).toBeDisabled()
+    await expect(nextMonth).toBeDisabled()
+    await expect(prevYear).toBeEnabled()
+    await userEvent.click(prevYear)
+    await expect(canvas.getByRole('grid', { name: 'June 2026' })).toBeVisible()
+    await expect(prevYear).toBeDisabled()
+    await expect(prevMonth).toBeDisabled()
+    await expect(nextYear).toBeEnabled()
   },
 }
 
@@ -261,8 +338,7 @@ export const MonthEnds: Story = {
 export const MinMax: Story = {
   args: { min: new Date(2026, 8, 10), max: new Date(2026, 8, 25) },
   play: async ({ args, canvas }) => {
-    await expect(canvas.getByRole('button', { name: 'Previous month' })).toBeDisabled()
-    await expect(canvas.getByRole('button', { name: 'Next month' })).toBeDisabled()
+    for (const name of HEADER_BUTTONS) await expect(canvas.getByRole('button', { name })).toBeDisabled()
     const early = canvas.getByRole('button', { name: day(2026, 9, 9) })
     await expect(early).toHaveAttribute('aria-disabled', 'true')
     ;(args.onValueChange as ReturnType<typeof fn>).mockClear()
@@ -341,8 +417,8 @@ export const RightToLeft: Story = {
     await userEvent.keyboard('{ArrowLeft}')
     await expect(canvas.getByRole('button', { name: day(2026, 9, 19) })).toHaveFocus()
     // The chevrons are mirrored to point the way the months move.
-    const svg = canvas.getByRole('button', { name: 'Previous month' }).querySelector('svg')!
-    await expect(getComputedStyle(svg).scale).toBe('-1 1')
+    for (const name of HEADER_BUTTONS)
+      for (const svg of canvas.getByRole('button', { name }).querySelectorAll('svg')) await expect(getComputedStyle(svg).scale).toBe('-1 1')
   },
 }
 
@@ -360,9 +436,11 @@ export const Vietnamese: Story = { args: { locale: 'vi-VN', weekStartsOn: undefi
 
 /** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
 export const anatomyParts = [
-  { name: 'Month', selector: '[aria-live="polite"]', description: 'The month and year, short, at the start. Announced as it changes.' },
+  { name: 'Previous year', selector: 'button[aria-label="Previous year"]', description: 'A double chevron: twelve months back, or to the month of min. Disabled there.' },
   { name: 'Previous month', selector: 'button[aria-label="Previous month"]', description: 'Disabled in the month of min. Mirrored right to left.' },
+  { name: 'Month', selector: '[aria-live="polite"]', description: 'The month and year in full, centred between the buttons. Announced as it changes.' },
   { name: 'Next month', selector: 'button[aria-label="Next month"]', description: 'Disabled in the month of max.' },
+  { name: 'Next year', selector: 'button[aria-label="Next year"]', description: 'A double chevron: twelve months on, or to the month of max. Disabled there.' },
   {
     name: 'Weekdays',
     selector: 'thead tr',
@@ -384,13 +462,11 @@ export const Anatomy: Story = {
   args: { isDateDisabled: (d: Date) => d.getMonth() === 8 && (d.getDate() === 23 || d.getDate() === 24) },
   play: async ({ canvasElement }) => {
     const found = await expectAnatomy(canvasElement, anatomyParts)
-    // Short month names differ between CLDR versions ("Sep", "Sept"): read the formatter.
-    const title = new Intl.DateTimeFormat('en-GB', { month: 'short', year: 'numeric', calendar: 'gregory' }).format(new Date(2026, 8))
-    await expect(found[0]).toHaveTextContent(title)
+    await expect(found[2]).toHaveTextContent('September 2026')
     // Outside days are not buttons, and assistive tech does not see them.
-    await expect(found[5]!.tagName).toBe('SPAN')
-    await expect(found[5]).toHaveAttribute('aria-hidden', 'true')
-    await expect(found[7]).toHaveAccessibleName(day(2026, 9, 23))
+    await expect(found[7]!.tagName).toBe('SPAN')
+    await expect(found[7]).toHaveAttribute('aria-hidden', 'true')
+    await expect(found[9]).toHaveAccessibleName(day(2026, 9, 23))
   },
 }
 

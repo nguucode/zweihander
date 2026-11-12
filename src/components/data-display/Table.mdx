@@ -119,7 +119,8 @@ A row has no height of its own: it is as tall as what its cells hold.
 | Header (one 16px line) | 24px |
 
 A body row is exactly that tall: there is no divider under it. The header
-and the total row add their 2px rule. The checkbox, expand and actions
+and the total row add their 2px rule, and a table that has rows adds one
+more under its last row. The checkbox, expand and actions
 columns take 2px less block padding than the other cells, so their 24px
 buttons do not make a row of text taller.
 
@@ -131,6 +132,7 @@ buttons do not make a row of text taller.
     { part: 'Cell', property: 'Inline padding, between columns', token: '--space-2' },
     { part: 'Header row', property: 'Rule under it', token: '--border-width-selected' },
     { part: 'Total row', property: 'Rule above it', token: '--border-width-selected' },
+    { part: 'Table', property: 'Rule under it, with rows', token: '--border-width-selected' },
     { part: 'Cell', property: 'Font size', token: '--text-body' },
     { part: 'Cell', property: 'Line height', token: '--leading-body' },
     { part: 'Header cell', property: 'Font size', token: '--text-body-sm' },
@@ -173,7 +175,13 @@ keys move it 16px at a time.
 Rows have no divider between them: the hover tint and the selection fill
 tell them apart. The header ends on a 2px rule and its labels are
 semibold; the total row sits under the same rule, so the sum reads as a
-sum. The sort button pulls itself out
+sum. A table that has rows closes on that rule too, as Atlassian's dynamic
+table: under the last row, an open row's content or the total row,
+whichever comes last. It is the table's own border, so under a sticky
+header it scrolls with the rows, and whatever a page puts under the table
+(a Pagination, a footer) keeps its own gap below the rule. An empty table
+has no closing rule: the header's is the only one over the empty state.
+The sort button pulls itself out
 by its own padding, so its label lines up with the cells below and its
 hover fill adds nothing to the header's height.
 
@@ -348,10 +356,12 @@ Cell sizing follows Atlassian's dynamic table.
   padding and the row is as tall as its content; rows were a fixed 48px
   and 40px before, picked by `density` and then `size`, which are
   deprecated.
-- **No row dividers.** Only the 2px rule under the header, as Atlassian
-  draws it; rows are told apart by the hover tint and the selection fill.
+- **No row dividers.** Only the 2px rule under the header and the one
+  that closes a table with rows, as Atlassian draws them; rows are told
+  apart by the hover tint and the selection fill.
 - **The total row has a 2px rule above it.** Atlassian's table has no
-  total row; the rule is the header's, turned over.
+  total row; the rule is the header's, turned over. The table's closing
+  rule then sits under the total row.
 - **No header fill, and flush edges.** As Atlassian's dynamic table: the
   header is its labels over the rule, and the first and last cells have no
   padding at the table's edge. The hover and selection tints run edge to
@@ -359,9 +369,6 @@ Cell sizing follows Atlassian's dynamic table.
 - **The caption** sits 24px from the top and 8px above the table, flush
   with the table's edge, as Atlassian's. Its type stays the cells' size,
   semibold; Atlassian's is a 20px heading.
-- **No rule under the last row.** Atlassian's dynamic table closes a table
-  that has rows with the header's 2px rule; here only the total row has
-  one.
 
 </DocTab>
 <DocTab value="guidelines">

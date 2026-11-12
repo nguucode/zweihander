@@ -20,16 +20,26 @@
 .header {
   display: flex;
   align-items: center;
-  gap: var(--space-stack);
-  /* 8px at each end, as Atlassian's header: the month starts 8px inside the
-     grid's edge and the arrows stop 8px short of it. */
+  /* 8px at each end, as Atlassian's header: the arrows stop 8px short of the
+     grid's edges. */
   padding-inline: var(--space-inline);
 }
 
-/* The month at the start, both arrows together at the end. */
+/* A year arrow and a month arrow, 8px apart, at each end. */
+.navs {
+  display: flex;
+  gap: var(--space-inline);
+}
+
+/* The month between the two pairs: they are as wide as each other, so it is
+   centred on the grid. A long name on a narrow screen wraps. */
 .title {
   flex: 1;
+  min-inline-size: 0;
+  font-size: var(--text-heading-xs);
+  line-height: var(--leading-heading-xs);
   font-weight: 600;
+  text-align: center;
 }
 
 .nav {
@@ -56,6 +66,23 @@
 .nav:disabled {
   opacity: 0.5;
   cursor: var(--cursor-disabled);
+}
+
+/* ponytail: the icon set has no double chevron, so a year arrow is two
+   chevrons a quarter of the icon apart (6 of the 24 units, as Boxicons'
+   chevrons). Swap for one `chevrons-left`/`-right` icon when src/lib/icon.tsx
+   has them. */
+.double {
+  display: inline-grid;
+}
+.double > svg {
+  grid-area: 1 / 1;
+}
+.double > svg:first-child {
+  translate: -25% 0;
+}
+.double > svg:last-child {
+  translate: 25% 0;
 }
 
 .grid {
@@ -199,12 +226,25 @@
 
 /* 40 by 32px days are below the 44px touch target. They touch, so a larger
    invisible area would lie over the next day: the days themselves grow on
-   coarse pointers. The arrows stay 24px and grow an invisible area instead;
-   the two overlap each other, as two buttons side by side in a field do. */
+   coarse pointers. The arrows stay 24px and grow an invisible area instead.
+   Four of them share the header, so it makes room: each area reaches 10px
+   past its arrow, the header pads that much, a pair sits twice that apart
+   and the month keeps that much clear, so the areas meet without lying over
+   each other, the month or the calendar's edge. */
 @media (pointer: coarse) {
   .calendar {
     --calendar-day-inline: min(var(--target-coarse), calc((100vw - 4.25rem) / 7));
     --calendar-day-block: var(--target-coarse);
+    --calendar-nav-reach: calc((var(--target-coarse) - var(--control-sm)) / 2);
+  }
+  .header {
+    padding-inline: var(--calendar-nav-reach);
+  }
+  .navs {
+    gap: calc(2 * var(--calendar-nav-reach));
+  }
+  .title {
+    padding-inline: var(--calendar-nav-reach);
   }
   .nav::after {
     content: '';

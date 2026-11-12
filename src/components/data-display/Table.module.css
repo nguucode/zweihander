@@ -16,7 +16,7 @@
 .table {
   /* Atlassian's cell: 4px block padding, and a row as tall as what it
      holds. One 20px line of text makes a 28px row. Rows have no divider:
-     only the header ends on a rule. */
+     the header ends on a rule, and so does a table that has rows. */
   --table-pad: var(--space-1);
   inline-size: 100%;
   border-collapse: separate;
@@ -26,6 +26,12 @@
   line-height: var(--leading-body);
   color: var(--card-foreground);
   font-variant-numeric: tabular-nums;
+}
+/* Atlassian's dynamic table closes a table that has rows on the header's
+   rule. On the table itself, as theirs, so it sits under whatever comes
+   last: a row, an open row's content or the total row. */
+.table.hasRows {
+  border-block-end: var(--border-width-selected) solid var(--border);
 }
 /* Atlassian's caption: 24px above it, 8px to the table. Flush with the
    table's edge inline, as the first cell's text is. */

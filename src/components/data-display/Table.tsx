@@ -326,7 +326,8 @@ export function Table<Row>({
       {...(isScrollRegion && { tabIndex: 0, role: 'region', 'aria-labelledby': `${baseId}-caption` })}
       onBlur={checkScrollRegion}
     >
-      <table className={cn(styles.table, isResizable && styles.resizable)}>
+      {/* As Atlassian's `hasDataRow`: a table with rows closes on a rule, an empty one does not. */}
+      <table className={cn(styles.table, shown.length > 0 && styles.hasRows, isResizable && styles.resizable)}>
         <caption id={`${baseId}-caption`} className={showCaption ? styles.caption : styles.srOnly}>
           {caption}
         </caption>

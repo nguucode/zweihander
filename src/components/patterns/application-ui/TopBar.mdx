@@ -40,8 +40,10 @@ that do not fit scroll sideways, so on a phone they stay in the bar.
   `--space-inline` apart and the items inside the start and the end `--space-stack` apart, as Atlassian's top nav; controls in it are 32px (`md` buttons, `sm` fields). Its fill and edge come from the App Shell's top cell
   (solid or transparent), not from the bar.
 - In the shell's top-bar layout with a sidebar, the brand takes a cell as
-  wide as the sidebar (`--sidebar-width`), so the logo sits where it sits
-  in the sidebar layout.
+  wide as the sidebar (`--sidebar-width`), so the logo's left edge is where
+  it is in the sidebar layout, on the nav icons' column. It is centred on
+  the bar, 24px from the top; in the sidebar layout it sits in Atlassian's
+  side nav header instead, centred 28px from the top.
 - Breakpoints read the container, which in an app is the shell.
 
 ## Accessibility
