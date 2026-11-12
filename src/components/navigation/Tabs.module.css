@@ -101,7 +101,8 @@
    first tab gives up its start padding instead: its box starts at its
    label and nothing sticks out of the tabs' own box. Not at full width,
    where each label is centred in its share of the row. */
-.underline.horizontal:not(.fullWidth) .tab:first-child {
+/* Child combinators, so a Tabs nested in a panel keeps its own padding. */
+.underline.horizontal:not(.fullWidth) > .list > .tab:first-child {
   padding-inline-start: 0;
 }
 .underline.vertical .list {
@@ -124,7 +125,7 @@
     inline-size var(--duration-slow);
 }
 /* Under the first tab the label starts at the tab's edge. */
-.underline.horizontal:not(.fullWidth) .list:has(> .tab:first-child[data-active]) .indicator {
+.underline.horizontal:not(.fullWidth) > .list:has(> .tab:first-child[data-active]) > .indicator {
   inset-inline-start: var(--active-tab-left);
   inline-size: calc(var(--active-tab-width) - var(--tab-pad));
 }

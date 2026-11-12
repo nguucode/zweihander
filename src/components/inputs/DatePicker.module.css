@@ -72,8 +72,9 @@
   outline-offset: var(--focus-offset-inset);
 }
 
-/* Narrow screens: one month, and the presets as a row above it. */
-@media (width < 50rem) {
+/* Narrow screens: one month, and the presets as a row above it. Sooner on
+   touch screens, where the days are 44px and two months are wider. */
+@media (width < 50rem), (pointer: coarse) and (width < 54rem) {
   .rangePopup {
     flex-direction: column;
   }

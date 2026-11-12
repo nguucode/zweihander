@@ -58,8 +58,8 @@
 }
 /* The scroll container clips at those edges: a ring drawn outside a control
    there would be cut. */
-.table > * > tr > :first-child :focus-visible,
-.table > * > tr > :last-child :focus-visible {
+.table > * > tr > :first-child:not(.expandedContent, .empty) :focus-visible,
+.table > * > tr > :last-child:not(.expandedContent, .empty) :focus-visible {
   outline-offset: var(--focus-offset-inset);
 }
 
@@ -73,7 +73,7 @@
 /* The only rule between rows: the header's. On the cells, so a sticky
    header carries it along. Under .table: a bare element selector is global
    in a CSS module and would rule every table on the page. */
-.table thead > tr > * {
+.table > thead > tr > * {
   border-block-end: var(--border-width-selected) solid var(--border);
 }
 .sticky thead .th,
@@ -156,6 +156,11 @@
   .sortButton {
     --table-sort-hit: var(--target-coarse);
   }
+  /* A control at the table's end edge has a 44px hit area that would reach
+     past the table and give the scroll container a sideways scrollbar. */
+  .table > * > tr > :last-child {
+    overflow-x: clip;
+  }
 }
 
 .sortIcon {
@@ -170,10 +175,10 @@
 
 /* Under .table: a bare element selector is global in a CSS module and
    would tint the rows of every table on the page. */
-.table tbody tr:hover > * {
+.table > tbody > tr:hover > * {
   background: var(--accent);
 }
-.table tbody tr.selected > * {
+.table > tbody > tr.selected > * {
   background: var(--primary-subtle);
 }
 
@@ -249,20 +254,20 @@
   padding: var(--space-2) 0 var(--space-4);
 }
 /* The content row is not a record: it takes no hover tint of its own. */
-.table tbody tr.expandedRow:hover > * {
+.table > tbody > tr.expandedRow:hover > * {
   background: transparent;
 }
 /* It shares its row's hover and selected tint, so the pair still reads as one. */
-.table tbody tr.expanded:hover + tr.expandedRow > * {
+.table > tbody > tr.expanded:hover + tr.expandedRow > * {
   background: var(--accent);
 }
-.table tbody tr.selected.expanded + tr.expandedRow > * {
+.table > tbody > tr.selected.expanded + tr.expandedRow > * {
   background: var(--primary-subtle);
 }
 
 /* The total row sits under the header's rule, turned over: with no
    dividers between rows, that is what makes the sum read as a sum. */
-.table tfoot > tr > * {
+.table > tfoot > tr > * {
   border-block-start: var(--border-width-selected) solid var(--border);
   font-weight: 600;
 }

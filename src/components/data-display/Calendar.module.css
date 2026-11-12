@@ -2,7 +2,9 @@
   /* A day is 40 by 32px and the days touch, as @atlaskit/calendar's: seven
      columns at least 2.5rem wide, a 20px line with 4px above and below
      inside a 2px edge. */
-  --calendar-day-inline: var(--box-lg);
+  /* Narrower on a screen that cannot hold seven of them (320px, the reflow
+     width of WCAG 1.4.10): the popup keeps 16px from each edge and pads 16px. */
+  --calendar-day-inline: min(var(--box-lg), calc((100vw - 4.25rem) / 7));
   --calendar-day-block: var(--control-md);
   display: inline-flex;
   flex-direction: column;
@@ -201,7 +203,7 @@
    the two overlap each other, as two buttons side by side in a field do. */
 @media (pointer: coarse) {
   .calendar {
-    --calendar-day-inline: var(--target-coarse);
+    --calendar-day-inline: min(var(--target-coarse), calc((100vw - 4.25rem) / 7));
     --calendar-day-block: var(--target-coarse);
   }
   .nav::after {

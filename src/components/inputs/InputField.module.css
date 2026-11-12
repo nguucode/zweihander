@@ -479,8 +479,11 @@
 
 /* A small ring of currentColor, as Button's loading state. */
 .spinner {
-  inline-size: var(--field-icon);
-  block-size: var(--field-icon);
+  /* 16px in every field, as Atlassian's: where the icon slot is a picker's
+     12px, the margin keeps the ring on the chevron's centre. */
+  inline-size: var(--icon-md);
+  block-size: var(--icon-md);
+  margin: calc((var(--field-icon) - var(--icon-md)) / 2);
   box-sizing: border-box;
   border: 2px solid currentColor;
   border-block-start-color: transparent;
