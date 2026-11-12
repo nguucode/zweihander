@@ -41,13 +41,19 @@ the page.
 ## The logo
 
 Pass the logo as `brand`, not inside the NavSidebar or the TopBar. The
-shell places it in the same spot in both layouts: its left edge on the
-sidebar icons' left edge, centred in a row as tall as the top bar. It does
-not move when the sidebar collapses. In the
-sidebar layout the shell hands it to the NavSidebar's top row, next to the
-collapse button; a collapsed rail cuts the logo to the rail's width, so lead
-the logo with its mark. It is rendered once, wherever it shows. A sidebar
-that is not a NavSidebar gets no logo in the sidebar layout.
+shell places it with its left edge on the sidebar icons' left edge in both
+layouts, and it does not move when the sidebar collapses. In the top-bar
+layout it is in the bar, as in Atlassian's top nav, centred on its 48px
+(24px from the top). In the sidebar layout the shell hands it to the
+NavSidebar's top row, next to the collapse button, inside Atlassian's side
+nav header padding: 12px down, centred on a 32px row (28px from the top).
+A collapsed rail cuts the logo to the rail's width, so lead the logo with
+its mark. It is rendered once, wherever it shows. A sidebar that is not a
+NavSidebar gets no logo in the sidebar layout.
+
+Atlassian's layout always has a top nav and keeps the logo there; its side
+nav header never holds one. The sidebar layout, with no top bar and the
+logo in the sidebar's head, is this kit's own.
 
 ## Canvas and content style
 

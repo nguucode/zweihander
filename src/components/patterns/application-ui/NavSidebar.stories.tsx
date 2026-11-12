@@ -219,9 +219,14 @@ export const Default: Story = {
     // Atlassian's SideNavHeader, SideNavBody and SideNavFooter: the head ends 4px above the body, the body
     // pads its scroller 12px, the footer is 12px all round under a rule across the whole sidebar.
     const [head, scroller, foot] = [...nav.children].map((el) => getComputedStyle(el))
-    // With a logo the top row is the 48px a top bar is, from the very top; without one the head starts 12px down.
-    await expect([head.paddingTop, head.paddingBottom]).toEqual(['0px', '4px'])
-    await expect(nav.children[0].firstElementChild!.getBoundingClientRect().height).toBe(48)
+    // The head is 12px above, 12px either side (the sidebar's padding) and 4px below with a logo too;
+    // the logo's row is a 32px control row starting 12px down, the logo centred on it.
+    await expect([head.paddingTop, getComputedStyle(nav).paddingRight, head.paddingBottom, getComputedStyle(nav).paddingLeft]).toEqual(['12px', '12px', '4px', '12px'])
+    const brandRow = nav.children[0].firstElementChild!.getBoundingClientRect()
+    await expect(brandRow.height).toBe(32)
+    await expect(brandRow.top - nav.getBoundingClientRect().top).toBeCloseTo(12, 0)
+    const logo = within(nav).getByTestId('brand').getBoundingClientRect()
+    await expect(logo.top + logo.height / 2 - nav.getBoundingClientRect().top).toBeCloseTo(28, 0)
     await expect([scroller.paddingTop, scroller.paddingBottom]).toEqual(['12px', '12px'])
     await expect([foot.paddingTop, foot.paddingRight, foot.paddingBottom, foot.paddingLeft]).toEqual(['12px', '12px', '12px', '12px'])
     await expect(foot.borderTopWidth).toBe('1px')
@@ -315,10 +320,19 @@ export const Collapsible: Story = {
   play: async ({ args, canvas }) => {
     const toggle = canvas.getByRole('button', { name: 'Collapse sidebar' })
     await expect(toggle).toHaveAttribute('aria-expanded', 'true')
+    const logoAt = () => canvas.getByTestId('brand').getBoundingClientRect()
+    const before = logoAt()
     await userEvent.click(toggle)
     await expect(args.onCollapsedChange).toHaveBeenLastCalledWith(true)
     const expand = canvas.getByRole('button', { name: 'Expand sidebar' })
     await expect(expand).toHaveAttribute('aria-expanded', 'false')
+    // The rail's head keeps the padding: the logo does not move, and the expand button is centred in the rail, 12px down.
+    const rail = canvas.getByRole('navigation', { name: 'Main' })
+    await expect([logoAt().left, logoAt().top]).toEqual([before.left, before.top])
+    await waitFor(() => expect(rail.getBoundingClientRect().width).toBe(56))
+    const button = expand.getBoundingClientRect()
+    await expect(button.left + button.width / 2 - rail.getBoundingClientRect().left).toBeCloseTo(28, 0)
+    await expect(button.top - rail.getBoundingClientRect().top).toBeCloseTo(12, 0)
     const invoices = canvas.getByRole('link', { name: 'Invoices' })
     await expect(invoices).toHaveAttribute('aria-current', 'page')
     // Still findable by category name: the label is only visually hidden.

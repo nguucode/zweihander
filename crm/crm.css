@@ -195,7 +195,8 @@
 .drawer-footer > :first-child { margin-right: auto; }
 
 /* ——— Listing ——— */
-.listing-tabs { overflow-x: auto; }
+/* The tab list starts 8px out of its box; the scroll box moves out with it so the first tab is not clipped. */
+.listing-tabs { overflow-x: auto; margin-inline-start: calc(var(--space-2) * -1); padding-inline-start: var(--space-2); }
 .price-rows { margin: 0; display: grid; }
 .price-rows > div { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1.2fr) auto; gap: var(--space-3); align-items: center; padding: var(--space-3) 0; border-top: 1px solid var(--border); }
 .price-rows > div:first-child { border-top: 0; }

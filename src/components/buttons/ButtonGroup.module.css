@@ -3,9 +3,7 @@
    and hover ring; a button never shrinks below its content. */
 .group {
   display: inline-flex;
-  /* Atlassian's does not wrap; the kit's does, so a group in a narrow
-     container goes onto a second row instead of overflowing it. */
-  flex-wrap: wrap;
+  /* One row, as Atlassian's: it does not wrap. */
   gap: var(--space-1);
 }
 

@@ -118,24 +118,26 @@ after it, and a label with no icon starts 10px in. A category label is a
 
 The three blocks are Atlassian's side nav header, body and footer. The
 **head** holds the logo row and the `header` rows, 8px apart: 12px above
-it, 4px below, 12px either side. With a logo its top row is instead the
-48px of a top bar, from the sidebar's very top, so the logo sits where it
-does in the App Shell's top-bar layout. The **body** pads its scroller
+it, 4px below, 12px either side, with or without a logo. The logo row is
+a 32px control row with the logo centred on it, so the logo's centre line
+is 28px from the sidebar's top. The **body** pads its scroller
 12px all round, so items scroll away under the head and the footer's
 rule. The **footer** is ruled across the whole sidebar and padded 12px
 all round. Atlassian's header and footer are plain slots with no layout
 of their own; the rows in them stack like items, and the header keeps
-8px between a switcher and a search field.
+8px between a switcher and a search field. Atlassian keeps its logo in
+the top nav and never in the side nav header; here the head can hold one,
+for a layout with no top bar, inside the same padding.
 
 <SpecTable
   caption="Sidebar"
   rows={[
     { part: 'NavSidebar', property: 'Inline padding', token: '--space-3' },
-    { part: 'Head', property: 'Block start padding, without a logo', token: '--space-3' },
+    { part: 'Head', property: 'Block start padding', token: '--space-3' },
     { part: 'Head', property: 'Block end padding', token: '--space-1' },
     { part: 'Body', property: 'Block padding', token: '--space-3' },
     { part: 'NavSidebar', property: 'Gap between groups', token: '--space-3' },
-    { part: 'Brand row', property: 'Height from the top edge: --control-md plus twice', token: '--space-inline' },
+    { part: 'Brand row', property: 'Minimum height', token: '--control-md' },
     { part: 'Header', property: 'Gap between rows', token: '--space-inline' },
     { part: 'Collapse button', property: 'Size', token: '--control-md' },
     { part: 'Category label row', property: 'Height', token: '--control-md' },

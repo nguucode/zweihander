@@ -35,7 +35,8 @@
 }
 
 /* Over a sidebar (the shell's top-bar layout), the logo takes a cell as wide
-   as the sidebar, so it sits where it sits in the sidebar layout. */
+   as the sidebar, so its left edge is where it is in the sidebar layout: on
+   the nav icons' column. */
 @container (min-width: 64rem) {
   .header[data-brand-cell] {
     padding-inline-start: 0;
