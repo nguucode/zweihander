@@ -132,6 +132,31 @@ export const Default: Story = {
     await expect(selected).toHaveAttribute('tabindex', '0')
     await userEvent.click(canvas.getByRole('button', { name: day(2026, 9, 22) }))
     await expect(args.onValueChange).toHaveBeenLastCalledWith(new Date(2026, 8, 22))
+    // As @atlaskit/calendar: days are 40 by 32px and touch, in a row and
+    // from one week to the next.
+    const rect = (d: number) => canvas.getByRole('button', { name: day(2026, 9, d) }).getBoundingClientRect()
+    await waitFor(() => expect([rect(15).width, rect(15).height]).toEqual([40, 32]))
+    await expect(rect(16).left).toBe(rect(15).right)
+    await expect(rect(22).top).toBe(rect(15).bottom)
+    // The weekday row is 32px tall, in 12px bold, and sits on the first week.
+    const weekday = within(grid).getAllByRole('columnheader')[0]
+    await expect([weekday.getBoundingClientRect().width, weekday.getBoundingClientRect().height]).toEqual([40, 32])
+    await expect(getComputedStyle(weekday).fontSize).toBe('12px')
+    await expect(getComputedStyle(weekday).fontWeight).toBe('600')
+    await expect(rect(1).top).toBe(weekday.getBoundingClientRect().bottom)
+    // The header is 12px above the grid; its arrows are 24px round a 12px chevron.
+    const next = canvas.getByRole('button', { name: 'Next month' })
+    const header = next.parentElement!.getBoundingClientRect()
+    await expect(grid.getBoundingClientRect().top - header.bottom).toBe(12)
+    for (const name of ['Previous month', 'Next month']) {
+      const nav = canvas.getByRole('button', { name })
+      await expect([nav.getBoundingClientRect().width, nav.getBoundingClientRect().height]).toEqual([24, 24])
+      await expect(nav.querySelector(':scope > svg')!.getBoundingClientRect().width).toBe(12)
+    }
+    // The focused day's ring lies over its neighbours, so it is lifted above them.
+    selected.focus()
+    await waitFor(() => expect(selected).toHaveFocus())
+    if (selected.matches(':focus-visible')) await expect(getComputedStyle(selected).zIndex).toBe('1')
   },
 }
 
@@ -176,7 +201,7 @@ export const Keyboard: Story = {
 /**
  * Today, on its own and inside a range, in both modes. The other stories pin
  * September 2026, so this is the one that always shows the current month:
- * axe checks the disc here, and the play measures it.
+ * axe checks the pill here, and the play measures it.
  */
 export const Today: Story = {
   args: { defaultValue: undefined },
@@ -261,6 +286,35 @@ export const Range: Story = {
     await expect(cell(17)).not.toHaveAttribute('aria-selected')
     // `range` wins over `value`.
     await expect(cell(18)).not.toHaveAttribute('aria-selected')
+    // The band is one strip: each cell's piece is as tall as the cell and
+    // meets the next. Under the two ends it covers only the half facing the
+    // range, so the ends keep their own shape and stay apart from the days between.
+    const band = (d: number) => {
+      const td = cell(d)!
+      const box = td.getBoundingClientRect()
+      const before = getComputedStyle(td, '::before')
+      return {
+        left: box.left + parseFloat(before.left),
+        right: box.right - parseFloat(before.right),
+        height: parseFloat(before.height),
+        fill: before.backgroundColor,
+      }
+    }
+    await waitFor(() => expect(band(11).height).toBe(32))
+    await expect(band(10).left).toBe(cell(10)!.getBoundingClientRect().left + 20)
+    await expect(band(10).right).toBe(band(11).left)
+    await expect(band(11).right).toBe(band(12).left)
+    // 13 September 2026 is a Sunday, the week's last day: the band stops at
+    // the row's end and picks up on Monday.
+    await expect(band(13).right).toBe(cell(13)!.getBoundingClientRect().right)
+    await expect(band(15).right).toBe(band(16).left)
+    await expect(band(16).right).toBe(cell(16)!.getBoundingClientRect().right - 20)
+    await expect(getComputedStyle(cell(17)!, '::before').content).toBe('none')
+    // The ends are filled over the band; the days between are not.
+    const fill = (d: number) => getComputedStyle(canvas.getByRole('button', { name: day(2026, 9, d) })).backgroundColor
+    await expect(fill(10)).toBe(fill(16))
+    await expect(fill(10)).not.toBe(band(11).fill)
+    await expect(fill(12)).toBe('rgba(0, 0, 0, 0)')
   },
 }
 

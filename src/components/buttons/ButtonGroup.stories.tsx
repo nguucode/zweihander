@@ -144,7 +144,7 @@ export const Multiple: Story = {
   },
 }
 
-/** Button group: related actions joined into one bar. Nothing stays pressed. */
+/** Button group: related actions as separate buttons, 4px apart. Nothing stays pressed. */
 export const Actions: Story = {
   render: () => periods,
   play: async ({ canvas, userEvent }) => {
@@ -193,7 +193,7 @@ export const IconToggles: Story = {
   },
 }
 
-/** A Tooltip merges onto its button rather than wrapping it, so tooltipped buttons still join. */
+/** A Tooltip merges onto its button rather than wrapping it, so the group still holds only its buttons. */
 export const WithTooltips: Story = {
   render: () => (
     <ButtonGroup aria-label="Pages">
@@ -213,8 +213,7 @@ export const WithTooltips: Story = {
     const group = canvas.getByRole('group', { name: 'Pages' })
     const [previous, next] = [canvas.getByRole('button', { name: 'Previous' }), canvas.getByRole('button', { name: 'Next' })]
     await expect([...group.children]).toEqual([previous, next])
-    await expect(getComputedStyle(previous).borderStartEndRadius).toBe('0px')
-    await expect(getComputedStyle(next).marginInlineStart).toBe('-1px')
+    await expect(next.getBoundingClientRect().left - previous.getBoundingClientRect().right).toBe(4)
     // Opening a tooltip adds nothing inside the group.
     await userEvent.tab()
     await within(document.body).findByRole('tooltip', {}, { timeout: 300 })
@@ -222,7 +221,52 @@ export const WithTooltips: Story = {
   },
 }
 
-/** The size is each button's own; the group only joins them. */
+/**
+ * ButtonGroup is Atlassian's: separate buttons 4px apart. Each button keeps
+ * what it has on its own: all four corners, its height, its contained look.
+ */
+export const Separate: Story = {
+  tags: ['!dev'],
+  render: () => (
+    <div style={grid}>
+      {(['sm', 'md'] as const).map((size) => (
+        <div key={size} style={{ display: 'flex', gap: 'var(--space-6)' }}>
+          <ButtonGroup aria-label={`Actions, ${size}`}>
+            <Button size={size}>Save</Button>
+            <Button size={size} variant="secondary" appearance="outlined">Preview</Button>
+            <Button size={size} variant="secondary" appearance="ghost">Cancel</Button>
+          </ButtonGroup>
+          <Button size={size} data-testid={`alone-${size}`}>Save</Button>
+        </div>
+      ))}
+    </div>
+  ),
+  play: async ({ canvas }) => {
+    const look = (el: Element) => {
+      const { borderStartStartRadius, borderStartEndRadius, borderEndStartRadius, borderEndEndRadius, backgroundImage, boxShadow } =
+        getComputedStyle(el)
+      return { borderStartStartRadius, borderStartEndRadius, borderEndStartRadius, borderEndEndRadius, backgroundImage, boxShadow }
+    }
+    for (const [size, height] of [['sm', 24], ['md', 32]] as const) {
+      const group = canvas.getByRole('group', { name: `Actions, ${size}` })
+      const buttons = within(group).getAllByRole('button')
+      await expect(getComputedStyle(group).columnGap).toBe('4px')
+      const boxes = buttons.map((button) => button.getBoundingClientRect())
+      for (const [i, box] of boxes.entries()) {
+        await expect(box.height).toBe(height)
+        // Separate: exactly the gap between neighbours, no overlap.
+        if (i > 0) await expect(box.left - boxes[i - 1].right).toBe(4)
+        const corners = Object.values(look(buttons[i])).slice(0, 4)
+        await expect(new Set(corners).size).toBe(1)
+        await expect(corners[0]).not.toBe('0px')
+      }
+      // The contained button in a group is the one that stands alone: same corners, gradient and edges.
+      await expect(look(buttons[0])).toEqual(look(canvas.getByTestId(`alone-${size}`)))
+    }
+  },
+}
+
+/** The size is each toggle's own; the group only joins them. */
 export const Sizes: Story = {
   render: (args) => (
     <div style={grid}>
@@ -282,7 +326,7 @@ export const Matrix: Story = {
 
 /** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
 export const anatomyParts = [
-  { name: 'Container', selector: '[role="group"]', description: 'Joins the buttons: inner corners square, borders shared.' },
+  { name: 'Container', selector: '[role="group"]', description: 'ToggleGroup joins its toggles: inner corners square, borders shared. ButtonGroup spaces its buttons 4px apart.' },
   { name: 'Button', selector: 'button:not([aria-pressed="true"])', description: 'A ToggleButton (or a Button in ButtonGroup), with a label or an icon.' },
   { name: 'Selected', selector: 'button[aria-pressed="true"]', description: 'The pressed toggle: one at a time, or several with `multiple`.' },
 ]

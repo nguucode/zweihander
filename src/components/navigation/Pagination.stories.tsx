@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import { expect, fn, userEvent, waitFor, within } from 'storybook/test'
+import { expect, fn, spyOn, userEvent, waitFor, within } from 'storybook/test'
 import { expectAnatomy } from '../../../.storybook/blocks'
 import { mediaRules } from '@/test/story-helpers'
 import { Pagination, paginationItems } from './Pagination'
@@ -44,7 +44,7 @@ const meta = {
     size: {
       description: 'Deprecated: Pagination has one size, 32px controls, and `sm` renders the same as `md`. Drop the prop; it will be removed in the next release.',
       control: false,
-      table: { type: { summary: "'sm' | 'md'" } },
+      table: { type: { summary: "'sm' | 'md'" }, defaultValue: { summary: "'md'" } },
     },
     getHref: {
       description: 'Render links instead of buttons, for pages with their own URL: they can be opened in a new tab and shared.',
@@ -108,6 +108,19 @@ export const Default: Story = {
 }
 
 export const Middle: Story = { args: { defaultPage: 6, totalPages: 20 } }
+
+/** Passing the documented default of a deprecated prop is silent: only `size="sm"` warns. */
+export const DefaultSizeIsSilent: Story = {
+  tags: ['!dev'],
+  args: { size: 'md' },
+  beforeEach: () => {
+    const warn = spyOn(console, 'warn')
+    return () => warn.mockRestore()
+  },
+  play: async () => {
+    await expect(console.warn).not.toHaveBeenCalledWith(expect.stringContaining('Pagination'))
+  },
+}
 
 /** `size` is deprecated: for one release it is accepted, and `sm` renders as `md`. */
 export const DeprecatedSize: Story = {

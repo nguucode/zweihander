@@ -184,7 +184,7 @@ function PickerField({
       isFullWidth={isFullWidth}
       className={className}
     >
-      <span ref={boxRef} className={cn(boxClass(size), inputStyles.picker)} onMouseDown={focusControl}>
+      <span ref={boxRef} className={cn(boxClass(size), inputStyles.picker, inputStyles.datePicker)} onMouseDown={focusControl}>
         <Field.Control
           ref={inputRef}
           id={id}

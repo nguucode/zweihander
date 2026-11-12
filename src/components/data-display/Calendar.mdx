@@ -71,39 +71,51 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/calendar.json
 The grid always has six rows. Months span four to six weeks; a fixed height
 keeps a popover or a page from jumping as you page through them.
 
-Two more looks sit on the days: **today**, an orange disc, round where a
+Two more looks sit on the days: **today**, an orange pill, round-ended where a
 selected day takes the control's corners; and with `range`, the **band**, as tall as a day,
-behind the days between the two ends. The band rounds off where a week or
+one unbroken strip behind the days from one end to the other. Under the
+two ends it covers only the half that faces the range, so each end keeps
+its own corners on the outside. The band rounds off where a week or
 the month starts or ends. Days of the months either side are never banded,
 so two months side by side never draw the same day twice.
 
 ## Measurements
 
-Calendar has one size. Days are 32px, 4px apart: each cell pads by half
-of `--space-1` on every side, so a range's band runs unbroken under the
-gap.
+Calendar has one size, after `@atlaskit/calendar`. Days are 40px wide and
+32px tall and touch: the whole cell is the day's target, and a range's
+band runs unbroken from cell to cell. The weekday row is 32px tall, 8px
+round a 16px line of bold 12px. The header keeps 8px at each end and sits
+12px above the grid; its arrows are 24px round a 12px chevron. In a Date
+Picker the panel adds 16px round all of it.
+
+The kit keeps its own header (the month at the start and one pair of
+arrows at the end, where Atlassian centres the month between month and
+year arrows) and its own looks for today and the selected day.
 
 <SpecTable
   caption="Header"
   rows={[
     { part: 'Header', property: 'Gap', token: '--space-stack' },
-    { part: 'Month', property: 'Inline start padding', token: '--space-inline' },
+    { part: 'Header', property: 'Inline padding', token: '--space-inline' },
     { part: 'Month', property: 'Font size', token: '--text-body' },
-    { part: 'Previous and next', property: 'Size', token: '--control-md' },
+    { part: 'Previous and next', property: 'Size', token: '--control-sm' },
+    { part: 'Previous and next', property: 'Minimum on touch screens', token: '--target-coarse' },
     { part: 'Previous and next', property: 'Corner radius', token: '--radius-control' },
-    { part: 'Previous and next', property: 'Icon size', token: '--icon-md' },
-    { part: 'Header to grid', property: 'Gap', token: '--space-inline' },
+    { part: 'Previous and next', property: 'Icon size', token: '--icon-xs' },
+    { part: 'Header to grid', property: 'Gap', token: '--space-3' },
   ]}
 />
 
 <SpecTable
   caption="Grid"
   rows={[
-    { part: 'Weekdays', property: 'Height', token: '--control-md' },
+    { part: 'Weekdays', property: 'Padding', token: '--space-2' },
+    { part: 'Weekdays', property: 'Minimum width', token: '--box-lg' },
     { part: 'Weekdays', property: 'Font size', token: '--text-body-sm' },
     { part: 'Weekdays', property: 'Line height', token: '--leading-body-sm' },
-    { part: 'Day', property: 'Size', token: '--control-md' },
-    { part: 'Day', property: 'Size on touch screens', token: '--target-coarse' },
+    { part: 'Day', property: 'Width', token: '--box-lg' },
+    { part: 'Day', property: 'Height', token: '--control-md' },
+    { part: 'Day', property: 'Width and height on touch screens', token: '--target-coarse' },
     { part: 'Day', property: 'Corner radius', token: '--radius-control' },
     { part: 'Day', property: 'Font size', token: '--text-body' },
     { part: 'Day', property: 'Line height', token: '--leading-body' },
@@ -121,8 +133,11 @@ gap.
 />
 
 Figures are tabular, so the columns of dates line up. On touch screens
-(`pointer: coarse`) days grow to 44px, the touch target; the previous and
-next buttons stay 32px.
+(`pointer: coarse`) days grow to 44px square, the touch target: they
+touch, so a larger invisible area would lie over the next day. The
+previous and next buttons stay 24px and grow an invisible 44px area
+instead; the two areas overlap, as two buttons side by side in a field
+do.
 
 ## Color
 
@@ -225,14 +240,16 @@ one under the pointer or the keyboard.
 - **Hover** fills a day, or the previous and next buttons, with `--accent`
   behind `--accent-foreground`. The selected day and today keep their own
   colours; unavailable and outside days do not react.
-- **Focus** is a 2px `--ring` outline, 2px outside the day.
+- **Focus** is a 2px `--ring` outline, 2px outside the day. The days
+  touch, so the focused day is lifted above its neighbours and the ring
+  is drawn whole over their edges.
 - **Pressed** has no look of its own: the click selects the day, and the
   selected look follows.
 - **Disabled** is per day: before `min`, after `max`, or ruled out by
   `isDateDisabled`. The previous and next buttons disable at the limits,
   at 50% opacity.
-- **Selected** is the brand fill, with the control's corners; **today** is the orange disc,
-  round. With `range`, both ends are selected and the days between are
+- **Selected** is the brand fill, with the control's corners; **today** is the orange pill,
+  round-ended. With `range`, both ends are selected and the days between are
   banded.
 
 ## API
@@ -305,7 +322,7 @@ February, not 3 March.
   nothing.
 - Days of the months either side are not buttons and are hidden from
   assistive tech.
-- Today's figure measures at least 4.5:1 on its disc, in both modes, on
+- Today's figure measures at least 4.5:1 on its pill, in both modes, on
   its own and inside a range.
 
 </DocTab>

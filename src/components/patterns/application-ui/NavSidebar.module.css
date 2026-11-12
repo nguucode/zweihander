@@ -9,7 +9,9 @@
   box-sizing: border-box;
   inline-size: var(--sidebar-width);
   block-size: 100%;
-  padding: var(--space-3);
+  /* Inline only: the head, the body and the footer bring their own block
+     padding, as Atlassian's SideNavHeader, SideNavBody and SideNavFooter. */
+  padding-inline: var(--space-3);
   border-inline-end: var(--sidebar-border, 1px solid var(--border));
   background: var(--sidebar-background, var(--surface-filled));
   font-family: var(--font-sans);
@@ -60,20 +62,31 @@
   --sidebar-width: calc(var(--control-md) + 2 * var(--space-3));
 }
 
-/* The top row: the logo and the collapse button. As tall as the AppShell's
-   top bar from the very top (it cancels the sidebar's padding), with the
-   logo an item's padding in, so the logo sits where it would in the
-   top-bar layout and lines up with the nav icons. */
+/* Atlassian's SideNavHeader: 12px above, 4px below (the body's own 12px
+   follows), the sidebar's 12px either side. It holds the logo row and the
+   header rows, 8px apart. */
+.head {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  gap: var(--space-inline);
+  padding-block: var(--space-3) var(--space-1);
+}
+/* The top row: the logo and the collapse button. With a logo it is as tall
+   as the AppShell's top bar from the very top (so the head drops its top
+   padding), with the logo an item's padding in: the logo sits where it
+   would in the top-bar layout and lines up with the nav icons. */
 .brandRow {
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: var(--space-2);
-  margin-block-end: var(--space-inline);
+}
+.head:has(> .withBrand) {
+  padding-block-start: 0;
 }
 .withBrand {
   justify-content: space-between;
-  margin-block: calc(-1 * var(--space-3)) 0;
   block-size: calc(var(--control-md) + 2 * var(--space-inline));
 }
 .brand {
@@ -106,13 +119,11 @@
   visibility: hidden;
 }
 
-/* Under the logo: a tenant switcher, search. The first item follows at the
-   header's own row gap, so header and nav read as one column. */
+/* Under the logo: a tenant switcher, search. */
 .header {
   display: flex;
   flex-direction: column;
   gap: var(--space-inline);
-  margin-block-end: var(--space-inline);
 }
 
 .toggle {
@@ -146,6 +157,9 @@
   /* 12px between groups, as Atlassian's spacer between top-level blocks. */
   gap: var(--space-3);
   min-block-size: 0;
+  /* Atlassian's SideNavBody pads its scroller 12px all round: inline that
+     is the sidebar's padding, block it is here, so items scroll under it. */
+  padding-block: var(--space-3);
   /* The body reaches through the sidebar's end padding, so its scrollbar
      sits against the sidebar's edge as in the Claude apps; the gutter is
      always kept, so rows keep their width whether or not the list scrolls.
@@ -300,6 +314,11 @@
   text-decoration: none;
   white-space: nowrap;
   cursor: var(--cursor-link);
+}
+/* Atlassian's item with no icon: its label starts 10px in (4px of the row
+   and 6px of the label), not on the icons' column. */
+.item:not(:has(> .icon)) {
+  padding-inline-start: var(--space-2-5);
 }
 .item:hover {
   background: var(--sidebar-hover, var(--hover-overlay));
@@ -457,13 +476,17 @@
   background: transparent;
 }
 
-/* No rule above it, as in the Claude apps: the body scrolls under it. Rows
+/* Atlassian's SideNavFooter: a rule across the whole sidebar (it reaches
+   through the sidebar's inline padding) and 12px all round. Rows
    (notifications, help, the account) under each other with no gap, like
    the items. */
 .footer {
   display: flex;
   flex-direction: column;
-  margin-block-start: var(--space-inline);
+  flex-shrink: 0;
+  margin-inline: calc(-1 * var(--space-3));
+  padding: var(--space-3);
+  border-block-start: 1px solid var(--border);
 }
 
 @media (pointer: coarse) {

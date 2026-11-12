@@ -2481,6 +2481,11 @@
       "$type": "dimension",
       "$value": "20rem",
       "$description": "An expanded Sidebar, and the brand cell above it in an AppShell's top bar, so the logo sits in the same place in either layout."
+    },
+    "aside-width": {
+      "$type": "dimension",
+      "$value": "16rem",
+      "$description": "A secondary column beside the page: AppContent's aside and the Settings nav. Narrower than the sidebar, so the content column keeps its room."
     }
   },
   "icon": {

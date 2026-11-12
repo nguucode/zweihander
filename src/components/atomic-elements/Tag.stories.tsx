@@ -115,17 +115,20 @@ const lines = [
   ['heading', 'var(--text-heading-lg)', 'var(--leading-heading-lg)', 28],
   ['body', 'var(--text-body)', 'var(--leading-body)', 20],
   ['small', 'var(--text-body-sm)', 'var(--leading-body-sm)', 20],
+  // Another family (a mono table cell): the line still keeps its height.
+  ['mono', 'var(--text-body)', 'var(--leading-body)', 20, 'var(--font-mono)'],
 ] as const
 
 /**
- * In a line of text the tag is centred on that line. A line as tall as the
- * tag or taller keeps its height; a 16px line grows to the tag's 20px.
+ * In a line of text the tag is centred on that line, whatever the line's
+ * font. A line as tall as the tag or taller keeps its height; a 16px line
+ * grows to the tag's 20px.
  */
 export const InText: Story = {
   render: (args) => (
     <div style={{ fontFamily: 'var(--font-sans)', color: 'var(--foreground)' }}>
-      {lines.map(([name, fontSize, lineHeight]) => (
-        <div key={name} data-testid={name} style={{ fontSize, lineHeight }}>
+      {lines.map(([name, fontSize, lineHeight, , fontFamily]) => (
+        <div key={name} data-testid={name} style={{ fontSize, lineHeight, fontFamily }}>
           <span>Invoice 1041</span> <Tag {...args} />
         </div>
       ))}
@@ -136,6 +139,10 @@ export const InText: Story = {
       const line = canvas.getByTestId(name)
       const centre = (el: Element) => el.getBoundingClientRect().top + el.getBoundingClientRect().height / 2
       await expect(line.getBoundingClientRect().height).toBe(height)
+      // The tag's own text is the kit's sans, whatever family surrounds it.
+      await expect(getComputedStyle(line.querySelector('span[class*="text"]')!).fontFamily).not.toBe(
+        getComputedStyle(canvas.getByTestId('mono')).fontFamily,
+      )
       // The tag's centre is the text's: the middle of its line, not of its x-height.
       await expect(Math.abs(centre(line.querySelector('span[class*="tag"]')!) - centre(line.querySelector('span')!))).toBeLessThan(0.51)
     }

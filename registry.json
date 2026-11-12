@@ -305,7 +305,7 @@
       "name": "button-group",
       "type": "registry:component",
       "title": "Button Group",
-      "description": "Buttons joined into one bar: ButtonGroup for related actions, ToggleGroup on Base UI for a segmented control or toggles that combine.",
+      "description": "Buttons that belong together: ButtonGroup sets related actions side by side with a small gap, ToggleGroup on Base UI joins toggles into a segmented control or a set that combines.",
       "registryDependencies": [
         "https://ontheshore.biz/zweihander/r/utils.json",
         "https://ontheshore.biz/zweihander/r/tokens.json",

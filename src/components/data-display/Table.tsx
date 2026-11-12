@@ -226,7 +226,9 @@ export function Table<Row>({
   onColumnWidthsChange,
   className,
 }: TableProps<Row>) {
-  if (import.meta.env.DEV && !hasWarned && (size !== undefined || density !== undefined)) {
+  // The kit's rule: a deprecated prop warns when its value is not the documented
+  // default (`md`), a renamed one (`density`) whenever it is used.
+  if (import.meta.env.DEV && !hasWarned && ((size !== undefined && size !== 'md') || density !== undefined)) {
     hasWarned = true
     console.warn('Table: `size` and `density` are deprecated and do nothing: Table has one size. They will be removed in the next release.')
   }

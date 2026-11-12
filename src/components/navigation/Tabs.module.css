@@ -94,23 +94,16 @@
 .underline .list {
   box-shadow: inset 0 -1px var(--border);
 }
-/* Atlassian's tab list is pulled out by a tab's padding, so the first
-   label lines up with the content under it; the rule starts at the label,
-   not at the tab's edge. ::before, so it sits under the indicator. */
-.underline.horizontal .list {
-  margin-inline-start: calc(var(--tab-pad) * -1);
-  box-shadow: none;
-}
-.underline.horizontal .list::before {
-  content: '';
-  position: absolute;
-  inset-block-end: 0;
-  inset-inline: var(--tab-pad) 0;
-  /* Under the tabs, so it never draws through a tab's focus ring. */
-  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- local stacking under the tabs, not a global layer */
-  z-index: -1;
-  block-size: var(--border-width);
-  background: var(--border);
+/* The first label lines up with the content under the list, as
+   Atlassian's. Atlassian gets there by pulling the list out by a tab's
+   padding, which a container that clips (a modal body, a card with
+   overflow hidden) cuts: the first tab's focus ring loses its edge. So the
+   first tab gives up its start padding instead: its box starts at its
+   label and nothing sticks out of the tabs' own box. Not at full width,
+   where each label is centred in its share of the row. */
+/* Child combinators, so a Tabs nested in a panel keeps its own padding. */
+.underline.horizontal:not(.fullWidth) > .list > .tab:first-child {
+  padding-inline-start: 0;
 }
 .underline.vertical .list {
   box-shadow: inset -1px 0 var(--border);
@@ -130,6 +123,11 @@
   transition:
     inset-inline-start var(--duration-slow),
     inline-size var(--duration-slow);
+}
+/* Under the first tab the label starts at the tab's edge. */
+.underline.horizontal:not(.fullWidth) > .list:has(> .tab:first-child[data-active]) > .indicator {
+  inset-inline-start: var(--active-tab-left);
+  inline-size: calc(var(--active-tab-width) - var(--tab-pad));
 }
 .underline.vertical .indicator {
   inset-inline-start: auto;

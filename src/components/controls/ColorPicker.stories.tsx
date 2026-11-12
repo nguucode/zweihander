@@ -119,6 +119,20 @@ export const Default: Story = {
     await waitFor(() => expect(area).toHaveFocus())
     await expect(area).toHaveAttribute('aria-valuetext', 'Saturation 76%, brightness 96%')
     await expect(dialog.getByRole('slider', { name: 'Hue' })).toHaveAttribute('aria-valuetext', '217 degrees')
+    // The popup hangs off the whole field, not the swatch: 8px under it,
+    // with 16px round the panel, as Date Picker's calendar.
+    const field = () => canvas.getByRole('textbox').parentElement!.getBoundingClientRect()
+    const panel = await popup()
+    await waitFor(() => expect(Math.round(panel.getBoundingClientRect().top - field().bottom)).toBe(8))
+    // Start-aligned; flush against the viewport's edge, as in this test, it
+    // takes the field's other edge. Either way an edge of the field, which
+    // the swatch, 7px inside it, is not.
+    await waitFor(() => {
+      const [p, f] = [panel.getBoundingClientRect(), field()]
+      expect([Math.round(f.left), Math.round(f.right)]).toContain(Math.round(p.left) === Math.round(f.left) ? Math.round(p.left) : Math.round(p.right))
+    })
+    await expect(getComputedStyle(panel).paddingTop).toBe('16px')
+    await expect(getComputedStyle(panel).paddingLeft).toBe('16px')
     // Up and down are brightness; left and right, saturation.
     await userEvent.keyboard('{Shift>}{ArrowDown}{/Shift}')
     await expect(area).toHaveAttribute('aria-valuetext', 'Saturation 76%, brightness 86%')

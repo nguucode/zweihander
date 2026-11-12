@@ -87,6 +87,7 @@ so their hit areas meet without overlapping.
     { part: 'Options', property: 'Gap, vertical', token: '--space-1' },
     { part: 'Options', property: 'Gap, horizontal', token: '--space-6' },
     { part: 'Option helper', property: 'Gap from the label', token: '--space-stack' },
+    { part: 'Legend', property: 'Font weight', token: '--font-weight-label' },
     { part: 'Focus ring', property: 'Width', token: '--focus-width' },
     { part: 'Focus ring', property: 'Offset', token: '--focus-offset' },
     { part: 'Hit area', property: 'Minimum', token: '--box-sm' },
@@ -94,7 +95,9 @@ so their hit areas meet without overlapping.
   ]}
 />
 
-The legend is the body size at medium weight.
+The legend is the body size at Atlassian's form label weight, 653 (its
+Legend and Label share it). An option's own label is regular weight, as
+Atlassian's radio and checkbox labels are.
 
 ## Color
 

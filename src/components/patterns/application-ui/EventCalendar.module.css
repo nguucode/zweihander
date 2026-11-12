@@ -338,7 +338,8 @@ button.event:hover {
 
 .year {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  /* 17.5rem: a mini calendar is seven 40px columns, 280px. */
+  grid-template-columns: repeat(auto-fill, minmax(17.5rem, 1fr));
   gap: var(--space-group);
   justify-items: center;
 }

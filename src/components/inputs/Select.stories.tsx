@@ -196,6 +196,9 @@ export const Sizes: Story = {
       const [value, chevron] = [...trigger.children].map((c) => c.getBoundingClientRect())
       await expect(value.left - edge.left).toBe(9)
       await expect(edge.right - (chevron.left + chevron.right) / 2).toBe(19)
+      // The chevron is a 12px icon, and the value stops 16px short of it.
+      await expect([chevron.width, chevron.height]).toEqual([12, 12])
+      await expect(chevron.left - value.right).toBe(16)
     }
   },
 }

@@ -11,10 +11,11 @@ import * as ButtonGroupStories from './ButtonGroup.stories'
 <DocTabs>
 <DocTab value="overview">
 
-Buttons joined into one bar. `ToggleGroup` joins
+Buttons that belong together. `ToggleGroup` joins
 [Toggle Buttons](?path=/docs/components-buttons-togglebutton--docs) that
-share one selection; `ButtonGroup` joins plain
-[Buttons](?path=/docs/components-buttons-button--docs) that act.
+share one selection into one bar; `ButtonGroup` sets plain
+[Buttons](?path=/docs/components-buttons-button--docs) that act side by
+side, 4px apart, as Atlassian's button group does.
 
 <Status of={ButtonGroupStories} />
 
@@ -62,15 +63,29 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/button-group.json
   <Story of={ButtonGroupStories.Anatomy} />
 </Anatomy>
 
-The buttons keep their own anatomy; the container only joins them.
+The buttons keep their own anatomy; the container only joins them
+(`ToggleGroup`) or spaces them (`ButtonGroup`).
 
 ## Measurements
 
 The group adds no size of its own. Each button keeps its tier, so a group
-of `sm` buttons is `--control-sm` tall. Inner corners are square and each
-button after the first overlaps the one before by its 1px border, so two
-outlined buttons share one line. The outer corners keep the buttons'
-radius.
+of `sm` buttons is `--control-sm` tall.
+
+In a `ToggleGroup` the inner corners are square and each toggle after the
+first overlaps the one before by its 1px border, so two outlined toggles
+share one line. The outer corners keep the toggles' radius.
+
+A `ButtonGroup` leaves its buttons whole: every button keeps its four
+corners, its border and its contained look, and the buttons stand
+`--space-1` (4px) apart in one row that does not wrap. In a group wider
+than its content the buttons share the extra width.
+
+<SpecTable
+  caption="ButtonGroup"
+  rows={[
+    { part: 'Container', property: 'Gap between buttons', token: '--space-1' },
+  ]}
+/>
 
 <SpecTable
   caption="sm"
@@ -116,8 +131,10 @@ raised over its neighbours so its own border wins where they overlap.
   <Story of={ButtonGroupStories.Default} />
 </States>
 
-Hover, focus and pressed are each button's own. The focused button is
-raised over its neighbours so the ring is never cut.
+Hover, focus and pressed are each button's own. In a `ToggleGroup` the
+focused toggle is raised over its neighbours so the ring is never cut, and
+a contained toggle's hover ring is left out: it would cut across the next
+segment. A `ButtonGroup`'s buttons keep both rings, which fit in the gap.
 
 ## API
 
@@ -128,6 +145,15 @@ raised over its neighbours so the ring is never cut.
 
 The table is `ToggleGroup`'s. `ButtonGroup` takes only `<div>` attributes:
 `aria-label` names it. Both pass every other `<div>` attribute through.
+
+### Differences from the spec
+
+- **`ButtonGroup` is Atlassian's, not a joined bar.** It used to join its
+  buttons like a `ToggleGroup`. It now follows `@atlaskit/button`'s button
+  group: separate buttons, 4px apart. Its API did not change. For a joined
+  bar where one option stays chosen, use `ToggleGroup`.
+- **`ToggleGroup` has no Atlassian counterpart.** It stays the kit's
+  segmented control, joined.
 
 </DocTab>
 <DocTab value="guidelines">
@@ -154,8 +180,8 @@ the only one that stands out.
   and its `tabpanel` role.
 - **For a choice submitted with a form.** Use a Radio group or Checkboxes:
   a toggle applies at once, a form field waits for Submit.
-- **For unrelated actions.** Lay out separate Buttons with a gap; joining
-  them says they belong together.
+- **For unrelated actions.** Lay out separate Buttons with a wider gap;
+  a group says they belong together.
 - **For more than a handful of options.** Use a Select.
 
 ## Accessibility
@@ -173,7 +199,7 @@ the only one that stands out.
 - An icon-only button needs its own `aria-label`, as on Button. A
   [Tooltip](?path=/docs/components-overlays-tooltip--docs) can show that
   label to sighted users: it merges onto the button instead of wrapping
-  it, so the buttons still join.
+  it, so the group still holds only its buttons.
 
   <Canvas of={ButtonGroupStories.WithTooltips} />
 

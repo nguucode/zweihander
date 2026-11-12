@@ -7,7 +7,7 @@ import styles from './ButtonGroup.module.css'
 
 export type ButtonGroupProps = ComponentProps<'div'>
 
-/** Buttons joined into one bar: related actions that read as a set. */
+/** Separate buttons in a row, 4px apart (Atlassian's ButtonGroup): related actions that read as a set. */
 export function ButtonGroup({ className, ...props }: ButtonGroupProps) {
   return <div role="group" {...props} className={cn(styles.group, className)} />
 }
@@ -38,7 +38,7 @@ export function ToggleGroup({ onValueChange, multiple = false, className, ...pro
         if (!multiple && next.length === 0) return details.cancel()
         onValueChange?.(next)
       }}
-      className={cn(styles.group, className)}
+      className={cn(styles.joined, className)}
     />
   )
 }

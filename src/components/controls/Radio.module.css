@@ -43,7 +43,8 @@
   padding: 0;
   font-size: var(--text-body);
   line-height: var(--leading-body);
-  font-weight: 500;
+  /* Atlassian's form Legend weight; an option's own label stays regular. */
+  font-weight: var(--font-weight-label);
   color: var(--foreground);
 }
 

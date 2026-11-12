@@ -150,6 +150,16 @@ export const Default: Story = {
     await waitFor(() => expect(highlighted(dialog)).toHaveTextContent('Invoice INV-1042'))
     // Focus stays in the input; the highlight is its active descendant.
     await expect(input).toHaveAttribute('aria-activedescendant', highlighted(dialog)!.id)
+    // As a Menu: items 12px inside the popup's outer edge (the border counted), and the search
+    // icon and the key hints on the items' content column, 24px in.
+    await waitFor(() => {
+      const from = (el: Element) => Math.round(el.getBoundingClientRect().left - dialog.getBoundingClientRect().left)
+      expect([
+        from(highlighted(dialog)!),
+        from(dialog.querySelector(`.${styles.searchIcon}`)!),
+        from(dialog.querySelector(`.${styles.hint}`)!),
+      ]).toEqual([12, 24, 24])
+    })
     // A shortcut is shown, not part of the item's name.
     await expect(within(dialog).getByRole('option', { name: 'New invoice' })).toBeInTheDocument()
     // Typing filters; the first match is highlighted; Enter chooses it.

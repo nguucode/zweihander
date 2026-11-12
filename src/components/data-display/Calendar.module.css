@@ -1,11 +1,15 @@
 .calendar {
-  --calendar-day: var(--control-md);
-  /* Half the gap between days. Padding on the cell, not border-spacing, so
-     a range's band runs unbroken under the gap. */
-  --calendar-gap: calc(var(--space-1) / 2);
+  /* A day is 40 by 32px and the days touch, as @atlaskit/calendar's: seven
+     columns at least 2.5rem wide, a 20px line with 4px above and below
+     inside a 2px edge. */
+  /* Narrower on a screen that cannot hold seven of them (320px, the reflow
+     width of WCAG 1.4.10): the popup keeps 16px from each edge and pads 16px. */
+  --calendar-day-inline: min(var(--box-lg), calc((100vw - 4.25rem) / 7));
+  --calendar-day-block: var(--control-md);
   display: inline-flex;
   flex-direction: column;
-  gap: var(--space-inline);
+  /* 12px from the header to the grid, as Atlassian's. */
+  gap: var(--space-3);
   font-family: var(--font-sans);
   font-size: var(--text-body);
   line-height: var(--leading-body);
@@ -17,12 +21,14 @@
   display: flex;
   align-items: center;
   gap: var(--space-stack);
+  /* 8px at each end, as Atlassian's header: the month starts 8px inside the
+     grid's edge and the arrows stop 8px short of it. */
+  padding-inline: var(--space-inline);
 }
 
 /* The month at the start, both arrows together at the end. */
 .title {
   flex: 1;
-  padding-inline-start: var(--space-inline);
   font-weight: 600;
 }
 
@@ -31,15 +37,16 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  inline-size: var(--control-md);
-  block-size: var(--control-md);
+  /* Atlassian's compact icon button: 24px round a 12px chevron. */
+  inline-size: var(--control-sm);
+  block-size: var(--control-sm);
   margin: 0;
   padding: 0;
   border: 0;
   border-radius: var(--radius-control);
   background: transparent;
   color: var(--foreground);
-  font-size: var(--icon-md);
+  font-size: var(--icon-xs);
   cursor: var(--cursor-button);
 }
 .nav:hover:not(:disabled) {
@@ -53,30 +60,39 @@
 
 .grid {
   border-collapse: collapse;
+  /* Keeps the focused day's z-index inside the grid. */
+  isolation: isolate;
 }
 
+/* 8px round a 16px line: a 32px row, as Atlassian's week header. */
 .weekday {
-  inline-size: var(--calendar-day);
-  block-size: var(--control-md);
-  padding: 0 var(--calendar-gap);
+  box-sizing: border-box;
+  min-inline-size: var(--calendar-day-inline);
+  padding: var(--space-2);
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
-  font-weight: 500;
+  font-weight: 600;
   color: var(--muted-foreground);
   text-align: center;
+  white-space: nowrap;
 }
 
 .cell {
-  padding: var(--calendar-gap);
-  text-align: center;
+  padding: 0;
 }
 
+/* The day fills its cell, so the days touch and all of the cell is the
+   target. `flex`, not `inline-flex`: an inline box would sit on the cell's
+   baseline and make the row taller than the day. Positioned, so the focused
+   day can be lifted above its neighbours. */
 .day {
-  display: inline-flex;
+  position: relative;
+  display: flex;
   align-items: center;
   justify-content: center;
-  inline-size: var(--calendar-day);
-  block-size: var(--calendar-day);
+  box-sizing: border-box;
+  inline-size: var(--calendar-day-inline);
+  block-size: var(--calendar-day-block);
   margin: 0;
   padding: 0;
   border: 0;
@@ -100,7 +116,7 @@
   cursor: default;
 }
 
-/* Today: an orange disc, round where the selected day is the control's
+/* Today: an orange pill, round-ended where the selected day is the control's
    shape, so the two differ by shape as well as colour. The figure is dark,
    as the generator gives warm accents: white on --orange is 3.4:1, under the
    4.5:1 a 14px figure needs, while --orange-contrast (neutral 900) clears
@@ -136,19 +152,26 @@
   outline: var(--focus-width) solid var(--ring);
   outline-offset: var(--focus-offset);
 }
+/* The days touch, so the ring lies over the days around it: the focused day
+   goes above them, or the next day's fill would cut the ring. */
+.day:focus-visible {
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- local stacking inside the grid, not a global layer */
+  z-index: 1;
+}
 
-/* A range: the days between sit on a band as tall as a day, drawn behind
-   the buttons and across the gap between them, from the middle of the
-   first end to the middle of the last. It rounds off where a week or the
-   month starts or ends. Logical insets, so right to left needs nothing. */
+/* A range: every cell from one end to the other draws a band behind its
+   day, as tall and as wide as the cell. The cells touch, so the band is one
+   unbroken strip. Under the two ends it covers only the half that faces the
+   range, so the ends keep their own corners on the outside and the band
+   meets them in the middle. It rounds off where a week or the month starts
+   or ends. Logical insets, so right to left needs nothing. */
 .inRange {
   position: relative;
 }
 .inRange::before {
   content: '';
   position: absolute;
-  inset-block: var(--calendar-gap);
-  inset-inline: 0;
+  inset: 0;
   background: var(--accent);
 }
 .rangeStart::before {
@@ -158,17 +181,12 @@
   inset-inline-end: 50%;
 }
 .bandStart:not(.rangeStart)::before {
-  inset-inline-start: var(--calendar-gap);
   border-start-start-radius: var(--radius-control);
   border-end-start-radius: var(--radius-control);
 }
 .bandEnd:not(.rangeEnd)::before {
-  inset-inline-end: var(--calendar-gap);
   border-start-end-radius: var(--radius-control);
   border-end-end-radius: var(--radius-control);
-}
-.inRange .day {
-  position: relative;
 }
 .between {
   color: var(--accent-foreground);
@@ -179,10 +197,22 @@
   color: var(--orange-contrast);
 }
 
-/* 32px days are below the 44px touch target; they grow on coarse pointers. */
+/* 40 by 32px days are below the 44px touch target. They touch, so a larger
+   invisible area would lie over the next day: the days themselves grow on
+   coarse pointers. The arrows stay 24px and grow an invisible area instead;
+   the two overlap each other, as two buttons side by side in a field do. */
 @media (pointer: coarse) {
   .calendar {
-    --calendar-day: var(--target-coarse);
+    --calendar-day-inline: min(var(--target-coarse), calc((100vw - 4.25rem) / 7));
+    --calendar-day-block: var(--target-coarse);
+  }
+  .nav::after {
+    content: '';
+    position: absolute;
+    inset: 50% auto auto 50%;
+    inline-size: var(--target-coarse);
+    block-size: var(--target-coarse);
+    translate: -50% -50%;
   }
 }
 

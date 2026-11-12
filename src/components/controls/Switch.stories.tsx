@@ -92,6 +92,8 @@ const stack = { display: 'grid', gap: 'var(--space-4)', justifyItems: 'start' }
 export const Default: Story = {
   play: async ({ canvas, userEvent, args }) => {
     const control = canvas.getByRole('switch', { name: 'Email notifications' })
+    // The label beside the switch is regular weight, like a checkbox's.
+    await expect(getComputedStyle(canvas.getByText('Email notifications')).fontWeight).toBe('400')
     await expect(control).toHaveAttribute('aria-checked', 'false')
     await userEvent.click(control)
     await expect(control).toHaveAttribute('aria-checked', 'true')

@@ -151,7 +151,10 @@ shown before, so the reader does not lose their place; it calls
 
 `size` is deprecated. Pagination has one size, as Atlassian's does:
 `size="sm"` renders the same 32px controls as `md`. It is still accepted
-for one release, with a console warning in development; drop it.
+for one release; drop it. The kit's rule for a deprecated prop: it warns
+in the development console, once, when it is passed a value that is not
+its documented default (or when a renamed prop is used under its old
+name). So `size="sm"` warns, and `size="md"`, the default, is silent.
 
 Every other `<nav>` attribute passes through. `paginationItems(page,
 total, siblings, boundary)` is exported too, for building your own.

@@ -96,6 +96,9 @@ export const Default: Story = {
   play: async ({ canvas, userEvent, args }) => {
     const group = canvas.getByRole('radiogroup', { name: 'Plan' })
     await expect(group).toBeVisible()
+    // The legend is Atlassian's form label weight; an option's own label is regular.
+    await expect(getComputedStyle(canvas.getByText('Plan')).fontWeight).toBe('653')
+    await expect(getComputedStyle(canvas.getByText('Free')).fontWeight).toBe('400')
     // A 16px circle with a 6px dot, in a 24px hit area.
     const free = canvas.getByRole('radio', { name: 'Free' })
     await expect(free.getBoundingClientRect().width).toBe(16)

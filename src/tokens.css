@@ -15,6 +15,7 @@
   --radius-factor: 1;
   --radius-full: 0px;
   --radius-pill: 9999px;
+  --font-weight-label: 653;
   --cursor-button: default;
   --cursor-link: pointer;
   --cursor-disabled: not-allowed;
@@ -921,6 +922,7 @@
   --badge-dot-sm: 0.375rem;
   --badge-dot-md: 0.5rem;
   --sidebar-width: 20rem;
+  --aside-width: 16rem;
 
   /* Icon sizes — one per control tier. */
   --icon-xs: 0.75rem;

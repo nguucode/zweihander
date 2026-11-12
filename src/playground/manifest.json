@@ -1646,7 +1646,7 @@
           {
             "name": "Container",
             "selector": "[role=\"group\"]",
-            "description": "Joins the buttons: inner corners square, borders shared."
+            "description": "ToggleGroup joins its toggles: inner corners square, borders shared. ButtonGroup spaces its buttons 4px apart."
           },
           {
             "name": "Button",
@@ -1660,6 +1660,16 @@
           }
         ],
         "measurements": [
+          {
+            "caption": "ButtonGroup",
+            "rows": [
+              {
+                "part": "Container",
+                "property": "Gap between buttons",
+                "token": "--space-1"
+              }
+            ]
+          },
           {
             "caption": "sm",
             "rows": [
@@ -1724,7 +1734,7 @@
           "Use `ToggleGroup` when the toggles answer one question (which view, which\nfilters) and `ButtonGroup` when a few actions belong together. Give every\nbutton in a group the same variant and appearance, so the pressed one is\nthe only one that stands out."
         ],
         "whenNotToUse": [
-          "- **To switch between panels of content.** Use Tabs: they own the panel\n  and its `tabpanel` role.\n- **For a choice submitted with a form.** Use a Radio group or Checkboxes:\n  a toggle applies at once, a form field waits for Submit.\n- **For unrelated actions.** Lay out separate Buttons with a gap; joining\n  them says they belong together.\n- **For more than a handful of options.** Use a Select."
+          "- **To switch between panels of content.** Use Tabs: they own the panel\n  and its `tabpanel` role.\n- **For a choice submitted with a form.** Use a Radio group or Checkboxes:\n  a toggle applies at once, a form field waits for Submit.\n- **For unrelated actions.** Lay out separate Buttons with a wider gap;\n  a group says they belong together.\n- **For more than a handful of options.** Use a Select."
         ],
         "doDont": [
           {
@@ -1742,7 +1752,7 @@
           {
             "title": "Accessibility",
             "blocks": [
-              "- Both containers have `role=\"group\"`; name them with `aria-label`.\n- Each toggle is a native `<button>` with `aria-pressed`, so a screen reader\n  announces \"Board, toggle button, pressed\".\n- A `ToggleGroup` is one tab stop. Arrow keys move between its toggles\n  and wrap, Home and End jump to the first and last; Space or Enter\n  presses.\n- Single choice keeps one pressed: pressing the pressed toggle again does\n  not release it.\n- A `ButtonGroup`'s buttons are each a tab stop, with no `aria-pressed`.\n- A disabled `ToggleGroup` disables every toggle in it.\n- An icon-only button needs its own `aria-label`, as on Button. A\n  [Tooltip](?path=/docs/components-overlays-tooltip--docs) can show that\n  label to sighted users: it merges onto the button instead of wrapping\n  it, so the buttons still join."
+              "- Both containers have `role=\"group\"`; name them with `aria-label`.\n- Each toggle is a native `<button>` with `aria-pressed`, so a screen reader\n  announces \"Board, toggle button, pressed\".\n- A `ToggleGroup` is one tab stop. Arrow keys move between its toggles\n  and wrap, Home and End jump to the first and last; Space or Enter\n  presses.\n- Single choice keeps one pressed: pressing the pressed toggle again does\n  not release it.\n- A `ButtonGroup`'s buttons are each a tab stop, with no `aria-pressed`.\n- A disabled `ToggleGroup` disables every toggle in it.\n- An icon-only button needs its own `aria-label`, as on Button. A\n  [Tooltip](?path=/docs/components-overlays-tooltip--docs) can show that\n  label to sighted users: it merges onto the button instead of wrapping\n  it, so the group still holds only its buttons."
             ]
           }
         ]
@@ -2556,7 +2566,7 @@
               {
                 "part": "Popover",
                 "property": "Padding",
-                "token": "--space-3"
+                "token": "--space-4"
               },
               {
                 "part": "Popover",
@@ -2856,6 +2866,11 @@
                 "part": "Option helper",
                 "property": "Gap from the label",
                 "token": "--space-stack"
+              },
+              {
+                "part": "Legend",
+                "property": "Font weight",
+                "token": "--font-weight-label"
               },
               {
                 "part": "Focus ring",
@@ -3380,6 +3395,11 @@
                 "part": "Label",
                 "property": "Gap to the value",
                 "token": "--space-cluster"
+              },
+              {
+                "part": "Label",
+                "property": "Font weight",
+                "token": "--font-weight-label"
               },
               {
                 "part": "Focus ring",
@@ -4243,8 +4263,8 @@
                 "token": "--space-stack"
               },
               {
-                "part": "Month",
-                "property": "Inline start padding",
+                "part": "Header",
+                "property": "Inline padding",
                 "token": "--space-inline"
               },
               {
@@ -4255,7 +4275,12 @@
               {
                 "part": "Previous and next",
                 "property": "Size",
-                "token": "--control-md"
+                "token": "--control-sm"
+              },
+              {
+                "part": "Previous and next",
+                "property": "Minimum on touch screens",
+                "token": "--target-coarse"
               },
               {
                 "part": "Previous and next",
@@ -4265,12 +4290,12 @@
               {
                 "part": "Previous and next",
                 "property": "Icon size",
-                "token": "--icon-md"
+                "token": "--icon-xs"
               },
               {
                 "part": "Header to grid",
                 "property": "Gap",
-                "token": "--space-inline"
+                "token": "--space-3"
               }
             ]
           },
@@ -4279,8 +4304,13 @@
             "rows": [
               {
                 "part": "Weekdays",
-                "property": "Height",
-                "token": "--control-md"
+                "property": "Padding",
+                "token": "--space-2"
+              },
+              {
+                "part": "Weekdays",
+                "property": "Minimum width",
+                "token": "--box-lg"
               },
               {
                 "part": "Weekdays",
@@ -4294,12 +4324,17 @@
               },
               {
                 "part": "Day",
-                "property": "Size",
+                "property": "Width",
+                "token": "--box-lg"
+              },
+              {
+                "part": "Day",
+                "property": "Height",
                 "token": "--control-md"
               },
               {
                 "part": "Day",
-                "property": "Size on touch screens",
+                "property": "Width and height on touch screens",
                 "token": "--target-coarse"
               },
               {
@@ -4484,7 +4519,7 @@
             "title": "Accessibility",
             "blocks": [
               "- A `role=\"grid\"` named by the month and year (\"September 2026\"), with\n  column headers that carry the full weekday name in `abbr`.\n- Each day is a button named by its full date (\"Friday 18 September\n  2026\"). The selected cell has `aria-selected`, and with `range` every\n  cell from one end to the other does. Today has `aria-current=\"date\"`.\n- One tab stop: the selected day, or today when nothing is selected.\n- Arrow keys move a day or a week, Home and End go to the week's ends,\n  Page Up and Page Down move a month, and Shift+Page Up and Shift+Page\n  Down a year. Enter or Space selects. Moving past the month shows the\n  next one.\n- Right to left, the arrows follow the screen (ArrowLeft is the next day)\n  and the previous and next chevrons are mirrored.",
-              "- The month and year are a polite live region, so paging is announced.\n- The previous and next buttons are named \"Previous month\" and \"Next\n  month\", and are disabled at `min` and `max`.\n- Unavailable days stay focusable with `aria-disabled`, so they are found\n  and announced as unavailable rather than skipped. Enter on one does\n  nothing.\n- Days of the months either side are not buttons and are hidden from\n  assistive tech.\n- Today's figure measures at least 4.5:1 on its disc, in both modes, on\n  its own and inside a range."
+              "- The month and year are a polite live region, so paging is announced.\n- The previous and next buttons are named \"Previous month\" and \"Next\n  month\", and are disabled at `min` and `max`.\n- Unavailable days stay focusable with `aria-disabled`, so they are found\n  and announced as unavailable rather than skipped. Enter on one does\n  nothing.\n- Days of the months either side are not buttons and are hidden from\n  assistive tech.\n- Today's figure measures at least 4.5:1 on its pill, in both modes, on\n  its own and inside a range."
             ]
           }
         ]
@@ -5542,7 +5577,7 @@
           {
             "name": "Header row",
             "selector": "thead tr",
-            "description": "Small muted labels on --surface-filled. Stays in view with hasStickyHeader."
+            "description": "Small muted labels over a 2px rule, with no fill. Stays in view with hasStickyHeader."
           },
           {
             "name": "Sort button",
@@ -5606,7 +5641,7 @@
               },
               {
                 "part": "Cell",
-                "property": "Inline padding",
+                "property": "Inline padding, between columns",
                 "token": "--space-2"
               },
               {
@@ -5665,8 +5700,18 @@
                 "token": "--icon-md"
               },
               {
-                "part": "Selection and expand columns",
+                "part": "Selection column",
                 "property": "Width",
+                "token": "--box-sm"
+              },
+              {
+                "part": "Expand column",
+                "property": "Width, first in the row",
+                "token": "--box-sm"
+              },
+              {
+                "part": "Expand column",
+                "property": "Width, after the selection column",
                 "token": "--box-md"
               },
               {
@@ -5677,11 +5722,11 @@
               {
                 "part": "Actions column",
                 "property": "Width",
-                "token": "--box-md"
+                "token": "--box-sm"
               },
               {
                 "part": "Expanded row",
-                "property": "Block start and inline padding",
+                "property": "Block start padding",
                 "token": "--space-2"
               },
               {
@@ -5696,7 +5741,7 @@
               },
               {
                 "part": "Caption",
-                "property": "Block end and inline padding",
+                "property": "Block end padding",
                 "token": "--space-2"
               },
               {
@@ -5748,8 +5793,8 @@
             "rows": [
               {
                 "part": "Header row",
-                "property": "Background",
-                "token": "--surface-filled"
+                "property": "Background when sticky",
+                "token": "--card"
               },
               {
                 "part": "Header label",
@@ -6027,7 +6072,7 @@
               {
                 "part": "Field",
                 "property": "Inline padding, end",
-                "token": "--space-2-5"
+                "token": "--space-3"
               },
               {
                 "part": "Field",
@@ -6037,12 +6082,12 @@
               {
                 "part": "Field",
                 "property": "Gap",
-                "token": "--space-2"
+                "token": "--space-3"
               },
               {
                 "part": "Icons and buttons",
-                "property": "Size",
-                "token": "--icon-md"
+                "property": "Icon size",
+                "token": "--icon-xs"
               },
               {
                 "part": "Input",
@@ -6072,7 +6117,7 @@
               {
                 "part": "Field",
                 "property": "Inline padding, end",
-                "token": "--space-2-5"
+                "token": "--space-3"
               },
               {
                 "part": "Field",
@@ -6082,12 +6127,12 @@
               {
                 "part": "Field",
                 "property": "Gap",
-                "token": "--space-2"
+                "token": "--space-3"
               },
               {
                 "part": "Icons and buttons",
-                "property": "Size",
-                "token": "--icon-md"
+                "property": "Icon size",
+                "token": "--icon-xs"
               },
               {
                 "part": "Input",
@@ -6424,8 +6469,8 @@
               },
               {
                 "part": "Field",
-                "property": "Inline padding, end",
-                "token": "--space-2-5"
+                "property": "Inline end, edge and padding together",
+                "token": "--space-3"
               },
               {
                 "part": "Field",
@@ -6469,8 +6514,8 @@
               },
               {
                 "part": "Field",
-                "property": "Inline padding, end",
-                "token": "--space-2-5"
+                "property": "Inline end, edge and padding together",
+                "token": "--space-3"
               },
               {
                 "part": "Field",
@@ -6783,8 +6828,8 @@
               },
               {
                 "part": "Field",
-                "property": "Inline padding, end",
-                "token": "--space-2-5"
+                "property": "Inline end, edge and padding together",
+                "token": "--space-3"
               },
               {
                 "part": "Field",
@@ -6818,8 +6863,8 @@
               },
               {
                 "part": "Field",
-                "property": "Inline padding, end",
-                "token": "--space-2-5"
+                "property": "Inline end, edge and padding together",
+                "token": "--space-3"
               },
               {
                 "part": "Field",
@@ -7096,6 +7141,11 @@
                 "part": "Label and helper text",
                 "property": "Line height",
                 "token": "--leading-body-sm"
+              },
+              {
+                "part": "Label",
+                "property": "Font weight",
+                "token": "--font-weight-label"
               },
               {
                 "part": "Label, control, helper",
@@ -7430,6 +7480,11 @@
                 "part": "Label",
                 "property": "Font size",
                 "token": "--text-body-sm"
+              },
+              {
+                "part": "Label",
+                "property": "Font weight",
+                "token": "--font-weight-label"
               },
               {
                 "part": "Label, drop zone, errors, list",
@@ -8809,7 +8864,7 @@
               {
                 "part": "Container",
                 "property": "Inline padding, end",
-                "token": "--space-2-5"
+                "token": "--space-3"
               },
               {
                 "part": "Container",
@@ -8819,12 +8874,17 @@
               {
                 "part": "Container",
                 "property": "Gap",
-                "token": "--space-2"
+                "token": "--space-3"
               },
               {
                 "part": "Chevron",
                 "property": "Size",
-                "token": "--icon-md"
+                "token": "--icon-xs"
+              },
+              {
+                "part": "Chevron",
+                "property": "Inline start margin",
+                "token": "--space-1"
               },
               {
                 "part": "Value",
@@ -8854,7 +8914,7 @@
               {
                 "part": "Container",
                 "property": "Inline padding, end",
-                "token": "--space-2-5"
+                "token": "--space-3"
               },
               {
                 "part": "Container",
@@ -8864,12 +8924,17 @@
               {
                 "part": "Container",
                 "property": "Gap",
-                "token": "--space-2"
+                "token": "--space-3"
               },
               {
                 "part": "Chevron",
                 "property": "Size",
-                "token": "--icon-md"
+                "token": "--icon-xs"
+              },
+              {
+                "part": "Chevron",
+                "property": "Inline start margin",
+                "token": "--space-1"
               },
               {
                 "part": "Value",
@@ -10675,7 +10740,7 @@
           },
           {
             "name": "Group label",
-            "selector": "._groupLabel_ckv5w_123",
+            "selector": "._groupLabel_6my8s_126",
             "description": "Names a group: Recent, Commands, an object type. It names the group for a screen reader too."
           },
           {
@@ -10685,7 +10750,7 @@
           },
           {
             "name": "Icon",
-            "selector": "._icon_ckv5w_154",
+            "selector": "._icon_6my8s_157",
             "description": "Optional. What kind of thing the item is."
           },
           {
@@ -10695,7 +10760,7 @@
           },
           {
             "name": "Key hints",
-            "selector": "._footer_ckv5w_185",
+            "selector": "._footer_6my8s_188",
             "description": "The keys that work here. Read once, as the input's description."
           }
         ],
@@ -13499,7 +13564,7 @@
           },
           {
             "name": "Consequence",
-            "selector": "._description_19qrb_81",
+            "selector": "._description_1eeqa_88",
             "description": "What happens, to what, and that it cannot be undone."
           },
           {
@@ -13509,12 +13574,12 @@
           },
           {
             "name": "Cancel",
-            "selector": "._footer_19qrb_100 > :first-child",
+            "selector": "._footer_1eeqa_109 > :first-child",
             "description": "The safe choice. Focus starts here, or in the field."
           },
           {
             "name": "Confirm",
-            "selector": "._footer_19qrb_100 > :last-child",
+            "selector": "._footer_1eeqa_109 > :last-child",
             "description": "`destructive`, named after what it does."
           }
         ],
@@ -13911,7 +13976,7 @@
             "lg"
           ],
           "default": "md",
-          "description": "Max width: 400px (`sm`), 600px (`md`) or 800px (`lg`). Never wider than the screen."
+          "description": "Max width: 400px (`sm`), 600px (`md`) or 800px (`lg`). Never wider than the screen less a 60px gutter either side; under 480px the modal is the whole screen."
         },
         {
           "name": "hasCloseButton",
@@ -13953,13 +14018,13 @@
         "anatomy": [
           {
             "name": "Backdrop",
-            "selector": "._backdrop_19qrb_5",
+            "selector": "._backdrop_1eeqa_5",
             "description": "A scrim over the whole page. It blocks the page until the modal closes."
           },
           {
             "name": "Container",
             "selector": "[role=\"dialog\"]",
-            "description": "The surface, centred. Never wider than the screen."
+            "description": "The surface, 60px from the top and sides of the screen. Under 480px it is the whole screen."
           },
           {
             "name": "Title",
@@ -13973,17 +14038,17 @@
           },
           {
             "name": "Description",
-            "selector": "._description_19qrb_81",
+            "selector": "._description_1eeqa_88",
             "description": "Optional. What the modal is for, or what will happen."
           },
           {
             "name": "Body",
-            "selector": "._body_19qrb_87",
+            "selector": "._body_1eeqa_95",
             "description": "children. Scrolls when the modal is taller than the screen."
           },
           {
             "name": "Footer",
-            "selector": "._footer_19qrb_100",
+            "selector": "._footer_1eeqa_109",
             "description": "Actions, right-aligned, the main one last."
           }
         ],
@@ -14005,11 +14070,6 @@
                 "part": "Container",
                 "property": "Shadow",
                 "token": "--shadow-overlay"
-              },
-              {
-                "part": "Container",
-                "property": "Margin to the screen edge",
-                "token": "--space-group"
               },
               {
                 "part": "Title",
@@ -15534,7 +15594,7 @@
           {
             "title": "Layout",
             "blocks": [
-              "- Below 48rem the flat surface drops its inset, edge and rounding and goes\n  flush.\n- The page padding is `--space-container`, `--space-section` from 64rem.\n  App Content sets no maximum width: to cap and centre a page, put a\n  [Container](?path=/docs/patterns-application-ui-container--docs) inside it.\n- Only the page scrolls; the shell's other pieces stay put. With an aside,\n  from 80rem the page and the aside scroll on their own, side by side;\n  under 80rem the aside follows the page and they scroll as one.\n- The surface restates `--background` as `--card` (flat) or as the\n  canvas's solid colour (card), so components that draw \"the surface under\n  me\" match it."
+              "- Below 48rem the flat surface drops its inset, edge and rounding and goes\n  flush.\n- The page padding is `--space-container`, `--space-section` from 64rem.\n  App Content sets no maximum width: to cap and centre a page, put a\n  [Container](?path=/docs/patterns-application-ui-container--docs) inside it.\n- Only the page scrolls; the shell's other pieces stay put. With an aside,\n  from 80rem the page and the aside scroll on their own, side by side, the\n  aside `--aside-width` wide (16rem, 256px);\n  under 80rem the aside follows the page and they scroll as one.\n- The surface restates `--background` as `--card` (flat) or as the\n  canvas's solid colour (card), so components that draw \"the surface under\n  me\" match it."
             ]
           },
           {
@@ -16275,7 +16335,7 @@
         "anatomy": [
           {
             "name": "Brand row",
-            "selector": "nav > div:first-child",
+            "selector": "nav > div:first-child > div:first-child",
             "description": "Optional: the logo, and the collapse button with isCollapsible."
           },
           {
@@ -16285,7 +16345,7 @@
           },
           {
             "name": "Header",
-            "selector": "nav > div:nth-child(2)",
+            "selector": "nav > div:first-child > div:nth-child(2)",
             "description": "Optional: a tenant switcher and search, as NavSidebarButtons."
           },
           {
@@ -16321,7 +16381,7 @@
           {
             "name": "Footer",
             "selector": "nav > div:last-child",
-            "description": "Optional, pinned to the bottom: the account, notifications, help."
+            "description": "Optional, pinned to the bottom under a rule: the account, notifications, help."
           }
         ],
         "measurements": [
@@ -16330,7 +16390,22 @@
             "rows": [
               {
                 "part": "NavSidebar",
-                "property": "Padding",
+                "property": "Inline padding",
+                "token": "--space-3"
+              },
+              {
+                "part": "Head",
+                "property": "Block start padding, without a logo",
+                "token": "--space-3"
+              },
+              {
+                "part": "Head",
+                "property": "Block end padding",
+                "token": "--space-1"
+              },
+              {
+                "part": "Body",
+                "property": "Block padding",
                 "token": "--space-3"
               },
               {
@@ -16346,11 +16421,6 @@
               {
                 "part": "Header",
                 "property": "Gap between rows",
-                "token": "--space-inline"
-              },
-              {
-                "part": "Header",
-                "property": "Space below",
                 "token": "--space-inline"
               },
               {
@@ -16370,8 +16440,8 @@
               },
               {
                 "part": "Footer",
-                "property": "Space above",
-                "token": "--space-inline"
+                "property": "Padding",
+                "token": "--space-3"
               }
             ]
           },
@@ -16387,6 +16457,11 @@
                 "part": "Item",
                 "property": "Inline padding",
                 "token": "--space-inline"
+              },
+              {
+                "part": "Item",
+                "property": "Inline start padding, no icon",
+                "token": "--space-2-5"
               },
               {
                 "part": "Item",
@@ -16468,6 +16543,11 @@
               {
                 "part": "NavSidebar",
                 "property": "Edge",
+                "token": "--border"
+              },
+              {
+                "part": "Footer",
+                "property": "Rule above it",
                 "token": "--border"
               },
               {
@@ -16899,7 +16979,7 @@
           {
             "title": "Layout",
             "blocks": [
-              "- **No width of its own.** It fills the column the page gives it; the\n  page decides the column's width and what happens on a narrow screen\n  (the Settings template stacks it above the content).\n- **Long labels wrap** rather than truncate: a cut-off section name hides\n  which section it is. A word with no spaces breaks anywhere.\n- Rows are `--control-md` tall at least, as in the Nav Sidebar, and\n  `--target-coarse` under a coarse pointer. They sit one under the other\n  with no gap, a group label is a 32px row with its text 6px in, and\n  groups are 12px apart, as Atlassian's side nav."
+              "- **No width of its own.** It fills the column the page gives it; the\n  page decides the column's width and what happens on a narrow screen\n  (the Settings template stacks it above the content).\n- **Long labels wrap** rather than truncate: a cut-off section name hides\n  which section it is. A word with no spaces breaks anywhere.\n- Rows are `--control-md` tall at least, as in the Nav Sidebar, and\n  `--target-coarse` under a coarse pointer. They sit one under the other\n  with no gap, a group label is a 32px row with its text 6px in, a label\n  with no icon starts 10px in (an icon 8px in), and groups are 12px\n  apart, as Atlassian's side nav."
             ]
           },
           {
@@ -16971,7 +17051,7 @@
           {
             "title": "Layout",
             "blocks": [
-              "- **The shell fills the viewport** (`block-size: 100dvh`) and only the\n  page scrolls, so the sidebar and the header stay in place. Set\n  `block-size` on it to put it in a smaller box.\n- **The sidebar sits beside the page at every width.** From 64rem, in\n  `layout=\"sidebar\"`, it runs the full height and the top bar is hidden,\n  because the sidebar holds what the bar would. Below 64rem it is the icon\n  rail and the top bar comes back in both layouts, for the logo, search and\n  the account.\n- **An aside** sits right of the page from 80rem, 16rem wide (narrower\n  than the 20rem sidebar, so the page keeps about 42rem beside both),\n  and the page and the aside each scroll on their own. Under 80rem it goes\n  below the page and the two scroll together; below 48rem it is flush too,\n  ruled off from a flat page at the top.\n- **Below 48rem** a flat page drops its 8px inset, edge and rounding and\n  goes flush, since a frame around it only costs width on a phone.\n- **Everything reads a token**: the top bar is `--control-md` plus two\n  `--space-inline` tall, the sidebar is `--sidebar-width` wide, the page\n  padding is `--space-section`.\n- **Breakpoints are the shell's own width**, which in an app is the\n  viewport's. That is also what lets the stories show the phone layout in\n  a 390px box.\n- **The shell is a size container** (`container-type: inline-size`), so\n  it takes its width from where it sits, never from its content. In a\n  block it fills the line as usual; as a flex or grid item that would\n  otherwise shrink to fit, give it a width (`inline-size: 100%` or\n  `flex: 1`), or it collapses."
+              "- **The shell fills the viewport** (`block-size: 100dvh`) and only the\n  page scrolls, so the sidebar and the header stay in place. Set\n  `block-size` on it to put it in a smaller box.\n- **The sidebar sits beside the page at every width.** From 64rem, in\n  `layout=\"sidebar\"`, it runs the full height and the top bar is hidden,\n  because the sidebar holds what the bar would. Below 64rem it is the icon\n  rail and the top bar comes back in both layouts, for the logo, search and\n  the account.\n- **An aside** sits right of the page from 80rem, `--aside-width` wide\n  (16rem, narrower\n  than the 20rem sidebar, so the page keeps about 42rem beside both),\n  and the page and the aside each scroll on their own. Under 80rem it goes\n  below the page and the two scroll together; below 48rem it is flush too,\n  ruled off from a flat page at the top.\n- **Below 48rem** a flat page drops its 8px inset, edge and rounding and\n  goes flush, since a frame around it only costs width on a phone.\n- **Everything reads a token**: the top bar is `--control-md` plus two\n  `--space-inline` tall, the sidebar is `--sidebar-width` wide, the page\n  padding is `--space-section`.\n- **Breakpoints are the shell's own width**, which in an app is the\n  viewport's. That is also what lets the stories show the phone layout in\n  a 390px box.\n- **The shell is a size container** (`container-type: inline-size`), so\n  it takes its width from where it sits, never from its content. In a\n  block it fills the line as usual; as a flex or grid item that would\n  otherwise shrink to fit, give it a width (`inline-size: 100%` or\n  `flex: 1`), or it collapses."
             ]
           },
           {
@@ -17071,7 +17151,7 @@
           {
             "title": "Layout",
             "blocks": [
-              "- From 48rem of page width the nav is a 16rem column and stays in view\n  while the section scrolls. Below that it\n  stacks above the section, every link still showing: a settings nav is a\n  handful of links, and folding it into a menu would hide where else to go.\n- Form Sections split (title and description beside the fields) from\n  48rem of their own width, and stack below."
+              "- From 48rem of page width the nav is a column `--aside-width` wide\n  (16rem, 256px, the same token as App Content's aside) and stays in view\n  while the section scrolls. Below that it\n  stacks above the section, every link still showing: a settings nav is a\n  handful of links, and folding it into a menu would hide where else to go.\n- Form Sections split (title and description beside the fields) from\n  48rem of their own width, and stack below."
             ]
           },
           {

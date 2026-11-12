@@ -216,6 +216,17 @@ export const Default: Story = {
     await expect(rows[0].getBoundingClientRect().height).toBe(32)
     await expect(Math.round(rows[1].getBoundingClientRect().top - rows[0].getBoundingClientRect().bottom)).toBe(0)
     await expect(getComputedStyle(within(rows[0]).getByRole('link')).paddingLeft).toBe('8px')
+    // Atlassian's SideNavHeader, SideNavBody and SideNavFooter: the head ends 4px above the body, the body
+    // pads its scroller 12px, the footer is 12px all round under a rule across the whole sidebar.
+    const [head, scroller, foot] = [...nav.children].map((el) => getComputedStyle(el))
+    // With a logo the top row is the 48px a top bar is, from the very top; without one the head starts 12px down.
+    await expect([head.paddingTop, head.paddingBottom]).toEqual(['0px', '4px'])
+    await expect(nav.children[0].firstElementChild!.getBoundingClientRect().height).toBe(48)
+    await expect([scroller.paddingTop, scroller.paddingBottom]).toEqual(['12px', '12px'])
+    await expect([foot.paddingTop, foot.paddingRight, foot.paddingBottom, foot.paddingLeft]).toEqual(['12px', '12px', '12px', '12px'])
+    await expect(foot.borderTopWidth).toBe('1px')
+    await expect(nav.children[2].getBoundingClientRect().width).toBeCloseTo(nav.clientWidth, 0)
+    await expect(nav.children[2].getBoundingClientRect().bottom).toBeCloseTo(nav.getBoundingClientRect().bottom, 0)
     await expect(within(nav).queryByRole('button', { name: 'Add to Pinned' })).toBeNull()
     // The header and footer rows are buttons named by their text.
     await expect(within(nav).getByRole('button', { name: 'Kafka Trading Co.' })).toBeVisible()
@@ -251,6 +262,9 @@ export const Default: Story = {
 export const Categories: Story = {
   args: { header: undefined, footer: undefined, items: itemsWithAction },
   play: async ({ canvas }) => {
+    // A label with no icon starts 10px in, an icon 8px in.
+    await expect(getComputedStyle(canvas.getByRole('button', { name: 'Show more' })).paddingLeft).toBe('10px')
+    await expect(getComputedStyle(within(canvas.getByRole('list', { name: 'Recent' })).getAllByRole('link')[0]).paddingLeft).toBe('10px')
     // The add action, opted into on Pinned, is a named button in the label row.
     await expect(canvas.getByRole('button', { name: 'Add to Pinned' })).toBeInTheDocument()
     const toggle = canvas.getByRole('button', { name: 'Recent' })
@@ -269,6 +283,20 @@ export const Categories: Story = {
     toggle.focus()
     await userEvent.keyboard('{Enter}')
     await expect(recent).toBeVisible()
+  },
+}
+
+/** No logo: the head is Atlassian's side nav header as it stands, 12px above its rows and 4px below. */
+export const HeadWithoutLogo: Story = {
+  tags: ['!dev'],
+  args: { brand: undefined },
+  play: async ({ canvas }) => {
+    const nav = canvas.getByRole('navigation', { name: 'Main' })
+    const head = getComputedStyle(nav.children[0])
+    await expect([head.paddingTop, head.paddingBottom]).toEqual(['12px', '4px'])
+    // The collapse button's row, then the header rows 8px under it.
+    await expect(head.rowGap).toBe('8px')
+    await expect(canvas.getByRole('button', { name: 'Collapse sidebar' }).getBoundingClientRect().top - nav.getBoundingClientRect().top).toBeCloseTo(12, 0)
   },
 }
 
@@ -378,16 +406,16 @@ export const LongContent: Story = {
 
 /** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
 export const anatomyParts = [
-  { name: 'Brand row', selector: 'nav > div:first-child', description: 'Optional: the logo, and the collapse button with isCollapsible.' },
+  { name: 'Brand row', selector: 'nav > div:first-child > div:first-child', description: 'Optional: the logo, and the collapse button with isCollapsible.' },
   { name: 'Collapse button', selector: 'button[aria-expanded][aria-label$="sidebar"]', description: 'Folds the sidebar to the icon rail and back.' },
-  { name: 'Header', selector: 'nav > div:nth-child(2)', description: 'Optional: a tenant switcher and search, as NavSidebarButtons.' },
+  { name: 'Header', selector: 'nav > div:first-child > div:nth-child(2)', description: 'Optional: a tenant switcher and search, as NavSidebarButtons.' },
   { name: 'Item', selector: 'a[href="#inbox"]', description: 'A link: icon, label, optional badge. A flush row of tier md.' },
   { name: 'Badge', selector: 'a[href="#inbox"] > span:last-child', description: 'Optional: a count or a short tag.' },
   { name: 'Current item', selector: 'a[aria-current="page"]', description: 'The page the reader is on: the selected fill and medium weight.' },
   { name: 'Category label', selector: 'button[aria-controls]:not([aria-haspopup])', description: 'Names the list; with isCollapsible, opens and closes it.' },
   { name: 'Category action', selector: 'button[aria-label="Add to Pinned"]', description: 'Optional: e.g. adds an item. Shows on hover and focus.' },
   { name: 'Show more', selector: 'nav ul + button', description: 'With limit: shows the rest of a long category.' },
-  { name: 'Footer', selector: 'nav > div:last-child', description: 'Optional, pinned to the bottom: the account, notifications, help.' },
+  { name: 'Footer', selector: 'nav > div:last-child', description: 'Optional, pinned to the bottom under a rule: the account, notifications, help.' },
 ]
 
 /** Every part present. */

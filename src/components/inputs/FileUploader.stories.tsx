@@ -80,6 +80,8 @@ export const Default: Story = {
     const group = canvas.getByRole('group', { name: 'Attachments' })
     const choose = canvas.getByRole('button', { name: 'Choose files' })
     await expect(choose).toHaveAccessibleDescription('PDF, PNG or JPG, up to 5 MB each.')
+    // The label is bold as every field's: 653, Atlassian's form Label.
+    await expect(getComputedStyle(canvas.getByText('Attachments')).fontWeight).toBe('653')
     pick(canvasElement, [report, photo])
     await expect(args.onFilesChange).toHaveBeenLastCalledWith([report, photo])
     await expect(canvas.getByRole('status')).toHaveTextContent('2 files added.')

@@ -74,18 +74,21 @@ the top of Overview to see it.
 The box is Text Input's: `sm` is 32px and `md` is 40px, one step taller
 than a Button, with the same padding, icon and type in both. A field that
 opens a list is roomier than one you type in, after Atlassian's Select:
-the value starts 8px inside the edge, not 6px, and the end has 10px, so
-the chevron's centre is 19px from the outer edge.
+the value starts 8px inside the edge, not 6px, and the chevron is a 12px
+icon with 12px after it, so its centre is 19px from the outer edge. The
+value stops 16px short of the chevron: the 12px gap and 4px before the
+chevron.
 
 <SpecTable
   caption="sm"
   rows={[
     { part: 'Container', property: 'Height', token: '--control-md' },
     { part: 'Container', property: 'Inline padding, start', token: '--space-2' },
-    { part: 'Container', property: 'Inline padding, end', token: '--space-2-5' },
+    { part: 'Container', property: 'Inline padding, end', token: '--space-3' },
     { part: 'Container', property: 'Corner radius', token: '--control-md-radius-field' },
-    { part: 'Container', property: 'Gap', token: '--space-2' },
-    { part: 'Chevron', property: 'Size', token: '--icon-md' },
+    { part: 'Container', property: 'Gap', token: '--space-3' },
+    { part: 'Chevron', property: 'Size', token: '--icon-xs' },
+    { part: 'Chevron', property: 'Inline start margin', token: '--space-1' },
     { part: 'Value', property: 'Font size', token: '--text-body' },
     { part: 'Option', property: 'Inline padding', token: '--space-3' },
   ]}
@@ -96,10 +99,11 @@ the chevron's centre is 19px from the outer edge.
   rows={[
     { part: 'Container', property: 'Height', token: '--control-lg' },
     { part: 'Container', property: 'Inline padding, start', token: '--space-2' },
-    { part: 'Container', property: 'Inline padding, end', token: '--space-2-5' },
+    { part: 'Container', property: 'Inline padding, end', token: '--space-3' },
     { part: 'Container', property: 'Corner radius', token: '--control-md-radius-field' },
-    { part: 'Container', property: 'Gap', token: '--space-2' },
-    { part: 'Chevron', property: 'Size', token: '--icon-md' },
+    { part: 'Container', property: 'Gap', token: '--space-3' },
+    { part: 'Chevron', property: 'Size', token: '--icon-xs' },
+    { part: 'Chevron', property: 'Inline start margin', token: '--space-1' },
     { part: 'Value', property: 'Font size', token: '--text-body' },
     { part: 'Option', property: 'Inline padding', token: '--space-3' },
   ]}

@@ -23,7 +23,8 @@
 .label {
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
-  font-weight: 600;
+  /* Atlassian's form Label is bold, 653 on its variable font. */
+  font-weight: var(--font-weight-label);
   color: var(--foreground);
 }
 
@@ -130,12 +131,37 @@
 /* A field that opens a list or a calendar (Select, Combobox, Date Picker) is
    Atlassian's Select, which is roomier than its Textfield. The value sits
    8px inside the edge (@atlaskit/react-select: 6px on the value container
-   plus 2px round the value), 9px from the outer edge. The end is 10px, which
-   puts the centre of the chevron or calendar icon 19px from the outer edge,
-   where Atlassian's indicator has it (4 + 2 + 6px and half a 12px icon).
+   plus 2px round the value), 9px from the outer edge. The chevron and the
+   clear button draw a 12px icon. The end is 12px, which puts the chevron's
+   centre 19px from the outer edge, where Atlassian's indicator has it
+   (1px edge, 4 + 2 + 6px and half a 12px icon). The gap is 12px, Atlassian's
+   from the clear icon to the chevron (2 + 2px after one, 2 + 6px before the
+   other) and from the value to the clear icon.
    After .sm and .md, so it wins at equal specificity. */
 .picker {
-  padding-inline: var(--space-2) var(--space-2-5);
+  --field-icon: var(--icon-xs);
+  gap: var(--space-3);
+  padding-inline: var(--space-2) var(--space-3);
+}
+/* The chevron straight after the value keeps 16px from it, so a value that
+   truncates stops there (Atlassian: 2 + 6px after the value, 2 + 6px before
+   the icon). */
+.picker > .value + .icon {
+  margin-inline-start: var(--space-1);
+}
+/* Not Date Picker's calendar button, nor a clear button before the chevron. */
+.picker:not(.datePicker) > .control + .iconButton:last-child {
+  margin-inline-start: calc((var(--field-icon) - var(--control-sm)) / 2 + var(--space-1));
+}
+
+/* Date Picker's button is Atlassian's default icon button, not Select's
+   indicator: a 16px calendar whose centre is 20px from the outer edge (4px
+   from the edge to a 32px button), so the end is 12px less the 1px edge.
+   After .picker, so it wins at equal specificity. */
+.datePicker {
+  --field-icon: var(--icon-md);
+  gap: var(--space-2);
+  padding-inline-end: calc(var(--space-3) - 1px);
 }
 
 /* The ring is on the box, drawn when the control inside has keyboard or
@@ -453,8 +479,11 @@
 
 /* A small ring of currentColor, as Button's loading state. */
 .spinner {
-  inline-size: var(--field-icon);
-  block-size: var(--field-icon);
+  /* 16px in every field, as Atlassian's: where the icon slot is a picker's
+     12px, the margin keeps the ring on the chevron's centre. */
+  inline-size: var(--icon-md);
+  block-size: var(--icon-md);
+  margin: calc((var(--field-icon) - var(--icon-md)) / 2);
   box-sizing: border-box;
   border: 2px solid currentColor;
   border-block-start-color: transparent;

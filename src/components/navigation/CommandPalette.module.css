@@ -33,7 +33,7 @@
   max-inline-size: 40rem;
   max-block-size: 100%;
   overflow: hidden;
-  border: 1px solid var(--border);
+  border: var(--border-width) solid var(--border);
   border-radius: var(--radius-panel);
   background: var(--popover);
   box-shadow: var(--shadow-overlay);
@@ -56,9 +56,10 @@
    palette's one input. No box of its own: the popup is the box, a rule
    under it ends the row. Its inset is the list's plus an item's (12 + 12px),
    so the search icon sits on the same column as the item icons, and its
-   gap is an item's. */
+   gap is an item's. Measured from the popup's outer edge, as the list's:
+   the padding gives back the border's pixel. */
 .search {
-  --palette-pad: var(--space-6);
+  --palette-pad: calc(var(--space-6) - var(--border-width));
   display: flex;
   flex-shrink: 0;
   align-items: center;
@@ -94,9 +95,11 @@
 
 /* About ten rows, then it scrolls; the search row and the hints stay. */
 /* The list is spaced as a Menu, after Atlassian's dropdown menu: 12px
-   inside the edge, rows 2px apart. */
+   inside the popup's outer edge, rows 2px apart. As Menu's, the padding
+   gives back the border's pixel (the popup's at the sides, the search
+   row's and the footer's rules above and below). */
 .results {
-  --palette-inset: var(--space-3);
+  --palette-inset: calc(var(--space-3) - var(--border-width));
   min-block-size: 0;
   max-block-size: 24rem;
   overflow-y: auto;
@@ -188,7 +191,7 @@
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-group);
-  padding: var(--space-2) var(--space-6);
+  padding: var(--space-2) calc(var(--space-6) - var(--border-width));
   border-block-start: 1px solid var(--border);
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
