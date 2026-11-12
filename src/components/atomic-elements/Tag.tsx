@@ -37,7 +37,8 @@ export interface TagProps extends Omit<ComponentProps<'span'>, 'children'> {
   startAvatar?: string
   /**
    * One size: every tag is 20px tall.
-   * @deprecated `sm` renders the same tag as `md` and goes in the next release; drop the prop.
+   * @deprecated `sm` renders the same tag as `md` and warns in development; `md`, the default, is
+   * silent. The prop goes in the next release: drop it.
    */
   size?: 'sm' | 'md'
   appearance?: 'subtle' | 'outlined' | 'solid'

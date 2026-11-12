@@ -60,8 +60,9 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/color-picker.json
   <Story of={ColorPickerStories.Anatomy} />
 </Anatomy>
 
-The panel here is shown open under its field; in a `ColorPicker` it opens
-in a popover from the swatch button.
+The panel here is shown open under its field; in a `ColorPicker` the
+swatch button opens it in a popover 8px under the whole field, aligned to
+its start, as Select's list and Date Picker's calendar.
 
 ## Measurements
 
@@ -89,7 +90,7 @@ the same at both field sizes.
   rows={[
     { part: 'Swatch button', property: 'Size', token: '--control-xs' },
     { part: 'Swatch button and swatches', property: 'Corner radius', token: '--radius-sm' },
-    { part: 'Popover', property: 'Padding', token: '--space-3' },
+    { part: 'Popover', property: 'Padding', token: '--space-4' },
     { part: 'Popover', property: 'Corner radius', token: '--radius-lg' },
     { part: 'Panel', property: 'Gap between sections', token: '--space-cluster' },
     { part: 'Area', property: 'Corner radius', token: '--radius-md' },

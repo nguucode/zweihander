@@ -81,20 +81,22 @@ The options list opens under the field, at least as wide as it:
 
 A field is one step taller than a Button, after Atlassian Design: `sm` is
 32px and `md` is 40px (Foundations / Sizing). The sizes share the rest:
-8px of padding at the start and 10px at the end, after Atlassian's
-Select, the 16px icon, the field radius, which never
+8px of padding at the start and 12px at the end, after Atlassian's
+Select, the 12px icons, 12px apart, the field radius, which never
 becomes a pill, and body type. The clear and open buttons are 24px
-targets round their icons, side by side.
+targets round their icons, side by side. The open icon's centre is 19px
+from the outer edge; with no clear button the text stops 16px short of
+it, the gap and 4px more.
 
 <SpecTable
   caption="sm"
   rows={[
     { part: 'Field', property: 'Height', token: '--control-md' },
     { part: 'Field', property: 'Inline padding, start', token: '--space-2' },
-    { part: 'Field', property: 'Inline padding, end', token: '--space-2-5' },
+    { part: 'Field', property: 'Inline padding, end', token: '--space-3' },
     { part: 'Field', property: 'Corner radius', token: '--control-md-radius-field' },
-    { part: 'Field', property: 'Gap', token: '--space-2' },
-    { part: 'Icons and buttons', property: 'Size', token: '--icon-md' },
+    { part: 'Field', property: 'Gap', token: '--space-3' },
+    { part: 'Icons and buttons', property: 'Icon size', token: '--icon-xs' },
     { part: 'Input', property: 'Font size', token: '--text-body' },
     { part: 'Input', property: 'Line height', token: '--leading-body' },
   ]}
@@ -105,10 +107,10 @@ targets round their icons, side by side.
   rows={[
     { part: 'Field', property: 'Height', token: '--control-lg' },
     { part: 'Field', property: 'Inline padding, start', token: '--space-2' },
-    { part: 'Field', property: 'Inline padding, end', token: '--space-2-5' },
+    { part: 'Field', property: 'Inline padding, end', token: '--space-3' },
     { part: 'Field', property: 'Corner radius', token: '--control-md-radius-field' },
-    { part: 'Field', property: 'Gap', token: '--space-2' },
-    { part: 'Icons and buttons', property: 'Size', token: '--icon-md' },
+    { part: 'Field', property: 'Gap', token: '--space-3' },
+    { part: 'Icons and buttons', property: 'Icon size', token: '--icon-xs' },
     { part: 'Input', property: 'Font size', token: '--text-body' },
     { part: 'Input', property: 'Line height', token: '--leading-body' },
   ]}

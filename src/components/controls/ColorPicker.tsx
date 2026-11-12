@@ -1,6 +1,6 @@
 'use client'
 
-import { useId, useState, type CSSProperties, type KeyboardEvent, type PointerEvent, type ReactNode } from 'react'
+import { useId, useRef, useState, type CSSProperties, type KeyboardEvent, type PointerEvent, type ReactNode } from 'react'
 import { Field } from '@base-ui/react/field'
 import { Popover } from '@base-ui/react/popover'
 import { Slider } from '@base-ui/react/slider'
@@ -501,6 +501,7 @@ export function ColorPicker({
     setInvalid(false)
     if (next !== hex) onValueChange?.(next)
   }
+  const boxRef = useRef<HTMLSpanElement>(null)
   const commitText = () => {
     const parsed = readHex(text, alpha)
     if (parsed) commit(parsed)
@@ -517,7 +518,7 @@ export function ColorPicker({
       isFullWidth={isFullWidth}
       className={className}
     >
-      <span className={boxClass(size)} onMouseDown={focusControl}>
+      <span ref={boxRef} className={boxClass(size)} onMouseDown={focusControl}>
         <Popover.Root>
           <Popover.Trigger
             className={cn(inputStyles.iconButton, styles.trigger)}
@@ -526,7 +527,9 @@ export function ColorPicker({
             aria-label={`Choose colour, ${hex} selected`}
           />
           <Popover.Portal>
-            <Popover.Positioner className={styles.positioner} side="bottom" align="start" sideOffset={6}>
+            {/* Under the whole field, start-aligned and 8px clear of it, as Select's list and
+                Date Picker's calendar; not the swatch, which sits inside the box. */}
+            <Popover.Positioner className={styles.positioner} anchor={boxRef} side="bottom" align="start" sideOffset={8}>
               <Popover.Popup aria-label="Choose colour" className={styles.popup}>
                 <ColorPanel value={hex} onValueChange={commit} alpha={alpha} defaultFormat={defaultFormat} swatches={swatches} />
               </Popover.Popup>

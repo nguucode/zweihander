@@ -265,6 +265,8 @@ export const WithHelperText: Story = {
     // Atlassian's Label and HelperMessage.
     const box = canvas.getByLabelText('Email').parentElement!.getBoundingClientRect()
     await expect(box.top - canvas.getByText('Email').getBoundingClientRect().bottom).toBe(4)
+    // The label is bold as Atlassian's form Label: 653.
+    await expect(getComputedStyle(canvas.getByText('Email')).fontWeight).toBe('653')
     await expect(canvas.getByText('We only use this for account recovery.').getBoundingClientRect().top - box.bottom).toBe(4)
   },
 }

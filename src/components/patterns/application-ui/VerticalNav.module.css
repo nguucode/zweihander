@@ -47,6 +47,10 @@
   text-decoration: none;
   cursor: var(--cursor-link);
 }
+/* As NavSidebar, after Atlassian: with no icon the label starts 10px in. */
+.item:not(:has(> .icon)) {
+  padding-inline-start: var(--space-2-5);
+}
 .item:hover {
   background: var(--hover-overlay);
   color: var(--accent-foreground);

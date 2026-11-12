@@ -49,12 +49,13 @@
   align-items: start;
 }
 
-/* Wide: the nav is a 16rem column (its own width: the app's 20rem sidebar
+/* Wide: the nav is an --aside-width column (16rem, as App Content's aside,
+   not --sidebar-width: the app's 20rem sidebar
    would leave the section 26rem at this breakpoint), and stays in view
    while a long section scrolls. 48rem is where Form Section splits too. */
 @container (min-width: 48rem) {
   .body {
-    grid-template-columns: 16rem minmax(0, 1fr);
+    grid-template-columns: var(--aside-width) minmax(0, 1fr);
   }
   .nav {
     position: sticky;

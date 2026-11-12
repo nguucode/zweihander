@@ -73,7 +73,7 @@
 }
 
 /* Narrow screens: one month, and the presets as a row above it. */
-@media (width < 40rem) {
+@media (width < 50rem) {
   .rangePopup {
     flex-direction: column;
   }

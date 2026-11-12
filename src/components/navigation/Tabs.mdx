@@ -74,8 +74,12 @@ across.
 Each size is a control tier (Foundations / Sizing). `md` follows Atlassian
 Design's tabs: 32px tall, 8px inline padding, no gap between tabs, a
 14/20 label and a 2px indicator as wide as the label (8px in from the
-tab's edges). The `underline` list is pulled out by those 8px, so the
-first label lines up with the content below it. The 16px from the list
+tab's edges). The first label of an `underline` list lines up with the
+content below it, as Atlassian's does. Atlassian pulls the whole list out
+by those 8px; the kit drops the first tab's start padding instead, so the
+tab starts at its label and nothing sticks out of the tabs' box: inside a
+container that clips (a modal body, a card with `overflow: hidden`) the
+first tab and its focus ring stay whole. The 16px from the list
 to the panel is the kit's own: Atlassian leaves that to the panel's
 content. Atlassian Design has no small tab; `sm` is the kit's own, the
 same tab in a 24px box for dense panels.

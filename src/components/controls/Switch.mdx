@@ -68,6 +68,7 @@ height. The thumb sits 2px inside the track at both sizes.
 
 `size="sm"` is deprecated. It draws the `md` track, warns once in
 development, and will be removed in the next release: drop the prop.
+`md` (the default, written out or not) and `lg` are silent.
 
 <SpecTable
   caption="md, 32×16px"
@@ -188,6 +189,10 @@ and the thumb its label colour, measured at 4.5:1 against it.
 
 - **Atlassian's two tracks.** 32×16px and 40×20px; `sm` is deprecated and
   draws the `md` track.
+- **The label sits beside the track at regular weight**, as a Checkbox's
+  does. Atlassian's toggle draws no visible label of its own (its `label`
+  is hidden text for a screen reader); a form there puts a separate form
+  Label next to it.
 - **Base UI's names:** `checked`, `defaultChecked`, `onCheckedChange` for
   the spec's `defaultValue` and `onChange`; native `disabled`,
   `required`, `readOnly` for `isDisabled`, `isRequired`, `isReadOnly`.

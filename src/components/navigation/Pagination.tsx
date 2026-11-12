@@ -63,15 +63,17 @@ export function Pagination({
   onPageChange,
   siblingCount = 1,
   boundaryCount = 1,
-  size,
+  size = 'md',
   getHref,
   'aria-label': ariaLabel = 'Pagination',
   className,
   ...props
 }: PaginationProps) {
-  if (import.meta.env.DEV && !hasWarned && size !== undefined) {
+  // The kit's deprecation rule: warn on a value that is not the documented
+  // default. `size="md"` is what you get anyway, so it stays silent.
+  if (import.meta.env.DEV && !hasWarned && size !== 'md') {
     hasWarned = true
-    console.warn('Pagination: `size` is deprecated and does nothing: Pagination has one size. It will be removed in the next release.')
+    console.warn('Pagination: `size="sm"` is deprecated and renders as `md`: Pagination has one size. `size` will be removed in the next release.')
   }
   const [pageState, setPageState] = useState(defaultPage)
   const [pageSizeState, setPageSizeState] = useState(defaultPageSize)

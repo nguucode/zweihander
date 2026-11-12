@@ -32,7 +32,7 @@
 }
 
 /* The aside: a second column of the same surface, beside the page from
-   80rem (Tailwind's xl: beside a 20rem sidebar and the 16rem aside the
+   80rem (Tailwind's xl: beside a 20rem sidebar and the 16rem --aside-width the
    page keeps about 42rem), else below it. Long words wrap: the column is
    narrow. */
 .aside {
@@ -51,13 +51,13 @@
   overflow: auto;
 }
 @container (min-width: 80rem) {
-  /* Side by side, each column scrolls on its own. 16rem, the aside's own
-     width, not --sidebar-width: at 20rem each the two would leave the page
-     under 39rem at this breakpoint, narrower than it is at 64rem with no
-     aside. No token holds it; the Settings nav column is the same 16rem. */
+  /* Side by side, each column scrolls on its own. --aside-width (16rem),
+     not --sidebar-width: at 20rem each the two would leave the page under
+     39rem at this breakpoint, narrower than it is at 64rem with no aside.
+     The Settings nav column reads the same token. */
   .withAside {
     grid-template-rows: minmax(0, 1fr);
-    grid-template-columns: minmax(0, 1fr) 16rem;
+    grid-template-columns: minmax(0, 1fr) var(--aside-width);
     overflow: hidden;
   }
 }

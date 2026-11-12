@@ -77,6 +77,8 @@ export const Default: Story = {
   play: async ({ args, canvas }) => {
     const group = canvas.getByRole('group', { name: 'Rate this template' })
     await expect(group).toBeVisible()
+    // The legend is a field label: the form label weight.
+    await expect(getComputedStyle(canvas.getByText('Rate this template')).fontWeight).toBe('653')
     await expect(canvas.getByRole('radio', { name: '3 out of 5 stars' })).toBeChecked()
     await userEvent.click(canvas.getByRole('radio', { name: '5 out of 5 stars' }))
     await expect(args.onValueChange).toHaveBeenLastCalledWith(5)

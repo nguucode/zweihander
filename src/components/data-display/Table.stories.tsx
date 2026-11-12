@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { useState } from 'react'
-import { expect, fn, userEvent, waitFor, within } from 'storybook/test'
+import { expect, fn, spyOn, userEvent, waitFor, within } from 'storybook/test'
 import { expectAnatomy } from '../../../.storybook/blocks'
 import { Icon } from '@/lib/icon'
 import { Tag } from '../atomic-elements/Tag'
@@ -148,7 +148,7 @@ const meta = {
       table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
     },
     size: {
-      description: 'Deprecated: Table has one size, and `sm` renders the same table as `md`. Drop the prop; it will be removed in the next release.',
+      description: 'Deprecated: Table has one size, and `sm` renders the same table as `md`. Drop the prop; it will be removed in the next release. Warns in development for any value but `md`.',
       control: false,
       table: { type: { summary: "'sm' | 'md'" } },
     },
@@ -201,6 +201,13 @@ const cellHeights = (canvas: ReturnType<typeof within>) =>
 
 /** Text only: a row of these is one 20px line tall. */
 const textColumns = columns.filter((c) => c.key !== 'status')
+
+/** Where an element's content is drawn, without its own padding. */
+const contentBox = (el: Element) => {
+  const range = document.createRange()
+  range.selectNodeContents(el)
+  return range.getBoundingClientRect()
+}
 
 const names = (canvas: ReturnType<typeof within>) => canvas.getAllByRole('rowheader').map((c: HTMLElement) => c.textContent)
 
@@ -301,6 +308,44 @@ export const EmptyValuesSortLast: Story = {
     await expect(names(canvas).at(-1)).toBe('Scratch')
     await userEvent.click(files)
     await expect(names(canvas)).toEqual(['Onboarding', 'Atlas', 'Billing revamp', 'Design tokens', 'Scratch'])
+  },
+}
+
+/**
+ * Atlassian's dynamic table: nothing between the table's edge and its first
+ * and last cells. The header has no fill, so flush text touches nothing.
+ */
+export const EdgeCells: Story = {
+  tags: ['!dev'],
+  play: async ({ canvas }) => {
+    const table = canvas.getByRole('table', { name: 'Projects' }).getBoundingClientRect()
+    const row = canvas.getByRole('rowheader', { name: 'Atlas' }).closest('tr')!
+    const head = canvas.getAllByRole('columnheader')
+    // The first cell's text, and its header's label, start at the table's left edge.
+    await expect(contentBox(row.firstElementChild!).left).toBeCloseTo(table.left, 0)
+    await expect(contentBox(within(head[0]).getByRole('button')).left).toBeCloseTo(table.left, 0)
+    // The last column is end-aligned: its figures and its label end at the right edge.
+    await expect(contentBox(row.lastElementChild!).right).toBeCloseTo(table.right, 0)
+    await expect(within(head.at(-1)!).getByRole('button').getBoundingClientRect().right).toBeCloseTo(table.right, 0)
+    // Between columns: 8px each side.
+    for (const cell of [row.children[1], head[1]]) {
+      const { paddingLeft, paddingRight } = getComputedStyle(cell)
+      await expect([paddingLeft, paddingRight]).toEqual(['8px', '8px'])
+    }
+    // No header fill: the container's colour shows through.
+    await expect(getComputedStyle(head[0]).backgroundColor).toBe('rgba(0, 0, 0, 0)')
+  },
+}
+
+/** Passing the documented default of a deprecated prop is silent: only another value warns. */
+export const ExplicitDefaultSize: Story = {
+  tags: ['!dev'],
+  args: { size: 'md' },
+  beforeEach: () => {
+    spyOn(console, 'warn').mockImplementation(() => {})
+  },
+  play: async () => {
+    await expect(console.warn).not.toHaveBeenCalledWith(expect.stringContaining('Table: `size`'))
   },
 }
 
@@ -532,6 +577,29 @@ export const RowWithControl: Story = {
   },
 }
 
+/** The control columns at the edges: the expand button first, the actions button last, both flush. */
+export const EdgeControls: Story = {
+  tags: ['!dev'],
+  args: { expandedContent: details, defaultExpandedIds: ['p1'], rowActions: actions },
+  play: async ({ canvas }) => {
+    const table = canvas.getByRole('table', { name: 'Projects' }).getBoundingClientRect()
+    const expand = canvas.getByRole('button', { name: 'Expand Atlas' })
+    const more = canvas.getByRole('button', { name: 'Actions for Atlas' })
+    await expect(expand.getBoundingClientRect().left).toBeCloseTo(table.left, 0)
+    await expect(more.getBoundingClientRect().right).toBeCloseTo(table.right, 0)
+    // The open row's content starts at the edge too.
+    await expect(contentBox(canvas.getByText(/Sam Rivera owns Atlas/)).left).toBeCloseTo(table.left, 0)
+    // The scroll container clips at the edge: the rings are drawn inside the buttons.
+    // Tab first, so the focus that follows counts as keyboard focus.
+    await userEvent.tab()
+    for (const button of [expand, more]) {
+      button.focus()
+      await expect(getComputedStyle(button).outlineStyle).toBe('solid')
+      await expect(getComputedStyle(button).outlineOffset).toBe('-2px')
+    }
+  },
+}
+
 /** The menu renders into <body>, outside the story's canvas. */
 const page = (el: HTMLElement) => within(el.ownerDocument.body)
 
@@ -699,7 +767,7 @@ export const ControlledWidths: Story = {
 /** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
 export const anatomyParts = [
   { name: 'Caption', selector: 'caption', description: 'Names the table. Visually hidden unless showCaption.' },
-  { name: 'Header row', selector: 'thead tr', description: 'Small muted labels on --surface-filled. Stays in view with hasStickyHeader.' },
+  { name: 'Header row', selector: 'thead tr', description: 'Small muted labels over a 2px rule, with no fill. Stays in view with hasStickyHeader.' },
   { name: 'Sort button', selector: 'th[aria-sort] button', description: 'The whole header label, with an icon for the sort. Only on sortable columns.' },
   { name: 'Select all', selector: 'thead [role="checkbox"]', description: 'With isSelectable. Selects or clears every row shown, and shows mixed when some are selected.' },
   { name: 'Row', selector: 'tbody tr', description: 'As tall as what it holds: 28px for one line of text. No divider: tinted when hovered or selected.' },
@@ -737,6 +805,13 @@ export const Anatomy: Story = {
     await expect([cell.paddingTop, cell.paddingRight, cell.paddingBottom, cell.paddingLeft]).toEqual(['4px', '8px', '4px', '8px'])
     const caption = getComputedStyle(found[0])
     await expect([caption.paddingTop, caption.paddingBottom]).toEqual(['24px', '8px'])
+    // Flush with the table's edges: the caption and the checkbox at the start, the actions button at the end.
+    const table = canvas.getByRole('table').getBoundingClientRect()
+    await expect(contentBox(found[0]).left).toBeCloseTo(table.left, 0)
+    await expect(found[5].getBoundingClientRect().left).toBeCloseTo(table.left, 0)
+    await expect(found[8].getBoundingClientRect().right).toBeCloseTo(table.right, 0)
+    // The checkbox column is the 16px box and 8px after it; the expand column after it, 8px and its 24px button.
+    await expect([found[5].closest('td')!.clientWidth, found[6].closest('td')!.clientWidth]).toEqual([24, 32])
     await expect(canvas.getByRole('columnheader', { name: 'Actions' })).toBeInTheDocument()
     // The expand column is announced like the others, by a hidden header.
     await expect(canvas.getByRole('columnheader', { name: 'Details' })).toBeInTheDocument()

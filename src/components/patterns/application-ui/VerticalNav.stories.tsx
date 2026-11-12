@@ -82,6 +82,8 @@ export const WithIcons: Story = {
     // Current is not shown by color alone: it is also medium weight.
     await expect(getComputedStyle(current).fontWeight).toBe('500')
     await expect(getComputedStyle(profile).fontWeight).toBe('400')
+    // As NavSidebar: the icon sits 8px in.
+    await expect(getComputedStyle(profile).paddingLeft).toBe('8px')
     // Tab goes down the list in order.
     await userEvent.tab()
     await expect(within(nav).getByRole('link', { name: 'Profile' })).toHaveFocus()
@@ -100,6 +102,8 @@ export const Grouped: Story = {
     // As Atlassian's side nav: rows one under the other with no gap, groups 12px apart.
     await expect(Math.round(rows[1].getBoundingClientRect().top - rows[0].getBoundingClientRect().bottom)).toBe(0)
     await expect(getComputedStyle(canvas.getByRole('navigation')).rowGap).toBe('12px')
+    // With no icon the label starts 10px in.
+    await expect(getComputedStyle(canvas.getByRole('link', { name: 'Overview' })).paddingLeft).toBe('10px')
     await expect(within(workspace).getByRole('link', { name: 'Integrations, 3' })).toBeVisible()
     await expect(canvas.getByRole('list', { name: 'Account' })).toBeVisible()
     await expect(canvas.queryByRole('heading')).toBeNull()

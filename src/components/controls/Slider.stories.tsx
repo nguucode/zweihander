@@ -110,6 +110,9 @@ export const Default: Story = {
     const thumb = canvas.getByRole('slider', { name: 'Volume' })
     await expect(thumb).toHaveAttribute('aria-valuenow', '40')
     await expect(canvas.getByText('40')).toBeVisible()
+    // A field label: Atlassian's form label weight. The value beside it is regular.
+    await expect(getComputedStyle(canvas.getByText('Volume')).fontWeight).toBe('653')
+    await expect(getComputedStyle(canvas.getByText('40')).fontWeight).toBe('400')
     // Keyboard: arrows step by `step`, Page Up by `largeStep`, End to max.
     // Tab, not a click: WebKit maps a click on the hidden input to the track's start.
     await userEvent.tab()

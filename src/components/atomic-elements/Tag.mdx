@@ -73,14 +73,16 @@ Sizing), so it sits in a line of text. The border is always there,
 transparent unless outlined, so appearances never shift the layout.
 
 In a line of text the tag is centred on the line, whatever the text's
-size: a 20px line of body text stays 20px with a tag in it (so a Table row
+size or family (the tag's own text is always the kit's sans; a mono table
+cell around it changes nothing): a 20px line of body text stays 20px with a tag in it (so a Table row
 stays 28px), and a taller line, like a heading's, keeps its height. Only a
 line shorter than the tag, 12/16 small text, grows to 20px.
 
 <Canvas of={TagStories.InText} />
 
-`size` is deprecated. `sm` renders the same tag as `md`, warns once in
-development, and the prop will be removed in the next release.
+`size` is deprecated and the prop will be removed in the next release.
+`size="sm"` renders the same tag as `md` and warns once in development;
+`size="md"`, the default written out, is silent.
 
 <SpecTable
   caption="Every tag"

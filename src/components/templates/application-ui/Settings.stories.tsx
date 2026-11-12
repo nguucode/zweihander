@@ -68,6 +68,8 @@ export const SwitchSections: Story = {
   decorators: box(1400),
   play: async ({ canvas, args }) => {
     const nav = canvas.getByRole('navigation', { name: 'Settings' })
+    // Wide, the nav column is --aside-width: 16rem, as App Content's aside.
+    await waitFor(() => expect(nav.getBoundingClientRect().width).toBeCloseTo(256, 0))
     await userEvent.type(canvas.getByRole('textbox', { name: /Username/ }), '-draft')
 
     const notifications = within(nav).getByRole('link', { name: 'Notifications' })

@@ -56,7 +56,7 @@ const meta = {
       table: { type: { summary: 'ReactNode' } },
     },
     size: {
-      description: 'Max width: 400px (`sm`), 600px (`md`) or 800px (`lg`). Never wider than the screen.',
+      description: 'Max width: 400px (`sm`), 600px (`md`) or 800px (`lg`). Never wider than the screen less a 60px gutter either side; under 480px the modal is the whole screen.',
       control: 'inline-radio',
       options: ['sm', 'md', 'lg'],
       table: { type: { summary: "'sm' | 'md' | 'lg'" }, defaultValue: { summary: "'md'" } },
@@ -245,15 +245,72 @@ export const Long: Story = {
 }
 
 /**
+ * How the modal sits on a screen 360, 480, 768 and 1280px wide. Each frame
+ * stands in for the screen: it contains layout, so the modal's fixed
+ * viewport, the size container its rules ask, is the frame.
+ */
+export const ScreenGutter: Story = {
+  tags: ['!dev'],
+  args: {
+    size: 'lg',
+    children: (
+      <div>
+        {Array.from({ length: 30 }, (_, i) => (
+          <p key={i}>Line {i + 1}</p>
+        ))}
+      </div>
+    ),
+  },
+  render: (args) => (
+    <div style={{ display: 'grid', gap: 'var(--space-4)' }}>
+      {[360, 480, 768, 1280].map((width) => (
+        <Pictured key={width} data-screen={width} style={{ position: 'relative', contain: 'layout paint', inlineSize: width, blockSize: 600 }}>
+          {(container) => <Modal {...args} trigger={undefined} open isModal={false} container={container} />}
+        </Pictured>
+      ))}
+    </div>
+  ),
+  play: async ({ canvasElement }) => {
+    // [left, top, width, height] of the modal inside its screen, and of its footer's bottom edge.
+    const box = (width: number) => {
+      const frame = canvasElement.querySelector(`[data-screen="${width}"]`)!
+      const dialog = frame.querySelector('[role="dialog"]')!
+      const [f, d] = [frame.getBoundingClientRect(), dialog.getBoundingClientRect()]
+      return { dialog, rect: [d.left - f.left, d.top - f.top, d.width, d.height].map(Math.round) }
+    }
+    await waitFor(() => expect(canvasElement.querySelectorAll('[role="dialog"]')).toHaveLength(4))
+    // Under 480px: the whole screen, with no corner and no shadow, and the footer at the bottom.
+    await waitFor(() => expect(box(360).rect).toEqual([0, 0, 360, 600]))
+    const phone = box(360).dialog
+    await expect(getComputedStyle(phone).borderTopLeftRadius).toBe('0px')
+    await expect(getComputedStyle(phone).boxShadow).toBe('none')
+    const footer = phone.querySelector(`.${styles.footer}`)!
+    await expect(Math.round(phone.getBoundingClientRect().bottom - footer.getBoundingClientRect().bottom)).toBe(24)
+    // The body still scrolls there.
+    const scroller = phone.querySelector(`.${styles.body}`)!
+    await expect(scroller.scrollHeight).toBeGreaterThan(scroller.clientHeight)
+    // From 480px: 60px from the top and from each side, and never taller than the screen less 60px above and below.
+    await waitFor(() => expect(box(480).rect).toEqual([60, 60, 360, 480]))
+    await expect(getComputedStyle(box(480).dialog).borderTopLeftRadius).not.toBe('0px')
+    await expect(getComputedStyle(box(480).dialog).boxShadow).not.toBe('none')
+    await waitFor(() => expect(box(768).rect).toEqual([60, 60, 648, 480]))
+    // Wide enough for the size: 800px (lg), centred, still 60px from the top.
+    await waitFor(() => expect(box(1280).rect).toEqual([240, 60, 800, 480]))
+  },
+}
+
+/**
  * The modal open in place, as a picture, and not modal: it must not lock the
  * docs page. The frame contains layout, so the fixed backdrop and viewport
- * fill the frame, not the window. On a phone the full-size picture is drawn
- * at 75%: a form modal is wider than a docs example has room for.
+ * fill the frame, not the window: 60px of backdrop shows around the modal,
+ * as on a screen. A frame under 480px wide is a phone: the modal fills it.
+ * On a phone the full-size picture is drawn at 75%: a form modal is wider
+ * than a docs example has room for.
  */
-const picture = ({ width, height = '23rem', ...args }: ModalProps & { width?: string; height?: string }) => (
+const picture = ({ width, height = '28.5rem', ...args }: ModalProps & { width?: string; height?: string }) => (
   <Pictured
     data-modal-picture={width ? undefined : ''}
-    style={{ position: 'relative', contain: 'layout paint', inlineSize: width ?? 'min(39.5rem, 100vw - 10rem)', blockSize: height, borderRadius: 'var(--radius-panel)' }}
+    style={{ position: 'relative', contain: 'layout paint', inlineSize: width ?? 'min(45rem, 100vw - 10rem)', blockSize: height, borderRadius: 'var(--radius-panel)' }}
   >
     {(container) => (
       <>
@@ -274,7 +331,7 @@ const editFooter = (
 /** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
 export const anatomyParts = [
   { name: 'Backdrop', selector: `.${styles.backdrop}`, description: 'A scrim over the whole page. It blocks the page until the modal closes.' },
-  { name: 'Container', selector: '[role="dialog"]', description: 'The surface, centred. Never wider than the screen.' },
+  { name: 'Container', selector: '[role="dialog"]', description: 'The surface, 60px from the top and sides of the screen. Under 480px it is the whole screen.' },
   { name: 'Title', selector: '[role="dialog"] h2', description: 'Required: it names the dialog.' },
   { name: 'Close button', selector: 'button[aria-label="Close"]', description: 'On by default, off for an alert.' },
   { name: 'Description', selector: `.${styles.description}`, description: 'Optional. What the modal is for, or what will happen.' },
@@ -303,7 +360,7 @@ export const Anatomy: Story = {
 export const CloseButton: Story = {
   tags: ['!dev'],
   args: { size: 'sm', description: undefined, children: undefined, footer: undefined },
-  render: (args) => picture({ ...args, width: '15rem', height: '7rem' }),
+  render: (args) => picture({ ...args, width: '15rem', height: '5rem' }),
 }
 
 /** Looks like an alert: no close button, a small modal. A picture cannot be an alert dialog, which is always modal. */
@@ -327,7 +384,7 @@ export const DoNameTheActions: Story = {
       </>
     ),
   },
-  render: (args) => picture({ ...args, width: 'min(22rem, 100vw - 10rem)', height: '17rem' }),
+  render: (args) => picture({ ...args, width: 'min(22rem, 100vw - 10rem)', height: '14rem' }),
 }
 
 /** Guidelines, Don't: OK and Cancel make the reader go back to the question. */
@@ -342,5 +399,5 @@ export const DontOkCancel: Story = {
       </>
     ),
   },
-  render: (args) => picture({ ...args, width: 'min(22rem, 100vw - 10rem)', height: '17rem' }),
+  render: (args) => picture({ ...args, width: 'min(22rem, 100vw - 10rem)', height: '14rem' }),
 }

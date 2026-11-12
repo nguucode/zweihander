@@ -95,6 +95,8 @@ const stack = { display: 'grid', gap: 'var(--space-4)', justifyItems: 'start' }
 export const Default: Story = {
   play: async ({ canvas, userEvent, args }) => {
     const box = canvas.getByRole('checkbox', { name: 'Remember me' })
+    // An option's own label is regular weight, as Atlassian's checkbox label is.
+    await expect(getComputedStyle(canvas.getByText('Remember me')).fontWeight).toBe('400')
     // A 16px box in a 24px hit area.
     await expect(box.getBoundingClientRect().width).toBe(16)
     await expect(box.getBoundingClientRect().height).toBe(16)

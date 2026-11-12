@@ -324,26 +324,31 @@ export function NavSidebar({
           className={cn(styles.sidebar, collapsed && styles.collapsed, peek.isOpen && styles.peek, className)}
           {...props}
         >
-          {(given(brand) || canToggle) && (
-            <div className={cn(styles.brandRow, given(brand) && styles.withBrand)}>
-              {given(brand) && <div className={styles.brand}>{brand}</div>}
-              {canToggle && (
-                <button
-                  type="button"
-                  className={styles.toggle}
-                  aria-expanded={!isRail}
-                  aria-label={peek.isOpen ? 'Keep sidebar open' : isRail ? 'Expand sidebar' : 'Collapse sidebar'}
-                  onClick={() => {
-                    peek.close()
-                    setRail(!isRail)
-                  }}
-                >
-                  <Icon name={isRail ? 'sidebar-expand' : 'sidebar-collapse'} />
-                </button>
+          {/* One block, as Atlassian's SideNavHeader: the logo row and the header rows share its padding. */}
+          {(given(brand) || canToggle || given(header)) && (
+            <div className={styles.head}>
+              {(given(brand) || canToggle) && (
+                <div className={cn(styles.brandRow, given(brand) && styles.withBrand)}>
+                  {given(brand) && <div className={styles.brand}>{brand}</div>}
+                  {canToggle && (
+                    <button
+                      type="button"
+                      className={styles.toggle}
+                      aria-expanded={!isRail}
+                      aria-label={peek.isOpen ? 'Keep sidebar open' : isRail ? 'Expand sidebar' : 'Collapse sidebar'}
+                      onClick={() => {
+                        peek.close()
+                        setRail(!isRail)
+                      }}
+                    >
+                      <Icon name={isRail ? 'sidebar-expand' : 'sidebar-collapse'} />
+                    </button>
+                  )}
+                </div>
               )}
+              {given(header) && <div className={styles.header}>{header}</div>}
             </div>
           )}
-          {given(header) && <div className={styles.header}>{header}</div>}
           <div className={styles.body}>
             {shown.map((section, i) =>
               Array.isArray(section) ? (

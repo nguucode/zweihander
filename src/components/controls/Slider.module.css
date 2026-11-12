@@ -30,7 +30,8 @@
 }
 
 .label {
-  font-weight: 500;
+  /* A field label: Atlassian's RangeField draws it with the form Label. */
+  font-weight: var(--font-weight-label);
 }
 
 .value {

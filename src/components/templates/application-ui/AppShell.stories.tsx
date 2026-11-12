@@ -211,7 +211,7 @@ const meta = {
     sidebar: { control: false },
     header: { control: false },
     aside: {
-      description: 'A column beside the page for a summary, a status or activity, in an `aside` landmark. Right of the page from 80rem of shell width, 16rem wide, each column scrolling on its own; below the page under 80rem.',
+      description: 'A column beside the page for a summary, a status or activity, in an `aside` landmark. Right of the page from 80rem of shell width, `--aside-width` (16rem) wide, each column scrolling on its own; below the page under 80rem.',
       control: false,
     },
     asideLabel: { description: "The aside's accessible name. Give one when the page has more than one `aside`.", control: 'text' },

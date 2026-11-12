@@ -14,11 +14,11 @@
   inline-size: 100%;
 }
 
-/* A field's label: 12px semibold, as in InputField. */
+/* A field's label: 12px bold (653), as in InputField. */
 .label {
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
-  font-weight: 600;
+  font-weight: var(--font-weight-label);
 }
 
 .required {

@@ -23,7 +23,8 @@
 
 .label {
   padding: 0;
-  font-weight: 500;
+  /* A field's legend, so the form Label weight, as on Radio's and Slider's. */
+  font-weight: var(--font-weight-label);
 }
 
 .stars {

@@ -161,8 +161,12 @@ export const TypeToConfirm: Story = {
   },
 }
 
-/** The dialog open in place, as a picture, not modal: it must not lock the docs page. */
-const picture = ({ height = '19rem', ...args }: ConfirmDialogProps & { height?: string }) => (
+/**
+ * The dialog open in place, as a picture, not modal: it must not lock the
+ * docs page. The frame is under 480px wide, a phone to the modal, so the
+ * dialog fills it.
+ */
+const picture = ({ height = '17rem', ...args }: ConfirmDialogProps & { height?: string }) => (
   <Pictured
     style={{ position: 'relative', contain: 'layout paint', inlineSize: 'min(27rem, 100vw - 6rem)', blockSize: height, borderRadius: 'var(--radius-panel)' }}
   >
@@ -208,7 +212,7 @@ export const DoEverydayDelete: Story = {
     description: 'It is removed from the thread for everyone.',
     confirmLabel: 'Delete comment',
   },
-  render: (args) => picture({ ...args, height: '14rem' }),
+  render: (args) => picture({ ...args, height: '12rem' }),
 }
 
 /** Guidelines, Don't: typing for a small delete teaches readers to type without reading. */
@@ -220,5 +224,5 @@ export const DontTypeForSmall: Story = {
     confirmLabel: 'Delete comment',
     confirmText: 'delete',
   },
-  render: (args) => picture({ ...args, height: '19rem' }),
+  render: (args) => picture({ ...args, height: '17rem' }),
 }

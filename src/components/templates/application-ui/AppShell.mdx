@@ -137,7 +137,8 @@ links stay in the bar and scroll sideways when they do not fit.
 Three columns, after Tailwind UI's multi-column layouts: the sidebar, the
 page and an `aside` on the right for what supports the page, such as a
 summary, a status or recent activity. Pass it as `aside`, and name it with
-`asideLabel`. From 80rem of shell width it sits beside the page, 16rem wide,
+`asideLabel`. From 80rem of shell width it sits beside the page,
+`--aside-width` (16rem) wide,
 and each column scrolls on its
 own, so the summary stays in view while the page scrolls. It takes the
 page's surface: a second card under `flat`, the canvas under `card`.
@@ -194,7 +195,8 @@ no sidebar, so there is no empty column.
   because the sidebar holds what the bar would. Below 64rem it is the icon
   rail and the top bar comes back in both layouts, for the logo, search and
   the account.
-- **An aside** sits right of the page from 80rem, 16rem wide (narrower
+- **An aside** sits right of the page from 80rem, `--aside-width` wide
+  (16rem, narrower
   than the 20rem sidebar, so the page keeps about 42rem beside both),
   and the page and the aside each scroll on their own. Under 80rem it goes
   below the page and the two scroll together; below 48rem it is flush too,

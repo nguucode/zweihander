@@ -254,9 +254,11 @@
   z-index: var(--layer-overlay);
 }
 
+/* A field's popup, as Date Picker's: 16px round the panel, the same edge,
+   corners and shadow. */
 .popup {
   box-sizing: border-box;
-  padding: var(--space-3);
+  padding: var(--space-4);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   background: var(--popover);

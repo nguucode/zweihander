@@ -28,7 +28,10 @@ out of reach until it closes.
 
 `size` sets the maximum width: `sm` (400px) for an alert, `md` (600px) for
 a short form, `lg` (800px) for long content. Taller than the screen, the
-body scrolls and the title and footer stay in view.
+body scrolls and the title and footer stay in view. On a screen under
+480px wide the modal is the whole screen.
+
+<Canvas of={ModalStories.ScreenGutter} />
 
 <Canvas of={ModalStories.Long} />
 
@@ -70,7 +73,6 @@ inert, so they do not lock this page or take its focus.
     { part: 'Container', property: 'Padding, from the outer edge', token: '--space-container' },
     { part: 'Container', property: 'Corner radius', token: '--radius-panel' },
     { part: 'Container', property: 'Shadow', token: '--shadow-overlay' },
-    { part: 'Container', property: 'Margin to the screen edge', token: '--space-group' },
     { part: 'Title', property: 'Font size', token: '--text-heading-md' },
     { part: 'Title', property: 'Line height', token: '--leading-heading-md' },
     { part: 'Title to close button', property: 'Gap', token: '--space-group' },
@@ -92,15 +94,27 @@ inert, so they do not lock this page or take its focus.
   ]}
 />
 
+The gutter to the screen has no token: the spacing scale has no 60px
+step, so the CSS adds two (`--space-12` and `--space-3`).
+
+| Screen width | Gutter, each side | From the top | Width | Height |
+| --- | --- | --- | --- | --- |
+| 480px and up | 60px | 60px | `size`, at most the screen less 120px | Its content, at most the screen less 120px; then the body scrolls |
+| Under 480px | 0 | 0 | The screen | The screen; the body scrolls, the footer sits at the bottom |
+
+"Screen" is the box the modal opens in: the window, or the `container`
+when that contains layout. Under 480px the modal has no corner radius and
+no shadow.
+
 Width is `size`: at most 400px (`sm`), 600px (`md`) or 800px (`lg`), set
-in rem (25, 37.5, 50), and never wider than the screen less its margin.
+in rem (25, 37.5, 50), and never wider than the screen less its gutter.
 These are Atlassian's small, medium and large modals, with its 24px
 padding, 12px corner and 20/24 semibold title, 16px from the title to the
 body and from the body to the footer, and 8px between the footer's
 buttons. The 8px from the title to the description is the kit's own:
-Atlassian's header has no description. So is the 16px margin to the
-screen edge: Atlassian keeps a 60px gutter, which leaves a phone no room
-for the modal. The close button is a 24px box, as
+Atlassian's header has no description. The 60px gutter, the 60px from
+the top (the modal is not centred, so a body that grows does not move the
+title) and the full screen under 480px are Atlassian's too. The close button is a 24px box, as
 tall as the title's line. The border is 1px, and the padding counts it:
 the content sits 24px from the modal's edge. Backdrop
 and modal sit on the `--layer-overlay` layer and fade in over
