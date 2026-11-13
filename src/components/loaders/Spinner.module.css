@@ -44,9 +44,14 @@
 
 .track,
 .indicator {
+  /* A constant 2.25px ring at every size, its outer edge on the box's. */
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- Figma's ring thickness, no token */
+  --spinner-stroke: 2.25px;
+  cx: 50%;
+  cy: 50%;
+  r: calc(50% - var(--spinner-stroke) / 2);
   fill: none;
-  /* 2.5 units of 24: 1.7px at 16px, 3.3px at 32px. */
-  stroke-width: 2.5;
+  stroke-width: var(--spinner-stroke);
 }
 
 /* The track only frames the motion; it is decoration and may be faint. */

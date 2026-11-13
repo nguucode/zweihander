@@ -7,7 +7,7 @@ import * as DarkModeStories from './DarkMode.stories'
 
 Dark mode is **a class, not a media query.** `tokens.css` declares the
 light values on `:root, .light` and the dark values on `.dark`, and
-Every rule in the kit reads those variables, so the class is the only
+every rule in the kit reads those variables, so the class is the only
 switch there is. The same scopes set `color-scheme`, so the UI the browser
 draws itself (scrollbars, date and select popups, autofill) switches with
 them.
@@ -35,21 +35,23 @@ hardcoded and then patched.
 Flipping lightness would produce the wrong result in three places, and the
 palette deliberately doesn't:
 
-- **`--color-surface` is neutral-950, not black.** A pure-black page makes
+- **`--color-surface` is gray-950, not black.** A pure-black page makes
   the halation around light text worse and leaves no room to sit a surface
   *below* the page level.
-- **Surfaces go up, not down.** `--color-surface-raised` and `--color-surface-overlay` are a step
-  *lighter* than the page in dark mode and identical to it in light mode.
-  Elevation in dark mode is carried by lightness, because a drop shadow
+- **Surfaces go up, not down.** `--color-surface-raised` and
+  `--color-surface-overlay` are a step *lighter* than the page in dark
+  mode (gray-900 on gray-950), as they are in light mode (white on
+  gray-50). Elevation in dark mode is carried by lightness, because a drop shadow
   has almost nothing left to darken (see
   [Shadows](?path=/docs/foundations-shadows--docs)).
 - **Strong fills become light, so their labels become dark.**
-  `--color-background-brand-bold` goes from near-black to near-white, and
-  `--color-text-brand-inverse` inverts with it. `--color-background-danger-bold` does the same,
-  red-600 to red-400 — which is exactly where the palette's one contrast
-  bug lived: keeping the near-white label on the lightened red measured
-  2.77:1. It is now neutral-900 at 6.19:1. Inverting a fill without
-  inverting its foreground is the single easiest dark-mode mistake to
+  `--color-background-brand-bold` goes from the accent's 600 step to its
+  400, and `--color-text-brand-inverse` turns near-black with it.
+  `--color-background-danger-bold` does the same, red-600 to red-400 —
+  which is exactly where the palette's one contrast bug lived: keeping the
+  near-white `--color-text-danger-inverse` on the lightened red measured
+  2.77:1. It is now neutral-900 at 6.19:1. Lightening a fill without
+  flipping its `-inverse` label is the single easiest dark-mode mistake to
   make.
 
 Full measurements for both modes are in
@@ -57,11 +59,14 @@ Full measurements for both modes are in
 
 ## Alpha for edges
 
-`--color-border` and `--color-border` are the one place the palette uses transparency:
-opaque neutral-200 in light, `white / 10%` and `white / 15%` in dark. An
-opaque dark border would have to be re-chosen for every surface it sits
-on; a translucent white edge lightens whatever is underneath, so the same
-token reads correctly on `--color-surface` and on a lifted `--color-surface-raised`.
+`--color-border` and `--color-border-input` are opaque gray-200 and
+gray-300 in light, and `white / 10%` and `white / 18%` in dark;
+`--color-background-selected` is `white / 10%` in dark too. An opaque dark
+border would have to be re-chosen for every surface it sits on; a
+translucent white edge lightens whatever is underneath, so the same token
+reads correctly on `--color-surface` and on a lifted
+`--color-surface-raised`. `--color-interaction-hovered` and
+`--color-blanket` are translucent in both modes for the same reason.
 
 ## Scoping
 

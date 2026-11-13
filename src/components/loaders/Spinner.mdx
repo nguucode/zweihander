@@ -63,14 +63,14 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/spinner.json
   <Story of={SpinnerStories.Anatomy} />
 </Anatomy>
 
-While spinning, the indicator is a quarter of the ring turning once every
+While spinning, the indicator is 30% of the ring turning once every
 `--duration-spin`. With no `label`, a visually hidden "Loading" stands in
 for it.
 
 ## Measurements
 
-The ring is an SVG drawn in a 24-unit box and scaled to the size, so the
-stroke (2.5 units) scales with it: 1.7px at `sm`, 3.3px at `lg`.
+The ring is a 2.25px stroke at every size, its outer edge on the box's
+edge. There is no token for 2.25px, so the thickness is not in the tables.
 
 <SpecTable caption="sm" rows={[{ part: 'Ring', property: 'Width and height', token: '--space-4' }]} />
 

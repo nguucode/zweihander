@@ -143,7 +143,7 @@ export function Combobox({
           />
           {isLoading && <span className={cn(s.icon, s.spinner)} aria-hidden="true" />}
           {isClearable && !readOnly && (
-            <BaseCombobox.Clear className={s.iconButton} aria-label="Clear selection">
+            <BaseCombobox.Clear className={cn(s.iconButton, s.bare)} aria-label="Clear selection">
               <Icon name="clear" />
             </BaseCombobox.Clear>
           )}
@@ -158,7 +158,7 @@ export function Combobox({
           </BaseCombobox.Trigger>
         </BaseCombobox.InputGroup>
         <BaseCombobox.Portal container={container}>
-          <BaseCombobox.Positioner className={s.positioner} sideOffset={8}>
+          <BaseCombobox.Positioner className={s.positioner} sideOffset={4}>
             <BaseCombobox.Popup className={s.popup}>
               {isLoading ? (
                 <BaseCombobox.Status className={s.status}>Loading…</BaseCombobox.Status>

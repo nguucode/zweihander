@@ -66,17 +66,15 @@ anatomy.
 
 The bar is a strip: its triggers are rows of the sm control tier (24px),
 shorter than the 36px items in the flyout. Atlassian Design has no
-menubar, so the bar keeps the kit's own numbers; the flyouts are Menu's. Triggers sit inset from the bar
-edge by the same amount as items inside a Menu popup, and their corner
-nests inside the bar's the same way.
+menubar, so the bar follows the Figma library; the flyouts are Menu's. The
+bar has no fill, border or padding: it is its triggers side by side,
+touching, each with the sm control's corner. Labels are regular weight.
 
 <SpecTable
   caption="Bar"
   rows={[
-    { part: 'Bar', property: 'Padding', token: '--space-stack' },
-    { part: 'Bar', property: 'Gap between triggers', token: '--space-0-5' },
-    { part: 'Bar', property: 'Corner radius', token: '--radius-field' },
     { part: 'Trigger', property: 'Height', token: '--control-sm' },
+    { part: 'Trigger', property: 'Corner radius', token: '--control-sm-radius' },
     { part: 'Trigger', property: 'Inline padding', token: '--control-sm-pad' },
     { part: 'Trigger', property: 'Font size', token: '--text-body' },
     { part: 'Trigger', property: 'Line height', token: '--leading-body' },
@@ -93,9 +91,7 @@ edge. When the bar is wider than its container, it scrolls sideways.
 <SpecTable
   caption="Bar"
   rows={[
-    { part: 'Bar', property: 'Background', token: '--color-surface' },
     { part: 'Bar', property: 'Text', token: '--color-text' },
-    { part: 'Bar', property: 'Border', token: '--color-border' },
     { part: 'Trigger, hover, highlighted or open', property: 'Background', token: '--color-background-neutral' },
     { part: 'Trigger, hover, highlighted or open', property: 'Text', token: '--color-text' },
     { part: 'Trigger, disabled', property: 'Text', token: '--color-text-subtlest' },

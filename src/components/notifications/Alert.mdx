@@ -97,9 +97,8 @@ without a jump in size.
 
 The border is always there, 1px and transparent unless `outlined`, so
 switching appearance never moves the content. The padding counts that
-pixel: the content sits 16px from the alert's edge. The close button is 24px on
-a 20px line: it is pulled 2px up and down, so it centres on the first line
-and a one-line alert is no taller for having it. No shadow: an alert is
+pixel: the content sits 16px from the alert's edge. The close button is 24px,
+flush with the padding and top-aligned with the icon. No shadow: an alert is
 part of the page.
 
 ## Color
@@ -107,7 +106,7 @@ part of the page.
 Each variant reads four tokens, the same four as a Tag of that variant, so
 the two always agree. Subtle and outlined keep the description in
 `--color-text`: a paragraph in the variant's colour is tiring to read, so
-the colour goes on the icon and the title.
+the colour goes on the icon, the title and the close button.
 
 <SpecTable
   caption="info"
@@ -115,6 +114,7 @@ the colour goes on the icon and the title.
     { part: 'Container, subtle', property: 'Background', token: '--color-background-info' },
     { part: 'Container, outlined', property: 'Border', token: '--color-text-info' },
     { part: 'Icon and title, subtle and outlined', property: 'Colour', token: '--color-text-info' },
+    { part: 'Close button, subtle and outlined', property: 'Colour', token: '--color-text-info' },
     { part: 'Container, solid', property: 'Background', token: '--color-background-info-bold' },
     { part: 'Content, solid', property: 'Colour', token: '--color-text-info-inverse' },
   ]}
@@ -126,6 +126,7 @@ the colour goes on the icon and the title.
     { part: 'Container, subtle', property: 'Background', token: '--color-background-success' },
     { part: 'Container, outlined', property: 'Border', token: '--color-text-success' },
     { part: 'Icon and title, subtle and outlined', property: 'Colour', token: '--color-text-success' },
+    { part: 'Close button, subtle and outlined', property: 'Colour', token: '--color-text-success' },
     { part: 'Container, solid', property: 'Background', token: '--color-background-success-bold' },
     { part: 'Content, solid', property: 'Colour', token: '--color-text-success-inverse' },
   ]}
@@ -137,6 +138,7 @@ the colour goes on the icon and the title.
     { part: 'Container, subtle', property: 'Background', token: '--color-background-warning' },
     { part: 'Container, outlined', property: 'Border', token: '--color-text-warning' },
     { part: 'Icon and title, subtle and outlined', property: 'Colour', token: '--color-text-warning' },
+    { part: 'Close button, subtle and outlined', property: 'Colour', token: '--color-text-warning' },
     { part: 'Container, solid', property: 'Background', token: '--color-background-warning-bold' },
     { part: 'Content, solid', property: 'Colour', token: '--color-text-warning-inverse' },
   ]}
@@ -148,6 +150,7 @@ the colour goes on the icon and the title.
     { part: 'Container, subtle', property: 'Background', token: '--color-background-danger' },
     { part: 'Container, outlined', property: 'Border', token: '--color-text-danger' },
     { part: 'Icon and title, subtle and outlined', property: 'Colour', token: '--color-text-danger' },
+    { part: 'Close button, subtle and outlined', property: 'Colour', token: '--color-text-danger' },
     { part: 'Container, solid', property: 'Background', token: '--color-background-danger-bold' },
     { part: 'Content, solid', property: 'Colour', token: '--color-text-danger-inverse' },
   ]}

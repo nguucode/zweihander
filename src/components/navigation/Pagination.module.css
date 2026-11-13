@@ -40,8 +40,8 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  /* No gap between controls, as Atlassian's pagination. */
-  gap: 0;
+  /* 4px between controls, as the Figma library binds it. */
+  gap: var(--space-1);
   margin: 0;
   padding: 0;
   list-style: none;

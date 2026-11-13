@@ -112,6 +112,8 @@ interface PickerFieldProps {
   validationState?: ValidationState
   size: InputSize
   placeholder: string
+  /** The typing format, for a placeholder that does not show it. */
+  formatHint?: string
   isFullWidth?: boolean
   disabled?: boolean
   readOnly?: boolean
@@ -142,6 +144,7 @@ function PickerField({
   validationState,
   size,
   placeholder,
+  formatHint,
   isFullWidth,
   disabled,
   readOnly,
@@ -193,6 +196,7 @@ function PickerField({
           inputMode="numeric"
           autoComplete="off"
           aria-label={ariaLabel}
+          aria-description={formatHint}
           required={required}
           readOnly={readOnly}
           className={inputStyles.control}
@@ -497,7 +501,10 @@ export function DateRangePicker({
       }
       validationState={invalid ? 'error' : validationState}
       size={size}
-      placeholder={placeholder ?? `${pattern} – ${pattern}`}
+      // Words, not the pattern twice: the pattern stays with assistive tech
+      // as the description, and in the error message.
+      placeholder={placeholder ?? 'Start – End'}
+      formatHint={`${pattern} – ${pattern}`}
       isFullWidth={isFullWidth}
       disabled={disabled}
       readOnly={readOnly}

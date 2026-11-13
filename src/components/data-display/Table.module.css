@@ -14,10 +14,10 @@
 }
 
 .table {
-  /* Atlassian's cell: 4px block padding, and a row as tall as what it
-     holds. One 20px line of text makes a 28px row. Rows have no divider:
-     the header ends on a rule, and so does a table that has rows. */
-  --table-pad: var(--space-1);
+  /* 8px round every cell, and a row as tall as what it holds. One 20px
+     line of text makes a 36px row. Rows have no divider: the header ends
+     on a rule, and so does a table that has rows. */
+  --table-pad: var(--space-2);
   inline-size: 100%;
   border-collapse: separate;
   border-spacing: 0;
@@ -31,12 +31,12 @@
    rule. On the table itself, as theirs, so it sits under whatever comes
    last: a row, an open row's content or the total row. */
 .table.hasRows {
-  border-block-end: var(--border-width-selected) solid var(--color-border);
+  border-block-end: var(--border-width) solid var(--color-border);
 }
-/* Atlassian's caption: 24px above it, 8px to the table. Flush with the
-   table's edge inline, as the first cell's text is. */
+/* Atlassian's caption: 24px above it, 8px to the table. 8px in from the
+   table's edge, where the first cell's text starts. */
 .caption {
-  padding: var(--space-6) 0 var(--space-2);
+  padding: var(--space-6) var(--space-2) var(--space-2);
   text-align: start;
   font-weight: 600;
   caption-side: top;
@@ -48,39 +48,23 @@
 .expand,
 .actions {
   box-sizing: border-box;
-  padding: var(--table-pad) var(--space-2);
+  padding: var(--table-pad);
   text-align: start;
   vertical-align: middle;
-}
-/* Atlassian's dynamic table: nothing between the table's edge and its first
-   and last cells, so text is flush with whatever sits above the table. The
-   header has no fill, and a row's hover and selected tint start at its text.
-   Child combinators, so a table inside a cell keeps its own edges. */
-.table > * > tr > :first-child {
-  padding-inline-start: 0;
-}
-.table > * > tr > :last-child {
-  padding-inline-end: 0;
-}
-/* The scroll container clips at those edges: a ring drawn outside a control
-   there would be cut. */
-.table > * > tr > :first-child:not(.expandedContent, .empty) :focus-visible,
-.table > * > tr > :last-child:not(.expandedContent, .empty) :focus-visible {
-  outline-offset: var(--focus-offset-inset);
 }
 
 .th {
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
   font-weight: 600;
-  color: var(--color-text-subtlest);
+  color: var(--color-text);
   white-space: nowrap;
 }
 /* The only rule between rows: the header's. On the cells, so a sticky
    header carries it along. Under .table: a bare element selector is global
    in a CSS module and would rule every table on the page. */
 .table > thead > tr > * {
-  border-block-end: var(--border-width-selected) solid var(--color-border);
+  border-block-end: var(--border-width) solid var(--color-border);
 }
 .sticky thead .th,
 .sticky thead .select,
@@ -128,16 +112,6 @@
 .end .sortButton {
   flex-direction: row-reverse;
 }
-/* At the table's edge there is nothing to pull out into: the label stays
-   flush and the hover fill starts at it. */
-.table > * > tr > :first-child .sortButton {
-  margin-inline-start: 0;
-  padding-inline-start: 0;
-}
-.table > * > tr > :last-child .sortButton {
-  margin-inline-end: 0;
-  padding-inline-end: 0;
-}
 .sortButton:hover {
   background: var(--color-background-neutral);
   color: var(--color-text);
@@ -172,11 +146,10 @@
 .sortIcon {
   display: inline-flex;
   font-size: var(--icon-md);
-  opacity: 0.6;
+  color: var(--color-text-subtlest);
 }
 .sortActive {
-  opacity: 1;
-  color: var(--color-text);
+  color: var(--color-icon-brand);
 }
 
 /* Under .table: a bare element selector is global in a CSS module and
@@ -188,27 +161,22 @@
   background: var(--color-background-brand-subtlest);
 }
 
-/* The control columns: just wide enough for the checkbox or the icon
-   button, and flush with the table's edge when they are its first or last
-   column. 2px less block padding, so the 24px button (and the checkbox's
+/* The control columns: the checkbox or the icon button and 8px either
+   side. 2px less block padding, so the 24px button (and the checkbox's
    20px line, in the header) leaves a one-line row at its own height. No
    line of text here, so the control alone sets the cell's height. */
+.select {
+  inline-size: var(--box-md);
+}
+.expand,
+.actions {
+  inline-size: var(--box-lg);
+}
 .select,
 .expand,
 .actions {
-  inline-size: var(--box-md);
   padding-block: calc(var(--table-pad) - var(--space-0-5));
   line-height: 0;
-}
-/* At the edge: the 24px button alone, or the 16px checkbox and 8px after
-   it. The expand column after a checkbox keeps its 8px before the button. */
-.select,
-.expand:first-child,
-.actions {
-  inline-size: var(--box-sm);
-}
-.select {
-  padding-inline-end: 0;
 }
 .expand > *,
 .actions > * {
@@ -220,9 +188,6 @@
 .expand :focus-visible,
 .actions :focus-visible {
   outline-offset: var(--focus-offset-inset);
-}
-.expand {
-  padding-inline-end: 0;
 }
 .expandIcon {
   display: inline-flex;
@@ -248,16 +213,14 @@
   rotate: 90deg;
 }
 
-/* The expand column's mirror at the row's end. */
 .actions {
-  padding-inline-start: 0;
   text-align: end;
 }
 
 /* An open row and its content read as one block: the content's deeper
    block-end padding sets the pair apart from the next row. */
 .expandedContent {
-  padding: var(--space-2) 0 var(--space-4);
+  padding: var(--space-2) var(--space-2) var(--space-4);
 }
 /* The content row is not a record: it takes no hover tint of its own. */
 .table > tbody > tr.expandedRow:hover > * {
@@ -274,7 +237,7 @@
 /* The total row sits under the header's rule, turned over: with no
    dividers between rows, that is what makes the sum read as a sum. */
 .table > tfoot > tr > * {
-  border-block-start: var(--border-width-selected) solid var(--color-border);
+  border-block-start: var(--border-width) solid var(--color-border);
   font-weight: 600;
 }
 

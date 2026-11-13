@@ -22,7 +22,10 @@ does nothing, so the reader has to choose.
 | Variant | Use for |
 | --- | --- |
 | Default | An everyday delete: a comment, a file, a saved view. One question, two buttons. |
+| Non-destructive (`kind="default"`) | A decision that destroys nothing: sign out everywhere, leave without saving. No warning icon, and the action is a primary button. |
 | Type to confirm (`confirmText`) | A large delete that cannot be undone: a workspace, an account, a project with its files. The action waits until the reader types the name. |
+
+<Canvas of={ConfirmDialogStories.KindDefault} />
 
 <Canvas of={ConfirmDialogStories.TypeToConfirm} />
 
@@ -59,11 +62,13 @@ or take its focus.
 ## Measurements
 
 It is a Modal at `size="sm"` (at most 400px wide): container, title,
-description, body and footer take Modal's measurements. Its own parts:
+body and footer take Modal's measurements, except the 16px from the title
+to the description (8px in a Modal). Its own parts:
 
 <SpecTable
   caption="Icon and field"
   rows={[
+    { part: 'Title to description', property: 'Gap', token: '--space-group' },
     { part: 'Warning icon', property: 'Width', token: '--icon-md' },
     { part: 'Icon to title', property: 'Gap', token: '--space-inline' },
     { part: 'Text to type', property: 'Font family', token: '--font-mono' },
@@ -83,7 +88,8 @@ the title wraps.
 />
 
 Everything else takes Modal's colours, and the buttons keep their own:
-Cancel is `secondary` outlined, the action `destructive`.
+Cancel is `secondary` outlined, the action `destructive` (`primary` with
+`kind="default"`, which has no warning icon).
 
 ## States
 
@@ -107,8 +113,8 @@ start.
 
 ### Differences from the spec
 
-- **Destructive only.** There is no neutral variant: a decision that
-  destroys nothing (sign out, leave without saving) is a
+- **Destructive by default.** `kind="default"` drops the warning icon and
+  makes the action primary; for anything more custom, use a
   [Modal](?path=/docs/components-overlays-modal--docs) with `isAlert`, where
   you choose the buttons.
 - **No pending state.** The dialog closes on confirm. If the delete can fail,

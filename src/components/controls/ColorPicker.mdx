@@ -98,7 +98,7 @@ the same at both field sizes.
     { part: 'Hue and opacity strips', property: 'Gap between them', token: '--space-stack' },
     { part: 'Thumbs', property: 'Size', token: '--space-4' },
     { part: 'Format menu and channel fields', property: 'Gap', token: '--space-inline' },
-    { part: 'Swatches', property: 'Minimum size', token: '--space-6' },
+    { part: 'Swatches', property: 'Size', token: '--box-sm' },
     { part: 'Swatches', property: 'Gap', token: '--space-inline' },
     { part: 'Focus ring', property: 'Width', token: '--focus-width' },
     { part: 'Focus ring', property: 'Offset', token: '--focus-offset' },
@@ -106,7 +106,8 @@ the same at both field sizes.
   ]}
 />
 
-The panel is 16rem wide, so eight swatches fit in a row, and the area is
+The panel is 16rem wide, so eight 24px swatches fit in their one row (it
+does not wrap), and the area is
 10rem tall. The format menu and the channels are the kit's sm (32px)
 Select and field box.
 

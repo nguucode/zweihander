@@ -6,11 +6,11 @@ import { Theme } from '@/theme/Theme'
 import docs from './docs.module.css'
 
 const PAIRS = [
-  ['background', 'foreground'],
-  ['card', 'card-foreground'],
-  ['primary', 'primary-foreground'],
-  ['muted', 'muted-foreground'],
-  ['destructive', 'destructive-foreground'],
+  ['color-surface', 'color-text'],
+  ['color-surface-raised', 'color-text'],
+  ['color-background-brand-bold', 'color-text-brand-inverse'],
+  ['color-background-neutral', 'color-text-subtlest'],
+  ['color-background-danger-bold', 'color-text-danger-inverse'],
 ] as const
 
 function Swatches() {

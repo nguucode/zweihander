@@ -76,7 +76,7 @@
           {
             "name": "Silhouette",
             "selector": "svg",
-            "description": "A head and shoulders, when there is neither."
+            "description": "The kit's user icon at 60% of the circle, when there is neither."
           },
           {
             "name": "Status dot",
@@ -286,14 +286,9 @@
                 "token": "--color-background-brand-bold"
               },
               {
-                "part": "Initials",
+                "part": "Initials and silhouette",
                 "property": "Colour",
                 "token": "--color-text-brand-inverse"
-              },
-              {
-                "part": "Silhouette",
-                "property": "Colour",
-                "token": "--color-text-inverse"
               }
             ]
           }
@@ -324,7 +319,7 @@
           {
             "title": "Accessibility",
             "blocks": [
-              "- `imageAlt` names the **whole avatar** (`role=\"img\"`), not just the\n  image, so the image, the initials and the silhouette all announce the\n  same person. The inner `<img>` has `alt=\"\"`.\n- Without `imageAlt` the avatar is **decorative** and hidden\n  (`aria-hidden`), its status dot with it.\n- With `status`, the status **joins the name**: \"Mary Thompson, Online\".\n  The dot itself is not read.\n- In a group, the \"+n\" is named \"3 more\" when the avatars are named, and\n  decorative when they are not.\n- With `hasTooltips`, the \"+n\" is the one avatar that takes focus, with\n  the focus ring, and its tooltip of hidden names is its description. The\n  other avatars' tooltips open on hover only: their names are already\n  their accessible names.\n- Initials are never read out: with `imageAlt` the avatar's name replaces\n  them, without it the avatar is hidden. They are uppercased with CSS, so\n  the text keeps the letters as passed.\n- Initials meet 4.5:1 in every colour and variant, on every gray ramp in\n  both modes, measured by the `Contrast` story. Neutral solid is gray 600\n  under gray 50, 6.5:1 or more.\n- On `subtle` the silhouette uses the initials colour (neutral uses\n  `--color-text-subtlest`), past the 3:1 a graphic needs.\n- On `solid` the silhouette is **always white**, by choice. In light mode\n  that is under 3:1 on the warm hues (orange to lime); in dark mode, where\n  the fill is the lighter 400 step, on most hues. It is accepted because\n  the silhouette carries no information: the name is in `imageAlt` or\n  printed beside the avatar."
+              "- `imageAlt` names the **whole avatar** (`role=\"img\"`), not just the\n  image, so the image, the initials and the silhouette all announce the\n  same person. The inner `<img>` has `alt=\"\"`.\n- Without `imageAlt` the avatar is **decorative** and hidden\n  (`aria-hidden`), its status dot with it.\n- With `status`, the status **joins the name**: \"Mary Thompson, Online\".\n  The dot itself is not read.\n- In a group, the \"+n\" is named \"3 more\" when the avatars are named, and\n  decorative when they are not.\n- With `hasTooltips`, the \"+n\" is the one avatar that takes focus, with\n  the focus ring, and its tooltip of hidden names is its description. The\n  other avatars' tooltips open on hover only: their names are already\n  their accessible names.\n- Initials are never read out: with `imageAlt` the avatar's name replaces\n  them, without it the avatar is hidden. They are uppercased with CSS, so\n  the text keeps the letters as passed.\n- Initials meet 4.5:1 in every colour and variant, on every gray ramp in\n  both modes, measured by the `Contrast` story. Neutral solid is gray 600\n  under gray 50, 6.5:1 or more.\n- The silhouette uses the initials colour (neutral subtle uses\n  `--color-text-subtlest`), past the 3:1 a graphic needs in every colour\n  and variant, measured by the `Contrast` story."
             ]
           }
         ]
@@ -738,7 +733,7 @@
       "id": "components-atomic-elements-kbd",
       "name": "Kbd",
       "category": "Atomic Elements",
-      "status": "experimental",
+      "status": "beta",
       "storyId": "components-atomic-elements-kbd--default",
       "props": [
         {
@@ -1625,14 +1620,18 @@
       "id": "components-buttons-buttongroup",
       "name": "ButtonGroup",
       "category": "Buttons",
-      "status": "experimental",
+      "status": "beta",
       "storyId": "components-buttons-buttongroup--default",
       "props": [
         {
-          "name": "multiple",
-          "control": "boolean",
-          "default": false,
-          "description": "Any number pressed at once. Without it, one at a time (a segmented control): once one is pressed, pressing it again keeps it pressed."
+          "name": "type",
+          "control": "inline-radio",
+          "options": [
+            "separate",
+            "joined"
+          ],
+          "default": "separate",
+          "description": "`separate`: ToggleButtons 4px apart. `joined`: one bar, inner corners square, borders shared."
         },
         {
           "name": "disabled",
@@ -1646,22 +1645,22 @@
           {
             "name": "Container",
             "selector": "[role=\"group\"]",
-            "description": "ToggleGroup joins its toggles: inner corners square, borders shared. ButtonGroup spaces its buttons 4px apart."
+            "description": "Separate spaces its toggles 4px apart; joined makes one bar, inner corners square, borders shared."
           },
           {
             "name": "Button",
             "selector": "button:not([aria-pressed=\"true\"])",
-            "description": "A ToggleButton (or a Button in ButtonGroup), with a label or an icon."
+            "description": "A ToggleButton, with a label or an icon."
           },
           {
             "name": "Selected",
             "selector": "button[aria-pressed=\"true\"]",
-            "description": "The pressed toggle: one at a time, or several with `multiple`."
+            "description": "The toggle that is on: exactly one."
           }
         ],
         "measurements": [
           {
-            "caption": "ButtonGroup",
+            "caption": "separate",
             "rows": [
               {
                 "part": "Container",
@@ -1731,16 +1730,16 @@
       "guideline": {
         "intro": [],
         "whenToUse": [
-          "Use `ToggleGroup` when the toggles answer one question (which view, which\nfilters) and `ButtonGroup` when a few actions belong together. Give every\nbutton in a group the same variant and appearance, so the pressed one is\nthe only one that stands out."
+          "Use a ButtonGroup when the toggles answer one question with one answer:\nwhich view, which mode, which period. Give every toggle in a group the\nsame variant and appearance, so the one that is on is the only one that\nstands out."
         ],
         "whenNotToUse": [
-          "- **To switch between panels of content.** Use Tabs: they own the panel\n  and its `tabpanel` role.\n- **For a choice submitted with a form.** Use a Radio group or Checkboxes:\n  a toggle applies at once, a form field waits for Submit.\n- **For unrelated actions.** Lay out separate Buttons with a wider gap;\n  a group says they belong together.\n- **For more than a handful of options.** Use a Select."
+          "- **To switch between panels of content.** Use Tabs: they own the panel\n  and its `tabpanel` role.\n- **For a choice submitted with a form.** Use a Radio group or Checkboxes:\n  a toggle applies at once, a form field waits for Submit.\n- **For actions.** A ButtonGroup keeps one option on; for previous and\n  next, or zoom in and out, lay out Buttons side by side.\n- **For settings that combine** (status filters, Bold and Italic). Use\n  separate ToggleButtons: a ButtonGroup keeps exactly one on.\n- **For more than a handful of options.** Use a Select."
         ],
         "doDont": [
           {
             "do": {
               "storyId": "components-buttons-buttongroup--do-same-look",
-              "caption": "One look across the group: only the pressed segment stands out."
+              "caption": "One look across the group: only the toggle that is on stands out."
             },
             "dont": {
               "storyId": "components-buttons-buttongroup--dont-mix-looks",
@@ -1752,7 +1751,7 @@
           {
             "title": "Accessibility",
             "blocks": [
-              "- Both containers have `role=\"group\"`; name them with `aria-label`.\n- Each toggle is a native `<button>` with `aria-pressed`, so a screen reader\n  announces \"Board, toggle button, pressed\".\n- A `ToggleGroup` is one tab stop. Arrow keys move between its toggles\n  and wrap, Home and End jump to the first and last; Space or Enter\n  presses.\n- Single choice keeps one pressed: pressing the pressed toggle again does\n  not release it.\n- A `ButtonGroup`'s buttons are each a tab stop, with no `aria-pressed`.\n- A disabled `ToggleGroup` disables every toggle in it.\n- An icon-only button needs its own `aria-label`, as on Button. A\n  [Tooltip](?path=/docs/components-overlays-tooltip--docs) can show that\n  label to sighted users: it merges onto the button instead of wrapping\n  it, so the group still holds only its buttons."
+              "- The container has `role=\"group\"`; name it with `aria-label`.\n- Each toggle is a native `<button>` with `aria-pressed`, so a screen reader\n  announces \"Board, toggle button, pressed\".\n- The group is one tab stop. Arrow keys move between its toggles and\n  wrap, Home and End jump to the first and last; Space or Enter turns one\n  on. This is the APG toolbar pattern Base UI's Toggle Group follows.\n- Exactly one stays on: pressing the one that is on again does not\n  release it.\n- A disabled group disables every toggle in it.\n- An icon-only toggle needs its own `aria-label`, as on Button. A\n  [Tooltip](?path=/docs/components-overlays-tooltip--docs) can show that\n  label to sighted users: it merges onto the toggle instead of wrapping\n  it, so the group still holds only its toggles."
             ]
           }
         ]
@@ -2079,7 +2078,7 @@
           "Use a toggle for a setting that is on or off and applies immediately:\nBold, Follow, a filter. The label names the setting, and stays the same in\nboth states."
         ],
         "whenNotToUse": [
-          "- **For a choice submitted with a form.** Use a Checkbox or a Switch: a\n  toggle applies at once, a form field waits for Submit.\n- **For one of many.** Put the toggles in a\n  [ToggleGroup](?path=/docs/components-buttons-buttongroup--docs), or use\n  radios or Tabs. A lone toggle is independent: pressing one does not\n  release another.\n- **For an action.** Something that happens once (Save, Send) is a\n  [Button](?path=/docs/components-buttons-button--docs)."
+          "- **For a choice submitted with a form.** Use a Checkbox or a Switch: a\n  toggle applies at once, a form field waits for Submit.\n- **For one of many.** Put the toggles in a\n  [Button Group](?path=/docs/components-buttons-buttongroup--docs), or use\n  radios or Tabs. A lone toggle is independent: pressing one does not\n  release another.\n- **For an action.** Something that happens once (Save, Send) is a\n  [Button](?path=/docs/components-buttons-button--docs)."
         ],
         "doDont": [
           {
@@ -2605,8 +2604,8 @@
               },
               {
                 "part": "Swatches",
-                "property": "Minimum size",
-                "token": "--space-6"
+                "property": "Size",
+                "token": "--box-sm"
               },
               {
                 "part": "Swatches",
@@ -3087,7 +3086,7 @@
           {
             "name": "Empty star",
             "selector": "fieldset > span > label:last-child",
-            "description": "After the score, outlined. Each star holds an invisible radio."
+            "description": "After the score, the same star in the border colour. Each star holds an invisible radio."
           }
         ],
         "measurements": [
@@ -3217,7 +3216,7 @@
           {
             "title": "Accessibility",
             "blocks": [
-              "- Interactive: a `<fieldset>` named by its legend (or `aria-label`), with\n  one radio per star named \"1 out of 5 stars\" and so on (change the words\n  with `getValueText`). Arrows move the choice; Tab moves into and out of\n  the group.\n- Read-only: `role=\"img\"` named with the value, \"4.5 out of 5 stars\".\n- Hover previews the score; focus shows the 2px ring round the star.\n- A filled star differs from an empty one by shape as well as colour.\n- Stars grow a 44px target on coarse pointers."
+              "- Interactive: a `<fieldset>` named by its legend (or `aria-label`), with\n  one radio per star named \"1 out of 5 stars\" and so on (change the words\n  with `getValueText`). Arrows move the choice; Tab moves into and out of\n  the group.\n- Read-only: `role=\"img\"` named with the value, \"4.5 out of 5 stars\".\n- Hover previews the score; focus shows the 2px ring round the star.\n- Filled and empty stars share one shape and differ by colour only, so\n  the score is always in the name: the group's checked radio, or the\n  image's label.\n- Stars grow a 44px target on coarse pointers."
             ]
           }
         ]
@@ -3579,7 +3578,7 @@
             "error"
           ],
           "default": "default",
-          "description": "`error` sets `aria-invalid`, draws a red edge inside the track and turns the helper red; `success` turns the helper green."
+          "description": "`error` sets `aria-invalid`, draws a 2px red ring outside the track and turns the helper red; `success` turns the helper green."
         }
       ],
       "specs": {
@@ -3768,7 +3767,7 @@
               },
               {
                 "part": "Track, error",
-                "property": "Inner edge",
+                "property": "Outside ring",
                 "token": "--color-text-danger"
               },
               {
@@ -3850,11 +3849,6 @@
       "specs": {
         "anatomy": [
           {
-            "name": "Previous year",
-            "selector": "button[aria-label=\"Previous year\"]",
-            "description": "A double chevron: twelve months back, or to the month of min. Disabled there."
-          },
-          {
             "name": "Previous month",
             "selector": "button[aria-label=\"Previous month\"]",
             "description": "Disabled in the month of min. Mirrored right to left."
@@ -3868,11 +3862,6 @@
             "name": "Next month",
             "selector": "button[aria-label=\"Next month\"]",
             "description": "Disabled in the month of max."
-          },
-          {
-            "name": "Next year",
-            "selector": "button[aria-label=\"Next year\"]",
-            "description": "A double chevron: twelve months on, or to the month of max. Disabled there."
           },
           {
             "name": "Weekdays",
@@ -3907,11 +3896,6 @@
               {
                 "part": "Header",
                 "property": "Inline padding",
-                "token": "--space-inline"
-              },
-              {
-                "part": "Previous and next",
-                "property": "Gap, year to month",
                 "token": "--space-inline"
               },
               {
@@ -4007,7 +3991,7 @@
               {
                 "part": "Today",
                 "property": "Corner radius",
-                "token": "--radius-pill"
+                "token": "--radius-control"
               },
               {
                 "part": "Range band",
@@ -4170,8 +4154,8 @@
           {
             "title": "Accessibility",
             "blocks": [
-              "- A `role=\"grid\"` named by the month and year (\"September 2026\"), with\n  column headers that carry the full weekday name in `abbr`.\n- Each day is a button named by its full date (\"Friday 18 September\n  2026\"). The selected cell has `aria-selected`, and with `range` every\n  cell from one end to the other does. Today has `aria-current=\"date\"`.\n- One tab stop: the selected day, or today when nothing is selected.\n- Arrow keys move a day or a week, Home and End go to the week's ends,\n  Page Up and Page Down move a month, and Shift+Page Up and Shift+Page\n  Down a year. Enter or Space selects. Moving past the month shows the\n  next one.\n- Right to left, the arrows follow the screen (ArrowLeft is the next day)\n  and the previous and next chevrons, single and double, are mirrored.",
-              "- The month and year are a polite live region, so paging is announced,\n  by a month or by a year.\n- The header's buttons are ordinary buttons in the tab order, before the\n  grid: \"Previous year\", \"Previous month\", then after the month \"Next\n  month\" and \"Next year\". The year buttons move the month shown by twelve\n  months, or to the month of `min` or `max` when that is nearer.\n- All four are disabled at the limits: the previous pair in the month of\n  `min`, the next pair in the month of `max`.\n- Unavailable days stay focusable with `aria-disabled`, so they are found\n  and announced as unavailable rather than skipped. Enter on one does\n  nothing.\n- Days of the months either side are not buttons and are hidden from\n  assistive tech.\n- Today's figure measures at least 4.5:1 on its pill, in both modes, on\n  its own and inside a range."
+              "- A `role=\"grid\"` named by the month and year (\"September 2026\"), with\n  column headers that carry the full weekday name in `abbr`.\n- Each day is a button named by its full date (\"Friday 18 September\n  2026\"). The selected cell has `aria-selected`, and with `range` every\n  cell from one end to the other does. Today has `aria-current=\"date\"`.\n- One tab stop: the selected day, or today when nothing is selected.\n- Arrow keys move a day or a week, Home and End go to the week's ends,\n  Page Up and Page Down move a month, and Shift+Page Up and Shift+Page\n  Down a year. Enter or Space selects. Moving past the month shows the\n  next one.\n- Right to left, the arrows follow the screen (ArrowLeft is the next day)\n  and the previous and next chevrons are mirrored.",
+              "- The month and year are a polite live region, so paging is announced,\n  by a month or by a year.\n- The header's buttons are ordinary buttons in the tab order, before the\n  grid: \"Previous month\", then after the month \"Next month\".\n- Both are disabled at the limits: previous in the month of `min`, next\n  in the month of `max`.\n- Unavailable days stay focusable with `aria-disabled`, so they are found\n  and announced as unavailable rather than skipped. Enter on one does\n  nothing.\n- Days of the months either side are not buttons and are hidden from\n  assistive tech.\n- Today's figure should measure at least 4.5:1 on its fill, in both modes,\n  on its own and inside a range. The `Today` story measures it."
             ]
           }
         ]
@@ -4190,12 +4174,10 @@
           "control": "inline-radio",
           "options": [
             "xs",
-            "sm",
-            "md",
-            "lg"
+            "sm"
           ],
-          "default": "md",
-          "description": "Padding 12, 16, 24 or 32px; the gap between children scales with it."
+          "default": "sm",
+          "description": "Padding 12 or 16px; the gap between children scales with it."
         },
         {
           "name": "appearance",
@@ -4203,11 +4185,10 @@
           "options": [
             "elevated",
             "outline",
-            "unstyled",
-            "surface"
+            "unstyled"
           ],
           "default": "elevated",
-          "description": "`elevated`: the card surface with a faint shadow. `outline`: the surface and its edge, no shadow. `unstyled`: keeps the padding and layout, drops every visual. `surface`: a block of a page on the Theme's canvas, elevated when the Theme's `contentStyle` is `card`, a section with a rule above when it is `flat`."
+          "description": "`elevated`: the card surface with a faint shadow, no visible edge. `outline`: the surface and its 1px `--color-border` edge, no shadow. `unstyled`: keeps the padding and layout, drops every visual."
         },
         {
           "name": "orientation",
@@ -4224,12 +4205,6 @@
           "control": "boolean",
           "default": true,
           "description": "Rounds the corners with `--radius-lg`. Off: square corners."
-        },
-        {
-          "name": "hasBorder",
-          "control": "boolean",
-          "default": true,
-          "description": "The 1px `--color-border` edge. Off: no visible edge. `unstyled` never has one."
         }
       ],
       "specs": {
@@ -4237,7 +4212,7 @@
           {
             "name": "Container",
             "selector": "div:has(> h3)",
-            "description": "The surface: --color-surface-raised, its --color-border edge and the padding from size. Content stacks or sits side by side, by orientation."
+            "description": "The surface: --color-surface-raised, a shadow (elevated) or a --color-border edge (outline), and the padding from size. Content stacks or sits side by side, by orientation."
           },
           {
             "name": "Title",
@@ -4282,36 +4257,6 @@
             ]
           },
           {
-            "caption": "md",
-            "rows": [
-              {
-                "part": "Container",
-                "property": "Padding",
-                "token": "--space-container"
-              },
-              {
-                "part": "Container",
-                "property": "Gap",
-                "token": "--space-group"
-              }
-            ]
-          },
-          {
-            "caption": "lg",
-            "rows": [
-              {
-                "part": "Container",
-                "property": "Padding",
-                "token": "--space-8"
-              },
-              {
-                "part": "Container",
-                "property": "Gap",
-                "token": "--space-6"
-              }
-            ]
-          },
-          {
             "caption": "Every size",
             "rows": [
               {
@@ -4350,11 +4295,6 @@
                 "part": "Container",
                 "property": "Background",
                 "token": "--color-surface-raised"
-              },
-              {
-                "part": "Container",
-                "property": "Border",
-                "token": "--color-border"
               },
               {
                 "part": "Container",
@@ -4690,13 +4630,13 @@
           "name": "label",
           "control": "text",
           "default": "Columns",
-          "description": "The button's text and the popover's title."
+          "description": "The button's text and the popup's accessible name."
         },
         {
           "name": "resetLabel",
           "control": "text",
-          "default": "Reset",
-          "description": "The Reset button's text."
+          "default": "Reset columns",
+          "description": "The text of the last row, which brings back the default columns."
         },
         {
           "name": "defaultOpen",
@@ -4713,9 +4653,9 @@
             "description": "An outlined secondary Button, \"Columns\", with a chevron. Opens the popover."
           },
           {
-            "name": "Popover",
+            "name": "Popup",
             "selector": "[role=\"dialog\"]",
-            "description": "A Popover titled like the button, lined up with its end."
+            "description": "A 240px list, a Listbox's shell, named like the button and lined up with its end."
           },
           {
             "name": "Locked column",
@@ -4725,12 +4665,17 @@
           {
             "name": "Column checkbox",
             "selector": "[role=\"dialog\"] [role=\"checkbox\"]:not([aria-checked=\"true\"])",
-            "description": "One per column, named by its header, in table order. Ticked means shown."
+            "description": "One per column, named by its header, in table order. Ticked means shown. The whole row toggles it."
+          },
+          {
+            "name": "Separator",
+            "selector": "[role=\"dialog\"] [role=\"separator\"]",
+            "description": "A 1px rule between the columns and Reset."
           },
           {
             "name": "Reset",
             "selector": "[role=\"dialog\"] button:not([aria-haspopup])",
-            "description": "A small ghost Button: brings back the default columns and calls onReset."
+            "description": "A row like the others, its text in line with the column names: brings back the default columns and calls onReset."
           }
         ],
         "measurements": [
@@ -4738,19 +4683,85 @@
             "caption": "Every chooser",
             "rows": [
               {
-                "part": "Checkbox list",
-                "property": "Gap",
+                "part": "Popup",
+                "property": "Block padding",
                 "token": "--space-2"
               },
               {
-                "part": "Reset",
-                "property": "Gap above",
+                "part": "Column checkbox",
+                "property": "Row block padding",
+                "token": "--space-1-5"
+              },
+              {
+                "part": "Column checkbox",
+                "property": "Row inline padding",
                 "token": "--space-3"
+              },
+              {
+                "part": "Column checkbox",
+                "property": "Row minimum height",
+                "token": "--control-md"
+              },
+              {
+                "part": "Column checkbox",
+                "property": "Gap, box to name",
+                "token": "--space-2"
+              },
+              {
+                "part": "Separator",
+                "property": "Space above and below",
+                "token": "--space-1"
+              },
+              {
+                "part": "Separator",
+                "property": "Thickness",
+                "token": "--border-width"
+              },
+              {
+                "part": "Reset",
+                "property": "Inline start padding, past a box",
+                "token": "--choice-box"
+              },
+              {
+                "part": "Reset",
+                "property": "Hit area on touch screens",
+                "token": "--target-coarse"
               }
             ]
           }
         ],
-        "color": [],
+        "color": [
+          {
+            "caption": "Rows",
+            "rows": [
+              {
+                "part": "Column checkbox, hover",
+                "property": "Background",
+                "token": "--color-background-neutral"
+              },
+              {
+                "part": "Reset",
+                "property": "Colour",
+                "token": "--color-text"
+              },
+              {
+                "part": "Reset, hover",
+                "property": "Background",
+                "token": "--color-background-neutral"
+              },
+              {
+                "part": "Separator",
+                "property": "Colour",
+                "token": "--color-border"
+              },
+              {
+                "part": "Reset, focus",
+                "property": "Ring",
+                "token": "--color-border-focused"
+              }
+            ]
+          }
+        ],
         "pseudo": [
           "hover",
           "focus-visible",
@@ -4781,7 +4792,7 @@
           {
             "title": "Accessibility",
             "blocks": [
-              "- The button reports `aria-haspopup=\"dialog\"` and `aria-expanded`. The\n  popup is a `role=\"dialog\"` named by the label, \"Columns\".\n- Opening moves focus into the dialog; Escape closes it and returns focus\n  to the button.\n- Each column is a checkbox named by its header, in table order; Space\n  toggles it, and the shown keys are reported in column order, the row\n  header always among them.\n- The row header column's checkbox, and the last checked one, are\n  `aria-disabled`: ticked and unchangeable.\n- Reset is a button named \"Reset\" that brings back the default columns."
+              "- The button reports `aria-haspopup=\"dialog\"` and `aria-expanded`. The\n  popup is a `role=\"dialog\"` named by the label, \"Columns\", through\n  `aria-label`: it shows no title.\n- Opening moves focus into the dialog; Escape closes it and returns focus\n  to the button.\n- Each column is a checkbox named by its header, in table order; Space\n  toggles it, and so does a click anywhere on its row. The shown keys are\n  reported in column order, the row header always among them.\n- The row header column's checkbox, and the last checked one, are\n  `aria-disabled`: ticked and unchangeable.\n- Reset is a button named \"Reset columns\" that brings back the default\n  columns, after a `role=\"separator\"`."
             ]
           }
         ]
@@ -4836,7 +4847,7 @@
           {
             "name": "Header row",
             "selector": "thead tr",
-            "description": "Small muted labels over a 2px rule, with no fill. Stays in view with hasStickyHeader."
+            "description": "Small semibold labels over a 1px rule, with no fill. Stays in view with hasStickyHeader."
           },
           {
             "name": "Sort button",
@@ -4851,7 +4862,7 @@
           {
             "name": "Row",
             "selector": "tbody tr",
-            "description": "As tall as what it holds: 28px for one line of text. No divider: tinted when hovered or selected."
+            "description": "As tall as what it holds: 36px for one line of text. No divider: tinted when hovered or selected."
           },
           {
             "name": "Row checkbox",
@@ -4881,7 +4892,7 @@
           {
             "name": "Total row",
             "selector": "tfoot tr",
-            "description": "With a footer on any column: a semibold row under a 2px rule, outside the sort."
+            "description": "With a footer on any column: a semibold row under a 1px rule, outside the sort."
           }
         ],
         "measurements": [
@@ -4889,34 +4900,29 @@
             "caption": "Every table",
             "rows": [
               {
-                "part": "Row",
-                "property": "Cell block padding",
-                "token": "--space-1"
-              },
-              {
-                "part": "Header row",
-                "property": "Cell block padding",
-                "token": "--space-1"
-              },
-              {
                 "part": "Cell",
-                "property": "Inline padding, between columns",
+                "property": "Padding, all round",
+                "token": "--space-2"
+              },
+              {
+                "part": "Header cell",
+                "property": "Padding, all round",
                 "token": "--space-2"
               },
               {
                 "part": "Header row",
                 "property": "Rule under it",
-                "token": "--border-width-selected"
+                "token": "--border-width"
               },
               {
                 "part": "Total row",
                 "property": "Rule above it",
-                "token": "--border-width-selected"
+                "token": "--border-width"
               },
               {
                 "part": "Table",
                 "property": "Rule under it, with rows",
-                "token": "--border-width-selected"
+                "token": "--border-width"
               },
               {
                 "part": "Cell",
@@ -4966,17 +4972,12 @@
               {
                 "part": "Selection column",
                 "property": "Width",
-                "token": "--box-sm"
-              },
-              {
-                "part": "Expand column",
-                "property": "Width, first in the row",
-                "token": "--box-sm"
-              },
-              {
-                "part": "Expand column",
-                "property": "Width, after the selection column",
                 "token": "--box-md"
+              },
+              {
+                "part": "Expand column",
+                "property": "Width",
+                "token": "--box-lg"
               },
               {
                 "part": "Expand icon",
@@ -4986,7 +4987,7 @@
               {
                 "part": "Actions column",
                 "property": "Width",
-                "token": "--box-sm"
+                "token": "--box-lg"
               },
               {
                 "part": "Expanded row",
@@ -5063,12 +5064,17 @@
               {
                 "part": "Header label",
                 "property": "Colour",
+                "token": "--color-text"
+              },
+              {
+                "part": "Sort icon",
+                "property": "Colour",
                 "token": "--color-text-subtlest"
               },
               {
                 "part": "Sort icon, sorted column",
                 "property": "Colour",
-                "token": "--color-text"
+                "token": "--color-icon-brand"
               },
               {
                 "part": "Header row",
@@ -5330,13 +5336,8 @@
               },
               {
                 "part": "Field",
-                "property": "Inline padding, start",
-                "token": "--space-2"
-              },
-              {
-                "part": "Field",
-                "property": "Inline padding, end",
-                "token": "--space-3"
+                "property": "Inline padding",
+                "token": "--space-2-5"
               },
               {
                 "part": "Field",
@@ -5351,7 +5352,7 @@
               {
                 "part": "Icons and buttons",
                 "property": "Icon size",
-                "token": "--icon-xs"
+                "token": "--icon-md"
               },
               {
                 "part": "Input",
@@ -5375,13 +5376,8 @@
               },
               {
                 "part": "Field",
-                "property": "Inline padding, start",
-                "token": "--space-2"
-              },
-              {
-                "part": "Field",
-                "property": "Inline padding, end",
-                "token": "--space-3"
+                "property": "Inline padding",
+                "token": "--space-2-5"
               },
               {
                 "part": "Field",
@@ -5396,7 +5392,7 @@
               {
                 "part": "Icons and buttons",
                 "property": "Icon size",
-                "token": "--icon-xs"
+                "token": "--icon-md"
               },
               {
                 "part": "Input",
@@ -5424,7 +5420,12 @@
                 "token": "--text-body-sm"
               },
               {
-                "part": "Clear and open buttons",
+                "part": "Clear button",
+                "property": "Width and height",
+                "token": "--icon-md"
+              },
+              {
+                "part": "Open button",
                 "property": "Width and height",
                 "token": "--control-sm"
               },
@@ -5728,13 +5729,8 @@
               },
               {
                 "part": "Field",
-                "property": "Inline padding, start",
-                "token": "--space-2"
-              },
-              {
-                "part": "Field",
-                "property": "Inline end, edge and padding together",
-                "token": "--space-3"
+                "property": "Inline padding",
+                "token": "--space-2-5"
               },
               {
                 "part": "Field",
@@ -5773,13 +5769,8 @@
               },
               {
                 "part": "Field",
-                "property": "Inline padding, start",
-                "token": "--space-2"
-              },
-              {
-                "part": "Field",
-                "property": "Inline end, edge and padding together",
-                "token": "--space-3"
+                "property": "Inline padding",
+                "token": "--space-2-5"
               },
               {
                 "part": "Field",
@@ -6025,7 +6016,7 @@
         {
           "name": "placeholder",
           "control": "text",
-          "description": "Defaults to the locale's pattern, e.g. \"dd/mm/yyyy – dd/mm/yyyy\"."
+          "description": "Defaults to \"Start – End\". The locale's pattern (\"dd/mm/yyyy – dd/mm/yyyy\") is the input's description, and the error message names it."
         },
         {
           "name": "isFullWidth",
@@ -6087,13 +6078,8 @@
               },
               {
                 "part": "Field",
-                "property": "Inline padding, start",
-                "token": "--space-2"
-              },
-              {
-                "part": "Field",
-                "property": "Inline end, edge and padding together",
-                "token": "--space-3"
+                "property": "Inline padding",
+                "token": "--space-2-5"
               },
               {
                 "part": "Field",
@@ -6122,13 +6108,8 @@
               },
               {
                 "part": "Field",
-                "property": "Inline padding, start",
-                "token": "--space-2"
-              },
-              {
-                "part": "Field",
-                "property": "Inline end, edge and padding together",
-                "token": "--space-3"
+                "property": "Inline padding",
+                "token": "--space-2-5"
               },
               {
                 "part": "Field",
@@ -6309,7 +6290,7 @@
       "id": "components-inputs-field",
       "name": "Field",
       "category": "Inputs",
-      "status": "experimental",
+      "status": "beta",
       "storyId": "components-inputs-field--default",
       "props": [
         {
@@ -6673,7 +6654,7 @@
           {
             "name": "Type icon",
             "selector": "li > svg",
-            "description": "A page with a coloured badge for Word, Excel, PowerPoint, PDF, image and audio."
+            "description": "A page with a coloured badge naming the type: DOC, XLS, PPT, PDF, IMG or MP3. A plain gray page for any other type."
           },
           {
             "name": "Progress ring",
@@ -6708,7 +6689,7 @@
               {
                 "part": "Drop zone",
                 "property": "Corner radius",
-                "token": "--radius-panel"
+                "token": "--radius-control"
               },
               {
                 "part": "Icon",
@@ -6757,7 +6738,7 @@
               },
               {
                 "part": "File row",
-                "property": "Padding",
+                "property": "Block padding",
                 "token": "--space-stack"
               },
               {
@@ -6861,6 +6842,11 @@
                 "part": "File row, hover",
                 "property": "Background",
                 "token": "--color-interaction-hovered"
+              },
+              {
+                "part": "Type icon",
+                "property": "Line round the page and fold",
+                "token": "--color-surface-raised"
               },
               {
                 "part": "Name",
@@ -7064,7 +7050,7 @@
               {
                 "part": "Container",
                 "property": "Inline padding, start",
-                "token": "--space-1-5"
+                "token": "--space-2-5"
               },
               {
                 "part": "Container",
@@ -7094,7 +7080,7 @@
               {
                 "part": "Container",
                 "property": "Inline padding, start",
-                "token": "--space-1-5"
+                "token": "--space-2-5"
               },
               {
                 "part": "Container",
@@ -7119,6 +7105,16 @@
               {
                 "part": "Container",
                 "property": "Inline padding, end",
+                "token": "--space-1-5"
+              },
+              {
+                "part": "Container",
+                "property": "Gap from the value to the steppers",
+                "token": "--space-2"
+              },
+              {
+                "part": "Stepper",
+                "property": "Gap between the two",
                 "token": "--space-0-5"
               },
               {
@@ -7276,7 +7272,7 @@
       "id": "components-inputs-otpinput",
       "name": "OTPInput",
       "category": "Inputs",
-      "status": "experimental",
+      "status": "beta",
       "storyId": "components-inputs-otpinput--default",
       "props": [
         {
@@ -7422,11 +7418,6 @@
                 "part": "Cell",
                 "property": "Corner radius",
                 "token": "--control-md-radius-field"
-              },
-              {
-                "part": "Cell",
-                "property": "Font size",
-                "token": "--text-body"
               }
             ]
           },
@@ -7442,11 +7433,6 @@
                 "part": "Cell",
                 "property": "Corner radius",
                 "token": "--control-md-radius-field"
-              },
-              {
-                "part": "Cell",
-                "property": "Font size",
-                "token": "--text-body"
               }
             ]
           },
@@ -7457,6 +7443,21 @@
                 "part": "Cells and separator",
                 "property": "Gap",
                 "token": "--space-2"
+              },
+              {
+                "part": "Cell",
+                "property": "Font size",
+                "token": "--text-heading-lg"
+              },
+              {
+                "part": "Cell",
+                "property": "Line height",
+                "token": "--leading-heading-lg"
+              },
+              {
+                "part": "Separator",
+                "property": "Font size",
+                "token": "--text-body"
               },
               {
                 "part": "Resend button",
@@ -7577,7 +7578,7 @@
       "id": "components-inputs-passwordinput",
       "name": "PasswordInput",
       "category": "Inputs",
-      "status": "experimental",
+      "status": "beta",
       "storyId": "components-inputs-passwordinput--default",
       "props": [
         {
@@ -7656,7 +7657,7 @@
           {
             "name": "Show / Hide button",
             "selector": "button",
-            "description": "An end add-on. Says what it does next."
+            "description": "A plain word at the end of the box, no fill or divider. Says what it does next."
           },
           {
             "name": "Rule",
@@ -7668,6 +7669,16 @@
           {
             "caption": "Every size",
             "rows": [
+              {
+                "part": "Show / Hide button",
+                "property": "Inline padding",
+                "token": "--space-1-5"
+              },
+              {
+                "part": "Show / Hide button",
+                "property": "Gap to the box's end edge",
+                "token": "--space-1"
+              },
               {
                 "part": "Rule",
                 "property": "Gap between tick and text",
@@ -7685,6 +7696,11 @@
           {
             "caption": "default",
             "rows": [
+              {
+                "part": "Show / Hide button",
+                "property": "Text colour",
+                "token": "--color-text"
+              },
               {
                 "part": "Met rule",
                 "property": "Colour",
@@ -7747,6 +7763,11 @@
           "description": "An optional visible label, above the field. Without one, `aria-label` names it."
         },
         {
+          "name": "helperText",
+          "control": "text",
+          "description": "Under the field: what can be searched, or a note on the results. It becomes the input's description."
+        },
+        {
           "name": "size",
           "control": "inline-radio",
           "options": [
@@ -7772,6 +7793,12 @@
           "control": "text",
           "default": "Search",
           "description": "What can be searched, e.g. \"Search components\". Not a name: the field is named by `label` or `aria-label`."
+        },
+        {
+          "name": "required",
+          "control": "boolean",
+          "default": false,
+          "description": "Native `required`. Adds an asterisk to the label, hidden from screen readers, which hear \"required\" from the input."
         },
         {
           "name": "disabled",
@@ -7825,7 +7852,12 @@
               },
               {
                 "part": "Container",
-                "property": "Inline padding",
+                "property": "Inline padding, start",
+                "token": "--space-2-5"
+              },
+              {
+                "part": "Container",
+                "property": "Inline padding, end",
                 "token": "--space-1-5"
               },
               {
@@ -7860,7 +7892,12 @@
               },
               {
                 "part": "Container",
-                "property": "Inline padding",
+                "property": "Inline padding, start",
+                "token": "--space-2-5"
+              },
+              {
+                "part": "Container",
+                "property": "Inline padding, end",
                 "token": "--space-1-5"
               },
               {
@@ -8121,13 +8158,8 @@
               },
               {
                 "part": "Container",
-                "property": "Inline padding, start",
-                "token": "--space-2"
-              },
-              {
-                "part": "Container",
-                "property": "Inline padding, end",
-                "token": "--space-3"
+                "property": "Inline padding",
+                "token": "--space-2-5"
               },
               {
                 "part": "Container",
@@ -8142,12 +8174,7 @@
               {
                 "part": "Chevron",
                 "property": "Size",
-                "token": "--icon-xs"
-              },
-              {
-                "part": "Chevron",
-                "property": "Inline start margin",
-                "token": "--space-1"
+                "token": "--icon-md"
               },
               {
                 "part": "Value",
@@ -8171,13 +8198,8 @@
               },
               {
                 "part": "Container",
-                "property": "Inline padding, start",
-                "token": "--space-2"
-              },
-              {
-                "part": "Container",
-                "property": "Inline padding, end",
-                "token": "--space-3"
+                "property": "Inline padding",
+                "token": "--space-2-5"
               },
               {
                 "part": "Container",
@@ -8192,12 +8214,7 @@
               {
                 "part": "Chevron",
                 "property": "Size",
-                "token": "--icon-xs"
-              },
-              {
-                "part": "Chevron",
-                "property": "Inline start margin",
-                "token": "--space-1"
+                "token": "--icon-md"
               },
               {
                 "part": "Value",
@@ -8548,8 +8565,8 @@
               },
               {
                 "part": "Input",
-                "property": "Inline padding, plus the border width",
-                "token": "--space-1-5"
+                "property": "Inline padding",
+                "token": "--space-2-5"
               },
               {
                 "part": "Input",
@@ -8578,8 +8595,8 @@
               },
               {
                 "part": "Input",
-                "property": "Inline padding, plus the border width",
-                "token": "--space-1-5"
+                "property": "Inline padding",
+                "token": "--space-2-5"
               },
               {
                 "part": "Input",
@@ -8862,7 +8879,7 @@
               {
                 "part": "Container",
                 "property": "Inline padding",
-                "token": "--space-1-5"
+                "token": "--space-2-5"
               },
               {
                 "part": "Container",
@@ -8882,7 +8899,7 @@
               {
                 "part": "Add-on",
                 "property": "Inline padding",
-                "token": "--space-1-5"
+                "token": "--space-2-5"
               },
               {
                 "part": "Input",
@@ -8907,7 +8924,7 @@
               {
                 "part": "Container",
                 "property": "Inline padding",
-                "token": "--space-1-5"
+                "token": "--space-2-5"
               },
               {
                 "part": "Container",
@@ -8927,7 +8944,7 @@
               {
                 "part": "Add-on",
                 "property": "Inline padding",
-                "token": "--space-1-5"
+                "token": "--space-2-5"
               },
               {
                 "part": "Input",
@@ -8963,6 +8980,11 @@
                 "part": "Label, container, helper",
                 "property": "Gap between",
                 "token": "--space-stack"
+              },
+              {
+                "part": "Required asterisk",
+                "property": "Gap after the label",
+                "token": "--space-1"
               },
               {
                 "part": "Focus ring",
@@ -9177,7 +9199,7 @@
           "name": "isIndeterminate",
           "control": "boolean",
           "default": false,
-          "description": "Progress is happening but how much is unknown: a third of the track slides across."
+          "description": "Progress is happening but how much is unknown: 40% of the track slides across."
         },
         {
           "name": "showValueLabel",
@@ -9207,7 +9229,7 @@
           {
             "name": "Indicator",
             "selector": "[role=\"progressbar\"] > div > :first-child > *",
-            "description": "The filled share, coloured by variant. A sliding third when indeterminate."
+            "description": "The filled share, coloured by variant. A sliding 40% of the track when indeterminate."
           },
           {
             "name": "Value label",
@@ -9580,7 +9602,7 @@
           {
             "name": "Indicator",
             "selector": "svg > circle:last-child",
-            "description": "The arc: a quarter turn while spinning, or the value as a share of the ring."
+            "description": "The arc: 30% of the ring while spinning, or the value as a share of the ring."
           },
           {
             "name": "Label",
@@ -9830,6 +9852,16 @@
                 "part": "Ellipsis",
                 "property": "Inline padding",
                 "token": "--space-1"
+              },
+              {
+                "part": "Ellipsis",
+                "property": "Icon size, md",
+                "token": "--icon-md"
+              },
+              {
+                "part": "Ellipsis",
+                "property": "Icon size, sm",
+                "token": "--icon-sm"
               },
               {
                 "part": "Link and ellipsis",
@@ -10243,8 +10275,8 @@
             "rows": [
               {
                 "part": "Popup",
-                "property": "Padding, from the outer edge",
-                "token": "--space-3"
+                "property": "Padding, inside the border",
+                "token": "--space-1"
               },
               {
                 "part": "Popup",
@@ -10264,7 +10296,7 @@
               {
                 "part": "Separator",
                 "property": "Space above and below",
-                "token": "--space-3"
+                "token": "--space-1"
               }
             ]
           },
@@ -10390,7 +10422,7 @@
               },
               {
                 "part": "Item, highlighted",
-                "property": "Text and icon",
+                "property": "Text",
                 "token": "--color-text"
               },
               {
@@ -10463,7 +10495,7 @@
       "id": "components-navigation-menubar",
       "name": "Menubar",
       "category": "Navigation",
-      "status": "experimental",
+      "status": "beta",
       "storyId": "components-navigation-menubar--default",
       "props": [
         {
@@ -10511,24 +10543,14 @@
             "caption": "Bar",
             "rows": [
               {
-                "part": "Bar",
-                "property": "Padding",
-                "token": "--space-stack"
-              },
-              {
-                "part": "Bar",
-                "property": "Gap between triggers",
-                "token": "--space-0-5"
-              },
-              {
-                "part": "Bar",
-                "property": "Corner radius",
-                "token": "--radius-field"
-              },
-              {
                 "part": "Trigger",
                 "property": "Height",
                 "token": "--control-sm"
+              },
+              {
+                "part": "Trigger",
+                "property": "Corner radius",
+                "token": "--control-sm-radius"
               },
               {
                 "part": "Trigger",
@@ -10564,18 +10586,8 @@
             "rows": [
               {
                 "part": "Bar",
-                "property": "Background",
-                "token": "--color-surface"
-              },
-              {
-                "part": "Bar",
                 "property": "Text",
                 "token": "--color-text"
-              },
-              {
-                "part": "Bar",
-                "property": "Border",
-                "token": "--color-border"
               },
               {
                 "part": "Trigger, hover, highlighted or open",
@@ -10752,6 +10764,11 @@
                 "part": "Summary, List, Rows per page",
                 "property": "Gap between them",
                 "token": "--space-inline"
+              },
+              {
+                "part": "Control",
+                "property": "Gap between controls",
+                "token": "--space-1"
               },
               {
                 "part": "Ellipsis",
@@ -10966,6 +10983,16 @@
                 "part": "Marker",
                 "property": "Corner radius",
                 "token": "--radius-pill"
+              },
+              {
+                "part": "Marker icon, md",
+                "property": "Size",
+                "token": "--icon-md"
+              },
+              {
+                "part": "Marker icon, sm",
+                "property": "Size",
+                "token": "--icon-sm"
               },
               {
                 "part": "Marker number, description",
@@ -11481,7 +11508,7 @@
               {
                 "part": "Indicator",
                 "property": "Background",
-                "token": "--color-surface-raised"
+                "token": "--color-surface"
               },
               {
                 "part": "Indicator",
@@ -11724,6 +11751,11 @@
                 "token": "--color-text-info"
               },
               {
+                "part": "Close button, subtle and outlined",
+                "property": "Colour",
+                "token": "--color-text-info"
+              },
+              {
                 "part": "Container, solid",
                 "property": "Background",
                 "token": "--color-background-info-bold"
@@ -11750,6 +11782,11 @@
               },
               {
                 "part": "Icon and title, subtle and outlined",
+                "property": "Colour",
+                "token": "--color-text-success"
+              },
+              {
+                "part": "Close button, subtle and outlined",
                 "property": "Colour",
                 "token": "--color-text-success"
               },
@@ -11784,6 +11821,11 @@
                 "token": "--color-text-warning"
               },
               {
+                "part": "Close button, subtle and outlined",
+                "property": "Colour",
+                "token": "--color-text-warning"
+              },
+              {
                 "part": "Container, solid",
                 "property": "Background",
                 "token": "--color-background-warning-bold"
@@ -11810,6 +11852,11 @@
               },
               {
                 "part": "Icon and title, subtle and outlined",
+                "property": "Colour",
+                "token": "--color-text-danger"
+              },
+              {
+                "part": "Close button, subtle and outlined",
                 "property": "Colour",
                 "token": "--color-text-danger"
               },
@@ -12108,12 +12155,12 @@
           {
             "name": "Container",
             "selector": "[role=\"dialog\"]",
-            "description": "The surface, in the opposite appearance to the page."
+            "description": "The overlay surface, in the page's own appearance."
           },
           {
             "name": "Icon",
             "selector": "[role=\"dialog\"] > span[aria-hidden=\"true\"]",
-            "description": "The variant's filled icon; none for `default`, a spinner while pending."
+            "description": "The variant's filled icon; none for `neutral`, a spinner while pending."
           },
           {
             "name": "Title",
@@ -12179,6 +12226,11 @@
                 "part": "Close button",
                 "property": "Size",
                 "token": "--box-sm"
+              },
+              {
+                "part": "Close button",
+                "property": "Gap, from the text",
+                "token": "--space-group"
               },
               {
                 "part": "Close button",
@@ -12362,10 +12414,20 @@
           "description": "Required: what happens, to what, and that it cannot be undone. Read as the dialog's description."
         },
         {
+          "name": "kind",
+          "control": "inline-radio",
+          "options": [
+            "default",
+            "destructive"
+          ],
+          "default": "destructive",
+          "description": "`destructive`: a warning icon and a destructive confirm button, for an action that cannot be undone. `default`: no icon and a primary confirm button, for a decision that destroys nothing (sign out, leave without saving)."
+        },
+        {
           "name": "confirmLabel",
           "control": "text",
           "default": "Delete project",
-          "description": "Required: the destructive button, named after what it does (\"Delete project\"), never \"OK\"."
+          "description": "Required: the confirm button, named after what it does (\"Delete project\"), never \"OK\"."
         },
         {
           "name": "cancelLabel",
@@ -12389,7 +12451,7 @@
         "anatomy": [
           {
             "name": "Warning icon",
-            "selector": "._icon_18fqf_8",
+            "selector": "._icon_jpjr0_13",
             "description": "In `--color-background-danger-bold`. Decorative: not part of the name."
           },
           {
@@ -12399,7 +12461,7 @@
           },
           {
             "name": "Consequence",
-            "selector": "._description_1rqwo_88",
+            "selector": "._description_1rwsd_96",
             "description": "What happens, to what, and that it cannot be undone."
           },
           {
@@ -12409,12 +12471,12 @@
           },
           {
             "name": "Cancel",
-            "selector": "._footer_1rqwo_109 > :first-child",
+            "selector": "._footer_1rwsd_117 > :first-child",
             "description": "The safe choice. Focus starts here, or in the field."
           },
           {
             "name": "Confirm",
-            "selector": "._footer_1rqwo_109 > :last-child",
+            "selector": "._footer_1rwsd_117 > :last-child",
             "description": "`destructive`, named after what it does."
           }
         ],
@@ -12422,6 +12484,11 @@
           {
             "caption": "Icon and field",
             "rows": [
+              {
+                "part": "Title to description",
+                "property": "Gap",
+                "token": "--space-group"
+              },
               {
                 "part": "Warning icon",
                 "property": "Width",
@@ -12556,7 +12623,7 @@
         "anatomy": [
           {
             "name": "Backdrop",
-            "selector": "._backdrop_1rqwo_5",
+            "selector": "._backdrop_1rwsd_5",
             "description": "A scrim over the whole page. It blocks the page until the modal closes."
           },
           {
@@ -12576,17 +12643,17 @@
           },
           {
             "name": "Description",
-            "selector": "._description_1rqwo_88",
+            "selector": "._description_1rwsd_96",
             "description": "Optional. What the modal is for, or what will happen."
           },
           {
             "name": "Body",
-            "selector": "._body_1rqwo_95",
+            "selector": "._body_1rwsd_103",
             "description": "children. Scrolls when the modal is taller than the screen."
           },
           {
             "name": "Footer",
-            "selector": "._footer_1rqwo_109",
+            "selector": "._footer_1rwsd_117",
             "description": "Actions, right-aligned, the main one last."
           }
         ],
@@ -12865,12 +12932,12 @@
           },
           {
             "name": "Description",
-            "selector": "._description_o6kjg_47",
+            "selector": "._description_1cv2y_53",
             "description": "Optional. What the popover is for."
           },
           {
             "name": "Body",
-            "selector": "._body_o6kjg_52",
+            "selector": "._body_1cv2y_58",
             "description": "children: the content."
           }
         ],
@@ -12907,11 +12974,6 @@
                 "part": "Title to close button",
                 "property": "Gap",
                 "token": "--space-cluster"
-              },
-              {
-                "part": "Title to description",
-                "property": "Gap",
-                "token": "--space-1"
               },
               {
                 "part": "Body",
@@ -13139,46 +13201,6 @@
                 "token": "--leading-body-sm"
               }
             ]
-          },
-          {
-            "caption": "Hover card",
-            "rows": [
-              {
-                "part": "Container",
-                "property": "Padding",
-                "token": "--space-group"
-              },
-              {
-                "part": "Container",
-                "property": "Corner radius",
-                "token": "--radius-lg"
-              },
-              {
-                "part": "Container",
-                "property": "Shadow",
-                "token": "--shadow-overlay"
-              },
-              {
-                "part": "Avatar to text",
-                "property": "Gap",
-                "token": "--space-cluster"
-              },
-              {
-                "part": "Text to action",
-                "property": "Gap",
-                "token": "--space-3"
-              },
-              {
-                "part": "Name",
-                "property": "Font size",
-                "token": "--text-body"
-              },
-              {
-                "part": "Meta",
-                "property": "Font size",
-                "token": "--text-body-sm"
-              }
-            ]
           }
         ],
         "color": [
@@ -13196,31 +13218,6 @@
                 "token": "--color-surface"
               }
             ]
-          },
-          {
-            "caption": "Hover card",
-            "rows": [
-              {
-                "part": "Container",
-                "property": "Background",
-                "token": "--color-surface-overlay"
-              },
-              {
-                "part": "Container",
-                "property": "Border",
-                "token": "--color-border"
-              },
-              {
-                "part": "Name",
-                "property": "Colour",
-                "token": "--color-text"
-              },
-              {
-                "part": "Meta",
-                "property": "Colour",
-                "token": "--color-text-subtlest"
-              }
-            ]
           }
         ],
         "pseudo": []
@@ -13231,7 +13228,7 @@
           "Use a Tooltip for a label or a hint: the name of an icon-only button, a\nkeyboard shortcut, one line on what a control does. 300ms before it opens\nis quick enough to feel responsive and long enough that tooltips do not\nflash as the pointer crosses a toolbar."
         ],
         "whenNotToUse": [
-          "- **For anything a reader needs to finish a task.** Put it on the page: a\n  tooltip cannot be reached by touch, and it disappears the moment you\n  look away.\n- **For links, buttons or other interactive content.** Hover and touch\n  cannot reach the tooltip. Use a\n  [Popover](?path=/docs/components-overlays-popover--docs).\n- **For a rich preview.** A tooltip holds text only. To preview a person\n  or record behind a link, use `HoverCard`. Its action is a shortcut, so\n  the linked page must offer the same action.\n- **On a disabled button.** It is not focusable, so its tooltip never opens\n  by keyboard. Put the reason it is disabled in text next to it."
+          "- **For anything a reader needs to finish a task.** Put it on the page: a\n  tooltip cannot be reached by touch, and it disappears the moment you\n  look away.\n- **For links, buttons or other interactive content.** Hover and touch\n  cannot reach the tooltip. Use a\n  [Popover](?path=/docs/components-overlays-popover--docs).\n- **For a rich preview.** A tooltip holds text only. Use a\n  [Popover](?path=/docs/components-overlays-popover--docs) with\n  `openOnHover`.\n- **On a disabled button.** It is not focusable, so its tooltip never opens\n  by keyboard. Put the reason it is disabled in text next to it."
         ],
         "doDont": [
           {
@@ -13250,9 +13247,7 @@
             "title": "Accessibility",
             "blocks": [
               "- It opens on hover after `delay` and on keyboard focus at once, and\n  closes on Escape, blur or pointer leave.",
-              "- Base UI keeps tooltips out of the accessibility tree. This component\n  gives the popup `role=\"tooltip\"` and, while it is open, points the\n  trigger's `aria-describedby` at it, so it is read as a description.\n- It is a **description, not a name.** An icon-only button still needs its\n  own `aria-label`; the tooltip then shows that label to sighted users too.\n- The trigger must be focusable: a Button, a link, a field.\n- `--color-surface` on `--color-text` reads at 16:1 or more in both modes.",
-              "- The trigger is a link to what the card previews. Hover or keyboard focus\n  on it opens the card; Escape closes it.",
-              "- The card is a visual preview, not a dialog: focus stays on the link and\n  Tab moves past the card, its action included. Touch has no hover, so\n  everything on it must be on the page the link opens."
+              "- Base UI keeps tooltips out of the accessibility tree. This component\n  gives the popup `role=\"tooltip\"` and, while it is open, points the\n  trigger's `aria-describedby` at it, so it is read as a description.\n- It is a **description, not a name.** An icon-only button still needs its\n  own `aria-label`; the tooltip then shows that label to sighted users too.\n- The trigger must be focusable: a Button, a link, a field.\n- `--color-surface` on `--color-text` reads at 16:1 or more in both modes."
             ]
           }
         ]
@@ -13367,12 +13362,12 @@
               {
                 "part": "Description",
                 "property": "Space above",
-                "token": "--space-inline"
+                "token": "--space-group"
               },
               {
                 "part": "Action",
                 "property": "Space above",
-                "token": "--space-group"
+                "token": "--space-container"
               }
             ]
           },
@@ -13442,7 +13437,7 @@
               {
                 "part": "Action",
                 "property": "Gap between buttons",
-                "token": "--space-stack"
+                "token": "--space-inline"
               }
             ]
           }
@@ -13625,7 +13620,7 @@
               {
                 "part": "Description",
                 "property": "Space above",
-                "token": "--space-inline"
+                "token": "--space-group"
               },
               {
                 "part": "Title",
@@ -13640,7 +13635,7 @@
               {
                 "part": "Action",
                 "property": "Space above",
-                "token": "--space-group"
+                "token": "--space-container"
               }
             ]
           },
@@ -13699,11 +13694,6 @@
               },
               {
                 "part": "Details",
-                "property": "Space above",
-                "token": "--space-2"
-              },
-              {
-                "part": "Details",
                 "property": "Font",
                 "token": "--font-mono"
               },
@@ -13740,9 +13730,14 @@
                 "token": "--color-text"
               },
               {
-                "part": "Description and details",
+                "part": "Description",
                 "property": "Colour",
                 "token": "--color-text-subtlest"
+              },
+              {
+                "part": "Details",
+                "property": "Colour",
+                "token": "--color-text-danger"
               }
             ]
           }
@@ -13889,7 +13884,7 @@
               {
                 "part": "Description",
                 "property": "Space above",
-                "token": "--space-inline"
+                "token": "--space-group"
               },
               {
                 "part": "Title",
@@ -13904,7 +13899,7 @@
               {
                 "part": "Action",
                 "property": "Space above",
-                "token": "--space-group"
+                "token": "--space-container"
               }
             ]
           },
@@ -13964,7 +13959,7 @@
               {
                 "part": "Action",
                 "property": "Gap between buttons",
-                "token": "--space-stack"
+                "token": "--space-inline"
               }
             ]
           }

@@ -7,15 +7,14 @@ const values = requests.map((d) => d.requests)
 
 const meta = {
   title: 'Charts/Sparkline',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: Sparkline,
   parameters: { layout: 'padded' },
-  decorators: [(Story) => <div style={{ inlineSize: 240 }}>{Story()}</div>],
   args: { data: values },
   argTypes: {
     data: { control: false, description: 'Values in order, oldest first. Empty or null shows "No data".' },
     color: { control: 'select', options: ['chart-1', 'chart-2', 'chart-3', 'chart-4', 'chart-5', 'chart-6', 'chart-7', 'chart-8', 'success', 'danger'], description: 'A colour token name.' },
-    appearance: { control: 'inline-radio', options: ['line', 'area'], description: '`area` fills under the line.' },
+    appearance: { control: 'inline-radio', options: ['line', 'area', 'bar'], description: '`area` fills under the line; `bar` draws one bar per value, for counts.' },
     'aria-label': { description: 'Off by default, as decoration beside a figure. Name it when the spark is the only place the trend is shown.' },
   },
 } satisfies Meta<typeof Sparkline>
@@ -23,11 +22,29 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-/** Beside a figure, the spark is decoration: hidden from assistive tech. */
+/** Beside a figure, the spark is decoration: hidden from assistive tech. 96 × 24 unless sized otherwise. */
 export const Default: Story = {
   play: async ({ canvasElement }) => {
     await expect(canvasElement.querySelector('svg')).toHaveAttribute('aria-hidden', 'true')
     await expect(canvasElement.querySelectorAll('path')).toHaveLength(2)
+    const box = canvasElement.querySelector('svg')!.getBoundingClientRect()
+    await expect([box.width, box.height]).toEqual([96, 24])
+  },
+}
+
+/** One bar per value, for counts. */
+export const Bar: Story = {
+  args: { appearance: 'bar', data: values.slice(-12) },
+  play: async ({ canvasElement }) => {
+    await expect(canvasElement.querySelectorAll('rect')).toHaveLength(12)
+  },
+}
+
+/** A class or style sets another width: here it fills a 240px cell. */
+export const Wide: Story = {
+  args: { style: { inlineSize: 240 } },
+  play: async ({ canvasElement }) => {
+    await expect(canvasElement.querySelector('svg')!.getBoundingClientRect().width).toBe(240)
   },
 }
 

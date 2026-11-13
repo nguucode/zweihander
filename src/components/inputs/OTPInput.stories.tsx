@@ -6,7 +6,7 @@ import { OTPInput } from './OTPInput'
 
 const meta = {
   title: 'Components/Inputs/OTPInput',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: OTPInput,
   // Every prop is listed by hand, with a description: these are the docs'
   // API table and the Playground's props panel.

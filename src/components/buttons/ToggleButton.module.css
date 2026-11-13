@@ -4,14 +4,13 @@
    A tint of the variant colour does not (red-600 on a red tint is 3.7:1),
    so pressed takes the neutral secondary fill and its measured label. The
    outlined border keeps the variant colour. It sets Button's own state
-   properties rather than painting over them, so hover and press follow
-   the same measured rules; two classes to outrank Button's appearance
-   classes, whichever stylesheet loads first. */
+   properties rather than painting over them, so hover follows the same
+   measured rules (a toggle has no press-and-hold state, see Button); two
+   classes to outrank Button's appearance classes, whichever stylesheet
+   loads first. */
 .tinted.tinted {
   --button-bg: var(--color-background-neutral);
   --button-fg: var(--color-text);
   --button-bg-hover: color-mix(in oklab, var(--color-background-neutral) 90%, var(--color-text));
-  --button-bg-active: color-mix(in oklab, var(--color-background-neutral) 82%, var(--color-text));
   --button-fg-hover: var(--color-text);
-  --button-fg-active: var(--color-text);
 }

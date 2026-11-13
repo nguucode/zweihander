@@ -39,7 +39,7 @@ const meta = {
       table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
     },
     isIndeterminate: {
-      description: 'Progress is happening but how much is unknown: a third of the track slides across.',
+      description: 'Progress is happening but how much is unknown: 40% of the track slides across.',
       control: 'boolean',
       table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
     },
@@ -182,7 +182,7 @@ export const WithoutVisibleLabel: Story = {
 export const anatomyParts = [
   { name: 'Label', selector: '[role="progressbar"] > :first-child', description: 'Optional, above the bar. Names the progressbar.' },
   { name: 'Track', selector: '[role="progressbar"] > div > :first-child', description: 'The full length, --color-background-neutral.' },
-  { name: 'Indicator', selector: '[role="progressbar"] > div > :first-child > *', description: 'The filled share, coloured by variant. A sliding third when indeterminate.' },
+  { name: 'Indicator', selector: '[role="progressbar"] > div > :first-child > *', description: 'The filled share, coloured by variant. A sliding 40% of the track when indeterminate.' },
   { name: 'Value label', selector: '[role="progressbar"] > div > :last-child', description: 'Optional, showValueLabel: the percentage after the bar.' },
 ]
 

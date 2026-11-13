@@ -26,15 +26,16 @@ export interface PieChartProps {
 }
 
 /**
- * Parts of one whole. No labels on the slices: the legend beside it carries
- * value and share. Past six slices, or under 3%, slices merge into "Other".
+ * Parts of one whole. No labels on the slices: the legend below it carries
+ * each share, the table the values. Past six slices, or under 3%, slices
+ * merge into "Other".
  */
 export function PieChart({
   title,
   data,
   appearance = 'pie',
   centerLabel = 'Total',
-  size = 200,
+  size = 160,
   format = formatCompact,
   isLoading = false,
   className,
@@ -121,8 +122,7 @@ export function PieChart({
             {slices.map((s) => `${s.label} ${shareOf(s.value)}`).join(', ')}
           </span>
           <ChartLegend
-            orientation="vertical"
-            items={slices.map((s, i) => ({ key: String(i), label: s.label, color: colorVar(s.color), value: `${format(s.value)} · ${shareOf(s.value)}` }))}
+            items={slices.map((s, i) => ({ key: String(i), label: s.label, color: colorVar(s.color), value: shareOf(s.value) }))}
             onFocusChange={setFocusKey}
           />
         </div>

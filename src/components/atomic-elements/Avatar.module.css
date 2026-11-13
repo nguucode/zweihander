@@ -59,6 +59,8 @@
   inline-size: var(--avatar-size);
   block-size: var(--avatar-size);
   font-size: var(--text-heading-xl);
+  /* Figma's Heading/xl and Heading/2xl: semibold at the profile sizes. */
+  font-weight: 600;
 }
 
 .xxl {
@@ -68,6 +70,7 @@
   inline-size: var(--avatar-size);
   block-size: var(--avatar-size);
   font-size: var(--text-heading-2xl);
+  font-weight: 600;
 }
 
 .image {
@@ -106,35 +109,24 @@
   color: var(--color-text-brand-inverse);
 }
 
-/* On subtle the silhouette takes the initials' colour, measured on its fill.
-   The hue's 600 step would look closer to a portrait but misses 3:1 on the
-   warm tints. Neutral subtle is the exception: gray 900 is too heavy for a
-   shape this large, and --color-text-subtlest is measured on the same fill. */
+/* The kit's user icon, centred at 60% of the circle, as in Figma. It takes
+   the initials' colour, measured on its fill: on solid that is
+   --color-text-inverse (neutral) or --color-text-brand-inverse (a hue).
+   Neutral subtle is the exception: gray 900 is too heavy for a shape this
+   large, and --color-text-subtlest is measured on the same fill. */
 .silhouette {
-  inline-size: 100%;
-  block-size: 100%;
-  fill: currentColor;
-  clip-path: circle(50%);
+  inline-size: 60%;
+  block-size: 60%;
 }
 
 .subtle:not([data-accent]) .silhouette {
   color: var(--color-text-subtlest);
 }
 
-/* On solid the silhouette is always white, for one consistent look across
-   hues. A deliberate a11y trade-off: it falls under the 3:1 a graphic needs
-   on the warm hues (orange to lime) in light mode, and on most hues in dark
-   mode, where the fill is the 400 step. Acceptable because the silhouette
-   carries no information: the name is in imageAlt or next to the avatar.
-   Initials keep the measured label. */
-.solid .silhouette {
-  color: var(--color-text-inverse);
-}
-
 /* On the bounding box's corner, outside the curve, as in most chat apps: the
    ring in the page colour cuts it out of the circle and any picture, as on
-   a floating Badge. With a dot the circle stops clipping, so the image and
-   silhouette clip themselves (above); without one nothing changes. */
+   a floating Badge. With a dot the circle stops clipping, so the image
+   clips itself (above); the silhouette sits inside the circle anyway. */
 .hasStatus {
   overflow: visible;
 }

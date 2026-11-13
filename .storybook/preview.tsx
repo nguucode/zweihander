@@ -40,8 +40,6 @@ const withTheme: Decorator = (Story, context) => {
         accent={parsePreviewTheme('accent', context.globals.accent)}
         gray={parsePreviewTheme('gray', context.globals.gray)}
         radius={parsePreviewTheme('radius', context.globals.radius)}
-        canvas={parsePreviewTheme('canvas', context.globals.canvas)}
-        contentStyle={parsePreviewTheme('contentStyle', context.globals.contentStyle)}
         font={parsePreviewTheme('font', context.globals.font)}
       >
         <Story />

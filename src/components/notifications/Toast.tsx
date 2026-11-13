@@ -1,12 +1,12 @@
 'use client'
 
-import { useSyncExternalStore, type ReactNode, type RefObject } from 'react'
+import { type ReactNode, type RefObject } from 'react'
 import { Toast as BaseToast } from '@base-ui/react/toast'
 import { Icon, type IconName } from '@/lib/icon'
 import { cn } from '@/lib/utils'
 import styles from './Toast.module.css'
 
-export type ToastVariant = 'default' | 'info' | 'success' | 'warning' | 'danger'
+export type ToastVariant = 'neutral' | 'info' | 'success' | 'warning' | 'danger'
 
 export interface ToastOptions {
   title?: ReactNode
@@ -39,7 +39,7 @@ export interface ToastProviderProps {
 
 // Base UI's promise() sets these types itself.
 const variantOf = (type: string | undefined): ToastVariant | 'loading' =>
-  type === 'error' ? 'danger' : type === 'loading' ? 'loading' : ((type as ToastVariant) ?? 'default')
+  type === 'error' ? 'danger' : type === 'loading' ? 'loading' : ((type as ToastVariant) ?? 'neutral')
 
 const icons: Partial<Record<ToastVariant, IconName>> = {
   info: 'info-filled',
@@ -47,16 +47,6 @@ const icons: Partial<Record<ToastVariant, IconName>> = {
   warning: 'warning-filled',
   danger: 'danger-filled',
 }
-
-// The toast takes the opposite appearance of the page (dark on a light page,
-// light on a dark one) so it stands out from what is under it. The page's
-// appearance is the `dark` class on <html>.
-const subscribeToPageTheme = (onChange: () => void) => {
-  const observer = new MutationObserver(onChange)
-  observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
-  return () => observer.disconnect()
-}
-const pageIsDark = () => document.documentElement.classList.contains('dark')
 
 function ToastList({ swipe }: { swipe: 'left' | 'right' | 'up' | 'down' }) {
   const { toasts } = BaseToast.useToastManager()
@@ -97,12 +87,11 @@ function ToastList({ swipe }: { swipe: 'left' | 'right' | 'up' | 'down' }) {
 export function ToastProvider({ children, placement = 'bottom-right', timeout = 5000, limit = 3, container }: ToastProviderProps) {
   const [vertical, horizontal] = placement.split('-') as ['top' | 'bottom', 'left' | 'center' | 'right']
   const swipe = horizontal === 'center' ? (vertical === 'top' ? 'up' : 'down') : horizontal
-  const dark = useSyncExternalStore(subscribeToPageTheme, pageIsDark, () => false)
   return (
     <BaseToast.Provider timeout={timeout} limit={limit}>
       {children}
       <BaseToast.Portal container={container}>
-        <BaseToast.Viewport className={cn(styles.viewport, styles[vertical], styles[horizontal], dark ? 'light' : 'dark')}>
+        <BaseToast.Viewport className={cn(styles.viewport, styles[vertical], styles[horizontal])}>
           <ToastList swipe={swipe} />
         </BaseToast.Viewport>
       </BaseToast.Portal>

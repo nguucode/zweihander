@@ -53,8 +53,7 @@
 }
 
 .required {
-  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- 2px between label and asterisk, below the spacing scale on purpose */
-  margin-inline-start: 0.125rem;
+  margin-inline-start: var(--space-1);
   color: var(--color-text-danger);
 }
 
@@ -103,14 +102,13 @@
 
 /* A field is one step taller than a button, after Atlassian: md is
    --control-lg (40px) and sm is --control-md (32px), which lines up with a
-   Button in a toolbar. Both sizes share the rest: 6px of padding inside the
-   edge, as @atlaskit/textfield's input (so text starts 7px from the outer
-   edge), the md icon and gap, the field radius (which never becomes a pill)
-   and body type. Every icon in the box (affix, chevron, clear, stepper,
-   spinner) reads --field-icon. */
+   Button in a toolbar. Both sizes share the rest: 10px of padding inside the
+   edge (the Figma library's binding), the md icon and gap, the field radius
+   (which never becomes a pill) and body type. Every icon in the box (affix,
+   chevron, clear, stepper, spinner) reads --field-icon. */
 .sm,
 .md {
-  --field-pad: var(--space-1-5);
+  --field-pad: var(--space-2-5);
   --field-icon: var(--icon-md);
   --field-radius: var(--control-md-radius-field);
   /* 8px, not the control tier's 6px gap: a 24px button in the box is pulled
@@ -128,40 +126,17 @@
   min-block-size: var(--control-lg);
 }
 
-/* A field that opens a list or a calendar (Select, Combobox, Date Picker) is
-   Atlassian's Select, which is roomier than its Textfield. The value sits
-   8px inside the edge (@atlaskit/react-select: 6px on the value container
-   plus 2px round the value), 9px from the outer edge. The chevron and the
-   clear button draw a 12px icon. The end is 12px, which puts the chevron's
-   centre 19px from the outer edge, where Atlassian's indicator has it
-   (1px edge, 4 + 2 + 6px and half a 12px icon). The gap is 12px, Atlassian's
-   from the clear icon to the chevron (2 + 2px after one, 2 + 6px before the
-   other) and from the value to the clear icon.
-   After .sm and .md, so it wins at equal specificity. */
+/* A field that opens a list (Select, Combobox) keeps the text fields'
+   padding and 16px icon, but 12px between the value, the clear icon and the
+   chevron. After .sm and .md, so it wins at equal specificity. */
 .picker {
-  --field-icon: var(--icon-xs);
   gap: var(--space-3);
-  padding-inline: var(--space-2) var(--space-3);
-}
-/* The chevron straight after the value keeps 16px from it, so a value that
-   truncates stops there (Atlassian: 2 + 6px after the value, 2 + 6px before
-   the icon). */
-.picker > .value + .icon {
-  margin-inline-start: var(--space-1);
-}
-/* Not Date Picker's calendar button, nor a clear button before the chevron. */
-.picker:not(.datePicker) > .control + .iconButton:last-child {
-  margin-inline-start: calc((var(--field-icon) - var(--control-sm)) / 2 + var(--space-1));
 }
 
-/* Date Picker's button is Atlassian's default icon button, not Select's
-   indicator: a 16px calendar whose centre is 20px from the outer edge (4px
-   from the edge to a 32px button), so the end is 12px less the 1px edge.
-   After .picker, so it wins at equal specificity. */
+/* Date Picker's calendar button sits 8px after the value, as a text field's
+   suffix. After .picker, so it wins at equal specificity. */
 .datePicker {
-  --field-icon: var(--icon-md);
   gap: var(--space-2);
-  padding-inline-end: calc(var(--space-3) - 1px);
 }
 
 /* The ring is on the box, drawn when the control inside has keyboard or
@@ -466,6 +441,15 @@
 :where(.box, .affix) > .iconButton:focus-visible {
   outline-offset: var(--focus-offset-inset);
 }
+/* A bare icon button (Combobox's clear): the 16px icon is the whole button,
+   with no 24px frame round it. The picker's 12px gaps keep it clear of its
+   neighbours, and on touch the ::after below still makes it 44px. */
+.box > .iconButton.bare {
+  inline-size: var(--field-icon);
+  block-size: var(--field-icon);
+  margin-inline: 0;
+}
+
 @media (pointer: coarse) {
   .iconButton::after {
     content: '';
@@ -479,11 +463,8 @@
 
 /* A small ring of currentColor, as Button's loading state. */
 .spinner {
-  /* 16px in every field, as Atlassian's: where the icon slot is a picker's
-     12px, the margin keeps the ring on the chevron's centre. */
-  inline-size: var(--icon-md);
-  block-size: var(--icon-md);
-  margin: calc((var(--field-icon) - var(--icon-md)) / 2);
+  inline-size: var(--field-icon);
+  block-size: var(--field-icon);
   box-sizing: border-box;
   border: 2px solid currentColor;
   border-block-start-color: transparent;

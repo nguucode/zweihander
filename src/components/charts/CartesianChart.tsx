@@ -33,8 +33,8 @@ export interface CartesianChartProps {
   timeZone?: 'UTC'
   /** The last bucket is still filling: drawn dashed (line) or faded (bar). */
   isIncomplete?: boolean
-  /** What the legend shows beside each series: its sum, or its latest value (for rates and latencies, where a sum means nothing). */
-  legendValue?: 'total' | 'latest'
+  /** What the legend shows beside each series: its sum, its latest value (for rates and latencies, where a sum means nothing), or nothing. */
+  legendValue?: 'total' | 'latest' | 'none'
   isLoading?: boolean
   className?: string
 }
@@ -48,6 +48,12 @@ interface Props extends CartesianChartProps {
 
 const MARGIN = { top: 8, right: 8, bottom: 24 }
 const DASH = '–'
+
+/** A bar with its top corners rounded (2px, less on a thin bar) and a square foot on the axis. */
+function barPath(x: number, y: number, w: number, h: number) {
+  const r = Math.max(0, Math.min(2, w / 2, h))
+  return `M${x},${y + h}V${y + r}Q${x},${y} ${x + r},${y}H${x + w - r}Q${x + w},${y} ${x + w},${y + r}V${y + h}Z`
+}
 
 /* A callback ref, so the observer follows the plot when it unmounts and comes
    back (loading, or the table view) instead of watching a detached node. */
@@ -114,7 +120,7 @@ export function CartesianChart({
   const legendItems = colored.map((s) => {
     const values = data.map((r) => read(r, s.key)).filter((v): v is number => v !== null)
     const shown = legendValue === 'latest' ? values.at(-1) : values.reduce((sum, v) => sum + v, 0)
-    return { key: s.key, label: s.label, color: s.fill, value: shown === undefined ? DASH : format(shown) }
+    return { key: s.key, label: s.label, color: s.fill, value: legendValue === 'none' ? undefined : shown === undefined ? DASH : format(shown) }
   })
 
   const plot = (titleId: string) => {
@@ -175,26 +181,31 @@ export function CartesianChart({
 
     let marks
     if (isStacked) {
-      marks = stack<ChartRow>()
+      const layers = stack<ChartRow>()
         .keys(keys)
         .value((r, k) => value(r, k))(data)
-        .map((layer, li) => (
-          <g key={layer.key} className={dimmed(layer.key)} fill={visible[li].fill}>
-            {layer.map(([y0, y1], i) =>
-              y(y0) - y(y1) < 0.5 ? null : (
-                <rect
-                  key={i}
-                  className={cn(styles.bar, isIncomplete && i === last && styles.partial)}
-                  style={{ '--i': i } as CSSProperties}
-                  x={bucketLeft(i) + gap / 2}
-                  y={y(y1)}
-                  width={Math.max(1, bucketW - gap)}
-                  height={y(y0) - y(y1)}
-                />
-              ),
-            )}
-          </g>
-        ))
+      const isDrawn = (p: ArrayLike<number>) => y(p[0]) - y(p[1]) >= 0.5
+      // Only the top segment of each stack gets the rounded corners.
+      const topLayer = data.map((_, i) => layers.findLastIndex((l) => isDrawn(l[i])))
+      marks = layers.map((layer, li) => (
+        <g key={layer.key} className={dimmed(layer.key)} fill={visible[li].fill}>
+          {layer.map((point, i) => {
+            if (!isDrawn(point)) return null
+            const [y0, y1] = point
+            const bx = bucketLeft(i) + gap / 2
+            const bw = Math.max(1, bucketW - gap)
+            const h = y(y0) - y(y1)
+            return (
+              <path
+                key={i}
+                className={cn(styles.bar, styles.barStacked, isIncomplete && i === last && styles.partial)}
+                style={{ '--i': i } as CSSProperties}
+                d={topLayer[i] === li ? barPath(bx, y(y1), bw, h) : `M${bx},${y(y1)}h${bw}v${h}h${-bw}Z`}
+              />
+            )
+          })}
+        </g>
+      ))
     } else if (type === 'bar') {
       const inner = scaleBand()
         .domain(keys)
@@ -203,14 +214,11 @@ export function CartesianChart({
       marks = visible.map((s) => (
         <g key={s.key} className={dimmed(s.key)} fill={s.fill}>
           {data.map((r, i) => (
-            <rect
+            <path
               key={i}
               className={cn(styles.bar, isIncomplete && i === last && styles.partial)}
               style={{ '--i': i } as CSSProperties}
-              x={bucketLeft(i) + (inner(s.key) ?? 0)}
-              y={y(value(r, s.key))}
-              width={inner.bandwidth()}
-              height={base - y(value(r, s.key))}
+              d={barPath(bucketLeft(i) + (inner(s.key) ?? 0), y(value(r, s.key)), inner.bandwidth(), base - y(value(r, s.key)))}
             />
           ))}
         </g>
@@ -347,8 +355,12 @@ export function CartesianChart({
     >
       {(titleId) => (
         <>
+          <div ref={plotRef} className={cn(styles.plot, isEntering && styles.entering)} style={{ blockSize: height }}>
+            {plot(titleId)}
+          </div>
           <ChartLegend
             items={legendItems}
+            marker={type === 'bar' ? 'dot' : 'line'}
             hiddenKeys={hidden.length === series.length ? [] : hidden}
             onToggle={(key) => {
               setFocusKey(null)
@@ -356,9 +368,6 @@ export function CartesianChart({
             }}
             onFocusChange={setFocusKey}
           />
-          <div ref={plotRef} className={cn(styles.plot, isEntering && styles.entering)} style={{ blockSize: height }}>
-            {plot(titleId)}
-          </div>
         </>
       )}
     </ChartFrame>

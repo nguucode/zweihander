@@ -22,8 +22,7 @@
 }
 
 .required {
-  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- 2px between label and asterisk, below the spacing scale on purpose */
-  margin-inline-start: 0.125rem;
+  margin-inline-start: var(--space-1);
   color: var(--color-text-danger);
 }
 
@@ -37,7 +36,7 @@
   gap: var(--space-inline);
   padding: var(--space-container) var(--space-group);
   border: 1px dashed var(--color-border-input);
-  border-radius: var(--radius-panel);
+  border-radius: var(--radius-control);
   background: var(--color-background-input);
   text-align: center;
   transition:
@@ -113,7 +112,9 @@
   grid-template-columns: auto minmax(0, 1fr) auto auto;
   align-items: center;
   gap: var(--space-inline);
-  padding: var(--space-stack) var(--space-stack) var(--space-stack) var(--space-inline);
+  /* No inline padding: the icon and the remove button line up with the
+     drop zone's edges. */
+  padding-block: var(--space-stack);
   border-radius: var(--radius-field);
 }
 .item:hover {
@@ -127,7 +128,6 @@
   flex: none;
   inline-size: 1.25rem;
   block-size: 1.25rem;
-  --kind: var(--color-text-subtlest);
 }
 .fileIcon[data-kind='word'] { --kind: #185abd; }
 .fileIcon[data-kind='excel'] { --kind: #107c41; }
@@ -137,12 +137,28 @@
 .fileIcon[data-kind='audio'] { --kind: #0f6cbd; }
 
 /* Filled: the page is a tint of the type colour, the folded corner a
-   deeper one, the badge solid. */
+   deeper one, the badge solid. A 1px line in the row's surface colour runs
+   round the page and along the fold, so the corner reads as folded. */
+.page,
+.fold {
+  stroke: var(--color-surface-raised);
+  stroke-width: 1px;
+}
 .page {
   fill: color-mix(in oklab, var(--kind) 18%, var(--color-surface));
 }
 .fold {
   fill: color-mix(in oklab, var(--kind) 40%, var(--color-surface));
+}
+/* An unknown type: a fixed light gray page, the same in both themes, as
+   the kind colours are. */
+.fileIcon:not([data-kind]) .page {
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- fixed file-icon gray, not themed (Figma File Icon, Generic) */
+  fill: #e3e5e8;
+}
+.fileIcon:not([data-kind]) .fold {
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- fixed file-icon gray, not themed (Figma File Icon, Generic) */
+  fill: #c2c5cc;
 }
 
 .badge {
@@ -156,15 +172,8 @@
   /* SVG user units on the icon's 20-unit viewBox, not page pixels: the
      label scales with the icon. */
   /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- SVG user units, see above */
-  font-size: 9px;
+  font-size: 6px;
   font-weight: 700;
-}
-
-.glyph {
-  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- white on the file type's fixed brand colour, not themed */
-  fill: #fff;
-  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- white on the file type's fixed brand colour, not themed */
-  stroke: #fff;
 }
 
 .nameRow {

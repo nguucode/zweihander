@@ -79,7 +79,8 @@ take the spacious inline padding, 12px at both sizes: a centred label
 needs more room either side than a field's left-aligned text. The 12px is
 measured from the button's outer edge to its label or icon, border
 included, as in Atlassian Design, and is the same with or without an icon
-on that side; icon and label sit 6px apart. The label is 14/20 at both
+on that side; icon and label sit 6px apart. Ghost has no border, so it is
+11px from edge to label, as Figma binds it. The label is 14/20 at both
 sizes.
 
 <SpecTable
@@ -174,10 +175,11 @@ accent in the toolbar: the values follow.
 />
 
 Ghost and outlined have no fill at rest. Contained is lit from above: a
-lighter top, a highlight on the top edge, a darker bottom edge and a
-hairline border a step darker than the solid. Each is the variant's solid
-moved in lightness, so it has no token of its own and follows the accent
-and the mode.
+lighter top, a highlight on the top edge, a bottom-edge inner shadow
+(black at 18%, 1px up, 1.2px blur, 0.35px spread) and a hairline border a
+step darker than the solid. The hairline is the variant's solid moved in
+lightness, so it has no token of its own and follows the accent and the
+mode; the highlight and the shadow are light, the same on every fill.
 
 ## States
 
@@ -198,12 +200,8 @@ and the mode.
   token each. A coloured solid (primary, destructive) moves away from its
   label and gains contrast; accent and secondary move toward it. Outlined
   and ghost tint the background with their tone, 8% on hover and 14% when
-  pressed. Every state keeps the label at 4.5:1, measured by the
+  pressed, and their label moves 25% and 40% toward `--color-text`. Every state keeps the label at 4.5:1, measured by the
   `StateContrast` story under all seventeen accents in both modes.
-- **Hover**, on contained, also draws a 1px hairline ring standing
-  `--focus-offset` off the button, where the focus ring sits, so focus
-  replaces it rather than adding a second ring. Inside a ToggleGroup the
-  ring is left out: it would cut across the next segment.
 - **Pressed**, on contained, turns the light over: shade on the top edge,
   no drop shadow, no gradient, as if pushed in.
 - **Focus** is a 2px `--color-border-focused` outline, 2px outside the button.
@@ -221,7 +219,7 @@ Every other `<button>` attribute passes through, including `ref`.
 
 ### Differences from the spec
 
-- **Two sizes, not four.** The sizes follow Atlassian Design: 32px (`md`) by default, 24px (`sm`) for tables and dense rows. Both take 12px from the outer edge to the label, a 6px gap and a 14/20 label; `sm` is a shorter box, not smaller type. The spec's larger steps were dropped; a big call to action is `md` with more room around it, not a taller box.
+- **Two sizes, not four.** The sizes follow Atlassian Design: 32px (`md`) by default, 24px (`sm`) for tables and dense rows. Both take 12px from the outer edge to the label (11px on ghost, which has no border), a 6px gap and a 14/20 label; `sm` is a shorter box, not smaller type. The spec's larger steps were dropped; a big call to action is `md` with more room around it, not a taller box.
 - **`disabled`, not `isDisabled`**: the native attribute keeps its name.
 - **`isIconOnly` is added.** The spec has no icon-only button, and a
   square button that still requires a name is common enough to need one.

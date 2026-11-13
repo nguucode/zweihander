@@ -71,8 +71,8 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/calendar.json
 The grid always has six rows. Months span four to six weeks; a fixed height
 keeps a popover or a page from jumping as you page through them.
 
-Two more looks sit on the days: **today**, an orange pill, round-ended where a
-selected day takes the control's corners; and with `range`, the **band**, as tall as a day,
+Two more looks sit on the days: **today**, an orange fill with the
+control's corners, as a selected day has; and with `range`, the **band**, as tall as a day,
 one unbroken strip behind the days from one end to the other. Under the
 two ends it covers only the half that faces the range, so each end keeps
 its own corners on the outside. The band rounds off where a week or
@@ -88,17 +88,15 @@ round a 16px line of bold 12px. The header keeps 8px at each end and sits
 12px above the grid; its arrows are 24px round a 12px chevron. In a Date
 Picker the panel adds 16px round all of it.
 
-The header is one row, as Atlassian's: previous year and previous month
-at the start, 8px apart; the month and year centred between the two
-pairs, in the 14px heading size; next month and next year at the end. A
-year arrow is a double chevron. The kit keeps its own looks for today and
-the selected day.
+The header is one row: previous month at the start, the month and year
+centred, in the 14px heading size, and next month at the end. There are
+no year buttons; Shift+Page Up and Shift+Page Down page by year. The kit
+keeps its own looks for today and the selected day.
 
 <SpecTable
   caption="Header"
   rows={[
     { part: 'Header', property: 'Inline padding', token: '--space-inline' },
-    { part: 'Previous and next', property: 'Gap, year to month', token: '--space-inline' },
     { part: 'Month', property: 'Font size', token: '--text-heading-xs' },
     { part: 'Month', property: 'Line height', token: '--leading-heading-xs' },
     { part: 'Previous and next', property: 'Size', token: '--control-sm' },
@@ -122,7 +120,7 @@ the selected day.
     { part: 'Day', property: 'Corner radius', token: '--radius-control' },
     { part: 'Day', property: 'Font size', token: '--text-body' },
     { part: 'Day', property: 'Line height', token: '--leading-body' },
-    { part: 'Today', property: 'Corner radius', token: '--radius-pill' },
+    { part: 'Today', property: 'Corner radius', token: '--radius-control' },
     { part: 'Range band', property: 'End corner radius', token: '--radius-control' },
   ]}
 />
@@ -138,11 +136,10 @@ the selected day.
 Figures are tabular, so the columns of dates line up. On touch screens
 (`pointer: coarse`) days grow to 44px square, the touch target: they
 touch, so a larger invisible area would lie over the next day. The
-four previous and next buttons stay 24px and grow an invisible 44px area
+previous and next buttons stay 24px and grow an invisible 44px area
 instead. The header makes room for them: it pads 10px (half of 44px less
-24px), a pair sits 20px apart and the month keeps 10px clear at each
-side, so the four areas meet without lying over each other, the month or
-the calendar's edge.
+24px) and the month keeps 10px clear at each side, so the areas lie over
+neither the month nor the calendar's edge.
 
 ## Color
 
@@ -201,9 +198,11 @@ the values follow.
 <SpecTable caption="Every part" rows={[{ part: 'Focus ring', property: 'Colour', token: '--color-border-focused' }]} />
 
 - **Day** has no fill at rest.
-- **Today's figure is dark**, not white: white on `--color-background-accent-orange-bolder` is 3.4:1,
-  under the 4.5:1 a 14px figure needs, while `--color-text-accent-orange-contrast` clears
-  4.9:1 in both modes. A selected today shows as selected.
+- **Today's figure** is `--color-text-accent-orange-contrast`, semibold:
+  near-black on `--color-background-accent-orange-bolder`, 4.9:1 in both
+  modes. White would be 3.4:1 in light, under the 4.5:1 a 14px figure
+  needs. A selected today shows as selected.
+- **Days between** the ends of a range are `--color-text`, regular weight.
 - **Outside days** are `--color-text-subtlest` mixed 50% with transparent,
   about 2:1. No token is lighter, and WCAG allows it for decoration: they
   are hidden from assistive tech and cannot be picked.
@@ -251,10 +250,10 @@ one under the pointer or the keyboard.
 - **Pressed** has no look of its own: the click selects the day, and the
   selected look follows.
 - **Disabled** is per day: before `min`, after `max`, or ruled out by
-  `isDateDisabled`. The previous and next buttons, year and month alike,
+  `isDateDisabled`. The previous and next buttons
   disable in the month of `min` or `max`, at 50% opacity.
-- **Selected** is the brand fill, with the control's corners; **today** is the orange pill,
-  round-ended. With `range`, both ends are selected and the days between are
+- **Selected** is the brand fill, with the control's corners; **today** is
+  the orange fill, with the same corners. With `range`, both ends are selected and the days between are
   banded.
 
 ## API
@@ -270,25 +269,21 @@ type. Every date is local midnight; times are ignored.
 
 ### Differences from the spec
 
-The header follows `@atlaskit/calendar`: the order of its four buttons,
-their size and gaps, the centred month and year.
+The header follows `@atlaskit/calendar` in the size of its buttons and
+the centred month and year, without its year buttons: Shift+Page Up and
+Shift+Page Down page by year.
 
 - **The buttons disable at `min` and `max`.** Atlassian's stay enabled and
-  page into months with nothing to pick. A year step that would pass a
-  limit stops at the limit's month, so a year button is off only where
-  its month button is.
-- **Fixed button names.** "Previous year", "Previous month", "Next month"
-  and "Next year", in English like the kit's other built-in labels.
-  Atlassian takes them as props and adds the month they lead to
-  ("Previous year, September 2025").
+  page into months with nothing to pick.
+- **Fixed button names.** "Previous month" and "Next month", in English
+  like the kit's other built-in labels. Atlassian takes them as props and
+  adds the month they lead to ("Previous month, August 2026").
 - **The month is not a heading.** Atlassian's is one, with a level prop; a
   calendar can sit anywhere in a page's outline, so here it is a plain
   live region, and the grid is named with the same text.
 - **Always a live region.** Atlassian turns `aria-live` on after the first
   press of a header button; here it is there from the start, which
   announces nothing until the month changes.
-- **The double chevron is drawn from two chevrons.** The icon set has no
-  double chevron yet.
 - **Semibold is 600**, as the kit's other headings; Atlassian's heading
   weight is 653.
 
@@ -338,25 +333,23 @@ February, not 3 March.
   Down a year. Enter or Space selects. Moving past the month shows the
   next one.
 - Right to left, the arrows follow the screen (ArrowLeft is the next day)
-  and the previous and next chevrons, single and double, are mirrored.
+  and the previous and next chevrons are mirrored.
 
   <Canvas of={CalendarStories.Keyboard} />
 
 - The month and year are a polite live region, so paging is announced,
   by a month or by a year.
 - The header's buttons are ordinary buttons in the tab order, before the
-  grid: "Previous year", "Previous month", then after the month "Next
-  month" and "Next year". The year buttons move the month shown by twelve
-  months, or to the month of `min` or `max` when that is nearer.
-- All four are disabled at the limits: the previous pair in the month of
-  `min`, the next pair in the month of `max`.
+  grid: "Previous month", then after the month "Next month".
+- Both are disabled at the limits: previous in the month of `min`, next
+  in the month of `max`.
 - Unavailable days stay focusable with `aria-disabled`, so they are found
   and announced as unavailable rather than skipped. Enter on one does
   nothing.
 - Days of the months either side are not buttons and are hidden from
   assistive tech.
-- Today's figure measures at least 4.5:1 on its pill, in both modes, on
-  its own and inside a range.
+- Today's figure should measure at least 4.5:1 on its fill, in both modes,
+  on its own and inside a range. The `Today` story measures it.
 
 </DocTab>
 </DocTabs>

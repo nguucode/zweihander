@@ -161,7 +161,7 @@ export const Delay: Story = {
 /** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
 export const anatomyParts = [
   { name: 'Track', selector: 'svg > circle:first-child', description: 'The full ring, --color-border. Frames the motion; decoration.' },
-  { name: 'Indicator', selector: 'svg > circle:last-child', description: 'The arc: a quarter turn while spinning, or the value as a share of the ring.' },
+  { name: 'Indicator', selector: 'svg > circle:last-child', description: 'The arc: 30% of the ring while spinning, or the value as a share of the ring.' },
   { name: 'Label', selector: '[role="progressbar"] > span', description: 'Optional, under the ring. Also the accessible name.' },
 ]
 

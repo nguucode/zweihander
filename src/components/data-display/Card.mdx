@@ -24,13 +24,12 @@ takes every size and orientation.
 
 | Appearance | Use for |
 | --- | --- |
-| `elevated` | The default panel: a white `--color-surface-raised` on the off-white page, with an edge and a faint shadow. |
-| `outline` | Cards in a dense grid or inside another panel, where a shadow per card is too much. |
+| `elevated` | The default panel: a white `--color-surface-raised` on the off-white page, standing off by a faint shadow, no edge. |
+| `outline` | Cards in a dense grid or inside another panel, where a shadow per card is too much: a 1px edge instead. |
 | `unstyled` | The card's padding and layout with nothing visible, e.g. inside a surface that already has its own. |
-| `surface` | A block of a page on the Theme's canvas. It follows the Theme's `contentStyle`: raised like `elevated` when the content is `card`, a section set off by a rule above when it is `flat`. |
 
-`size` sets the padding and the gap between children, from 12px (`xs`) to
-32px (`lg`).
+`size` sets the padding and the gap between children: 12px (`xs`) or
+16px (`sm`, the default).
 
 <Canvas of={CardStories.Sizes} />
 
@@ -44,7 +43,9 @@ is a link.
 
 <Canvas of={CardStories.Clickable} />
 
-<Canvas of={CardStories.NoBorderSquare} />
+`isRounded={false}` gives square corners.
+
+<Canvas of={CardStories.Square} />
 
 ## Resources
 
@@ -97,22 +98,6 @@ gap between children.
 />
 
 <SpecTable
-  caption="md"
-  rows={[
-    { part: 'Container', property: 'Padding', token: '--space-container' },
-    { part: 'Container', property: 'Gap', token: '--space-group' },
-  ]}
-/>
-
-<SpecTable
-  caption="lg"
-  rows={[
-    { part: 'Container', property: 'Padding', token: '--space-8' },
-    { part: 'Container', property: 'Gap', token: '--space-6' },
-  ]}
-/>
-
-<SpecTable
   caption="Every size"
   rows={[
     { part: 'Container', property: 'Corner radius', token: '--radius-lg' },
@@ -123,8 +108,8 @@ gap between children.
   ]}
 />
 
-The border is 1px, transparent when `hasBorder` is off, so turning it on
-or off never moves the content. `isRounded={false}` gives square corners.
+The border is 1px on every appearance, drawn only on `outline` and
+transparent on the others, so switching appearance never moves the content. `isRounded={false}` gives square corners.
 The 8px corner and the two shadows (raised at rest, overlay on hover) are
 Atlassian's; the padding steps are the kit's own.
 
@@ -136,7 +121,6 @@ Switch the theme in the toolbar: the values follow.
   caption="elevated"
   rows={[
     { part: 'Container', property: 'Background', token: '--color-surface-raised' },
-    { part: 'Container', property: 'Border', token: '--color-border' },
     { part: 'Container', property: 'Shadow', token: '--shadow-raised' },
     { part: 'Container, hover', property: 'Shadow', token: '--shadow-overlay' },
     { part: 'Content', property: 'Colour', token: '--color-text' },
@@ -153,12 +137,9 @@ Switch the theme in the toolbar: the values follow.
   ]}
 />
 
-`unstyled` has no background, border or shadow, and its content takes the
-colour of what it sits on.
-
-`surface` takes `elevated`'s colours under `contentStyle="card"`. Under
-`contentStyle="flat"` it has no background, radius or shadow, only `--color-border`
-along its top edge.
+`elevated` has no visible border: its 1px edge is transparent, as in
+Figma. `unstyled` has no background, border or shadow, and its content
+takes the colour of what it sits on.
 
 <SpecTable caption="Every appearance" rows={[{ part: 'Focus ring', property: 'Colour', token: '--color-border-focused' }]} />
 
@@ -207,6 +188,8 @@ Every other `<div>` attribute passes through, including `ref`.
 - **No `filled` appearance.** The spec's tinted card was dropped to match
   the Claude apps, where a panel is a white `--color-surface-raised` on the off-white
   page, with an edge or a faint shadow.
+- **Two sizes, `xs` and `sm`**, as in the Figma spec; `sm` is the
+  default.
 - **`unstyled`** keeps the padding and layout and drops every visual.
 
 </DocTab>

@@ -17,7 +17,7 @@ export const defaultPasswordRules: PasswordRule[] = [
   { label: 'At least 12 characters', test: (password) => password.length >= 12 },
 ]
 
-export interface PasswordInputProps extends Omit<TextInputProps, 'type' | 'endAddon'> {
+export interface PasswordInputProps extends Omit<TextInputProps, 'type' | 'suffix' | 'endAddon'> {
   /**
    * What a new password needs, listed under the field and ticked off as the
    * reader types. Checking them before sending is the form's job.
@@ -100,8 +100,13 @@ export function PasswordInput({
           helperText
         )
       }
-      endAddon={
-        <TextInputButton aria-label={`${isShown ? 'Hide' : 'Show'} ${field}`} onClick={() => setIsShown((shown) => !shown)}>
+      // A plain word inside the box, not a filled add-on segment.
+      suffix={
+        <TextInputButton
+          aria-label={`${isShown ? 'Hide' : 'Show'} ${field}`}
+          className={styles.toggle}
+          onClick={() => setIsShown((shown) => !shown)}
+        >
           {isShown ? 'Hide' : 'Show'}
         </TextInputButton>
       }

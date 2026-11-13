@@ -145,7 +145,7 @@ and the thumb its label colour, measured at 4.5:1 against it.
   rows={[
     { part: 'Label', property: 'Colour', token: '--color-text' },
     { part: 'Helper text', property: 'Colour', token: '--color-text-subtlest' },
-    { part: 'Track, error', property: 'Inner edge', token: '--color-text-danger' },
+    { part: 'Track, error', property: 'Outside ring', token: '--color-text-danger' },
     { part: 'Helper text, error', property: 'Colour', token: '--color-text-danger' },
     { part: 'Helper text, success', property: 'Colour', token: '--color-text-success' },
     { part: 'Focus ring', property: 'Colour', token: '--color-border-focused' },
@@ -170,8 +170,9 @@ and the thumb its label colour, measured at 4.5:1 against it.
   step to move to without losing its 3:1.
 - **Focus** is a 2px `--color-border-focused` outline, 2px outside the track.
 - **Disabled** dims the track and the label to 50%.
-- **Error** draws a 2px `--color-text-danger` edge inside the track, so it reads
-  on and off alike and leaves the band outside to the focus ring.
+- **Error** draws a 2px `--color-text-danger` ring outside the track, as
+  Figma's outside stroke. It fills the 2px focus offset, so the focus ring
+  draws just beyond it and both show.
 - **Read-only** looks enabled, with an arrow cursor.
 - The thumb slides over `--duration-base`, and stops animating under
   `prefers-reduced-motion`.

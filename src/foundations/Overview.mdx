@@ -47,9 +47,9 @@ other.
 
 Two things follow from that, and both are visible on other pages here.
 
-**Nothing semantic holds a literal.** In the source, `primary` is
-`{accent.solid}` and `foreground` is `{gray.950}` — references, not
-colours. Swapping a ramp moves everything downstream of it in one edit,
+**Nothing semantic holds a literal.** In the source,
+`color-background-brand-bold` is `{accent.solid}` and `color-text` is
+`{gray.950}` — references, not colours. Swapping a ramp moves everything downstream of it in one edit,
 which is what makes the 17 accents and 9 grays on this page a
 three-line change rather than a rewrite.
 
@@ -120,7 +120,7 @@ Four settings, each independent:
 
 | Prop | Values |
 | --- | --- |
-| `accentColor` | 17 hues — drives `--color-background-brand-bold` and `--color-border-focused` |
+| `accentColor` | 17 hues — drives the brand tokens (`--color-background-brand-bold`, `--color-text-brand`, `--color-icon-brand`) and `--color-border-focused` |
 | `grayColor` | 9 neutral ramps — drives backgrounds, text, borders |
 | `appearance` | `light`, `dark`, `inherit` |
 | `radius` | `sharp`, `rounded`, `full-rounded` |
@@ -135,13 +135,9 @@ the lighter solids miss the 3:1 a focus indicator needs.
 
 <Canvas of={OverviewStories.AccentColor} />
 
-**`accentColor` sets `--color-background-brand-bold`, not `--color-background-neutral`.** The token named
-`--color-background-neutral` is a subtle hover surface — a different thing that happens to
-share the word.
-
 ### Gray color
 
-The neutral ramp behind surfaces, text, borders and muted fills. The
+The neutral ramp behind surfaces, text, borders and neutral fills. The
 differences are subtle and cumulative; they read most clearly in dark
 mode, which is how they are shown here.
 

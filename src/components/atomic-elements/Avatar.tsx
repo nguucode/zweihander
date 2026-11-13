@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, type ComponentProps } from 'react'
+import { Icon } from '@/lib/icon'
 import { cn } from '@/lib/utils'
 import type { AccentColor } from '@/theme/palettes'
 import { Tooltip, TooltipGroup } from '../overlays/Tooltip'
@@ -81,19 +82,14 @@ export function Avatar({
       ) : letters ? (
         <span className={styles.initials}>{letters}</span>
       ) : (
-        // Drawn to the container's edge, not an icon with a margin: the body
-        // runs off the bottom and the circle crops it.
-        <svg viewBox="0 0 64 64" className={styles.silhouette}>
-          <circle cx="32" cy="26" r="12" />
-          <rect x="12" y="42" width="40" height="30" rx="20" />
-        </svg>
+        <Icon name="user" className={styles.silhouette} />
       )}
       {status && (
         <Badge
           isDot
           variant={STATUS[status].variant}
-          // 6px up to the 32px avatar, 8px on 40px; xl and 2xl size it in CSS.
-          size={size === 'xs' || size === 'sm' || size === 'md' ? 'sm' : 'md'}
+          // 8px from sm to lg, as Figma; xl and 2xl size it in CSS, xs hides it.
+          size="md"
           className={styles.status}
         />
       )}

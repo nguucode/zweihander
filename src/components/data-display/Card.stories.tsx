@@ -30,16 +30,16 @@ const meta = {
       table: { type: { summary: 'ReactNode' } },
     },
     size: {
-      description: 'Padding 12, 16, 24 or 32px; the gap between children scales with it.',
+      description: 'Padding 12 or 16px; the gap between children scales with it.',
       control: 'inline-radio',
-      options: ['xs', 'sm', 'md', 'lg'],
-      table: { type: { summary: "'xs' | 'sm' | 'md' | 'lg'" }, defaultValue: { summary: "'md'" } },
+      options: ['xs', 'sm'],
+      table: { type: { summary: "'xs' | 'sm'" }, defaultValue: { summary: "'sm'" } },
     },
     appearance: {
-      description: '`elevated`: the card surface with a faint shadow. `outline`: the surface and its edge, no shadow. `unstyled`: keeps the padding and layout, drops every visual. `surface`: a block of a page on the Theme\'s canvas, elevated when the Theme\'s `contentStyle` is `card`, a section with a rule above when it is `flat`.',
+      description: '`elevated`: the card surface with a faint shadow, no visible edge. `outline`: the surface and its 1px `--color-border` edge, no shadow. `unstyled`: keeps the padding and layout, drops every visual.',
       control: 'inline-radio',
-      options: ['elevated', 'outline', 'unstyled', 'surface'],
-      table: { type: { summary: "'elevated' | 'outline' | 'unstyled' | 'surface'" }, defaultValue: { summary: "'elevated'" } },
+      options: ['elevated', 'outline', 'unstyled'],
+      table: { type: { summary: "'elevated' | 'outline' | 'unstyled'" }, defaultValue: { summary: "'elevated'" } },
     },
     orientation: {
       description: 'How children flow: `vertical` stacks them, `horizontal` sets them side by side (media and text).',
@@ -49,11 +49,6 @@ const meta = {
     },
     isRounded: {
       description: 'Rounds the corners with `--radius-lg`. Off: square corners.',
-      control: 'boolean',
-      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'true' } },
-    },
-    hasBorder: {
-      description: 'The 1px `--color-border` edge. Off: no visible edge. `unstyled` never has one.',
       control: 'boolean',
       table: { type: { summary: 'boolean' }, defaultValue: { summary: 'true' } },
     },
@@ -82,8 +77,10 @@ export const Default: Story = {
     const card = canvas.getByRole('heading', { name: 'Payment method' }).parentElement!
     await expect(card.tagName).toBe('DIV')
     await expect(card).not.toHaveAttribute('role')
-    // No size given: md, the house default.
-    await expect(getComputedStyle(card).paddingTop).toBe('24px')
+    // No size given: sm. Card has no md (Figma has xs and sm only).
+    await expect(getComputedStyle(card).paddingTop).toBe('16px')
+    // Elevated draws no edge: its 1px border is transparent.
+    await expect(getComputedStyle(card).borderTopColor).toBe('rgba(0, 0, 0, 0)')
     await expect(canvas.getAllByRole('heading')).toHaveLength(1)
     await userEvent.tab()
     await expect(document.body).toHaveFocus()
@@ -93,29 +90,36 @@ export const Default: Story = {
 export const Appearances: Story = {
   render: (args) => (
     <div style={{ display: 'grid', gap: 'var(--space-4)' }}>
-      {(['elevated', 'outline', 'unstyled', 'surface'] as const).map((appearance) => (
-        <Card key={appearance} {...args} appearance={appearance}>
+      {(['elevated', 'outline', 'unstyled'] as const).map((appearance) => (
+        <Card key={appearance} {...args} appearance={appearance} data-appearance={appearance}>
           <h3 style={title}>{appearance}</h3>
           <p style={muted}>Change how you pay for your plan.</p>
         </Card>
       ))}
     </div>
   ),
+  play: async ({ canvasElement }) => {
+    // Only outline draws its edge; every appearance keeps the same 1px box.
+    const edge = (a: string) => getComputedStyle(canvasElement.querySelector(`[data-appearance="${a}"]`)!)
+    await expect(edge('outline').borderTopColor).not.toBe('rgba(0, 0, 0, 0)')
+    for (const a of ['elevated', 'unstyled']) await expect(edge(a).borderTopColor).toBe('rgba(0, 0, 0, 0)')
+    for (const a of ['elevated', 'outline', 'unstyled']) await expect(edge(a).borderTopWidth).toBe('1px')
+  },
 }
 
 export const Sizes: Story = {
   render: (args) => (
     <div style={{ display: 'grid', gap: 'var(--space-4)' }}>
-      {(['xs', 'sm', 'md', 'lg'] as const).map((size) => (
+      {(['xs', 'sm'] as const).map((size) => (
         <Card key={size} {...args} size={size} data-size={size} />
       ))}
     </div>
   ),
   play: async ({ canvasElement }) => {
-    const pads = ['xs', 'sm', 'md', 'lg'].map(
+    const pads = ['xs', 'sm'].map(
       (s) => getComputedStyle(canvasElement.querySelector(`[data-size="${s}"]`)!).paddingTop,
     )
-    await expect(pads).toEqual(['12px', '16px', '24px', '32px'])
+    await expect(pads).toEqual(['12px', '16px'])
   },
 }
 
@@ -137,8 +141,8 @@ export const Horizontal: Story = {
   },
 }
 
-export const NoBorderSquare: Story = {
-  args: { hasBorder: false, isRounded: false },
+export const Square: Story = {
+  args: { isRounded: false },
 }
 
 /**
@@ -195,7 +199,7 @@ export const Contrast: Story = {
           appearance={mode}
           style={{ display: 'grid', gap: 'var(--space-2)', background: 'var(--color-surface)', padding: 'var(--space-2)' }}
         >
-          {(['elevated', 'outline', 'unstyled', 'surface'] as const).map((appearance) => (
+          {(['elevated', 'outline', 'unstyled'] as const).map((appearance) => (
             <Card key={appearance} appearance={appearance} onClick={() => {}} data-audit={`${mode} ${appearance}`}>
               <span style={muted}>Change how you pay for your plan.</span>
             </Card>
@@ -235,7 +239,7 @@ export const ClickableOutline: Story = {
 
 /** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
 export const anatomyParts = [
-  { name: 'Container', selector: 'div:has(> h3)', description: 'The surface: --color-surface-raised, its --color-border edge and the padding from size. Content stacks or sits side by side, by orientation.' },
+  { name: 'Container', selector: 'div:has(> h3)', description: 'The surface: --color-surface-raised, a shadow (elevated) or a --color-border edge (outline), and the padding from size. Content stacks or sits side by side, by orientation.' },
   { name: 'Title', selector: 'div:has(> h3) > h3', description: 'Your content: a heading at the level the page needs. The card has none of its own.' },
   { name: 'Body', selector: 'div:has(> h3) > p', description: 'Your content: anything, here a line of muted text.' },
 ]

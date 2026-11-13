@@ -25,13 +25,7 @@
   padding-inline: var(--space-inline);
 }
 
-/* A year arrow and a month arrow, 8px apart, at each end. */
-.navs {
-  display: flex;
-  gap: var(--space-inline);
-}
-
-/* The month between the two pairs: they are as wide as each other, so it is
+/* The month between the two arrows: they are as wide as each other, so it is
    centred on the grid. A long name on a narrow screen wraps. */
 .title {
   flex: 1;
@@ -66,23 +60,6 @@
 .nav:disabled {
   opacity: 0.5;
   cursor: var(--cursor-disabled);
-}
-
-/* ponytail: the icon set has no double chevron, so a year arrow is two
-   chevrons a quarter of the icon apart (6 of the 24 units, as Boxicons'
-   chevrons). Swap for one `chevrons-left`/`-right` icon when src/lib/icon.tsx
-   has them. */
-.double {
-  display: inline-grid;
-}
-.double > svg {
-  grid-area: 1 / 1;
-}
-.double > svg:first-child {
-  translate: -25% 0;
-}
-.double > svg:last-child {
-  translate: 25% 0;
 }
 
 .grid {
@@ -143,13 +120,11 @@
   cursor: default;
 }
 
-/* Today: an orange pill, round-ended where the selected day is the control's
-   shape, so the two differ by shape as well as colour. The figure is dark,
-   as the generator gives warm accents: white on --color-background-accent-orange-bolder is 3.4:1, under the
-   4.5:1 a 14px figure needs, while --color-text-accent-orange-contrast (neutral 900) clears
-   4.9:1 in both modes. --color-text-accent-orange-inverse stays white for the solid Tags. */
+/* Today: the control's shape in orange. The figure is near-black
+   (--color-text-accent-orange-contrast, 4.9:1 in both modes): white on the
+   orange is 3.4:1 in light, under the 4.5:1 a 14px figure needs. */
 .today {
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-control);
   background: var(--color-background-accent-orange-bolder);
   color: var(--color-text-accent-orange-contrast);
   font-weight: 600;
@@ -217,20 +192,20 @@
 }
 .between {
   color: var(--color-text);
-  font-weight: 500;
+  font-weight: 400;
 }
-/* Today keeps its dark figure inside a range too. */
+/* Today keeps its figure inside a range too. */
 .between.today {
   color: var(--color-text-accent-orange-contrast);
+  font-weight: 600;
 }
 
 /* 40 by 32px days are below the 44px touch target. They touch, so a larger
    invisible area would lie over the next day: the days themselves grow on
    coarse pointers. The arrows stay 24px and grow an invisible area instead.
-   Four of them share the header, so it makes room: each area reaches 10px
-   past its arrow, the header pads that much, a pair sits twice that apart
-   and the month keeps that much clear, so the areas meet without lying over
-   each other, the month or the calendar's edge. */
+   The header makes room: each area reaches 10px past its arrow, the header
+   pads that much and the month keeps that much clear, so the areas lie over
+   neither the month nor the calendar's edge. */
 @media (pointer: coarse) {
   .calendar {
     --calendar-day-inline: min(var(--target-coarse), calc((100vw - 4.25rem) / 7));
@@ -239,9 +214,6 @@
   }
   .header {
     padding-inline: var(--calendar-nav-reach);
-  }
-  .navs {
-    gap: calc(2 * var(--calendar-nav-reach));
   }
   .title {
     padding-inline: var(--calendar-nav-reach);

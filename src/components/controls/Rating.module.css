@@ -34,10 +34,9 @@
   gap: 2px;
 }
 
-/* Filled stars in the bright --color-background-warning-bold amber (2.1:1 on white, below the
-   3:1 for meaningful graphics: the filled vs outlined shape and the
-   accessible name carry the score, not the fill colour). Empty stars
-   are outlined in --color-border-bold (3:1). */
+/* Every star is the filled shape, as in Figma: on in the bright
+   --color-background-warning-bold amber (2.1:1 on white), off in
+   --color-border-bold (3:1). The accessible name carries the score. */
 .star {
   position: relative;
   display: inline-flex;
@@ -82,7 +81,7 @@ fieldset:disabled .star {
   cursor: var(--cursor-disabled);
 }
 
-/* Read-only: an outlined star with a filled one clipped to the fraction. */
+/* Read-only: an off star with an on one clipped to the fraction. */
 .fill {
   position: absolute;
   inset-block: 0;

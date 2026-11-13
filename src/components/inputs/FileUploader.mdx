@@ -89,7 +89,7 @@ One size. The buttons inside are `sm` Buttons, 24px tall.
     { part: 'Drop zone', property: 'Block padding', token: '--space-container' },
     { part: 'Drop zone', property: 'Inline padding', token: '--space-group' },
     { part: 'Drop zone', property: 'Gap', token: '--space-inline' },
-    { part: 'Drop zone', property: 'Corner radius', token: '--radius-panel' },
+    { part: 'Drop zone', property: 'Corner radius', token: '--radius-control' },
     { part: 'Icon', property: 'Size', token: '--space-6' },
     { part: 'Icon', property: 'Padding', token: '--space-inline' },
     { part: 'Choose button', property: 'Height', token: '--control-sm' },
@@ -104,7 +104,7 @@ One size. The buttons inside are `sm` Buttons, 24px tall.
     { part: 'Label', property: 'Font size', token: '--text-body-sm' },
     { part: 'Label', property: 'Font weight', token: '--font-weight-label' },
     { part: 'Label, drop zone, errors, list', property: 'Gap', token: '--control-sm-gap' },
-    { part: 'File row', property: 'Padding', token: '--space-stack' },
+    { part: 'File row', property: 'Block padding', token: '--space-stack' },
     { part: 'File row', property: 'Gap', token: '--space-inline' },
     { part: 'File row', property: 'Corner radius', token: '--radius-field' },
     { part: 'Name', property: 'Font size', token: '--text-body' },
@@ -114,7 +114,11 @@ One size. The buttons inside are `sm` Buttons, 24px tall.
   ]}
 />
 
-The uploader is 24rem wide unless `isFullWidth`. The type icon is 20px.
+The uploader is 24rem wide unless `isFullWidth`. A file row has no
+inline padding, so its icon and remove button line up with the drop
+zone's edges. The type icon is 20px: a 13 × 18 page with a folded corner,
+and a badge 8px tall (14px wide, 16px for DOC and MP3) naming the type
+in 6px bold: DOC, XLS, PPT, PDF, IMG or MP3.
 
 ## Color
 
@@ -139,6 +143,7 @@ The uploader is 24rem wide unless `isFullWidth`. The type icon is 20px.
   caption="File list"
   rows={[
     { part: 'File row, hover', property: 'Background', token: '--color-interaction-hovered' },
+    { part: 'Type icon', property: 'Line round the page and fold', token: '--color-surface-raised' },
     { part: 'Name', property: 'Colour', token: '--color-text' },
     { part: 'Size', property: 'Colour', token: '--color-text-subtlest' },
     { part: 'Progress ring', property: 'Colour', token: '--color-text-brand' },
@@ -148,6 +153,8 @@ The uploader is 24rem wide unless `isFullWidth`. The type icon is 20px.
 
 The type badges keep fixed colours in both modes: they are each file
 type's identity, not the theme's, and white on each is above 4.5:1. The
+page is an 18% tint of the badge colour and the fold a 40% one; an
+unknown type gets a fixed light gray page (#e3e5e8, fold #c2c5cc). The
 Choose button is an `accent contained` Button and the remove buttons
 `secondary ghost`; their states are Button's.
 

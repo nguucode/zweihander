@@ -1,5 +1,6 @@
 .stepper {
   --step-marker: var(--space-8);
+  --step-icon: var(--icon-md);
   font-family: var(--font-sans);
   font-size: var(--text-body);
   line-height: var(--leading-body);
@@ -8,6 +9,7 @@
 
 .sm {
   --step-marker: var(--space-6);
+  --step-icon: var(--icon-sm);
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
 }
@@ -71,9 +73,10 @@ button.target:focus-visible {
   font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
+/* 16px in the 32px marker, 14px in the 24px one. */
 .marker :global(svg) {
-  inline-size: 60%;
-  block-size: 60%;
+  inline-size: var(--step-icon);
+  block-size: var(--step-icon);
 }
 
 /* Complete and current share the primary colour; the filled disc says

@@ -109,13 +109,13 @@ export const TokenOverride: Story = {
       <Theme style={{ borderRadius: 'var(--radius-panel)', padding: 'var(--space-4)' }}>
         <Panel label="default tokens" />
       </Theme>
-      <Theme style={{ borderRadius: 'var(--radius-panel)', padding: 'var(--space-4)' }} tokens={{ radius: '1.5rem', primary: 'oklch(0.55 0.2 150)' }}>
-        <Panel label="radius + primary overridden" />
+      <Theme style={{ borderRadius: 'var(--radius-panel)', padding: 'var(--space-4)' }} tokens={{ radius: '1.5rem', 'color-background-brand-bold': 'oklch(0.55 0.2 150)' }}>
+        <Panel label="radius + brand overridden" />
       </Theme>
     </div>
   ),
   play: async ({ canvas }) => {
-    const scope = canvas.getByText('radius + primary overridden').closest('div[style]')
+    const scope = canvas.getByText('radius + brand overridden').closest('div[style]')
     await expect(scope).toHaveStyle({ '--radius': '1.5rem' })
   },
 }

@@ -23,7 +23,7 @@ close it.
 | --- | --- |
 | Non-modal (default) | Most popovers. Tab can leave it and the page stays usable while it is open. |
 | Modal (`isModal`) | A popover that must be finished or closed first: focus stays inside, the page does not scroll and presses outside are blocked. |
-| `openOnHover` | A preview that also opens on hover, when what it holds must be reachable by click, keyboard and touch. For a person or record preview on a link, use [HoverCard](?path=/docs/components-overlays-tooltip--docs). |
+| `openOnHover` | A preview that also opens on hover, when what it holds must be reachable by click, keyboard and touch. A person or record preview on a link fits here too. |
 
 A title is optional. Without one, name the popover with `aria-label`:
 
@@ -70,7 +70,6 @@ trigger where it opens.
     { part: 'Title', property: 'Font size', token: '--text-body' },
     { part: 'Title', property: 'Line height', token: '--leading-body' },
     { part: 'Title to close button', property: 'Gap', token: '--space-cluster' },
-    { part: 'Title to description', property: 'Gap', token: '--space-1' },
     { part: 'Body', property: 'Gap above', token: '--space-3' },
   ]}
 />
@@ -89,7 +88,9 @@ trigger where it opens.
 The container is as wide as its content, at most 22rem and never wider
 than the room beside the trigger. It has no arrow: it opens 6px from the
 trigger and lines up with it, which already ties the two. It has a 1px
-border and a semibold title. The 8px corner and the overlay shadow are
+border and a semibold title. The header stacks the title and the
+description with no gap between them, and the close button sits beside
+both, flush in the top-right corner of the padding. The 8px corner and the overlay shadow are
 Atlassian's popup; the 16px padding and the 22rem cap are the kit's own. The close button is 20px: 2px around its icon,
 one line of text tall. Popovers sit on the `--layer-overlay` layer and fade
 in over `--duration-fast`.

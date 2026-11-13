@@ -180,6 +180,11 @@ export const Swatches: Story = {
     const dialog = within(await popup())
     const swatches = within(dialog.getByRole('radiogroup', { name: 'Swatches' }))
     await expect(swatches.getByRole('radio', { name: 'Blue' })).toBeChecked()
+    // Fixed 24px, all in one row.
+    await waitFor(() => {
+      const boxes = swatches.getAllByRole('radio').map((r) => r.getBoundingClientRect())
+      expect(boxes.every((b) => b.width === 24 && b.height === 24 && b.top === boxes[0].top)).toBe(true)
+    })
     await userEvent.click(swatches.getByRole('radio', { name: 'Violet' }))
     await expect(args.onValueChange).toHaveBeenLastCalledWith('#8b5cf6')
     await expect(swatches.getByRole('radio', { name: 'Violet' })).toBeChecked()

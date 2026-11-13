@@ -4,17 +4,14 @@
   outline: none;
 }
 
-/* --menu-inset is the gap between the popup's edge and its items: 12px, as
-   the group padding of Atlassian Design's dropdown menu (its newer menu,
-   behind platform-dst-new-menu). The padding gives back the border's
-   pixel. */
+/* The items sit 4px inside the popup's border, as the Figma library binds
+   it, so a highlighted item's corner nests inside the popup's. */
 .popup {
-  --menu-inset: var(--space-3);
   box-sizing: border-box;
   min-inline-size: max(12rem, var(--anchor-width));
   max-block-size: var(--available-height);
   overflow-y: auto;
-  padding: calc(var(--menu-inset) - var(--border-width));
+  padding: var(--space-1);
   border: var(--border-width) solid var(--color-border);
   border-radius: var(--radius-lg);
   background: var(--color-surface-overlay);
@@ -104,9 +101,6 @@
 .icon {
   color: var(--color-text-subtlest);
 }
-.item[data-highlighted] .icon {
-  color: inherit;
-}
 .destructive .icon {
   color: inherit;
 }
@@ -124,14 +118,12 @@
   letter-spacing: 0.05em;
 }
 
-/* Edge to edge, 12px above and below: Atlassian draws it as the next
-   group's top border, between two groups' 12px padding. After the row
-   rule above, so its margin wins. */
+/* As wide as the items, 4px from the items above and below: the 2px row
+   gap and the separator's own 2px in the Figma library. One margin here
+   (vertical margins collapse), after the row rule above so it wins. */
 .separator {
   block-size: 1px;
-  /* Out by the popup's padding, which is the inset less its border: 1px
-     more would make the popup scroll sideways. */
-  margin: var(--menu-inset) calc(var(--border-width) - var(--menu-inset));
+  margin: var(--space-1) 0;
   background: var(--color-border);
 }
 .separator + * {

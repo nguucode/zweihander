@@ -180,7 +180,8 @@ red tint measures 3.7:1.
 </States>
 
 Hover, focus, disabled and loading behave as on Button, in both the
-pressed and the unpressed look.
+pressed and the unpressed look. A toggle has no press-and-hold state:
+holding the pointer down shows hover until it flips.
 
 ## API
 
@@ -193,7 +194,7 @@ Every other `<button>` attribute passes through, including `ref`.
 
 ### Differences from the spec
 
-- **Two sizes, not four.** The sizes follow Atlassian Design: 32px (`md`) by default, 24px (`sm`) for tables and dense rows. Both take 12px from the outer edge to the label, a 6px gap and a 14/20 label; `sm` is a shorter box, not smaller type. The spec's larger steps were dropped; a big call to action is `md` with more room around it, not a taller box.
+- **Two sizes, not four.** The sizes follow Atlassian Design: 32px (`md`) by default, 24px (`sm`) for tables and dense rows. Both take 12px from the outer edge to the label (11px on ghost), a 6px gap and a 14/20 label; `sm` is a shorter box, not smaller type. The spec's larger steps were dropped; a big call to action is `md` with more room around it, not a taller box.
 - **`pressed`, `defaultPressed`, `onPressedChange`** instead of
   `isSelected`: Base UI's names, per the kit's convention for components
   built on it. "Pressed" is also the ARIA word (`aria-pressed`).
@@ -230,7 +231,7 @@ both states.
 - **For a choice submitted with a form.** Use a Checkbox or a Switch: a
   toggle applies at once, a form field waits for Submit.
 - **For one of many.** Put the toggles in a
-  [ToggleGroup](?path=/docs/components-buttons-buttongroup--docs), or use
+  [Button Group](?path=/docs/components-buttons-buttongroup--docs), or use
   radios or Tabs. A lone toggle is independent: pressing one does not
   release another.
 - **For an action.** Something that happens once (Save, Send) is a

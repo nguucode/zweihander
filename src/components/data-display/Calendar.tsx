@@ -172,11 +172,8 @@ export function Calendar({
   }
   const minMonth = min ? startOfMonth(min) : null
   const maxMonth = max ? startOfMonth(max) : null
-  // A year step stops at the month of `min` or `max` instead of refusing, so
-  // the year arrows are off exactly where the month arrows are.
   const nav = (label: string, months: number) => {
     const back = months < 0
-    const icon = <Icon name={back ? 'chevron-left' : 'chevron-right'} className={styles.dirIcon} />
     return (
       <button
         type="button"
@@ -185,36 +182,23 @@ export function Calendar({
         disabled={back ? !!minMonth && minMonth >= month : !!maxMonth && maxMonth <= month}
         onClick={() => setMonth(clamp(addMonths(month, months), minMonth, maxMonth))}
       >
-        {Math.abs(months) === 1 ? (
-          icon
-        ) : (
-          <span className={styles.double}>
-            {icon}
-            {icon}
-          </span>
-        )}
+        <Icon name={back ? 'chevron-left' : 'chevron-right'} className={styles.dirIcon} />
       </button>
     )
   }
 
   return (
     <div className={cn(styles.calendar, className)}>
-      {/* As @atlaskit/calendar's header: year and month back at the start,
-          the month centred, month and year on at the end. */}
+      {/* Month back at the start, the month centred, month on at the end.
+          Years are Shift+Page Up and Shift+Page Down. */}
       <div className={styles.header}>
-        <div className={styles.navs}>
-          {nav('Previous year', -12)}
-          {nav('Previous month', -1)}
-        </div>
+        {nav('Previous month', -1)}
         {/* Not a heading: a calendar can sit anywhere in a page's outline.
             It announces the month as it changes. */}
         <div className={styles.title} aria-live="polite">
           {fmt.title.format(month)}
         </div>
-        <div className={styles.navs}>
-          {nav('Next month', 1)}
-          {nav('Next year', 12)}
-        </div>
+        {nav('Next month', 1)}
       </div>
       <table ref={gridRef} role="grid" aria-label={fmt.title.format(month)} className={styles.grid} onKeyDown={onKeyDown}>
         <thead>

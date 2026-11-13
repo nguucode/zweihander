@@ -80,13 +80,16 @@ not focused; the two never show at once.
 
 The box is Text Input's: `sm` is 32px and `md` is 40px, one step taller
 than a Button. The search icon and the clear button's icon are 16px in
-both; the clear button is a 24px target round its icon.
+both; the clear button is a 24px target round its icon. The start
+padding is 10px, as Text Input's; the end is 6px, so the clear button's
+icon still sits 10px from the edge.
 
 <SpecTable
   caption="sm"
   rows={[
     { part: 'Container', property: 'Height', token: '--control-md' },
-    { part: 'Container', property: 'Inline padding', token: '--space-1-5' },
+    { part: 'Container', property: 'Inline padding, start', token: '--space-2-5' },
+    { part: 'Container', property: 'Inline padding, end', token: '--space-1-5' },
     { part: 'Container', property: 'Corner radius', token: '--control-md-radius-field' },
     { part: 'Container', property: 'Gap', token: '--space-2' },
     { part: 'Search icon and clear button', property: 'Size', token: '--icon-md' },
@@ -98,7 +101,8 @@ both; the clear button is a 24px target round its icon.
   caption="md"
   rows={[
     { part: 'Container', property: 'Height', token: '--control-lg' },
-    { part: 'Container', property: 'Inline padding', token: '--space-1-5' },
+    { part: 'Container', property: 'Inline padding, start', token: '--space-2-5' },
+    { part: 'Container', property: 'Inline padding, end', token: '--space-1-5' },
     { part: 'Container', property: 'Corner radius', token: '--control-md-radius-field' },
     { part: 'Container', property: 'Gap', token: '--space-2' },
     { part: 'Search icon and clear button', property: 'Size', token: '--icon-md' },

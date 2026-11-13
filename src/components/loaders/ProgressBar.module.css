@@ -67,18 +67,18 @@
   transition: inline-size var(--duration-slow);
 }
 
-/* Indeterminate: a third-width bar sliding across. */
+/* Indeterminate: a 40%-wide bar sliding across. */
 .indicator[data-indeterminate] {
   position: absolute;
   inset-block: 0;
-  inline-size: 33%;
+  inline-size: 40%;
   /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- own loop, not a UI transition */
   animation: slide 1.4s ease-in-out infinite;
 }
 
 @keyframes slide {
   from {
-    inset-inline-start: -33%;
+    inset-inline-start: -40%;
   }
   to {
     inset-inline-start: 100%;

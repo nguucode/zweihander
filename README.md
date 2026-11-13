@@ -80,7 +80,7 @@ carry a readable label and the build throws rather than shipping it.
 ### Exporting to Figma
 
 `tokens/design-tokens.json` keeps `semantic` as **aliases** into `primitive`
-(`"primary": "{primitive.accent.blue.600}"`) rather than flattening them,
+(`"color-background-brand-bold": "{primitive.accent.blue.600}"`) rather than flattening them,
 because a Figma variable is supposed to point at another variable — a
 flattened export imports as a pile of disconnected colours. `light` and
 `dark` are the two modes of one collection; `space`, `text` and `radius`

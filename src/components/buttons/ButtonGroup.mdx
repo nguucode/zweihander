@@ -11,38 +11,34 @@ import * as ButtonGroupStories from './ButtonGroup.stories'
 <DocTabs>
 <DocTab value="overview">
 
-Buttons that belong together. `ToggleGroup` joins
+A selection control, like Tabs without the panel:
 [Toggle Buttons](?path=/docs/components-buttons-togglebutton--docs) that
-share one selection into one bar; `ButtonGroup` sets plain
-[Buttons](?path=/docs/components-buttons-button--docs) that act side by
-side, 4px apart, as Atlassian's button group does.
+share one selection, exactly one on at a time. `type="separate"` sets them
+4px apart; `type="joined"` makes them one bar.
 
 <Status of={ButtonGroupStories} />
 
-Button Group is outside the 1.0 component list, so it starts as experimental.
+Button Group is outside the 1.0 component list; it is beta from 0.9.0.
 
 <Canvas of={ButtonGroupStories.Default} />
 
 ## Variants
 
-| Form | Use for |
+| `type` | Use for |
 | --- | --- |
-| `ToggleGroup`, single | A segmented control: one view, one mode, one period at a time. |
-| `ToggleGroup multiple` | Settings that combine: status filters, Bold and Italic. |
-| `ButtonGroup` | Related actions that read as a set: previous and next, zoom in and out. |
+| `separate` | The default. Outlined toggles 4px apart: one view, one mode, one period at a time. |
+| `joined` | A segmented control: one bar, where the options read as one control. |
 
-<Canvas of={ButtonGroupStories.Multiple} />
+<Canvas of={ButtonGroupStories.Joined} />
 
-<Canvas of={ButtonGroupStories.Actions} />
-
-<Canvas of={ButtonGroupStories.IconOnly} />
+<Canvas of={ButtonGroupStories.IconToggles} />
 
 ## Resources
 
 From npm, or copied into your project through the registry:
 
 ```js
-import { ButtonGroup, ToggleGroup } from 'zweihander/button-group'
+import { ButtonGroup } from 'zweihander/button-group'
 ```
 
 ```sh
@@ -63,25 +59,25 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/button-group.json
   <Story of={ButtonGroupStories.Anatomy} />
 </Anatomy>
 
-The buttons keep their own anatomy; the container only joins them
-(`ToggleGroup`) or spaces them (`ButtonGroup`).
+The toggles keep their own anatomy; the container only spaces them
+(`separate`) or joins them (`joined`).
 
 ## Measurements
 
 The group adds no size of its own. Each button keeps its tier, so a group
 of `sm` buttons is `--control-sm` tall.
 
-In a `ToggleGroup` the inner corners are square and each toggle after the
-first overlaps the one before by its 1px border, so two outlined toggles
-share one line. The outer corners keep the toggles' radius.
+`joined`: the inner corners are square and each toggle after the first
+overlaps the one before by its 1px border, so two outlined toggles share
+one line. The outer corners keep the toggles' radius.
 
-A `ButtonGroup` leaves its buttons whole: every button keeps its four
-corners, its border and its contained look, and the buttons stand
-`--space-1` (4px) apart in one row that does not wrap. In a group wider
-than its content the buttons share the extra width.
+`separate` leaves its toggles whole: every toggle keeps its four corners
+and its border, and they stand `--space-1` (4px) apart in one row that does
+not wrap. In a group wider than its content the toggles share the extra
+width.
 
 <SpecTable
-  caption="ButtonGroup"
+  caption="separate"
   rows={[
     { part: 'Container', property: 'Gap between buttons', token: '--space-1' },
   ]}
@@ -105,9 +101,9 @@ than its content the buttons share the extra width.
 
 ## Color
 
-The group paints nothing: unpressed and pressed colours are the Toggle
-Button's, and a ButtonGroup's are each Button's. The pressed toggle is
-raised over its neighbours so its own border wins where they overlap.
+The group paints nothing: off and on colours are the Toggle Button's. In
+a joined group the toggle that is on is raised over its neighbours so its
+own border wins where they overlap.
 
 <SpecTable
   caption="Default toggles"
@@ -131,10 +127,9 @@ raised over its neighbours so its own border wins where they overlap.
   <Story of={ButtonGroupStories.Default} />
 </States>
 
-Hover, focus and pressed are each button's own. In a `ToggleGroup` the
-focused toggle is raised over its neighbours so the ring is never cut, and
-a contained toggle's hover ring is left out: it would cut across the next
-segment. A `ButtonGroup`'s buttons keep both rings, which fit in the gap.
+Hover and focus are each toggle's own; a toggle has no press-and-hold
+state. In a joined group the focused toggle is raised over its neighbours
+so the ring is never cut; in a separate group the ring fits in the gap.
 
 ## API
 
@@ -143,31 +138,30 @@ segment. A `ButtonGroup`'s buttons keep both rings, which fit in the gap.
   <ArgTypes of={ButtonGroupStories} />
 </div>
 
-The table is `ToggleGroup`'s. `ButtonGroup` takes only `<div>` attributes:
-`aria-label` names it. Both pass every other `<div>` attribute through.
+Every other `<div>` attribute passes through.
 
 ### Differences from the spec
 
-- **`ButtonGroup` is Atlassian's, not a joined bar.** It used to join its
-  buttons like a `ToggleGroup`. It now follows `@atlaskit/button`'s button
-  group: separate buttons, 4px apart. Its API did not change. For a joined
-  bar where one option stays chosen, use `ToggleGroup`.
-- **`ToggleGroup` has no Atlassian counterpart.** It stays the kit's
-  segmented control, joined.
+- **A selection control, not a row of actions.** As in the Figma library,
+  ButtonGroup holds ToggleButtons with exactly one on, in a `separate` or
+  `joined` `type`. In 0.9 it replaced both the old action-row
+  `ButtonGroup` and `ToggleGroup`. There is no `multiple`: for settings
+  that combine, use separate ToggleButtons. For related actions, lay out
+  Buttons yourself.
 
 </DocTab>
 <DocTab value="guidelines">
 
 ## When to use
 
-Use `ToggleGroup` when the toggles answer one question (which view, which
-filters) and `ButtonGroup` when a few actions belong together. Give every
-button in a group the same variant and appearance, so the pressed one is
-the only one that stands out.
+Use a ButtonGroup when the toggles answer one question with one answer:
+which view, which mode, which period. Give every toggle in a group the
+same variant and appearance, so the one that is on is the only one that
+stands out.
 
 <DoDont
   do={<Story of={ButtonGroupStories.DoSameLook} />}
-  doCaption="One look across the group: only the pressed segment stands out."
+  doCaption="One look across the group: only the toggle that is on stands out."
   dont={<Story of={ButtonGroupStories.DontMixLooks} />}
   dontCaption="A different variant per button reads as several states at once."
 />
@@ -180,26 +174,27 @@ the only one that stands out.
   and its `tabpanel` role.
 - **For a choice submitted with a form.** Use a Radio group or Checkboxes:
   a toggle applies at once, a form field waits for Submit.
-- **For unrelated actions.** Lay out separate Buttons with a wider gap;
-  a group says they belong together.
+- **For actions.** A ButtonGroup keeps one option on; for previous and
+  next, or zoom in and out, lay out Buttons side by side.
+- **For settings that combine** (status filters, Bold and Italic). Use
+  separate ToggleButtons: a ButtonGroup keeps exactly one on.
 - **For more than a handful of options.** Use a Select.
 
 ## Accessibility
 
-- Both containers have `role="group"`; name them with `aria-label`.
+- The container has `role="group"`; name it with `aria-label`.
 - Each toggle is a native `<button>` with `aria-pressed`, so a screen reader
   announces "Board, toggle button, pressed".
-- A `ToggleGroup` is one tab stop. Arrow keys move between its toggles
-  and wrap, Home and End jump to the first and last; Space or Enter
-  presses.
-- Single choice keeps one pressed: pressing the pressed toggle again does
-  not release it.
-- A `ButtonGroup`'s buttons are each a tab stop, with no `aria-pressed`.
-- A disabled `ToggleGroup` disables every toggle in it.
-- An icon-only button needs its own `aria-label`, as on Button. A
+- The group is one tab stop. Arrow keys move between its toggles and
+  wrap, Home and End jump to the first and last; Space or Enter turns one
+  on. This is the APG toolbar pattern Base UI's Toggle Group follows.
+- Exactly one stays on: pressing the one that is on again does not
+  release it.
+- A disabled group disables every toggle in it.
+- An icon-only toggle needs its own `aria-label`, as on Button. A
   [Tooltip](?path=/docs/components-overlays-tooltip--docs) can show that
-  label to sighted users: it merges onto the button instead of wrapping
-  it, so the group still holds only its buttons.
+  label to sighted users: it merges onto the toggle instead of wrapping
+  it, so the group still holds only its toggles.
 
   <Canvas of={ButtonGroupStories.WithTooltips} />
 

@@ -29,23 +29,9 @@
   gap: var(--space-cluster);
   padding: var(--space-group);
 }
-.md {
-  gap: var(--space-group);
-  padding: var(--space-container);
-}
-.lg {
-  gap: var(--space-6);
-  padding: var(--space-8);
-}
 
 .rounded {
   border-radius: var(--radius-lg);
-}
-
-/* The card's own border is the non-interactive one; a clickable card still
-   uses it, and shows its interactivity by hover and focus instead. */
-.bordered {
-  border-color: var(--color-border);
 }
 
 .elevated {
@@ -58,30 +44,10 @@
 .outline {
   /* stylelint-disable-next-line zweihander/no-token-shadow -- what sits on the card reads its colour */
   --color-surface: var(--color-surface-raised);
+  /* The only appearance with a visible edge. Elevated and unstyled keep the
+     transparent 1px from .card, so every appearance has the same box. */
+  border-color: var(--color-border);
   background: var(--color-surface-raised);
-}
-
-/* surface is a block of a page on the Theme's canvas and takes the look the Theme's
-   contentStyle picks: a raised card on the canvas (card), or a section of
-   the one flat surface, set off by a rule above (flat). It restates
-   --color-surface because it is what the components inside sit on. */
-.surface {
-  /* stylelint-disable-next-line zweihander/no-token-shadow -- what sits on the surface reads its colour */
-  --color-surface: var(--color-surface-raised);
-  background: var(--content-card, var(--color-surface-raised)) var(--content-flat, transparent);
-  box-shadow: var(--content-card, var(--shadow-raised)) var(--content-flat, none);
-}
-.surface.rounded {
-  border-radius: var(--content-card, var(--radius-lg)) var(--content-flat, 0);
-}
-.surface.bordered {
-  border-color: var(--content-card, var(--color-border)) var(--content-flat, transparent);
-  border-block-start-color: var(--color-border);
-}
-.surface.interactive:hover {
-  box-shadow: var(--content-card, var(--shadow-overlay)) var(--content-flat, none);
-  /* Flat has no shadow to lift: the rule above strengthens, as outline's edge does. */
-  border-block-start-color: var(--content-card, var(--color-border)) var(--content-flat, var(--color-border-bold));
 }
 
 /* unstyled keeps its padding and layout, and drops everything you see. */

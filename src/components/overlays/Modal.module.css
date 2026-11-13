@@ -76,8 +76,16 @@
   gap: var(--space-group);
 }
 
-.title {
+/* Title and description stacked, with the close button beside both.
+   ConfirmDialog widens the gap to 16px through --modal-heading-gap. */
+.heading {
+  display: grid;
   flex: 1;
+  gap: var(--modal-heading-gap, var(--space-inline));
+  min-inline-size: 0;
+}
+
+.title {
   margin: 0;
   font-size: var(--text-heading-md);
   line-height: var(--leading-heading-md);
@@ -86,7 +94,7 @@
 }
 
 .description {
-  margin: var(--space-inline) 0 0;
+  margin: 0;
   color: var(--color-text-subtlest);
 }
 
@@ -120,9 +128,9 @@
   display: inline-flex;
   flex-shrink: 0;
   /* 4px around a 16px icon: a 24px box, the height of the title's line,
-     pulled 4px into the corner so the icon lines up with the padding. */
+     flush with the padding. */
   padding: var(--control-xs-gap);
-  margin: 0 calc(var(--control-xs-gap) * -1);
+  margin: 0;
   border: 0;
   border-radius: var(--radius-sm);
   background: transparent;

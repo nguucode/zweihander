@@ -70,14 +70,16 @@ and a fill only on hover.
 ## Measurements
 
 The box is Text Input's: `sm` is 32px and `md` is 40px, one step taller
-than a Button. A stepper is a 24px square in both, centred in the box and
-4px from its end.
+than a Button. A stepper is a 24px square in both, centred in the box.
+The value sits 10px from the start edge and 8px before the steppers; the
+steppers are 2px apart and 6px from the end edge, so each icon sits 10px
+in.
 
 <SpecTable
   caption="sm"
   rows={[
     { part: 'Container', property: 'Height', token: '--control-md' },
-    { part: 'Container', property: 'Inline padding, start', token: '--space-1-5' },
+    { part: 'Container', property: 'Inline padding, start', token: '--space-2-5' },
     { part: 'Container', property: 'Corner radius', token: '--control-md-radius-field' },
     { part: 'Stepper', property: 'Icon size', token: '--icon-md' },
     { part: 'Input', property: 'Font size', token: '--text-body' },
@@ -88,7 +90,7 @@ than a Button. A stepper is a 24px square in both, centred in the box and
   caption="md"
   rows={[
     { part: 'Container', property: 'Height', token: '--control-lg' },
-    { part: 'Container', property: 'Inline padding, start', token: '--space-1-5' },
+    { part: 'Container', property: 'Inline padding, start', token: '--space-2-5' },
     { part: 'Container', property: 'Corner radius', token: '--control-md-radius-field' },
     { part: 'Stepper', property: 'Icon size', token: '--icon-md' },
     { part: 'Input', property: 'Font size', token: '--text-body' },
@@ -98,7 +100,9 @@ than a Button. A stepper is a 24px square in both, centred in the box and
 <SpecTable
   caption="Every size"
   rows={[
-    { part: 'Container', property: 'Inline padding, end', token: '--space-0-5' },
+    { part: 'Container', property: 'Inline padding, end', token: '--space-1-5' },
+    { part: 'Container', property: 'Gap from the value to the steppers', token: '--space-2' },
+    { part: 'Stepper', property: 'Gap between the two', token: '--space-0-5' },
     { part: 'Stepper', property: 'Width and height', token: '--control-sm' },
     { part: 'Stepper', property: 'Corner radius', token: '--radius-sm' },
     { part: 'Stepper', property: 'Width on touch screens', token: '--target-coarse' },
@@ -107,7 +111,7 @@ than a Button. A stepper is a 24px square in both, centred in the box and
   ]}
 />
 
-The two steppers are 2px apart. The input
+The input
 uses tabular figures, so digits do not shift as the value changes.
 
 ## Color

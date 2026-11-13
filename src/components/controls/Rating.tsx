@@ -58,7 +58,7 @@ export function Rating({
             const fill = Math.min(1, Math.max(0, current - (n - 1)))
             return (
               <span key={n} className={styles.star} aria-hidden="true">
-                <Icon name="star" className={styles.empty} />
+                <Icon name="star-filled" className={styles.empty} />
                 <span className={styles.fill} style={{ inlineSize: `${fill * 100}%` }}>
                   <Icon name="star-filled" />
                 </span>
@@ -90,7 +90,7 @@ export function Rating({
                 onValueChange?.(n)
               }}
             />
-            <Icon name={n <= current ? 'star-filled' : 'star'} />
+            <Icon name="star-filled" />
           </label>
         ))}
       </span>

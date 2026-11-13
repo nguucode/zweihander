@@ -60,9 +60,14 @@ export function Popover({
       <BasePopover.Portal container={container}>
         <BasePopover.Positioner className={styles.positioner} side={side} align={align} sideOffset={6}>
           <BasePopover.Popup aria-label={title ? undefined : ariaLabel} className={cn(styles.popup, className)}>
-            {(title || hasCloseButton) && (
+            {(title || description || hasCloseButton) && (
               <div className={styles.header}>
-                {title && <BasePopover.Title className={styles.title}>{title}</BasePopover.Title>}
+                {(title || description) && (
+                  <div className={styles.heading}>
+                    {title && <BasePopover.Title className={styles.title}>{title}</BasePopover.Title>}
+                    {description && <BasePopover.Description className={styles.description}>{description}</BasePopover.Description>}
+                  </div>
+                )}
                 {hasCloseButton && (
                   <BasePopover.Close aria-label={closeLabel} className={styles.close}>
                     <Icon name="close" />
@@ -77,7 +82,6 @@ export function Popover({
                 <Icon name="close" />
               </BasePopover.Close>
             )}
-            {description && <BasePopover.Description className={styles.description}>{description}</BasePopover.Description>}
             {children && <div className={styles.body}>{children}</div>}
           </BasePopover.Popup>
         </BasePopover.Positioner>

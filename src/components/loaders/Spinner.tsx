@@ -18,10 +18,6 @@ export interface SpinnerProps extends Omit<ComponentProps<'span'>, 'children'> {
   label?: string
 }
 
-// Circle of radius 10 in a 24-unit viewBox: the stroke scales with the size.
-const R = 10
-const C = 2 * Math.PI * R
-
 export function Spinner({
   size = 'md',
   variant = 'accent',
@@ -45,16 +41,16 @@ export function Spinner({
   const name = label || 'Loading'
 
   const indicator = (
-    <svg viewBox="0 0 24 24" className={cn(styles.svg, !determinate && styles.spinning)} aria-hidden="true">
-      <circle className={styles.track} cx="12" cy="12" r={R} />
+    // No viewBox: the ring is sized in CSS so its stroke stays 2.25px at
+    // every size. pathLength 100 lets the dash read as a percentage.
+    <svg className={cn(styles.svg, !determinate && styles.spinning)} aria-hidden="true">
+      <circle className={styles.track} />
       <circle
         className={styles.indicator}
-        cx="12"
-        cy="12"
-        r={R}
-        strokeDasharray={C}
-        // Indeterminate shows a quarter arc; determinate shows the value.
-        strokeDashoffset={determinate ? C * (1 - clamped / 100) : C * 0.75}
+        pathLength={100}
+        strokeDasharray={100}
+        // Indeterminate shows 30% of the ring; determinate shows the value.
+        strokeDashoffset={determinate ? 100 - clamped : 70}
       />
     </svg>
   )

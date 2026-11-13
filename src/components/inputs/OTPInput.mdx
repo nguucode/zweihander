@@ -71,14 +71,14 @@ helper text are Text Input's.
 ## Measurements
 
 A cell is a square as tall as a Text Input of the same size: 32px in
-`sm`, 40px in `md`, with body type in both.
+`sm`, 40px in `md`. The digit is Heading lg (24/28, semibold) in both;
+the separator between groups is body type.
 
 <SpecTable
   caption="sm"
   rows={[
     { part: 'Cell', property: 'Width and height', token: '--control-md' },
     { part: 'Cell', property: 'Corner radius', token: '--control-md-radius-field' },
-    { part: 'Cell', property: 'Font size', token: '--text-body' },
   ]}
 />
 
@@ -87,7 +87,6 @@ A cell is a square as tall as a Text Input of the same size: 32px in
   rows={[
     { part: 'Cell', property: 'Width and height', token: '--control-lg' },
     { part: 'Cell', property: 'Corner radius', token: '--control-md-radius-field' },
-    { part: 'Cell', property: 'Font size', token: '--text-body' },
   ]}
 />
 
@@ -95,6 +94,9 @@ A cell is a square as tall as a Text Input of the same size: 32px in
   caption="Every size"
   rows={[
     { part: 'Cells and separator', property: 'Gap', token: '--space-2' },
+    { part: 'Cell', property: 'Font size', token: '--text-heading-lg' },
+    { part: 'Cell', property: 'Line height', token: '--leading-heading-lg' },
+    { part: 'Separator', property: 'Font size', token: '--text-body' },
     { part: 'Resend button', property: 'Pulled back to line up with the cells', token: '--control-sm-pad' },
     { part: 'Focus ring', property: 'Width', token: '--focus-width' },
     { part: 'Focus ring', property: 'Offset', token: '--focus-offset' },

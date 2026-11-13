@@ -82,12 +82,21 @@ export const Default: Story = {
     await expect(items[2]).toHaveTextContent('Invite, not started')
     // Without onStepClick nothing is a button.
     await expect(within(nav).queryByRole('button')).toBeNull()
+    // The complete step's check is 16px in its 32px marker.
+    await expect(items[0].querySelector('svg')!.getBoundingClientRect().width).toBe(16)
   },
 }
 
 export const Vertical: Story = { args: { orientation: 'vertical', current: 2 } }
 
-export const Small: Story = { args: { size: 'sm' } }
+export const Small: Story = {
+  args: { size: 'sm' },
+  play: async ({ canvas }) => {
+    // 14px in the 24px marker.
+    const done = within(canvas.getByRole('navigation')).getAllByRole('listitem')[0]
+    await expect(done.querySelector('svg')!.getBoundingClientRect().width).toBe(14)
+  },
+}
 
 export const WithError: Story = {
   args: {

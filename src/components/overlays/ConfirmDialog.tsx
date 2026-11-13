@@ -14,7 +14,13 @@ export interface ConfirmDialogProps {
   title: ReactNode
   /** What happens, and that it cannot be undone. Describes the dialog. */
   description: ReactNode
-  /** The destructive button, named after what it does: "Delete project". */
+  /**
+   * `destructive` (the default): a warning icon and a destructive confirm
+   * button, for an action that cannot be undone. `default`: no icon and a
+   * primary confirm button, for a decision that destroys nothing.
+   */
+  kind?: 'default' | 'destructive'
+  /** The confirm button, named after what it does: "Delete project". */
   confirmLabel: string
   /** The safe button. */
   cancelLabel?: string
@@ -35,11 +41,12 @@ export interface ConfirmDialogProps {
   isModal?: boolean
 }
 
-/** Asks before something that cannot be undone, in an alert dialog. */
+/** Asks before an action, usually one that cannot be undone, in an alert dialog. */
 export function ConfirmDialog({
   trigger,
   title,
   description,
+  kind = 'destructive',
   confirmLabel,
   cancelLabel = 'Cancel',
   confirmText,
@@ -84,18 +91,23 @@ export function ConfirmDialog({
       container={container}
       open={isOpen}
       onOpenChange={setOpen}
+      className={styles.dialog}
       title={
-        <span className={styles.heading}>
-          <Icon name="warning" className={styles.icon} />
-          {title}
-        </span>
+        kind === 'destructive' ? (
+          <span className={styles.heading}>
+            <Icon name="warning" className={styles.icon} />
+            {title}
+          </span>
+        ) : (
+          title
+        )
       }
       description={description}
       footer={
         <>
           {/* Before the action, so it has focus on open (after the field, when there is one) and Enter cannot delete. */}
           <ModalClose render={<Button variant="secondary" appearance="outlined" />}>{cancelLabel}</ModalClose>
-          <Button variant="destructive" disabled={!ready} onClick={confirm}>
+          <Button variant={kind === 'destructive' ? 'destructive' : 'primary'} disabled={!ready} onClick={confirm}>
             {confirmLabel}
           </Button>
         </>

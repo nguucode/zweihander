@@ -48,12 +48,12 @@
   cursor: default;
 }
 
-/* Invalid: a danger-coloured edge INSIDE the track, so it reads on and off
-   alike and leaves the band outside the track to the focus ring — an
-   outside ring here would sit exactly where focus draws and hide it. The
-   helper text says what is wrong. */
+/* Invalid: a 2px danger-coloured ring OUTSIDE the track, as Figma's
+   outside stroke. It fills the --focus-offset gap, so the focus ring
+   draws just beyond it and both show. The helper text says what is
+   wrong. */
 .track[data-invalid] {
-  box-shadow: inset 0 0 0 2px var(--color-text-danger);
+  box-shadow: 0 0 0 2px var(--color-text-danger);
 }
 
 .thumb {

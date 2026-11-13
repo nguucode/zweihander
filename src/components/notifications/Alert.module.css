@@ -56,8 +56,10 @@
 }
 .subtle .icon,
 .subtle .title,
+.subtle .close,
 .outlined .icon,
-.outlined .title {
+.outlined .title,
+.outlined .close {
   color: var(--alert-text);
 }
 .solid {
@@ -97,11 +99,8 @@
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
+  /* Flush with the 16px padding and top-aligned with the icon, as Figma. */
   margin: 0;
-  /* A 24px button on a 20px line: pulled up and down by the 2px it is
-     taller, so it centres on the first line and adds no height. */
-  margin-block: calc((var(--leading-body) * var(--text-body) - var(--box-sm)) / 2);
-  margin-inline-end: calc(var(--space-1) * -1);
   inline-size: var(--box-sm);
   block-size: var(--box-sm);
   padding: 0;

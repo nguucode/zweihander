@@ -1,10 +1,68 @@
+/* The popup is a Listbox's shell, not a Popover's card: 8px above and below
+   the rows, none at the sides, so the rows' highlight runs edge to edge.
+   Doubled with the role so it wins over Popover's own .popup, whatever
+   order the two stylesheets load in. */
+[role='dialog'].popup {
+  /* Popover's own max-inline-size keeps it inside a narrow screen. */
+  inline-size: 15rem;
+  padding: var(--space-2) 0;
+}
+
 .list {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
 }
 
-/* Set apart from the boxes, so it does not read as one of them. */
+/* A column is an Option's row: 6px block and 12px inline padding around a
+   20px line, a 32px row. The Checkbox's label is stretched to fill it, so
+   the whole row is the click target. */
+.row > label,
 .reset {
-  margin-block-start: var(--space-3);
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  inline-size: 100%;
+  min-block-size: var(--control-md);
+  padding: var(--space-1-5) var(--space-3);
+}
+
+.row > label:hover:not([data-disabled]),
+.reset:hover {
+  background: var(--color-background-neutral);
+  color: var(--color-text);
+}
+
+/* 1px rule, 4px above and below, edge to edge. */
+.separator {
+  block-size: var(--border-width);
+  margin-block: var(--space-1);
+  background: var(--color-border);
+}
+
+/* Reset reads as one more row: its text starts where the column names do,
+   past a checkbox-wide slot. */
+.reset {
+  margin: 0;
+  padding-inline-start: calc(var(--space-3) + var(--choice-box) + var(--space-2));
+  border: 0;
+  background: transparent;
+  color: var(--color-text);
+  font: inherit;
+  text-align: start;
+  cursor: var(--cursor-button);
+  outline: none;
+}
+.reset:focus-visible {
+  outline: var(--focus-width) solid var(--color-border-focused);
+  outline-offset: var(--focus-offset-inset);
+}
+
+/* Rows are 32px; on touch they grow to 44px. They stack edge to edge, so
+   an invisible larger area would overlap the next one. */
+@media (pointer: coarse) {
+  .row > label,
+  .reset {
+    min-block-size: var(--target-coarse);
+  }
 }

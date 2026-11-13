@@ -80,6 +80,10 @@ export const Default: Story = {
     // The legend is a field label: the form label weight.
     await expect(getComputedStyle(canvas.getByText('Rate this template')).fontWeight).toBe('653')
     await expect(canvas.getByRole('radio', { name: '3 out of 5 stars' })).toBeChecked()
+    // On and off are the same filled star; only the colour differs.
+    const [on, off] = [group.querySelector('label:first-child svg')!, group.querySelector('label:last-child svg')!]
+    await expect(off.innerHTML).toBe(on.innerHTML)
+    await expect(getComputedStyle(off).color).not.toBe(getComputedStyle(on).color)
     await userEvent.click(canvas.getByRole('radio', { name: '5 out of 5 stars' }))
     await expect(args.onValueChange).toHaveBeenLastCalledWith(5)
     // Arrows move the choice, as in any radio group.
@@ -139,7 +143,7 @@ export const CustomText: Story = {
 export const anatomyParts = [
   { name: 'Label', selector: 'legend', description: 'Optional. Names the group; without it, pass `aria-label`.' },
   { name: 'Filled star', selector: 'fieldset > span > label:first-child', description: 'Up to the score, in the bright amber.' },
-  { name: 'Empty star', selector: 'fieldset > span > label:last-child', description: 'After the score, outlined. Each star holds an invisible radio.' },
+  { name: 'Empty star', selector: 'fieldset > span > label:last-child', description: 'After the score, the same star in the border colour. Each star holds an invisible radio.' },
 ]
 
 /** Every part present. */

@@ -3,10 +3,12 @@
 }
 
 .md {
+  --breadcrumbs-icon: var(--icon-md);
   font-size: var(--text-body);
   line-height: var(--leading-body);
 }
 .sm {
+  --breadcrumbs-icon: var(--icon-sm);
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
 }
@@ -82,7 +84,7 @@
   border-radius: var(--radius-sm);
   background: transparent;
   color: var(--color-text-subtlest);
-  font-size: inherit;
+  font-size: var(--breadcrumbs-icon);
   cursor: var(--cursor-button);
 }
 .ellipsis:hover {

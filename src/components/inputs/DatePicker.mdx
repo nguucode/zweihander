@@ -72,18 +72,15 @@ in a panel. Its days, header and paging buttons are specified there.
 ## Measurements
 
 The field is the kit's field: `sm` is 32px and `md` is 40px, one step
-taller than a Button, with the same padding, icon and type in both. As
-Atlassian's date picker, which is its Select, the date starts 8px inside
-the edge. The calendar button is not Select's 12px chevron: it is a 16px
-icon in a 24px target, its centre 20px from the outer edge, so the edge
-and the end padding make 12px together.
+taller than a Button, with the same 10px padding, icon and type in both.
+The calendar button is a 16px icon in a 24px target, pulled into the
+padding so the icon ends 10px inside the edge, 8px after the date.
 
 <SpecTable
   caption="sm"
   rows={[
     { part: 'Field', property: 'Height', token: '--control-md' },
-    { part: 'Field', property: 'Inline padding, start', token: '--space-2' },
-    { part: 'Field', property: 'Inline end, edge and padding together', token: '--space-3' },
+    { part: 'Field', property: 'Inline padding', token: '--space-2-5' },
     { part: 'Field', property: 'Corner radius', token: '--control-md-radius-field' },
     { part: 'Field', property: 'Gap', token: '--space-2' },
     { part: 'Calendar button', property: 'Icon size', token: '--icon-md' },
@@ -96,8 +93,7 @@ and the end padding make 12px together.
   caption="md"
   rows={[
     { part: 'Field', property: 'Height', token: '--control-lg' },
-    { part: 'Field', property: 'Inline padding, start', token: '--space-2' },
-    { part: 'Field', property: 'Inline end, edge and padding together', token: '--space-3' },
+    { part: 'Field', property: 'Inline padding', token: '--space-2-5' },
     { part: 'Field', property: 'Corner radius', token: '--control-md-radius-field' },
     { part: 'Field', property: 'Gap', token: '--space-2' },
     { part: 'Calendar button', property: 'Icon size', token: '--icon-md' },

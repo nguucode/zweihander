@@ -186,7 +186,7 @@
   box-sizing: border-box;
   border: 1px solid var(--color-border);
   border-radius: calc(var(--tab-track-radius) - 2px);
-  background: var(--color-surface-raised);
+  background: var(--color-surface);
   box-shadow: var(--shadow-raised);
   transition:
     inset-inline-start var(--duration-slow),

@@ -30,7 +30,7 @@ colour.
 
 | Variant | Use for |
 | --- | --- |
-| `default` | Most toasts: something done, nothing to judge. "File moved to Trash." |
+| `neutral` | Most toasts: something done, nothing to judge. "File moved to Trash." |
 | `info` | A neutral fact about what just happened: "Sync paused while offline." |
 | `success` | A result worth confirming because it was not obvious: "Invite sent to 12 people." |
 | `warning` | Done, with a catch: "Saved, but 2 rows were skipped." |
@@ -88,6 +88,7 @@ from.
     { part: 'Title and description', property: 'Gap', token: '--space-inline' },
     { part: 'Action', property: 'Height', token: '--control-sm' },
     { part: 'Close button', property: 'Size', token: '--box-sm' },
+    { part: 'Close button', property: 'Gap, from the text', token: '--space-group' },
     { part: 'Close button', property: 'Icon size', token: '--icon-md' },
     { part: 'Close button', property: 'Corner radius', token: '--radius-sm' },
     { part: 'Close button', property: 'Minimum hit area on touch screens', token: '--target-coarse' },
@@ -101,17 +102,14 @@ from.
 
 At most 25rem (400px) wide, and never wider than the window less the edge
 distance on both sides. The padding counts the 1px border: the content
-sits 16px from the toast's edge. The close button is 24px on a 20px line:
-it is pulled 2px up and down, so it centres on the first line, and it
-sits 8px from the text. The action is a 24px row straight under the
+sits 16px from the toast's edge. The close button is 24px, top-aligned with
+the content and flush with the padding, 16px from the text. The action is a 24px row straight under the
 description.
 
 ## Color
 
-The surface takes the opposite appearance to the page: dark toasts on a
-light page, light on a dark one. The contrast pulls the eye to a message
-that is only there for a few seconds. The tokens below are read in that
-opposite appearance.
+The toast takes the page's own appearance: the overlay surface, its
+border and the overlay shadow lift it off what is under it.
 
 <SpecTable
   caption="Every variant"
@@ -139,7 +137,7 @@ opposite appearance.
   ]}
 />
 
-`default` shows no icon.
+`neutral` shows no icon.
 
 ## States
 
@@ -192,7 +190,7 @@ toast.add({ title: 'File moved to Trash', action: { label: 'Undo', onClick: rest
 | Option | Values | |
 | --- | --- | --- |
 | `title`, `description` | node | |
-| `variant` | `default`, `info`, `success`, `warning`, `danger` | `default` |
+| `variant` | `neutral`, `info`, `success`, `warning`, `danger` | `neutral` |
 | `action` | `{ label, onClick }` | One button. |
 | `timeout` | number (ms) | The provider's by default. `0` keeps it until dismissed. |
 | `priority` | `low`, `high` | `high` by default for `danger`. |

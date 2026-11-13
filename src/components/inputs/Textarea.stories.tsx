@@ -129,15 +129,15 @@ export const Sizes: Story = {
     </div>
   ),
   play: async ({ canvas }) => {
-    // Atlassian's textarea padding: 2px (sm) or 6px (md) above and below,
-    // 7px at the sides, inside the 1px edge.
+    // Atlassian's textarea padding: 2px (sm) or 6px (md) above and below;
+    // 10px at the sides, as every field's box, inside the 1px edge.
     const pads = ['sm', 'md'].map((n) => {
       const { paddingTop, paddingBottom, paddingLeft, paddingRight } = getComputedStyle(canvas.getByLabelText(n))
       return [paddingTop, paddingBottom, paddingLeft, paddingRight]
     })
     await expect(pads).toEqual([
-      ['2px', '2px', '7px', '7px'],
-      ['6px', '6px', '7px', '7px'],
+      ['2px', '2px', '10px', '10px'],
+      ['6px', '6px', '10px', '10px'],
     ])
   },
 }

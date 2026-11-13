@@ -1,8 +1,7 @@
 /* A textarea's box grows with it, so it takes vertical padding instead of a
-   fixed height. The numbers are @atlaskit/textarea's: 2px at sm (its
-   compact), 6px at md, and 7px at the sides in both, a pixel more than a
-   single-line field (Atlassian hard-codes the 7px; there is no 7px step, so
-   it is 6px plus the border width). The padding sits on the
+   fixed height. The block padding is @atlaskit/textarea's: 2px at sm (its
+   compact), 6px at md. The sides are 10px in both, as every field's box
+   (the Figma library's binding). The padding sits on the
    <textarea>, not the box, so the browser's resize handle lands in the
    field's corner. Doubled classes outrank the shared size classes,
    whichever stylesheet loads first. */
@@ -18,7 +17,7 @@
 }
 .pad-sm,
 .pad-md {
-  --pad-inline: calc(var(--space-1-5) + var(--border-width));
+  --pad-inline: var(--space-2-5);
 }
 
 .textarea.textarea {

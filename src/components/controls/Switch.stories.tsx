@@ -49,7 +49,7 @@ const meta = {
       table: { type: { summary: "'primary' | 'accent' | 'destructive'" }, defaultValue: { summary: "'primary'" } },
     },
     validationState: {
-      description: '`error` sets `aria-invalid`, draws a red edge inside the track and turns the helper red; `success` turns the helper green.',
+      description: '`error` sets `aria-invalid`, draws a 2px red ring outside the track and turns the helper red; `success` turns the helper green.',
       control: 'inline-radio',
       options: ['default', 'success', 'error'],
       table: { type: { summary: "'default' | 'success' | 'error'" }, defaultValue: { summary: "'default'" } },
@@ -152,6 +152,8 @@ export const Validation: Story = {
     const terms = canvas.getByRole('switch', { name: /Accept the terms/ })
     await expect(terms).toHaveAttribute('aria-invalid', 'true')
     await expect(terms).toHaveAccessibleDescription('Required to continue.')
+    // A 2px ring outside the track, not inset.
+    await expect(getComputedStyle(terms).boxShadow).toMatch(/ 0px 0px 0px 2px$/)
   },
 }
 

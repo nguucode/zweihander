@@ -6,7 +6,7 @@ import { formatBytes, pointAtMiddle, requests, traffic, transfer } from './sampl
 
 const meta = {
   title: 'Charts/LineChart',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: LineChart,
   parameters: { layout: 'padded' },
   decorators: [(Story) => <div style={{ maxInlineSize: 640 }}>{Story()}</div>],
@@ -26,7 +26,7 @@ const meta = {
     appearance: { control: 'inline-radio', options: ['line', 'area'], description: '`area` fills under each line and keeps the y axis at zero.' },
     isAutoDomain: { description: 'Fit the y axis to the data instead of starting at zero. Line appearance only.' },
     isIncomplete: { description: 'The last bucket is still filling: its segment is dashed.' },
-    legendValue: { control: 'inline-radio', options: ['total', 'latest'], description: 'Beside each series: its sum, or its latest value (for rates and latencies).' },
+    legendValue: { control: 'inline-radio', options: ['total', 'latest', 'none'], description: 'Beside each series: its sum, its latest value (for rates and latencies), or nothing (label only).' },
     isLoading: { description: 'Shows a skeleton the height of the plot.' },
     height: { description: 'Plot height in pixels. The width follows the container.' },
     format: { control: false, description: 'Formats values on the axis, legend, tooltip and table. Defaults to compact numbers.' },
@@ -97,6 +97,10 @@ export const MultiSeries: Story = {
     await expect(web).toHaveAttribute('aria-disabled', 'true')
     await userEvent.click(web)
     await expect(web).toHaveAttribute('aria-pressed', 'true')
+
+    // Line series take line markers in the legend.
+    const marker = api.querySelector('span')!
+    await expect(marker.getBoundingClientRect().width).toBeGreaterThan(marker.getBoundingClientRect().height)
 
     // Keyboard: Tab reaches the toggle, Enter flips it back.
     api.focus()

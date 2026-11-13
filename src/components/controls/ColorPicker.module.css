@@ -177,20 +177,22 @@
 }
 
 /* -------------------------------------------------------------- swatches */
+/* One row of fixed 24px swatches, as in Figma; it does not wrap.
+   ponytail: past eight swatches the row runs out of the 16rem panel; wrap or
+   scroll it if a palette ever needs more. */
 .swatches {
-  display: grid;
+  display: flex;
   padding-block-start: var(--space-cluster);
   border-block-start: 1px solid var(--color-border);
-  grid-template-columns: repeat(auto-fill, minmax(var(--space-6), 1fr));
   gap: var(--space-inline);
 }
 
 .swatch {
   position: relative;
   appearance: none;
-  aspect-ratio: 1;
-  inline-size: auto;
-  block-size: auto;
+  flex-shrink: 0;
+  inline-size: var(--box-sm);
+  block-size: var(--box-sm);
   margin: 0;
   padding: 0;
   border: 0;

@@ -5,7 +5,7 @@ import { invoicesByDay, pointAtMiddle, statusCodes } from './sample-data'
 
 const meta = {
   title: 'Charts/BarChart',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: BarChart,
   parameters: { layout: 'padded' },
   decorators: [(Story) => <div style={{ maxInlineSize: 640 }}>{Story()}</div>],
@@ -34,6 +34,7 @@ const meta = {
     height: { description: 'Plot height in pixels. The width follows the container.' },
     format: { control: false, description: 'Formats values on the axis, legend, tooltip and table. Defaults to compact numbers.' },
     timeZone: { control: 'inline-radio', options: [undefined, 'UTC'], description: 'The time axis is in the viewer\'s time zone, or UTC.' },
+    legendValue: { control: 'inline-radio', options: ['total', 'latest', 'none'], description: 'Beside each series: its sum, its latest value, or nothing (label only).' },
   },
 } satisfies Meta<typeof BarChart>
 
@@ -45,7 +46,10 @@ export const Stacked: Story = {
   play: async ({ canvas, canvasElement }) => {
     const img = await canvas.findByRole('img', { name: /Requests by status code/ })
     await expect(canvasElement.querySelectorAll('svg g[class*="series"]')).toHaveLength(4)
-    await expect(canvasElement.querySelectorAll('rect[class*="partial"]').length).toBeGreaterThan(0)
+    await expect(canvasElement.querySelectorAll('path[class*="partial"]').length).toBeGreaterThan(0)
+    // The legend sits below the plot.
+    const legend = canvas.getByRole('list', { name: 'Legend' })
+    await expect(legend.getBoundingClientRect().top).toBeGreaterThan(img.getBoundingClientRect().bottom)
     // The tooltip lists every series in the bucket, top of the stack first, and the total.
     pointAtMiddle(img)
     await waitFor(() => expect(canvasElement.querySelector('[class*="tooltip"]')).toHaveTextContent(/5xx.*2xx.*Total/))
@@ -78,6 +82,8 @@ export const Grouped: Story = {
     x: 'day',
     layout: 'grouped',
     isIncomplete: false,
+    // Label only in the legend, as in Figma.
+    legendValue: 'none',
     series: [
       { key: 'thisWeek', label: 'This week' },
       { key: 'lastWeek', label: 'Last week' },
@@ -86,11 +92,15 @@ export const Grouped: Story = {
   play: async ({ canvas, canvasElement }) => {
     await canvas.findByRole('img', { name: /Invoices issued Mon to Sun/ })
     // Two bars per day, every one starting from the zero line.
-    const bars = [...canvasElement.querySelectorAll('rect[class*="bar"]')]
+    const bars = [...canvasElement.querySelectorAll<SVGPathElement>('path[class*="bar"]')]
     await expect(bars).toHaveLength(14)
-    const bottoms = new Set(bars.map((b) => Math.round(Number(b.getAttribute('y')) + Number(b.getAttribute('height')))))
+    const bottoms = new Set(bars.map((b) => Math.round(b.getBBox().y + b.getBBox().height)))
     await expect(bottoms.size).toBe(1)
+    // Rounded at the top, square on the axis, no outline.
+    await expect(bars[0].getAttribute('d')).toMatch(/Q/)
+    await expect(getComputedStyle(bars[0]).stroke).toBe('none')
     await expect(canvas.getByText('Wed')).toBeInTheDocument()
+    await expect(canvas.getByRole('button', { name: 'This week' })).toBeVisible()
   },
 }
 

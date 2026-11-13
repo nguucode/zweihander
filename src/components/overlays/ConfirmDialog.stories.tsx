@@ -29,8 +29,15 @@ const meta = {
       control: 'text',
       table: { type: { summary: 'ReactNode' } },
     },
+    kind: {
+      description:
+        '`destructive`: a warning icon and a destructive confirm button, for an action that cannot be undone. `default`: no icon and a primary confirm button, for a decision that destroys nothing (sign out, leave without saving).',
+      control: 'inline-radio',
+      options: ['default', 'destructive'],
+      table: { type: { summary: "'default' | 'destructive'" }, defaultValue: { summary: "'destructive'" } },
+    },
     confirmLabel: {
-      description: 'Required: the destructive button, named after what it does ("Delete project"), never "OK".',
+      description: 'Required: the confirm button, named after what it does ("Delete project"), never "OK".',
       control: 'text',
       table: { type: { summary: 'string' } },
     },
@@ -194,6 +201,24 @@ export const Anatomy: Story = {
     const found = await expectAnatomy(canvasElement, anatomyParts)
     await expect(found[1]).toHaveTextContent('Delete the “northwind” workspace?')
     await expect(found[5]).toBeDisabled()
+  },
+}
+
+/** `kind="default"`: a decision that destroys nothing. No icon, a primary confirm button. */
+export const KindDefault: Story = {
+  tags: ['!dev'],
+  args: {
+    kind: 'default',
+    title: 'Sign out of every device?',
+    description: 'You stay signed in here. Everywhere else asks for your password again.',
+    confirmLabel: 'Sign out',
+  },
+  render: (args) => picture({ ...args, height: '12rem' }),
+  play: async ({ canvasElement }) => {
+    const dialog = within(canvasElement).getByRole('dialog')
+    await expect(dialog.querySelector(`.${styles.icon}`)).toBeNull()
+    // 16px from the title to the description, where a Modal has 8px.
+    await expect(getComputedStyle(dialog.querySelector(`.${modalStyles.heading}`)!).rowGap).toBe('16px')
   },
 }
 

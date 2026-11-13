@@ -1,3 +1,8 @@
+/* 16px from the title to the description, where a Modal has 8px. */
+.dialog {
+  --modal-heading-gap: var(--space-group);
+}
+
 .heading {
   display: flex;
   align-items: flex-start;
