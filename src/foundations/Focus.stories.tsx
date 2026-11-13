@@ -6,7 +6,7 @@ import docs from './docs.module.css'
 const TOKENS = [
   { name: '--focus-width', use: 'Ring thickness, on every focusable element' },
   { name: '--focus-offset', use: 'Ring outside the element: buttons, fields, links, free-standing controls' },
-  { name: '--focus-offset-inset', use: 'Ring inside the element: tabs, rows, accordion headers, close buttons in a panel' },
+  { name: '--focus-offset-inset', use: 'Ring inside the element: tabs, rows, close buttons in a panel' },
 ]
 
 const SAMPLE: React.CSSProperties = {
