@@ -233,6 +233,8 @@ Give the page's main search `shortcut="/"`, and only that one.
 
 - `type="search"`, exposed as a `searchbox`, named by the visible label
   or "Search". A placeholder is not a name.
+- `helperText`, when given, sits under the field and is the input's
+  description, as on Text Input.
 - **Clearing works the same everywhere:** the button, and Escape in the
   field (Chrome and Safari do this natively; Firefox did not). Either way
   `onChange` fires with a real event.

@@ -217,6 +217,7 @@ Write the label so that checked means yes.
 - `role="checkbox"` with `aria-checked`, `mixed` when indeterminate.
   Space toggles it.
 - The label wraps the box, so it names it and clicking it toggles the box.
+  Without a visible label, pass `aria-label`: it goes to the box itself.
 - `helperText` is the box's description; the error state sets
   `aria-invalid`.
 - The unchecked outline is `--color-border-bold`, 3:1 on the page on every

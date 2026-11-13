@@ -243,7 +243,8 @@ be used cannot be chosen, rather than refusing it after submit.
 
 - The input is a labelled text box with `inputmode="numeric"` for a
   number keypad; while the text is not a valid date it has
-  `aria-invalid` and the helper explains the format.
+  `aria-invalid` and the helper explains the format. Without a visible
+  label, pass `aria-label` to name the input.
 - The calendar button is named "Choose date", with the current date when
   there is one. Alt+Down in the input opens it too.
 - `readOnly` puts `readonly` on the input: screen readers announce it,

@@ -248,6 +248,9 @@ Keep it to a few words. A toast is read in passing, often half-noticed.
   `role="alertdialog"` and announced at once.
 - Each toast is a non-modal dialog named by its title, or by its
   description when it has none (as `promise()` toasts do).
+- A toast closes after 5 seconds by default (the provider's `timeout`);
+  `timeout: 0` keeps it until it is dismissed. At most three show at once
+  (`limit`).
 - Timers pause while the pointer is over the stack or focus is in it, so
   there is time to reach the action. F6 moves focus to the stack.
 - The close button is named `Dismiss`; Enter and Space press it. On touch

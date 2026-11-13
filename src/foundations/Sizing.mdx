@@ -37,8 +37,8 @@ item is as tall as the button beside it.
 | The default field (`size="md"`) and an OTP cell | `lg` | 40px |
 | The default control: button, tab, pagination and menu item, calendar day, an icon button in the app frame (sidebar toggle, carousel arrows), a nav item; a field at `size="sm"` | `md` | 32px |
 | A small inline control; a button inside a field (clear, calendar, stepper); a close button inside a surface (Modal, Popover, Toast, Alert); the small Stepper marker; the medium spinner | `sm` | 24px |
-| Small parts: Tag `size="sm"`, the slider thumb, the checkbox and radio box, Badge `md`, Kbd `md`, a file icon | `xs` | 20px |
-| A mark that sits with a glyph: Badge `sm`, Kbd `sm`, the small slider thumb, the small spinner, a skeleton line | `2xs` | 16px |
+| Small parts: Tag `size="sm"`, the slider thumb, Kbd `md`, a file icon | `xs` | 20px |
+| A mark that sits with a glyph: the checkbox and radio box, Badge `md`, Kbd `sm`, the small slider thumb, the small spinner, a skeleton line | `2xs` | 16px |
 | A leading visual: Avatar `lg`, the small EmptyState icon | `lg` | 40px |
 | A large visual: the Stats icon, the EmptyState icon | `xl` | 48px |
 | A glyph inside a control | `--icon-{tier}` | 12 / 14 / 16px |
@@ -96,7 +96,7 @@ not a control.
 
 **The 24px floor is for the hit area, not the drawn box.** WCAG 2.5.8
 asks for a 24×24px target. A box drawn smaller (the checkbox is
-20px) keeps its look and widens its hit area to 24px with a
+16px) keeps its look and widens its hit area to 24px with a
 `::before`. On touch screens every tier grows its hit area to
 `--target-coarse` (44px) the same way, without growing the visible box.
 
@@ -121,16 +121,14 @@ See [Radius](?path=/docs/foundations-radius--docs).
 
 A default Button beside a text field and a select at `size="sm"`: one
 height (32px), one corner, one type size. The story asserts all three,
-and the icons: 20px in the Button, 16px for a field's own icon, 12px for a
+and the icons: 20px in the Button, 16px for a field's own icon and for a
 picker's chevron. At the same `size` the field is the taller one: a
 default field is 40px.
 
 ## Why these gaps
 
-The gap grows with the tier: 4, 6, 8px. Before tiers each component chose
-its own, and they disagreed at the small size: Button and the field put
-8px between icon and label, Tag put 4px. `md` keeps the 8px every default
-control already had, so the size most of an interface uses does not move.
-`sm` takes the step between, 6px, which is the one change: small buttons
-tighten by 2px, and a medium Tag loosens by 2px. A field reads the `md`
-gap and the `md` icon at both of its sizes.
+The gap is 4px at `xs` and 6px at `sm` and `md`. Before tiers each
+component chose its own, and they disagreed at the small size: Button and
+the field put 8px between icon and label, Tag put 4px. One 6px gap for the
+two sizes most of an interface uses ends that; the compact `xs` parts keep
+4px. A field reads the `md` gap and the `md` icon at both of its sizes.

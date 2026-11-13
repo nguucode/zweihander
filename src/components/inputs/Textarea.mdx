@@ -221,7 +221,8 @@ so a long entry never pushes the rest of the form off the screen.
 ## Accessibility
 
 - A real `<textarea>` with its `<label>`: clicking the label focuses it,
-  and the label is its accessible name.
+  and the label is its accessible name. Without a visible label, pass
+  `aria-label`: it goes to the `<textarea>` itself.
 - `helperText` is its description (`aria-describedby`);
   `validationState="error"` sets `aria-invalid="true"`. The helper text
   carries the message, not only the colour.

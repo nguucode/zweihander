@@ -228,7 +228,8 @@ whenever the range is known, so the steppers stop at its ends.
 ## Accessibility
 
 - The input is a text field with `inputmode="numeric"` and the role
-  description "Number field", named by the label.
+  description "Number field", named by the label. Without a visible label,
+  pass `aria-label`: a placeholder is a hint, not a name.
 - **Keyboard:** Up and Down step the value by `step` from the input; with
   Shift they step by 10, with Alt by 0.1. The steppers are out of the tab order
   (`tabindex="-1"`): the arrow keys do the same from the field.

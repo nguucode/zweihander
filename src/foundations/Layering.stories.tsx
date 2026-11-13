@@ -4,7 +4,7 @@ import { TokenTable } from './TokenTable'
 
 const TOKENS = [
   { name: '--layer-sticky', use: 'Sticky headers that scroll with the page' },
-  { name: '--layer-overlay', use: 'Popover, menu, listbox, date picker, modal, drawer' },
+  { name: '--layer-overlay', use: 'Popover, menu, listbox, date picker, modal' },
   { name: '--layer-tooltip', use: 'Tooltips, and the skip link' },
   { name: '--layer-toast', use: 'Toasts: above everything, including an open modal' },
 ]

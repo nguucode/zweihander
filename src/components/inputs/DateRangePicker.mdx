@@ -222,7 +222,8 @@ end, and the value is complete or `null`.
 ## Accessibility
 
 - As Date Picker: a labelled text box, an error state with the expected
-  pattern, and the calendars in a dialog named "Choose dates".
+  pattern, and the calendars in a dialog named "Choose dates". Without a
+  visible label, pass `aria-label` to name the input.
 - The calendar button is named "Choose dates", with the current range
   when there is one.
 - `readOnly` works as on Date Picker: `readonly` on the input, no

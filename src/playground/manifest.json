@@ -2386,7 +2386,7 @@
           {
             "title": "Accessibility",
             "blocks": [
-              "- `role=\"checkbox\"` with `aria-checked`, `mixed` when indeterminate.\n  Space toggles it.\n- The label wraps the box, so it names it and clicking it toggles the box.\n- `helperText` is the box's description; the error state sets\n  `aria-invalid`.\n- The unchecked outline is `--color-border-bold`, 3:1 on the page on every\n  gray ramp.\n- A hidden native input carries `name`, `value` and `required` into form\n  submission and validation.\n- The hit area is 24×24px, 44×44px on coarse pointers, without the box\n  growing."
+              "- `role=\"checkbox\"` with `aria-checked`, `mixed` when indeterminate.\n  Space toggles it.\n- The label wraps the box, so it names it and clicking it toggles the box.\n  Without a visible label, pass `aria-label`: it goes to the box itself.\n- `helperText` is the box's description; the error state sets\n  `aria-invalid`.\n- The unchecked outline is `--color-border-bold`, 3:1 on the page on every\n  gray ramp.\n- A hidden native input carries `name`, `value` and `required` into form\n  submission and validation.\n- The hit area is 24×24px, 44×44px on coarse pointers, without the box\n  growing."
             ]
           }
         ]
@@ -3816,7 +3816,7 @@
           {
             "title": "Accessibility",
             "blocks": [
-              "- `role=\"switch\"` with `aria-checked`; Space toggles it.\n- The label wraps the control, so it names it and clicking it toggles it.\n- `helperText` is the switch's description (`aria-describedby`); in the\n  error state the switch has `aria-invalid`.\n- The off track is `--color-border-bold`, measured at 3:1 on the page on\n  every gray ramp; the thumb is 4.5:1 or more against its track in both\n  states.\n- A hidden `<input type=\"checkbox\">` carries `name`, `value` and\n  `required` into native form submission and validation.\n- On is the end side: in a right-to-left page the thumb travels left.\n- The hit area is at least 24px tall, 44×44px on coarse pointers."
+              "- `role=\"switch\"` with `aria-checked`; Space toggles it.\n- The label wraps the control, so it names it and clicking it toggles it.\n  Without a visible label, pass `aria-label`: it goes to the switch itself.\n- `helperText` is the switch's description (`aria-describedby`); in the\n  error state the switch has `aria-invalid`.\n- The off track is `--color-border-bold`, measured at 3:1 on the page on\n  every gray ramp; the thumb is 4.5:1 or more against its track in both\n  states.\n- A hidden `<input type=\"checkbox\">` carries `name`, `value` and\n  `required` into native form submission and validation.\n- On is the end side: in a right-to-left page the thumb travels left.\n- The hit area is at least 24px tall, 44×44px on coarse pointers."
             ]
           }
         ]
@@ -5950,7 +5950,7 @@
           {
             "title": "Accessibility",
             "blocks": [
-              "- The input is a labelled text box with `inputmode=\"numeric\"` for a\n  number keypad; while the text is not a valid date it has\n  `aria-invalid` and the helper explains the format.\n- The calendar button is named \"Choose date\", with the current date when\n  there is one. Alt+Down in the input opens it too.\n- `readOnly` puts `readonly` on the input: screen readers announce it,\n  it stays in the tab order, and there is no calendar button; a click or\n  Alt+Down opens nothing.\n- The calendar opens as a dialog named \"Choose date\" with focus on the\n  selected day; Escape closes it without a change.\n- **After a pick the field goes back to rest.** Picked with the pointer,\n  focus leaves the field (no caret, no ring), as in Combobox. Picked with\n  the keyboard, focus returns to where it came from (the button, or the\n  input), so keyboard and screen reader users are not dropped to the page.\n- The field and calendar's own labels (\"Choose date\", \"Previous month\")\n  are in English, like the rest of the kit's built-in labels.\n- On touch screens (`pointer: coarse`) the calendar button gets a 44×44px\n  hit area without the field growing."
+              "- The input is a labelled text box with `inputmode=\"numeric\"` for a\n  number keypad; while the text is not a valid date it has\n  `aria-invalid` and the helper explains the format. Without a visible\n  label, pass `aria-label` to name the input.\n- The calendar button is named \"Choose date\", with the current date when\n  there is one. Alt+Down in the input opens it too.\n- `readOnly` puts `readonly` on the input: screen readers announce it,\n  it stays in the tab order, and there is no calendar button; a click or\n  Alt+Down opens nothing.\n- The calendar opens as a dialog named \"Choose date\" with focus on the\n  selected day; Escape closes it without a change.\n- **After a pick the field goes back to rest.** Picked with the pointer,\n  focus leaves the field (no caret, no ring), as in Combobox. Picked with\n  the keyboard, focus returns to where it came from (the button, or the\n  input), so keyboard and screen reader users are not dropped to the page.\n- The field and calendar's own labels (\"Choose date\", \"Previous month\")\n  are in English, like the rest of the kit's built-in labels.\n- On touch screens (`pointer: coarse`) the calendar button gets a 44×44px\n  hit area without the field growing."
             ]
           }
         ]
@@ -6279,7 +6279,7 @@
           {
             "title": "Accessibility",
             "blocks": [
-              "- As Date Picker: a labelled text box, an error state with the expected\n  pattern, and the calendars in a dialog named \"Choose dates\".\n- The calendar button is named \"Choose dates\", with the current range\n  when there is one.\n- `readOnly` works as on Date Picker: `readonly` on the input, no\n  calendar button, and a click or Alt+Down opens nothing.\n- Every day in the range has `aria-selected`, so the span is announced,\n  not only its ends.\n- A day of the month either side is decoration: hidden from assistive\n  tech and not pickable, so each day is one button.\n- Presets are toggle buttons in a group named \"Presets\"; the one that\n  matches the picked range is `aria-pressed`.\n- After both ends are in, the field goes back to rest, as Date Picker's\n  does after a pick."
+              "- As Date Picker: a labelled text box, an error state with the expected\n  pattern, and the calendars in a dialog named \"Choose dates\". Without a\n  visible label, pass `aria-label` to name the input.\n- The calendar button is named \"Choose dates\", with the current range\n  when there is one.\n- `readOnly` works as on Date Picker: `readonly` on the input, no\n  calendar button, and a click or Alt+Down opens nothing.\n- Every day in the range has `aria-selected`, so the span is announced,\n  not only its ends.\n- A day of the month either side is decoration: hidden from assistive\n  tech and not pickable, so each day is one button.\n- Presets are toggle buttons in a group named \"Presets\"; the one that\n  matches the picked range is `aria-pressed`.\n- After both ends are in, the field goes back to rest, as Date Picker's\n  does after a pick."
             ]
           }
         ]
@@ -6900,7 +6900,7 @@
           {
             "title": "Accessibility",
             "blocks": [
-              "- Dragging is a shortcut, never the only way: the Choose button is a\n  real button, reached by Tab, and opens the system picker. The file\n  input itself is hidden from assistive tech so there is one control, not\n  two.\n- The uploader is a `group` named by its label; `required` adds\n  \"(required)\" to that name, since a group cannot be `aria-required`.\n  Submitting it empty shows \"Choose at least one file.\" (or \"Choose a\n  file.\") in the errors and moves focus to the Choose button, instead of\n  the browser's bubble on the hidden input.\n- The helper text and any errors describe the Choose button, so they\n  are read when focus lands on it.\n- A polite status line announces \"2 files added. 1 not added.\" and\n  \"report.pdf removed.\"\n- Remove buttons are named \"Remove report.pdf\". After a remove, focus\n  moves to the next file's button, or back to Choose when the list is\n  empty, so it is never lost.\n- The progress ring is a `progressbar` named \"Uploading report.pdf\",\n  with its value.\n- While dragging, the drop zone's edge turns solid as well as changing\n  colour."
+              "- Dragging is a shortcut, never the only way: the Choose button is a\n  real button, reached by Tab, and opens the system picker. The file\n  input itself is hidden from assistive tech so there is one control, not\n  two.\n- The uploader is a `group` named by its label; `required` adds\n  \"(required)\" to that name, since a group cannot be `aria-required`.\n  Submitting it empty shows \"Choose at least one file.\" (or \"Choose a\n  file.\") in the errors and moves focus to the Choose button, instead of\n  the browser's bubble on the hidden input.\n- The helper text and any errors describe the Choose button, so they\n  are read when focus lands on it.\n- The chosen files are a list named \"Chosen files\" (\"Chosen file\" when\n  `multiple` is off), one item per file.\n- A polite status line announces \"2 files added. 1 not added.\" and\n  \"report.pdf removed.\"\n- Remove buttons are named \"Remove report.pdf\". After a remove, focus\n  moves to the next file's button, or back to Choose when the list is\n  empty, so it is never lost.\n- The progress ring is a `progressbar` named \"Uploading report.pdf\",\n  with its value.\n- While dragging, the drop zone's edge turns solid as well as changing\n  colour."
             ]
           }
         ]
@@ -7261,7 +7261,7 @@
           {
             "title": "Accessibility",
             "blocks": [
-              "- The input is a text field with `inputmode=\"numeric\"` and the role\n  description \"Number field\", named by the label.\n- **Keyboard:** Up and Down step the value by `step` from the input; with\n  Shift they step by 10, with Alt by 0.1. The steppers are out of the tab order\n  (`tabindex=\"-1\"`): the arrow keys do the same from the field.\n- The steppers are named \"Increase\" and \"Decrease\" and are disabled at\n  the limits, so a screen reader hears why nothing happened.\n- The value is parsed and formatted in the user's locale; the form\n  receives the plain number.\n- `helperText` is the input's description and\n  `validationState=\"error\"` sets `aria-invalid`, as on Text Input.\n- Steppers widen to 44px on touch screens, the one direction they can\n  grow without covering the input or each other."
+              "- The input is a text field with `inputmode=\"numeric\"` and the role\n  description \"Number field\", named by the label. Without a visible label,\n  pass `aria-label`: a placeholder is a hint, not a name.\n- **Keyboard:** Up and Down step the value by `step` from the input; with\n  Shift they step by 10, with Alt by 0.1. The steppers are out of the tab order\n  (`tabindex=\"-1\"`): the arrow keys do the same from the field.\n- The steppers are named \"Increase\" and \"Decrease\" and are disabled at\n  the limits, so a screen reader hears why nothing happened.\n- The value is parsed and formatted in the user's locale; the form\n  receives the plain number.\n- `helperText` is the input's description and\n  `validationState=\"error\"` sets `aria-invalid`, as on Text Input.\n- Steppers widen to 44px on touch screens, the one direction they can\n  grow without covering the input or each other."
             ]
           }
         ]
@@ -7716,7 +7716,8 @@
       "guideline": {
         "intro": [],
         "whenToUse": [
-          "Use it for every password field: sign in, sign up, reset, and change\npassword in Settings. Give a new password `rules` so the reader knows what\nit needs before sending, not after."
+          "Use it for every password field: sign in, sign up, reset, and change\npassword in Settings. Give a new password `rules` so the reader knows what\nit needs before sending, not after.",
+          "It takes Text Input's props, `prefix` and `startAddon` included. The end of\nthe field is the Show button's, so there is no `suffix` or `endAddon`."
         ],
         "whenNotToUse": [
           "- **For a code that was sent**, such as a sign-in code. Use an\n  [OTP Input](?path=/docs/components-inputs-otpinput--docs).\n- **For an API key or token** the reader copies. Use a\n  [Text Input](?path=/docs/components-inputs-textinput--docs) that is\n  read-only, with a copy button."
@@ -7737,7 +7738,7 @@
           {
             "title": "Accessibility",
             "blocks": [
-              "- The field is named by its label. The Show / Hide button's name says\n  what it does next and to which field (\"Show password\", \"Hide new\n  password\"), and its visible text is the start of that name.\n- The rules are part of the field's description, each ending \"(met)\" or\n  \"(not met)\", so they are read when the field gets focus; ticking one off\n  is not announced on every keystroke.\n- When the form is sent the field goes back to dots, so the browser does\n  not keep the password as plain text in its form history.\n- `autoComplete` is `current-password` by default and should be\n  `new-password` where a password is chosen, so password managers fill or\n  suggest the right one.\n- A disabled field disables its button too."
+              "- The field is named by its label; without a visible one, pass\n  `aria-label`, as on Text Input. The Show / Hide button's name says\n  what it does next and to which field (\"Show password\", \"Hide new\n  password\"), and its visible text is the start of that name.\n- The rules are part of the field's description, each ending \"(met)\" or\n  \"(not met)\", so they are read when the field gets focus; ticking one off\n  is not announced on every keystroke.\n- When the form is sent the field goes back to dots, so the browser does\n  not keep the password as plain text in its form history.\n- `autoComplete` is `current-password` by default and should be\n  `new-password` where a password is chosen, so password managers fill or\n  suggest the right one.\n- A disabled field disables its button too."
             ]
           }
         ]
@@ -8036,7 +8037,7 @@
           {
             "title": "Accessibility",
             "blocks": [
-              "- `type=\"search\"`, exposed as a `searchbox`, named by the visible label\n  or \"Search\". A placeholder is not a name.\n- **Clearing works the same everywhere:** the button, and Escape in the\n  field (Chrome and Safari do this natively; Firefox did not). Either way\n  `onChange` fires with a real event.\n- The clear button is a real `<button>` named \"Clear search\", reached\n  with Tab after the input. Pressed from the keyboard, it hands focus\n  back to the field instead of losing it; a mouse press leaves focus\n  where it was.\n- The clear button's hit area grows to 44px on touch screens.\n- The search icon is decorative and hidden from screen readers.\n- **`shortcut`** focuses the field from anywhere on the page, without typing\n  the key. It does nothing while focus is in a form field, or with ⌘,\n  Ctrl or Alt held, or while the field is disabled or read-only. The input carries `aria-keyshortcuts`; the key cap is\n  hidden from screen readers so the key is not read twice.\n- The edge is the light `--color-border-input`, the approved exception to WCAG\n  1.4.11 described on Text Input."
+              "- `type=\"search\"`, exposed as a `searchbox`, named by the visible label\n  or \"Search\". A placeholder is not a name.\n- `helperText`, when given, sits under the field and is the input's\n  description, as on Text Input.\n- **Clearing works the same everywhere:** the button, and Escape in the\n  field (Chrome and Safari do this natively; Firefox did not). Either way\n  `onChange` fires with a real event.\n- The clear button is a real `<button>` named \"Clear search\", reached\n  with Tab after the input. Pressed from the keyboard, it hands focus\n  back to the field instead of losing it; a mouse press leaves focus\n  where it was.\n- The clear button's hit area grows to 44px on touch screens.\n- The search icon is decorative and hidden from screen readers.\n- **`shortcut`** focuses the field from anywhere on the page, without typing\n  the key. It does nothing while focus is in a form field, or with ⌘,\n  Ctrl or Alt held, or while the field is disabled or read-only. The input carries `aria-keyshortcuts`; the key cap is\n  hidden from screen readers so the key is not read twice.\n- The edge is the light `--color-border-input`, the approved exception to WCAG\n  1.4.11 described on Text Input."
             ]
           }
         ]
@@ -8420,7 +8421,7 @@
           {
             "title": "Accessibility",
             "blocks": [
-              "- The field is a `<button>` with `role=\"combobox\"`,\n  `aria-haspopup=\"listbox\"` and `aria-expanded`; the list is a `listbox`\n  of `option`s, with `aria-selected` on the chosen one.\n- **Keyboard:** Space, Enter or Up/Down open it; the arrows move, typing\n  jumps to a matching option, Enter selects, Escape closes, and focus\n  returns to the field.\n- The label is associated with the field (`aria-labelledby`). It is a\n  `<div>`, because a `<label>` would also click the button and open the\n  list.\n- `helperText` is the field's description; `validationState=\"error\"`\n  sets `aria-invalid`, and `required` sets `aria-required`.\n- **Read-only** locks the value, not the list: it still opens so the\n  options can be read, but choosing one changes nothing. The field has\n  `aria-readonly`. Use `disabled` when the list should not open at all.\n- `isLoading` sets `aria-busy` on the field.\n- The list renders in a portal at the end of `<body>`: it reads the\n  root's tokens, so a `Theme` scope around the field does not restyle it.\n- Options are 32px, 44px on touch screens."
+              "- The field is a `<button>` with `role=\"combobox\"`,\n  `aria-haspopup=\"listbox\"` and `aria-expanded`; the list is a `listbox`\n  of `option`s, with `aria-selected` on the chosen one.\n- **Keyboard:** Space, Enter or Up/Down open it; the arrows move, typing\n  jumps to a matching option, Enter selects, Escape closes, and focus\n  returns to the field.\n- The label is associated with the field (`aria-labelledby`). It is a\n  `<div>`, because a `<label>` would also click the button and open the\n  list. Without a visible label, pass `aria-label` to name the field.\n- `helperText` is the field's description; `validationState=\"error\"`\n  sets `aria-invalid`, and `required` sets `aria-required`.\n- **Read-only** locks the value, not the list: it still opens so the\n  options can be read, but choosing one changes nothing. The field has\n  `aria-readonly`. Use `disabled` when the list should not open at all.\n- `isLoading` sets `aria-busy` on the field.\n- The list renders in a portal at the end of `<body>`: it reads the\n  root's tokens, so a `Theme` scope around the field does not restyle it.\n- Options are 32px, 44px on touch screens."
             ]
           }
         ]
@@ -8747,7 +8748,7 @@
           {
             "title": "Accessibility",
             "blocks": [
-              "- A real `<textarea>` with its `<label>`: clicking the label focuses it,\n  and the label is its accessible name.\n- `helperText` is its description (`aria-describedby`);\n  `validationState=\"error\"` sets `aria-invalid=\"true\"`. The helper text\n  carries the message, not only the colour.\n- `required` sets the native `required`; the label's asterisk is\n  `aria-hidden`.\n- Enter inserts a line break; it does not submit the form.\n- Auto-size caps at `maxRows` and scrolls beyond it, so the page does not\n  grow without limit and the text stays reachable by keyboard.\n- The edge is the light `--color-border-input`, about 1.5:1, the same approved\n  exception to WCAG 1.4.11 as Text Input; set\n  `--color-border-input: var(--color-border-bold)` where 3:1 is needed.\n- Focus ring: 2px, 2px offset, around the whole field."
+              "- A real `<textarea>` with its `<label>`: clicking the label focuses it,\n  and the label is its accessible name. Without a visible label, pass\n  `aria-label`: it goes to the `<textarea>` itself.\n- `helperText` is its description (`aria-describedby`);\n  `validationState=\"error\"` sets `aria-invalid=\"true\"`. The helper text\n  carries the message, not only the colour.\n- `required` sets the native `required`; the label's asterisk is\n  `aria-hidden`.\n- Enter inserts a line break; it does not submit the form.\n- Auto-size caps at `maxRows` and scrolls beyond it, so the page does not\n  grow without limit and the text stays reachable by keyboard.\n- The edge is the light `--color-border-input`, about 1.5:1, the same approved\n  exception to WCAG 1.4.11 as Text Input; set\n  `--color-border-input: var(--color-border-bold)` where 3:1 is needed.\n- Focus ring: 2px, 2px offset, around the whole field."
             ]
           }
         ]
@@ -10453,7 +10454,8 @@
       "guideline": {
         "intro": [],
         "whenToUse": [
-          "Use a Menu for actions that belong to one thing but would crowd the\nscreen as buttons: the actions on a table row, a card's overflow, a\ntoolbar's \"More\". Keep it short, put the most used item first, and give\ndestructive actions the last place, after a separator."
+          "Use a Menu for actions that belong to one thing but would crowd the\nscreen as buttons: the actions on a table row, a card's overflow, a\ntoolbar's \"More\". Keep it short, put the most used item first, and give\ndestructive actions the last place, after a separator.",
+          "The popup opens below the trigger, lined up with its start edge; `side`\nand `align` place it elsewhere."
         ],
         "whenNotToUse": [
           "- **To pick a value for a form.** Use a\n  [Select](?path=/docs/components-inputs-select--docs), or a\n  [Combobox](?path=/docs/components-inputs-combobox--docs) when the list\n  is long enough to search.\n- **For one or two actions.** Show them as\n  [Buttons](?path=/docs/components-buttons-button--docs): a hidden action\n  is one fewer person finds.\n- **For the app's main navigation.** Use a side navigation of\n  [Links](?path=/docs/components-navigation-link--docs) or\n  [Tabs](?path=/docs/components-navigation-tabs--docs), which show where\n  the reader is.\n- **For content: a form, a preview.** Use a\n  [Popover](?path=/docs/components-overlays-popover--docs). A menu holds\n  only menu items."
@@ -12387,7 +12389,7 @@
           {
             "title": "Accessibility",
             "blocks": [
-              "- The stack is a polite live region: a new toast is announced without\n  interrupting. `danger` toasts (and any with `priority: 'high'`) are\n  `role=\"alertdialog\"` and announced at once.\n- Each toast is a non-modal dialog named by its title, or by its\n  description when it has none (as `promise()` toasts do).\n- Timers pause while the pointer is over the stack or focus is in it, so\n  there is time to reach the action. F6 moves focus to the stack.\n- The close button is named `Dismiss`; Enter and Space press it. On touch\n  screens its hit area grows to 44×44px, and a toast swipes away toward\n  the nearest edge.\n- A toast raised from inside a modal shows above it and is not hidden from\n  assistive tech by it."
+              "- The stack is a polite live region: a new toast is announced without\n  interrupting. `danger` toasts (and any with `priority: 'high'`) are\n  `role=\"alertdialog\"` and announced at once.\n- Each toast is a non-modal dialog named by its title, or by its\n  description when it has none (as `promise()` toasts do).\n- A toast closes after 5 seconds by default (the provider's `timeout`);\n  `timeout: 0` keeps it until it is dismissed. At most three show at once\n  (`limit`).\n- Timers pause while the pointer is over the stack or focus is in it, so\n  there is time to reach the action. F6 moves focus to the stack.\n- The close button is named `Dismiss`; Enter and Space press it. On touch\n  screens its hit area grows to 44×44px, and a toast swipes away toward\n  the nearest edge.\n- A toast raised from inside a modal shows above it and is not hidden from\n  assistive tech by it."
             ]
           }
         ]
@@ -13068,7 +13070,8 @@
       "guideline": {
         "intro": [],
         "whenToUse": [
-          "Use a Popover for a short task that belongs to the button that opens it:\nshare a file, set a filter, pick from a few options. It holds links,\ninputs and buttons, which a Tooltip must not."
+          "Use a Popover for a short task that belongs to the button that opens it:\nshare a file, set a filter, pick from a few options. It holds links,\ninputs and buttons, which a Tooltip must not.",
+          "It opens below the trigger by default; `side` and `align` move it. When\nthat side has no room, it flips to the other one."
         ],
         "whenNotToUse": [
           "- **For a label or a hint** on hover or focus. Use a\n  [Tooltip](?path=/docs/components-overlays-tooltip--docs).\n- **For a list of actions or commands.** Use a\n  [Menu](?path=/docs/components-navigation-menu--docs): it has the\n  arrow-key navigation a list of commands needs.\n- **For a long form or a decision with consequences.** Use a\n  [Modal](?path=/docs/components-overlays-modal--docs)."
@@ -13225,7 +13228,8 @@
       "guideline": {
         "intro": [],
         "whenToUse": [
-          "Use a Tooltip for a label or a hint: the name of an icon-only button, a\nkeyboard shortcut, one line on what a control does. 300ms before it opens\nis quick enough to feel responsive and long enough that tooltips do not\nflash as the pointer crosses a toolbar."
+          "Use a Tooltip for a label or a hint: the name of an icon-only button, a\nkeyboard shortcut, one line on what a control does. 300ms before it opens\nis quick enough to feel responsive and long enough that tooltips do not\nflash as the pointer crosses a toolbar.",
+          "It opens on the `side` given, top by default. When that side has no room,\nit flips to the other one."
         ],
         "whenNotToUse": [
           "- **For anything a reader needs to finish a task.** Put it on the page: a\n  tooltip cannot be reached by touch, and it disappears the moment you\n  look away.\n- **For links, buttons or other interactive content.** Hover and touch\n  cannot reach the tooltip. Use a\n  [Popover](?path=/docs/components-overlays-popover--docs).\n- **For a rich preview.** A tooltip holds text only. Use a\n  [Popover](?path=/docs/components-overlays-popover--docs) with\n  `openOnHover`.\n- **On a disabled button.** It is not focusable, so its tooltip never opens\n  by keyboard. Put the reason it is disabled in text next to it."

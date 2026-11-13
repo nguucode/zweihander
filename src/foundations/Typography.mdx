@@ -48,7 +48,7 @@ and point the tokens at it (see **Customization**).
 
 ## Headings
 
-Seven steps, all bold. The line height tightens as the size grows, which
+Seven steps, all semibold (600). The line height tightens as the size grows, which
 is the thing a single ratio applied across a whole scale gets wrong.
 
 <Canvas of={TypographyStories.Headings} />
@@ -116,7 +116,9 @@ or a tab's, is medium (500).
 
 Weight is written directly rather than tokenised — there are four of them
 and they are the same four everywhere, so a `--font-weight-medium`
-indirection would buy nothing. Button is `--text-body` at `font-weight:
+indirection would buy nothing. The one exception is `--font-weight-label`
+(653), a field's label, which a variable face draws between medium and
+semibold. Button is `--text-body` at `font-weight:
 500`; the role supplies the size and line height, the rule supplies the
 weight.
 

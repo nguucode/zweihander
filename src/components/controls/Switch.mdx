@@ -230,6 +230,7 @@ like a light switch: dark mode, notifications, auto-save.
 
 - `role="switch"` with `aria-checked`; Space toggles it.
 - The label wraps the control, so it names it and clicking it toggles it.
+  Without a visible label, pass `aria-label`: it goes to the switch itself.
 - `helperText` is the switch's description (`aria-describedby`); in the
   error state the switch has `aria-invalid`.
 - The off track is `--color-border-bold`, measured at 3:1 on the page on

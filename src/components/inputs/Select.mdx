@@ -254,7 +254,7 @@ a way people expect: by size or frequency, or alphabetically for names.
   returns to the field.
 - The label is associated with the field (`aria-labelledby`). It is a
   `<div>`, because a `<label>` would also click the button and open the
-  list.
+  list. Without a visible label, pass `aria-label` to name the field.
 - `helperText` is the field's description; `validationState="error"`
   sets `aria-invalid`, and `required` sets `aria-required`.
 - **Read-only** locks the value, not the list: it still opens so the
