@@ -6279,7 +6279,7 @@
           {
             "title": "Accessibility",
             "blocks": [
-              "- As Date Picker: a labelled text box, an error state with the expected\n  pattern, and the calendars in a dialog named \"Choose dates\".\n- The calendar button is named \"Choose dates\", with the current range\n  when there is one.\n- `readOnly` works as on Date Picker: `readonly` on the input, no\n  calendar button, and a click or Alt+Down opens nothing.\n- Every day in the range has `aria-selected`, so the span is announced,\n  not only its ends.\n- A day of the month either side is decoration: hidden from assistive\n  tech and not pickable, so each day is one button.\n- Presets are toggle buttons in a group named \"Presets\"; the one that\n  matches the picked range is `aria-pressed`.\n- After both ends are in the field goes back to rest, as Date Picker's\n  does after a pick."
+              "- As Date Picker: a labelled text box, an error state with the expected\n  pattern, and the calendars in a dialog named \"Choose dates\".\n- The calendar button is named \"Choose dates\", with the current range\n  when there is one.\n- `readOnly` works as on Date Picker: `readonly` on the input, no\n  calendar button, and a click or Alt+Down opens nothing.\n- Every day in the range has `aria-selected`, so the span is announced,\n  not only its ends.\n- A day of the month either side is decoration: hidden from assistive\n  tech and not pickable, so each day is one button.\n- Presets are toggle buttons in a group named \"Presets\"; the one that\n  matches the picked range is `aria-pressed`.\n- After both ends are in, the field goes back to rest, as Date Picker's\n  does after a pick."
             ]
           }
         ]
