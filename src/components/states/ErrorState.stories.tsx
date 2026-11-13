@@ -95,7 +95,7 @@ export const DefaultTitle: Story = {
 
 export const Small: Story = {
   args: { size: 'sm', headingLevel: 3, title: 'Couldn’t load comments', description: undefined, action: <Button size="sm" appearance="outlined" variant="accent">Retry</Button> },
-  decorators: [(Story) => <div style={{ maxInlineSize: '20rem', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)' }}>{Story()}</div>],
+  decorators: [(Story) => <div style={{ maxInlineSize: '20rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)' }}>{Story()}</div>],
 }
 
 /** Replaces a list that failed to load, and is announced. */

@@ -1,5 +1,5 @@
 .link {
-  --link-color: var(--primary-text);
+  --link-color: var(--color-text-brand);
   color: var(--link-color);
   /* Inherit the sentence around it unless a size is given. */
   font: inherit;
@@ -14,13 +14,13 @@
 
 /* Every colour here is a text colour at 4.5:1 on the page. */
 .primary {
-  --link-color: var(--primary-text);
+  --link-color: var(--color-text-brand);
 }
 .accent {
-  --link-color: var(--foreground);
+  --link-color: var(--color-text);
 }
 .secondary {
-  --link-color: var(--muted-foreground);
+  --link-color: var(--color-text-subtlest);
 }
 
 .sm {
@@ -50,7 +50,7 @@
 }
 
 .link:focus-visible {
-  outline: var(--focus-width) solid var(--ring);
+  outline: var(--focus-width) solid var(--color-border-focused);
   outline-offset: var(--focus-offset);
 }
 

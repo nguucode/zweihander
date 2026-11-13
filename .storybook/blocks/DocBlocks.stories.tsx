@@ -146,7 +146,7 @@ const spec = (
     caption="Measurements, md"
     rows={[
       { part: 'Container', property: 'Height', token: '--control-md' },
-      { part: 'Container', property: 'Background', token: '--background' },
+      { part: 'Container', property: 'Background', token: '--color-surface' },
       { part: 'Label', property: 'Line height', token: '--leading-body' },
     ]}
   />

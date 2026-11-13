@@ -70,157 +70,157 @@
    reuses the secondary surface; the rest read --<name>, -foreground,
    -subtle and -text, which the token build measures at 4.5:1. */
 .neutral {
-  --tag-solid: var(--foreground);
-  --tag-on-solid: var(--background);
-  --tag-subtle: var(--secondary);
-  --tag-text: var(--secondary-foreground);
+  --tag-solid: var(--color-text);
+  --tag-on-solid: var(--color-surface);
+  --tag-subtle: var(--color-background-neutral);
+  --tag-text: var(--color-text);
 }
 
 .info {
-  --tag-solid: var(--info);
-  --tag-on-solid: var(--info-foreground);
-  --tag-subtle: var(--info-subtle);
-  --tag-text: var(--info-text);
+  --tag-solid: var(--color-background-info-bold);
+  --tag-on-solid: var(--color-text-info-inverse);
+  --tag-subtle: var(--color-background-info);
+  --tag-text: var(--color-text-info);
 }
 
 .success {
-  --tag-solid: var(--success);
-  --tag-on-solid: var(--success-foreground);
-  --tag-subtle: var(--success-subtle);
-  --tag-text: var(--success-text);
+  --tag-solid: var(--color-background-success-bold);
+  --tag-on-solid: var(--color-text-success-inverse);
+  --tag-subtle: var(--color-background-success);
+  --tag-text: var(--color-text-success);
 }
 
 .warning {
-  --tag-solid: var(--warning);
-  --tag-on-solid: var(--warning-foreground);
-  --tag-subtle: var(--warning-subtle);
-  --tag-text: var(--warning-text);
+  --tag-solid: var(--color-background-warning-bold);
+  --tag-on-solid: var(--color-text-warning-inverse);
+  --tag-subtle: var(--color-background-warning);
+  --tag-text: var(--color-text-warning);
 }
 
 .danger {
-  --tag-solid: var(--danger);
-  --tag-on-solid: var(--danger-foreground);
-  --tag-subtle: var(--danger-subtle);
-  --tag-text: var(--danger-text);
+  --tag-solid: var(--color-background-danger-bold);
+  --tag-on-solid: var(--color-text-danger-inverse);
+  --tag-subtle: var(--color-background-danger);
+  --tag-text: var(--color-text-danger);
 }
 
 .red {
-  --tag-solid: var(--red);
-  --tag-on-solid: var(--red-foreground);
-  --tag-subtle: var(--red-subtle);
-  --tag-text: var(--red-text);
+  --tag-solid: var(--color-background-accent-red-bolder);
+  --tag-on-solid: var(--color-text-accent-red-inverse);
+  --tag-subtle: var(--color-background-accent-red-subtler);
+  --tag-text: var(--color-text-accent-red);
 }
 
 .orange {
-  --tag-solid: var(--orange);
-  --tag-on-solid: var(--orange-foreground);
-  --tag-subtle: var(--orange-subtle);
-  --tag-text: var(--orange-text);
+  --tag-solid: var(--color-background-accent-orange-bolder);
+  --tag-on-solid: var(--color-text-accent-orange-inverse);
+  --tag-subtle: var(--color-background-accent-orange-subtler);
+  --tag-text: var(--color-text-accent-orange);
 }
 
 .amber {
-  --tag-solid: var(--amber);
-  --tag-on-solid: var(--amber-foreground);
-  --tag-subtle: var(--amber-subtle);
-  --tag-text: var(--amber-text);
+  --tag-solid: var(--color-background-accent-amber-bolder);
+  --tag-on-solid: var(--color-text-accent-amber-inverse);
+  --tag-subtle: var(--color-background-accent-amber-subtler);
+  --tag-text: var(--color-text-accent-amber);
 }
 
 .yellow {
-  --tag-solid: var(--yellow);
-  --tag-on-solid: var(--yellow-foreground);
-  --tag-subtle: var(--yellow-subtle);
-  --tag-text: var(--yellow-text);
+  --tag-solid: var(--color-background-accent-yellow-bolder);
+  --tag-on-solid: var(--color-text-accent-yellow-inverse);
+  --tag-subtle: var(--color-background-accent-yellow-subtler);
+  --tag-text: var(--color-text-accent-yellow);
 }
 
 .lime {
-  --tag-solid: var(--lime);
-  --tag-on-solid: var(--lime-foreground);
-  --tag-subtle: var(--lime-subtle);
-  --tag-text: var(--lime-text);
+  --tag-solid: var(--color-background-accent-lime-bolder);
+  --tag-on-solid: var(--color-text-accent-lime-inverse);
+  --tag-subtle: var(--color-background-accent-lime-subtler);
+  --tag-text: var(--color-text-accent-lime);
 }
 
 .green {
-  --tag-solid: var(--green);
-  --tag-on-solid: var(--green-foreground);
-  --tag-subtle: var(--green-subtle);
-  --tag-text: var(--green-text);
+  --tag-solid: var(--color-background-accent-green-bolder);
+  --tag-on-solid: var(--color-text-accent-green-inverse);
+  --tag-subtle: var(--color-background-accent-green-subtler);
+  --tag-text: var(--color-text-accent-green);
 }
 
 .emerald {
-  --tag-solid: var(--emerald);
-  --tag-on-solid: var(--emerald-foreground);
-  --tag-subtle: var(--emerald-subtle);
-  --tag-text: var(--emerald-text);
+  --tag-solid: var(--color-background-accent-emerald-bolder);
+  --tag-on-solid: var(--color-text-accent-emerald-inverse);
+  --tag-subtle: var(--color-background-accent-emerald-subtler);
+  --tag-text: var(--color-text-accent-emerald);
 }
 
 .teal {
-  --tag-solid: var(--teal);
-  --tag-on-solid: var(--teal-foreground);
-  --tag-subtle: var(--teal-subtle);
-  --tag-text: var(--teal-text);
+  --tag-solid: var(--color-background-accent-teal-bolder);
+  --tag-on-solid: var(--color-text-accent-teal-inverse);
+  --tag-subtle: var(--color-background-accent-teal-subtler);
+  --tag-text: var(--color-text-accent-teal);
 }
 
 .cyan {
-  --tag-solid: var(--cyan);
-  --tag-on-solid: var(--cyan-foreground);
-  --tag-subtle: var(--cyan-subtle);
-  --tag-text: var(--cyan-text);
+  --tag-solid: var(--color-background-accent-cyan-bolder);
+  --tag-on-solid: var(--color-text-accent-cyan-inverse);
+  --tag-subtle: var(--color-background-accent-cyan-subtler);
+  --tag-text: var(--color-text-accent-cyan);
 }
 
 .sky {
-  --tag-solid: var(--sky);
-  --tag-on-solid: var(--sky-foreground);
-  --tag-subtle: var(--sky-subtle);
-  --tag-text: var(--sky-text);
+  --tag-solid: var(--color-background-accent-sky-bolder);
+  --tag-on-solid: var(--color-text-accent-sky-inverse);
+  --tag-subtle: var(--color-background-accent-sky-subtler);
+  --tag-text: var(--color-text-accent-sky);
 }
 
 .blue {
-  --tag-solid: var(--blue);
-  --tag-on-solid: var(--blue-foreground);
-  --tag-subtle: var(--blue-subtle);
-  --tag-text: var(--blue-text);
+  --tag-solid: var(--color-background-accent-blue-bolder);
+  --tag-on-solid: var(--color-text-accent-blue-inverse);
+  --tag-subtle: var(--color-background-accent-blue-subtler);
+  --tag-text: var(--color-text-accent-blue);
 }
 
 .indigo {
-  --tag-solid: var(--indigo);
-  --tag-on-solid: var(--indigo-foreground);
-  --tag-subtle: var(--indigo-subtle);
-  --tag-text: var(--indigo-text);
+  --tag-solid: var(--color-background-accent-indigo-bolder);
+  --tag-on-solid: var(--color-text-accent-indigo-inverse);
+  --tag-subtle: var(--color-background-accent-indigo-subtler);
+  --tag-text: var(--color-text-accent-indigo);
 }
 
 .violet {
-  --tag-solid: var(--violet);
-  --tag-on-solid: var(--violet-foreground);
-  --tag-subtle: var(--violet-subtle);
-  --tag-text: var(--violet-text);
+  --tag-solid: var(--color-background-accent-violet-bolder);
+  --tag-on-solid: var(--color-text-accent-violet-inverse);
+  --tag-subtle: var(--color-background-accent-violet-subtler);
+  --tag-text: var(--color-text-accent-violet);
 }
 
 .purple {
-  --tag-solid: var(--purple);
-  --tag-on-solid: var(--purple-foreground);
-  --tag-subtle: var(--purple-subtle);
-  --tag-text: var(--purple-text);
+  --tag-solid: var(--color-background-accent-purple-bolder);
+  --tag-on-solid: var(--color-text-accent-purple-inverse);
+  --tag-subtle: var(--color-background-accent-purple-subtler);
+  --tag-text: var(--color-text-accent-purple);
 }
 
 .fuchsia {
-  --tag-solid: var(--fuchsia);
-  --tag-on-solid: var(--fuchsia-foreground);
-  --tag-subtle: var(--fuchsia-subtle);
-  --tag-text: var(--fuchsia-text);
+  --tag-solid: var(--color-background-accent-fuchsia-bolder);
+  --tag-on-solid: var(--color-text-accent-fuchsia-inverse);
+  --tag-subtle: var(--color-background-accent-fuchsia-subtler);
+  --tag-text: var(--color-text-accent-fuchsia);
 }
 
 .pink {
-  --tag-solid: var(--pink);
-  --tag-on-solid: var(--pink-foreground);
-  --tag-subtle: var(--pink-subtle);
-  --tag-text: var(--pink-text);
+  --tag-solid: var(--color-background-accent-pink-bolder);
+  --tag-on-solid: var(--color-text-accent-pink-inverse);
+  --tag-subtle: var(--color-background-accent-pink-subtler);
+  --tag-text: var(--color-text-accent-pink);
 }
 
 .rose {
-  --tag-solid: var(--rose);
-  --tag-on-solid: var(--rose-foreground);
-  --tag-subtle: var(--rose-subtle);
-  --tag-text: var(--rose-text);
+  --tag-solid: var(--color-background-accent-rose-bolder);
+  --tag-on-solid: var(--color-text-accent-rose-inverse);
+  --tag-subtle: var(--color-background-accent-rose-subtler);
+  --tag-text: var(--color-text-accent-rose);
 }
 
 .subtle {
@@ -262,7 +262,7 @@
 /* Same ring as every control, hugging the 12px mark: inset it would cover
    the glyph, and 2px out it still sits inside the 20px tag. */
 .remove:focus-visible {
-  outline: var(--focus-width) solid var(--ring);
+  outline: var(--focus-width) solid var(--color-border-focused);
   outline-offset: 0;
 }
 

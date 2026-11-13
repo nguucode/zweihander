@@ -85,33 +85,33 @@ function fileKind(file: File): FileKind | undefined {
   if (type.startsWith('audio/') || ['mp3', 'wav', 'm4a', 'ogg', 'flac'].includes(ext)) return 'audio'
 }
 
-const badgeText: Partial<Record<FileKind, string>> = { word: 'W', excel: 'X', powerpoint: 'P', pdf: 'PDF' }
+const badgeText: Record<FileKind, string> = {
+  word: 'DOC',
+  excel: 'XLS',
+  powerpoint: 'PPT',
+  pdf: 'PDF',
+  image: 'IMG',
+  audio: 'MP3',
+}
 
-/** A page with a coloured type badge, after Microsoft 365's file icons. Unknown types get the bare page. */
+/**
+ * A page with a coloured type badge, after Microsoft 365's file icons, on
+ * the Figma library's 20px grid. Unknown types get the bare page. DOC and
+ * MP3 are wider letters, so their badge is 16px, the rest 14px.
+ */
 function FileTypeIcon({ file }: { file: File }) {
   const kind = fileKind(file)
+  const badgeWidth = kind === 'word' || kind === 'audio' ? 16 : 14
   return (
-    <svg className={styles.fileIcon} data-kind={kind} viewBox="0 0 32 32" aria-hidden="true">
-      <path className={styles.page} d="M9.5 2.5h11l7 7v18a2 2 0 0 1-2 2h-16a2 2 0 0 1-2-2v-23a2 2 0 0 1 2-2Z" />
-      <path className={styles.fold} d="M20.5 2.5v5a2 2 0 0 0 2 2h5Z" />
+    <svg className={styles.fileIcon} data-kind={kind} viewBox="0 0 20 20" aria-hidden="true">
+      <path className={styles.page} d="M4 1h8l5 5v13H4Z" />
+      <path className={styles.fold} d="M12 1l5 5h-5Z" />
       {kind && (
         <g>
-          <rect className={styles.badge} x="2" y="13" width={kind === 'pdf' ? 20 : 15} height="14" rx="2" />
-          {badgeText[kind] ? (
-            <text className={styles.badgeText} x={kind === 'pdf' ? 12 : 9.5} y="23.5" textAnchor="middle">
-              {badgeText[kind]}
-            </text>
-          ) : kind === 'image' ? (
-            <g className={styles.glyph}>
-              <circle cx="12.5" cy="17.5" r="1.25" />
-              <path d="M5 24.5l3.5-4.5 2.5 3 1.5-1.5 2.5 3Z" />
-            </g>
-          ) : (
-            <g className={styles.glyph}>
-              <circle cx="7.5" cy="23" r="1.75" />
-              <path d="M9.25 23v-6.5l4 1.25v2" fill="none" strokeWidth="1.5" strokeLinejoin="round" />
-            </g>
-          )}
+          <rect className={styles.badge} x="1" y="10" width={badgeWidth} height="8" rx="1.5" />
+          <text className={styles.badgeText} x={1 + badgeWidth / 2} y="14" textAnchor="middle" dominantBaseline="central">
+            {badgeText[kind]}
+          </text>
         </g>
       )}
     </svg>

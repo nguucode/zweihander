@@ -1,6 +1,6 @@
 import { useEffect, useId, useRef, useState, useSyncExternalStore, type MouseEvent, type ReactNode } from 'react'
 import { Tag } from '@/components/atomic-elements/Tag'
-import { Accordion } from '@/components/data-display/Accordion'
+import { Collapse } from '@/components/data-display/Collapse'
 import { Button } from '@/components/buttons/Button'
 import { RadioGroup } from '@/components/controls/Radio'
 import { Switch } from '@/components/controls/Switch'
@@ -243,8 +243,6 @@ function readTheme(): PreviewTheme {
     accent: read('accent'),
     gray: read('gray'),
     radius: read('radius'),
-    canvas: read('canvas'),
-    contentStyle: read('contentStyle'),
     font: read('font'),
     appearance: read('appearance'),
   }
@@ -620,21 +618,6 @@ function ThemePopover({ theme, onChange }: { theme: PreviewTheme; onChange: (the
           value={theme.radius}
           onValueChange={(radius) => set({ radius: radius as PreviewTheme['radius'] })}
         />
-        {/* What an AppShell sits on, and how its page meets that canvas. */}
-        <RadioGroup
-          label="Canvas"
-          orientation="horizontal"
-          options={choices(PREVIEW_THEME_VALUES.canvas)}
-          value={theme.canvas}
-          onValueChange={(canvas) => set({ canvas: canvas as PreviewTheme['canvas'] })}
-        />
-        <RadioGroup
-          label="Content"
-          orientation="horizontal"
-          options={choices(PREVIEW_THEME_VALUES.contentStyle)}
-          value={theme.contentStyle}
-          onValueChange={(contentStyle) => set({ contentStyle: contentStyle as PreviewTheme['contentStyle'] })}
-        />
         <RadioGroup
           label="Theme"
           orientation="horizontal"
@@ -820,46 +803,45 @@ function Browser({
               <h2 id={`pg-group-${kind}`} className={styles.groupTitle}>
                 {label}
               </h2>
-              <Accordion
-                multiple
-                appearance="flush"
-                value={keys.filter((key) => !folded.includes(key))}
-                onValueChange={(opened) =>
-                  onFolds({
-                    ...folds,
-                    [isFiltering ? 'filtering' : 'browsing']: [
-                      ...folded.filter((key) => !keys.includes(key)),
-                      ...keys.filter((key) => !opened.includes(key)),
-                    ],
-                  })
-                }
-                items={sections.map((section, index) => ({
-                  value: keys[index],
-                  title: section,
-                  content: (
-                    <ul className={styles.cards}>
-                      {group
-                        .filter((item) => item.category === section)
-                        .map((item) => (
-                          <li key={item.id}>
-                            <a
-                              href={urlWith({ ...withoutProps(selected), item: item.id })}
-                              aria-current={item.id === selected.id ? 'true' : undefined}
-                              className={styles.card}
-                              onClick={(e) => open(e, item)}
-                            >
-                              <span className={styles.cardName}>{item.name}</span>
-                              <Tag
-                                text={item.status}
-                                variant={item.status === 'experimental' ? 'warning' : 'info'}
-                              />
-                            </a>
-                          </li>
-                        ))}
-                    </ul>
-                  ),
-                }))}
-              />
+              {sections.map((section, index) => {
+                const key = keys[index]
+                return (
+                  <Collapse
+                    key={key}
+                    label={section}
+                    open={!folded.includes(key)}
+                    onOpenChange={(isOpen) =>
+                      onFolds({
+                        ...folds,
+                        [isFiltering ? 'filtering' : 'browsing']: isOpen
+                          ? folded.filter((k) => k !== key)
+                          : [...folded, key],
+                      })
+                    }
+                  >
+                        <ul className={styles.cards}>
+                          {group
+                            .filter((item) => item.category === section)
+                            .map((item) => (
+                              <li key={item.id}>
+                                <a
+                                  href={urlWith({ ...withoutProps(selected), item: item.id })}
+                                  aria-current={item.id === selected.id ? 'true' : undefined}
+                                  className={styles.card}
+                                  onClick={(e) => open(e, item)}
+                                >
+                                  <span className={styles.cardName}>{item.name}</span>
+                                  <Tag
+                                    text={item.status}
+                                    variant={item.status === 'experimental' ? 'warning' : 'info'}
+                                  />
+                                </a>
+                              </li>
+                            ))}
+                        </ul>
+                  </Collapse>
+                )
+              })}
             </section>
           )
         })

@@ -30,7 +30,7 @@ a[href].button {
 }
 
 .button:focus-visible {
-  outline: var(--focus-width) solid var(--ring);
+  outline: var(--focus-width) solid var(--color-border-focused);
   outline-offset: var(--focus-offset);
 }
 
@@ -52,35 +52,35 @@ a[href].button {
    of them paint the fill, the border and the label. */
 
 .primary {
-  --button-solid: var(--primary);
-  --button-on-solid: var(--primary-foreground);
-  --button-tone: var(--primary-text);
-  --button-border: var(--primary-text);
+  --button-solid: var(--color-background-brand-bold);
+  --button-on-solid: var(--color-text-brand-inverse);
+  --button-tone: var(--color-text-brand);
+  --button-border: var(--color-text-brand);
 }
 
 /* The token set has one brand hue, which primary already uses, so accent
    is the inverted neutral: the strongest contrast available. */
 .accent {
-  --button-solid: var(--foreground);
-  --button-on-solid: var(--background);
-  --button-tone: var(--foreground);
-  --button-border: var(--foreground);
+  --button-solid: var(--color-text);
+  --button-on-solid: var(--color-surface);
+  --button-tone: var(--color-text);
+  --button-border: var(--color-text);
 }
 
 /* Secondary's outline is the input border: quiet on purpose, the label
    names the button. */
 .secondary {
-  --button-solid: var(--secondary);
-  --button-on-solid: var(--secondary-foreground);
-  --button-tone: var(--foreground);
-  --button-border: var(--input);
+  --button-solid: var(--color-background-neutral);
+  --button-on-solid: var(--color-text);
+  --button-tone: var(--color-text);
+  --button-border: var(--color-border);
 }
 
 .destructive {
-  --button-solid: var(--destructive);
-  --button-on-solid: var(--destructive-foreground);
-  --button-tone: var(--destructive);
-  --button-border: var(--destructive);
+  --button-solid: var(--color-background-danger-bold);
+  --button-on-solid: var(--color-text-danger-inverse);
+  --button-tone: var(--color-background-danger-bold);
+  --button-border: var(--color-background-danger-bold);
 }
 
 /* --------------------------------------------------------- appearances
@@ -111,17 +111,16 @@ a[href].button {
   --button-bg-active: color-mix(in oklab, var(--button-solid) 82%, var(--button-on-solid));
 }
 
-/* Outlined and ghost tint the background with their own tone, which pulls
-   it toward the text; the text moves toward --foreground by as much, so it
-   keeps its distance from the tint. */
+/* Outlined and ghost tint the background with their own tone; the label
+   stays the tone in every state, as in Figma. */
 .outlined,
 .ghost {
   --button-bg: transparent;
   --button-fg: var(--button-tone);
   --button-bg-hover: color-mix(in oklab, var(--button-tone) 8%, transparent);
   --button-bg-active: color-mix(in oklab, var(--button-tone) 14%, transparent);
-  --button-fg-hover: color-mix(in oklab, var(--button-tone) 75%, var(--foreground));
-  --button-fg-active: color-mix(in oklab, var(--button-tone) 60%, var(--foreground));
+  --button-fg-hover: color-mix(in oklab, var(--button-tone) 75%, var(--color-text));
+  --button-fg-active: color-mix(in oklab, var(--button-tone) 60%, var(--color-text));
 }
 
 .outlined {
@@ -138,23 +137,25 @@ a[href].button {
   background-color: var(--button-bg-hover);
   color: var(--button-fg-hover);
 }
-.button:active {
+/* A ToggleButton (the only one with aria-pressed) has no press-and-hold
+   state in Figma: holding it shows hover until it flips. */
+.button:active:not([aria-pressed]) {
   background-color: var(--button-bg-active);
   color: var(--button-fg-active);
 }
 
 /* ------------------------------------------------------------ lighting
    Contained is lit from above so it reads as a key you can press; pressed
-   turns the light over, as if pushed in. The edge and hairline are the
-   solid moved in lightness, so they follow the variant, the accent and the
-   mode. Highlight and shade are light, not colour: white and black at an
-   alpha, the same on every fill, so no token holds them. The fill
+   turns the light over, as if pushed in. The hairline is the solid moved
+   in lightness, so it follows the variant, the accent and the mode.
+   Highlight, shade and the bottom edge are light, not colour: white and
+   black at an alpha, the same on every fill, so no token holds them. The fill
    StateContrast measures is unchanged; the gradient lifts only its top, by
    a few percent. Offsets are the approved Figma values. */
 .contained {
   --button-highlight: oklch(1 0 0 / 0.2);
   --button-shade: oklch(0 0 0 / 0.45);
-  --button-bottom-edge: oklch(from var(--button-solid) calc(l - 0.12) c h);
+  --button-bottom-edge: oklch(0 0 0 / 0.18);
   --button-hairline: oklch(from var(--button-solid) calc(l - 0.06) c h);
   border-color: var(--button-hairline);
   background-image: linear-gradient(oklch(1 0 0 / 0.06), transparent);
@@ -162,24 +163,11 @@ a[href].button {
     inset 0 0.5px 1px var(--button-highlight),
     inset 0 -1px 1.2px 0.35px var(--button-bottom-edge);
 }
-.contained:active {
+.contained:active:not([aria-pressed]) {
   background-image: none;
   box-shadow:
     inset 0 1.5px 2px var(--button-shade),
     inset 0 -0.5px 1px var(--button-highlight);
-}
-
-/* Hover draws a hairline ring detached from the button, in the focus
-   ring's place, --focus-offset out, so focus-visible replaces it instead
-   of stacking a second ring beside it. An outline, not a positioned
-   pseudo-element: an outline never counts as overflow, so a button flush
-   with a scroll box's edge does not make it scroll. Set on hover only:
-   forced-colors mode paints even a transparent outline, so one at rest
-   would show as a permanent ring. */
-.contained:hover:not(:focus-visible) {
-  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- hairline, the same 1px as the button's border; there is no border-width scale */
-  outline: 1px solid var(--button-hairline);
-  outline-offset: var(--focus-offset);
 }
 
 /* ---------------------------------------------------------------- sizes */
@@ -191,6 +179,8 @@ a[href].button {
    Design, whose button has no border of its own (it draws one on ::after):
    12px from edge to label, with or without an icon on that side. This
    button's border is real, so the padding is the pad less --border-width.
+   Ghost draws no border (Figma binds 11px padding with no stroke), so it
+   sits 11px from edge to label.
    The label is 14/20 at both sizes: sm is a shorter box, not smaller type.
    There is no xs: 20px is below the 24px target of WCAG 2.5.8. */
 .sm {
@@ -209,6 +199,10 @@ a[href].button {
   gap: var(--control-md-gap);
   padding-inline: calc(var(--control-md-pad-spacious) - var(--border-width));
   border-radius: var(--control-md-radius);
+}
+
+.ghost {
+  border-width: 0;
 }
 
 .iconOnly {

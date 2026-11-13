@@ -12,7 +12,7 @@ const items = [
 
 const meta = {
   title: 'Charts/ChartLegend',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: ChartLegend,
   parameters: { layout: 'padded' },
   args: { items },
@@ -21,7 +21,7 @@ const meta = {
     hiddenKeys: { control: false, description: 'Keys of series switched off.' },
     onToggle: { description: 'Makes each item a toggle button. Without it the legend is a plain list.' },
     onFocusChange: { description: 'Called with the key under the pointer or focus, null when it leaves.' },
-    orientation: { control: 'inline-radio', options: ['horizontal', 'vertical'] },
+    marker: { control: 'inline-radio', options: ['dot', 'line'], description: '`dot` for bars and slices, `line` for line and area series. Off, a dot goes hollow and a line fades.' },
   },
 } satisfies Meta<typeof ChartLegend>
 
@@ -48,11 +48,26 @@ export const Toggles: Story = {
   },
 }
 
-/** A plain list, stacked, as beside a pie. */
-export const Vertical: Story = {
-  args: { orientation: 'vertical' },
+/** A plain list, as under a pie: no toggles. */
+export const Static: Story = {
   play: async ({ canvas }) => {
     await expect(canvas.queryByRole('button')).toBeNull()
     await expect(canvas.getAllByRole('listitem')).toHaveLength(3)
+  },
+}
+
+/** Line markers, as under a line chart. Off, the marker fades to 40% instead of going hollow. */
+export const LineMarker: Story = {
+  args: { marker: 'line', items: items.map((item) => ({ ...item, value: undefined })) },
+  render: function Render(args) {
+    const [hidden, setHidden] = useState<string[]>([])
+    return <ChartLegend {...args} hiddenKeys={hidden} onToggle={(k) => setHidden((h) => (h.includes(k) ? h.filter((x) => x !== k) : [...h, k]))} />
+  },
+  play: async ({ canvas }) => {
+    const miss = canvas.getByRole('button', { name: 'Miss' })
+    const marker = miss.querySelector('span')!
+    await expect(marker.getBoundingClientRect().width).toBeGreaterThan(marker.getBoundingClientRect().height)
+    await userEvent.click(miss)
+    await expect(getComputedStyle(marker).opacity).toBe('0.4')
   },
 }

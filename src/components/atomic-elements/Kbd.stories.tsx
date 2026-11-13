@@ -6,7 +6,7 @@ import { Kbd } from './Kbd'
 
 const meta = {
   title: 'Components/Atomic Elements/Kbd',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: Kbd,
   args: { children: 'Esc' },
   // Every prop is listed by hand, with its type and default: these

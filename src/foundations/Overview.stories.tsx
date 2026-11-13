@@ -9,7 +9,7 @@ function Panel({ label }: { label: string }) {
   return (
     <div
       className={docs.card}
-      style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)', background: 'var(--card)', color: 'var(--card-foreground)' }}
+      style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)', background: 'var(--color-surface-raised)', color: 'var(--color-text)' }}
     >
       <span style={{ fontSize: 'var(--text-body)', fontWeight: 500 }}>{label}</span>
       <TextInput label="Email" placeholder="you@example.com" />
@@ -51,7 +51,7 @@ export const AccentColor: Story = {
   play: async ({ canvas }) => {
     const solid = (name: string) =>
       getComputedStyle(canvas.getByRole('button', { name })).backgroundColor
-    // Changing the accent has to actually move --primary.
+    // Changing the accent has to actually move --color-background-brand-bold.
     await expect(solid('blue')).not.toBe(solid('red'))
   },
 }
@@ -68,12 +68,12 @@ export const GrayColor: Story = {
               alignItems: 'center',
               justifyContent: 'space-between',
               borderRadius: 'var(--radius-field)',
-              background: 'var(--background)',
+              background: 'var(--color-surface)',
               padding: 'var(--space-2) var(--space-3)',
             }}
           >
-            <span style={{ fontSize: 'var(--text-body)', color: 'var(--foreground)' }}>{gray}</span>
-            <span style={{ fontSize: 'var(--text-body)', color: 'var(--muted-foreground)' }}>muted</span>
+            <span style={{ fontSize: 'var(--text-body)', color: 'var(--color-text)' }}>{gray}</span>
+            <span style={{ fontSize: 'var(--text-body)', color: 'var(--color-text-subtlest)' }}>muted</span>
           </div>
         </Theme>
       ))}
@@ -84,10 +84,10 @@ export const GrayColor: Story = {
 export const Appearance: Story = {
   render: () => (
     <div className={docs.gridHalves} style={{ gap: 'var(--space-4)' }}>
-      <Theme appearance="light" style={{ borderRadius: 'var(--radius-panel)', background: 'var(--background)', padding: 'var(--space-4)' }}>
+      <Theme appearance="light" style={{ borderRadius: 'var(--radius-panel)', background: 'var(--color-surface)', padding: 'var(--space-4)' }}>
         <Panel label="appearance=&quot;light&quot;" />
       </Theme>
-      <Theme appearance="dark" style={{ borderRadius: 'var(--radius-panel)', background: 'var(--background)', padding: 'var(--space-4)' }}>
+      <Theme appearance="dark" style={{ borderRadius: 'var(--radius-panel)', background: 'var(--color-surface)', padding: 'var(--space-4)' }}>
         <Panel label="appearance=&quot;dark&quot;" />
       </Theme>
     </div>
@@ -95,13 +95,13 @@ export const Appearance: Story = {
   play: async ({ canvas }) => {
     const [light, dark] = canvas.getAllByText(/appearance=/)
     const bg = (el: HTMLElement) =>
-      getComputedStyle(el.closest('.light, .dark') as HTMLElement).getPropertyValue('--background')
+      getComputedStyle(el.closest('.light, .dark') as HTMLElement).getPropertyValue('--color-surface')
     await expect(bg(light)).not.toBe(bg(dark))
   },
 }
 
 export const TokenOverride: Story = {
-  // Shows a consumer's own --primary override; its contrast is the consumer's, not the kit's.
+  // Shows a consumer's own --color-background-brand-bold override; its contrast is the consumer's, not the kit's.
   parameters: { a11y: { test: 'off' } },
   name: 'Token override',
   render: () => (
@@ -109,23 +109,23 @@ export const TokenOverride: Story = {
       <Theme style={{ borderRadius: 'var(--radius-panel)', padding: 'var(--space-4)' }}>
         <Panel label="default tokens" />
       </Theme>
-      <Theme style={{ borderRadius: 'var(--radius-panel)', padding: 'var(--space-4)' }} tokens={{ radius: '1.5rem', primary: 'oklch(0.55 0.2 150)' }}>
-        <Panel label="radius + primary overridden" />
+      <Theme style={{ borderRadius: 'var(--radius-panel)', padding: 'var(--space-4)' }} tokens={{ radius: '1.5rem', 'color-background-brand-bold': 'oklch(0.55 0.2 150)' }}>
+        <Panel label="radius + brand overridden" />
       </Theme>
     </div>
   ),
   play: async ({ canvas }) => {
-    const scope = canvas.getByText('radius + primary overridden').closest('div[style]')
+    const scope = canvas.getByText('radius + brand overridden').closest('div[style]')
     await expect(scope).toHaveStyle({ '--radius': '1.5rem' })
   },
 }
 
 export const Nested: Story = {
   render: () => (
-    <Theme appearance="dark" style={{ borderRadius: 'var(--radius-panel)', background: 'var(--background)', padding: 'var(--space-4)' }}>
+    <Theme appearance="dark" style={{ borderRadius: 'var(--radius-panel)', background: 'var(--color-surface)', padding: 'var(--space-4)' }}>
       <div className={docs.stackWide} style={{ gap: 'var(--space-4)' }}>
         <Panel label="dark page" />
-        <Theme appearance="light" style={{ borderRadius: 'var(--radius-panel)', background: 'var(--background)', padding: 'var(--space-4)' }}>
+        <Theme appearance="light" style={{ borderRadius: 'var(--radius-panel)', background: 'var(--color-surface)', padding: 'var(--space-4)' }}>
           <Panel label="light island inside it" />
         </Theme>
       </div>
@@ -134,7 +134,7 @@ export const Nested: Story = {
   play: async ({ canvas }) => {
     const island = canvas.getByText('light island inside it').closest('.light')
     await expect(island).toBeInTheDocument()
-    const bg = (el: Element) => getComputedStyle(el as HTMLElement).getPropertyValue('--background').trim()
+    const bg = (el: Element) => getComputedStyle(el as HTMLElement).getPropertyValue('--color-surface').trim()
     // Compared against :root rather than a literal, so the assertion is about
     // the nested scope resolving to the light default — not about how the
     // generator happens to spell oklch().
@@ -149,8 +149,8 @@ export const Nested: Story = {
  */
 export const NestedPalettes: Story = {
   render: () => (
-    <Theme appearance="dark" accentColor="orange" grayColor="slate" data-testid="dark" style={{ background: 'var(--background)', padding: 'var(--space-4)' }}>
-      <Theme appearance="light" style={{ background: 'var(--background)', padding: 'var(--space-4)' }}>
+    <Theme appearance="dark" accentColor="orange" grayColor="slate" data-testid="dark" style={{ background: 'var(--color-surface)', padding: 'var(--space-4)' }}>
+      <Theme appearance="light" style={{ background: 'var(--color-surface)', padding: 'var(--space-4)' }}>
         <Theme accentColor="orange" grayColor="slate" data-testid="island">
           <Panel label="orange on slate, light, inside dark" />
           <Theme appearance="dark" style={{ padding: 'var(--space-2)' }}>
@@ -169,7 +169,7 @@ export const NestedPalettes: Story = {
     const v = (el: Element, name: string) => getComputedStyle(el).getPropertyValue(name).trim()
     const dark = canvas.getByTestId('dark')
     const island = canvas.getByTestId('island')
-    for (const name of ['--primary-text', '--primary', '--ring', '--foreground', '--muted-foreground', '--control-border']) {
+    for (const name of ['--color-text-brand', '--color-background-brand-bold', '--color-border-focused', '--color-text', '--color-text-subtlest', '--color-border-bold']) {
       // Light inside dark: the light palette, not the page's dark one.
       await expect(v(island, name)).not.toBe(v(dark, name))
       // Dark again one level down, and on the same element: the dark palette.

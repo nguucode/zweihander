@@ -1,6 +1,6 @@
 /* Shared by Text Input, Textarea, Search, Number Input, Select and Combobox. */
 .field {
-  --field-edge: var(--field-border);
+  --field-edge: var(--color-border-input);
   display: inline-grid;
   gap: var(--space-stack);
   inline-size: 20rem;
@@ -25,7 +25,7 @@
   line-height: var(--leading-body-sm);
   /* Atlassian's form Label is bold, 653 on its variable font. */
   font-weight: var(--font-weight-label);
-  color: var(--foreground);
+  color: var(--color-text);
 }
 
 /* The label and its info button. The button is out of the <label>, so
@@ -41,11 +41,11 @@
   box-sizing: border-box;
   max-inline-size: min(22rem, var(--available-width));
   padding: var(--space-2) var(--space-3);
-  border: 1px solid var(--border);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  background: var(--popover);
+  background: var(--color-surface-overlay);
   box-shadow: var(--shadow-overlay);
-  color: var(--popover-foreground);
+  color: var(--color-text);
   font-family: var(--font-sans);
   font-size: var(--text-body);
   line-height: var(--leading-body);
@@ -53,37 +53,36 @@
 }
 
 .required {
-  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- 2px between label and asterisk, below the spacing scale on purpose */
-  margin-inline-start: 0.125rem;
-  color: var(--danger-text);
+  margin-inline-start: var(--space-1);
+  color: var(--color-text-danger);
 }
 
 .helper {
   margin: 0;
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
 }
 
 /* Validation changes the field's edge and its helper text together; the
    words are the message, the colour only points at it. */
 .state-error {
-  --field-edge: var(--danger-text);
+  --field-edge: var(--color-text-danger);
 }
 .state-error .helper {
-  color: var(--danger-text);
+  color: var(--color-text-danger);
 }
 .state-success {
-  --field-edge: var(--success-text);
+  --field-edge: var(--color-text-success);
 }
 .state-success .helper {
-  color: var(--success-text);
+  color: var(--color-text-success);
 }
 
 /* ------------------------------------------------------------------ box
    The box draws the field; the control inside it is bare. The edge is
-   --field-border, a light hairline (about 1.5:1, as in the Claude apps),
-   not the 3:1 --control-border: a deliberate exception to WCAG 1.4.11,
+   --color-border-input, a light hairline (about 1.5:1, as in the Claude apps),
+   not the 3:1 --color-border-bold: a deliberate exception to WCAG 1.4.11,
    approved 2026-10-08. The outlined field makes up for it by being a white
    card on the off-white page, and the label, placeholder and focus ring
    still mark it. Checkbox, radio and switch keep 3:1. */
@@ -95,22 +94,21 @@
   /* Inside Number Input's wrapper the box is a block, not a grid item. */
   min-inline-size: 0;
   border: 1px solid var(--field-edge);
-  background: var(--card);
-  color: var(--foreground);
+  background: var(--color-surface-raised);
+  color: var(--color-text);
   cursor: text;
   transition: border-color var(--duration-base);
 }
 
 /* A field is one step taller than a button, after Atlassian: md is
    --control-lg (40px) and sm is --control-md (32px), which lines up with a
-   Button in a toolbar. Both sizes share the rest: 6px of padding inside the
-   edge, as @atlaskit/textfield's input (so text starts 7px from the outer
-   edge), the md icon and gap, the field radius (which never becomes a pill)
-   and body type. Every icon in the box (affix, chevron, clear, stepper,
-   spinner) reads --field-icon. */
+   Button in a toolbar. Both sizes share the rest: 10px of padding inside the
+   edge (the Figma library's binding), the md icon and gap, the field radius
+   (which never becomes a pill) and body type. Every icon in the box (affix,
+   chevron, clear, stepper, spinner) reads --field-icon. */
 .sm,
 .md {
-  --field-pad: var(--space-1-5);
+  --field-pad: var(--space-2-5);
   --field-icon: var(--icon-md);
   --field-radius: var(--control-md-radius-field);
   /* 8px, not the control tier's 6px gap: a 24px button in the box is pulled
@@ -128,40 +126,17 @@
   min-block-size: var(--control-lg);
 }
 
-/* A field that opens a list or a calendar (Select, Combobox, Date Picker) is
-   Atlassian's Select, which is roomier than its Textfield. The value sits
-   8px inside the edge (@atlaskit/react-select: 6px on the value container
-   plus 2px round the value), 9px from the outer edge. The chevron and the
-   clear button draw a 12px icon. The end is 12px, which puts the chevron's
-   centre 19px from the outer edge, where Atlassian's indicator has it
-   (1px edge, 4 + 2 + 6px and half a 12px icon). The gap is 12px, Atlassian's
-   from the clear icon to the chevron (2 + 2px after one, 2 + 6px before the
-   other) and from the value to the clear icon.
-   After .sm and .md, so it wins at equal specificity. */
+/* A field that opens a list (Select, Combobox) keeps the text fields'
+   padding and 16px icon, but 12px between the value, the clear icon and the
+   chevron. After .sm and .md, so it wins at equal specificity. */
 .picker {
-  --field-icon: var(--icon-xs);
   gap: var(--space-3);
-  padding-inline: var(--space-2) var(--space-3);
-}
-/* The chevron straight after the value keeps 16px from it, so a value that
-   truncates stops there (Atlassian: 2 + 6px after the value, 2 + 6px before
-   the icon). */
-.picker > .value + .icon {
-  margin-inline-start: var(--space-1);
-}
-/* Not Date Picker's calendar button, nor a clear button before the chevron. */
-.picker:not(.datePicker) > .control + .iconButton:last-child {
-  margin-inline-start: calc((var(--field-icon) - var(--control-sm)) / 2 + var(--space-1));
 }
 
-/* Date Picker's button is Atlassian's default icon button, not Select's
-   indicator: a 16px calendar whose centre is 20px from the outer edge (4px
-   from the edge to a 32px button), so the end is 12px less the 1px edge.
-   After .picker, so it wins at equal specificity. */
+/* Date Picker's calendar button sits 8px after the value, as a text field's
+   suffix. After .picker, so it wins at equal specificity. */
 .datePicker {
-  --field-icon: var(--icon-md);
   gap: var(--space-2);
-  padding-inline-end: calc(var(--space-3) - 1px);
 }
 
 /* The ring is on the box, drawn when the control inside has keyboard or
@@ -174,14 +149,14 @@
 .box:has(.control:focus),
 .box:focus-visible,
 .box[data-popup-open] {
-  outline: var(--focus-width) solid var(--ring);
+  outline: var(--focus-width) solid var(--color-border-focused);
   outline-offset: var(--focus-offset);
 }
 
 .state-error .box:has(.control:focus),
 .state-error .box:focus-visible,
 .state-error .box[data-popup-open] {
-  outline-color: var(--danger-text);
+  outline-color: var(--color-text-danger);
 }
 
 /* Keyed to the control, not any descendant: a stepper button disabled at
@@ -197,7 +172,7 @@
 
 .box:has(.control[readonly]),
 .box[data-readonly] {
-  background: var(--surface-filled);
+  background: var(--color-background-input);
 }
 
 /* ------------------------------------------------------------- control */
@@ -215,7 +190,7 @@
 }
 
 .control::placeholder {
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
   opacity: 1;
 }
 
@@ -223,7 +198,7 @@
   display: inline-flex;
   align-items: center;
   flex-shrink: 0;
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
   white-space: nowrap;
 }
 
@@ -242,8 +217,8 @@
   align-self: stretch;
   flex-shrink: 0;
   padding-inline: var(--field-pad);
-  background: var(--surface-filled);
-  color: var(--muted-foreground);
+  background: var(--color-background-input);
+  color: var(--color-text-subtlest);
   white-space: nowrap;
 }
 /* The corners follow the box's inner curve: its radius less the 1px edge. */
@@ -274,12 +249,12 @@
   gap: var(--space-1);
   padding-inline: var(--field-pad);
   border-radius: inherit;
-  color: var(--foreground);
+  color: var(--color-text);
   font: inherit;
   font-weight: 500;
 }
 .addon > .iconButton:not(:disabled):hover {
-  background: var(--accent);
+  background: var(--color-background-neutral);
 }
 /* Inside the segment, so the ring is not cut by the box's edge. */
 .addon > .iconButton:focus-visible {
@@ -310,11 +285,11 @@
   overflow-y: auto;
   /* 8px above and below the options, as Atlassian's Select menu. */
   padding-block: var(--space-2);
-  border: 1px solid var(--border);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  background: var(--popover);
+  background: var(--color-surface-overlay);
   box-shadow: var(--shadow-overlay);
-  color: var(--popover-foreground);
+  color: var(--color-text);
   font-family: var(--font-sans);
   font-size: var(--text-body);
   line-height: var(--leading-body);
@@ -345,14 +320,14 @@
 }
 
 /* The highlighted option is where arrow keys are: the subtle surface, as
-   for any hover. Its text stays --popover-foreground, 16:1 or more. */
+   for any hover. Its text stays --color-text, 16:1 or more. */
 .option[data-highlighted] {
-  background: var(--accent);
-  color: var(--accent-foreground);
+  background: var(--color-background-neutral);
+  color: var(--color-text);
 }
 
 .option[data-disabled] {
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
   opacity: 0.6;
 }
 
@@ -362,7 +337,7 @@
   grid-column: 1;
   grid-row: 1;
   display: inline-flex;
-  color: var(--primary-text);
+  color: var(--color-text-brand);
   font-size: var(--icon-md);
 }
 .option > :not(.check) {
@@ -373,7 +348,7 @@
 .empty,
 .status {
   padding: var(--space-2) var(--space-3);
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
 }
 
 .empty:empty,
@@ -403,7 +378,7 @@
 }
 
 .value[data-placeholder] {
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
 }
 
 .value {
@@ -417,7 +392,7 @@
 .icon {
   display: inline-flex;
   flex-shrink: 0;
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
   font-size: var(--field-icon);
 }
 
@@ -430,12 +405,12 @@
   border: 0;
   border-radius: var(--radius-sm);
   background: transparent;
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
   font-size: var(--field-icon);
   cursor: var(--cursor-button);
 }
 .iconButton:not(:disabled):hover {
-  color: var(--foreground);
+  color: var(--color-text);
 }
 .iconButton:disabled {
   cursor: var(--cursor-disabled);
@@ -446,7 +421,7 @@
   opacity: 0.5;
 }
 .iconButton:focus-visible {
-  outline: var(--focus-width) solid var(--ring);
+  outline: var(--focus-width) solid var(--color-border-focused);
   outline-offset: var(--focus-offset);
 }
 /* In the box (clear, open, calendar, a button in a prefix or suffix) the
@@ -466,6 +441,15 @@
 :where(.box, .affix) > .iconButton:focus-visible {
   outline-offset: var(--focus-offset-inset);
 }
+/* A bare icon button (Combobox's clear): the 16px icon is the whole button,
+   with no 24px frame round it. The picker's 12px gaps keep it clear of its
+   neighbours, and on touch the ::after below still makes it 44px. */
+.box > .iconButton.bare {
+  inline-size: var(--field-icon);
+  block-size: var(--field-icon);
+  margin-inline: 0;
+}
+
 @media (pointer: coarse) {
   .iconButton::after {
     content: '';
@@ -479,11 +463,8 @@
 
 /* A small ring of currentColor, as Button's loading state. */
 .spinner {
-  /* 16px in every field, as Atlassian's: where the icon slot is a picker's
-     12px, the margin keeps the ring on the chevron's centre. */
-  inline-size: var(--icon-md);
-  block-size: var(--icon-md);
-  margin: calc((var(--field-icon) - var(--icon-md)) / 2);
+  inline-size: var(--field-icon);
+  block-size: var(--field-icon);
   box-sizing: border-box;
   border: 2px solid currentColor;
   border-block-start-color: transparent;

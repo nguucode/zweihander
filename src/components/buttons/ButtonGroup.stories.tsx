@@ -4,36 +4,35 @@ import { expect, fn, within } from 'storybook/test'
 import { expectAnatomy } from '../../../.storybook/blocks'
 import { Icon } from '@/lib/icon'
 import { Tooltip } from '../overlays/Tooltip'
-import { Button } from './Button'
-import { ButtonGroup, ToggleGroup } from './ButtonGroup'
+import { ButtonGroup } from './ButtonGroup'
 import { ToggleButton } from './ToggleButton'
 
 const meta = {
   title: 'Components/Buttons/ButtonGroup',
-  tags: ['experimental'],
-  component: ToggleGroup,
+  tags: ['beta'],
+  component: ButtonGroup,
   // Listed by hand so the API table and the Playground carry the same words.
   argTypes: {
+    type: {
+      description: '`separate`: ToggleButtons 4px apart. `joined`: one bar, inner corners square, borders shared.',
+      control: 'inline-radio',
+      options: ['separate', 'joined'],
+      table: { type: { summary: "'separate' | 'joined'" }, defaultValue: { summary: "'separate'" } },
+    },
     value: {
-      description: 'Controlled: the `value` of each pressed ToggleButton. Pair with `onValueChange`.',
+      description: 'Controlled: the `value` of the ToggleButton that is on. Pair with `onValueChange`.',
       control: false,
-      table: { type: { summary: 'string[]' } },
+      table: { type: { summary: 'string' } },
     },
     defaultValue: {
-      description: 'Uncontrolled: the values pressed at first.',
+      description: 'Uncontrolled: the value on at first.',
       control: false,
-      table: { type: { summary: 'string[]' } },
+      table: { type: { summary: 'string' } },
     },
     onValueChange: {
-      description: 'Called with the new list of pressed values.',
+      description: 'Called with the value of the ToggleButton just turned on. Pressing the one that is on again does nothing.',
       control: false,
-      table: { type: { summary: '(value: string[]) => void' } },
-    },
-    multiple: {
-      description:
-        'Any number pressed at once. Without it, one at a time (a segmented control): once one is pressed, pressing it again keeps it pressed.',
-      control: 'boolean',
-      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+      table: { type: { summary: '(value: string) => void' } },
     },
     disabled: {
       description: 'Disables every toggle in the group.',
@@ -46,14 +45,14 @@ const meta = {
       table: { type: { summary: 'string' } },
     },
     children: {
-      description: 'ToggleButtons, each with a `value`. ButtonGroup takes Buttons instead.',
+      description: 'ToggleButtons, each with a `value`.',
       control: false,
       table: { type: { summary: 'ReactNode' } },
     },
   },
-  args: { 'aria-label': 'View', defaultValue: ['list'], onValueChange: fn() },
+  args: { 'aria-label': 'View', defaultValue: 'list', onValueChange: fn() },
   excludeStories: ['anatomyParts'],
-} satisfies Meta<typeof ToggleGroup>
+} satisfies Meta<typeof ButtonGroup>
 
 export default meta
 type Story = StoryObj<typeof meta>
@@ -62,46 +61,37 @@ const grid = { display: 'grid', gap: 'var(--space-3)', justifyItems: 'start' }
 
 const views = (
   <>
+    <ToggleButton value="list" appearance="outlined">List</ToggleButton>
+    <ToggleButton value="board" appearance="outlined">Board</ToggleButton>
+    <ToggleButton value="calendar" appearance="outlined">Calendar</ToggleButton>
+  </>
+)
+
+const joinedViews = (
+  <>
     <ToggleButton value="list">List</ToggleButton>
     <ToggleButton value="board">Board</ToggleButton>
     <ToggleButton value="calendar">Calendar</ToggleButton>
   </>
 )
 
-const periods = (
-  <ButtonGroup aria-label="Period">
-        <Button variant="secondary" appearance="outlined">Years</Button>
-        <Button variant="secondary" appearance="outlined">Months</Button>
-        <Button variant="secondary" appearance="outlined">Days</Button>
-      </ButtonGroup>
-)
-
-const pages = (
-  <ButtonGroup aria-label="Pages">
-        <Button variant="secondary" appearance="outlined" isIconOnly aria-label="Previous">
-          <Icon name="chevron-left" />
-        </Button>
-        <Button variant="secondary" appearance="outlined" isIconOnly aria-label="Next">
-          <Icon name="chevron-right" />
-        </Button>
-      </ButtonGroup>
-)
-
-/** Segmented control: one view at a time. */
+/** Separate: outlined ToggleButtons 4px apart, exactly one on. */
 export const Default: Story = {
-  render: (args) => <ToggleGroup {...args}>{views}</ToggleGroup>,
+  render: (args) => <ButtonGroup {...args}>{views}</ButtonGroup>,
   play: async ({ canvas, userEvent, args }) => {
     await expect(canvas.getByRole('group', { name: 'View' })).toBeVisible()
     const list = canvas.getByRole('button', { name: 'List' })
     const board = canvas.getByRole('button', { name: 'Board' })
     const calendar = canvas.getByRole('button', { name: 'Calendar' })
     await expect(list).toHaveAttribute('aria-pressed', 'true')
+    // Separate: exactly the gap between neighbours, no overlap.
+    await expect(board.getBoundingClientRect().left - list.getBoundingClientRect().right).toBe(4)
     // Pressing another releases the first.
     await userEvent.click(board)
     await expect(board).toHaveAttribute('aria-pressed', 'true')
     await expect(list).toHaveAttribute('aria-pressed', 'false')
-    await expect(args.onValueChange).toHaveBeenLastCalledWith(['board'])
-    // Pressing the pressed one again keeps it: a segmented control always has an answer.
+    await expect(args.onValueChange).toHaveBeenLastCalledWith('board')
+    // Pressing the one that is on again keeps it: the group always has an answer.
     await userEvent.click(board)
     await expect(board).toHaveAttribute('aria-pressed', 'true')
     // One tab stop; arrow keys move between toggles, Home and End jump, and the focus wraps.
@@ -114,7 +104,7 @@ export const Default: Story = {
     await expect(calendar).toHaveFocus()
     await userEvent.keyboard('{Home}')
     await expect(list).toHaveFocus()
-    // Arrows only move focus; Space or Enter presses.
+    // Arrows only move focus; Space or Enter turns one on.
     await expect(list).toHaveAttribute('aria-pressed', 'false')
     await userEvent.keyboard(' ')
     await expect(list).toHaveAttribute('aria-pressed', 'true')
@@ -123,52 +113,16 @@ export const Default: Story = {
   },
 }
 
-/** Several at once: filters that combine. */
-export const Multiple: Story = {
-  args: { multiple: true, 'aria-label': 'Status', defaultValue: ['open'] },
-  render: (args) => (
-    <ToggleGroup {...args}>
-      <ToggleButton value="open">Open</ToggleButton>
-      <ToggleButton value="pending">Pending</ToggleButton>
-      <ToggleButton value="closed">Closed</ToggleButton>
-    </ToggleGroup>
-  ),
-  play: async ({ canvas, userEvent, args }) => {
-    await userEvent.click(canvas.getByRole('button', { name: 'Pending' }))
-    await expect(args.onValueChange).toHaveBeenLastCalledWith(['open', 'pending'])
-    await expect(canvas.getByRole('button', { name: 'Open' })).toHaveAttribute('aria-pressed', 'true')
-    // In a multiple group every toggle can be released, down to none.
-    await userEvent.click(canvas.getByRole('button', { name: 'Open' }))
-    await userEvent.click(canvas.getByRole('button', { name: 'Pending' }))
-    await expect(args.onValueChange).toHaveBeenLastCalledWith([])
-  },
-}
-
-/** Button group: related actions as separate buttons, 4px apart. Nothing stays pressed. */
-export const Actions: Story = {
-  render: () => periods,
-  play: async ({ canvas, userEvent }) => {
-    const group = canvas.getByRole('group', { name: 'Period' })
-    // Unlike a toggle group, Tab stops on each button in turn.
-    await userEvent.tab()
-    await expect(canvas.getByRole('button', { name: 'Years' })).toHaveFocus()
-    await userEvent.tab()
-    await expect(canvas.getByRole('button', { name: 'Months' })).toHaveFocus()
-    // Nothing stays pressed.
-    for (const button of canvas.getAllByRole('button')) {
-      await expect(group).toContainElement(button)
-      await expect(button).not.toHaveAttribute('aria-pressed')
-      await expect(button).not.toHaveAttribute('tabindex', '-1')
-    }
-  },
-}
-
-/** Icon-only buttons each need their own `aria-label`. */
-export const IconOnly: Story = {
-  render: () => pages,
+/** Joined: one bar, the toggle that is on raised over its neighbours. */
+export const Joined: Story = {
+  args: { type: 'joined' },
+  render: (args) => <ButtonGroup {...args}>{joinedViews}</ButtonGroup>,
   play: async ({ canvas }) => {
-    await expect(canvas.getByRole('button', { name: 'Previous' })).toBeVisible()
-    await expect(canvas.getByRole('button', { name: 'Next' })).toBeVisible()
+    const [list, board] = canvas.getAllByRole('button')
+    // Each toggle after the first overlaps the one before by its 1px border.
+    await expect(board.getBoundingClientRect().left - list.getBoundingClientRect().right).toBe(-1)
+    await expect(getComputedStyle(list).borderStartEndRadius).toBe('0px')
+    await expect(getComputedStyle(list).zIndex).toBe('1')
   },
 }
 
@@ -176,14 +130,14 @@ export const IconOnly: Story = {
 export const IconToggles: Story = {
   args: { 'aria-label': 'Layout' },
   render: (args) => (
-    <ToggleGroup {...args}>
+    <ButtonGroup {...args}>
       <ToggleButton value="list" isIconOnly aria-label="List" appearance="outlined" variant="secondary">
         <Icon name="menu" />
       </ToggleButton>
       <ToggleButton value="calendar" isIconOnly aria-label="Calendar" appearance="outlined" variant="secondary">
         <Icon name="calendar" />
       </ToggleButton>
-    </ToggleGroup>
+    </ButtonGroup>
   ),
   play: async ({ canvas, userEvent }) => {
     const calendar = canvas.getByRole('button', { name: 'Calendar' })
@@ -193,104 +147,69 @@ export const IconToggles: Story = {
   },
 }
 
-/** A Tooltip merges onto its button rather than wrapping it, so the group still holds only its buttons. */
+/** A Tooltip merges onto its toggle rather than wrapping it, so the group still holds only its toggles. */
 export const WithTooltips: Story = {
-  render: () => (
-    <ButtonGroup aria-label="Pages">
-      <Tooltip content="Previous">
-        <Button variant="secondary" appearance="outlined" isIconOnly aria-label="Previous">
-          <Icon name="chevron-left" />
-        </Button>
+  args: { 'aria-label': 'Layout' },
+  render: (args) => (
+    <ButtonGroup {...args}>
+      <Tooltip content="List">
+        <ToggleButton value="list" isIconOnly aria-label="List" appearance="outlined" variant="secondary">
+          <Icon name="menu" />
+        </ToggleButton>
       </Tooltip>
-      <Tooltip content="Next">
-        <Button variant="secondary" appearance="outlined" isIconOnly aria-label="Next">
-          <Icon name="chevron-right" />
-        </Button>
+      <Tooltip content="Calendar">
+        <ToggleButton value="calendar" isIconOnly aria-label="Calendar" appearance="outlined" variant="secondary">
+          <Icon name="calendar" />
+        </ToggleButton>
       </Tooltip>
     </ButtonGroup>
   ),
   play: async ({ canvas, userEvent }) => {
-    const group = canvas.getByRole('group', { name: 'Pages' })
-    const [previous, next] = [canvas.getByRole('button', { name: 'Previous' }), canvas.getByRole('button', { name: 'Next' })]
-    await expect([...group.children]).toEqual([previous, next])
-    await expect(next.getBoundingClientRect().left - previous.getBoundingClientRect().right).toBe(4)
+    const group = canvas.getByRole('group', { name: 'Layout' })
+    const [list, calendar] = [canvas.getByRole('button', { name: 'List' }), canvas.getByRole('button', { name: 'Calendar' })]
+    await expect([...group.children]).toEqual([list, calendar])
     // Opening a tooltip adds nothing inside the group.
     await userEvent.tab()
     await within(document.body).findByRole('tooltip', {}, { timeout: 300 })
-    await expect([...group.children]).toEqual([previous, next])
+    await expect([...group.children]).toEqual([list, calendar])
   },
 }
 
-/**
- * ButtonGroup is Atlassian's: separate buttons 4px apart. Each button keeps
- * what it has on its own: all four corners, its height, its contained look.
- */
-export const Separate: Story = {
-  tags: ['!dev'],
-  render: () => (
-    <div style={grid}>
-      {(['sm', 'md'] as const).map((size) => (
-        <div key={size} style={{ display: 'flex', gap: 'var(--space-6)' }}>
-          <ButtonGroup aria-label={`Actions, ${size}`}>
-            <Button size={size}>Save</Button>
-            <Button size={size} variant="secondary" appearance="outlined">Preview</Button>
-            <Button size={size} variant="secondary" appearance="ghost">Cancel</Button>
-          </ButtonGroup>
-          <Button size={size} data-testid={`alone-${size}`}>Save</Button>
-        </div>
-      ))}
-    </div>
-  ),
-  play: async ({ canvas }) => {
-    const look = (el: Element) => {
-      const { borderStartStartRadius, borderStartEndRadius, borderEndStartRadius, borderEndEndRadius, backgroundImage, boxShadow } =
-        getComputedStyle(el)
-      return { borderStartStartRadius, borderStartEndRadius, borderEndStartRadius, borderEndEndRadius, backgroundImage, boxShadow }
-    }
-    for (const [size, height] of [['sm', 24], ['md', 32]] as const) {
-      const group = canvas.getByRole('group', { name: `Actions, ${size}` })
-      const buttons = within(group).getAllByRole('button')
-      await expect(getComputedStyle(group).columnGap).toBe('4px')
-      const boxes = buttons.map((button) => button.getBoundingClientRect())
-      for (const [i, box] of boxes.entries()) {
-        await expect(box.height).toBe(height)
-        // Separate: exactly the gap between neighbours, no overlap.
-        if (i > 0) await expect(box.left - boxes[i - 1].right).toBe(4)
-        const corners = Object.values(look(buttons[i])).slice(0, 4)
-        await expect(new Set(corners).size).toBe(1)
-        await expect(corners[0]).not.toBe('0px')
-      }
-      // The contained button in a group is the one that stands alone: same corners, gradient and edges.
-      await expect(look(buttons[0])).toEqual(look(canvas.getByTestId(`alone-${size}`)))
-    }
-  },
-}
-
-/** The size is each toggle's own; the group only joins them. */
+/** The size is each toggle's own; the group only places them. */
 export const Sizes: Story = {
   render: (args) => (
     <div style={grid}>
-      {(['sm', 'md'] as const).map((size) => (
-        <ToggleGroup key={size} {...args} aria-label={`View, ${size}`}>
-          <ToggleButton size={size} value="list">List</ToggleButton>
-          <ToggleButton size={size} value="board">Board</ToggleButton>
-          <ToggleButton size={size} value="calendar">Calendar</ToggleButton>
-        </ToggleGroup>
-      ))}
+      {(['separate', 'joined'] as const).flatMap((type) =>
+        (['sm', 'md'] as const).map((size) => (
+          <ButtonGroup key={type + size} {...args} type={type} aria-label={`View, ${type}, ${size}`}>
+            <ToggleButton size={size} value="list" appearance={type === 'separate' ? 'outlined' : undefined}>List</ToggleButton>
+            <ToggleButton size={size} value="board" appearance={type === 'separate' ? 'outlined' : undefined}>Board</ToggleButton>
+            <ToggleButton size={size} value="calendar" appearance={type === 'separate' ? 'outlined' : undefined}>Calendar</ToggleButton>
+          </ButtonGroup>
+        )),
+      )}
     </div>
   ),
+  play: async ({ canvas }) => {
+    for (const [size, height] of [['sm', 24], ['md', 32]] as const) {
+      for (const type of ['separate', 'joined']) {
+        const group = canvas.getByRole('group', { name: `View, ${type}, ${size}` })
+        for (const button of within(group).getAllByRole('button')) await expect(button.getBoundingClientRect().height).toBe(height)
+      }
+    }
+  },
 }
 
 /** Controlled: the parent owns the value. */
 export const Controlled: Story = {
   render: function Render(args) {
-    const [value, setValue] = useState(['board'])
+    const [value, setValue] = useState('board')
     return (
       <div style={grid}>
-        <ToggleGroup {...args} defaultValue={undefined} value={value} onValueChange={setValue}>
+        <ButtonGroup {...args} defaultValue={undefined} value={value} onValueChange={setValue}>
           {views}
-        </ToggleGroup>
-        <span>Showing {value.join(', ')}</span>
+        </ButtonGroup>
+        <span>Showing {value}</span>
       </div>
     )
   },
@@ -302,7 +221,7 @@ export const Controlled: Story = {
 
 export const Disabled: Story = {
   args: { disabled: true },
-  render: (args) => <ToggleGroup {...args}>{views}</ToggleGroup>,
+  render: (args) => <ButtonGroup {...args}>{views}</ButtonGroup>,
   play: async ({ canvas }) => {
     for (const toggle of canvas.getAllByRole('button')) await expect(toggle).toBeDisabled()
   },
@@ -312,34 +231,36 @@ export const Disabled: Story = {
 export const Matrix: Story = {
   render: (args) => (
     <div style={grid}>
-      <ToggleGroup {...args}>{views}</ToggleGroup>
-      <ToggleGroup {...args} aria-label="Status" multiple defaultValue={['open', 'closed']}>
-        <ToggleButton appearance="outlined" variant="secondary" value="open">Open</ToggleButton>
-        <ToggleButton appearance="outlined" variant="secondary" value="pending">Pending</ToggleButton>
-        <ToggleButton appearance="outlined" variant="secondary" value="closed">Closed</ToggleButton>
-      </ToggleGroup>
-      {periods}
-      {pages}
+      <ButtonGroup {...args}>{views}</ButtonGroup>
+      <ButtonGroup {...args} type="joined">{joinedViews}</ButtonGroup>
+      <ButtonGroup {...args} type="joined" aria-label="Layout" defaultValue="calendar">
+        <ToggleButton value="list" isIconOnly aria-label="List" appearance="outlined" variant="secondary">
+          <Icon name="menu" />
+        </ToggleButton>
+        <ToggleButton value="calendar" isIconOnly aria-label="Calendar" appearance="outlined" variant="secondary">
+          <Icon name="calendar" />
+        </ToggleButton>
+      </ButtonGroup>
     </div>
   ),
 }
 
 /** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
 export const anatomyParts = [
-  { name: 'Container', selector: '[role="group"]', description: 'ToggleGroup joins its toggles: inner corners square, borders shared. ButtonGroup spaces its buttons 4px apart.' },
-  { name: 'Button', selector: 'button:not([aria-pressed="true"])', description: 'A ToggleButton (or a Button in ButtonGroup), with a label or an icon.' },
-  { name: 'Selected', selector: 'button[aria-pressed="true"]', description: 'The pressed toggle: one at a time, or several with `multiple`.' },
+  { name: 'Container', selector: '[role="group"]', description: 'Separate spaces its toggles 4px apart; joined makes one bar, inner corners square, borders shared.' },
+  { name: 'Button', selector: 'button:not([aria-pressed="true"])', description: 'A ToggleButton, with a label or an icon.' },
+  { name: 'Selected', selector: 'button[aria-pressed="true"]', description: 'The toggle that is on: exactly one.' },
 ]
 
-/** One pressed and one not, so the docs can point at each. */
+/** One on and one off, so the docs can point at each. */
 export const Anatomy: Story = {
   tags: ['!dev'],
-  args: { defaultValue: ['board'] },
+  args: { defaultValue: 'board' },
   render: (args) => (
-    <ToggleGroup {...args}>
-      <ToggleButton value="list">List</ToggleButton>
-      <ToggleButton value="board">Board</ToggleButton>
-    </ToggleGroup>
+    <ButtonGroup {...args}>
+      <ToggleButton value="list" appearance="outlined">List</ToggleButton>
+      <ToggleButton value="board" appearance="outlined">Board</ToggleButton>
+    </ButtonGroup>
   ),
   play: async ({ canvasElement }) => {
     const found = await expectAnatomy(canvasElement, anatomyParts)
@@ -347,19 +268,19 @@ export const Anatomy: Story = {
   },
 }
 
-/** Guidelines, Do: one look across the group, so only the pressed one stands out. */
+/** Guidelines, Do: one look across the group, so only the one that is on stands out. */
 export const DoSameLook: Story = {
-  render: (args) => <ToggleGroup {...args}>{views}</ToggleGroup>,
+  render: (args) => <ButtonGroup {...args}>{views}</ButtonGroup>,
 }
 
-/** Guidelines, Don't: a different variant per button reads as several states at once. */
+/** Guidelines, Don't: a different variant per toggle reads as several states at once. */
 export const DontMixLooks: Story = {
   tags: ['!dev'],
   render: (args) => (
-    <ToggleGroup {...args}>
-      <ToggleButton value="list">List</ToggleButton>
+    <ButtonGroup {...args}>
+      <ToggleButton value="list" appearance="outlined">List</ToggleButton>
       <ToggleButton value="board" variant="destructive">Board</ToggleButton>
       <ToggleButton value="calendar" appearance="ghost">Calendar</ToggleButton>
-    </ToggleGroup>
+    </ButtonGroup>
   ),
 }

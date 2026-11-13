@@ -111,9 +111,9 @@ export const Default: Story = {
     // A one-line item is 36px: 8px padding around a 20px line. offsetHeight, so the popup's opening scale does not count.
     const edit = within(menu).getByRole<HTMLElement>('menuitem', { name: /Edit/ })
     await expect(edit.offsetHeight).toBe(36)
-    // Atlassian's dropdown menu: items 12px inside the popup (11px padding and the 1px border), 12px
-    // inline padding and 12px between an item's parts, 2px between items.
-    await expect(getComputedStyle(menu).paddingLeft).toBe('11px')
+    // Items 4px inside the popup's border, 12px inline padding and 12px between an item's parts,
+    // 2px between items.
+    await expect(getComputedStyle(menu).paddingLeft).toBe('4px')
     await expect(getComputedStyle(edit).paddingLeft).toBe('12px')
     await expect(getComputedStyle(edit).columnGap).toBe('12px')
     const items = within(menu).getAllByRole<HTMLElement>('menuitem')

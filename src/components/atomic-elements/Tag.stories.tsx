@@ -126,7 +126,7 @@ const lines = [
  */
 export const InText: Story = {
   render: (args) => (
-    <div style={{ fontFamily: 'var(--font-sans)', color: 'var(--foreground)' }}>
+    <div style={{ fontFamily: 'var(--font-sans)', color: 'var(--color-text)' }}>
       {lines.map(([name, fontSize, lineHeight, , fontFamily]) => (
         <div key={name} data-testid={name} style={{ fontSize, lineHeight, fontFamily }}>
           <span>Invoice 1041</span> <Tag {...args} />
@@ -276,7 +276,7 @@ export const Contrast: Story = {
   render: (args) => (
     <div>
       {(['light', 'dark'] as const).map((mode) => (
-        <Theme key={mode} appearance={mode} style={{ ...row, background: 'var(--background)', padding: 4 }}>
+        <Theme key={mode} appearance={mode} style={{ ...row, background: 'var(--color-surface)', padding: 4 }}>
           {(['subtle', 'outlined', 'solid'] as const).flatMap((appearance) =>
             (appearance === 'solid' ? statuses : TAG_VARIANTS).map((variant) => (
               <Tag

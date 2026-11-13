@@ -19,16 +19,17 @@ export interface ChartLegendProps {
   onToggle?: (key: string) => void
   /** Called with the key under the pointer or focus, null when it leaves. Charts use it to fade the other series. */
   onFocusChange?: (key: string | null) => void
-  orientation?: 'horizontal' | 'vertical'
+  /** `dot` for bars and slices, `line` for line and area series. */
+  marker?: 'dot' | 'line'
   className?: string
 }
 
-/** Swatch, label and value per series. As toggles, it shows and hides series in the chart above it. */
-export function ChartLegend({ items, hiddenKeys = [], onToggle, onFocusChange, orientation = 'horizontal', className }: ChartLegendProps) {
+/** Swatch, label and value per series, centred in a wrapping row. As toggles, it shows and hides series in the chart above it. */
+export function ChartLegend({ items, hiddenKeys = [], onToggle, onFocusChange, marker = 'dot', className }: ChartLegendProps) {
   const visibleCount = items.length - hiddenKeys.length
   return (
     <ul
-      className={cn(styles.legend, orientation === 'vertical' && styles.legendVertical, className)}
+      className={cn(styles.legend, className)}
       aria-label="Legend"
       onPointerLeave={() => onFocusChange?.(null)}
     >
@@ -36,7 +37,7 @@ export function ChartLegend({ items, hiddenKeys = [], onToggle, onFocusChange, o
         const isHidden = hiddenKeys.includes(item.key)
         const content = (
           <>
-            <span className={styles.swatch} style={{ '--swatch': item.color } as CSSProperties} aria-hidden="true" />
+            <span className={cn(styles.swatch, marker === 'line' && styles.swatchLine)} style={{ '--swatch': item.color } as CSSProperties} aria-hidden="true" />
             <span className={styles.legendLabel}>{item.label}</span>
             {item.value !== undefined && <span className={styles.legendValue}>{item.value}</span>}
           </>

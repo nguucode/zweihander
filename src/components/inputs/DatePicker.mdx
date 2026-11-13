@@ -72,18 +72,15 @@ in a panel. Its days, header and paging buttons are specified there.
 ## Measurements
 
 The field is the kit's field: `sm` is 32px and `md` is 40px, one step
-taller than a Button, with the same padding, icon and type in both. As
-Atlassian's date picker, which is its Select, the date starts 8px inside
-the edge. The calendar button is not Select's 12px chevron: it is a 16px
-icon in a 24px target, its centre 20px from the outer edge, so the edge
-and the end padding make 12px together.
+taller than a Button, with the same 10px padding, icon and type in both.
+The calendar button is a 16px icon in a 24px target, pulled into the
+padding so the icon ends 10px inside the edge, 8px after the date.
 
 <SpecTable
   caption="sm"
   rows={[
     { part: 'Field', property: 'Height', token: '--control-md' },
-    { part: 'Field', property: 'Inline padding, start', token: '--space-2' },
-    { part: 'Field', property: 'Inline end, edge and padding together', token: '--space-3' },
+    { part: 'Field', property: 'Inline padding', token: '--space-2-5' },
     { part: 'Field', property: 'Corner radius', token: '--control-md-radius-field' },
     { part: 'Field', property: 'Gap', token: '--space-2' },
     { part: 'Calendar button', property: 'Icon size', token: '--icon-md' },
@@ -96,8 +93,7 @@ and the end padding make 12px together.
   caption="md"
   rows={[
     { part: 'Field', property: 'Height', token: '--control-lg' },
-    { part: 'Field', property: 'Inline padding, start', token: '--space-2' },
-    { part: 'Field', property: 'Inline end, edge and padding together', token: '--space-3' },
+    { part: 'Field', property: 'Inline padding', token: '--space-2-5' },
     { part: 'Field', property: 'Corner radius', token: '--control-md-radius-field' },
     { part: 'Field', property: 'Gap', token: '--space-2' },
     { part: 'Calendar button', property: 'Icon size', token: '--icon-md' },
@@ -128,29 +124,29 @@ wider than the screen less 16px a side.
 <SpecTable
   caption="Field"
   rows={[
-    { part: 'Field', property: 'Background', token: '--card' },
-    { part: 'Field', property: 'Border', token: '--field-border' },
-    { part: 'Label, input', property: 'Colour', token: '--foreground' },
-    { part: 'Placeholder, helper, calendar icon', property: 'Colour', token: '--muted-foreground' },
-    { part: 'Required asterisk', property: 'Colour', token: '--danger-text' },
-    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+    { part: 'Field', property: 'Background', token: '--color-surface-raised' },
+    { part: 'Field', property: 'Border', token: '--color-border-input' },
+    { part: 'Label, input', property: 'Colour', token: '--color-text' },
+    { part: 'Placeholder, helper, calendar icon', property: 'Colour', token: '--color-text-subtlest' },
+    { part: 'Required asterisk', property: 'Colour', token: '--color-text-danger' },
+    { part: 'Focus ring', property: 'Colour', token: '--color-border-focused' },
   ]}
 />
 
 <SpecTable
   caption="Validation"
   rows={[
-    { part: 'Border, helper, focus ring, error', property: 'Colour', token: '--danger-text' },
-    { part: 'Border, helper, success', property: 'Colour', token: '--success-text' },
+    { part: 'Border, helper, focus ring, error', property: 'Colour', token: '--color-text-danger' },
+    { part: 'Border, helper, success', property: 'Colour', token: '--color-text-success' },
   ]}
 />
 
 <SpecTable
   caption="Popover"
   rows={[
-    { part: 'Panel', property: 'Background', token: '--popover' },
-    { part: 'Panel', property: 'Colour', token: '--popover-foreground' },
-    { part: 'Panel', property: 'Border', token: '--border' },
+    { part: 'Panel', property: 'Background', token: '--color-surface-overlay' },
+    { part: 'Panel', property: 'Colour', token: '--color-text' },
+    { part: 'Panel', property: 'Border', token: '--color-border' },
     { part: 'Panel', property: 'Shadow', token: '--shadow-overlay' },
   ]}
 />
@@ -177,15 +173,15 @@ its page.
   <DatePicker label="Start date" locale="en-GB" defaultValue={new Date(2026, 8, 18)} />
 </States>
 
-- **Focus** is a 2px `--ring` outline, 2px outside the field, drawn while
+- **Focus** is a 2px `--color-border-focused` outline, 2px outside the field, drawn while
   the input has focus, by pointer too. In the error state the ring is
-  `--danger-text`. The calendar button draws its own ring when tabbed to.
-- **Error** turns the edge and the helper `--danger-text`. It is also
+  `--color-text-danger`. The calendar button draws its own ring when tabbed to.
+- **Error** turns the edge and the helper `--color-text-danger`. It is also
   shown on its own while the typed text is not a date, or is outside
   `min` and `max`: the helper then gives the expected pattern.
 - **Hover** changes nothing on the field; the calendar icon darkens from
-  `--muted-foreground` to `--foreground`.
-- **Read-only** fills the box with `--surface-filled`, as every
+  `--color-text-subtlest` to `--color-text`.
+- **Read-only** fills the box with `--color-background-input`, as every
   Zweihänder field does. The input stays focusable and copyable and its
   value is submitted; the calendar icon stays but is not a button, so the
   calendar never opens. Say why in `helperText`.
@@ -247,7 +243,8 @@ be used cannot be chosen, rather than refusing it after submit.
 
 - The input is a labelled text box with `inputmode="numeric"` for a
   number keypad; while the text is not a valid date it has
-  `aria-invalid` and the helper explains the format.
+  `aria-invalid` and the helper explains the format. Without a visible
+  label, pass `aria-label` to name the input.
 - The calendar button is named "Choose date", with the current date when
   there is one. Alt+Down in the input opens it too.
 - `readOnly` puts `readonly` on the input: screen readers announce it,

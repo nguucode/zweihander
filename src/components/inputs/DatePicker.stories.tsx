@@ -183,14 +183,14 @@ export const Required: Story = {
   play: async ({ canvas }) => {
     const input = canvas.getByRole('textbox', { name: /Start date/ })
     await expect(input).toBeRequired()
-    // As Atlassian's date picker: the date starts 9px from the box's outer
-    // edge, and the 16px calendar icon's centre is 20px from the end, in a
-    // 24px target.
+    // The date starts 11px from the box's outer edge (the 1px edge and 10px
+    // of padding), and the 16px calendar icon ends there too, its centre
+    // 19px from the end, in a 24px target.
     const edge = input.parentElement!.getBoundingClientRect()
     const trigger = canvas.getByRole('button', { name: 'Choose date' })
     const button = trigger.getBoundingClientRect()
-    await expect(input.getBoundingClientRect().left - edge.left).toBe(9)
-    await expect(edge.right - (button.left + button.right) / 2).toBe(20)
+    await expect(input.getBoundingClientRect().left - edge.left).toBe(11)
+    await expect(edge.right - (button.left + button.right) / 2).toBe(19)
     await expect([button.width, button.height]).toEqual([24, 24])
     await expect(trigger.querySelector(':scope > svg')!.getBoundingClientRect().width).toBe(16)
   },

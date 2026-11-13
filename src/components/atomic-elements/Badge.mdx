@@ -105,54 +105,54 @@ out, with a 2px ring.
 <SpecTable
   caption="primary"
   rows={[
-    { part: 'Container and dot', property: 'Background', token: '--primary' },
-    { part: 'Count', property: 'Colour', token: '--primary-foreground' },
+    { part: 'Container and dot', property: 'Background', token: '--color-background-brand-bold' },
+    { part: 'Count', property: 'Colour', token: '--color-text-brand-inverse' },
   ]}
 />
 
 <SpecTable
   caption="accent"
   rows={[
-    { part: 'Container and dot', property: 'Background', token: '--foreground' },
-    { part: 'Count', property: 'Colour', token: '--background' },
+    { part: 'Container and dot', property: 'Background', token: '--color-text' },
+    { part: 'Count', property: 'Colour', token: '--color-surface' },
   ]}
 />
 
 <SpecTable
   caption="secondary"
   rows={[
-    { part: 'Container', property: 'Background', token: '--secondary' },
-    { part: 'Count', property: 'Colour', token: '--secondary-foreground' },
-    { part: 'Dot', property: 'Background', token: '--muted-foreground' },
+    { part: 'Container', property: 'Background', token: '--color-background-neutral' },
+    { part: 'Count', property: 'Colour', token: '--color-text' },
+    { part: 'Dot', property: 'Background', token: '--color-text-subtlest' },
   ]}
 />
 
 <SpecTable
   caption="destructive"
   rows={[
-    { part: 'Container and dot', property: 'Background', token: '--destructive' },
-    { part: 'Count', property: 'Colour', token: '--destructive-foreground' },
+    { part: 'Container and dot', property: 'Background', token: '--color-background-danger-bold' },
+    { part: 'Count', property: 'Colour', token: '--color-text-danger-inverse' },
   ]}
 />
 
 <SpecTable
   caption="success"
   rows={[
-    { part: 'Container and dot', property: 'Background', token: '--success' },
-    { part: 'Count', property: 'Colour', token: '--success-foreground' },
+    { part: 'Container and dot', property: 'Background', token: '--color-background-success-bold' },
+    { part: 'Count', property: 'Colour', token: '--color-text-success-inverse' },
   ]}
 />
 
 <SpecTable
   caption="warning"
   rows={[
-    { part: 'Container', property: 'Background', token: '--warning' },
-    { part: 'Count', property: 'Colour', token: '--warning-foreground' },
-    { part: 'Dot', property: 'Background', token: '--warning-indicator' },
+    { part: 'Container', property: 'Background', token: '--color-background-warning-bold' },
+    { part: 'Count', property: 'Colour', token: '--color-text-warning-inverse' },
+    { part: 'Dot', property: 'Background', token: '--color-icon-warning' },
   ]}
 />
 
-<SpecTable caption="Floating, every variant" rows={[{ part: 'Ring', property: 'Colour', token: '--background' }]} />
+<SpecTable caption="Floating, every variant" rows={[{ part: 'Ring', property: 'Colour', token: '--color-surface' }]} />
 
 A dot has no text to carry it, so it must reach 3:1 against the page on its
 own. That is why the `secondary` and `warning` dots step to a darker colour

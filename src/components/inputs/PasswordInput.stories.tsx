@@ -6,7 +6,7 @@ import { TextInput } from './TextInput'
 
 const meta = {
   title: 'Components/Inputs/PasswordInput',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: PasswordInput,
   // Every prop is listed by hand: docgen cannot read the props it inherits
   // from TextInput, and these are the docs' API table and the Playground panel.
@@ -80,6 +80,13 @@ export const Default: Story = {
     await expect(input).toHaveAttribute('type', 'password')
     await expect(input).toHaveAttribute('autocomplete', 'current-password')
     const toggle = canvas.getByRole('button', { name: 'Show password' })
+    // A plain word inside the box: no fill, the box's full height inside its
+    // 1px edge, and 4px from the end.
+    const box = input.parentElement!.getBoundingClientRect()
+    const button = toggle.getBoundingClientRect()
+    await expect(getComputedStyle(toggle).backgroundColor).toBe('rgba(0, 0, 0, 0)')
+    await expect(button.height).toBe(box.height - 2)
+    await expect(box.right - button.right).toBe(5)
     await userEvent.type(input, 'hunter2')
     // The button says what it does next; its text is the visible part of its name.
     await userEvent.click(toggle)
@@ -163,7 +170,7 @@ export const Disabled: Story = {
 export const anatomyParts = [
   { name: 'Label', selector: 'label', description: 'Names the field and, from a text label, the Show / Hide button.' },
   { name: 'Field', selector: 'input', description: 'Dots while hidden, the text while shown.' },
-  { name: 'Show / Hide button', selector: 'button', description: 'An end add-on. Says what it does next.' },
+  { name: 'Show / Hide button', selector: 'button', description: 'A plain word at the end of the box, no fill or divider. Says what it does next.' },
   { name: 'Rule', selector: '[data-met]', description: 'One thing the password needs, ticked once met. Optional.' },
 ]
 

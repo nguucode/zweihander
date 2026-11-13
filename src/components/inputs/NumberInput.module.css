@@ -1,10 +1,8 @@
-/* The stepper buttons float inside the field: no divider, a small inset
-   from the end, and a fill only on hover. */
+/* The stepper buttons float inside the field: no divider, a fill only on
+   hover. 8px from the value to the steppers (the box's gap), 2px between
+   the two, and 6px from the end, so each icon sits 10px in. */
 .group.group {
-  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- 2px between stepper buttons, below the spacing scale on purpose */
-  gap: 2px;
-  /* 2px, so the chevron sits 7px from the edge, as in the other fields. */
-  padding-inline-end: var(--space-0-5);
+  padding-inline-end: var(--space-1-5);
 }
 
 .input {
@@ -12,6 +10,9 @@
 }
 
 /* A 24px square in either size: the in-field button, centred in the box. */
+.step + .step {
+  margin-inline-start: calc(var(--space-0-5) - var(--space-2));
+}
 .step {
   display: inline-flex;
   align-items: center;
@@ -24,7 +25,7 @@
   border: 0;
   border-radius: var(--radius-sm);
   background: transparent;
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
   font-size: var(--field-icon);
   cursor: var(--cursor-button);
   transition:
@@ -33,12 +34,12 @@
 }
 
 .step:hover {
-  background: var(--accent);
-  color: var(--foreground);
+  background: var(--color-background-neutral);
+  color: var(--color-text);
 }
 
 .step:focus-visible {
-  outline: var(--focus-width) solid var(--ring);
+  outline: var(--focus-width) solid var(--color-border-focused);
   outline-offset: var(--focus-offset-inset);
 }
 
@@ -51,13 +52,17 @@
 .step:disabled:hover,
 .step[data-disabled]:hover {
   background: transparent;
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
 }
 
 /* On touch they widen to 44px, the only direction they can grow without
-   overlapping the input or each other. */
+   overlapping the input or each other: the 2px pull between them is
+   dropped, so the two 44px targets do not overlap. */
 @media (pointer: coarse) {
   .step {
     min-inline-size: var(--target-coarse);
+  }
+  .step + .step {
+    margin-inline-start: 0;
   }
 }

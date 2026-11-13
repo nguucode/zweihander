@@ -19,8 +19,8 @@ acted on, and a total row can sum them up.
 
 ## Variants
 
-Table has one size: 4px above and below each cell, so a row of text is
-28px, and a row that holds a button or a field grows to fit it. Any table
+Table has one size: 8px round each cell, so a row of text is
+36px, and a row that holds a button or a field grows to fit it. Any table
 takes any of these together: a selectable table can also expand its rows
 and keep its header in view.
 
@@ -44,17 +44,6 @@ selection and survives sorting:
 A menu at the end of each row. A row with nothing to do gets no button:
 
 <Canvas of={TableStories.RowActions} />
-
-`hasRowContextMenu` also opens a row's `rowActions` at the pointer on
-right click or long press, through [Context
-Menu](?path=/docs/components-navigation-context-menu--docs), as Stacked
-List and Grid List do. It is off by default: the row then loses the
-browser's own menu, so people can no longer copy a cell's text or open a
-link in a cell in a new tab from it. Turn it on for tables people work
-through record by record, not ones they read or copy from. A row with no
-items, and an expanded row's details, keep the browser's menu.
-
-<Canvas of={TableStories.RowContextMenu} />
 
 A total row under the rows, which sorting leaves at the bottom. The table
 does not add anything up: you pass each column's `footer`, so you decide
@@ -112,14 +101,14 @@ A row has no height of its own: it is as tall as what its cells hold.
 
 | What the row holds | Row height |
 | --- | --- |
-| One line of text (20px), or a Tag | 28px |
-| A checkbox, an expand button or an actions button (24px) | 28px |
-| A 24px button | 32px |
-| A 32px button or field | 40px |
-| Header (one 16px line) | 24px |
+| One line of text (20px), or a Tag | 36px |
+| A checkbox, an expand button or an actions button (24px) | 36px |
+| A 24px button | 40px |
+| A 32px button or field | 48px |
+| Header (one 16px line) | 32px |
 
 A body row is exactly that tall: there is no divider under it. The header
-and the total row add their 2px rule, and a table that has rows adds one
+and the total row add their 1px rule, and a table that has rows adds one
 more under its last row. The checkbox, expand and actions
 columns take 2px less block padding than the other cells, so their 24px
 buttons do not make a row of text taller.
@@ -127,12 +116,11 @@ buttons do not make a row of text taller.
 <SpecTable
   caption="Every table"
   rows={[
-    { part: 'Row', property: 'Cell block padding', token: '--space-1' },
-    { part: 'Header row', property: 'Cell block padding', token: '--space-1' },
-    { part: 'Cell', property: 'Inline padding, between columns', token: '--space-2' },
-    { part: 'Header row', property: 'Rule under it', token: '--border-width-selected' },
-    { part: 'Total row', property: 'Rule above it', token: '--border-width-selected' },
-    { part: 'Table', property: 'Rule under it, with rows', token: '--border-width-selected' },
+    { part: 'Cell', property: 'Padding, all round', token: '--space-2' },
+    { part: 'Header cell', property: 'Padding, all round', token: '--space-2' },
+    { part: 'Header row', property: 'Rule under it', token: '--border-width' },
+    { part: 'Total row', property: 'Rule above it', token: '--border-width' },
+    { part: 'Table', property: 'Rule under it, with rows', token: '--border-width' },
     { part: 'Cell', property: 'Font size', token: '--text-body' },
     { part: 'Cell', property: 'Line height', token: '--leading-body' },
     { part: 'Header cell', property: 'Font size', token: '--text-body-sm' },
@@ -142,11 +130,10 @@ buttons do not make a row of text taller.
     { part: 'Sort button', property: 'Gap', token: '--space-1' },
     { part: 'Sort button', property: 'Corner radius', token: '--radius-sm' },
     { part: 'Sort icon', property: 'Size', token: '--icon-md' },
-    { part: 'Selection column', property: 'Width', token: '--box-sm' },
-    { part: 'Expand column', property: 'Width, first in the row', token: '--box-sm' },
-    { part: 'Expand column', property: 'Width, after the selection column', token: '--box-md' },
+    { part: 'Selection column', property: 'Width', token: '--box-md' },
+    { part: 'Expand column', property: 'Width', token: '--box-lg' },
     { part: 'Expand icon', property: 'Size', token: '--icon-md' },
-    { part: 'Actions column', property: 'Width', token: '--box-sm' },
+    { part: 'Actions column', property: 'Width', token: '--box-lg' },
     { part: 'Expanded row', property: 'Block start padding', token: '--space-2' },
     { part: 'Expanded row', property: 'Block end padding', token: '--space-4' },
     { part: 'Caption', property: 'Block start padding', token: '--space-6' },
@@ -173,7 +160,7 @@ only on hover and drag. A column is 48px to 1200px wide; the arrow
 keys move it 16px at a time.
 
 Rows have no divider between them: the hover tint and the selection fill
-tell them apart. The header ends on a 2px rule and its labels are
+tell them apart. The header ends on a 1px rule and its labels are
 semibold; the total row sits under the same rule, so the sum reads as a
 sum. A table that has rows closes on that rule too, as Atlassian's dynamic
 table: under the last row, an open row's content or the total row,
@@ -185,18 +172,14 @@ The sort button pulls itself out
 by its own padding, so its label lines up with the cells below and its
 hover fill adds nothing to the header's height.
 
-**The table's edges are flush.** The first cell of every row has no
-inline-start padding and the last none at its end, as Atlassian's dynamic
-table: the first column's text, the caption and an open row's content all
-start on the table's left edge, and an end-aligned last column ends on its
-right edge. So does everything that hangs off an edge: the checkbox, the
-expand button when there is no checkbox, the actions button. Their columns
-are 24px wide there (the button alone, or the 16px checkbox and 8px after
-it); the expand column after a checkbox is 32px, 8px and its button. At an
-edge a sort button is not pulled out: its label stays flush and its hover
-fill starts at the label. Focus rings in the edge cells are drawn inside
-the control, because the scroll container clips at the edge. Figures are tabular, so numbers line up
-column-wide.
+**Every cell is padded 8px all round**, the first and last of a row
+included: the first column's text, the caption and an open row's content
+all start 8px in from the table's left edge, and an end-aligned last
+column ends 8px short of its right edge. The control columns are their
+control with 8px either side: 32px for the 16px checkbox, 40px for the
+24px expand and actions buttons. Focus rings in the control columns are
+drawn inside the control, because the cell has no room for an outset
+ring. Figures are tabular, so numbers line up column-wide.
 
 ## Color
 
@@ -205,55 +188,55 @@ Switch the theme and the accent in the toolbar: the values follow.
 <SpecTable
   caption="Header"
   rows={[
-    { part: 'Header row', property: 'Background when sticky', token: '--card' },
-    { part: 'Header label', property: 'Colour', token: '--muted-foreground' },
-    { part: 'Sort icon, sorted column', property: 'Colour', token: '--foreground' },
-    { part: 'Header row', property: 'Rule under it', token: '--border' },
+    { part: 'Header row', property: 'Background when sticky', token: '--color-surface-raised' },
+    { part: 'Header label', property: 'Colour', token: '--color-text' },
+    { part: 'Sort icon', property: 'Colour', token: '--color-text-subtlest' },
+    { part: 'Sort icon, sorted column', property: 'Colour', token: '--color-icon-brand' },
+    { part: 'Header row', property: 'Rule under it', token: '--color-border' },
   ]}
 />
 
 <SpecTable
   caption="Row"
   rows={[
-    { part: 'Container', property: 'Background', token: '--card' },
-    { part: 'Cell', property: 'Colour', token: '--card-foreground' },
-    { part: 'Total row', property: 'Rule above it', token: '--border' },
+    { part: 'Container', property: 'Background', token: '--color-surface-raised' },
+    { part: 'Cell', property: 'Colour', token: '--color-text' },
+    { part: 'Total row', property: 'Rule above it', token: '--color-border' },
   ]}
 />
 
 <SpecTable
   caption="Hover"
   rows={[
-    { part: 'Row', property: 'Background', token: '--accent' },
-    { part: 'Sort button', property: 'Background', token: '--accent' },
-    { part: 'Sort button', property: 'Colour', token: '--accent-foreground' },
+    { part: 'Row', property: 'Background', token: '--color-background-neutral' },
+    { part: 'Sort button', property: 'Background', token: '--color-background-neutral' },
+    { part: 'Sort button', property: 'Colour', token: '--color-text' },
   ]}
 />
 
 <SpecTable
   caption="Selected"
   rows={[
-    { part: 'Row', property: 'Background', token: '--primary-subtle' },
+    { part: 'Row', property: 'Background', token: '--color-background-brand-subtlest' },
   ]}
 />
 
 <SpecTable
   caption="Resize handle"
   rows={[
-    { part: 'Handle line', property: 'Colour', token: '--border' },
-    { part: 'Handle line, hover and drag', property: 'Colour', token: '--primary' },
+    { part: 'Handle line', property: 'Colour', token: '--color-border' },
+    { part: 'Handle line, hover and drag', property: 'Colour', token: '--color-background-brand-bold' },
   ]}
 />
 
-<SpecTable caption="Every part" rows={[{ part: 'Focus ring', property: 'Colour', token: '--ring' }]} />
+<SpecTable caption="Every part" rows={[{ part: 'Focus ring', property: 'Colour', token: '--color-border-focused' }]} />
 
 - The header has no fill. With `hasStickyHeader` it takes the container's
-  own `--card`, only so the rows scroll under it.
+  own `--color-surface-raised`, only so the rows scroll under it.
 - Rows are not striped, and have no divider: hover and selection tint
-  the row under the pointer or the checkbox, from edge to edge, so the
-  tint starts where the first cell's text does.
-- The sort icon of a column that is not sorted is the label's colour at 60%
-  opacity.
+  the row under the pointer or the checkbox, from edge to edge.
+- The sort icon of a column that is not sorted is `--color-text-subtlest`;
+  the sorted column's is the brand colour.
 - **Two selected rows next to each other** read as one filled block;
   each row's checkbox says which are in it.
 - **An open row and its content read as one block**: the content row
@@ -292,19 +275,19 @@ Switch the theme and the accent in the toolbar: the values follow.
 Each example forces the state on every row and button at once; on screen
 it is the one under the pointer or the keyboard.
 
-- **Hover** tints the row with `--accent`, and the sort button too. The
+- **Hover** tints the row with `--color-background-neutral`, and the sort button too. The
   content row of an open row takes no hover of its own, only its row's.
-- **Focus** is a 2px `--ring` outline, drawn 2px inside the sort button.
+- **Focus** is a 2px `--color-border-focused` outline, drawn 2px inside the sort button.
   The checkboxes and the expand button keep
   their own focus rings.
 - **Pressed** has no look of its own: the click sorts, selects or opens,
   and that state's look follows.
-- **Resize handle**: hover and drag thicken its line to 2px `--primary`;
-  focus draws the `--ring` outline inside the handle.
+- **Resize handle**: hover and drag thicken its line to 2px `--color-background-brand-bold`;
+  focus draws the `--color-border-focused` outline inside the handle.
 - **Disabled**: Table has none. A row that cannot be acted on is a row
   without the control.
 - **Sorted** shows the column's icon at full colour, pointing up or down.
-- **Selected** tints the row with `--primary-subtle`.
+- **Selected** tints the row with `--color-background-brand-subtlest`.
 - **Expanded** turns the chevron to point down and opens the content row
   under it.
 
@@ -344,30 +327,29 @@ whenever it is used. So `size="sm"` and any `density` warn, and
 
 With `sort` controlled, the table leaves the order to you. `sortRows(rows,
 columns, sort)` returns the rows in the order the table would sort them,
-so you can sort every row before slicing out a page, as the
-[Projects](?path=/docs/templates-object-management-projects--docs)
-template does.
+so you can sort every row before slicing out a page.
 
 ### Differences from the spec
 
-Cell sizing follows Atlassian's dynamic table.
+Cell sizing follows the Figma library: Atlassian's dynamic table with 8px
+round every cell.
 
-- **No row height, and one size.** A cell has 4px block and 8px inline
-  padding and the row is as tall as its content; rows were a fixed 48px
+- **No row height, and one size.** A cell has 8px padding all round
+  and the row is as tall as its content; rows were a fixed 48px
   and 40px before, picked by `density` and then `size`, which are
   deprecated.
-- **No row dividers.** Only the 2px rule under the header and the one
+- **No row dividers.** Only the 1px rule under the header and the one
   that closes a table with rows, as Atlassian draws them; rows are told
   apart by the hover tint and the selection fill.
-- **The total row has a 2px rule above it.** Atlassian's table has no
+- **The total row has a 1px rule above it.** Atlassian's table has no
   total row; the rule is the header's, turned over. The table's closing
   rule then sits under the total row.
-- **No header fill, and flush edges.** As Atlassian's dynamic table: the
-  header is its labels over the rule, and the first and last cells have no
-  padding at the table's edge. The hover and selection tints run edge to
-  edge and start at the text, as Atlassian's do.
-- **The caption** sits 24px from the top and 8px above the table, flush
-  with the table's edge, as Atlassian's. Its type stays the cells' size,
+- **No header fill, and padded edges.** The header is its labels over the
+  rule, as Atlassian's dynamic table. Unlike Atlassian's, the first and
+  last cells keep their 8px at the table's edge. The hover and selection
+  tints run edge to edge.
+- **The caption** sits 24px from the top and 8px above the table, 8px in
+  from the edge where the cells' text starts. Its type stays the cells' size,
   semibold; Atlassian's is a 20px heading.
 
 </DocTab>
@@ -418,10 +400,6 @@ Pass `expandedIds` to open rows from outside the table:
 
 ## When not to use
 
-- **For a whole list page** with search, filters, bulk actions and paging.
-  Start from the
-  [Data Table Page](?path=/docs/patterns-application-ui-data-table-page--docs)
-  pattern, which puts a Table together with them.
 - **For records that do not share fields**, or that are read one at a
   time, like products in a shop. Use [Cards](?path=/docs/components-data-display-card--docs).
 - **For layout.** A table announces rows and columns to a screen reader;
@@ -455,8 +433,6 @@ Pass `expandedIds` to open rows from outside the table:
   Escape closes it, and focus returns to the button. A row with no items
   has no button.
 - The actions column's header is "Actions", visually hidden.
-- With `hasRowContextMenu`, the right-click menu is a shortcut to the
-  same entries, never the only way in: the ⋯ button stays.
 - When the table is wider than its box and nothing in it takes focus, the
   scroll box becomes a tab stop with a focus ring: `role="region"` named by
   the caption, which the browser scrolls with the arrow keys. A table that

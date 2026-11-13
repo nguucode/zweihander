@@ -10,7 +10,8 @@ import * as ColumnChooserStories from './ColumnChooser.stories'
 <DocTab value="overview">
 
 A button above a table that opens a list of its columns, each with a
-checkbox to show or hide it, and a Reset that brings back the default set.
+checkbox to show or hide it, and a Reset columns row that brings back the
+default set.
 
 <Status of={ColumnChooserStories} />
 
@@ -46,8 +47,8 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/column-chooser.json
 
 - Source: [src/components/data-display/ColumnChooser.tsx](https://github.com/nguucode/zweihander/blob/main/src/components/data-display/ColumnChooser.tsx)
 - Spec: none on uiguideline.com; built from the Application UI catalogue, whose source for widths is shadcn's Resizable. Widths are Table's `isResizable` instead, a handle in each header rather than resizable panels
-- Behaviour: the kit's [Popover](?path=/docs/components-overlays-popover--docs), [Checkbox](?path=/docs/components-controls-checkbox--docs) and [Button](?path=/docs/components-buttons-button--docs)
-- Figma: not in the library yet
+- Behaviour: the kit's [Popover](?path=/docs/components-overlays-popover--docs), [Checkbox](?path=/docs/components-controls-checkbox--docs) and [Button](?path=/docs/components-buttons-button--docs); the popup is styled as a [Select](?path=/docs/components-inputs-select--docs) list's shell and options
+- Figma: the Column Chooser component in the library
 
 </DocTab>
 <DocTab value="specs">
@@ -67,24 +68,48 @@ button where it opens.
 <SpecTable
   caption="Every chooser"
   rows={[
-    { part: 'Checkbox list', property: 'Gap', token: '--space-2' },
-    { part: 'Reset', property: 'Gap above', token: '--space-3' },
+    { part: 'Popup', property: 'Block padding', token: '--space-2' },
+    { part: 'Column checkbox', property: 'Row block padding', token: '--space-1-5' },
+    { part: 'Column checkbox', property: 'Row inline padding', token: '--space-3' },
+    { part: 'Column checkbox', property: 'Row minimum height', token: '--control-md' },
+    { part: 'Column checkbox', property: 'Gap, box to name', token: '--space-2' },
+    { part: 'Separator', property: 'Space above and below', token: '--space-1' },
+    { part: 'Separator', property: 'Thickness', token: '--border-width' },
+    { part: 'Reset', property: 'Inline start padding, past a box', token: '--choice-box' },
+    { part: 'Reset', property: 'Hit area on touch screens', token: '--target-coarse' },
   ]}
 />
 
-The button is a medium Button and Reset a small one; the popover, its
-padding and title are Popover's. Checkboxes keep their own sizes.
+The button is a medium Button. The popup is a list's shell, as Select's,
+with Popover's border, `--radius-lg` corner and `--shadow-overlay`:
+240px wide (or the screen's width, if narrower), 8px above and below the
+rows and none at the sides, so a row's hover fill runs edge to edge. Each
+column is an option's row, 32px, and the whole row is the click target:
+it is the checkbox's label, stretched. Reset columns is one more row, its
+text in line with the column names. Rows grow to 44px on touch screens.
 
 ## Color
 
-The chooser adds no colour of its own: the button is an outlined secondary
-Button, Reset a ghost secondary Button, and the surface is Popover's
-`--popover`. See those pages for their tokens.
+The button is an outlined secondary Button and the popup's surface is
+Popover's `--color-surface-overlay`; see those pages for their tokens.
+
+<SpecTable
+  caption="Rows"
+  rows={[
+    { part: 'Column checkbox, hover', property: 'Background', token: '--color-background-neutral' },
+    { part: 'Reset', property: 'Colour', token: '--color-text' },
+    { part: 'Reset, hover', property: 'Background', token: '--color-background-neutral' },
+    { part: 'Separator', property: 'Colour', token: '--color-border' },
+    { part: 'Reset, focus', property: 'Ring', token: '--color-border-focused' },
+  ]}
+/>
 
 ## States
 
 The chooser is open or closed. The button keeps Button's states; each box
-keeps Checkbox's, and a locked column shows Checkbox's disabled look:
+keeps Checkbox's, and a locked column shows Checkbox's disabled look. A
+row and Reset take `--color-background-neutral` on hover; Reset's focus
+ring is drawn inside it:
 
 <States
   states={[
@@ -111,7 +136,9 @@ keeps Checkbox's, and a locked column shows Checkbox's disabled look:
 
 There is no uiguideline spec. The catalogue's anatomy lists drag to
 reorder as optional; it is left out until a table needs it, because it
-needs a keyboard way to move as well.
+needs a keyboard way to move as well. The popup is a dialog with no
+visible title, named by `label`: it holds checkboxes and a button, which a
+`listbox` cannot.
 
 </DocTab>
 <DocTab value="guidelines">
@@ -140,15 +167,17 @@ once, typically six or more, where different people read different ones.
 ## Accessibility
 
 - The button reports `aria-haspopup="dialog"` and `aria-expanded`. The
-  popup is a `role="dialog"` named by the label, "Columns".
+  popup is a `role="dialog"` named by the label, "Columns", through
+  `aria-label`: it shows no title.
 - Opening moves focus into the dialog; Escape closes it and returns focus
   to the button.
 - Each column is a checkbox named by its header, in table order; Space
-  toggles it, and the shown keys are reported in column order, the row
-  header always among them.
+  toggles it, and so does a click anywhere on its row. The shown keys are
+  reported in column order, the row header always among them.
 - The row header column's checkbox, and the last checked one, are
   `aria-disabled`: ticked and unchangeable.
-- Reset is a button named "Reset" that brings back the default columns.
+- Reset is a button named "Reset columns" that brings back the default
+  columns, after a `role="separator"`.
 
 </DocTab>
 </DocTabs>

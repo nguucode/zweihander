@@ -70,10 +70,10 @@ Empty State's, plus the details line.
     { part: 'Container', property: 'Inline padding', token: '--space-group' },
     { part: 'Icon disc', property: 'Size', token: '--space-10' },
     { part: 'Icon disc', property: 'Space below', token: '--space-group' },
-    { part: 'Description', property: 'Space above', token: '--space-inline' },
+    { part: 'Description', property: 'Space above', token: '--space-group' },
     { part: 'Title', property: 'Font size', token: '--text-heading-sm' },
     { part: 'Title', property: 'Line height', token: '--leading-heading-sm' },
-    { part: 'Action', property: 'Space above', token: '--space-group' },
+    { part: 'Action', property: 'Space above', token: '--space-container' },
   ]}
 />
 
@@ -95,7 +95,6 @@ Empty State's, plus the details line.
   caption="Every size"
   rows={[
     { part: 'Description', property: 'Font size', token: '--text-body' },
-    { part: 'Details', property: 'Space above', token: '--space-2' },
     { part: 'Details', property: 'Font', token: '--font-mono' },
     { part: 'Details', property: 'Font size', token: '--text-body-sm' },
     { part: 'Details', property: 'Line height', token: '--leading-body-sm' },
@@ -104,20 +103,21 @@ Empty State's, plus the details line.
 
 ## Color
 
-One tone: danger, on the disc only. The title and description stay
-neutral, so the page does not shout.
+One tone: danger, on the disc and the details line. The title and
+description stay neutral, so the page does not shout.
 
 <SpecTable
   caption="Danger"
   rows={[
-    { part: 'Icon disc', property: 'Background', token: '--danger-subtle' },
-    { part: 'Icon', property: 'Colour', token: '--danger-text' },
-    { part: 'Title', property: 'Colour', token: '--foreground' },
-    { part: 'Description and details', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Icon disc', property: 'Background', token: '--color-background-danger' },
+    { part: 'Icon', property: 'Colour', token: '--color-text-danger' },
+    { part: 'Title', property: 'Colour', token: '--color-text' },
+    { part: 'Description', property: 'Colour', token: '--color-text-subtlest' },
+    { part: 'Details', property: 'Colour', token: '--color-text-danger' },
   ]}
 />
 
-`--danger-text` on `--danger-subtle` is 4.5:1 or more in both modes.
+`--color-text-danger` on `--color-background-danger` is 4.5:1 or more in both modes.
 
 ## States
 

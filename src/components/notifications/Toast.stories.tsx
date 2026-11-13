@@ -84,14 +84,14 @@ export const Variants: Story = {
   render: (args) => (
     <ToastProvider {...args} limit={5}>
       <div style={row}>
-        {(['default', 'info', 'success', 'warning', 'danger'] as const).map((variant) => (
+        {(['neutral', 'info', 'success', 'warning', 'danger'] as const).map((variant) => (
           <Demo key={variant} label={variant} options={{ variant, title: `${variant[0].toUpperCase()}${variant.slice(1)}`, description: 'Something happened.' }} />
         ))}
       </div>
     </ToastProvider>
   ),
   play: async ({ canvas }) => {
-    for (const v of ['default', 'info', 'success', 'warning', 'danger']) await userEvent.click(canvas.getByRole('button', { name: v }))
+    for (const v of ['neutral', 'info', 'success', 'warning', 'danger']) await userEvent.click(canvas.getByRole('button', { name: v }))
     // Each toast is a non-modal dialog; all five fit under the limit.
     // All five fit under the limit. Danger is high priority: an alertdialog
     // whose text Base UI announces assertively through a separate live region.
@@ -271,7 +271,7 @@ export const VariantsStatic: Story = {
   render: () => (
     <Preview
       height="24.5rem"
-      toasts={(['default', 'info', 'success', 'warning', 'danger'] as const).map((variant) => ({
+      toasts={(['neutral', 'info', 'success', 'warning', 'danger'] as const).map((variant) => ({
         variant,
         title: `${variant[0].toUpperCase()}${variant.slice(1)}`,
         description: 'Something happened.',
@@ -301,8 +301,8 @@ export const Pending: Story = {
 
 /** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
 export const anatomyParts = [
-  { name: 'Container', selector: '[role="dialog"]', description: 'The surface, in the opposite appearance to the page.' },
-  { name: 'Icon', selector: '[role="dialog"] > span[aria-hidden="true"]', description: "The variant's filled icon; none for `default`, a spinner while pending." },
+  { name: 'Container', selector: '[role="dialog"]', description: 'The overlay surface, in the page\'s own appearance.' },
+  { name: 'Icon', selector: '[role="dialog"] > span[aria-hidden="true"]', description: "The variant's filled icon; none for `neutral`, a spinner while pending." },
   { name: 'Title', selector: '[role="dialog"] h2', description: 'Semibold. What happened.' },
   { name: 'Description', selector: '[role="dialog"] p', description: 'Optional, muted.' },
   { name: 'Action', selector: '[role="dialog"] button:not([aria-label])', description: 'Optional, one text button, e.g. "Undo".' },

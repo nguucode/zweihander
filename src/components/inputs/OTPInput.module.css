@@ -29,23 +29,27 @@
   padding: 0;
   border: 1px solid var(--field-edge);
   border-radius: var(--otp-radius);
-  background: var(--card);
-  color: var(--foreground);
-  font-family: var(--font-sans);
-  font-size: inherit;
+  background: var(--color-surface-raised);
+  color: var(--color-text);
+  /* The digit is Heading lg (24/28 semibold), so a code reads at a glance;
+     the separator between groups stays body size. */
+  font-family: var(--font-heading);
+  font-size: var(--text-heading-lg);
+  line-height: var(--leading-heading-lg);
+  font-weight: 600;
   font-variant-numeric: tabular-nums;
   text-align: center;
-  caret-color: var(--ring);
+  caret-color: var(--color-border-focused);
   transition: border-color var(--duration-base);
 }
 
 .cell:focus {
-  outline: var(--focus-width) solid var(--ring);
+  outline: var(--focus-width) solid var(--color-border-focused);
   outline-offset: var(--focus-offset);
 }
 
 .cell[aria-invalid='true']:focus {
-  outline-color: var(--danger-text);
+  outline-color: var(--color-text-danger);
 }
 
 .cell:disabled {
@@ -54,11 +58,11 @@
 }
 
 .cell[readonly] {
-  background: var(--surface-filled);
+  background: var(--color-background-input);
 }
 
 .separator {
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
 }
 
 /* A ghost button whose text starts where the cells do. */

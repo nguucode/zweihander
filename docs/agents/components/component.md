@@ -1,6 +1,6 @@
 # Reference: component
 
-Use for everything in `src/components/<category>/`, except `patterns/`.
+Use for everything in `src/components/<category>/`.
 
 ## API conventions
 

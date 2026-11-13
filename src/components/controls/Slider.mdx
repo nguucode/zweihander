@@ -107,20 +107,20 @@ The thumb has a 2px ring. A vertical slider is 12rem tall.
 
 <SpecTable
   rows={[
-    { part: 'Track', property: 'Background', token: '--secondary' },
-    { part: 'Indicator', property: 'Background', token: '--primary-text' },
-    { part: 'Thumb', property: 'Background', token: '--background' },
-    { part: 'Thumb', property: 'Ring', token: '--primary-text' },
-    { part: 'Label', property: 'Colour', token: '--foreground' },
-    { part: 'Value', property: 'Colour', token: '--muted-foreground' },
-    { part: 'Label, disabled', property: 'Colour', token: '--muted-foreground' },
-    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+    { part: 'Track', property: 'Background', token: '--color-background-neutral' },
+    { part: 'Indicator', property: 'Background', token: '--color-text-brand' },
+    { part: 'Thumb', property: 'Background', token: '--color-surface' },
+    { part: 'Thumb', property: 'Ring', token: '--color-text-brand' },
+    { part: 'Label', property: 'Colour', token: '--color-text' },
+    { part: 'Value', property: 'Colour', token: '--color-text-subtlest' },
+    { part: 'Label, disabled', property: 'Colour', token: '--color-text-subtlest' },
+    { part: 'Focus ring', property: 'Colour', token: '--color-border-focused' },
   ]}
 />
 
-The fill is a text colour, as on Progress Bar: `--primary-text` clears
-3:1 on the `--secondary` track for every accent, where the solid
-`--primary` does not.
+The fill is a text colour, as on Progress Bar: `--color-text-brand` clears
+3:1 on the `--color-background-neutral` track for every accent, where the solid
+`--color-background-brand-bold` does not.
 
 ## States
 
@@ -134,10 +134,10 @@ The fill is a text colour, as on Progress Bar: `--primary-text` clears
   <Slider label="Volume" defaultValue={40} showValue />
 </States>
 
-- **Focus** is a 2px `--ring` outline, 2px outside the thumb.
+- **Focus** is a 2px `--color-border-focused` outline, 2px outside the thumb.
 - **Dragging** changes the cursor to a closed hand.
 - **Disabled** dims the track and thumbs to 50%. The label turns
-  `--muted-foreground` and the value stays as it was, so both still read
+  `--color-text-subtlest` and the value stays as it was, so both still read
   at 4.5:1: they are not a native `<label>`, so faded text would fail
   contrast rather than be exempt as part of a disabled control.
 

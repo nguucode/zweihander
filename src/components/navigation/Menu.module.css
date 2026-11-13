@@ -4,22 +4,19 @@
   outline: none;
 }
 
-/* --menu-inset is the gap between the popup's edge and its items: 12px, as
-   the group padding of Atlassian Design's dropdown menu (its newer menu,
-   behind platform-dst-new-menu). The padding gives back the border's
-   pixel. */
+/* The items sit 4px inside the popup's border, as the Figma library binds
+   it, so a highlighted item's corner nests inside the popup's. */
 .popup {
-  --menu-inset: var(--space-3);
   box-sizing: border-box;
   min-inline-size: max(12rem, var(--anchor-width));
   max-block-size: var(--available-height);
   overflow-y: auto;
-  padding: calc(var(--menu-inset) - var(--border-width));
-  border: var(--border-width) solid var(--border);
+  padding: var(--space-1);
+  border: var(--border-width) solid var(--color-border);
   border-radius: var(--radius-lg);
-  background: var(--popover);
+  background: var(--color-surface-overlay);
   box-shadow: var(--shadow-overlay);
-  color: var(--popover-foreground);
+  color: var(--color-text);
   font-family: var(--font-sans);
   font-size: var(--text-body);
   line-height: var(--leading-body);
@@ -64,23 +61,23 @@
    trigger keeps it while its submenu is open. */
 .item[data-highlighted],
 .item[data-popup-open] {
-  background: var(--accent);
-  color: var(--accent-foreground);
+  background: var(--color-background-neutral);
+  color: var(--color-text);
 }
 
 .item[data-disabled] {
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
   opacity: 0.6;
 }
 
 /* Text colour, not the solid: 4.5:1 on the popover and on the hover
    surface. */
 .destructive {
-  color: var(--danger-text);
+  color: var(--color-text-danger);
 }
 .destructive[data-highlighted] {
-  background: var(--danger-subtle);
-  color: var(--danger-text);
+  background: var(--color-background-danger);
+  color: var(--color-text-danger);
 }
 
 /* 12px after the label, on top of the item's gap: a shortcut or a chevron
@@ -102,10 +99,7 @@
 }
 
 .icon {
-  color: var(--muted-foreground);
-}
-.item[data-highlighted] .icon {
-  color: inherit;
+  color: var(--color-text-subtlest);
 }
 .destructive .icon {
   color: inherit;
@@ -113,26 +107,24 @@
 
 .chevron {
   margin-inline-end: calc(var(--space-1) * -1);
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
 }
 
 .shortcut {
   font-family: inherit;
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
   letter-spacing: 0.05em;
 }
 
-/* Edge to edge, 12px above and below: Atlassian draws it as the next
-   group's top border, between two groups' 12px padding. After the row
-   rule above, so its margin wins. */
+/* As wide as the items, 4px from the items above and below: the 2px row
+   gap and the separator's own 2px in the Figma library. One margin here
+   (vertical margins collapse), after the row rule above so it wins. */
 .separator {
   block-size: 1px;
-  /* Out by the popup's padding, which is the inset less its border: 1px
-     more would make the popup scroll sideways. */
-  margin: var(--menu-inset) calc(var(--border-width) - var(--menu-inset));
-  background: var(--border);
+  margin: var(--space-1) 0;
+  background: var(--color-border);
 }
 .separator + * {
   margin-block-start: 0;
@@ -145,7 +137,7 @@
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
   font-weight: 600;
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
 }
 
 /* Items are 36px; on touch they grow to 44px. */

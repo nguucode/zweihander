@@ -79,8 +79,7 @@ padding, icon and type in both.
   caption="sm"
   rows={[
     { part: 'Field', property: 'Height', token: '--control-md' },
-    { part: 'Field', property: 'Inline padding, start', token: '--space-2' },
-    { part: 'Field', property: 'Inline end, edge and padding together', token: '--space-3' },
+    { part: 'Field', property: 'Inline padding', token: '--space-2-5' },
     { part: 'Field', property: 'Corner radius', token: '--control-md-radius-field' },
     { part: 'Calendar button', property: 'Icon size', token: '--icon-md' },
     { part: 'Input', property: 'Font size', token: '--text-body' },
@@ -91,8 +90,7 @@ padding, icon and type in both.
   caption="md"
   rows={[
     { part: 'Field', property: 'Height', token: '--control-lg' },
-    { part: 'Field', property: 'Inline padding, start', token: '--space-2' },
-    { part: 'Field', property: 'Inline end, edge and padding together', token: '--space-3' },
+    { part: 'Field', property: 'Inline padding', token: '--space-2-5' },
     { part: 'Field', property: 'Corner radius', token: '--control-md-radius-field' },
     { part: 'Calendar button', property: 'Icon size', token: '--icon-md' },
     { part: 'Input', property: 'Font size', token: '--text-body' },
@@ -122,25 +120,25 @@ it room or `isFullWidth`.
 <SpecTable
   caption="Field"
   rows={[
-    { part: 'Field', property: 'Background', token: '--card' },
-    { part: 'Field', property: 'Border', token: '--field-border' },
-    { part: 'Label, input', property: 'Colour', token: '--foreground' },
-    { part: 'Placeholder, helper, calendar icon', property: 'Colour', token: '--muted-foreground' },
-    { part: 'Border, helper, error', property: 'Colour', token: '--danger-text' },
-    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+    { part: 'Field', property: 'Background', token: '--color-surface-raised' },
+    { part: 'Field', property: 'Border', token: '--color-border-input' },
+    { part: 'Label, input', property: 'Colour', token: '--color-text' },
+    { part: 'Placeholder, helper, calendar icon', property: 'Colour', token: '--color-text-subtlest' },
+    { part: 'Border, helper, error', property: 'Colour', token: '--color-text-danger' },
+    { part: 'Focus ring', property: 'Colour', token: '--color-border-focused' },
   ]}
 />
 
 <SpecTable
   caption="Popover"
   rows={[
-    { part: 'Panel', property: 'Background', token: '--popover' },
-    { part: 'Panel', property: 'Border', token: '--border' },
+    { part: 'Panel', property: 'Background', token: '--color-surface-overlay' },
+    { part: 'Panel', property: 'Border', token: '--color-border' },
     { part: 'Panel', property: 'Shadow', token: '--shadow-overlay' },
-    { part: 'Dividers between presets and months', property: 'Colour', token: '--border' },
-    { part: 'Preset', property: 'Colour', token: '--foreground' },
-    { part: 'Preset, hover and pressed', property: 'Background', token: '--accent' },
-    { part: 'Preset, hover and pressed', property: 'Colour', token: '--accent-foreground' },
+    { part: 'Dividers between presets and months', property: 'Colour', token: '--color-border' },
+    { part: 'Preset', property: 'Colour', token: '--color-text' },
+    { part: 'Preset, hover and pressed', property: 'Background', token: '--color-background-neutral' },
+    { part: 'Preset, hover and pressed', property: 'Colour', token: '--color-text' },
   ]}
 />
 
@@ -171,9 +169,9 @@ The days and the band between the range's ends are the
   <DateRangePicker label="Period" locale="en-GB" defaultValue={{ start: new Date(2026, 8, 7), end: new Date(2026, 8, 13) }} />
 </States>
 
-The field's states are Date Picker's: a `--ring` outline while the input
-has focus, `--danger-text` in error (also while the typed text is not a
-range), `--surface-filled` and no calendar button when read-only, 50%
+The field's states are Date Picker's: a `--color-border-focused` outline while the input
+has focus, `--color-text-danger` in error (also while the typed text is not a
+range), `--color-background-input` and no calendar button when read-only, 50%
 opacity when disabled. A preset matching the picked range
 stays in its pressed look.
 
@@ -224,7 +222,8 @@ end, and the value is complete or `null`.
 ## Accessibility
 
 - As Date Picker: a labelled text box, an error state with the expected
-  pattern, and the calendars in a dialog named "Choose dates".
+  pattern, and the calendars in a dialog named "Choose dates". Without a
+  visible label, pass `aria-label` to name the input.
 - The calendar button is named "Choose dates", with the current range
   when there is one.
 - `readOnly` works as on Date Picker: `readonly` on the input, no
@@ -235,7 +234,7 @@ end, and the value is complete or `null`.
   tech and not pickable, so each day is one button.
 - Presets are toggle buttons in a group named "Presets"; the one that
   matches the picked range is `aria-pressed`.
-- After both ends are in the field goes back to rest, as Date Picker's
+- After both ends are in, the field goes back to rest, as Date Picker's
   does after a pick.
 
 </DocTab>

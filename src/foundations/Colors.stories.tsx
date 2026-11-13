@@ -19,7 +19,7 @@ function BandSwatches({ pairs }: { pairs: readonly (readonly [string, string])[]
   )
 }
 
-const LINES = ['border', 'input', 'ring'] as const
+const LINES = ['color-border', 'color-border-input', 'color-border-bold', 'color-border-focused'] as const
 
 function LineSwatches() {
   return (
@@ -80,9 +80,9 @@ export const Surfaces: Story = {
   render: () => (
     <BandSwatches
       pairs={[
-        ['background', 'foreground'],
-        ['card', 'card-foreground'],
-        ['popover', 'popover-foreground'],
+        ['color-surface', 'color-text'],
+        ['color-surface-raised', 'color-text'],
+        ['color-surface-overlay', 'color-text'],
       ]}
     />
   ),
@@ -95,8 +95,9 @@ export const SubtleSurfaces: Story = {
   render: () => (
     <BandSwatches
       pairs={[
-        ['muted', 'muted-foreground'],
-        ['accent', 'accent-foreground'],
+        ['color-background-neutral', 'color-text-subtlest'],
+        ['color-background-input', 'color-text-subtlest'],
+        ['color-background-selected', 'color-text'],
       ]}
     />
   ),
@@ -109,9 +110,9 @@ export const SolidActions: Story = {
   render: () => (
     <BandSwatches
       pairs={[
-        ['primary', 'primary-foreground'],
-        ['secondary', 'secondary-foreground'],
-        ['destructive', 'destructive-foreground'],
+        ['color-background-brand-bold', 'color-text-brand-inverse'],
+        ['color-background-neutral-bold', 'color-text-inverse'],
+        ['color-background-danger-bold', 'color-text-danger-inverse'],
       ]}
     />
   ),

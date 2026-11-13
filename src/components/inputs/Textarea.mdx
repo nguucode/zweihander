@@ -66,14 +66,14 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/textarea.json
 
 The resize handle is the browser's own, in the input's bottom corner, on
 the axes `resize` allows; `hasAutoSize` hides it. The placeholder is the
-textarea's, in `--muted-foreground`.
+textarea's, in `--color-text-subtlest`.
 
 ## Measurements
 
 A textarea grows, so it has no height token: it takes block padding
 instead, after Atlassian's textarea: 2px in `sm` and 6px in `md`. Both
-sizes take body type and 7px of inline padding, the field's 6px plus the
-1px border width, so the text starts 8px from the outer edge. The starting height is `minRows` lines (3 by default)
+sizes take body type and 10px of inline padding, as every field's box,
+so the text starts 11px from the outer edge. The starting height is `minRows` lines (3 by default)
 plus that padding. The padding sits on the textarea, not the box, so the
 resize handle lands in the field's corner.
 
@@ -81,7 +81,7 @@ resize handle lands in the field's corner.
   caption="sm"
   rows={[
     { part: 'Input', property: 'Block padding', token: '--space-0-5' },
-    { part: 'Input', property: 'Inline padding, plus the border width', token: '--space-1-5' },
+    { part: 'Input', property: 'Inline padding', token: '--space-2-5' },
     { part: 'Input', property: 'Font size', token: '--text-body' },
     { part: 'Input', property: 'Line height', token: '--leading-body' },
     { part: 'Container', property: 'Corner radius', token: '--control-md-radius-field' },
@@ -92,7 +92,7 @@ resize handle lands in the field's corner.
   caption="md"
   rows={[
     { part: 'Input', property: 'Block padding', token: '--space-1-5' },
-    { part: 'Input', property: 'Inline padding, plus the border width', token: '--space-1-5' },
+    { part: 'Input', property: 'Inline padding', token: '--space-2-5' },
     { part: 'Input', property: 'Font size', token: '--text-body' },
     { part: 'Input', property: 'Line height', token: '--leading-body' },
     { part: 'Container', property: 'Corner radius', token: '--control-md-radius-field' },
@@ -121,32 +121,32 @@ state changes the edge and the helper text together.
 <SpecTable
   caption="default"
   rows={[
-    { part: 'Container', property: 'Background', token: '--card' },
-    { part: 'Container', property: 'Border', token: '--field-border' },
-    { part: 'Label and input', property: 'Colour', token: '--foreground' },
-    { part: 'Placeholder and helper text', property: 'Colour', token: '--muted-foreground' },
-    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+    { part: 'Container', property: 'Background', token: '--color-surface-raised' },
+    { part: 'Container', property: 'Border', token: '--color-border-input' },
+    { part: 'Label and input', property: 'Colour', token: '--color-text' },
+    { part: 'Placeholder and helper text', property: 'Colour', token: '--color-text-subtlest' },
+    { part: 'Focus ring', property: 'Colour', token: '--color-border-focused' },
   ]}
 />
 
 <SpecTable
   caption="error"
   rows={[
-    { part: 'Container', property: 'Border', token: '--danger-text' },
-    { part: 'Helper text', property: 'Colour', token: '--danger-text' },
-    { part: 'Focus ring', property: 'Colour', token: '--danger-text' },
+    { part: 'Container', property: 'Border', token: '--color-text-danger' },
+    { part: 'Helper text', property: 'Colour', token: '--color-text-danger' },
+    { part: 'Focus ring', property: 'Colour', token: '--color-text-danger' },
   ]}
 />
 
 <SpecTable
   caption="success"
   rows={[
-    { part: 'Container', property: 'Border', token: '--success-text' },
-    { part: 'Helper text', property: 'Colour', token: '--success-text' },
+    { part: 'Container', property: 'Border', token: '--color-text-success' },
+    { part: 'Helper text', property: 'Colour', token: '--color-text-success' },
   ]}
 />
 
-<SpecTable caption="Read-only" rows={[{ part: 'Container', property: 'Background', token: '--surface-filled' }]} />
+<SpecTable caption="Read-only" rows={[{ part: 'Container', property: 'Background', token: '--color-background-input' }]} />
 
 ## States
 
@@ -163,10 +163,10 @@ state changes the edge and the helper text together.
 </States>
 
 - **Hover** changes nothing; the cursor turns to a text cursor.
-- **Focus** is a 2px `--ring` outline around the whole box, 2px outside
+- **Focus** is a 2px `--color-border-focused` outline around the whole box, 2px outside
   it, on click as well as keyboard. In the error state it is
-  `--danger-text`.
-- **Read-only** fills the box with `--surface-filled`.
+  `--color-text-danger`.
+- **Read-only** fills the box with `--color-background-input`.
 - **Disabled** is the enabled look at 50% opacity.
 
 ## API
@@ -221,7 +221,8 @@ so a long entry never pushes the rest of the form off the screen.
 ## Accessibility
 
 - A real `<textarea>` with its `<label>`: clicking the label focuses it,
-  and the label is its accessible name.
+  and the label is its accessible name. Without a visible label, pass
+  `aria-label`: it goes to the `<textarea>` itself.
 - `helperText` is its description (`aria-describedby`);
   `validationState="error"` sets `aria-invalid="true"`. The helper text
   carries the message, not only the colour.
@@ -230,9 +231,9 @@ so a long entry never pushes the rest of the form off the screen.
 - Enter inserts a line break; it does not submit the form.
 - Auto-size caps at `maxRows` and scrolls beyond it, so the page does not
   grow without limit and the text stays reachable by keyboard.
-- The edge is the light `--field-border`, about 1.5:1, the same approved
+- The edge is the light `--color-border-input`, about 1.5:1, the same approved
   exception to WCAG 1.4.11 as Text Input; set
-  `--field-border: var(--control-border)` where 3:1 is needed.
+  `--color-border-input: var(--color-border-bold)` where 3:1 is needed.
 - Focus ring: 2px, 2px offset, around the whole field.
 
 </DocTab>

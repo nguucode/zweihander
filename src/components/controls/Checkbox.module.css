@@ -4,29 +4,29 @@
   --choice-control: var(--choice-box);
 }
 
-/* 16px box, a --control-border outline (3:1 on the page). Checked and
+/* 16px box, a --color-border-bold outline (3:1 on the page). Checked and
    indeterminate fill with the variant and show the mark in its label
    colour. */
 .box {
-  --checkbox-fill: var(--foreground);
-  --checkbox-mark: var(--background);
+  --checkbox-fill: var(--color-text);
+  --checkbox-mark: var(--color-surface);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   inline-size: var(--choice-control);
   block-size: var(--choice-control);
-  border: 1px solid var(--control-border);
+  border: 1px solid var(--color-border-bold);
   /* The step, not --control-xs-radius: a box that turned round at
      radius="full-rounded" would read as a radio. 2px, Atlassian's corner
      for a 16px box. */
   border-radius: var(--radius-xs);
-  background: var(--background);
+  background: var(--color-surface);
   cursor: var(--cursor-button);
 }
 
 .primary {
-  --checkbox-fill: var(--primary);
-  --checkbox-mark: var(--primary-foreground);
+  --checkbox-fill: var(--color-background-brand-bold);
+  --checkbox-mark: var(--color-text-brand-inverse);
 }
 
 .box:is([data-checked], [data-indeterminate]) {
@@ -38,7 +38,7 @@
 }
 
 .box[data-invalid] {
-  border-color: var(--danger-text);
+  border-color: var(--color-text-danger);
 }
 
 .box[data-readonly] {
@@ -49,7 +49,7 @@
    outline stays red); checked nudges the fill toward the mark, as Button
    does. */
 label:hover > .box:not([data-checked], [data-indeterminate], [data-disabled], [data-readonly], [data-invalid]) {
-  border-color: var(--foreground);
+  border-color: var(--color-text);
 }
 
 label:hover > .box:is([data-checked], [data-indeterminate]):not([data-disabled], [data-readonly]) {

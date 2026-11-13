@@ -35,7 +35,7 @@ looking like a container. Only controls opt all the way in.
 
 ## How it works
 
-Two variables do the work, both on `:root`:
+Three variables do the work, all on `:root`:
 
 | Variable | Default | Set by |
 | --- | --- | --- |
@@ -75,7 +75,7 @@ step up with the preset and stop there. Concretely, at the default base:
 | `rounded` | 6px | 6px | 12px |
 | `full-rounded` | pill | 12px | 24px |
 
-The default input is 32px tall, so a pill would be 16px. `field` at
+The default input is 40px tall, so a pill would be 20px. `field` at
 `full-rounded` lands under that on purpose, and a test asserts it.
 
 ## Two rules
@@ -142,7 +142,7 @@ What components actually use.
 | --- | --- | --- |
 | `--radius-control` | the md tier of Button, ToggleButton, Tabs, Pagination | yes |
 | `--radius-field` | every field | no |
-| `--radius-panel` | Modal, Drawer, the command palette | no |
+| `--radius-panel` | Modal | no |
 
 Surfaces that float or frame content without being a dialog read a step,
 `--radius-lg` (8px): Card, Popover, Menu, the Select and Combobox lists,
@@ -157,7 +157,7 @@ token system exists to prevent.
 
 ## Steps
 
-The raw scale — `--radius-sm` through `--radius-xl` — for anything that is
+The raw scale — `--radius-xs` through `--radius-2xl` — for anything that is
 genuinely decorative rather than a control, field or panel.
 
 <Canvas of={RadiusStories.Steps} />

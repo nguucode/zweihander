@@ -17,7 +17,7 @@ designer never chooses between 12 and 16 pixels: they choose
 | Token | Use for | Value |
 | --- | --- | --- |
 | `--space-stack` | Lines of text under each other: title to description, label to value | 4 |
-| `--space-inline` | Small things side by side: icon to text, label to value on one line, sidebar items | 8 |
+| `--space-inline` | Small things side by side: icon to text, label to value on one line, breadcrumb items | 8 |
 | `--space-cluster` | Controls or parts that sit together: filters in a toolbar, an avatar to its content, the parts of a page heading, inside a small card | 12 |
 | `--space-group` | Items and blocks that belong together: cards in a row, toolbar to table, table cell sides | 16 |
 | `--space-container` | Inside the edge of a card, panel or page heading | 24 |
@@ -25,8 +25,8 @@ designer never chooses between 12 and 16 pixels: they choose
 
 The scale is short on purpose: 4, 8, 12, 16, 24. Section and container
 share 24px, so separate sections with a card edge or a rule, not with
-extra white space. AppShell applies `--space-section` to the page edge
-from 64rem up; below that the edge stays at its narrow value.
+extra white space. Apply `--space-section` to the page edge from 64rem
+up; below that, keep the edge at its narrow value.
 
 The numeric steps (`--space-0-5` to `--space-20`) still exist for the few
 places no role fits, such as the size of an icon disc.

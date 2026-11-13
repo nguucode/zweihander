@@ -12,12 +12,12 @@
   --choice-control-block: var(--switch-lg-h);
 }
 
-/* Off: a --control-border track (3:1 on the page, so the control is
+/* Off: a --color-border-bold track (3:1 on the page, so the control is
    visible at all) with a page-coloured thumb. On: the variant's solid and
    its label colour, which is measured at 4.5:1 against it. */
 .track {
-  --switch-on: var(--primary);
-  --switch-on-thumb: var(--primary-foreground);
+  --switch-on: var(--color-background-brand-bold);
+  --switch-on-thumb: var(--color-text-brand-inverse);
   display: inline-flex;
   align-items: center;
   inline-size: var(--choice-control);
@@ -26,18 +26,18 @@
   /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- see above */
   padding: 2px;
   border-radius: var(--radius-pill);
-  background: var(--control-border);
+  background: var(--color-border-bold);
   cursor: var(--cursor-button);
   transition: background-color var(--duration-base);
 }
 
 .accent {
-  --switch-on: var(--foreground);
-  --switch-on-thumb: var(--background);
+  --switch-on: var(--color-text);
+  --switch-on-thumb: var(--color-surface);
 }
 .destructive {
-  --switch-on: var(--destructive);
-  --switch-on-thumb: var(--destructive-foreground);
+  --switch-on: var(--color-background-danger-bold);
+  --switch-on-thumb: var(--color-text-danger-inverse);
 }
 
 .track[data-checked] {
@@ -48,19 +48,19 @@
   cursor: default;
 }
 
-/* Invalid: a danger-coloured edge INSIDE the track, so it reads on and off
-   alike and leaves the band outside the track to the focus ring — an
-   outside ring here would sit exactly where focus draws and hide it. The
-   helper text says what is wrong. */
+/* Invalid: a 2px danger-coloured ring OUTSIDE the track, as Figma's
+   outside stroke. It fills the --focus-offset gap, so the focus ring
+   draws just beyond it and both show. The helper text says what is
+   wrong. */
 .track[data-invalid] {
-  box-shadow: inset 0 0 0 2px var(--danger-text);
+  box-shadow: 0 0 0 2px var(--color-text-danger);
 }
 
 .thumb {
   block-size: calc(var(--choice-control-block) - 4px);
   aspect-ratio: 1;
   border-radius: var(--radius-pill);
-  background: var(--background);
+  background: var(--color-surface);
   transition:
     translate var(--duration-base),
     background-color var(--duration-base);

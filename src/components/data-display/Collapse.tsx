@@ -27,7 +27,8 @@ export interface CollapseProps {
 
 /**
  * One show/hide section: a text button with a chevron and the content it
- * reveals. For a list of sections, use Accordion.
+ * reveals. For a list of sections, give each its own heading, in a Card
+ * section or with a Collapse under it.
  */
 export function Collapse({
   label,

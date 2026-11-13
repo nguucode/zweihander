@@ -6,7 +6,7 @@
   font-family: var(--font-sans);
   font-size: var(--text-body);
   line-height: var(--leading-body);
-  color: var(--foreground);
+  color: var(--color-text);
 }
 
 .fullWidth {
@@ -22,13 +22,12 @@
 }
 
 .required {
-  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- 2px between label and asterisk, below the spacing scale on purpose */
-  margin-inline-start: 0.125rem;
-  color: var(--danger-text);
+  margin-inline-start: var(--space-1);
+  color: var(--color-text-danger);
 }
 
 /* ------------------------------------------------------------- dropzone
-   The dashed edge is --field-border, as a text field's. The Choose button
+   The dashed edge is --color-border-input, as a text field's. The Choose button
    inside is an accent contained button. */
 .dropzone {
   position: relative;
@@ -36,9 +35,9 @@
   justify-items: center;
   gap: var(--space-inline);
   padding: var(--space-container) var(--space-group);
-  border: 1px dashed var(--field-border);
-  border-radius: var(--radius-panel);
-  background: var(--surface-filled);
+  border: 1px dashed var(--color-border-input);
+  border-radius: var(--radius-control);
+  background: var(--color-background-input);
   text-align: center;
   transition:
     border-color var(--duration-base),
@@ -49,26 +48,26 @@
    the change is not colour alone. */
 .dragging {
   border-style: solid;
-  border-color: var(--ring);
-  background: var(--accent);
+  border-color: var(--color-border-focused);
+  background: var(--color-background-neutral);
 }
 
 .invalid {
-  border-color: var(--danger-text);
+  border-color: var(--color-text-danger);
 }
 
 .icon {
   display: inline-flex;
   padding: var(--space-inline);
   border-radius: var(--radius-pill);
-  background: var(--background);
-  color: var(--muted-foreground);
+  background: var(--color-surface);
+  color: var(--color-text-subtlest);
   font-size: var(--space-6);
 }
 
 .prompt {
   margin: 0;
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
 }
 
 /* Disabled fades the icon, and the buttons fade themselves. The text stays
@@ -81,21 +80,21 @@
   opacity: 0.5;
 }
 .disabled .label {
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
 }
 
 .helper {
   margin: 0;
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
 }
 
 .errors {
   margin: 0;
   padding: 0;
   list-style: none;
-  color: var(--danger-text);
+  color: var(--color-text-danger);
 }
 
 /* ------------------------------------------------------------------ list */
@@ -113,11 +112,13 @@
   grid-template-columns: auto minmax(0, 1fr) auto auto;
   align-items: center;
   gap: var(--space-inline);
-  padding: var(--space-stack) var(--space-stack) var(--space-stack) var(--space-inline);
+  /* No inline padding: the icon and the remove button line up with the
+     drop zone's edges. */
+  padding-block: var(--space-stack);
   border-radius: var(--radius-field);
 }
 .item:hover {
-  background: var(--hover-overlay);
+  background: var(--color-interaction-hovered);
 }
 
 /* File-type icon, after Microsoft 365's: a page with a coloured badge.
@@ -127,7 +128,6 @@
   flex: none;
   inline-size: 1.25rem;
   block-size: 1.25rem;
-  --kind: var(--muted-foreground);
 }
 .fileIcon[data-kind='word'] { --kind: #185abd; }
 .fileIcon[data-kind='excel'] { --kind: #107c41; }
@@ -137,12 +137,28 @@
 .fileIcon[data-kind='audio'] { --kind: #0f6cbd; }
 
 /* Filled: the page is a tint of the type colour, the folded corner a
-   deeper one, the badge solid. */
+   deeper one, the badge solid. A 1px line in the row's surface colour runs
+   round the page and along the fold, so the corner reads as folded. */
+.page,
+.fold {
+  stroke: var(--color-surface-raised);
+  stroke-width: 1px;
+}
 .page {
-  fill: color-mix(in oklab, var(--kind) 18%, var(--background));
+  fill: color-mix(in oklab, var(--kind) 18%, var(--color-surface));
 }
 .fold {
-  fill: color-mix(in oklab, var(--kind) 40%, var(--background));
+  fill: color-mix(in oklab, var(--kind) 40%, var(--color-surface));
+}
+/* An unknown type: a fixed light gray page, the same in both themes, as
+   the kind colours are. */
+.fileIcon:not([data-kind]) .page {
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- fixed file-icon gray, not themed (Figma File Icon, Generic) */
+  fill: #e3e5e8;
+}
+.fileIcon:not([data-kind]) .fold {
+  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- fixed file-icon gray, not themed (Figma File Icon, Generic) */
+  fill: #c2c5cc;
 }
 
 .badge {
@@ -156,15 +172,8 @@
   /* SVG user units on the icon's 20-unit viewBox, not page pixels: the
      label scales with the icon. */
   /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- SVG user units, see above */
-  font-size: 9px;
+  font-size: 6px;
   font-weight: 700;
-}
-
-.glyph {
-  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- white on the file type's fixed brand colour, not themed */
-  fill: #fff;
-  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- white on the file type's fixed brand colour, not themed */
-  stroke: #fff;
 }
 
 .nameRow {
@@ -187,7 +196,7 @@
   white-space: nowrap;
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
   font-variant-numeric: tabular-nums;
 }
 
@@ -204,7 +213,7 @@
   white-space: nowrap;
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
-  color: var(--danger-text);
+  color: var(--color-text-danger);
 }
 
 .srOnly {

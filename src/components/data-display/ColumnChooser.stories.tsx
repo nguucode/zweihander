@@ -64,14 +64,14 @@ const meta = {
       table: { type: { summary: '() => void' } },
     },
     label: {
-      description: 'The button\'s text and the popover\'s title.',
+      description: 'The button\'s text and the popup\'s accessible name.',
       control: 'text',
       table: { type: { summary: 'string' }, defaultValue: { summary: "'Columns'" } },
     },
     resetLabel: {
-      description: 'The Reset button\'s text.',
+      description: 'The text of the last row, which brings back the default columns.',
       control: 'text',
-      table: { type: { summary: 'string' }, defaultValue: { summary: "'Reset'" } },
+      table: { type: { summary: 'string' }, defaultValue: { summary: "'Reset columns'" } },
     },
     open: {
       description: 'Controlled open state. Pair with `onOpenChange`.',
@@ -175,10 +175,16 @@ export const Default: Story = {
       await userEvent.keyboard(' ')
       await expect(args.onVisibleKeysChange).toHaveBeenLastCalledWith(['name', 'owner', 'status', 'files'])
     })
+    await step('A click anywhere on a row toggles its box', async () => {
+      const status = within(body().getByRole('dialog')).getByRole('checkbox', { name: 'Status' })
+      // The row itself, not the box: the label is stretched across the popup.
+      await userEvent.click(status.closest('label')!)
+      await expect(status).not.toBeChecked()
+      await expect(headers(canvas)).toEqual(['Project', 'Owner', 'Files'])
+    })
     await step('Reset brings every column back', async () => {
       const dialog = body().getByRole('dialog')
-      await userEvent.click(within(dialog).getByRole('checkbox', { name: 'Status' }))
-      await userEvent.click(within(dialog).getByRole('button', { name: 'Reset' }))
+      await userEvent.click(within(dialog).getByRole('button', { name: 'Reset columns' }))
       await expect(args.onReset).toHaveBeenCalled()
       await expect(headers(canvas)).toEqual(['Project', 'Owner', 'Status', 'Files'])
     })
@@ -200,7 +206,7 @@ export const SomeHiddenByDefault: Story = {
     const dialog = await body().findByRole('dialog')
     await userEvent.click(within(dialog).getByRole('checkbox', { name: 'Files' }))
     await expect(headers(canvas)).toEqual(['Project', 'Owner', 'Files'])
-    await userEvent.click(within(dialog).getByRole('button', { name: 'Reset' }))
+    await userEvent.click(within(dialog).getByRole('button', { name: 'Reset columns' }))
     await expect(args.onVisibleKeysChange).toHaveBeenLastCalledWith(['name', 'owner'])
     await expect(headers(canvas)).toEqual(['Project', 'Owner'])
   },
@@ -212,7 +218,7 @@ export const RowHeaderAlwaysReported: Story = {
   play: async ({ args }) => {
     const dialog = await body().findByRole('dialog')
     await expect(within(dialog).getByRole('checkbox', { name: 'Project' })).toBeChecked()
-    await userEvent.click(within(dialog).getByRole('button', { name: 'Reset' }))
+    await userEvent.click(within(dialog).getByRole('button', { name: 'Reset columns' }))
     await expect(args.onVisibleKeysChange).toHaveBeenLastCalledWith(['name', 'owner', 'files'])
   },
 }
@@ -243,10 +249,11 @@ export const Open: Story = {
 /** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
 export const anatomyParts = [
   { name: 'Button', selector: 'button[aria-haspopup="dialog"]', description: 'An outlined secondary Button, "Columns", with a chevron. Opens the popover.' },
-  { name: 'Popover', selector: '[role="dialog"]', description: 'A Popover titled like the button, lined up with its end.' },
+  { name: 'Popup', selector: '[role="dialog"]', description: 'A 240px list, a Listbox\'s shell, named like the button and lined up with its end.' },
   { name: 'Locked column', selector: '[role="dialog"] [role="checkbox"][aria-disabled="true"]', description: 'The row header: always shown, so its box is ticked and disabled.' },
-  { name: 'Column checkbox', selector: '[role="dialog"] [role="checkbox"]:not([aria-checked="true"])', description: 'One per column, named by its header, in table order. Ticked means shown.' },
-  { name: 'Reset', selector: '[role="dialog"] button:not([aria-haspopup])', description: 'A small ghost Button: brings back the default columns and calls onReset.' },
+  { name: 'Column checkbox', selector: '[role="dialog"] [role="checkbox"]:not([aria-checked="true"])', description: 'One per column, named by its header, in table order. Ticked means shown. The whole row toggles it.' },
+  { name: 'Separator', selector: '[role="dialog"] [role="separator"]', description: 'A 1px rule between the columns and Reset.' },
+  { name: 'Reset', selector: '[role="dialog"] button:not([aria-haspopup])', description: 'A row like the others, its text in line with the column names: brings back the default columns and calls onReset.' },
 ]
 
 export const Anatomy: Story = {
@@ -258,7 +265,21 @@ export const Anatomy: Story = {
     const found = await expectAnatomy(canvasElement, anatomyParts)
     await expect(found[2]).toHaveAccessibleName('Project')
     await expect(found[3]).toHaveAccessibleName('Owner')
-    await expect(found[4]).toHaveTextContent('Reset')
+    await expect(found[5]).toHaveTextContent('Reset columns')
+    // A Listbox's shell: 240px wide, 8px above and below, none at the sides.
+    const popup = getComputedStyle(found[1])
+    await expect([popup.inlineSize, popup.paddingTop, popup.paddingLeft]).toEqual(['240px', '8px', '0px'])
+    // Each column is an Option's row: 32px, its label stretched across the popup.
+    const row = found[3].closest('label')!
+    await expect(row.getBoundingClientRect().height).toBe(32)
+    await expect(row.getBoundingClientRect().width).toBe(found[1].clientWidth)
+    // Reset's text starts where the column names do.
+    const text = (el: Element) => {
+      const range = document.createRange()
+      range.selectNodeContents(el)
+      return range.getBoundingClientRect().left
+    }
+    await expect(text(found[5])).toBeCloseTo(text(within(row as HTMLElement).getByText('Owner')), 0)
   },
 }
 

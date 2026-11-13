@@ -23,7 +23,7 @@ function StepScale() {
             style={{
               height: '4rem',
               width: '4rem',
-              background: 'var(--primary)',
+              background: 'var(--color-background-brand-bold)',
               borderRadius: `var(--${token})`,
             }}
           />
@@ -52,8 +52,8 @@ function Intents() {
               width: '7rem',
               alignItems: 'center',
               justifyContent: 'center',
-              background: 'var(--secondary)',
-              color: 'var(--secondary-foreground)',
+              background: 'var(--color-background-neutral)',
+              color: 'var(--color-text)',
               fontSize: 'var(--text-body)',
               borderRadius: `var(--${token})`,
             }}
@@ -82,9 +82,9 @@ function PresetRow({ preset }: { preset: RadiusPreset }) {
         <div
           data-panel
           style={{
-            border: '1px solid var(--border)',
-            background: 'var(--card)',
-            color: 'var(--card-foreground)',
+            border: '1px solid var(--color-border)',
+            background: 'var(--color-surface-raised)',
+            color: 'var(--color-text)',
             padding: 'var(--space-2) var(--space-4)',
             fontSize: 'var(--text-body)',
             borderRadius: 'var(--radius-panel)',

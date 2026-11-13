@@ -8,3 +8,14 @@
 :focus-within > .shortcut {
   display: none;
 }
+
+/* The end is 6px, not the field's 10px, and the clear button is not pulled
+   into the padding: its 24px target sits 8px after the text and ends 6px
+   from the edge, so the icon is 10px in. Doubled to outrank the shared
+   size classes. */
+.box.box {
+  padding-inline-end: var(--space-1-5);
+}
+.clear.clear {
+  margin-inline: 0;
+}

@@ -7,7 +7,7 @@
   padding: calc(var(--space-section) * 2) var(--space-container);
   font-family: var(--font-sans);
   text-align: center;
-  color: var(--foreground);
+  color: var(--color-text);
 }
 
 .sm {
@@ -24,12 +24,13 @@
   inline-size: var(--empty-icon);
   block-size: var(--empty-icon);
   /* md follows Atlassian's empty state: 24px under the image, 16px under
-     the heading, 24px above the buttons. sm is a step tighter. */
+     the heading, 24px above the buttons. sm keeps the 16 and 24 and is a
+     step tighter only under the image. */
   margin-block-end: var(--space-container);
   border-radius: var(--radius-pill);
   /* Error State and Success State set these to their own tone. */
-  background: var(--empty-icon-bg, var(--muted));
-  color: var(--empty-icon-fg, var(--muted-foreground));
+  background: var(--empty-icon-bg, var(--color-background-neutral));
+  color: var(--empty-icon-fg, var(--color-text-subtlest));
   font-size: calc(var(--empty-icon) / 2);
 }
 
@@ -67,20 +68,14 @@
   padding-block-start: var(--space-group);
   font-size: var(--text-body);
   line-height: var(--leading-body);
-  color: var(--muted-foreground);
-}
-.sm .description {
-  padding-block-start: var(--space-inline);
+  color: var(--color-text-subtlest);
 }
 
 .action {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  /* Atlassian's button group: 4px between buttons. */
-  gap: var(--space-stack);
+  /* 8px between buttons, as Figma. */
+  gap: var(--space-inline);
   padding-block-start: var(--space-container);
-}
-.sm .action {
-  padding-block-start: var(--space-group);
 }

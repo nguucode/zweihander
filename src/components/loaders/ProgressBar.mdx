@@ -100,20 +100,20 @@ each variant fills with a colour meant to be read as text on the page,
 which keeps it at 3:1 or better on the track. Switch the theme and the
 accent in the toolbar: the values follow.
 
-<SpecTable caption="primary" rows={[{ part: 'Indicator', property: 'Background', token: '--primary-text' }]} />
+<SpecTable caption="primary" rows={[{ part: 'Indicator', property: 'Background', token: '--color-text-brand' }]} />
 
-<SpecTable caption="accent" rows={[{ part: 'Indicator', property: 'Background', token: '--foreground' }]} />
+<SpecTable caption="accent" rows={[{ part: 'Indicator', property: 'Background', token: '--color-text' }]} />
 
-<SpecTable caption="secondary" rows={[{ part: 'Indicator', property: 'Background', token: '--muted-foreground' }]} />
+<SpecTable caption="secondary" rows={[{ part: 'Indicator', property: 'Background', token: '--color-text-subtlest' }]} />
 
-<SpecTable caption="destructive" rows={[{ part: 'Indicator', property: 'Background', token: '--danger-text' }]} />
+<SpecTable caption="destructive" rows={[{ part: 'Indicator', property: 'Background', token: '--color-text-danger' }]} />
 
 <SpecTable
   caption="Every variant"
   rows={[
-    { part: 'Track', property: 'Background', token: '--secondary' },
-    { part: 'Label', property: 'Colour', token: '--foreground' },
-    { part: 'Value label', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Track', property: 'Background', token: '--color-background-neutral' },
+    { part: 'Label', property: 'Colour', token: '--color-text' },
+    { part: 'Value label', property: 'Colour', token: '--color-text-subtlest' },
   ]}
 />
 
@@ -134,7 +134,7 @@ state.
 
 - **Progress** fills from the start edge, easing between values over
   `--duration-slow`.
-- **Indeterminate** slides a third of the track across, once every 1.4s.
+- **Indeterminate** slides 40% of the track across, once every 1.4s.
   The value label is hidden: there is no value to show.
 - **Complete** is a full bar. It does not change on its own; replace or
   remove it when the task ends.
@@ -198,7 +198,7 @@ Use it only where the context already says what the bar measures.
 - Every bar needs a name: a visible `label` (linked by Base UI) or
   `aria-label`.
 - The fill clears 3:1 on the track for every variant and accent, in both
-  modes. The value label is `--muted-foreground`.
+  modes. The value label is `--color-text-subtlest`.
 - Under `prefers-reduced-motion` the fill stops easing between values and
   the indeterminate slide slows from 1.4s to 4s a pass.
 - A progressbar is not a live region. If completion matters, announce it

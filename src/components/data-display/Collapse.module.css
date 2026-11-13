@@ -2,7 +2,7 @@
   font-family: var(--font-sans);
   font-size: var(--text-body);
   line-height: var(--leading-body);
-  color: var(--foreground);
+  color: var(--color-text);
 }
 
 .sm {
@@ -21,7 +21,7 @@
   border: 0;
   border-radius: var(--radius-sm);
   background: transparent;
-  color: var(--foreground);
+  color: var(--color-text);
   font: inherit;
   font-weight: 500;
   cursor: var(--cursor-button);
@@ -31,7 +31,7 @@
   text-underline-offset: 0.2em;
 }
 .trigger:focus-visible {
-  outline: var(--focus-width) solid var(--ring);
+  outline: var(--focus-width) solid var(--color-border-focused);
   outline-offset: var(--focus-offset);
 }
 .trigger[data-disabled] {
@@ -43,7 +43,7 @@
 .chevron {
   display: inline-flex;
   font-size: var(--icon-md);
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
   transition: rotate var(--duration-base);
 }
 .trigger[data-panel-open] .chevron {
@@ -59,7 +59,7 @@
 
 /* Base UI measures the content into --collapsible-panel-height; animating
    height to it and to 0 at the start and end states is its documented
-   pattern, as on Accordion. */
+   pattern. */
 .panel {
   block-size: var(--collapsible-panel-height);
   overflow: hidden;

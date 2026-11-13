@@ -49,7 +49,7 @@ const meta = {
       table: { type: { summary: "'primary' | 'accent' | 'destructive'" }, defaultValue: { summary: "'primary'" } },
     },
     validationState: {
-      description: '`error` sets `aria-invalid`, draws a red edge inside the track and turns the helper red; `success` turns the helper green.',
+      description: '`error` sets `aria-invalid`, draws a 2px red ring outside the track and turns the helper red; `success` turns the helper green.',
       control: 'inline-radio',
       options: ['default', 'success', 'error'],
       table: { type: { summary: "'default' | 'success' | 'error'" }, defaultValue: { summary: "'default'" } },
@@ -152,6 +152,8 @@ export const Validation: Story = {
     const terms = canvas.getByRole('switch', { name: /Accept the terms/ })
     await expect(terms).toHaveAttribute('aria-invalid', 'true')
     await expect(terms).toHaveAccessibleDescription('Required to continue.')
+    // A 2px ring outside the track, not inset.
+    await expect(getComputedStyle(terms).boxShadow).toMatch(/ 0px 0px 0px 2px$/)
   },
 }
 
@@ -237,7 +239,7 @@ export const InAForm: Story = {
 
 /** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
 export const anatomyParts = [
-  { name: 'Track', selector: '[role="switch"]', description: 'The pill: `--control-border` when off, the variant’s solid when on.' },
+  { name: 'Track', selector: '[role="switch"]', description: 'The pill: `--color-border-bold` when off, the variant’s solid when on.' },
   { name: 'Thumb', selector: '[role="switch"] > span', description: 'Slides to the end when on.' },
   { name: 'Label', selector: 'label > span:last-child', description: 'Names the setting. Part of the click target.' },
   { name: 'Helper text', selector: 'p', description: 'Optional. Indented under the label; the error message in the error state.' },

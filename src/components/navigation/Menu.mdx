@@ -71,21 +71,20 @@ a check where an action shows its icon, so their labels line up.
 The item follows Atlassian Design's dropdown item: 8px block and 12px
 inline padding around a 20px line, so a one-line item is 36px tall. The
 box ramp has no 36px step, so the md control tier (32px) is the floor and
-the padding makes the rest. The rest is Atlassian's dropdown menu too
-(its newer menu): items sit 12px inside the popup and 2px apart, with a
-6px corner and 12px between icon and label; a shortcut or a chevron sits
-24px after the label; a separator runs edge to edge with 12px above and
-below; a group label has 8px block padding, 12px before and 24px after.
-The popup's padding counts its 1px border.
+the padding makes the rest. Items sit 4px inside the
+popup's border and 2px apart, with a 6px corner and 12px between icon and
+label; a shortcut or a chevron sits 24px after the label; a separator is
+as wide as the items, with 4px above and below; a group label has 8px
+block padding, 12px before and 24px after.
 
 <SpecTable
   caption="Popup"
   rows={[
-    { part: 'Popup', property: 'Padding, from the outer edge', token: '--space-3' },
+    { part: 'Popup', property: 'Padding, inside the border', token: '--space-1' },
     { part: 'Popup', property: 'Corner radius', token: '--radius-lg' },
     { part: 'Popup', property: 'Shadow', token: '--shadow-overlay' },
     { part: 'Popup', property: 'Layer', token: '--layer-overlay' },
-    { part: 'Separator', property: 'Space above and below', token: '--space-3' },
+    { part: 'Separator', property: 'Space above and below', token: '--space-1' },
   ]}
 />
 
@@ -118,29 +117,29 @@ and no taller than the space on screen: past that it scrolls. It opens
 <SpecTable
   caption="Popup"
   rows={[
-    { part: 'Popup', property: 'Background', token: '--popover' },
-    { part: 'Popup', property: 'Text', token: '--popover-foreground' },
-    { part: 'Popup', property: 'Border', token: '--border' },
-    { part: 'Separator', property: 'Colour', token: '--border' },
-    { part: 'Group label, shortcut, chevron', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Popup', property: 'Background', token: '--color-surface-overlay' },
+    { part: 'Popup', property: 'Text', token: '--color-text' },
+    { part: 'Popup', property: 'Border', token: '--color-border' },
+    { part: 'Separator', property: 'Colour', token: '--color-border' },
+    { part: 'Group label, shortcut, chevron', property: 'Colour', token: '--color-text-subtlest' },
   ]}
 />
 
 <SpecTable
   caption="Item"
   rows={[
-    { part: 'Icon', property: 'Colour', token: '--muted-foreground' },
-    { part: 'Item, highlighted', property: 'Background', token: '--accent' },
-    { part: 'Item, highlighted', property: 'Text and icon', token: '--accent-foreground' },
-    { part: 'Item, disabled', property: 'Text', token: '--muted-foreground' },
+    { part: 'Icon', property: 'Colour', token: '--color-text-subtlest' },
+    { part: 'Item, highlighted', property: 'Background', token: '--color-background-neutral' },
+    { part: 'Item, highlighted', property: 'Text', token: '--color-text' },
+    { part: 'Item, disabled', property: 'Text', token: '--color-text-subtlest' },
   ]}
 />
 
 <SpecTable
   caption="Destructive item"
   rows={[
-    { part: 'Item', property: 'Text and icon', token: '--danger-text' },
-    { part: 'Item, highlighted', property: 'Background', token: '--danger-subtle' },
+    { part: 'Item', property: 'Text and icon', token: '--color-text-danger' },
+    { part: 'Item, highlighted', property: 'Background', token: '--color-background-danger' },
   ]}
 />
 
@@ -156,8 +155,8 @@ at 4.5:1 on the popup and on its highlight.
   ]}
 />
 
-- **Highlighted** is where the arrow keys or the pointer are: a `--accent`
-  fill, the icon taking the text colour. A submenu's item stays highlighted
+- **Highlighted** is where the arrow keys or the pointer are: a `--color-background-neutral`
+  fill; the icon keeps `--color-text-subtlest`. A submenu's item stays highlighted
   while its submenu is open. Focus moves with the highlight, so there is no
   separate focus ring inside the popup.
 - **Disabled** items are muted at 60% opacity and skipped by the arrow
@@ -202,6 +201,9 @@ destructive actions the last place, after a separator.
   dontCaption="A menu standing in for a form field. Use a Select: it has a label, a value and a form name."
 />
 
+The popup opens below the trigger, lined up with its start edge; `side`
+and `align` place it elsewhere.
+
 ## When not to use
 
 - **To pick a value for a form.** Use a
@@ -211,8 +213,8 @@ destructive actions the last place, after a separator.
 - **For one or two actions.** Show them as
   [Buttons](?path=/docs/components-buttons-button--docs): a hidden action
   is one fewer person finds.
-- **For the app's main navigation.** Use a
-  [Nav Sidebar](?path=/docs/patterns-application-ui-nav-sidebar--docs) or
+- **For the app's main navigation.** Use a side navigation of
+  [Links](?path=/docs/components-navigation-link--docs) or
   [Tabs](?path=/docs/components-navigation-tabs--docs), which show where
   the reader is.
 - **For content: a form, a preview.** Use a

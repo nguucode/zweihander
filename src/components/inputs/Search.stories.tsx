@@ -24,6 +24,16 @@ const meta = {
       control: 'text',
       table: { type: { summary: 'ReactNode' } },
     },
+    helperText: {
+      description: 'Under the field: what can be searched, or a note on the results. It becomes the input\'s description.',
+      control: 'text',
+      table: { type: { summary: 'ReactNode' } },
+    },
+    required: {
+      description: 'Native `required`. Adds an asterisk to the label, hidden from screen readers, which hear "required" from the input.',
+      control: 'boolean',
+      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
+    },
     'aria-label': {
       description: 'The name when there is no visible `label`.',
       control: 'text',
@@ -61,7 +71,7 @@ const meta = {
       table: { type: { summary: 'string' }, defaultValue: { summary: "''" } },
     },
     shortcut: {
-      description: 'One key, e.g. `/`, that focuses the field from anywhere on the page, unless focus is already in a form field. Shown as a key cap while the field is empty and idle. Off while disabled or read-only. No modifiers: ⌘K belongs to the Command Palette. One per page.',
+      description: 'One key, e.g. `/`, that focuses the field from anywhere on the page, unless focus is already in a form field. Shown as a key cap while the field is empty and idle. Off while disabled or read-only. No modifiers: ⌘K is left to the app. One per page.',
       control: 'text',
       table: { type: { summary: 'string' } },
     },
@@ -186,6 +196,17 @@ export const WithLabel: Story = {
   args: { label: 'Find a component' },
   play: async ({ canvas }) => {
     await expect(canvas.getByRole('searchbox', { name: 'Find a component' })).toBeVisible()
+  },
+}
+
+export const WithHelperText: Story = {
+  args: { label: 'Find a component', helperText: 'Names and descriptions are searched.', required: true },
+  play: async ({ canvas }) => {
+    const input = canvas.getByRole('searchbox', { name: 'Find a component' })
+    await expect(input).toHaveAccessibleDescription('Names and descriptions are searched.')
+    await expect(input).toBeRequired()
+    // The asterisk is decoration: the name stays the label alone.
+    await expect(canvas.getByText('*')).toHaveAttribute('aria-hidden', 'true')
   },
 }
 

@@ -26,8 +26,9 @@ export interface ColumnChooserProps {
   onVisibleKeysChange?: (keys: string[]) => void
   /** Also called by Reset, to put back what lives outside the chooser, such as column widths. */
   onReset?: () => void
-  /** The button's text and the popover's title. */
+  /** The button's text and the popup's accessible name. */
   label?: string
+  /** The text of the last row, which brings back the default columns. */
   resetLabel?: string
   open?: boolean
   defaultOpen?: boolean
@@ -45,7 +46,7 @@ export function ColumnChooser({
   onVisibleKeysChange,
   onReset,
   label = 'Columns',
-  resetLabel = 'Reset',
+  resetLabel = 'Reset columns',
   open,
   defaultOpen,
   onOpenChange,
@@ -70,7 +71,8 @@ export function ColumnChooser({
           {label}
         </Button>
       }
-      title={label}
+      aria-label={label}
+      className={styles.popup}
       align="end"
       open={open}
       defaultOpen={defaultOpen}
@@ -81,8 +83,10 @@ export function ColumnChooser({
         {columns.map((col) => {
           const checked = col.isRowHeader || shown.has(col.key)
           return (
+            // The row is the Checkbox's own label, stretched: a click anywhere on it toggles the box.
             <Checkbox
               key={col.key}
+              className={styles.row}
               label={col.header}
               checked={checked}
               // The row header always shows, and so does the last column left.
@@ -97,10 +101,9 @@ export function ColumnChooser({
           )
         })}
       </div>
-      <Button
-        variant="secondary"
-        appearance="ghost"
-        size="sm"
+      <div role="separator" className={styles.separator} />
+      <button
+        type="button"
         className={styles.reset}
         onClick={() => {
           set(new Set(initial))
@@ -108,7 +111,7 @@ export function ColumnChooser({
         }}
       >
         {resetLabel}
-      </Button>
+      </button>
     </Popover>
   )
 }

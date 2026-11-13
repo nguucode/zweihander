@@ -17,16 +17,16 @@
 }
 
 .info {
-  --inline-alert-text: var(--info-text);
+  --inline-alert-text: var(--color-text-info);
 }
 .success {
-  --inline-alert-text: var(--success-text);
+  --inline-alert-text: var(--color-text-success);
 }
 .warning {
-  --inline-alert-text: var(--warning-text);
+  --inline-alert-text: var(--color-text-warning);
 }
 .danger {
-  --inline-alert-text: var(--danger-text);
+  --inline-alert-text: var(--color-text-danger);
 }
 
 /* One line tall, so the icon sits on the first line of a wrapped message.

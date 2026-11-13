@@ -6,11 +6,11 @@ import { Theme } from '@/theme/Theme'
 import docs from './docs.module.css'
 
 const PAIRS = [
-  ['background', 'foreground'],
-  ['card', 'card-foreground'],
-  ['primary', 'primary-foreground'],
-  ['muted', 'muted-foreground'],
-  ['destructive', 'destructive-foreground'],
+  ['color-surface', 'color-text'],
+  ['color-surface-raised', 'color-text'],
+  ['color-background-brand-bold', 'color-text-brand-inverse'],
+  ['color-background-neutral', 'color-text-subtlest'],
+  ['color-background-danger-bold', 'color-text-danger-inverse'],
 ] as const
 
 function Swatches() {
@@ -24,7 +24,7 @@ function Swatches() {
             alignItems: 'center',
             justifyContent: 'space-between',
             borderRadius: 'var(--radius-md)',
-            border: '1px solid var(--border)',
+            border: '1px solid var(--color-border)',
             padding: 'var(--space-2) var(--space-3)',
             background: `var(--${bg})`,
             color: `var(--${fg})`,
@@ -40,7 +40,7 @@ function Swatches() {
 
 function Sample() {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)', background: 'var(--background)', color: 'var(--foreground)', padding: 'var(--space-4)' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)', background: 'var(--color-surface)', color: 'var(--color-text)', padding: 'var(--space-4)' }}>
       <Swatches />
       <TextInput label="Email" placeholder="you@example.com" />
       <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
@@ -67,10 +67,10 @@ export const SideBySide: Story = {
   name: 'Side by side',
   render: () => (
     <div className={docs.gridHalves} style={{ gap: 'var(--space-4)' }}>
-      <Theme appearance="light" style={{ overflow: 'hidden', borderRadius: 'var(--radius-panel)', border: '1px solid var(--border)' }}>
+      <Theme appearance="light" style={{ overflow: 'hidden', borderRadius: 'var(--radius-panel)', border: '1px solid var(--color-border)' }}>
         <Sample />
       </Theme>
-      <Theme appearance="dark" style={{ overflow: 'hidden', borderRadius: 'var(--radius-panel)', border: '1px solid var(--border)' }}>
+      <Theme appearance="dark" style={{ overflow: 'hidden', borderRadius: 'var(--radius-panel)', border: '1px solid var(--color-border)' }}>
         <Sample />
       </Theme>
     </div>

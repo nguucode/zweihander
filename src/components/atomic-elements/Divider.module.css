@@ -4,7 +4,7 @@
    Solid comes from the fallback; only .dashed sets --divider-style. */
 .divider {
   margin: 0;
-  border: 0 var(--divider-style, solid) var(--border);
+  border: 0 var(--divider-style, solid) var(--color-border);
   flex-shrink: 0;
   align-self: stretch;
 }

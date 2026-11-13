@@ -8,7 +8,7 @@
   font-family: var(--font-sans);
   font-size: var(--text-body);
   line-height: var(--leading-body);
-  color: var(--foreground);
+  color: var(--color-text);
 }
 
 .sm {
@@ -36,7 +36,7 @@
 
 .value {
   font-variant-numeric: tabular-nums;
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
 }
 
 /* The control is as tall as the thumb, so the whole strip is a target,
@@ -60,7 +60,7 @@
   inline-size: 100%;
   block-size: var(--slider-track);
   border-radius: var(--radius-pill);
-  background: var(--secondary);
+  background: var(--color-background-neutral);
 }
 .vertical .track {
   inline-size: var(--slider-track);
@@ -71,16 +71,16 @@
    on the track, as on Progress Bar. */
 .indicator {
   border-radius: inherit;
-  background: var(--primary-text);
+  background: var(--color-text-brand);
 }
 
 .thumb {
   box-sizing: border-box;
   inline-size: var(--slider-thumb);
   block-size: var(--slider-thumb);
-  border: 2px solid var(--primary-text);
+  border: 2px solid var(--color-text-brand);
   border-radius: var(--radius-pill);
-  background: var(--background);
+  background: var(--color-surface);
   box-shadow: var(--shadow-raised);
   cursor: grab;
   transition: scale var(--duration-fast);
@@ -89,18 +89,18 @@
   cursor: grabbing;
 }
 .thumb:has(:focus-visible) {
-  outline: var(--focus-width) solid var(--ring);
+  outline: var(--focus-width) solid var(--color-border-focused);
   outline-offset: var(--focus-offset);
 }
 
 /* Disabled dims the control only. The label and value stay readable in
-   --muted-foreground (4.5:1): they are not a native <label>, so a faded
+   --color-text-subtlest (4.5:1): they are not a native <label>, so a faded
    label would fail contrast rather than be exempt as a disabled control. */
 .slider[data-disabled] .control {
   opacity: 0.5;
 }
 .slider[data-disabled] .label {
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
 }
 .slider[data-disabled] .thumb {
   cursor: var(--cursor-disabled);

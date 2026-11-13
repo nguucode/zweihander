@@ -44,13 +44,13 @@ export const Default: Story = {
       { name: 'Missing', selector: 'nav' },
     ]
     try {
-      inspector.set({ parts, tokens: ['--control-md', '--primary', '--nope'] })
+      inspector.set({ parts, tokens: ['--control-md', '--color-background-brand-bold', '--nope'] })
       // One number, on the part that is there; decoration only.
       await waitFor(() => expect(layer()?.textContent).toBe('①'))
       await expect(layer()).toHaveAttribute('aria-hidden', 'true')
       await expect(getComputedStyle(layer()!).pointerEvents).toBe('none')
       await waitFor(() => expect(values['--control-md']).toEqual({ kind: 'length', text: '32px' }))
-      await expect(values['--primary'].kind).toBe('color')
+      await expect(values['--color-background-brand-bold'].kind).toBe('color')
       await expect(values['--nope']).toEqual({ kind: 'missing', text: 'Not defined here' })
 
       // A row's redline: the part's height, with its value.

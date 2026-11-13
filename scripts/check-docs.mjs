@@ -5,17 +5,17 @@
  *   node scripts/check-docs.mjs <file…>  check only these (used by the tests)
  *
  * 1. Every token an MDX page names must exist. A page names a token in a code
- *    span (`--primary`) or in a docs block prop (token="--primary"). Exists
+ *    span (`--color-background-brand-bold`) or in a docs block prop (token="--color-background-brand-bold"). Exists
  *    means some stylesheet under src/ declares it: tokens.css for the token
- *    layer, a component's CSS for the variables it exposes (`--field-border`).
+ *    layer, a component's CSS for the variables it exposes (`--color-border-input`).
  *    A renamed token otherwise leaves the docs pointing at nothing, and a
  *    SpecTable row silently shows no value. A page that names a token on
  *    purpose because it does NOT exist ("there is no `--radius-xs`") says so
  *    with an MDX comment, reason required, like a stylelint disable:
  *      {/* docs:check allow --radius-xs -- the page explains why it is absent *\/}
  * 2. Every component page (src/components/<category>/<Name>.mdx) uses
- *    <DocTabs>, so the format cannot drift back to one long page. Patterns,
- *    templates and the Overview pages are not component docs and keep theirs.
+ *    <DocTabs>, so the format cannot drift back to one long page. The
+ *    Overview pages are not component docs and keep theirs.
  * 3. A page that uses <DocTabs> has the three tabs, in order, and the sections
  *    each tab must carry (spec: component-docs, Q14).
  * 4. Every story a page names (`<Canvas of={ButtonStories.Default} />`, or any
@@ -131,10 +131,10 @@ const tokenMentions = (source) => {
   return found
 }
 
-/** src/components/<category>/<Name>.mdx, minus the categories that are not components. */
+/** src/components/<category>/<Name>.mdx, minus the Overview pages. */
 const isComponentPage = (where) => {
   const m = where.split(sep).join('/').match(/^src\/components\/([^/]+)\/([^/]+)\.mdx$/)
-  return !!m && !['patterns', 'templates'].includes(m[1]) && m[2] !== 'Overview'
+  return !!m && m[2] !== 'Overview'
 }
 
 /** The body of each <DocTab value="…"> on a page, in order. */

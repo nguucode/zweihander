@@ -79,7 +79,8 @@ take the spacious inline padding, 12px at both sizes: a centred label
 needs more room either side than a field's left-aligned text. The 12px is
 measured from the button's outer edge to its label or icon, border
 included, as in Atlassian Design, and is the same with or without an icon
-on that side; icon and label sit 6px apart. The label is 14/20 at both
+on that side; icon and label sit 6px apart. Ghost has no border, so it is
+11px from edge to label, as Figma binds it. The label is 14/20 at both
 sizes.
 
 <SpecTable
@@ -129,55 +130,56 @@ accent in the toolbar: the values follow.
 <SpecTable
   caption="primary"
   rows={[
-    { part: 'Container, contained', property: 'Background', token: '--primary' },
-    { part: 'Label, contained', property: 'Colour', token: '--primary-foreground' },
-    { part: 'Label, outlined and ghost', property: 'Colour', token: '--primary-text' },
-    { part: 'Container, outlined', property: 'Border', token: '--primary-text' },
+    { part: 'Container, contained', property: 'Background', token: '--color-background-brand-bold' },
+    { part: 'Label, contained', property: 'Colour', token: '--color-text-brand-inverse' },
+    { part: 'Label, outlined and ghost', property: 'Colour', token: '--color-text-brand' },
+    { part: 'Container, outlined', property: 'Border', token: '--color-text-brand' },
   ]}
 />
 
 <SpecTable
   caption="accent"
   rows={[
-    { part: 'Container, contained', property: 'Background', token: '--foreground' },
-    { part: 'Label, contained', property: 'Colour', token: '--background' },
-    { part: 'Label, outlined and ghost', property: 'Colour', token: '--foreground' },
-    { part: 'Container, outlined', property: 'Border', token: '--foreground' },
+    { part: 'Container, contained', property: 'Background', token: '--color-text' },
+    { part: 'Label, contained', property: 'Colour', token: '--color-surface' },
+    { part: 'Label, outlined and ghost', property: 'Colour', token: '--color-text' },
+    { part: 'Container, outlined', property: 'Border', token: '--color-text' },
   ]}
 />
 
 <SpecTable
   caption="secondary"
   rows={[
-    { part: 'Container, contained', property: 'Background', token: '--secondary' },
-    { part: 'Label, contained', property: 'Colour', token: '--secondary-foreground' },
-    { part: 'Label, outlined and ghost', property: 'Colour', token: '--foreground' },
-    { part: 'Container, outlined', property: 'Border', token: '--input' },
+    { part: 'Container, contained', property: 'Background', token: '--color-background-neutral' },
+    { part: 'Label, contained', property: 'Colour', token: '--color-text' },
+    { part: 'Label, outlined and ghost', property: 'Colour', token: '--color-text' },
+    { part: 'Container, outlined', property: 'Border', token: '--color-border' },
   ]}
 />
 
 <SpecTable
   caption="destructive"
   rows={[
-    { part: 'Container, contained', property: 'Background', token: '--destructive' },
-    { part: 'Label, contained', property: 'Colour', token: '--destructive-foreground' },
-    { part: 'Label, outlined and ghost', property: 'Colour', token: '--destructive' },
-    { part: 'Container, outlined', property: 'Border', token: '--destructive' },
+    { part: 'Container, contained', property: 'Background', token: '--color-background-danger-bold' },
+    { part: 'Label, contained', property: 'Colour', token: '--color-text-danger-inverse' },
+    { part: 'Label, outlined and ghost', property: 'Colour', token: '--color-background-danger-bold' },
+    { part: 'Container, outlined', property: 'Border', token: '--color-background-danger-bold' },
   ]}
 />
 
 <SpecTable
   caption="Every variant"
   rows={[
-    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+    { part: 'Focus ring', property: 'Colour', token: '--color-border-focused' },
   ]}
 />
 
 Ghost and outlined have no fill at rest. Contained is lit from above: a
-lighter top, a highlight on the top edge, a darker bottom edge and a
-hairline border a step darker than the solid. Each is the variant's solid
-moved in lightness, so it has no token of its own and follows the accent
-and the mode.
+lighter top, a highlight on the top edge, a bottom-edge inner shadow
+(black at 18%, 1px up, 1.2px blur, 0.35px spread) and a hairline border a
+step darker than the solid. The hairline is the variant's solid moved in
+lightness, so it has no token of its own and follows the accent and the
+mode; the highlight and the shadow are light, the same on every fill.
 
 ## States
 
@@ -198,15 +200,11 @@ and the mode.
   token each. A coloured solid (primary, destructive) moves away from its
   label and gains contrast; accent and secondary move toward it. Outlined
   and ghost tint the background with their tone, 8% on hover and 14% when
-  pressed. Every state keeps the label at 4.5:1, measured by the
+  pressed, and their label moves 25% and 40% toward `--color-text`. Every state keeps the label at 4.5:1, measured by the
   `StateContrast` story under all seventeen accents in both modes.
-- **Hover**, on contained, also draws a 1px hairline ring standing
-  `--focus-offset` off the button, where the focus ring sits, so focus
-  replaces it rather than adding a second ring. Inside a ToggleGroup the
-  ring is left out: it would cut across the next segment.
 - **Pressed**, on contained, turns the light over: shade on the top edge,
   no drop shadow, no gradient, as if pushed in.
-- **Focus** is a 2px `--ring` outline, 2px outside the button.
+- **Focus** is a 2px `--color-border-focused` outline, 2px outside the button.
 - **Disabled** is the enabled look at 50% opacity.
 - **Loading** keeps the full colour: the button is busy, not unavailable.
 
@@ -221,7 +219,7 @@ Every other `<button>` attribute passes through, including `ref`.
 
 ### Differences from the spec
 
-- **Two sizes, not four.** The sizes follow Atlassian Design: 32px (`md`) by default, 24px (`sm`) for tables and dense rows. Both take 12px from the outer edge to the label, a 6px gap and a 14/20 label; `sm` is a shorter box, not smaller type. The spec's larger steps were dropped; a big call to action is `md` with more room around it, not a taller box.
+- **Two sizes, not four.** The sizes follow Atlassian Design: 32px (`md`) by default, 24px (`sm`) for tables and dense rows. Both take 12px from the outer edge to the label (11px on ghost, which has no border), a 6px gap and a 14/20 label; `sm` is a shorter box, not smaller type. The spec's larger steps were dropped; a big call to action is `md` with more room around it, not a taller box.
 - **`disabled`, not `isDisabled`**: the native attribute keeps its name.
 - **`isIconOnly` is added.** The spec has no icon-only button, and a
   square button that still requires a name is common enough to need one.
@@ -229,7 +227,7 @@ Every other `<button>` attribute passes through, including `ref`.
   matching Base UI and shadcn. It replaced `asChild` in 0.8.
 - **`accent` is the inverted neutral** (foreground on background), as on
   Badge: the token set has one brand hue and `primary` uses it.
-- Outlined and ghost `primary` use `--primary-text`, a step of the accent
+- Outlined and ghost `primary` use `--color-text-brand`, a step of the accent
   measured to read at 4.5:1 on the page. The solid step would not, for
   warm accents.
 
@@ -295,7 +293,7 @@ back to the top of the page.
   accents in both modes, from the CSS that ships.
 - `sm` and `md` are under 44px; on touch screens (`pointer: coarse`) the
   hit area grows to 44×44px without the button growing.
-- Focus ring: 2px `--ring`, 2px offset, at 3:1 or better on the page.
+- Focus ring: 2px `--color-border-focused`, 2px offset, at 3:1 or better on the page.
 
 </DocTab>
 </DocTabs>

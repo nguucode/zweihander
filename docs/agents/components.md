@@ -1,28 +1,26 @@
 # Component conventions
 
-Conventions for every change under `src/components/**` (component or pattern, new or enhanced). It used to be the `zw-build` skill.
+Conventions for every change under `src/components/**` (new or enhanced). It used to be the `zw-build` skill.
 
 Work through the sections in order; each ends with a **gate**. The code is done only when gates 0 to 3 are green; gates 4 and 5 are checked before merge.
 
 A breaking change found midway sends you back to section 1 (fix `argTypes` and the MDX first), then the code.
 
-Before starting, read the reference file for the right kind:
+Before starting, read:
 
 - Component (`src/components/<category>/`): [components/component.md](components/component.md)
-- Pattern (`src/components/patterns/`): [components/pattern.md](components/pattern.md)
 - Example walking every section with Button: [components/example-button.md](components/example-button.md)
 
 The source decisions live in the vault (Definition of done, API conventions, Figma's role): `/Volumes/KAFKA/Vault/10-projects/zweihander/v1-plan/issues/04-definition-of-done.md`, `05-api-conventions.md`, `09-figma-role.md`. This file is how those decisions are carried out. If this file and the vault disagree, the vault is right: tell the user and fix this file.
 
 ## 0. Classify
 
-Answer three questions before opening the editor:
+Answer two questions before opening the editor:
 
-1. **Component or pattern?** A pattern is a section composed of several components, with no behaviour of its own.
-2. **New or enhance?**
+1. **New or enhance?**
    - *New:* is there a source spec on uiguideline.com? Is it in the 1.0 scope (`zweihander-component-list.md`)? Out of scope can still be built, but it enters with status `experimental`.
    - *Enhance:* is the change breaking? Check the breaking table in the reference file. Breaking starts at section 1. Only a token, color or spacing change goes straight to section 2.
-3. **Does it need Figma first?** A visual change (new component, new variant, changed anatomy) goes Figma → user approves → code. Tokens always go from code to Figma, never the other way.
+2. **Does it need Figma first?** A visual change (new component, new variant, changed anatomy) goes Figma → user approves → code. Tokens always go from code to Figma, never the other way.
 
 **Gate:** you can write one sentence of the form "<Name> — <new|enhance> — <breaking|non-breaking> — <target status>".
 
@@ -57,11 +55,11 @@ import * as NameStories from './Name.stories'
 Rules for each block:
 
 - **Props live in `argTypes`.** Every public prop has a `description` in the story file's `meta.argTypes`. `<ArgTypes>` renders the API table from it, and the Playground props panel reads the same source via `npm run playground:manifest`. Do not hand-write a prop table in the MDX. Type and default are usually inferred by react-docgen; when it cannot read them, see [Hard cases](#hard-cases). Changed a story? Run `npm run playground:manifest` and commit `src/playground/manifest.json`.
-- **The Playground reads the docs page too.** Its Specs and Guideline tabs come from the MDX via `npm run playground:manifest` (`scripts/playground-docs.mjs`): every `<SpecTable>` under `## Measurements` and `## Color` (caption a size name like `md` to pair with the `size` prop, or a variant name), `anatomyParts`, the prose of `## When to use`, `## When not to use` and `## Accessibility`, and every `<DoDont>`. A pattern or template page (no DocTabs) gives the Guideline tab its opening prose and its `## Layout`, `## What works`, `## Make it yours` and `## Accessibility`. So SpecTable `rows` and `caption` are literals (no variables), a `<DoDont>` closes with `/>` on a line of its own, and a SpecTable row's `part` up to its first comma, and up to " and " or " to " (`Title and description` → `Title`), is how the Playground finds that part's element in `anatomyParts` to draw its redline: by name, else the first part whose name has it as a whole word (`Icon` → `Start icon`). Focus ring and Hit area rows are drawn around the item's focusable element. A row naming a part the anatomy does not list (Option, Popover) shows in the table with no redline: add the part to `anatomyParts` to give it one. What follows the comma can name a state (`Container, hover`, `Label, pressed`, `Border, focus`, `Container, disabled`): the Specs tab's State picker then shows that row only in that state, so write the state word plainly there. A Color table whose caption is an option of a choice prop (`primary` of `variant`) shows only while that prop has that value, as a Measurements table captioned `md` does for `size`. Changed the MDX? Run `npm run playground:manifest` too.
+- **The Playground reads the docs page too.** Its Specs and Guideline tabs come from the MDX via `npm run playground:manifest` (`scripts/playground-docs.mjs`): every `<SpecTable>` under `## Measurements` and `## Color` (caption a size name like `md` to pair with the `size` prop, or a variant name), `anatomyParts`, the prose of `## When to use`, `## When not to use` and `## Accessibility`, and every `<DoDont>`. So SpecTable `rows` and `caption` are literals (no variables), a `<DoDont>` closes with `/>` on a line of its own, and a SpecTable row's `part` up to its first comma, and up to " and " or " to " (`Title and description` → `Title`), is how the Playground finds that part's element in `anatomyParts` to draw its redline: by name, else the first part whose name has it as a whole word (`Icon` → `Start icon`). Focus ring and Hit area rows are drawn around the item's focusable element. A row naming a part the anatomy does not list (Option, Popover) shows in the table with no redline: add the part to `anatomyParts` to give it one. What follows the comma can name a state (`Container, hover`, `Label, pressed`, `Border, focus`, `Container, disabled`): the Specs tab's State picker then shows that row only in that state, so write the state word plainly there. A Color table whose caption is an option of a choice prop (`primary` of `variant`) shows only while that prop has that value, as a Measurements table captioned `md` does for `size`. Changed the MDX? Run `npm run playground:manifest` too.
 - **Anatomy** renders the real component, not an image. The part list (`name`, `selector`, `description`) is exported from the story file as `anatomyParts` (added to `excludeStories`), with an `Anatomy` story tagged `!dev` whose `play` checks each selector matches exactly one distinct element. A part with no element of its own (a label that is a text node) gets wrapped in a `<span>` by the story.
 - **SpecTable** names tokens only; values are read live from CSS. Use only semantic tokens or tier tokens (`--control-md`), never the component's internal variables (`--button-bg`): they do not resolve outside the component. When hover and pressed mix colors with `color-mix`, explain it in text under `<States>`.
 - **DoDont** takes both sides from real stories. A "Don't" story is tagged `!dev` to hide it from the sidebar and the Playground; its tests still run.
-- `npm run docs:check` goes red when a component page (`src/components/<category>/<Name>.mdx`, except patterns, templates and the Overview pages) has no `<DocTabs>`, is missing a tab or a section from the table above, mentions a token that does not exist, points to a story the stories file does not export (`<Canvas of={XStories.Gone} />`), or has a SpecTable row naming a token that the component's CSS (the `.module.css` file followed from the import in `<Name>.tsx`) does not read with `var()`.
+- `npm run docs:check` goes red when a component page (`src/components/<category>/<Name>.mdx`, except the Overview pages) has no `<DocTabs>`, is missing a tab or a section from the table above, mentions a token that does not exist, points to a story the stories file does not export (`<Canvas of={XStories.Gone} />`), or has a SpecTable row naming a token that the component's CSS (the `.module.css` file followed from the import in `<Name>.tsx`) does not read with `var()`.
 
 Every component page uses the three tabs; the old long-page format is gone.
 
@@ -90,13 +88,13 @@ Breaking change: fix `argTypes` (and `### Differences from the spec` if any) **f
 ## 2. Code
 
 - Follow the API conventions in the reference file: prop names, `variant`/`appearance`, `render` instead of `asChild`, no `forwardRef`.
-- **Size defaults to `md`.** A component whose `size` offers `md` uses it as the default, and its `argTypes` default says so; usage code (stories, templates, the Playground) leaves `size` out unless it needs another size on purpose. `npm run playground:check` goes red on a size default that is not `md`. Exceptions: Divider (its size is a line weight, 1px `sm` is the norm) and Link (no default, it inherits the surrounding text size).
+- **Size defaults to `md`.** A component whose `size` offers `md` uses it as the default, and its `argTypes` default says so; usage code (stories, the Playground) leaves `size` out unless it needs another size on purpose. `npm run playground:check` goes red on a size default that is not `md`. Exceptions: Divider (its size is a line weight, 1px `sm` is the norm) and Link (no default, it inherits the surrounding text size).
 - Tokens only (`var(--…)`), no hard-coded values for color, spacing, radius or font.
 - Fixed sizes (`block-size`, `inline-size`) read `--box-*` or a role token (`--control-*`, `--icon-*`, `--row-height`, the `size` group), never `--space-*`. Pick the step by role from the table in `src/foundations/Sizing.mdx`.
 - A file with a hook or state: the first line is `'use client'`.
 - Comments explain *why*, they do not restate the code.
 - Update `registry.json`. The description **does not state counts** (do not write "four sizes"), because counts drift when the code changes.
-- Component (not pattern): export in `package.json#exports`, entries in `vite.lib.config.ts` and `tsconfig.build.json`.
+- Export in `package.json#exports`, entries in `vite.lib.config.ts` and `tsconfig.build.json`.
 - Minimum hit area 44×44 under `pointer: coarse`, by extending the hit area, not enlarging the visible part.
 
 **Gate:** these commands are all green.
@@ -139,12 +137,12 @@ The first command is green on all three browsers. The second only means somethin
 
 Each story file carries exactly one status tag in `meta.tags`, next to `'autodocs'` if present. Filter by status with the tag filter in the sidebar.
 
-| Status | Component | Pattern |
-|---|---|---|
-| `experimental` | Has a working story. API changes freely | Same as component |
-| `beta` | Meets sections 1–4: all three MDX tabs, tests green, a11y `error` | Not used |
-| `stable` | Beta, plus: green on Chromium/Firefox/WebKit, has a visual regression baseline, tried with VoiceOver + Safari (noted in the build log), one month without a breaking change | Meets sections 1–4, green on three browsers, has a visual regression baseline |
-| `deprecated` | Has a replacement, noted in the MDX. Removed in the next release | Same as component |
+| Status | Condition |
+|---|---|
+| `experimental` | Has a working story. API changes freely |
+| `beta` | Meets sections 1–4: all three MDX tabs, tests green, a11y `error` |
+| `stable` | Beta, plus: green on Chromium/Firefox/WebKit, has a visual regression baseline, tried with VoiceOver + Safari (noted in the build log), one month without a breaking change |
+| `deprecated` | Has a replacement, noted in the MDX. Removed in the next release |
 
 Do not raise a status before the conditions are met. Do not write "tested with a screen reader" until it was actually done.
 
@@ -161,7 +159,7 @@ Checklist to paste into the PR description:
 
 ```
 - [ ] Classify: <Name> — <new|enhance> — <breaking|non-breaking> — <status>
-- [ ] MDX: component 3 tabs Overview / Specs / Guidelines, `docs:check` green, props in `argTypes`; pattern: variants / Props / Layout / Accessibility
+- [ ] MDX: 3 tabs Overview / Specs / Guidelines, `docs:check` green, props in `argTypes`
 - [ ] Code: tokens only, 'use client', registry (no counts), exports
 - [ ] Story + play for each Accessibility sentence; a11y error
 - [ ] tsc, lint, tokens:check, registry:check, vitest storybook (3 browsers), vitest visual (CI)

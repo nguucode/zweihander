@@ -97,68 +97,71 @@ without a jump in size.
 
 The border is always there, 1px and transparent unless `outlined`, so
 switching appearance never moves the content. The padding counts that
-pixel: the content sits 16px from the alert's edge. The close button is 24px on
-a 20px line: it is pulled 2px up and down, so it centres on the first line
-and a one-line alert is no taller for having it. No shadow: an alert is
+pixel: the content sits 16px from the alert's edge. The close button is 24px,
+flush with the padding and top-aligned with the icon. No shadow: an alert is
 part of the page.
 
 ## Color
 
 Each variant reads four tokens, the same four as a Tag of that variant, so
 the two always agree. Subtle and outlined keep the description in
-`--foreground`: a paragraph in the variant's colour is tiring to read, so
-the colour goes on the icon and the title.
+`--color-text`: a paragraph in the variant's colour is tiring to read, so
+the colour goes on the icon, the title and the close button.
 
 <SpecTable
   caption="info"
   rows={[
-    { part: 'Container, subtle', property: 'Background', token: '--info-subtle' },
-    { part: 'Container, outlined', property: 'Border', token: '--info-text' },
-    { part: 'Icon and title, subtle and outlined', property: 'Colour', token: '--info-text' },
-    { part: 'Container, solid', property: 'Background', token: '--info' },
-    { part: 'Content, solid', property: 'Colour', token: '--info-foreground' },
+    { part: 'Container, subtle', property: 'Background', token: '--color-background-info' },
+    { part: 'Container, outlined', property: 'Border', token: '--color-text-info' },
+    { part: 'Icon and title, subtle and outlined', property: 'Colour', token: '--color-text-info' },
+    { part: 'Close button, subtle and outlined', property: 'Colour', token: '--color-text-info' },
+    { part: 'Container, solid', property: 'Background', token: '--color-background-info-bold' },
+    { part: 'Content, solid', property: 'Colour', token: '--color-text-info-inverse' },
   ]}
 />
 
 <SpecTable
   caption="success"
   rows={[
-    { part: 'Container, subtle', property: 'Background', token: '--success-subtle' },
-    { part: 'Container, outlined', property: 'Border', token: '--success-text' },
-    { part: 'Icon and title, subtle and outlined', property: 'Colour', token: '--success-text' },
-    { part: 'Container, solid', property: 'Background', token: '--success' },
-    { part: 'Content, solid', property: 'Colour', token: '--success-foreground' },
+    { part: 'Container, subtle', property: 'Background', token: '--color-background-success' },
+    { part: 'Container, outlined', property: 'Border', token: '--color-text-success' },
+    { part: 'Icon and title, subtle and outlined', property: 'Colour', token: '--color-text-success' },
+    { part: 'Close button, subtle and outlined', property: 'Colour', token: '--color-text-success' },
+    { part: 'Container, solid', property: 'Background', token: '--color-background-success-bold' },
+    { part: 'Content, solid', property: 'Colour', token: '--color-text-success-inverse' },
   ]}
 />
 
 <SpecTable
   caption="warning"
   rows={[
-    { part: 'Container, subtle', property: 'Background', token: '--warning-subtle' },
-    { part: 'Container, outlined', property: 'Border', token: '--warning-text' },
-    { part: 'Icon and title, subtle and outlined', property: 'Colour', token: '--warning-text' },
-    { part: 'Container, solid', property: 'Background', token: '--warning' },
-    { part: 'Content, solid', property: 'Colour', token: '--warning-foreground' },
+    { part: 'Container, subtle', property: 'Background', token: '--color-background-warning' },
+    { part: 'Container, outlined', property: 'Border', token: '--color-text-warning' },
+    { part: 'Icon and title, subtle and outlined', property: 'Colour', token: '--color-text-warning' },
+    { part: 'Close button, subtle and outlined', property: 'Colour', token: '--color-text-warning' },
+    { part: 'Container, solid', property: 'Background', token: '--color-background-warning-bold' },
+    { part: 'Content, solid', property: 'Colour', token: '--color-text-warning-inverse' },
   ]}
 />
 
 <SpecTable
   caption="danger"
   rows={[
-    { part: 'Container, subtle', property: 'Background', token: '--danger-subtle' },
-    { part: 'Container, outlined', property: 'Border', token: '--danger-text' },
-    { part: 'Icon and title, subtle and outlined', property: 'Colour', token: '--danger-text' },
-    { part: 'Container, solid', property: 'Background', token: '--danger' },
-    { part: 'Content, solid', property: 'Colour', token: '--danger-foreground' },
+    { part: 'Container, subtle', property: 'Background', token: '--color-background-danger' },
+    { part: 'Container, outlined', property: 'Border', token: '--color-text-danger' },
+    { part: 'Icon and title, subtle and outlined', property: 'Colour', token: '--color-text-danger' },
+    { part: 'Close button, subtle and outlined', property: 'Colour', token: '--color-text-danger' },
+    { part: 'Container, solid', property: 'Background', token: '--color-background-danger-bold' },
+    { part: 'Content, solid', property: 'Colour', token: '--color-text-danger-inverse' },
   ]}
 />
 
 <SpecTable
   caption="Every variant"
   rows={[
-    { part: 'Description, subtle and outlined', property: 'Colour', token: '--foreground' },
-    { part: 'Container, outlined', property: 'Background', token: '--background' },
-    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+    { part: 'Description, subtle and outlined', property: 'Colour', token: '--color-text' },
+    { part: 'Container, outlined', property: 'Background', token: '--color-surface' },
+    { part: 'Focus ring', property: 'Colour', token: '--color-border-focused' },
   ]}
 />
 
@@ -178,7 +181,7 @@ The alert itself has no states. Its close button does.
 
 - **Hover** tints the close button with 15% of the alert's own text
   colour, so it reads on every variant and appearance.
-- **Focus** is a 2px `--ring` outline, inside the button's edge.
+- **Focus** is a 2px `--color-border-focused` outline, inside the button's edge.
 
 ## API
 
@@ -248,7 +251,7 @@ The icon is decorative, so the variant has to be clear from the words too:
 - The icon is `aria-hidden`: the words carry the meaning.
 - The close button is a native `<button>` named `Dismiss` (change it with
   `closeLabel`). Tab reaches it, Enter and Space press it.
-- Focus ring: 2px `--ring` on the close button. On touch screens its hit
+- Focus ring: 2px `--color-border-focused` on the close button. On touch screens its hit
   area grows to 44×44px without the button growing.
 - Every variant and appearance passes the story tests' contrast check
   (light mode).

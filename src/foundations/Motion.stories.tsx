@@ -4,8 +4,8 @@ import { TokenTable } from './TokenTable'
 
 const TOKENS = [
   { name: '--duration-fast', use: 'Popups appearing: menu, tooltip, popover, date picker, listbox' },
-  { name: '--duration-base', use: 'State changes: hover and press colours, switch, accordion, modal' },
-  { name: '--duration-slow', use: 'Things that travel: the tab indicator, a toast sliding in, a drawer' },
+  { name: '--duration-base', use: 'State changes: hover and press colours, switch, collapse, modal' },
+  { name: '--duration-slow', use: 'Things that travel: the tab indicator, a toast sliding in' },
   { name: '--duration-spin', use: 'One turn of every spinner' },
   { name: '--duration-spin-reduced', use: 'One turn under prefers-reduced-motion' },
 ]

@@ -6,11 +6,11 @@
 .popup {
   box-sizing: border-box;
   max-inline-size: calc(100vw - 2 * var(--space-4));
-  border: 1px solid var(--border);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  background: var(--popover);
+  background: var(--color-surface-overlay);
   box-shadow: var(--shadow-overlay);
-  color: var(--popover-foreground);
+  color: var(--color-text);
   outline: none;
   transform-origin: var(--transform-origin);
   transition:
@@ -37,7 +37,7 @@
   display: flex;
 }
 .second {
-  border-inline-start: 1px solid var(--border);
+  border-inline-start: 1px solid var(--color-border);
 }
 .presets {
   display: flex;
@@ -45,7 +45,7 @@
   /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- 2px between preset rows, below the spacing scale on purpose */
   gap: 2px;
   padding: var(--space-inline);
-  border-inline-end: 1px solid var(--border);
+  border-inline-end: 1px solid var(--color-border);
 }
 .preset {
   min-inline-size: 7rem;
@@ -55,7 +55,7 @@
   border: 0;
   border-radius: var(--radius-control);
   background: transparent;
-  color: var(--foreground);
+  color: var(--color-text);
   font: inherit;
   font-size: var(--text-body-sm);
   font-weight: 500;
@@ -64,11 +64,11 @@
 }
 .preset:hover,
 .preset[aria-pressed='true'] {
-  background: var(--accent);
-  color: var(--accent-foreground);
+  background: var(--color-background-neutral);
+  color: var(--color-text);
 }
 .preset:focus-visible {
-  outline: var(--focus-width) solid var(--ring);
+  outline: var(--focus-width) solid var(--color-border-focused);
   outline-offset: var(--focus-offset-inset);
 }
 
@@ -85,7 +85,7 @@
     flex-direction: row;
     flex-wrap: wrap;
     border-inline-end: 0;
-    border-block-end: 1px solid var(--border);
+    border-block-end: 1px solid var(--color-border);
   }
   .preset {
     min-inline-size: 0;

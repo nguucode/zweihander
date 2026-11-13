@@ -153,12 +153,12 @@ export const Sizes: Story = {
       (n) => canvas.getByLabelText(n).parentElement!.getBoundingClientRect().height,
     )
     await expect(heights).toEqual([32, 40, 32, 40])
-    // The text starts 7px from the box's outer edge in both sizes, as
-    // Atlassian's Textfield: the 1px edge and 6px of padding.
+    // The text starts 11px from the box's outer edge in both sizes: the
+    // 1px edge and 10px of padding.
     for (const n of ['sm', 'md']) {
       const input = canvas.getByLabelText(n)
       await expect(parseFloat(getComputedStyle(input).paddingLeft)).toBe(0)
-      await expect(input.getBoundingClientRect().left - input.parentElement!.getBoundingClientRect().left).toBe(7)
+      await expect(input.getBoundingClientRect().left - input.parentElement!.getBoundingClientRect().left).toBe(11)
     }
   },
 }

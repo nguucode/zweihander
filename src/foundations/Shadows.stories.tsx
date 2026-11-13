@@ -14,7 +14,7 @@ function Swatch({ step }: { step: string }) {
           height: '4.5rem',
           width: '4.5rem',
           borderRadius: 'var(--radius-panel)',
-          background: 'var(--card)',
+          background: 'var(--color-surface-raised)',
           boxShadow: `var(--shadow-${step})`,
         }}
       />
@@ -60,10 +60,10 @@ export const Modes: Story = {
           key={appearance}
           appearance={appearance}
           style={{
-            background: 'var(--background)',
+            background: 'var(--color-surface)',
             // The light panel is the near-white page, so without this its
             // edge barely shows and the comparison looks one-sided.
-            border: '1px solid var(--border)',
+            border: '1px solid var(--color-border)',
             borderRadius: 'var(--radius-panel)',
             padding: 'var(--space-6)',
           }}

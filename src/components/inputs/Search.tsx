@@ -20,11 +20,13 @@ export interface SearchProps extends Omit<ComponentProps<'input'>, 'size' | 'typ
   defaultValue?: string
   /** A visible label. Without one the field is named by `aria-label` ("Search" by default). */
   label?: ReactNode
+  /** Under the field: what can be searched, or a note on the results. */
+  helperText?: ReactNode
   size?: InputSize
   isFullWidth?: boolean
   /**
    * One key, e.g. `/`, that focuses the field from anywhere on the page.
-   * No modifiers: ⌘K belongs to the Command Palette. One per page.
+   * No modifiers: ⌘K is left to the app. One per page.
    */
   shortcut?: string
 }
@@ -37,12 +39,14 @@ export function Search({
   value,
   defaultValue = '',
   label,
+  helperText,
   placeholder = 'Search',
   size = 'md',
   isFullWidth,
   shortcut,
   disabled,
   readOnly,
+  required,
   onChange,
   onKeyDown,
   className,
@@ -63,7 +67,7 @@ export function Search({
   useEffect(() => {
     if (!key) return
     const onKey = (e: globalThis.KeyboardEvent) => {
-      // Case-blind, as Command Palette's hotkey, so Caps Lock does not matter.
+      // Case-blind, so Caps Lock does not matter.
       if (e.key.toLowerCase() !== key.toLowerCase() || e.metaKey || e.ctrlKey || e.altKey || e.repeat || e.isComposing) return
       if (e.defaultPrevented || isInField(e.target)) return
       // Or the key would be typed into the field, and Firefox's quick find takes `/`.
@@ -88,8 +92,15 @@ export function Search({
   }
 
   return (
-    <InputField label={label} disabled={disabled} isFullWidth={isFullWidth} className={className}>
-      <span className={boxClass(size)} onMouseDown={focusControl}>
+    <InputField
+      label={label}
+      helperText={helperText}
+      required={required}
+      disabled={disabled}
+      isFullWidth={isFullWidth}
+      className={className}
+    >
+      <span className={cn(boxClass(size), styles.box)} onMouseDown={focusControl}>
         <span className={inputStyles.affix}>
           <Icon name="search" />
         </span>
@@ -105,6 +116,7 @@ export function Search({
           placeholder={placeholder}
           disabled={disabled}
           readOnly={readOnly}
+          required={required}
           aria-label={label ? ariaLabel : (ariaLabel ?? 'Search')}
           aria-keyshortcuts={key}
           onChange={(event: ChangeEvent<HTMLInputElement>) => {
@@ -132,7 +144,7 @@ export function Search({
           <button
             type="button"
             aria-label="Clear search"
-            className={inputStyles.iconButton}
+            className={cn(inputStyles.iconButton, styles.clear)}
             // Keep focus where it is: a focused field stays focused, an idle one stays idle.
             onMouseDown={(event) => event.preventDefault()}
             onClick={clear}

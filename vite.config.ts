@@ -33,14 +33,12 @@ const chromium = {
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
   plugins: [react()],
-  // Pages: the docs home, the Playground (`/playground/`) and the Houseura demo (`/crm/`).
+  // Pages: the docs home and the Playground (`/playground/`).
   build: {
     rollupOptions: {
       input: {
         main: path.join(dirname, 'index.html'),
         playground: path.join(dirname, 'playground/index.html'),
-        // Houseura: a sample CRM built from the kit (`/crm/`).
-        crm: path.join(dirname, 'crm/index.html'),
       },
     },
   },

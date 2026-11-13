@@ -6,7 +6,7 @@ import { contentTypes, countries } from './sample-data'
 
 const meta = {
   title: 'Charts/PieChart',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: PieChart,
   parameters: { layout: 'padded' },
   decorators: [(Story) => <div style={{ maxInlineSize: 560 }}>{Story()}</div>],
@@ -32,7 +32,11 @@ export const Default: Story = {
     const items = within(legend).getAllByRole('listitem')
     await expect(items).toHaveLength(5)
     const total = countries.reduce((s, c) => s + c.value, 0)
-    await expect(items[4]).toHaveTextContent(`Other (3)50 · ${formatShare(50 / total)}`)
+    // The legend carries the share only; the table has the values.
+    await expect(items[4]).toHaveTextContent(`Other (3)${formatShare(50 / total)}`)
+    // Centred below the pie.
+    const img = canvas.getByRole('img')
+    await expect(legend.getBoundingClientRect().top).toBeGreaterThan(img.getBoundingClientRect().bottom)
     // Each slice's share is in the image's description, not only in colour.
     await expect(canvas.getByRole('img', { name: new RegExp(`United States ${formatShare(1850 / total)}`) })).toBeVisible()
     // Hovering a legend item fades the other slices.

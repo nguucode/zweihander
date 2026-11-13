@@ -136,30 +136,30 @@ and the accent in the toolbar: the values follow.
 <SpecTable
   caption="underline"
   rows={[
-    { part: 'Tab', property: 'Label colour', token: '--muted-foreground' },
-    { part: 'Tab, hover', property: 'Label colour', token: '--foreground' },
-    { part: 'Selected tab', property: 'Label colour', token: '--primary-text' },
-    { part: 'Indicator', property: 'Colour', token: '--primary' },
-    { part: 'Tab list', property: 'Rule', token: '--border' },
+    { part: 'Tab', property: 'Label colour', token: '--color-text-subtlest' },
+    { part: 'Tab, hover', property: 'Label colour', token: '--color-text' },
+    { part: 'Selected tab', property: 'Label colour', token: '--color-text-brand' },
+    { part: 'Indicator', property: 'Colour', token: '--color-background-brand-bold' },
+    { part: 'Tab list', property: 'Rule', token: '--color-border' },
   ]}
 />
 
 <SpecTable
   caption="pills"
   rows={[
-    { part: 'Tab list', property: 'Track', token: '--muted' },
-    { part: 'Tab', property: 'Label colour', token: '--subtle-foreground' },
-    { part: 'Tab, hover, and selected tab', property: 'Label colour', token: '--foreground' },
-    { part: 'Indicator', property: 'Background', token: '--card' },
-    { part: 'Indicator', property: 'Border', token: '--border' },
+    { part: 'Tab list', property: 'Track', token: '--color-background-neutral' },
+    { part: 'Tab', property: 'Label colour', token: '--color-text-subtle' },
+    { part: 'Tab, hover, and selected tab', property: 'Label colour', token: '--color-text' },
+    { part: 'Indicator', property: 'Background', token: '--color-surface' },
+    { part: 'Indicator', property: 'Border', token: '--color-border' },
     { part: 'Indicator', property: 'Shadow', token: '--shadow-raised' },
   ]}
 />
 
-<SpecTable caption="Every appearance" rows={[{ part: 'Focus ring', property: 'Colour', token: '--ring' }]} />
+<SpecTable caption="Every appearance" rows={[{ part: 'Focus ring', property: 'Colour', token: '--color-border-focused' }]} />
 
-Pill labels use `--subtle-foreground`, not `--muted-foreground`: that is
-4.3:1 on the `--muted` track, under 4.5:1.
+Pill labels use `--color-text-subtle`, not `--color-text-subtlest`: that is
+4.3:1 on the `--color-background-neutral` track, under 4.5:1.
 
 ## States
 
@@ -185,9 +185,9 @@ Pill labels use `--subtle-foreground`, not `--muted-foreground`: that is
 
 - **Selected**: the label takes the selected colour and the indicator
   slides under it (`underline`) or behind it (`pills`).
-- **Hover** brings an unselected label up to `--foreground`. It adds no
+- **Hover** brings an unselected label up to `--color-text`. It adds no
   fill.
-- **Focus** is a 2px `--ring` outline drawn just inside the tab, so it is
+- **Focus** is a 2px `--color-border-focused` outline drawn just inside the tab, so it is
   not clipped by the list.
 - **Disabled** (Archive, above) is the enabled look at 50% opacity. It
   still takes focus.
@@ -230,7 +230,7 @@ selects, so a slow panel does not load on every keypress. Turn on
   Stepper.
 - **To compare content side by side.** Tabs show one panel at a time; put
   things that are read together on the same view.
-- **To go to another page.** Use links, a Nav Sidebar or Breadcrumbs: a tab
+- **To go to another page.** Use links, a side navigation or Breadcrumbs: a tab
   changes the view, not the URL.
 - **For one setting with two or three options.** Use a radio group or a
   [Toggle Button](?path=/docs/components-buttons-togglebutton--docs) group:
@@ -250,7 +250,7 @@ selects, so a slow panel does not load on every keypress. Turn on
   found and announced, but it cannot be selected.
 - Tabs are 24 or 32px tall and grow to 44px on touch screens
   (`pointer: coarse`).
-- Focus ring: 2px `--ring`, drawn inside the tab.
+- Focus ring: 2px `--color-border-focused`, drawn inside the tab.
 
 </DocTab>
 </DocTabs>

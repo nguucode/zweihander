@@ -4,7 +4,7 @@ import { expectAnatomy } from '../../../.storybook/blocks'
 import { ACCENT_COLORS, GRAY_COLORS } from '@/theme/palettes'
 import { Theme } from '@/theme/Theme'
 import { Avatar, AvatarGroup } from './Avatar'
-import { contrast, lum, paint } from '@/test/story-helpers'
+import { contrast } from '@/test/story-helpers'
 
 // A self-contained stand-in portrait, so stories never depend on the network.
 const portrait =
@@ -119,6 +119,8 @@ export const InitialsSizes: Story = {
     const text = SIZES.map((n) => canvas.getByRole('img', { name: n }).firstElementChild!)
     await expect(text.map((el) => el.textContent)).toEqual(['s', 'sr', 'sr', 'sr', 'sr', 'sr'])
     await expect(text.map((el) => parseFloat(getComputedStyle(el).fontSize))).toEqual([12, 12, 12, 14, 28, 32])
+    // Medium on the row sizes, semibold (Figma's Heading/xl and 2xl) on the profile sizes.
+    await expect(text.map((el) => getComputedStyle(el).fontWeight)).toEqual(['500', '500', '500', '500', '600', '600'])
     // The letters fit inside the circle at every size.
     for (const el of text) {
       await expect(el.getBoundingClientRect().width).toBeLessThan(el.parentElement!.getBoundingClientRect().width)
@@ -158,8 +160,12 @@ export const Silhouette: Story = {
     // No name means decorative: hidden, not announced as an empty image.
     await expect(canvasElement.querySelector('span')).toHaveAttribute('aria-hidden', 'true')
     await expect(canvas.queryByRole('img')).toBeNull()
-    // Neither image nor initials: the silhouette.
-    await expect(canvasElement.querySelector('svg')).toBeVisible()
+    // Neither image nor initials: the silhouette, the user icon at 60% of the circle, centred.
+    const svg = canvasElement.querySelector('svg')!
+    await expect(svg).toBeVisible()
+    const [a, i] = [canvasElement.querySelector('span')!.getBoundingClientRect(), svg.getBoundingClientRect()]
+    await expect(i.width / a.width).toBeCloseTo(0.6, 2)
+    await expect(i.left - a.left).toBeCloseTo(a.right - i.right, 1)
   },
 }
 
@@ -190,8 +196,6 @@ export const Colors: Story = {
   ),
 }
 
-const WARM = ['orange', 'amber', 'yellow', 'lime']
-
 /**
  * Every colour × variant, initials and silhouette, on every gray ramp in both
  * modes, measured from the CSS that ships.
@@ -206,7 +210,7 @@ export const Contrast: Story = {
             key={mode + gray}
             appearance={mode}
             grayColor={gray}
-            style={{ background: 'var(--background)', display: 'flex', flexWrap: 'wrap', gap: 2, padding: 2 }}
+            style={{ background: 'var(--color-surface)', display: 'flex', flexWrap: 'wrap', gap: 2, padding: 2 }}
           >
             {(['subtle', 'solid'] as const).flatMap((variant) =>
               [undefined, ...ACCENT_COLORS].flatMap((color) =>
@@ -230,10 +234,9 @@ export const Contrast: Story = {
   ),
   play: async ({ canvasElement }) => {
     const failures: string[] = []
-    const solidSilhouettes = new Map<string, Set<string>>()
     for (const avatar of canvasElement.querySelectorAll<HTMLElement>('[data-audit]')) {
       const audit = avatar.dataset.audit!
-      const [mode, gray, variant, color] = audit.split(' ')
+      const [, , variant, color] = audit.split(' ')
       const page = getComputedStyle(avatar.parentElement!).backgroundColor
       const fill = getComputedStyle(avatar).backgroundColor
       const svg = avatar.querySelector('svg')
@@ -243,29 +246,20 @@ export const Contrast: Story = {
         // Initials: 4.5:1 everywhere; neutral solid (gray 600 under gray 50) 6.5:1 on every ramp.
         const floor = variant === 'solid' && color === 'neutral' ? 6.5 : 4.5
         if (ratio < floor) failures.push(`${audit} initials ${ratio.toFixed(2)}`)
-      } else if (variant === 'subtle') {
-        // The initials' colour (neutral: --muted-foreground), past 3:1.
+      } else {
+        // The initials' colour (neutral subtle: --color-text-subtlest), past 3:1.
         const probe = avatar.parentElement!.appendChild(document.createElement('span'))
-        probe.style.color = 'var(--muted-foreground)'
+        probe.style.color = 'var(--color-text-subtlest)'
         const expected =
-          color === 'neutral'
+          variant === 'subtle' && color === 'neutral'
             ? getComputedStyle(probe).color
             : getComputedStyle(avatar.previousElementSibling!.firstElementChild!).color
         probe.remove()
         if (fg !== expected) failures.push(`${audit} silhouette ${fg} is not ${expected}`)
         if (ratio < 3) failures.push(`${audit} silhouette ${ratio.toFixed(2)}`)
-      } else {
-        // Solid: one white across hues. In light mode only the warm hues may
-        // fall under 3:1; in dark mode the fill is the 400 step and most hues
-        // do, which the docs state as the accepted trade-off.
-        const key = `${mode} ${gray}`
-        solidSilhouettes.set(key, (solidSilhouettes.get(key) ?? new Set()).add(fg))
-        if (lum(paint(fg)) < 0.9) failures.push(`${audit} silhouette is not white: ${fg}`)
-        if (mode === 'light' && ratio < 3 && !WARM.includes(color)) failures.push(`${audit} silhouette ${ratio.toFixed(2)}`)
       }
     }
     await expect(failures).toEqual([])
-    await expect([...solidSilhouettes.values()].every((colours) => colours.size === 1)).toBe(true)
   },
 }
 
@@ -319,7 +313,7 @@ export const StatusSizes: Story = {
         return { a: avatar.getBoundingClientRect(), d: avatar.lastElementChild!.getBoundingClientRect() }
       })
       // No dot at xs (16px), as in Atlassian; the name above still says "Online".
-      expect(dots.map(({ d }) => [d.width, d.height])).toEqual([[0, 0], [6, 6], [6, 6], [8, 8], [16, 16], [20, 20]])
+      expect(dots.map(({ d }) => [d.width, d.height])).toEqual([[0, 0], [8, 8], [8, 8], [8, 8], [16, 16], [20, 20]])
       for (const { a, d } of dots.slice(1, 4)) expect([d.right, d.bottom]).toEqual([a.right, a.bottom])
       // xl and 2xl: the dot's centre is on the circle, so it overlaps the picture instead of floating off it.
       for (const { a, d } of dots.slice(4)) {
@@ -439,7 +433,7 @@ export const anatomyParts = [
   { name: 'Container', selector: '[role="img"]', description: 'The circle, in the chosen colour and variant. Clips its content and carries the name.' },
   { name: 'Image', selector: 'img', description: 'Cropped to fill. Silent itself: the name is on the container.' },
   { name: 'Initials', selector: '[role="img"] > span', description: 'Shown when there is no image, or it fails to load.' },
-  { name: 'Silhouette', selector: 'svg', description: 'A head and shoulders, when there is neither.' },
+  { name: 'Silhouette', selector: 'svg', description: 'The kit\'s user icon at 60% of the circle, when there is neither.' },
   { name: 'Status dot', selector: '[role="img"] > span:last-child:empty', description: 'Optional. Presence, on the bottom-end corner, in a ring of the page colour. Part of the name.' },
   { name: 'Group', selector: '[data-part="group"]', description: 'Optional. Avatars overlapping by 4px, each ringed in the page colour.' },
   { name: 'More', selector: '[data-part="group"] > :last-child', description: 'A neutral avatar with "+n" for the people past `max`. Named only when the avatars are.' },

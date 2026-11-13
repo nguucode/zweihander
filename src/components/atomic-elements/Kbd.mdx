@@ -15,7 +15,7 @@ or a short word like Esc.
 
 <Status of={KbdStories} />
 
-Kbd is outside the 1.0 component list, so it starts as experimental.
+Kbd is outside the 1.0 component list; it is beta from 0.9.0.
 
 <Canvas of={KbdStories.Sizes} />
 
@@ -96,9 +96,9 @@ The border is 1px, 2px along the bottom so the cap reads as raised.
 <SpecTable
   caption="Key"
   rows={[
-    { part: 'Key', property: 'Background', token: '--muted' },
-    { part: 'Key', property: 'Border', token: '--border' },
-    { part: 'Key', property: 'Glyph', token: '--muted-foreground' },
+    { part: 'Key', property: 'Background', token: '--color-background-neutral' },
+    { part: 'Key', property: 'Border', token: '--color-border' },
+    { part: 'Key', property: 'Glyph', token: '--color-text-subtlest' },
   ]}
 />
 

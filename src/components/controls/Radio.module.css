@@ -45,7 +45,7 @@
   line-height: var(--leading-body);
   /* Atlassian's form Legend weight; an option's own label stays regular. */
   font-weight: var(--font-weight-label);
-  color: var(--foreground);
+  color: var(--color-text);
 }
 
 .item {
@@ -57,7 +57,7 @@
    group is in error or success; only the group message takes that colour.
    Three classes to outrank ChoiceField's `.error .helper`. */
 .item .optionHelper.optionHelper {
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
 }
 
 /* Group helper text sits under the group, not indented under a control. */
@@ -65,25 +65,25 @@
   padding-inline-start: 0;
 }
 
-/* --choice-box circle, a --control-border outline (3:1 on the page). Selected fills
+/* --choice-box circle, a --color-border-bold outline (3:1 on the page). Selected fills
    with the variant and shows a dot in its label colour. */
 .radio {
-  --radio-fill: var(--foreground);
-  --radio-dot: var(--background);
+  --radio-fill: var(--color-text);
+  --radio-dot: var(--color-surface);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   inline-size: var(--choice-control);
   block-size: var(--choice-control);
-  border: 1px solid var(--control-border);
+  border: 1px solid var(--color-border-bold);
   border-radius: var(--radius-pill);
-  background: var(--background);
+  background: var(--color-surface);
   cursor: var(--cursor-button);
 }
 
 .primary {
-  --radio-fill: var(--primary);
-  --radio-dot: var(--primary-foreground);
+  --radio-fill: var(--color-background-brand-bold);
+  --radio-dot: var(--color-text-brand-inverse);
 }
 
 .radio[data-checked] {
@@ -94,7 +94,7 @@
 }
 
 .radio[data-invalid] {
-  border-color: var(--danger-text);
+  border-color: var(--color-text-danger);
 }
 
 .radio[data-readonly] {
@@ -105,7 +105,7 @@
    error ring stays red); selected nudges the fill toward the dot, as Button
    does. */
 label:hover > .radio:not([data-checked], [data-disabled], [data-readonly], [data-invalid]) {
-  border-color: var(--foreground);
+  border-color: var(--color-text);
 }
 
 label:hover > .radio[data-checked]:not([data-disabled], [data-readonly]) {

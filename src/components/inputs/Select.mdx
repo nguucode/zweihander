@@ -63,7 +63,7 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/select.json
   <Story of={SelectStories.Anatomy} />
 </Anatomy>
 
-The **options list** opens below the field, 8px away, at least as wide as
+The **options list** opens below the field, 4px away, at least as wide as
 the field. It renders in a portal at the end of `<body>`, so it is not
 marked above. Each **option** is a 32px row with 12px at its sides, after Atlassian's
 Select; the chosen one has a check before its label, in the brand colour. Open the list in the example at
@@ -72,23 +72,18 @@ the top of Overview to see it.
 ## Measurements
 
 The box is Text Input's: `sm` is 32px and `md` is 40px, one step taller
-than a Button, with the same padding, icon and type in both. A field that
-opens a list is roomier than one you type in, after Atlassian's Select:
-the value starts 8px inside the edge, not 6px, and the chevron is a 12px
-icon with 12px after it, so its centre is 19px from the outer edge. The
-value stops 16px short of the chevron: the 12px gap and 4px before the
-chevron.
+than a Button, with the same 10px padding, 16px icon and type in both.
+The value stops 12px short of the chevron, which ends 10px inside the
+edge.
 
 <SpecTable
   caption="sm"
   rows={[
     { part: 'Container', property: 'Height', token: '--control-md' },
-    { part: 'Container', property: 'Inline padding, start', token: '--space-2' },
-    { part: 'Container', property: 'Inline padding, end', token: '--space-3' },
+    { part: 'Container', property: 'Inline padding', token: '--space-2-5' },
     { part: 'Container', property: 'Corner radius', token: '--control-md-radius-field' },
     { part: 'Container', property: 'Gap', token: '--space-3' },
-    { part: 'Chevron', property: 'Size', token: '--icon-xs' },
-    { part: 'Chevron', property: 'Inline start margin', token: '--space-1' },
+    { part: 'Chevron', property: 'Size', token: '--icon-md' },
     { part: 'Value', property: 'Font size', token: '--text-body' },
     { part: 'Option', property: 'Inline padding', token: '--space-3' },
   ]}
@@ -98,12 +93,10 @@ chevron.
   caption="md"
   rows={[
     { part: 'Container', property: 'Height', token: '--control-lg' },
-    { part: 'Container', property: 'Inline padding, start', token: '--space-2' },
-    { part: 'Container', property: 'Inline padding, end', token: '--space-3' },
+    { part: 'Container', property: 'Inline padding', token: '--space-2-5' },
     { part: 'Container', property: 'Corner radius', token: '--control-md-radius-field' },
     { part: 'Container', property: 'Gap', token: '--space-3' },
-    { part: 'Chevron', property: 'Size', token: '--icon-xs' },
-    { part: 'Chevron', property: 'Inline start margin', token: '--space-1' },
+    { part: 'Chevron', property: 'Size', token: '--icon-md' },
     { part: 'Value', property: 'Font size', token: '--text-body' },
     { part: 'Option', property: 'Inline padding', token: '--space-3' },
   ]}
@@ -136,38 +129,38 @@ The field's colours are Text Input's; the list adds the popover's.
 <SpecTable
   caption="default"
   rows={[
-    { part: 'Container', property: 'Background', token: '--card' },
-    { part: 'Container', property: 'Border', token: '--field-border' },
-    { part: 'Value', property: 'Colour', token: '--foreground' },
-    { part: 'Placeholder and chevron', property: 'Colour', token: '--muted-foreground' },
-    { part: 'Options list', property: 'Background', token: '--popover' },
-    { part: 'Options list', property: 'Border', token: '--border' },
-    { part: 'Option', property: 'Colour', token: '--popover-foreground' },
-    { part: 'Option, highlighted', property: 'Background', token: '--accent' },
-    { part: 'Option, highlighted', property: 'Colour', token: '--accent-foreground' },
-    { part: 'Check', property: 'Colour', token: '--primary-text' },
-    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+    { part: 'Container', property: 'Background', token: '--color-surface-raised' },
+    { part: 'Container', property: 'Border', token: '--color-border-input' },
+    { part: 'Value', property: 'Colour', token: '--color-text' },
+    { part: 'Placeholder and chevron', property: 'Colour', token: '--color-text-subtlest' },
+    { part: 'Options list', property: 'Background', token: '--color-surface-overlay' },
+    { part: 'Options list', property: 'Border', token: '--color-border' },
+    { part: 'Option', property: 'Colour', token: '--color-text' },
+    { part: 'Option, highlighted', property: 'Background', token: '--color-background-neutral' },
+    { part: 'Option, highlighted', property: 'Colour', token: '--color-text' },
+    { part: 'Check', property: 'Colour', token: '--color-text-brand' },
+    { part: 'Focus ring', property: 'Colour', token: '--color-border-focused' },
   ]}
 />
 
 <SpecTable
   caption="error"
   rows={[
-    { part: 'Container', property: 'Border', token: '--danger-text' },
-    { part: 'Helper text', property: 'Colour', token: '--danger-text' },
-    { part: 'Focus ring', property: 'Colour', token: '--danger-text' },
+    { part: 'Container', property: 'Border', token: '--color-text-danger' },
+    { part: 'Helper text', property: 'Colour', token: '--color-text-danger' },
+    { part: 'Focus ring', property: 'Colour', token: '--color-text-danger' },
   ]}
 />
 
 <SpecTable
   caption="success"
   rows={[
-    { part: 'Container', property: 'Border', token: '--success-text' },
-    { part: 'Helper text', property: 'Colour', token: '--success-text' },
+    { part: 'Container', property: 'Border', token: '--color-text-success' },
+    { part: 'Helper text', property: 'Colour', token: '--color-text-success' },
   ]}
 />
 
-<SpecTable caption="Read-only" rows={[{ part: 'Container', property: 'Background', token: '--surface-filled' }]} />
+<SpecTable caption="Read-only" rows={[{ part: 'Container', property: 'Background', token: '--color-background-input' }]} />
 
 ## States
 
@@ -185,13 +178,13 @@ The field's colours are Text Input's; the list adds the popover's.
 </States>
 
 - **Hover** changes nothing on the field; the cursor turns to the button cursor.
-- **Focus** is the field's 2px `--ring` outline, shown from the keyboard,
+- **Focus** is the field's 2px `--color-border-focused` outline, shown from the keyboard,
   and kept while the list is open: focus moves into the list, but the
   field is still the one being chosen for.
 - **Highlighted option** is where the arrow keys or the pointer are:
-  `--accent` behind it. Disabled options are dimmed to 60% and skipped.
+  `--color-background-neutral` behind it. Disabled options are dimmed to 60% and skipped.
 - **Loading** swaps the chevron for a spinner in the same place.
-- **Read-only** fills the field with `--surface-filled`.
+- **Read-only** fills the field with `--color-background-input`.
 - **Disabled** is the enabled look at 50% opacity.
 
 ## API
@@ -261,7 +254,7 @@ a way people expect: by size or frequency, or alphabetically for names.
   returns to the field.
 - The label is associated with the field (`aria-labelledby`). It is a
   `<div>`, because a `<label>` would also click the button and open the
-  list.
+  list. Without a visible label, pass `aria-label` to name the field.
 - `helperText` is the field's description; `validationState="error"`
   sets `aria-invalid`, and `required` sets `aria-required`.
 - **Read-only** locks the value, not the list: it still opens so the

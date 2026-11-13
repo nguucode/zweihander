@@ -39,18 +39,12 @@ export type Density = (typeof DENSITIES)[number]
 
 let hasWarned = false
 
-export const CANVASES = ['plain', 'neutral', 'tinted'] as const
-export type Canvas = (typeof CANVASES)[number]
-
-export const CONTENT_STYLES = ['card', 'flat'] as const
-export type ContentStyle = (typeof CONTENT_STYLES)[number]
-
 export interface ThemeProps extends ComponentProps<'div'> {
   /** `inherit` (default) leaves the surrounding appearance alone. */
   appearance?: Appearance
   /**
-   * The brand hue. Drives `--primary` and `--ring` — not the token named
-   * `--accent`, which is a subtle surface and a different thing entirely.
+   * The brand hue. Drives the brand tokens (`--color-background-brand-bold`,
+   * `--color-text-brand`, …) and `--color-border-focused`.
    */
   accentColor?: AccentColor
   /** The neutral ramp behind backgrounds, text, borders and muted surfaces. */
@@ -62,26 +56,8 @@ export interface ThemeProps extends ComponentProps<'div'> {
   /** Rescales rounding for this scope. Inherits when omitted. */
   radius?: Radius
   /**
-   * What an AppShell sits on: `plain` (the card colour), `neutral` (the page
-   * gray) or `tinted` (the accent's subtle step). For any other colour or a
-   * gradient, pass `tokens={{ canvas, 'canvas-solid', 'canvas-foreground',
-   * 'canvas-muted-foreground' }}` (`canvas-solid`: one colour standing for
-   * it, for rings and fills), and for a transparent NavSidebar on it
-   * `canvas-hover`, `canvas-selected`, `canvas-field`, `canvas-field-border`,
-   * `canvas-badge`, `canvas-badge-foreground`; contrast is then yours to
-   * check, in both appearances. Inherits when omitted; the default is `neutral`.
-   */
-  canvas?: Canvas
-  /**
-   * How an AppShell's content meets the canvas: `flat` puts it on one card
-   * surface inset from the edges, `card` leaves it on the canvas so each block
-   * is its own Card (`appearance="surface"`). Inherits when omitted; the
-   * default is `flat`.
-   */
-  contentStyle?: ContentStyle
-  /**
    * Token overrides for this scope, without the `--` prefix:
-   * `{ radius: '1rem', primary: 'oklch(0.55 0.2 260)' }`. Any custom property
+   * `{ radius: '1rem', 'color-background-brand-bold': 'oklch(0.55 0.2 260)' }`. Any custom property
    * works, including ones Zweihänder doesn't define.
    */
   tokens?: Record<string, string>
@@ -96,8 +72,6 @@ export function Theme({
   scaling,
   density,
   radius,
-  canvas,
-  contentStyle,
   tokens,
   render,
   className,
@@ -121,8 +95,6 @@ export function Theme({
         // instead of restating them on every scope.
         'data-accent': accentColor,
         'data-gray': grayColor,
-        'data-canvas': canvas,
-        'data-content-style': contentStyle,
         className: cn(appearance !== 'inherit' && appearance, className),
         style: { ...tokensToStyle(resolved), ...style } as CSSProperties,
       } as ComponentProps<'div'>,

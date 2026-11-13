@@ -75,14 +75,16 @@ export function Modal({
         <Dialog.Viewport className={styles.viewport}>
           <Dialog.Popup initialFocus={initialFocus} className={cn(styles.popup, widths[size], className)}>
             <div className={styles.header}>
-              <Dialog.Title className={styles.title}>{title}</Dialog.Title>
+              <div className={styles.heading}>
+                <Dialog.Title className={styles.title}>{title}</Dialog.Title>
+                {description && <Dialog.Description className={styles.description}>{description}</Dialog.Description>}
+              </div>
               {showClose && (
                 <Dialog.Close aria-label={closeLabel} className={styles.close}>
                   <Icon name="close" />
                 </Dialog.Close>
               )}
             </div>
-            {description && <Dialog.Description className={styles.description}>{description}</Dialog.Description>}
             {children && <div className={styles.body}>{children}</div>}
             {footer && <div className={styles.footer}>{footer}</div>}
           </Dialog.Popup>

@@ -23,13 +23,13 @@ from](#where-the-values-come-from) — but nothing downstream of it is.
 
 | Layer | Where | Example |
 | --- | --- | --- |
-| Raw value | `:root` / `.dark` in `tokens.css` | `--primary: oklch(51.1% 0.262 276.966)` |
+| Raw value | `:root` / `.dark` in `tokens.css` | `--color-background-brand-bold: oklch(51.1% 0.262 276.966)` |
 | Derived value | the `*` block in `tokens.css` | `--radius-control: max(…)` |
-| Usage | a component's `.module.css` | `background: var(--primary)` |
+| Usage | a component's `.module.css` | `background: var(--color-background-brand-bold)` |
 
 Components only ever read the variable. That is what makes a rebrand a
 change to one file, and what keeps theme conditionals out of component CSS
-entirely — the value behind `var(--primary)` changes, the rule does not.
+entirely — the value behind `var(--color-background-brand-bold)` changes, the rule does not.
 
 The derived layer is on `*` rather than `:root` on purpose: a custom
 property that reads another one resolves where it is *declared*, so
@@ -47,9 +47,9 @@ other.
 
 Two things follow from that, and both are visible on other pages here.
 
-**Nothing semantic holds a literal.** In the source, `primary` is
-`{accent.solid}` and `foreground` is `{gray.950}` — references, not
-colours. Swapping a ramp moves everything downstream of it in one edit,
+**Nothing semantic holds a literal.** In the source,
+`color-background-brand-bold` is `{accent.solid}` and `color-text` is
+`{gray.950}` — references, not colours. Swapping a ramp moves everything downstream of it in one edit,
 which is what makes the 17 accents and 9 grays on this page a
 three-line change rather than a rewrite.
 
@@ -99,7 +99,7 @@ stylesheet loads:
 ```css
 :root {
   --radius: 1rem;
-  --primary: oklch(0.55 0.2 264);
+  --color-background-brand-bold: oklch(0.55 0.2 264);
 }
 ```
 
@@ -120,7 +120,7 @@ Four settings, each independent:
 
 | Prop | Values |
 | --- | --- |
-| `accentColor` | 17 hues — drives `--primary` and `--ring` |
+| `accentColor` | 17 hues — drives the brand tokens (`--color-background-brand-bold`, `--color-text-brand`, `--color-icon-brand`) and `--color-border-focused` |
 | `grayColor` | 9 neutral ramps — drives backgrounds, text, borders |
 | `appearance` | `light`, `dark`, `inherit` |
 | `radius` | `sharp`, `rounded`, `full-rounded` |
@@ -135,13 +135,9 @@ the lighter solids miss the 3:1 a focus indicator needs.
 
 <Canvas of={OverviewStories.AccentColor} />
 
-**`accentColor` sets `--primary`, not `--accent`.** The token named
-`--accent` is a subtle hover surface — a different thing that happens to
-share the word.
-
 ### Gray color
 
-The neutral ramp behind surfaces, text, borders and muted fills. The
+The neutral ramp behind surfaces, text, borders and neutral fills. The
 differences are subtle and cumulative; they read most clearly in dark
 mode, which is how they are shown here.
 

@@ -95,7 +95,7 @@ export const FirstUse: Story = {
 /** Inside a panel or a table body. */
 export const Small: Story = {
   args: { size: 'sm', headingLevel: 3, action: undefined, title: 'No comments', description: 'Comments on this file show up here.', icon: <Icon name="info" /> },
-  decorators: [(Story) => <div style={{ maxInlineSize: '20rem', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)' }}>{Story()}</div>],
+  decorators: [(Story) => <div style={{ maxInlineSize: '20rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)' }}>{Story()}</div>],
   play: async ({ canvas }) => {
     await expect(canvas.getByRole('heading', { level: 3 })).toHaveTextContent('No comments')
   },

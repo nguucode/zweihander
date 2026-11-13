@@ -5,8 +5,8 @@ import * as SkeletonStories from './Skeleton.stories'
 
 <Meta of={SkeletonStories} />
 
-{/* On the page background: in dark mode --muted is the stage's own colour. */}
-export const card = { background: 'var(--background)', padding: 'var(--space-4)', borderRadius: 'var(--radius-lg)' }
+{/* On the page background: in dark mode --color-background-neutral is the stage's own colour. */}
+export const card = { background: 'var(--color-surface)', padding: 'var(--space-4)', borderRadius: 'var(--radius-lg)' }
 
 # Skeleton
 
@@ -93,7 +93,7 @@ any contrast floor on purpose: a placeholder should read as "something
 goes here", not compete with content that has arrived. Switch the theme in
 the toolbar: the value follows.
 
-<SpecTable caption="Every appearance" rows={[{ part: 'Shape', property: 'Background', token: '--muted' }]} />
+<SpecTable caption="Every appearance" rows={[{ part: 'Shape', property: 'Background', token: '--color-background-neutral' }]} />
 
 ## States
 
@@ -162,7 +162,7 @@ default because a screen of pulsing shapes is noise.
   it when the content arrives.
 - If the wait matters, announce it: a visually hidden status, or a Spinner
   with a label.
-- `--muted` is below 3:1 on the page in both modes, on purpose. It is not
+- `--color-background-neutral` is below 3:1 on the page in both modes, on purpose. It is not
   content, and should not compete with content that has arrived.
 - The pulse stops under `prefers-reduced-motion`.
 

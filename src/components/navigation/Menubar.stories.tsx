@@ -65,7 +65,7 @@ const menus: MenubarMenu[] = [
 
 const meta = {
   title: 'Components/Navigation/Menubar',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: Menubar,
   args: { menus, 'aria-label': 'Invoice editor' },
   // Every prop is described here: these are the docs' API table and the
@@ -115,6 +115,9 @@ export const Default: Story = {
     onUndo.mockClear()
     const bar = canvas.getByRole('menubar', { name: 'Invoice editor' })
     const [file, edit, view] = within(bar).getAllByRole('menuitem')
+    // The bar is just its triggers: no border or padding, triggers touching, labels regular weight.
+    await expect([getComputedStyle(bar).borderTopWidth, getComputedStyle(bar).paddingLeft, getComputedStyle(bar).columnGap]).toEqual(['0px', '0px', 'normal'])
+    await expect(getComputedStyle(file).fontWeight).toBe('400')
     await expect(file).toHaveAttribute('aria-haspopup', 'menu')
     await expect(file).toHaveAttribute('aria-expanded', 'false')
     // One tab stop: Tab lands on the first menu, the arrows move along the bar.

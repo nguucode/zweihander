@@ -133,25 +133,27 @@ export const Sizes: Story = {
     </div>
   ),
   play: async ({ canvas }) => {
-    // 32 and 40px boxes; in each the clear and open buttons are 24px targets
-    // that touch without overlapping and stay inside the box's edge.
+    // 32 and 40px boxes; in each the clear button and the open button's
+    // target stay inside the box's edge without overlapping.
     const boxes = ['sm', 'md'].map((n) => canvas.getByRole('combobox', { name: n }).parentElement!)
     await waitFor(() => expect(boxes.map((b) => b.getBoundingClientRect().height)).toEqual([32, 40]))
     for (const box of boxes) {
       const edge = box.getBoundingClientRect()
       const [clear, open] = [...box.querySelectorAll(':scope > button')].map((b) => b.getBoundingClientRect())
-      for (const r of [clear, open]) await expect([r.width, r.height]).toEqual([24, 24])
-      await expect(clear.right).toBe(open.left)
+      // The clear button is the bare 16px icon; the open button a 24px target.
+      await expect([clear.width, clear.height]).toEqual([16, 16])
+      await expect([open.width, open.height]).toEqual([24, 24])
+      await expect(open.left - clear.right).toBe(8)
       await expect(open.right).toBeLessThan(edge.right)
       await expect(open.top).toBeGreaterThan(edge.top)
       await expect(open.bottom).toBeLessThan(edge.bottom)
-      // As Atlassian's Select: the value starts 9px from the outer edge and
-      // the open icon's centre is 19px from the end.
-      await expect(box.querySelector('input')!.getBoundingClientRect().left - edge.left).toBe(9)
+      // The value starts 11px from the outer edge (the 1px edge and 10px of
+      // padding), and the open icon's centre is 19px from the end.
+      await expect(box.querySelector('input')!.getBoundingClientRect().left - edge.left).toBe(11)
       await expect(edge.right - (open.left + open.right) / 2).toBe(19)
-      // Both draw a 12px icon, 12px apart; the value stops 12px short of the clear icon.
+      // Both draw a 16px icon, 12px apart; the value stops 12px short of the clear icon.
       const [clearIcon, openIcon] = [...box.querySelectorAll(':scope > button > svg')].map((i) => i.getBoundingClientRect())
-      for (const r of [clearIcon, openIcon]) await expect([r.width, r.height]).toEqual([12, 12])
+      for (const r of [clearIcon, openIcon]) await expect([r.width, r.height]).toEqual([16, 16])
       await expect(openIcon.left - clearIcon.right).toBe(12)
       await expect(clearIcon.left - box.querySelector('input')!.getBoundingClientRect().right).toBe(12)
     }

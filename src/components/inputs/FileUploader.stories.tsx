@@ -163,7 +163,7 @@ export const WithStatus: Story = {
   },
 }
 
-/** Word, Excel, PowerPoint, PDF, image and audio get a coloured badge; anything else the bare page. */
+/** Word, Excel, PowerPoint, PDF, image and audio get a coloured badge naming the type; anything else a plain gray page. */
 export const FileTypes: Story = {
   args: {
     accept: undefined,
@@ -178,6 +178,14 @@ export const FileTypes: Story = {
       file('notes.txt', 900, 'text/plain'),
       file('Minutes of the quarterly steering committee meeting, final version.docx', 128_000, 'application/msword'),
     ],
+  },
+  play: async ({ canvasElement }) => {
+    const rows = [...canvasElement.querySelectorAll('li')]
+    const labels = rows.map((row) => row.querySelector(':scope > svg text')?.textContent ?? null)
+    await expect(labels).toEqual(['DOC', 'XLS', 'PPT', 'PDF', 'IMG', 'MP3', null, 'DOC'])
+    // No inline padding: the icon starts at the row's edge.
+    const [row] = rows
+    await expect(row.querySelector(':scope > svg')!.getBoundingClientRect().left).toBe(row.getBoundingClientRect().left)
   },
 }
 
@@ -265,7 +273,7 @@ export const anatomyParts = [
   { name: 'Choose button', selector: 'div:has(> input[type="file"]) > button', description: 'An accent contained Button. Opens the system picker: the way in for keyboard, screen reader and touch.' },
   { name: 'Helper text', selector: '[id$="-helper"]', description: 'What is allowed. Describes the Choose button.' },
   { name: 'File row', selector: 'li', description: 'Type icon, name and size on one line. The name truncates, the size never does.' },
-  { name: 'Type icon', selector: 'li > svg', description: 'A page with a coloured badge for Word, Excel, PowerPoint, PDF, image and audio.' },
+  { name: 'Type icon', selector: 'li > svg', description: 'A page with a coloured badge naming the type: DOC, XLS, PPT, PDF, IMG or MP3. A plain gray page for any other type.' },
   { name: 'Progress ring', selector: '[role="progressbar"]', description: 'While getFileStatus reports progress under 100. An error takes its place.' },
   { name: 'Remove button', selector: '[data-remove]', description: 'A ghost icon Button named "Remove <file name>".' },
 ]

@@ -16,7 +16,7 @@ const time = (
 
 const meta = {
   title: 'Components/Inputs/Field',
-  tags: ['experimental'],
+  tags: ['beta'],
   component: Field,
   argTypes: {
     label: {

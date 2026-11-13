@@ -17,7 +17,7 @@ const complete = {
 }
 
 test('a token that exists passes, in a code span or a block prop', () => {
-  assert.deepEqual(checkFile(file, 'Uses `--primary` and `--radius: 0.25rem`.\n<SpecTable rows={[{ token: \'--control-md\' }]} />'), [])
+  assert.deepEqual(checkFile(file, 'Uses `--color-background-brand-bold` and `--radius: 0.25rem`.\n<SpecTable rows={[{ token: \'--control-md\' }]} />'), [])
 })
 
 test('a token that does not exist fails, with its line', () => {
@@ -46,8 +46,8 @@ test('a component page in a category must use DocTabs', () => {
   assert.deepEqual(checkFile(component, page(complete)), [])
 })
 
-test('category overviews, patterns and templates keep their own format', () => {
-  for (const path of ['buttons/Overview.mdx', 'patterns/application-ui/Fixture.mdx', 'templates/Overview.mdx', 'Overview.mdx'])
+test('overview pages keep their own format', () => {
+  for (const path of ['buttons/Overview.mdx', 'Overview.mdx'])
     assert.deepEqual(checkFile(new URL(`../src/components/${path}`, import.meta.url).pathname, '# Page\n'), [], path)
 })
 
@@ -111,13 +111,13 @@ test('a stories import that points at no file fails', () => {
 
 test("a SpecTable token the component's CSS reads passes, through its imports", () => {
   // Button.tsx imports Button.module.css, which reads both.
-  assert.deepEqual(check(withButton("<SpecTable rows={[{ token: '--control-md' }, { token: '--primary' }]} />")), [])
+  assert.deepEqual(check(withButton("<SpecTable rows={[{ token: '--control-md' }, { token: '--color-background-brand-bold' }]} />")), [])
 })
 
 test("a SpecTable token the component's CSS never reads fails, with its line", () => {
-  const errors = check(withButton("<SpecTable\n  rows={[\n    { token: '--control-md' },\n    { token: '--sidebar-width' },\n  ]}\n/>"))
+  const errors = check(withButton("<SpecTable\n  rows={[\n    { token: '--control-md' },\n    { token: '--color-chart-1' },\n  ]}\n/>"))
   assert.equal(errors.length, 1)
-  assert.match(errors[0], /buttons\/Fixture\.mdx:7: SpecTable names --sidebar-width, which the component's CSS never reads/)
+  assert.match(errors[0], /buttons\/Fixture\.mdx:7: SpecTable names --color-chart-1, which the component's CSS never reads/)
 })
 
 test('the command line takes relative and absolute paths', async () => {

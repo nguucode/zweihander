@@ -141,12 +141,6 @@ const meta = {
       control: false,
       table: { type: { summary: '(row: Row) => MenuEntry[] | null | undefined' } },
     },
-    hasRowContextMenu: {
-      description:
-        "Also opens a row's `rowActions` on right click or long press, at the pointer. Off by default: the row then loses the browser's own menu (copy a cell's text, open a link in a new tab).",
-      control: 'boolean',
-      table: { type: { summary: 'boolean' }, defaultValue: { summary: 'false' } },
-    },
     size: {
       description: 'Deprecated: Table has one size, and `sm` renders the same table as `md`. Drop the prop; it will be removed in the next release. Warns in development for any value but `md`.',
       control: false,
@@ -215,20 +209,20 @@ export const Default: Story = {
   play: async ({ args, canvas }) => {
     const table = canvas.getByRole('table', { name: 'Projects' })
     await expect(within(table).getAllByRole('row')).toHaveLength(5)
-    // 4px above and below the header's 16px line: the sort button adds nothing.
-    await expect(cellHeights(canvas)[1]).toBe(24)
-    // The header ends on a 2px rule; the rows have no divider.
-    await expect(getComputedStyle(canvas.getAllByRole('columnheader')[0]).borderBottomWidth).toBe('2px')
+    // 8px above and below the header's 16px line: the sort button adds nothing.
+    await expect(cellHeights(canvas)[1]).toBe(32)
+    // The header ends on a 1px rule; the rows have no divider.
+    await expect(getComputedStyle(canvas.getAllByRole('columnheader')[0]).borderBottomWidth).toBe('1px')
     await expect(getComputedStyle(canvas.getAllByRole('rowheader')[0]).borderBottomWidth).toBe('0px')
-    // A table with rows closes on the same rule, as Atlassian's: 2px, the header's colour, right under the last row.
+    // A table with rows closes on the same rule: 1px, the header's colour, right under the last row.
     const closing = getComputedStyle(table)
-    await expect(closing.borderBottomWidth).toBe('2px')
+    await expect(closing.borderBottomWidth).toBe('1px')
     await expect(closing.borderBottomColor).toBe(getComputedStyle(canvas.getAllByRole('columnheader')[0]).borderBottomColor)
-    await expect(table.getBoundingClientRect().bottom - within(table).getAllByRole('row').at(-1)!.getBoundingClientRect().bottom).toBe(2)
-    // So a one-line row is 28px all told, and the Tag in it adds nothing.
+    await expect(table.getBoundingClientRect().bottom - within(table).getAllByRole('row').at(-1)!.getBoundingClientRect().bottom).toBe(1)
+    // So a one-line row is 36px all told, and the Tag in it adds nothing.
     const atlas = canvas.getByRole('rowheader', { name: 'Atlas' }).closest('tr')!
     await expect(within(atlas).getByText('Active')).toBeVisible()
-    await expect(atlas.getBoundingClientRect().height).toBe(28)
+    await expect(atlas.getBoundingClientRect().height).toBe(36)
     await expect(names(canvas)).toEqual(['Atlas', 'Billing revamp', 'Onboarding', 'Design tokens'])
     // Sort: ascending, descending, then back to unsorted. aria-sort follows.
     const files = canvas.getByRole('columnheader', { name: /Files/ })
@@ -317,8 +311,8 @@ export const EmptyValuesSortLast: Story = {
 }
 
 /**
- * Atlassian's dynamic table: nothing between the table's edge and its first
- * and last cells. The header has no fill, so flush text touches nothing.
+ * Every cell, the first and last included, is padded 8px all round. The
+ * header has no fill.
  */
 export const EdgeCells: Story = {
   tags: ['!dev'],
@@ -326,14 +320,14 @@ export const EdgeCells: Story = {
     const table = canvas.getByRole('table', { name: 'Projects' }).getBoundingClientRect()
     const row = canvas.getByRole('rowheader', { name: 'Atlas' }).closest('tr')!
     const head = canvas.getAllByRole('columnheader')
-    // The first cell's text, and its header's label, start at the table's left edge.
-    await expect(contentBox(row.firstElementChild!).left).toBeCloseTo(table.left, 0)
-    await expect(contentBox(within(head[0]).getByRole('button')).left).toBeCloseTo(table.left, 0)
-    // The last column is end-aligned: its figures and its label end at the right edge.
-    await expect(contentBox(row.lastElementChild!).right).toBeCloseTo(table.right, 0)
-    await expect(within(head.at(-1)!).getByRole('button').getBoundingClientRect().right).toBeCloseTo(table.right, 0)
-    // Between columns: 8px each side.
-    for (const cell of [row.children[1], head[1]]) {
+    // The first cell's text, and its header's label, start 8px in from the table's left edge.
+    await expect(contentBox(row.firstElementChild!).left).toBeCloseTo(table.left + 8, 0)
+    await expect(contentBox(within(head[0]).getByRole('button')).left).toBeCloseTo(table.left + 8, 0)
+    // The last column is end-aligned: its figures and its label end 8px in from the right edge.
+    await expect(contentBox(row.lastElementChild!).right).toBeCloseTo(table.right - 8, 0)
+    await expect(contentBox(within(head.at(-1)!).getByRole('button')).right).toBeCloseTo(table.right - 8, 0)
+    // Every cell: 8px each side, the edge cells too.
+    for (const cell of [row.firstElementChild!, row.children[1], row.lastElementChild!, head[0], head[1], head.at(-1)!]) {
       const { paddingLeft, paddingRight } = getComputedStyle(cell)
       await expect([paddingLeft, paddingRight]).toEqual(['8px', '8px'])
     }
@@ -359,8 +353,8 @@ export const DeprecatedSize: Story = {
   tags: ['!dev'],
   args: { size: 'sm', density: 'sm', columns: textColumns },
   play: async ({ canvas }) => {
-    // 4px above and below one 20px line of text, and the header's 16px line.
-    await expect(cellHeights(canvas)).toEqual([28, 24])
+    // 8px above and below one 20px line of text, and the header's 16px line.
+    await expect(cellHeights(canvas)).toEqual([36, 32])
   },
 }
 
@@ -563,9 +557,9 @@ const actions = (p: Project): MenuEntry[] =>
       ]
 
 /**
- * A row is as tall as what it holds. One line of text is 28px, and the
+ * A row is as tall as what it holds. One line of text is 36px, and the
  * checkbox, the expand button and the actions button all fit in that; a
- * 32px button in a cell makes its row 40px.
+ * 32px button in a cell makes its row 48px.
  */
 export const RowWithControl: Story = {
   tags: ['!dev'],
@@ -577,14 +571,14 @@ export const RowWithControl: Story = {
   },
   play: async ({ canvas }) => {
     const [atlas, billing] = canvas.getAllByRole('rowheader')
-    await expect([atlas.clientHeight, billing.clientHeight]).toEqual([40, 28])
-    await expect(cellHeights(canvas)[1]).toBe(24)
+    await expect([atlas.clientHeight, billing.clientHeight]).toEqual([48, 36])
+    await expect(cellHeights(canvas)[1]).toBe(32)
     // No divider: the row is exactly as tall as its cells.
-    await expect(billing.closest('tr')!.getBoundingClientRect().height).toBe(28)
+    await expect(billing.closest('tr')!.getBoundingClientRect().height).toBe(36)
   },
 }
 
-/** The control columns at the edges: the expand button first, the actions button last, both flush. */
+/** The control columns at the edges: the expand button first, the actions button last, each 8px in from the edge. */
 export const EdgeControls: Story = {
   tags: ['!dev'],
   args: { expandedContent: details, defaultExpandedIds: ['p1'], rowActions: actions },
@@ -592,11 +586,11 @@ export const EdgeControls: Story = {
     const table = canvas.getByRole('table', { name: 'Projects' }).getBoundingClientRect()
     const expand = canvas.getByRole('button', { name: 'Expand Atlas' })
     const more = canvas.getByRole('button', { name: 'Actions for Atlas' })
-    await expect(expand.getBoundingClientRect().left).toBeCloseTo(table.left, 0)
-    await expect(more.getBoundingClientRect().right).toBeCloseTo(table.right, 0)
-    // The open row's content starts at the edge too.
-    await expect(contentBox(canvas.getByText(/Sam Rivera owns Atlas/)).left).toBeCloseTo(table.left, 0)
-    // The scroll container clips at the edge: the rings are drawn inside the buttons.
+    await expect(expand.getBoundingClientRect().left).toBeCloseTo(table.left + 8, 0)
+    await expect(more.getBoundingClientRect().right).toBeCloseTo(table.right - 8, 0)
+    // The open row's content lines up with the cells' text.
+    await expect(contentBox(canvas.getByText(/Sam Rivera owns Atlas/)).left).toBeCloseTo(table.left + 8, 0)
+    // The cell has no room for an outset ring: the rings are drawn inside the buttons.
     // Tab first, so the focus that follows counts as keyboard focus.
     await userEvent.tab()
     for (const button of [expand, more]) {
@@ -639,29 +633,6 @@ export const RowActions: Story = {
   },
 }
 
-/** True when nothing handled the right click, so the browser shows its own menu. */
-const rightClick = (el: Element) => el.dispatchEvent(new MouseEvent('contextmenu', { bubbles: true, cancelable: true, button: 2 }))
-
-/** `hasRowContextMenu`: right click or long press on a row opens its `rowActions` at the pointer. */
-export const RowContextMenu: Story = {
-  args: { rowActions: actions, hasRowContextMenu: true },
-  play: async ({ canvas, step }) => {
-    const row = (name: string) => canvas.getByRole('rowheader', { name }).closest('tr')!
-    await step('Right click on a row opens the same entries as its ⋯ button', async () => {
-      onAction.mockClear()
-      await userEvent.pointer({ keys: '[MouseRight]', target: row('Billing revamp') })
-      await userEvent.click(await within(document.body).findByRole('menuitem', { name: 'Duplicate' }))
-      await expect(onAction).toHaveBeenLastCalledWith('duplicate', 'p2')
-      // A shortcut, never the only way in: the ⋯ button stays.
-      await expect(canvas.getByRole('button', { name: 'Actions for Billing revamp' })).toBeInTheDocument()
-    })
-    await step('A row with no actions keeps the browser menu, and the rows add no tab stop', async () => {
-      await expect(rightClick(row('Design tokens'))).toBe(true)
-      await expect(row('Atlas')).not.toHaveAttribute('tabindex')
-    })
-  },
-}
-
 /** Files summed in a footer row that sorting leaves at the bottom. */
 const totalled: TableColumn<Project>[] = columns.map((c) =>
   c.key === 'name'
@@ -681,14 +652,14 @@ export const TotalRow: Story = {
     await expect(within(foot).getAllByRole('cell').map((c) => c.textContent)).toContain('1,464')
     // One cell per column, the checkbox and expand columns included, so it lines up.
     await expect(within(foot).getByRole('row').children).toHaveLength(canvas.getAllByRole('columnheader').length)
-    // The header's 2px rule, over the total: 28px of row under it.
+    // The header's 1px rule, over the total: 36px of row under it.
     const total = within(foot).getByRole('rowheader', { name: 'Total' })
-    await expect(getComputedStyle(total).borderTopWidth).toBe('2px')
+    await expect(getComputedStyle(total).borderTopWidth).toBe('1px')
     // The table's closing rule sits under the total row.
     const table = canvas.getByRole('table')
-    await expect(getComputedStyle(table).borderBottomWidth).toBe('2px')
-    await expect(table.getBoundingClientRect().bottom - total.getBoundingClientRect().bottom).toBe(2)
-    await expect(total.clientHeight).toBe(28)
+    await expect(getComputedStyle(table).borderBottomWidth).toBe('1px')
+    await expect(table.getBoundingClientRect().bottom - total.getBoundingClientRect().bottom).toBe(1)
+    await expect(total.clientHeight).toBe(36)
     // Sorting moves the rows, never the total.
     await userEvent.click(within(canvas.getByRole('columnheader', { name: /Files/ })).getByRole('button'))
     await expect(canvas.getAllByRole('row').at(-1)).toHaveTextContent('Total')
@@ -778,10 +749,10 @@ export const ControlledWidths: Story = {
 /** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
 export const anatomyParts = [
   { name: 'Caption', selector: 'caption', description: 'Names the table. Visually hidden unless showCaption.' },
-  { name: 'Header row', selector: 'thead tr', description: 'Small muted labels over a 2px rule, with no fill. Stays in view with hasStickyHeader.' },
+  { name: 'Header row', selector: 'thead tr', description: 'Small semibold labels over a 1px rule, with no fill. Stays in view with hasStickyHeader.' },
   { name: 'Sort button', selector: 'th[aria-sort] button', description: 'The whole header label, with an icon for the sort. Only on sortable columns.' },
   { name: 'Select all', selector: 'thead [role="checkbox"]', description: 'With isSelectable. Selects or clears every row shown, and shows mixed when some are selected.' },
-  { name: 'Row', selector: 'tbody tr', description: 'As tall as what it holds: 28px for one line of text. No divider: tinted when hovered or selected.' },
+  { name: 'Row', selector: 'tbody tr', description: 'As tall as what it holds: 36px for one line of text. No divider: tinted when hovered or selected.' },
   { name: 'Row checkbox', selector: 'tbody [role="checkbox"]', description: 'Named after the row header: "Select Atlas".' },
   { name: 'Expand button', selector: 'tbody [aria-expanded]', description: 'With expandedContent: a ghost icon button. The chevron turns down when open.' },
   { name: 'Row header', selector: 'tbody th[scope="row"]', description: 'The column marked isRowHeader, medium weight: the name a row is known by.' },
@@ -791,7 +762,7 @@ export const anatomyParts = [
     selector: 'tbody td[colspan]',
     description: 'One cell spanning every column, under its row. Holds any layout.',
   },
-  { name: 'Total row', selector: 'tfoot tr', description: 'With a footer on any column: a semibold row under a 2px rule, outside the sort.' },
+  { name: 'Total row', selector: 'tfoot tr', description: 'With a footer on any column: a semibold row under a 1px rule, outside the sort.' },
 ]
 
 /** Every part present: caption shown, a sortable column, selection, one row open, row actions, a total. */
@@ -811,18 +782,18 @@ export const Anatomy: Story = {
     await expect(found[7]).toHaveTextContent('Atlas')
     await expect(found[9]).toHaveTextContent(/Sam Rivera owns Atlas/)
     await expect(found[10]).toHaveTextContent('Total')
-    // Atlassian's dynamic table: cells padded 4px by 8px, the caption 24px from the top and 8px from the table.
+    // Cells padded 8px all round, the caption 24px from the top and 8px from the table.
     const cell = getComputedStyle(found[7])
-    await expect([cell.paddingTop, cell.paddingRight, cell.paddingBottom, cell.paddingLeft]).toEqual(['4px', '8px', '4px', '8px'])
+    await expect([cell.paddingTop, cell.paddingRight, cell.paddingBottom, cell.paddingLeft]).toEqual(['8px', '8px', '8px', '8px'])
     const caption = getComputedStyle(found[0])
     await expect([caption.paddingTop, caption.paddingBottom]).toEqual(['24px', '8px'])
-    // Flush with the table's edges: the caption and the checkbox at the start, the actions button at the end.
+    // 8px in from the table's edges, as the cells' text: the caption and the checkbox at the start, the actions button at the end.
     const table = canvas.getByRole('table').getBoundingClientRect()
-    await expect(contentBox(found[0]).left).toBeCloseTo(table.left, 0)
-    await expect(found[5].getBoundingClientRect().left).toBeCloseTo(table.left, 0)
-    await expect(found[8].getBoundingClientRect().right).toBeCloseTo(table.right, 0)
-    // The checkbox column is the 16px box and 8px after it; the expand column after it, 8px and its 24px button.
-    await expect([found[5].closest('td')!.clientWidth, found[6].closest('td')!.clientWidth]).toEqual([24, 32])
+    await expect(contentBox(found[0]).left).toBeCloseTo(table.left + 8, 0)
+    await expect(found[5].getBoundingClientRect().left).toBeCloseTo(table.left + 8, 0)
+    await expect(found[8].getBoundingClientRect().right).toBeCloseTo(table.right - 8, 0)
+    // The checkbox column is the 16px box with 8px either side; the expand column, its 24px button with 8px either side.
+    await expect([found[5].closest('td')!.clientWidth, found[6].closest('td')!.clientWidth]).toEqual([32, 40])
     await expect(canvas.getByRole('columnheader', { name: 'Actions' })).toBeInTheDocument()
     // The expand column is announced like the others, by a hidden header.
     await expect(canvas.getByRole('columnheader', { name: 'Details' })).toBeInTheDocument()

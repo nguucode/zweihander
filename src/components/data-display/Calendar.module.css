@@ -13,7 +13,7 @@
   font-family: var(--font-sans);
   font-size: var(--text-body);
   line-height: var(--leading-body);
-  color: var(--foreground);
+  color: var(--color-text);
   font-variant-numeric: tabular-nums;
 }
 
@@ -25,13 +25,7 @@
   padding-inline: var(--space-inline);
 }
 
-/* A year arrow and a month arrow, 8px apart, at each end. */
-.navs {
-  display: flex;
-  gap: var(--space-inline);
-}
-
-/* The month between the two pairs: they are as wide as each other, so it is
+/* The month between the two arrows: they are as wide as each other, so it is
    centred on the grid. A long name on a narrow screen wraps. */
 .title {
   flex: 1;
@@ -55,34 +49,17 @@
   border: 0;
   border-radius: var(--radius-control);
   background: transparent;
-  color: var(--foreground);
+  color: var(--color-text);
   font-size: var(--icon-xs);
   cursor: var(--cursor-button);
 }
 .nav:hover:not(:disabled) {
-  background: var(--accent);
-  color: var(--accent-foreground);
+  background: var(--color-background-neutral);
+  color: var(--color-text);
 }
 .nav:disabled {
   opacity: 0.5;
   cursor: var(--cursor-disabled);
-}
-
-/* ponytail: the icon set has no double chevron, so a year arrow is two
-   chevrons a quarter of the icon apart (6 of the 24 units, as Boxicons'
-   chevrons). Swap for one `chevrons-left`/`-right` icon when src/lib/icon.tsx
-   has them. */
-.double {
-  display: inline-grid;
-}
-.double > svg {
-  grid-area: 1 / 1;
-}
-.double > svg:first-child {
-  translate: -25% 0;
-}
-.double > svg:last-child {
-  translate: 25% 0;
 }
 
 .grid {
@@ -99,7 +76,7 @@
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
   font-weight: 600;
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
   text-align: center;
   white-space: nowrap;
 }
@@ -125,50 +102,48 @@
   border: 0;
   border-radius: var(--radius-control);
   background: transparent;
-  color: var(--foreground);
+  color: var(--color-text);
   font: inherit;
   cursor: var(--cursor-button);
 }
 .day:hover:not([aria-disabled='true'], .selected, .outside) {
-  background: var(--accent);
-  color: var(--accent-foreground);
+  background: var(--color-background-neutral);
+  color: var(--color-text);
 }
 
 /* Days of the next and previous month: shape, not content. Faded past
-   --muted-foreground so the month reads first; no token is lighter. About
+   --color-text-subtlest so the month reads first; no token is lighter. About
    2:1, which WCAG allows for decoration: they are aria-hidden and not
    pickable. */
 .outside {
-  color: color-mix(in oklch, var(--muted-foreground) 50%, transparent);
+  color: color-mix(in oklch, var(--color-text-subtlest) 50%, transparent);
   cursor: default;
 }
 
-/* Today: an orange pill, round-ended where the selected day is the control's
-   shape, so the two differ by shape as well as colour. The figure is dark,
-   as the generator gives warm accents: white on --orange is 3.4:1, under the
-   4.5:1 a 14px figure needs, while --orange-contrast (neutral 900) clears
-   4.9:1 in both modes. --orange-foreground stays white for the solid Tags. */
+/* Today: the control's shape in orange. The figure is near-black
+   (--color-text-accent-orange-contrast, 4.9:1 in both modes): white on the
+   orange is 3.4:1 in light, under the 4.5:1 a 14px figure needs. */
 .today {
-  border-radius: var(--radius-pill);
-  background: var(--orange);
-  color: var(--orange-contrast);
+  border-radius: var(--radius-control);
+  background: var(--color-background-accent-orange-bolder);
+  color: var(--color-text-accent-orange-contrast);
   font-weight: 600;
 }
 .today:hover:not([aria-disabled='true'], .selected) {
-  background: var(--orange);
-  color: var(--orange-contrast);
+  background: var(--color-background-accent-orange-bolder);
+  color: var(--color-text-accent-orange-contrast);
 }
 
 /* After .today: a selected today shows as selected. */
 .selected {
   border-radius: var(--radius-control);
-  background: var(--primary);
-  color: var(--primary-foreground);
+  background: var(--color-background-brand-bold);
+  color: var(--color-text-brand-inverse);
   font-weight: 600;
 }
 
 .day[aria-disabled='true'] {
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
   text-decoration: line-through;
   opacity: 0.6;
   cursor: var(--cursor-disabled);
@@ -176,7 +151,7 @@
 
 .day:focus-visible,
 .nav:focus-visible {
-  outline: var(--focus-width) solid var(--ring);
+  outline: var(--focus-width) solid var(--color-border-focused);
   outline-offset: var(--focus-offset);
 }
 /* The days touch, so the ring lies over the days around it: the focused day
@@ -199,7 +174,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: var(--accent);
+  background: var(--color-background-neutral);
 }
 .rangeStart::before {
   inset-inline-start: 50%;
@@ -216,21 +191,21 @@
   border-end-end-radius: var(--radius-control);
 }
 .between {
-  color: var(--accent-foreground);
-  font-weight: 500;
+  color: var(--color-text);
+  font-weight: 400;
 }
-/* Today keeps its dark figure inside a range too. */
+/* Today keeps its figure inside a range too. */
 .between.today {
-  color: var(--orange-contrast);
+  color: var(--color-text-accent-orange-contrast);
+  font-weight: 600;
 }
 
 /* 40 by 32px days are below the 44px touch target. They touch, so a larger
    invisible area would lie over the next day: the days themselves grow on
    coarse pointers. The arrows stay 24px and grow an invisible area instead.
-   Four of them share the header, so it makes room: each area reaches 10px
-   past its arrow, the header pads that much, a pair sits twice that apart
-   and the month keeps that much clear, so the areas meet without lying over
-   each other, the month or the calendar's edge. */
+   The header makes room: each area reaches 10px past its arrow, the header
+   pads that much and the month keeps that much clear, so the areas lie over
+   neither the month nor the calendar's edge. */
 @media (pointer: coarse) {
   .calendar {
     --calendar-day-inline: min(var(--target-coarse), calc((100vw - 4.25rem) / 7));
@@ -239,9 +214,6 @@
   }
   .header {
     padding-inline: var(--calendar-nav-reach);
-  }
-  .navs {
-    gap: calc(2 * var(--calendar-nav-reach));
   }
   .title {
     padding-inline: var(--calendar-nav-reach);

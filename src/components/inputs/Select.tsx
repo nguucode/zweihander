@@ -110,7 +110,7 @@ export function Select({
         <BaseSelect.Portal container={container}>
           {/* Opens below the field like a list, rather than laid over it
               with the selected option aligned to the trigger. */}
-          <BaseSelect.Positioner className={s.positioner} sideOffset={8} alignItemWithTrigger={false}>
+          <BaseSelect.Positioner className={s.positioner} sideOffset={4} alignItemWithTrigger={false}>
             <BaseSelect.Popup className={s.popup}>
               <BaseSelect.List>
                 {items.map((item) => (

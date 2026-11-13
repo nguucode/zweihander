@@ -161,25 +161,27 @@ corner setting.
 
 <SpecTable caption="Every size" rows={[{ part: 'Container', property: 'Corner radius', token: '--radius-pill' }]} />
 
-The image and the silhouette fill the circle edge to edge.
+The image fills the circle edge to edge. The silhouette is the kit's
+`user` icon at 60% of the circle, centred.
 
 Initials are 12px up to `md`, where `xs` keeps only the first letter, 14px
 on `lg`, then 28px and 32px: the type scale stops at 32px, so on `xl` and
-`2xl` the letters are a smaller share of the circle.
+`2xl` the letters are a smaller share of the circle. They are medium (500)
+up to `lg` and semibold (600) on `xl` and `2xl`, Figma's Heading/xl and
+Heading/2xl.
 
 An `xs` avatar draws no status dot, as in Atlassian: at 16px the dot would
 cover most of the picture, so the status is in the accessible name only.
-The status dot is a Badge dot: `sm` (6px) on the sm and md avatars,
-`md` (8px) on lg, sitting on the corner of the avatar's box, outside the
-curve. On `xl` and `2xl` that corner is far off the circle and a Badge dot
+The status dot is an 8px Badge dot (`md`) on the sm, md and lg avatars,
+flush on the corner of the avatar's box, outside the curve. On `xl` and `2xl` that corner is far off the circle and a Badge dot
 is a speck, so the dot is 16px and 20px, and its centre sits on the circle
 at 45°.
 
 <SpecTable
   caption="Status dot and group"
   rows={[
-    { part: 'Status dot', property: 'Ring', token: '--background' },
-    { part: 'Group', property: 'Ring around each avatar', token: '--background' },
+    { part: 'Status dot', property: 'Ring', token: '--color-surface' },
+    { part: 'Group', property: 'Ring around each avatar', token: '--color-surface' },
     { part: 'Group', property: 'Overlap, every size but sm', token: '--space-1' },
   ]}
 />
@@ -196,39 +198,35 @@ the values for another one.
 <SpecTable
   caption="subtle, neutral"
   rows={[
-    { part: 'Container', property: 'Background', token: '--secondary' },
-    { part: 'Initials', property: 'Colour', token: '--secondary-foreground' },
-    { part: 'Silhouette', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Container', property: 'Background', token: '--color-background-neutral' },
+    { part: 'Initials', property: 'Colour', token: '--color-text' },
+    { part: 'Silhouette', property: 'Colour', token: '--color-text-subtlest' },
   ]}
 />
 
 <SpecTable
   caption="subtle, with a hue"
   rows={[
-    { part: 'Container', property: 'Background', token: '--primary-subtle' },
-    { part: 'Initials and silhouette', property: 'Colour', token: '--primary-subtle-text' },
+    { part: 'Container', property: 'Background', token: '--color-background-brand-subtlest' },
+    { part: 'Initials and silhouette', property: 'Colour', token: '--color-text-brand-bold' },
   ]}
 />
 
 <SpecTable
   caption="solid, neutral"
   rows={[
-    { part: 'Container', property: 'Background', token: '--neutral-solid' },
-    { part: 'Initials and silhouette', property: 'Colour', token: '--neutral-solid-foreground' },
+    { part: 'Container', property: 'Background', token: '--color-background-neutral-bold' },
+    { part: 'Initials and silhouette', property: 'Colour', token: '--color-text-inverse' },
   ]}
 />
 
 <SpecTable
   caption="solid, with a hue"
   rows={[
-    { part: 'Container', property: 'Background', token: '--primary' },
-    { part: 'Initials', property: 'Colour', token: '--primary-foreground' },
-    { part: 'Silhouette', property: 'Colour', token: '--neutral-solid-foreground' },
+    { part: 'Container', property: 'Background', token: '--color-background-brand-bold' },
+    { part: 'Initials and silhouette', property: 'Colour', token: '--color-text-brand-inverse' },
   ]}
 />
-
-On `solid` the silhouette is always white, one look across hues; see
-Accessibility for what that costs.
 
 The status dot takes Badge's presence colours: online `success`, away
 `warning`, busy `destructive`, offline `secondary`. The "+n" in a group is a
@@ -288,9 +286,8 @@ Every other `<span>` attribute passes through to the row.
   smallest type size.
 - **No square, no `appearance`.** Always a circle, so a person never
   reads as a product or workspace logo.
-- **The placeholder is a silhouette**, not the outline `user` icon: it
-  fills the circle edge to edge and takes `color` and `variant` like
-  initials do.
+- **The placeholder is the kit's `user` icon** at 60% of the circle,
+  centred, as in Figma. It takes `color` and `variant` like initials do.
 - **`color` and `variant` are added**, to tell people apart in a list.
 - **The circle ignores the radius preset.**
 - **`status` and `AvatarGroup` are added.** The status words and the
@@ -351,13 +348,9 @@ once.
 - Initials meet 4.5:1 in every colour and variant, on every gray ramp in
   both modes, measured by the `Contrast` story. Neutral solid is gray 600
   under gray 50, 6.5:1 or more.
-- On `subtle` the silhouette uses the initials colour (neutral uses
-  `--muted-foreground`), past the 3:1 a graphic needs.
-- On `solid` the silhouette is **always white**, by choice. In light mode
-  that is under 3:1 on the warm hues (orange to lime); in dark mode, where
-  the fill is the lighter 400 step, on most hues. It is accepted because
-  the silhouette carries no information: the name is in `imageAlt` or
-  printed beside the avatar.
+- The silhouette uses the initials colour (neutral subtle uses
+  `--color-text-subtlest`), past the 3:1 a graphic needs in every colour
+  and variant, measured by the `Contrast` story.
 
 </DocTab>
 </DocTabs>

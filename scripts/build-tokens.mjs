@@ -28,7 +28,7 @@ const DEFAULT_GRAY = 'gray'
 
 const NEAR_WHITE = ramp('gray', 'neutral', '50')
 const NEAR_BLACK = ramp('gray', 'neutral', '900')
-// The page is the default gray's 50 / 950 (see --background), so every
+// The page is the default gray's 50 / 950 (see --color-surface), so every
 // "against the page" measurement below reads the surface actually shipped.
 const PAGE_LIGHT = ramp('gray', DEFAULT_GRAY, '50')
 const PAGE_DARK = ramp('gray', DEFAULT_GRAY, '950')
@@ -128,7 +128,7 @@ const decls = (obj, indent = '  ') =>
     .join('\n')
 
 /**
- * Status and hue colours (--red, --red-subtle, …) pin their ramp steps by
+ * Status and hue colours (--color-background-accent-red-bolder, --color-text-accent-red, …) pin their ramp steps by
  * hand, so measure them the way the accents are measured: a label on its
  * solid, and text on both its subtle tint and the page, all at 4.5:1. A ramp
  * edit that breaks one stops the build instead of shipping an unreadable Tag
@@ -146,9 +146,16 @@ for (const [mode, page] of [
   const val = (k) => alias(c[k].$value, { accent: {}, gray: {} })
   for (const s of ['info', 'success', 'warning', 'danger', ...ACCENTS]) {
     for (const [fg, bg] of [
-      ...(ACCENTS.includes(s) ? [] : [[`${s}-foreground`, s]]),
-      [`${s}-text`, `${s}-subtle`],
-      [`${s}-text`, page],
+      ...(ACCENTS.includes(s) ? [] : [[`color-text-${s}-inverse`, `color-background-${s}-bold`]]),
+      ...(ACCENTS.includes(s)
+        ? [
+            [`color-text-accent-${s}`, `color-background-accent-${s}-subtler`],
+            [`color-text-accent-${s}`, page],
+          ]
+        : [
+            [`color-text-${s}`, `color-background-${s}`],
+            [`color-text-${s}`, page],
+          ]),
     ]) {
       const ratio = contrast(val(fg), c[bg] ? val(bg) : bg)
       if (ratio < AA_TEXT)
@@ -158,9 +165,9 @@ for (const [mode, page] of [
 }
 
 /**
- * --control-border outlines a checkbox, radio or switch track: the only
+ * --color-border-bold outlines a checkbox, radio or switch track: the only
  * thing that shows the control is there, so WCAG 1.4.11 wants 3:1 against
- * the page. --input is far lighter on purpose (a text field has its
+ * the page. --color-border-input is far lighter on purpose (a text field has its
  * placeholder and label), so this is its own token, measured on every gray
  * ramp because the Theme can swap the ramp underneath it.
  */
@@ -169,15 +176,15 @@ for (const g of GRAYS) {
     ['light', PAGE_LIGHT],
     ['dark', ramp('gray', g, '950')],
   ]) {
-    const step = semantic.color[mode]['control-border'].$value.match(/\{gray\.(\d+)\}/)[1]
+    const step = semantic.color[mode]['color-border-bold'].$value.match(/\{gray\.(\d+)\}/)[1]
     const ratio = contrast(ramp('gray', g, step), page)
     if (ratio < AA_NON_TEXT)
-      throw new Error(`${mode} --control-border on the ${g} ramp is ${ratio.toFixed(2)}:1, below ${AA_NON_TEXT}:1.`)
+      throw new Error(`${mode} --color-border-bold on the ${g} ramp is ${ratio.toFixed(2)}:1, below ${AA_NON_TEXT}:1.`)
   }
 }
 
 /**
- * --chart-1…8 colour lines, bars and slices: the mark is the data, so WCAG
+ * --color-chart-1…8 colour lines, bars and slices: the mark is the data, so WCAG
  * 1.4.11 wants 3:1 against the card it sits on, on every gray ramp (the dark
  * card is the ramp's 900). This is why yellow and lime take step 700 in light.
  */
@@ -186,16 +193,16 @@ for (const g of GRAYS) {
     const c = semantic.color[mode]
     const gray = Object.fromEntries(entries(primitives.gray[g]).map(([s, v]) => [s, v.$value]))
     const val = (k) => alias(c[k].$value, { accent: {}, gray })
-    for (const k of Object.keys(c).filter((k) => /^chart-\d+$/.test(k))) {
-      const ratio = contrast(val(k), val('card'))
+    for (const k of Object.keys(c).filter((k) => /^color-chart-\d+$/.test(k))) {
+      const ratio = contrast(val(k), val('color-surface-raised'))
       if (ratio < AA_NON_TEXT)
-        throw new Error(`${mode} --${k} on --card on the ${g} ramp is ${ratio.toFixed(2)}:1, below ${AA_NON_TEXT}:1.`)
+        throw new Error(`${mode} --${k} on --color-surface-raised on the ${g} ramp is ${ratio.toFixed(2)}:1, below ${AA_NON_TEXT}:1.`)
     }
   }
 }
 
 /**
- * --neutral-solid is the gray counterpart of a hue's solid fill (a neutral
+ * --color-background-neutral-bold is the gray counterpart of a hue's solid fill (a neutral
  * solid Avatar), so its label needs 4.5:1 on every gray ramp the Theme can
  * swap in, in both appearances.
  */
@@ -204,15 +211,15 @@ for (const g of GRAYS) {
     const c = semantic.color[mode]
     const gray = Object.fromEntries(entries(primitives.gray[g]).map(([s, v]) => [s, v.$value]))
     const val = (k) => alias(c[k].$value, { accent: {}, gray })
-    const ratio = contrast(val('neutral-solid-foreground'), val('neutral-solid'))
+    const ratio = contrast(val('color-text-inverse'), val('color-background-neutral-bold'))
     if (ratio < AA_TEXT)
-      throw new Error(`${mode} --neutral-solid-foreground on --neutral-solid on the ${g} ramp is ${ratio.toFixed(2)}:1, below ${AA_TEXT}:1.`)
+      throw new Error(`${mode} --color-text-inverse on --color-background-neutral-bold on the ${g} ramp is ${ratio.toFixed(2)}:1, below ${AA_TEXT}:1.`)
   }
 }
 
 /**
- * --muted-foreground is body text (descriptions, hints, captions), so it
- * needs 4.5:1 on every surface it sits on, on every gray ramp, the --muted
+ * --color-text-subtlest is body text (descriptions, hints, captions), so it
+ * needs 4.5:1 on every surface it sits on, on every gray ramp, the --color-background-neutral
  * fill included. The lightest gray step of each ramp sits at a slightly
  * different luminance, so one ramp can pass where its neighbour fails.
  */
@@ -222,11 +229,11 @@ for (const g of GRAYS) {
     const c = semantic.color[mode]
     const gray = Object.fromEntries(entries(primitives.gray[g]).map(([s, v]) => [s, v.$value]))
     const val = (k) => alias(c[k].$value, { accent: {}, gray })
-    for (const bg of ['background', 'card', 'surface-filled', 'muted']) {
-      const ratio = contrast(val('muted-foreground'), val(bg))
+    for (const bg of ['color-surface', 'color-surface-raised', 'color-background-input', 'color-background-neutral']) {
+      const ratio = contrast(val('color-text-subtlest'), val(bg))
       worstMuted = Math.min(worstMuted, ratio)
       if (ratio < AA_TEXT)
-        throw new Error(`${mode} --muted-foreground on --${bg} on the ${g} ramp is ${ratio.toFixed(2)}:1, below ${AA_TEXT}:1.`)
+        throw new Error(`${mode} --color-text-subtlest on --${bg} on the ${g} ramp is ${ratio.toFixed(2)}:1, below ${AA_TEXT}:1.`)
     }
   }
 }
@@ -400,8 +407,6 @@ const OFF_RAMP = {
   'size.progress-lg': 'a bar thickness, under 12px',
   'size.badge-dot-sm': 'a dot, under 12px',
   'size.badge-dot-md': 'a dot, under 12px',
-  'size.sidebar-width': 'a column width for the expanded Sidebar, not a box',
-  'size.aside-width': 'a column width for a secondary column, not a box',
   'size.avatar-xl': 'a profile picture (96px), a region rather than a box in a row',
   'size.avatar-2xl': 'a profile picture (128px), a region rather than a box in a row',
 }
@@ -521,54 +526,20 @@ ${shadowDecls('dark')}
   --use-dark: initial;
 }
 
-/* Canvas and content style, set by Theme for an AppShell. Same switch idiom:
-   the nearest [data-canvas] / [data-content-style] wins at any depth. The
-   colours themselves are resolved where they are used (the shell, a surface
-   Card), against that element's own palette, so a nested appearance or
-   accent still reaches them. */
-:root,
-[data-canvas='neutral'] {
-  --canvas-plain: ;
-  --canvas-neutral: initial;
-  --canvas-tinted: ;
-}
-
-[data-canvas='plain'] {
-  --canvas-plain: initial;
-  --canvas-neutral: ;
-  --canvas-tinted: ;
-}
-
-[data-canvas='tinted'] {
-  --canvas-plain: ;
-  --canvas-neutral: ;
-  --canvas-tinted: initial;
-}
-
-:root,
-[data-content-style='flat'] {
-  --content-card: ;
-  --content-flat: initial;
-}
-
-[data-content-style='card'] {
-  --content-card: initial;
-  --content-flat: ;
-}
-
 /* A custom property that reads another one is resolved where it is DECLARED
    and inherits as a finished value, so setting --accent-solid-* further down
-   the tree cannot reach a --primary already computed at :root. Every element
+   the tree cannot reach a --color-background-brand-bold already computed at :root. Every element
    that changes the palette therefore has to restate the mapping, for the
    appearance it is in. */
 [data-accent] {
 ${[
-  ['primary', 'solid'],
-  ['primary-foreground', 'contrast'],
-  ['ring', 'ring'],
-  ['primary-text', 'text'],
-  ['primary-subtle', 'subtle'],
-  ['primary-subtle-text', 'subtle-text'],
+  ['color-background-brand-bold', 'solid'],
+  ['color-text-brand-inverse', 'contrast'],
+  ['color-border-focused', 'ring'],
+  ['color-text-brand', 'text'],
+  ['color-icon-brand', 'text'],
+  ['color-background-brand-subtlest', 'subtle'],
+  ['color-text-brand-bold', 'subtle-text'],
 ]
   .map(([k, v]) => `  --${k}: var(--use-light, var(--accent-${v}-light)) var(--use-dark, var(--accent-${v}-dark));`)
   .join('\n')}

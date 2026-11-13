@@ -81,22 +81,20 @@ The options list opens under the field, at least as wide as it:
 
 A field is one step taller than a Button, after Atlassian Design: `sm` is
 32px and `md` is 40px (Foundations / Sizing). The sizes share the rest:
-8px of padding at the start and 12px at the end, after Atlassian's
-Select, the 12px icons, 12px apart, the field radius, which never
-becomes a pill, and body type. The clear and open buttons are 24px
-targets round their icons, side by side. The open icon's centre is 19px
-from the outer edge; with no clear button the text stops 16px short of
-it, the gap and 4px more.
+10px of padding at each end, the 16px icons, 12px apart, the field
+radius, which never becomes a pill, and body type. The clear button is
+the bare 16px icon; the open button is a 24px target round its icon,
+which ends 10px inside the edge. The text stops 12px short of the first
+icon.
 
 <SpecTable
   caption="sm"
   rows={[
     { part: 'Field', property: 'Height', token: '--control-md' },
-    { part: 'Field', property: 'Inline padding, start', token: '--space-2' },
-    { part: 'Field', property: 'Inline padding, end', token: '--space-3' },
+    { part: 'Field', property: 'Inline padding', token: '--space-2-5' },
     { part: 'Field', property: 'Corner radius', token: '--control-md-radius-field' },
     { part: 'Field', property: 'Gap', token: '--space-3' },
-    { part: 'Icons and buttons', property: 'Icon size', token: '--icon-xs' },
+    { part: 'Icons and buttons', property: 'Icon size', token: '--icon-md' },
     { part: 'Input', property: 'Font size', token: '--text-body' },
     { part: 'Input', property: 'Line height', token: '--leading-body' },
   ]}
@@ -106,11 +104,10 @@ it, the gap and 4px more.
   caption="md"
   rows={[
     { part: 'Field', property: 'Height', token: '--control-lg' },
-    { part: 'Field', property: 'Inline padding, start', token: '--space-2' },
-    { part: 'Field', property: 'Inline padding, end', token: '--space-3' },
+    { part: 'Field', property: 'Inline padding', token: '--space-2-5' },
     { part: 'Field', property: 'Corner radius', token: '--control-md-radius-field' },
     { part: 'Field', property: 'Gap', token: '--space-3' },
-    { part: 'Icons and buttons', property: 'Icon size', token: '--icon-xs' },
+    { part: 'Icons and buttons', property: 'Icon size', token: '--icon-md' },
     { part: 'Input', property: 'Font size', token: '--text-body' },
     { part: 'Input', property: 'Line height', token: '--leading-body' },
   ]}
@@ -121,7 +118,8 @@ it, the gap and 4px more.
   rows={[
     { part: 'Label and helper', property: 'Gap to the field', token: '--space-stack' },
     { part: 'Label and helper', property: 'Font size', token: '--text-body-sm' },
-    { part: 'Clear and open buttons', property: 'Width and height', token: '--control-sm' },
+    { part: 'Clear button', property: 'Width and height', token: '--icon-md' },
+    { part: 'Open button', property: 'Width and height', token: '--control-sm' },
     { part: 'Options list', property: 'Block padding', token: '--space-2' },
     { part: 'Option', property: 'Block padding', token: '--space-1-5' },
     { part: 'Option', property: 'Inline padding', token: '--space-3' },
@@ -135,7 +133,7 @@ it, the gap and 4px more.
 />
 
 The field is 20rem wide unless `isFullWidth`; the list is at least as
-wide as the field, 8px under it, and scrolls after 20rem (about ten
+wide as the field, 4px under it, and scrolls after 20rem (about ten
 options).
 
 ## Color
@@ -143,35 +141,35 @@ options).
 <SpecTable
   caption="Field"
   rows={[
-    { part: 'Field', property: 'Background', token: '--card' },
-    { part: 'Field', property: 'Border', token: '--field-border' },
-    { part: 'Label, input', property: 'Colour', token: '--foreground' },
-    { part: 'Placeholder, helper, icons', property: 'Colour', token: '--muted-foreground' },
-    { part: 'Required asterisk', property: 'Colour', token: '--danger-text' },
-    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+    { part: 'Field', property: 'Background', token: '--color-surface-raised' },
+    { part: 'Field', property: 'Border', token: '--color-border-input' },
+    { part: 'Label, input', property: 'Colour', token: '--color-text' },
+    { part: 'Placeholder, helper, icons', property: 'Colour', token: '--color-text-subtlest' },
+    { part: 'Required asterisk', property: 'Colour', token: '--color-text-danger' },
+    { part: 'Focus ring', property: 'Colour', token: '--color-border-focused' },
   ]}
 />
 
 <SpecTable
   caption="Validation and read-only"
   rows={[
-    { part: 'Border, helper, focus ring, error', property: 'Colour', token: '--danger-text' },
-    { part: 'Border, helper, success', property: 'Colour', token: '--success-text' },
-    { part: 'Field, read-only', property: 'Background', token: '--surface-filled' },
+    { part: 'Border, helper, focus ring, error', property: 'Colour', token: '--color-text-danger' },
+    { part: 'Border, helper, success', property: 'Colour', token: '--color-text-success' },
+    { part: 'Field, read-only', property: 'Background', token: '--color-background-input' },
   ]}
 />
 
 <SpecTable
   caption="Options list"
   rows={[
-    { part: 'List', property: 'Background', token: '--popover' },
-    { part: 'List', property: 'Border', token: '--border' },
+    { part: 'List', property: 'Background', token: '--color-surface-overlay' },
+    { part: 'List', property: 'Border', token: '--color-border' },
     { part: 'List', property: 'Shadow', token: '--shadow-overlay' },
-    { part: 'Option', property: 'Colour', token: '--popover-foreground' },
-    { part: 'Option, highlighted', property: 'Background', token: '--accent' },
-    { part: 'Option, highlighted', property: 'Colour', token: '--accent-foreground' },
-    { part: 'Check', property: 'Colour', token: '--primary-text' },
-    { part: 'No matches, Loading…', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Option', property: 'Colour', token: '--color-text' },
+    { part: 'Option, highlighted', property: 'Background', token: '--color-background-neutral' },
+    { part: 'Option, highlighted', property: 'Colour', token: '--color-text' },
+    { part: 'Check', property: 'Colour', token: '--color-text-brand' },
+    { part: 'No matches, Loading…', property: 'Colour', token: '--color-text-subtlest' },
   ]}
 />
 
@@ -196,15 +194,15 @@ so it holds full contrast on the highlighted row.
   <Fit><Story of={ComboboxStories.Default} /></Fit>
 </States>
 
-- **Focus** is a 2px `--ring` outline, 2px outside the field, drawn while
+- **Focus** is a 2px `--color-border-focused` outline, 2px outside the field, drawn while
   the input has focus, by pointer too: that is where typing goes. In the
-  error state the ring is `--danger-text`. The clear and open buttons draw
+  error state the ring is `--color-text-danger`. The clear and open buttons draw
   their own ring when tabbed to, so the field never shows two.
 - **Hover** changes nothing on the field; the clear and open buttons
-  darken from `--muted-foreground` to `--foreground`.
-- **Error** turns the edge and the helper `--danger-text` together; the
+  darken from `--color-text-subtlest` to `--color-text`.
+- **Error** turns the edge and the helper `--color-text-danger` together; the
   words are the message, the colour only points at it.
-- **Read-only** fills the field with `--surface-filled`; there is no clear
+- **Read-only** fills the field with `--color-background-input`; there is no clear
   button.
 - **Disabled** is the enabled look at 50% opacity.
 - **Loading** adds a spinner before the buttons and says "Loading…" in the

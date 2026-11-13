@@ -123,6 +123,13 @@ export const Matrix: Story = {
       ))}
     </div>
   ),
+  play: async ({ canvasElement }) => {
+    // Ghost has no border: 11px from the outer edge to the label, as Figma binds it.
+    const ghost = canvasElement.querySelectorAll('button')[8]
+    const style = getComputedStyle(ghost)
+    await expect(parseFloat(style.borderInlineStartWidth) + parseFloat(style.paddingInlineStart)).toBe(11)
+    await expect(parseFloat(style.borderInlineEndWidth) + parseFloat(style.paddingInlineEnd)).toBe(11)
+  },
 }
 
 export const Sizes: Story = {
@@ -279,7 +286,7 @@ export const StateContrast: Story = {
   render: () => (
     <div>
       {(['light', 'dark'] as const).map((mode) => (
-        <Theme key={mode} appearance={mode} style={{ background: 'var(--background)', padding: 8 }}>
+        <Theme key={mode} appearance={mode} style={{ background: 'var(--color-surface)', padding: 8 }}>
           {ACCENT_COLORS.map((accent) => (
             <Theme key={accent} accentColor={accent} style={{ display: 'flex', gap: 4 }}>
               {(['primary', 'accent', 'secondary', 'destructive'] as const).flatMap((variant) =>

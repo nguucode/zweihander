@@ -13,8 +13,7 @@ import * as SearchStories from './Search.stories'
 A field for a search query, with a button to clear it and, optionally, a
 key that focuses it. The field is
 [Text Input](?path=/docs/components-inputs-textinput--docs)'s. It searches
-one place: a list, a table, a results page. Finding anything from anywhere
-is the [Command Palette](?path=/docs/components-navigation-commandpalette--docs).
+one place: a list, a table, a results page.
 
 <Status of={SearchStories} />
 
@@ -44,7 +43,7 @@ visible label.
 | Shortcut | Use for |
 | --- | --- |
 | None (default) | Most fields. |
-| `shortcut="/"` | The one search a page is about, such as a list page's [Filter Bar](?path=/docs/patterns-application-ui-filterbar--docs). The key cap shows while the field is empty and idle. |
+| `shortcut="/"` | The one search a page is about, such as the search above a list page's table. The key cap shows while the field is empty and idle. |
 
 ## Resources
 
@@ -81,13 +80,16 @@ not focused; the two never show at once.
 
 The box is Text Input's: `sm` is 32px and `md` is 40px, one step taller
 than a Button. The search icon and the clear button's icon are 16px in
-both; the clear button is a 24px target round its icon.
+both; the clear button is a 24px target round its icon. The start
+padding is 10px, as Text Input's; the end is 6px, so the clear button's
+icon still sits 10px from the edge.
 
 <SpecTable
   caption="sm"
   rows={[
     { part: 'Container', property: 'Height', token: '--control-md' },
-    { part: 'Container', property: 'Inline padding', token: '--space-1-5' },
+    { part: 'Container', property: 'Inline padding, start', token: '--space-2-5' },
+    { part: 'Container', property: 'Inline padding, end', token: '--space-1-5' },
     { part: 'Container', property: 'Corner radius', token: '--control-md-radius-field' },
     { part: 'Container', property: 'Gap', token: '--space-2' },
     { part: 'Search icon and clear button', property: 'Size', token: '--icon-md' },
@@ -99,7 +101,8 @@ both; the clear button is a 24px target round its icon.
   caption="md"
   rows={[
     { part: 'Container', property: 'Height', token: '--control-lg' },
-    { part: 'Container', property: 'Inline padding', token: '--space-1-5' },
+    { part: 'Container', property: 'Inline padding, start', token: '--space-2-5' },
+    { part: 'Container', property: 'Inline padding, end', token: '--space-1-5' },
     { part: 'Container', property: 'Corner radius', token: '--control-md-radius-field' },
     { part: 'Container', property: 'Gap', token: '--space-2' },
     { part: 'Search icon and clear button', property: 'Size', token: '--icon-md' },
@@ -129,17 +132,17 @@ default ones.
 <SpecTable
   caption="default"
   rows={[
-    { part: 'Container', property: 'Background', token: '--card' },
-    { part: 'Container', property: 'Border', token: '--field-border' },
-    { part: 'Input', property: 'Colour', token: '--foreground' },
-    { part: 'Placeholder and search icon', property: 'Colour', token: '--muted-foreground' },
-    { part: 'Clear button', property: 'Colour', token: '--muted-foreground' },
-    { part: 'Clear button, hover', property: 'Colour', token: '--foreground' },
-    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+    { part: 'Container', property: 'Background', token: '--color-surface-raised' },
+    { part: 'Container', property: 'Border', token: '--color-border-input' },
+    { part: 'Input', property: 'Colour', token: '--color-text' },
+    { part: 'Placeholder and search icon', property: 'Colour', token: '--color-text-subtlest' },
+    { part: 'Clear button', property: 'Colour', token: '--color-text-subtlest' },
+    { part: 'Clear button, hover', property: 'Colour', token: '--color-text' },
+    { part: 'Focus ring', property: 'Colour', token: '--color-border-focused' },
   ]}
 />
 
-<SpecTable caption="Read-only" rows={[{ part: 'Container', property: 'Background', token: '--surface-filled' }]} />
+<SpecTable caption="Read-only" rows={[{ part: 'Container', property: 'Background', token: '--color-background-input' }]} />
 
 ## States
 
@@ -159,14 +162,14 @@ default ones.
 
 - **The clear button** appears once there is a query, and not while the
   field is disabled or read-only. On hover its icon darkens to
-  `--foreground`.
-- **Focus** is the field's 2px `--ring` outline around the box, on click
+  `--color-text`.
+- **Focus** is the field's 2px `--color-border-focused` outline around the box, on click
   as well as keyboard. The clear button, when tabbed to, draws its own
   ring instead, so the two never double.
 - **The shortcut's key cap** shows while the field is empty and hides on
   focus, when the key would type instead. Disabled or read-only, there is
   no key cap and the key is not bound.
-- **Read-only** fills the box with `--surface-filled`.
+- **Read-only** fills the box with `--color-background-input`.
 - **Disabled** is the enabled look at 50% opacity.
 
 ## API
@@ -188,11 +191,10 @@ Every other `<input>` attribute passes through, including `ref`, `name`,
 - **`value` is added** for a controlled query.
 - **`shortcut` is added**, a single key that focuses the field.
 - **No suggestion panel.** Recent searches and results grouped by type, as the
-  spec's global search shows them, are the
-  [Command Palette](?path=/docs/components-navigation-commandpalette--docs)'s
-  job; picking one value from matches is the
-  [Combobox](?path=/docs/components-inputs-combobox--docs)'s. Search stays a
-  field, so there are not three lists that behave alike.
+  spec's global search shows them, are left to the app; picking one value
+  from matches is the
+  [Combobox](?path=/docs/components-inputs-combobox--docs)'s job. Search
+  stays a field, so there are not two lists that behave alike.
 - Native `disabled`, `readOnly` names.
 
 </DocTab>
@@ -214,18 +216,13 @@ When it searches the site, put it inside a `<form role="search">` (or
 `<search>`) so it becomes a landmark people can jump to. The component is
 only the field: filtering a list in place does not need a landmark.
 
-Above a list page, Search goes in the
-[Filter Bar](?path=/docs/patterns-application-ui-filterbar--docs)'s `search`
-slot, which is already the `role="search"` landmark. Give the page's main
-search `shortcut="/"`, and only that one.
+Give the page's main search `shortcut="/"`, and only that one.
 
 ## When not to use
 
 - **To find anything from anywhere in the app**, with recent items and
-  results grouped by type. Use the
-  [Command Palette](?path=/docs/components-navigation-commandpalette--docs),
-  opened with ⌘K or from a search button. Do not bind ⌘K to a Search.
-
+  results grouped by type. That is a command palette, opened with ⌘K, and
+  the kit does not ship one. Do not bind ⌘K to a Search.
 - **To choose one value from a list.** Use a
   [Combobox](?path=/docs/components-inputs-combobox--docs): it shows the
   matches and keeps the choice.
@@ -236,6 +233,8 @@ search `shortcut="/"`, and only that one.
 
 - `type="search"`, exposed as a `searchbox`, named by the visible label
   or "Search". A placeholder is not a name.
+- `helperText`, when given, sits under the field and is the input's
+  description, as on Text Input.
 - **Clearing works the same everywhere:** the button, and Escape in the
   field (Chrome and Safari do this natively; Firefox did not). Either way
   `onChange` fires with a real event.
@@ -249,7 +248,7 @@ search `shortcut="/"`, and only that one.
   the key. It does nothing while focus is in a form field, or with ⌘,
   Ctrl or Alt held, or while the field is disabled or read-only. The input carries `aria-keyshortcuts`; the key cap is
   hidden from screen readers so the key is not read twice.
-- The edge is the light `--field-border`, the approved exception to WCAG
+- The edge is the light `--color-border-input`, the approved exception to WCAG
   1.4.11 described on Text Input.
 
 </DocTab>

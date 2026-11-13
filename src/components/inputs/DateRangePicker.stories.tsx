@@ -61,7 +61,7 @@ const meta = {
     isDateDisabled: { description: 'Return `true` to disable a day. Checked when typing too.', control: false },
     locale: { description: 'BCP 47 tag. Sets the typed order and the calendars\' month and day names.', control: 'text' },
     weekStartsOn: { description: 'First column of the calendars, and the start of "This week". Defaults to the locale\'s.', control: 'number' },
-    placeholder: { description: 'Defaults to the locale\'s pattern, e.g. "dd/mm/yyyy – dd/mm/yyyy".', control: 'text' },
+    placeholder: { description: 'Defaults to "Start – End". The locale\'s pattern ("dd/mm/yyyy – dd/mm/yyyy") is the input\'s description, and the error message names it.', control: 'text' },
     isFullWidth: { description: 'Fills the width of its container instead of 20rem.', control: 'boolean' },
     name: { description: 'Submitted as `yyyy-mm-dd/yyyy-mm-dd`, an ISO 8601 interval.', control: 'text' },
     disabled: { description: 'Dimmed, out of the tab order, not submitted.', control: 'boolean' },
@@ -95,6 +95,9 @@ export const Default: Story = {
   play: async ({ args, canvas }) => {
     const input = canvas.getByRole('textbox', { name: 'Period' })
     await expect(input).toHaveValue('07/09/2026 – 13/09/2026')
+    // The placeholder is words; the typing format is the description.
+    await expect(input).toHaveAttribute('placeholder', 'Start – End')
+    await expect(input).toHaveAccessibleDescription('dd/mm/yyyy – dd/mm/yyyy')
     await userEvent.click(canvas.getByRole('button', { name: /Choose dates/ }))
     const dialog = await body().findByRole('dialog', { name: 'Choose dates' })
     const september = within(dialog).getByRole('grid', { name: 'September 2026' })

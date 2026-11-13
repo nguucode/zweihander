@@ -30,7 +30,7 @@ function Row({ token, px, weight }: { token: string; px: string; weight: number 
   return (
     <div
       className={docs.rowBaseline}
-      style={{ borderBottom: '1px solid var(--border)', padding: 'var(--space-2) 0' }}
+      style={{ borderBottom: '1px solid var(--color-border)', padding: 'var(--space-2) 0' }}
     >
       <span className={docs.caption} style={{ width: '10rem', flexShrink: 0 }}>
         --text-{token}

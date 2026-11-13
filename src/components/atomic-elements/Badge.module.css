@@ -41,49 +41,49 @@
 }
 
 .primary {
-  background: var(--primary);
-  color: var(--primary-foreground);
+  background: var(--color-background-brand-bold);
+  color: var(--color-text-brand-inverse);
 }
 
 /* The token set has one brand hue, so accent is the inverted neutral: the
    strongest contrast available without inventing a colour. */
 .accent {
-  background: var(--foreground);
-  color: var(--background);
+  background: var(--color-text);
+  color: var(--color-surface);
 }
 
 .secondary {
-  background: var(--secondary);
-  color: var(--secondary-foreground);
+  background: var(--color-background-neutral);
+  color: var(--color-text);
 }
 
 /* A dot has no text to carry it, so it must reach 3:1 against the page on
    its own; the secondary fill is far below that. */
 .dot.secondary {
-  background: var(--muted-foreground);
+  background: var(--color-text-subtlest);
 }
 
 .destructive {
-  background: var(--destructive);
-  color: var(--destructive-foreground);
+  background: var(--color-background-danger-bold);
+  color: var(--color-text-danger-inverse);
 }
 
 /* Status colours, for presence and state dots: success is Online, warning
    Away or Pending. Offline is secondary; info would repeat primary's blue. */
 .success {
-  background: var(--success);
-  color: var(--success-foreground);
+  background: var(--color-background-success-bold);
+  color: var(--color-text-success-inverse);
 }
 
 .warning {
-  background: var(--warning);
-  color: var(--warning-foreground);
+  background: var(--color-background-warning-bold);
+  color: var(--color-text-warning-inverse);
 }
 
 /* Same 3:1 rule as the secondary dot: amber-500 reaches only 2:1 on the
    light page, so the dot steps down to amber-600. */
 .dot.warning {
-  background: var(--warning-indicator);
+  background: var(--color-icon-warning);
 }
 
 /* The ring in the page background separates the badge from whatever it
@@ -91,7 +91,7 @@
    the same width as the focus ring: enough to read as a gap, not a border. */
 .floating {
   position: absolute;
-  box-shadow: 0 0 0 2px var(--background);
+  box-shadow: 0 0 0 2px var(--color-surface);
 }
 
 /* start/end are physical left/right, so RTL pages get mirrored

@@ -160,8 +160,8 @@ export const Delay: Story = {
 
 /** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
 export const anatomyParts = [
-  { name: 'Track', selector: 'svg > circle:first-child', description: 'The full ring, --border. Frames the motion; decoration.' },
-  { name: 'Indicator', selector: 'svg > circle:last-child', description: 'The arc: a quarter turn while spinning, or the value as a share of the ring.' },
+  { name: 'Track', selector: 'svg > circle:first-child', description: 'The full ring, --color-border. Frames the motion; decoration.' },
+  { name: 'Indicator', selector: 'svg > circle:last-child', description: 'The arc: 30% of the ring while spinning, or the value as a share of the ring.' },
   { name: 'Label', selector: '[role="progressbar"] > span', description: 'Optional, under the ring. Also the accessible name.' },
 ]
 
@@ -178,7 +178,7 @@ export const Anatomy: Story = {
 /** Guidelines, Do: one spinner, labelled, for the region that is loading. */
 export const DoOneForTheRegion: Story = {
   render: (args) => (
-    <div aria-busy="true" style={{ display: 'grid', placeItems: 'center', inlineSize: 320, blockSize: 120, border: '1px solid var(--border)', borderRadius: 'var(--radius-md)' }}>
+    <div aria-busy="true" style={{ display: 'grid', placeItems: 'center', inlineSize: 320, blockSize: 120, border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)' }}>
       <Spinner {...args} label="Loading projects…" />
     </div>
   ),
@@ -190,7 +190,7 @@ export const DontOnePerItem: Story = {
   render: (args) => (
     <div style={{ display: 'flex', gap: 'var(--space-2)' }}>
       {[1, 2, 3].map((n) => (
-        <div key={n} style={{ display: 'grid', placeItems: 'center', inlineSize: 100, blockSize: 120, border: '1px solid var(--border)', borderRadius: 'var(--radius-md)' }}>
+        <div key={n} style={{ display: 'grid', placeItems: 'center', inlineSize: 100, blockSize: 120, border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)' }}>
           <Spinner {...args} />
         </div>
       ))}
@@ -203,7 +203,7 @@ export const IndicatorContrast: Story = {
   render: () => (
     <div>
       {(['light', 'dark'] as const).map((mode) => (
-        <Theme key={mode} appearance={mode} style={{ background: 'var(--background)', padding: 8 }}>
+        <Theme key={mode} appearance={mode} style={{ background: 'var(--color-surface)', padding: 8 }}>
           {ACCENT_COLORS.map((accent) => (
             <Theme key={accent} accentColor={accent} style={{ display: 'flex', gap: 4 }}>
               {(['primary', 'accent', 'secondary'] as const).map((variant) => (

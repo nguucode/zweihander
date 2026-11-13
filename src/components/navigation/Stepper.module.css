@@ -1,13 +1,15 @@
 .stepper {
   --step-marker: var(--space-8);
+  --step-icon: var(--icon-md);
   font-family: var(--font-sans);
   font-size: var(--text-body);
   line-height: var(--leading-body);
-  color: var(--foreground);
+  color: var(--color-text);
 }
 
 .sm {
   --step-marker: var(--space-6);
+  --step-icon: var(--icon-sm);
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
 }
@@ -51,7 +53,7 @@ button.target:hover .label {
   text-underline-offset: 0.2em;
 }
 button.target:focus-visible {
-  outline: var(--focus-width) solid var(--ring);
+  outline: var(--focus-width) solid var(--color-border-focused);
   outline-offset: var(--focus-offset);
 }
 
@@ -63,34 +65,35 @@ button.target:focus-visible {
   box-sizing: border-box;
   inline-size: var(--step-marker);
   block-size: var(--step-marker);
-  border: 2px solid var(--control-border);
+  border: 2px solid var(--color-border-bold);
   border-radius: var(--radius-pill);
-  background: var(--background);
-  color: var(--muted-foreground);
+  background: var(--color-surface);
+  color: var(--color-text-subtlest);
   font-size: var(--text-body-sm);
   font-weight: 600;
   font-variant-numeric: tabular-nums;
 }
+/* 16px in the 32px marker, 14px in the 24px one. */
 .marker :global(svg) {
-  inline-size: 60%;
-  block-size: 60%;
+  inline-size: var(--step-icon);
+  block-size: var(--step-icon);
 }
 
 /* Complete and current share the primary colour; the filled disc says
    done, the ring says here. */
 .complete .marker {
-  border-color: var(--primary);
-  background: var(--primary);
-  color: var(--primary-foreground);
+  border-color: var(--color-background-brand-bold);
+  background: var(--color-background-brand-bold);
+  color: var(--color-text-brand-inverse);
 }
 .current .marker {
-  border-color: var(--primary-text);
-  color: var(--primary-text);
+  border-color: var(--color-text-brand);
+  color: var(--color-text-brand);
 }
 .error .marker {
-  border-color: var(--danger-text);
-  background: var(--danger-subtle);
-  color: var(--danger-text);
+  border-color: var(--color-text-danger);
+  background: var(--color-background-danger);
+  color: var(--color-text-danger);
 }
 
 .text {
@@ -105,28 +108,28 @@ button.target:focus-visible {
   font-weight: 500;
 }
 .upcoming .label {
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
 }
 .error .label {
-  color: var(--danger-text);
+  color: var(--color-text-danger);
 }
 
 .description {
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
 }
 
-/* The line to the next step: --border ahead, --primary once this step is
+/* The line to the next step: --color-border ahead, --color-background-brand-bold once this step is
    done. Horizontal, it runs from this marker to the next along the
    markers' centre line, with the text below, so every step gets the same
    width whatever its label. Vertical, it runs down beside the text. */
 .connector {
   border-radius: var(--radius-pill);
-  background: var(--border);
+  background: var(--color-border);
 }
 .complete .connector {
-  background: var(--primary);
+  background: var(--color-background-brand-bold);
 }
 
 .horizontal .step {
@@ -177,7 +180,7 @@ button.target:focus-visible {
   margin: 0 0 var(--space-2);
 }
 .count {
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
 }
 .bullets .list {
   align-items: center;
@@ -194,28 +197,28 @@ button.target:focus-visible {
   border-radius: var(--radius-pill);
 }
 .bullets button.target:hover {
-  background: var(--muted);
+  background: var(--color-background-neutral);
 }
 .bullets .marker {
   --step-marker: calc(var(--box-2xs) / 2);
-  --dot: var(--border);
+  --dot: var(--color-border);
   border-width: 0;
   background: var(--dot);
 }
 .bullets .complete .marker {
-  --dot: var(--primary);
+  --dot: var(--color-background-brand-bold);
 }
 .bullets .current .marker {
-  --dot: var(--primary-text);
+  --dot: var(--color-text-brand);
 }
 .bullets .error .marker {
-  --dot: var(--danger-text);
+  --dot: var(--color-text-danger);
 }
 /* A ring round the dot says here, in the dot's own colour, so an error on
    the current step keeps it. */
 .bullets [aria-current='step'] .marker {
   box-shadow:
-    0 0 0 2px var(--background),
+    0 0 0 2px var(--color-surface),
     0 0 0 4px var(--dot);
 }
 @media (pointer: coarse) {
