@@ -1,5 +1,27 @@
 # zweihander
 
+## 0.9.0
+
+### Minor Changes
+
+- 257fcdf: Breaking: remove Accordion, Carousel, Resizable, ContextMenu, CommandPalette and Drawer, every pattern and template, the Houseura demo, and Table's `hasRowContextMenu`. The Figma file no longer has them.
+  
+  Breaking: colour tokens follow Atlassian's categories, `--color-<category>-<role>[-<emphasis>]`: surface, text, icon, border, background, interaction, blanket, chart. The old names are gone. Map: `--background` → `--color-surface`, `--card` → `--color-surface-raised`, `--popover` → `--color-surface-overlay`, `--foreground` (and card-, popover-, accent-, secondary-foreground) → `--color-text`, `--subtle-foreground` → `--color-text-subtle`, `--muted-foreground` → `--color-text-subtlest`, `--primary-text` → `--color-text-brand`, `--primary-foreground` → `--color-text-brand-inverse`, `--border` and `--input` → `--color-border`, `--field-border` → `--color-border-input`, `--control-border` → `--color-border-bold`, `--ring` → `--color-border-focused`, `--secondary`, `--muted`, `--accent` → `--color-background-neutral`, `--primary` → `--color-background-brand-bold`, `--surface-filled` → `--color-background-input`, `--<status>` → `--color-background-<status>-bold`, `--<status>-subtle` → `--color-background-<status>`, `--<status>-text` → `--color-text-<status>`, `--<status>-foreground` → `--color-text-<status>-inverse` (`--destructive*` merge into danger), `--<hue>` → `--color-background-accent-<hue>-bolder`, `--<hue>-subtle` → `--color-background-accent-<hue>-subtler`, `--<hue>-text` → `--color-text-accent-<hue>`, `--hover-overlay` → `--color-interaction-hovered`, `--scrim` → `--color-blanket`, `--warning-indicator` → `--color-icon-warning`, `--chart-N` → `--color-chart-N`. New `--color-icon*` tokens. `--sidebar-width` and `--aside-width` are removed.
+- 257fcdf: Components follow the Figma file. Every remaining component is beta.
+  
+  Breaking:
+  - `ButtonGroup` is a single-select toggle group (`type: 'separate' | 'joined'`, `value`, `defaultValue`, `onValueChange`, ToggleButton children). `ToggleGroup` and `multiple` are removed.
+  - `Card`: `size` is `xs | sm` (default `sm`); `appearance="surface"` and `hasBorder` are removed; elevated has no visible edge. Theme's `canvas` and `contentStyle` are removed.
+  - `Tooltip`: `HoverCard` is removed. `Toast` variant `default` is `neutral`, and Toast follows the page theme.
+  - `ChartLegend` loses `orientation`; chart legends sit centred below the plot. PieChart is vertical, default `size` 160, legend shows the share. Sparkline defaults to 96 × 24.
+  - `PasswordInput` no longer takes `suffix`. Calendar has no year buttons. ColumnChooser's popup is a list of checkbox rows with a "Reset columns" row.
+  
+  Added: ChartLegend `marker`, chart `legendValue: 'none'`, Sparkline `appearance="bar"`, ConfirmDialog `kind`, Search `helperText` and `required`.
+  
+  Changed measurements: field padding 10px, 16px select chevrons, 4px popup offset, Table cells padded 8px with 1px rules, Menubar without a frame, Menu inset 4px, ghost buttons 11px, Spinner ring 2.25px, bar charts with rounded tops, and the other values in each component's Specs tab.
+  
+  Docs: the Figma file has a Specs and a Guidelines canvas for every component and for the 11 Foundations pages, and the Storybook docs carry the same guidance (aria-labels, popup placement, Toast timeout) and corrected Foundations facts.
+
 ## 0.8.0
 
 ### Minor Changes
