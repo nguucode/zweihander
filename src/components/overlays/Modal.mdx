@@ -125,15 +125,15 @@ and modal sit on the `--layer-overlay` layer and fade in over
 <SpecTable
   caption="Every modal"
   rows={[
-    { part: 'Backdrop', property: 'Background', token: '--scrim' },
-    { part: 'Container', property: 'Background', token: '--popover' },
-    { part: 'Container', property: 'Border', token: '--border' },
-    { part: 'Title, body', property: 'Colour', token: '--popover-foreground' },
-    { part: 'Description', property: 'Colour', token: '--muted-foreground' },
-    { part: 'Close button', property: 'Colour', token: '--muted-foreground' },
-    { part: 'Close button, hover', property: 'Background', token: '--accent' },
-    { part: 'Close button, hover', property: 'Colour', token: '--accent-foreground' },
-    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+    { part: 'Backdrop', property: 'Background', token: '--color-blanket' },
+    { part: 'Container', property: 'Background', token: '--color-surface-overlay' },
+    { part: 'Container', property: 'Border', token: '--color-border' },
+    { part: 'Title, body', property: 'Colour', token: '--color-text' },
+    { part: 'Description', property: 'Colour', token: '--color-text-subtlest' },
+    { part: 'Close button', property: 'Colour', token: '--color-text-subtlest' },
+    { part: 'Close button, hover', property: 'Background', token: '--color-background-neutral' },
+    { part: 'Close button, hover', property: 'Colour', token: '--color-text' },
+    { part: 'Focus ring', property: 'Colour', token: '--color-border-focused' },
   ]}
 />
 
@@ -155,8 +155,8 @@ part with states of its own:
   <Story of={ModalStories.CloseButton} />
 </States>
 
-- **Hover** fills the button with `--accent`.
-- **Focus** is a 2px `--ring` outline drawn inside the button, so it is not
+- **Hover** fills the button with `--color-background-neutral`.
+- **Focus** is a 2px `--color-border-focused` outline drawn inside the button, so it is not
   clipped at the container's corner.
 
 ## API

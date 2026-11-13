@@ -177,7 +177,7 @@ const picture = ({ height = '17rem', ...args }: ConfirmDialogProps & { height?: 
 
 /** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
 export const anatomyParts = [
-  { name: 'Warning icon', selector: `.${styles.icon}`, description: 'In `--destructive`. Decorative: not part of the name.' },
+  { name: 'Warning icon', selector: `.${styles.icon}`, description: 'In `--color-background-danger-bold`. Decorative: not part of the name.' },
   { name: 'Title', selector: '[role="dialog"] h2', description: 'The action, as a question. Names the dialog.' },
   { name: 'Consequence', selector: `.${modalStyles.description}`, description: 'What happens, to what, and that it cannot be undone.' },
   { name: 'Type to confirm', selector: '[role="dialog"] input', description: 'Optional, `confirmText`. The confirm button waits for an exact match.' },

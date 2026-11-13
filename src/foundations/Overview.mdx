@@ -23,13 +23,13 @@ from](#where-the-values-come-from) — but nothing downstream of it is.
 
 | Layer | Where | Example |
 | --- | --- | --- |
-| Raw value | `:root` / `.dark` in `tokens.css` | `--primary: oklch(51.1% 0.262 276.966)` |
+| Raw value | `:root` / `.dark` in `tokens.css` | `--color-background-brand-bold: oklch(51.1% 0.262 276.966)` |
 | Derived value | the `*` block in `tokens.css` | `--radius-control: max(…)` |
-| Usage | a component's `.module.css` | `background: var(--primary)` |
+| Usage | a component's `.module.css` | `background: var(--color-background-brand-bold)` |
 
 Components only ever read the variable. That is what makes a rebrand a
 change to one file, and what keeps theme conditionals out of component CSS
-entirely — the value behind `var(--primary)` changes, the rule does not.
+entirely — the value behind `var(--color-background-brand-bold)` changes, the rule does not.
 
 The derived layer is on `*` rather than `:root` on purpose: a custom
 property that reads another one resolves where it is *declared*, so
@@ -99,7 +99,7 @@ stylesheet loads:
 ```css
 :root {
   --radius: 1rem;
-  --primary: oklch(0.55 0.2 264);
+  --color-background-brand-bold: oklch(0.55 0.2 264);
 }
 ```
 
@@ -120,7 +120,7 @@ Four settings, each independent:
 
 | Prop | Values |
 | --- | --- |
-| `accentColor` | 17 hues — drives `--primary` and `--ring` |
+| `accentColor` | 17 hues — drives `--color-background-brand-bold` and `--color-border-focused` |
 | `grayColor` | 9 neutral ramps — drives backgrounds, text, borders |
 | `appearance` | `light`, `dark`, `inherit` |
 | `radius` | `sharp`, `rounded`, `full-rounded` |
@@ -135,8 +135,8 @@ the lighter solids miss the 3:1 a focus indicator needs.
 
 <Canvas of={OverviewStories.AccentColor} />
 
-**`accentColor` sets `--primary`, not `--accent`.** The token named
-`--accent` is a subtle hover surface — a different thing that happens to
+**`accentColor` sets `--color-background-brand-bold`, not `--color-background-neutral`.** The token named
+`--color-background-neutral` is a subtle hover surface — a different thing that happens to
 share the word.
 
 ### Gray color

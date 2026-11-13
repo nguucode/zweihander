@@ -237,7 +237,7 @@ export const InAForm: Story = {
 
 /** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
 export const anatomyParts = [
-  { name: 'Track', selector: '[role="switch"]', description: 'The pill: `--control-border` when off, the variant’s solid when on.' },
+  { name: 'Track', selector: '[role="switch"]', description: 'The pill: `--color-border-bold` when off, the variant’s solid when on.' },
   { name: 'Thumb', selector: '[role="switch"] > span', description: 'Slides to the end when on.' },
   { name: 'Label', selector: 'label > span:last-child', description: 'Names the setting. Part of the click target.' },
   { name: 'Helper text', selector: 'p', description: 'Optional. Indented under the label; the error message in the error state.' },

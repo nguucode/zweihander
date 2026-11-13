@@ -279,7 +279,7 @@ export const StateContrast: Story = {
   render: () => (
     <div>
       {(['light', 'dark'] as const).map((mode) => (
-        <Theme key={mode} appearance={mode} style={{ background: 'var(--background)', padding: 8 }}>
+        <Theme key={mode} appearance={mode} style={{ background: 'var(--color-surface)', padding: 8 }}>
           {ACCENT_COLORS.map((accent) => (
             <Theme key={accent} accentColor={accent} style={{ display: 'flex', gap: 4 }}>
               {(['primary', 'accent', 'secondary', 'destructive'] as const).flatMap((variant) =>

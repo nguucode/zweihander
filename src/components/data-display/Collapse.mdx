@@ -107,10 +107,10 @@ line height too.
 <SpecTable
   caption="Every size"
   rows={[
-    { part: 'Label', property: 'Colour', token: '--foreground' },
-    { part: 'Chevron', property: 'Colour', token: '--muted-foreground' },
-    { part: 'Panel', property: 'Text colour', token: '--foreground' },
-    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+    { part: 'Label', property: 'Colour', token: '--color-text' },
+    { part: 'Chevron', property: 'Colour', token: '--color-text-subtlest' },
+    { part: 'Panel', property: 'Text colour', token: '--color-text' },
+    { part: 'Focus ring', property: 'Colour', token: '--color-border-focused' },
   ]}
 />
 
@@ -132,7 +132,7 @@ The trigger has no fill and no border in any state.
 </States>
 
 - **Hover** underlines the label, like a link.
-- **Focus** is a 2px `--ring` outline, 2px outside the trigger.
+- **Focus** is a 2px `--color-border-focused` outline, 2px outside the trigger.
 - **Pressed** has no look of its own: the label stays underlined while the
   pointer is down.
 - **Open** turns the chevron from right to down, shows `openLabel` if
@@ -166,15 +166,16 @@ link in a sentence.
   do={<Story of={CollapseStories.DoAsideInText} />}
   doCaption="One aside, under the text it belongs to. The label says what opening it does."
   dont={<Story of={CollapseStories.DontStackAsList} />}
-  dontCaption="A stack of Collapses is a list of sections. Use an Accordion: its items are real headings, framed and divided."
+  dontCaption="Bare Collapses stacked with nothing around them read as a menu, not as asides. Give each section a heading, and a Collapse under it only for what can wait."
 />
 
 ## When not to use
 
-- **For a list of sections.** Use an
-  [Accordion](?path=/docs/components-data-display-accordion--docs). Its
-  items are full-width bars with dividers because they are the page's
-  structure.
+- **As the structure of a page.** A list of sections needs real
+  headings. Give each one a heading, in a
+  [Card](?path=/docs/components-data-display-card--docs) section where it
+  needs a frame, and put a Collapse under a heading only for the part
+  that can wait.
 - **For a short hint about a control.** Use a
   [Tooltip](?path=/docs/components-overlays-tooltip--docs) or a
   [Popover](?path=/docs/components-overlays-popover--docs), which do not

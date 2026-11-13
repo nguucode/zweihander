@@ -128,29 +128,29 @@ wider than the screen less 16px a side.
 <SpecTable
   caption="Field"
   rows={[
-    { part: 'Field', property: 'Background', token: '--card' },
-    { part: 'Field', property: 'Border', token: '--field-border' },
-    { part: 'Label, input', property: 'Colour', token: '--foreground' },
-    { part: 'Placeholder, helper, calendar icon', property: 'Colour', token: '--muted-foreground' },
-    { part: 'Required asterisk', property: 'Colour', token: '--danger-text' },
-    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+    { part: 'Field', property: 'Background', token: '--color-surface-raised' },
+    { part: 'Field', property: 'Border', token: '--color-border-input' },
+    { part: 'Label, input', property: 'Colour', token: '--color-text' },
+    { part: 'Placeholder, helper, calendar icon', property: 'Colour', token: '--color-text-subtlest' },
+    { part: 'Required asterisk', property: 'Colour', token: '--color-text-danger' },
+    { part: 'Focus ring', property: 'Colour', token: '--color-border-focused' },
   ]}
 />
 
 <SpecTable
   caption="Validation"
   rows={[
-    { part: 'Border, helper, focus ring, error', property: 'Colour', token: '--danger-text' },
-    { part: 'Border, helper, success', property: 'Colour', token: '--success-text' },
+    { part: 'Border, helper, focus ring, error', property: 'Colour', token: '--color-text-danger' },
+    { part: 'Border, helper, success', property: 'Colour', token: '--color-text-success' },
   ]}
 />
 
 <SpecTable
   caption="Popover"
   rows={[
-    { part: 'Panel', property: 'Background', token: '--popover' },
-    { part: 'Panel', property: 'Colour', token: '--popover-foreground' },
-    { part: 'Panel', property: 'Border', token: '--border' },
+    { part: 'Panel', property: 'Background', token: '--color-surface-overlay' },
+    { part: 'Panel', property: 'Colour', token: '--color-text' },
+    { part: 'Panel', property: 'Border', token: '--color-border' },
     { part: 'Panel', property: 'Shadow', token: '--shadow-overlay' },
   ]}
 />
@@ -177,15 +177,15 @@ its page.
   <DatePicker label="Start date" locale="en-GB" defaultValue={new Date(2026, 8, 18)} />
 </States>
 
-- **Focus** is a 2px `--ring` outline, 2px outside the field, drawn while
+- **Focus** is a 2px `--color-border-focused` outline, 2px outside the field, drawn while
   the input has focus, by pointer too. In the error state the ring is
-  `--danger-text`. The calendar button draws its own ring when tabbed to.
-- **Error** turns the edge and the helper `--danger-text`. It is also
+  `--color-text-danger`. The calendar button draws its own ring when tabbed to.
+- **Error** turns the edge and the helper `--color-text-danger`. It is also
   shown on its own while the typed text is not a date, or is outside
   `min` and `max`: the helper then gives the expected pattern.
 - **Hover** changes nothing on the field; the calendar icon darkens from
-  `--muted-foreground` to `--foreground`.
-- **Read-only** fills the box with `--surface-filled`, as every
+  `--color-text-subtlest` to `--color-text`.
+- **Read-only** fills the box with `--color-background-input`, as every
   Zweihänder field does. The input stays focusable and copyable and its
   value is submitted; the calendar icon stays but is not a button, so the
   calendar never opens. Say why in `helperText`.

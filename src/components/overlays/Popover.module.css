@@ -9,11 +9,11 @@
   inline-size: max-content;
   max-inline-size: min(22rem, var(--available-width));
   padding: var(--space-group);
-  border: 1px solid var(--border);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  background: var(--popover);
+  background: var(--color-surface-overlay);
   box-shadow: var(--shadow-overlay);
-  color: var(--popover-foreground);
+  color: var(--color-text);
   font-family: var(--font-sans);
   font-size: var(--text-body);
   line-height: var(--leading-body);
@@ -46,7 +46,7 @@
 
 .description {
   margin: var(--space-1) 0 0;
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
 }
 
 .header + .body,
@@ -67,16 +67,16 @@
   border: 0;
   border-radius: var(--radius-sm);
   background: transparent;
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
   font-size: var(--icon-md);
   cursor: var(--cursor-button);
 }
 .close:hover {
-  background: var(--accent);
-  color: var(--accent-foreground);
+  background: var(--color-background-neutral);
+  color: var(--color-text);
 }
 .close:focus-visible {
-  outline: var(--focus-width) solid var(--ring);
+  outline: var(--focus-width) solid var(--color-border-focused);
   outline-offset: var(--focus-offset-inset);
 }
 @media (pointer: coarse) {

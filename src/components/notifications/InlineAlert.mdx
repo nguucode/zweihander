@@ -93,17 +93,17 @@ around it.
 ## Color
 
 The whole line, icon and message, takes the variant's text colour. An Alert
-can keep its message in `--foreground` because its box carries the colour;
+can keep its message in `--color-text` because its box carries the colour;
 an inline alert has no box, so the text does. Every `--*-text` token is
 4.5:1 on the page in both modes, so a message of any length stays readable.
 
 <SpecTable
   caption="Icon and message, by variant"
   rows={[
-    { part: 'info', property: 'Colour', token: '--info-text' },
-    { part: 'success', property: 'Colour', token: '--success-text' },
-    { part: 'warning', property: 'Colour', token: '--warning-text' },
-    { part: 'danger', property: 'Colour', token: '--danger-text' },
+    { part: 'info', property: 'Colour', token: '--color-text-info' },
+    { part: 'success', property: 'Colour', token: '--color-text-success' },
+    { part: 'warning', property: 'Colour', token: '--color-text-warning' },
+    { part: 'danger', property: 'Colour', token: '--color-text-danger' },
   ]}
 />
 

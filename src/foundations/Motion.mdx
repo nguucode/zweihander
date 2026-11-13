@@ -15,12 +15,12 @@ kit reads one of them; nothing types a number of milliseconds.
 The step follows what moves, not how important it is. A popup appearing
 is `fast`: it answers a click, and anything slower reads as lag. A colour
 or state change is `base`. Something that travels across the screen (the
-tab indicator, a toast, a drawer) is `slow`, because the eye has to follow
+tab indicator, a toast, a progress bar's fill) is `slow`, because the eye has to follow
 it. If a new transition does not fit one of the three, that is a reason to
 question the transition before adding a fourth step.
 
 Easing is the browser default (`ease`) except where something grows or
-shrinks: Accordion and Collapse open with `ease-out`, so the panel arrives
+shrinks: Collapse opens with `ease-out`, so the panel arrives
 fast and settles. There is no easing token: two curves, each with an
 obvious owner, do not need a name yet.
 

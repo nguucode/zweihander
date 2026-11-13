@@ -59,7 +59,7 @@
 
 .areaThumb:has(:focus-visible),
 .stripThumb:has(:focus-visible) {
-  outline: var(--focus-width) solid var(--ring);
+  outline: var(--focus-width) solid var(--color-border-focused);
   outline-offset: var(--focus-offset);
 }
 
@@ -156,7 +156,7 @@
   text-align: center;
 }
 .channel + .channel {
-  border-inline-start: 1px solid var(--border);
+  border-inline-start: 1px solid var(--color-border);
 }
 .hexChannel {
   flex: 3;
@@ -180,7 +180,7 @@
 .swatches {
   display: grid;
   padding-block-start: var(--space-cluster);
-  border-block-start: 1px solid var(--border);
+  border-block-start: 1px solid var(--color-border);
   grid-template-columns: repeat(auto-fill, minmax(var(--space-6), 1fr));
   gap: var(--space-inline);
 }
@@ -206,18 +206,18 @@
   cursor: var(--cursor-button);
 }
 .swatch:focus-visible {
-  outline: var(--focus-width) solid var(--ring);
+  outline: var(--focus-width) solid var(--color-border-focused);
   outline-offset: var(--focus-offset);
 }
 /* The chosen one gets a ring in the brand colour, as every selected control
    in the kit, not a tick that would need a contrasting colour per swatch. */
 .swatch:checked {
-  outline: var(--focus-width) solid var(--primary);
+  outline: var(--focus-width) solid var(--color-background-brand-bold);
   outline-offset: var(--focus-offset);
 }
 /* Focus on the chosen swatch: the ring colour, a step further out. */
 .swatch:checked:focus-visible {
-  outline-color: var(--ring);
+  outline-color: var(--color-border-focused);
   outline-offset: calc(var(--focus-offset) + 1px);
 }
 .swatch:disabled {
@@ -236,7 +236,7 @@
   background:
     linear-gradient(var(--swatch), var(--swatch)),
     var(--checker);
-  box-shadow: inset 0 0 0 1px var(--control-border);
+  box-shadow: inset 0 0 0 1px var(--color-border-bold);
 }
 
 /* Outside the swatch, so the ring is not drawn over the colour. */
@@ -259,11 +259,11 @@
 .popup {
   box-sizing: border-box;
   padding: var(--space-4);
-  border: 1px solid var(--border);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  background: var(--popover);
+  background: var(--color-surface-overlay);
   box-shadow: var(--shadow-overlay);
-  color: var(--popover-foreground);
+  color: var(--color-text);
   outline: none;
   transform-origin: var(--transform-origin);
   transition:

@@ -28,13 +28,12 @@ npm run dev          # docs home at http://localhost:5173 (src/App.tsx)
 
 ## Structure (Atomic Design)
 
-Storybook sidebar is ordered Foundations → Components → Patterns (`.storybook/preview.tsx`).
+Storybook sidebar is ordered Foundations → Components (`.storybook/preview.tsx`).
 
 | Tier (atomic design) | Folder | Storybook title | What goes here |
 | --- | --- | --- | --- |
 | **Foundations** (atoms) | `src/foundations/` | `Foundations/*` | Overview, color, dark mode, typography, spacing, breakpoints, radius, shadows, cursors |
 | **Components** (molecules) | `src/components/<category>/` | `Components/<Category>/*` | Single components (Button, Input, Modal, ...) — see [`src/components/Overview.mdx`](src/components/Overview.mdx) for the full category list |
-| **Patterns** (organisms) | `src/components/patterns/<category>/` | `Patterns/<Category>/*` | Full sections assembled from Components (Marketing, Application UI, E-commerce), shipped through the registry only. See [`src/components/patterns/Overview.mdx`](src/components/patterns/Overview.mdx) |
 
 **Every topic gets a hand-written `.mdx` doc page**, not an autodocs blurb —
 a story alone is a visual, not documentation. The `.mdx` file imports its
@@ -69,7 +68,7 @@ Those four files carry a `GENERATED` header and must not be hand-edited;
 steps). `tokens/semantic.json` holds what components actually read, and
 every colour in it is an **alias** — `{gray.950}`, `{accent.solid}` — so no
 semantic token carries a literal and swapping a ramp swaps everything
-downstream. Components use the semantic names (`var(--primary)`, never
+downstream. Components use the semantic names (`var(--color-background-brand-bold)`, never
 `var(--gray-900)`) for the same reason.
 
 The generator is not a templating pass: it *measures*. Each accent's solid
@@ -118,7 +117,7 @@ independent settings to any subtree:
 
 | Prop | Values |
 | --- | --- |
-| `accentColor` | 17 hues — drives `--primary` and `--ring` (default: **blue**) |
+| `accentColor` | 17 hues — drives `--color-background-brand-bold` and `--color-border-focused` (default: **blue**) |
 | `grayColor` | 9 neutral ramps — surfaces, text, borders (default: gray) |
 | `appearance` | `light` / `dark` / `inherit` |
 | `radius` | `sharp` / `rounded` / `full-rounded` |
@@ -167,7 +166,6 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/toggle-button.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/switch.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/checkbox.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/radio.json
-npx shadcn@latest add https://ontheshore.biz/zweihander/r/accordion.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/card.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/textarea.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/search.json
@@ -194,12 +192,10 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/success-state.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/collapse.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/slider.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/stepper.json
-npx shadcn@latest add https://ontheshore.biz/zweihander/r/sidebar.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/rating.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/table.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/calendar.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/date-picker.json
-npx shadcn@latest add https://ontheshore.biz/zweihander/r/carousel.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/color-picker.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/file-uploader.json
 ```
@@ -239,7 +235,6 @@ import { ToggleButton } from 'zweihander/toggle-button'
 import { Switch } from 'zweihander/switch'
 import { Checkbox } from 'zweihander/checkbox'
 import { RadioGroup } from 'zweihander/radio'
-import { Accordion } from 'zweihander/accordion'
 import { Card } from 'zweihander/card'
 import { Textarea } from 'zweihander/textarea'
 import { Search } from 'zweihander/search'
@@ -265,12 +260,10 @@ import { SuccessState } from 'zweihander/success-state'
 import { Collapse } from 'zweihander/collapse'
 import { Slider } from 'zweihander/slider'
 import { Stepper } from 'zweihander/stepper'
-import { Sidebar } from 'zweihander/sidebar'
 import { Rating } from 'zweihander/rating'
 import { Table } from 'zweihander/table'
 import { Calendar } from 'zweihander/calendar'
 import { DatePicker } from 'zweihander/date-picker'
-import { Carousel } from 'zweihander/carousel'
 import { ColorPicker } from 'zweihander/color-picker'
 import { FileUploader } from 'zweihander/file-uploader'
 import { ToastProvider, useToast } from 'zweihander/toast'
@@ -292,7 +285,7 @@ automated by CI).
 
 ## Adding a component
 
-1. Build it in `src/components/<category>/` (pick a category from the Components overview) — see `buttons/Button.tsx` for the pattern: a `<Name>.module.css` beside the component, one class per variant and size, looked up as `styles[variant]` and merged with `cn()` from `src/lib/utils.ts`. Read tokens (`var(--primary)`), never literals, and set `font-family: var(--font-sans)` explicitly rather than inheriting — a consumer's page may set no font at all. Import shared code via the `@/` alias (e.g. `@/lib/utils`), not a relative path — that's what lets the CLI rewrite it to the consumer's own alias.
+1. Build it in `src/components/<category>/` (pick a category from the Components overview) — see `buttons/Button.tsx` for the pattern: a `<Name>.module.css` beside the component, one class per variant and size, looked up as `styles[variant]` and merged with `cn()` from `src/lib/utils.ts`. Read tokens (`var(--color-background-brand-bold)`), never literals, and set `font-family: var(--font-sans)` explicitly rather than inheriting — a consumer's page may set no font at all. Import shared code via the `@/` alias (e.g. `@/lib/utils`), not a relative path — that's what lets the CLI rewrite it to the consumer's own alias.
 2. Add a `*.stories.tsx` file next to it, titled `Components/<Category>/<Component>`, and a hand-written `<Component>.mdx` beside it with three tabs, Overview / Specs / Guidelines, built from the docs blocks in `.storybook/blocks/` (template and required sections: Storybook *Internal / Docs blocks*) — no `autodocs` tag, per Structure above. `npm run docs:check` fails a component page without them.
 3. Add an entry for it in [`registry.json`](registry.json) so it's installable via the CLI.
 4. Figma designs will be synced in as the source of truth for new components.

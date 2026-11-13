@@ -8,7 +8,7 @@ import { Card } from './Card'
 import { contrast, hoverRules } from '@/test/story-helpers'
 
 const title = { margin: 0, fontSize: 'var(--text-heading-xs)', lineHeight: 'var(--leading-heading-xs)', fontWeight: 600 }
-const muted = { margin: 0, color: 'var(--muted-foreground)' }
+const muted = { margin: 0, color: 'var(--color-text-subtlest)' }
 
 const Content = () => (
   <>
@@ -36,7 +36,7 @@ const meta = {
       table: { type: { summary: "'xs' | 'sm' | 'md' | 'lg'" }, defaultValue: { summary: "'md'" } },
     },
     appearance: {
-      description: '`elevated`: the card surface with a faint shadow. `outline`: the surface and its edge, no shadow. `unstyled`: keeps the padding and layout, drops every visual. `surface`: a block of an AppShell page, elevated when the Theme\'s `contentStyle` is `card`, a section with a rule above when it is `flat`.',
+      description: '`elevated`: the card surface with a faint shadow. `outline`: the surface and its edge, no shadow. `unstyled`: keeps the padding and layout, drops every visual. `surface`: a block of a page on the Theme\'s canvas, elevated when the Theme\'s `contentStyle` is `card`, a section with a rule above when it is `flat`.',
       control: 'inline-radio',
       options: ['elevated', 'outline', 'unstyled', 'surface'],
       table: { type: { summary: "'elevated' | 'outline' | 'unstyled' | 'surface'" }, defaultValue: { summary: "'elevated'" } },
@@ -53,7 +53,7 @@ const meta = {
       table: { type: { summary: 'boolean' }, defaultValue: { summary: 'true' } },
     },
     hasBorder: {
-      description: 'The 1px `--border` edge. Off: no visible edge. `unstyled` never has one.',
+      description: 'The 1px `--color-border` edge. Off: no visible edge. `unstyled` never has one.',
       control: 'boolean',
       table: { type: { summary: 'boolean' }, defaultValue: { summary: 'true' } },
     },
@@ -193,7 +193,7 @@ export const Contrast: Story = {
         <Theme
           key={mode}
           appearance={mode}
-          style={{ display: 'grid', gap: 'var(--space-2)', background: 'var(--background)', padding: 'var(--space-2)' }}
+          style={{ display: 'grid', gap: 'var(--space-2)', background: 'var(--color-surface)', padding: 'var(--space-2)' }}
         >
           {(['elevated', 'outline', 'unstyled', 'surface'] as const).map((appearance) => (
             <Card key={appearance} appearance={appearance} onClick={() => {}} data-audit={`${mode} ${appearance}`}>
@@ -229,13 +229,13 @@ export const ClickableOutline: Story = {
   play: async ({ canvas }) => {
     const card = canvas.getByRole('button')
     // Hover strengthens the edge to the 3:1 control border.
-    await expect(hoverRules(card).some((r) => r.style.borderColor === 'var(--control-border)')).toBe(true)
+    await expect(hoverRules(card).some((r) => r.style.borderColor === 'var(--color-border-bold)')).toBe(true)
   },
 }
 
 /** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
 export const anatomyParts = [
-  { name: 'Container', selector: 'div:has(> h3)', description: 'The surface: --card, its --border edge and the padding from size. Content stacks or sits side by side, by orientation.' },
+  { name: 'Container', selector: 'div:has(> h3)', description: 'The surface: --color-surface-raised, its --color-border edge and the padding from size. Content stacks or sits side by side, by orientation.' },
   { name: 'Title', selector: 'div:has(> h3) > h3', description: 'Your content: a heading at the level the page needs. The card has none of its own.' },
   { name: 'Body', selector: 'div:has(> h3) > p', description: 'Your content: anything, here a line of muted text.' },
 ]

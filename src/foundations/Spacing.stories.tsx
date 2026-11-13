@@ -16,7 +16,7 @@ function RoleBars() {
             style={{
               height: '1rem',
               borderRadius: 'var(--radius-sm)',
-              background: 'var(--primary)',
+              background: 'var(--color-background-brand-bold)',
               width: `var(--space-${role})`,
             }}
           />

@@ -1,6 +1,6 @@
 /* The matched part of an option: heavier and underlined, in the option's
    own colour. A brand colour would drop under 4.5:1 on the highlighted
-   row's --accent fill; weight and underline carry the match without
+   row's --color-background-neutral fill; weight and underline carry the match without
    touching contrast. <mark>'s yellow fill is removed. */
 .match {
   background: transparent;

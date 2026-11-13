@@ -113,56 +113,56 @@ red tint measures 3.7:1.
 <SpecTable
   caption="Unpressed, every variant (ghost has no border)"
   rows={[
-    { part: 'Container', property: 'Border', token: '--input' },
-    { part: 'Label', property: 'Colour', token: '--foreground' },
+    { part: 'Container', property: 'Border', token: '--color-border' },
+    { part: 'Label', property: 'Colour', token: '--color-text' },
   ]}
 />
 
 <SpecTable
   caption="Pressed, outlined and ghost, every variant"
   rows={[
-    { part: 'Container', property: 'Background', token: '--secondary' },
-    { part: 'Label', property: 'Colour', token: '--secondary-foreground' },
+    { part: 'Container', property: 'Background', token: '--color-background-neutral' },
+    { part: 'Label', property: 'Colour', token: '--color-text' },
   ]}
 />
 
 <SpecTable
   caption="primary, pressed"
   rows={[
-    { part: 'Container, contained', property: 'Background', token: '--primary' },
-    { part: 'Label, contained', property: 'Colour', token: '--primary-foreground' },
-    { part: 'Container, outlined', property: 'Border', token: '--primary-text' },
+    { part: 'Container, contained', property: 'Background', token: '--color-background-brand-bold' },
+    { part: 'Label, contained', property: 'Colour', token: '--color-text-brand-inverse' },
+    { part: 'Container, outlined', property: 'Border', token: '--color-text-brand' },
   ]}
 />
 
 <SpecTable
   caption="accent, pressed"
   rows={[
-    { part: 'Container, contained', property: 'Background', token: '--foreground' },
-    { part: 'Label, contained', property: 'Colour', token: '--background' },
-    { part: 'Container, outlined', property: 'Border', token: '--foreground' },
+    { part: 'Container, contained', property: 'Background', token: '--color-text' },
+    { part: 'Label, contained', property: 'Colour', token: '--color-surface' },
+    { part: 'Container, outlined', property: 'Border', token: '--color-text' },
   ]}
 />
 
 <SpecTable
   caption="secondary, pressed"
   rows={[
-    { part: 'Container, contained', property: 'Background', token: '--secondary' },
-    { part: 'Label, contained', property: 'Colour', token: '--secondary-foreground' },
-    { part: 'Container, outlined', property: 'Border', token: '--input' },
+    { part: 'Container, contained', property: 'Background', token: '--color-background-neutral' },
+    { part: 'Label, contained', property: 'Colour', token: '--color-text' },
+    { part: 'Container, outlined', property: 'Border', token: '--color-border' },
   ]}
 />
 
 <SpecTable
   caption="destructive, pressed"
   rows={[
-    { part: 'Container, contained', property: 'Background', token: '--destructive' },
-    { part: 'Label, contained', property: 'Colour', token: '--destructive-foreground' },
-    { part: 'Container, outlined', property: 'Border', token: '--destructive' },
+    { part: 'Container, contained', property: 'Background', token: '--color-background-danger-bold' },
+    { part: 'Label, contained', property: 'Colour', token: '--color-text-danger-inverse' },
+    { part: 'Container, outlined', property: 'Border', token: '--color-background-danger-bold' },
   ]}
 />
 
-<SpecTable caption="Every variant" rows={[{ part: 'Focus ring', property: 'Colour', token: '--ring' }]} />
+<SpecTable caption="Every variant" rows={[{ part: 'Focus ring', property: 'Colour', token: '--color-border-focused' }]} />
 
 ## States
 

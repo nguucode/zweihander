@@ -16,7 +16,7 @@
  * zweihander/no-token-shadow: a component stylesheet never declares a name
  * src/tokens.css emits. A local `--radio-dot` once collided with a new
  * `--radio-dot` token and the dot silently changed colour (PR #138). An
- * intended restatement (a surface setting --background for what sits on it)
+ * intended restatement (a surface setting --color-surface for what sits on it)
  * takes a `stylelint-disable-next-line zweihander/no-token-shadow -- <reason>`.
  * A separate rule so that comment leaves the var() check on the line alone.
  */

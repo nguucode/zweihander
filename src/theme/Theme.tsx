@@ -49,8 +49,8 @@ export interface ThemeProps extends ComponentProps<'div'> {
   /** `inherit` (default) leaves the surrounding appearance alone. */
   appearance?: Appearance
   /**
-   * The brand hue. Drives `--primary` and `--ring` — not the token named
-   * `--accent`, which is a subtle surface and a different thing entirely.
+   * The brand hue. Drives `--color-background-brand-bold` and `--color-border-focused` — not the token named
+   * `--color-background-neutral`, which is a subtle surface and a different thing entirely.
    */
   accentColor?: AccentColor
   /** The neutral ramp behind backgrounds, text, borders and muted surfaces. */
@@ -62,18 +62,18 @@ export interface ThemeProps extends ComponentProps<'div'> {
   /** Rescales rounding for this scope. Inherits when omitted. */
   radius?: Radius
   /**
-   * What an AppShell sits on: `plain` (the card colour), `neutral` (the page
+   * What the app's page sits on: `plain` (the card colour), `neutral` (the page
    * gray) or `tinted` (the accent's subtle step). For any other colour or a
    * gradient, pass `tokens={{ canvas, 'canvas-solid', 'canvas-foreground',
    * 'canvas-muted-foreground' }}` (`canvas-solid`: one colour standing for
-   * it, for rings and fills), and for a transparent NavSidebar on it
+   * it, for rings and fills), and for a transparent side navigation on it
    * `canvas-hover`, `canvas-selected`, `canvas-field`, `canvas-field-border`,
    * `canvas-badge`, `canvas-badge-foreground`; contrast is then yours to
    * check, in both appearances. Inherits when omitted; the default is `neutral`.
    */
   canvas?: Canvas
   /**
-   * How an AppShell's content meets the canvas: `flat` puts it on one card
+   * How the page's content meets the canvas: `flat` puts it on one card
    * surface inset from the edges, `card` leaves it on the canvas so each block
    * is its own Card (`appearance="surface"`). Inherits when omitted; the
    * default is `flat`.

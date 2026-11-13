@@ -72,10 +72,6 @@
       "types": "./dist/components/controls/Radio.d.ts",
       "import": "./dist/components/controls/Radio.js"
     },
-    "./accordion": {
-      "types": "./dist/components/data-display/Accordion.d.ts",
-      "import": "./dist/components/data-display/Accordion.js"
-    },
     "./card": {
       "types": "./dist/components/data-display/Card.d.ts",
       "import": "./dist/components/data-display/Card.js"
@@ -140,17 +136,9 @@
       "types": "./dist/components/overlays/Modal.d.ts",
       "import": "./dist/components/overlays/Modal.js"
     },
-    "./drawer": {
-      "types": "./dist/components/overlays/Drawer.d.ts",
-      "import": "./dist/components/overlays/Drawer.js"
-    },
     "./confirm-dialog": {
       "types": "./dist/components/overlays/ConfirmDialog.d.ts",
       "import": "./dist/components/overlays/ConfirmDialog.js"
-    },
-    "./command-palette": {
-      "types": "./dist/components/navigation/CommandPalette.d.ts",
-      "import": "./dist/components/navigation/CommandPalette.js"
     },
     "./menu": {
       "types": "./dist/components/navigation/Menu.d.ts",
@@ -159,10 +147,6 @@
     "./menubar": {
       "types": "./dist/components/navigation/Menubar.d.ts",
       "import": "./dist/components/navigation/Menubar.js"
-    },
-    "./context-menu": {
-      "types": "./dist/components/navigation/ContextMenu.d.ts",
-      "import": "./dist/components/navigation/ContextMenu.js"
     },
     "./breadcrumbs": {
       "types": "./dist/components/navigation/Breadcrumbs.d.ts",
@@ -196,10 +180,6 @@
       "types": "./dist/components/data-display/Collapse.d.ts",
       "import": "./dist/components/data-display/Collapse.js"
     },
-    "./resizable": {
-      "types": "./dist/components/data-display/Resizable.d.ts",
-      "import": "./dist/components/data-display/Resizable.js"
-    },
     "./slider": {
       "types": "./dist/components/controls/Slider.d.ts",
       "import": "./dist/components/controls/Slider.js"
@@ -227,10 +207,6 @@
     "./date-picker": {
       "types": "./dist/components/inputs/DatePicker.d.ts",
       "import": "./dist/components/inputs/DatePicker.js"
-    },
-    "./carousel": {
-      "types": "./dist/components/data-display/Carousel.d.ts",
-      "import": "./dist/components/data-display/Carousel.js"
     },
     "./color-picker": {
       "types": "./dist/components/controls/ColorPicker.d.ts",

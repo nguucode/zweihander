@@ -10,10 +10,10 @@
   max-inline-size: 100%;
   overflow-x: auto;
   padding: var(--menubar-inset);
-  border: 1px solid var(--border);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-field);
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--color-surface);
+  color: var(--color-text);
   font-family: var(--font-sans);
   font-size: var(--text-body);
   line-height: var(--leading-body);
@@ -42,18 +42,18 @@
 .trigger:hover,
 .trigger[data-highlighted],
 .trigger[data-popup-open] {
-  background: var(--accent);
-  color: var(--accent-foreground);
+  background: var(--color-background-neutral);
+  color: var(--color-text);
 }
 
 .trigger:focus-visible {
-  outline: var(--focus-width) solid var(--ring);
+  outline: var(--focus-width) solid var(--color-border-focused);
   outline-offset: calc(var(--focus-width) * -1);
 }
 
 .trigger[data-disabled] {
   background: transparent;
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
   opacity: 0.6;
 }
 

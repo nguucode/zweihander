@@ -24,7 +24,7 @@ export interface SearchProps extends Omit<ComponentProps<'input'>, 'size' | 'typ
   isFullWidth?: boolean
   /**
    * One key, e.g. `/`, that focuses the field from anywhere on the page.
-   * No modifiers: ⌘K belongs to the Command Palette. One per page.
+   * No modifiers: ⌘K is left to the app. One per page.
    */
   shortcut?: string
 }
@@ -63,7 +63,7 @@ export function Search({
   useEffect(() => {
     if (!key) return
     const onKey = (e: globalThis.KeyboardEvent) => {
-      // Case-blind, as Command Palette's hotkey, so Caps Lock does not matter.
+      // Case-blind, so Caps Lock does not matter.
       if (e.key.toLowerCase() !== key.toLowerCase() || e.metaKey || e.ctrlKey || e.altKey || e.repeat || e.isComposing) return
       if (e.defaultPrevented || isInField(e.target)) return
       // Or the key would be typed into the field, and Firefox's quick find takes `/`.

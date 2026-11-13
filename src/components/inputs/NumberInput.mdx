@@ -117,34 +117,34 @@ The field's colours are Text Input's; the steppers add their own.
 <SpecTable
   caption="default"
   rows={[
-    { part: 'Container', property: 'Background', token: '--card' },
-    { part: 'Container', property: 'Border', token: '--field-border' },
-    { part: 'Input', property: 'Colour', token: '--foreground' },
-    { part: 'Stepper icon', property: 'Colour', token: '--muted-foreground' },
-    { part: 'Stepper, hover', property: 'Background', token: '--accent' },
-    { part: 'Stepper icon, hover', property: 'Colour', token: '--foreground' },
-    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+    { part: 'Container', property: 'Background', token: '--color-surface-raised' },
+    { part: 'Container', property: 'Border', token: '--color-border-input' },
+    { part: 'Input', property: 'Colour', token: '--color-text' },
+    { part: 'Stepper icon', property: 'Colour', token: '--color-text-subtlest' },
+    { part: 'Stepper, hover', property: 'Background', token: '--color-background-neutral' },
+    { part: 'Stepper icon, hover', property: 'Colour', token: '--color-text' },
+    { part: 'Focus ring', property: 'Colour', token: '--color-border-focused' },
   ]}
 />
 
 <SpecTable
   caption="error"
   rows={[
-    { part: 'Container', property: 'Border', token: '--danger-text' },
-    { part: 'Helper text', property: 'Colour', token: '--danger-text' },
-    { part: 'Focus ring', property: 'Colour', token: '--danger-text' },
+    { part: 'Container', property: 'Border', token: '--color-text-danger' },
+    { part: 'Helper text', property: 'Colour', token: '--color-text-danger' },
+    { part: 'Focus ring', property: 'Colour', token: '--color-text-danger' },
   ]}
 />
 
 <SpecTable
   caption="success"
   rows={[
-    { part: 'Container', property: 'Border', token: '--success-text' },
-    { part: 'Helper text', property: 'Colour', token: '--success-text' },
+    { part: 'Container', property: 'Border', token: '--color-text-success' },
+    { part: 'Helper text', property: 'Colour', token: '--color-text-success' },
   ]}
 />
 
-<SpecTable caption="Read-only" rows={[{ part: 'Container', property: 'Background', token: '--surface-filled' }]} />
+<SpecTable caption="Read-only" rows={[{ part: 'Container', property: 'Background', token: '--color-background-input' }]} />
 
 ## States
 
@@ -161,13 +161,13 @@ The field's colours are Text Input's; the steppers add their own.
   <NumberInput label="Guests" defaultValue={4} min={1} max={12} />
 </States>
 
-- **Hover** on a stepper fills it with `--accent` and darkens its icon; the
+- **Hover** on a stepper fills it with `--color-background-neutral` and darkens its icon; the
   field itself does not change.
 - **Focus** is the field's 2px ring around the whole box, in
-  `--danger-text` when invalid.
+  `--color-text-danger` when invalid.
 - **At a limit** the stepper that would go past it is disabled, at 50%
   opacity, and ignores hover, so it looks as unavailable as it is.
-- **Read-only** fills the box with `--surface-filled`; the steppers do
+- **Read-only** fills the box with `--color-background-input`; the steppers do
   nothing.
 - **Disabled** dims the whole field to 50%.
 

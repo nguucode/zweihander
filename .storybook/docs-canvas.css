@@ -5,6 +5,6 @@
  * frame from the tokens so it follows the toolbar like every other docs block.
  */
 .dark .sbdocs-preview {
-  border-color: var(--border);
-  background: var(--background);
+  border-color: var(--color-border);
+  background: var(--color-surface);
 }

@@ -1,7 +1,7 @@
 .rating {
   --rating-star: var(--space-6);
-  --rating-on: var(--warning);
-  --rating-off: var(--control-border);
+  --rating-on: var(--color-background-warning-bold);
+  --rating-off: var(--color-border-bold);
   display: inline-flex;
   flex-direction: column;
   gap: var(--space-1-5);
@@ -12,7 +12,7 @@
   font-family: var(--font-sans);
   font-size: var(--text-body);
   line-height: var(--leading-body);
-  color: var(--foreground);
+  color: var(--color-text);
 }
 .sm {
   --rating-star: var(--space-4);
@@ -34,10 +34,10 @@
   gap: 2px;
 }
 
-/* Filled stars in the bright --warning amber (2.1:1 on white, below the
+/* Filled stars in the bright --color-background-warning-bold amber (2.1:1 on white, below the
    3:1 for meaningful graphics: the filled vs outlined shape and the
    accessible name carry the score, not the fill colour). Empty stars
-   are outlined in --control-border (3:1). */
+   are outlined in --color-border-bold (3:1). */
 .star {
   position: relative;
   display: inline-flex;
@@ -72,7 +72,7 @@ fieldset:enabled .stars:has(label.star:hover) label.star:hover {
 }
 
 .star:has(.input:focus-visible) {
-  outline: var(--focus-width) solid var(--ring);
+  outline: var(--focus-width) solid var(--color-border-focused);
   outline-offset: var(--focus-offset);
   border-radius: var(--radius-sm);
 }

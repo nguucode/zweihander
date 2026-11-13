@@ -289,7 +289,7 @@ export const Today: Story = {
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16 }}>
         {(['light', 'dark'] as const).flatMap((mode) =>
           [undefined, range].map((r) => (
-            <Theme key={mode + !!r} appearance={mode} style={{ background: 'var(--background)', padding: 8 }} data-audit={`${mode}${r ? ' range' : ''}`}>
+            <Theme key={mode + !!r} appearance={mode} style={{ background: 'var(--color-surface)', padding: 8 }} data-audit={`${mode}${r ? ' range' : ''}`}>
               {/* Today's month, not the range's: on the 1st the range starts last month. */}
               <Calendar {...args} range={r} defaultMonth={now} />
             </Theme>

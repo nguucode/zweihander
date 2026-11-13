@@ -30,7 +30,7 @@ a[href].button {
 }
 
 .button:focus-visible {
-  outline: var(--focus-width) solid var(--ring);
+  outline: var(--focus-width) solid var(--color-border-focused);
   outline-offset: var(--focus-offset);
 }
 
@@ -52,35 +52,35 @@ a[href].button {
    of them paint the fill, the border and the label. */
 
 .primary {
-  --button-solid: var(--primary);
-  --button-on-solid: var(--primary-foreground);
-  --button-tone: var(--primary-text);
-  --button-border: var(--primary-text);
+  --button-solid: var(--color-background-brand-bold);
+  --button-on-solid: var(--color-text-brand-inverse);
+  --button-tone: var(--color-text-brand);
+  --button-border: var(--color-text-brand);
 }
 
 /* The token set has one brand hue, which primary already uses, so accent
    is the inverted neutral: the strongest contrast available. */
 .accent {
-  --button-solid: var(--foreground);
-  --button-on-solid: var(--background);
-  --button-tone: var(--foreground);
-  --button-border: var(--foreground);
+  --button-solid: var(--color-text);
+  --button-on-solid: var(--color-surface);
+  --button-tone: var(--color-text);
+  --button-border: var(--color-text);
 }
 
 /* Secondary's outline is the input border: quiet on purpose, the label
    names the button. */
 .secondary {
-  --button-solid: var(--secondary);
-  --button-on-solid: var(--secondary-foreground);
-  --button-tone: var(--foreground);
-  --button-border: var(--input);
+  --button-solid: var(--color-background-neutral);
+  --button-on-solid: var(--color-text);
+  --button-tone: var(--color-text);
+  --button-border: var(--color-border);
 }
 
 .destructive {
-  --button-solid: var(--destructive);
-  --button-on-solid: var(--destructive-foreground);
-  --button-tone: var(--destructive);
-  --button-border: var(--destructive);
+  --button-solid: var(--color-background-danger-bold);
+  --button-on-solid: var(--color-text-danger-inverse);
+  --button-tone: var(--color-background-danger-bold);
+  --button-border: var(--color-background-danger-bold);
 }
 
 /* --------------------------------------------------------- appearances
@@ -112,7 +112,7 @@ a[href].button {
 }
 
 /* Outlined and ghost tint the background with their own tone, which pulls
-   it toward the text; the text moves toward --foreground by as much, so it
+   it toward the text; the text moves toward --color-text by as much, so it
    keeps its distance from the tint. */
 .outlined,
 .ghost {
@@ -120,8 +120,8 @@ a[href].button {
   --button-fg: var(--button-tone);
   --button-bg-hover: color-mix(in oklab, var(--button-tone) 8%, transparent);
   --button-bg-active: color-mix(in oklab, var(--button-tone) 14%, transparent);
-  --button-fg-hover: color-mix(in oklab, var(--button-tone) 75%, var(--foreground));
-  --button-fg-active: color-mix(in oklab, var(--button-tone) 60%, var(--foreground));
+  --button-fg-hover: color-mix(in oklab, var(--button-tone) 75%, var(--color-text));
+  --button-fg-active: color-mix(in oklab, var(--button-tone) 60%, var(--color-text));
 }
 
 .outlined {

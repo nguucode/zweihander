@@ -136,38 +136,38 @@ The field's colours are Text Input's; the list adds the popover's.
 <SpecTable
   caption="default"
   rows={[
-    { part: 'Container', property: 'Background', token: '--card' },
-    { part: 'Container', property: 'Border', token: '--field-border' },
-    { part: 'Value', property: 'Colour', token: '--foreground' },
-    { part: 'Placeholder and chevron', property: 'Colour', token: '--muted-foreground' },
-    { part: 'Options list', property: 'Background', token: '--popover' },
-    { part: 'Options list', property: 'Border', token: '--border' },
-    { part: 'Option', property: 'Colour', token: '--popover-foreground' },
-    { part: 'Option, highlighted', property: 'Background', token: '--accent' },
-    { part: 'Option, highlighted', property: 'Colour', token: '--accent-foreground' },
-    { part: 'Check', property: 'Colour', token: '--primary-text' },
-    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+    { part: 'Container', property: 'Background', token: '--color-surface-raised' },
+    { part: 'Container', property: 'Border', token: '--color-border-input' },
+    { part: 'Value', property: 'Colour', token: '--color-text' },
+    { part: 'Placeholder and chevron', property: 'Colour', token: '--color-text-subtlest' },
+    { part: 'Options list', property: 'Background', token: '--color-surface-overlay' },
+    { part: 'Options list', property: 'Border', token: '--color-border' },
+    { part: 'Option', property: 'Colour', token: '--color-text' },
+    { part: 'Option, highlighted', property: 'Background', token: '--color-background-neutral' },
+    { part: 'Option, highlighted', property: 'Colour', token: '--color-text' },
+    { part: 'Check', property: 'Colour', token: '--color-text-brand' },
+    { part: 'Focus ring', property: 'Colour', token: '--color-border-focused' },
   ]}
 />
 
 <SpecTable
   caption="error"
   rows={[
-    { part: 'Container', property: 'Border', token: '--danger-text' },
-    { part: 'Helper text', property: 'Colour', token: '--danger-text' },
-    { part: 'Focus ring', property: 'Colour', token: '--danger-text' },
+    { part: 'Container', property: 'Border', token: '--color-text-danger' },
+    { part: 'Helper text', property: 'Colour', token: '--color-text-danger' },
+    { part: 'Focus ring', property: 'Colour', token: '--color-text-danger' },
   ]}
 />
 
 <SpecTable
   caption="success"
   rows={[
-    { part: 'Container', property: 'Border', token: '--success-text' },
-    { part: 'Helper text', property: 'Colour', token: '--success-text' },
+    { part: 'Container', property: 'Border', token: '--color-text-success' },
+    { part: 'Helper text', property: 'Colour', token: '--color-text-success' },
   ]}
 />
 
-<SpecTable caption="Read-only" rows={[{ part: 'Container', property: 'Background', token: '--surface-filled' }]} />
+<SpecTable caption="Read-only" rows={[{ part: 'Container', property: 'Background', token: '--color-background-input' }]} />
 
 ## States
 
@@ -185,13 +185,13 @@ The field's colours are Text Input's; the list adds the popover's.
 </States>
 
 - **Hover** changes nothing on the field; the cursor turns to the button cursor.
-- **Focus** is the field's 2px `--ring` outline, shown from the keyboard,
+- **Focus** is the field's 2px `--color-border-focused` outline, shown from the keyboard,
   and kept while the list is open: focus moves into the list, but the
   field is still the one being chosen for.
 - **Highlighted option** is where the arrow keys or the pointer are:
-  `--accent` behind it. Disabled options are dimmed to 60% and skipped.
+  `--color-background-neutral` behind it. Disabled options are dimmed to 60% and skipped.
 - **Loading** swaps the chevron for a spinner in the same place.
-- **Read-only** fills the field with `--surface-filled`.
+- **Read-only** fills the field with `--color-background-input`.
 - **Disabled** is the enabled look at 50% opacity.
 
 ## API

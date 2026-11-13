@@ -6,7 +6,7 @@
   position: fixed;
   inset: 0;
   z-index: var(--layer-overlay);
-  background: var(--scrim);
+  background: var(--color-blanket);
   transition: opacity var(--duration-base);
 }
 .backdrop[data-starting-style],
@@ -40,11 +40,11 @@
   /* Atlassian's modal: content 24px from the edge. The padding gives back
      the border's pixel. */
   padding: calc(var(--space-container) - var(--border-width));
-  border: var(--border-width) solid var(--border);
+  border: var(--border-width) solid var(--color-border);
   border-radius: var(--radius-panel);
-  background: var(--popover);
+  background: var(--color-surface-overlay);
   box-shadow: var(--shadow-overlay);
-  color: var(--popover-foreground);
+  color: var(--color-text);
   font-family: var(--font-sans);
   font-size: var(--text-body);
   line-height: var(--leading-body);
@@ -87,7 +87,7 @@
 
 .description {
   margin: var(--space-inline) 0 0;
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
 }
 
 /* The body scrolls; title and footer stay in view. It takes the height
@@ -126,16 +126,16 @@
   border: 0;
   border-radius: var(--radius-sm);
   background: transparent;
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
   font-size: var(--icon-md);
   cursor: var(--cursor-button);
 }
 .close:hover {
-  background: var(--accent);
-  color: var(--accent-foreground);
+  background: var(--color-background-neutral);
+  color: var(--color-text);
 }
 .close:focus-visible {
-  outline: var(--focus-width) solid var(--ring);
+  outline: var(--focus-width) solid var(--color-border-focused);
   outline-offset: var(--focus-offset-inset);
 }
 @media (pointer: coarse) {

@@ -10,8 +10,8 @@ Every color in the system is a CSS custom property declared in
 separate dark palette file and no JS theme object — one stylesheet holds
 both modes.
 
-**Read them with `var()`** — `background: var(--card)`,
-`color: var(--muted-foreground)`, `border-color: var(--border)`. Because
+**Read them with `var()`** — `background: var(--color-surface-raised)`,
+`color: var(--color-text-subtlest)`, `border-color: var(--color-border)`. Because
 the variable changes rather than the rule, a component written this way
 switches theme without a single conditional: there is no light branch and
 no dark branch anywhere in the kit's CSS.
@@ -24,25 +24,25 @@ too.
 
 ## Surfaces
 
-`--background` is the page. `--card` and `--popover` are surfaces that sit
+`--color-surface` is the page. `--color-surface-raised` and `--color-surface-overlay` are surfaces that sit
 a level above it — a card inset in the page, a menu floating over it. In
 light mode the page is gray-50, a cool off-white, and card/popover are
 white: a panel separates from the page by being lighter, so it needs a
-border at most, not a shadow. In dark mode `--background` sits at the
+border at most, not a shadow. In dark mode `--color-surface` sits at the
 darkest step and card/popover are lifted one step toward the viewer.
 
 Each surface has a `-foreground` partner, and the pair is the contract:
-put `--card-foreground` on `--card`, never `--foreground`, even where the
+put `--color-text` on `--color-surface-raised`, never `--color-text`, even where the
 two happen to be equal today.
 
 <Canvas of={ColorsStories.Surfaces} />
 
 ## Subtle surfaces
 
-`--muted` and `--accent` are the same value in both modes and differ only
-in intent. `--muted` is for surfaces that recede — a disabled field's
+`--color-background-neutral` and `--color-background-neutral` are the same value in both modes and differ only
+in intent. `--color-background-neutral` is for surfaces that recede — a disabled field's
 fill, a table's zebra stripe — and is the only one of the two with a
-foreground meant for *long-form* secondary text. `--accent` is for
+foreground meant for *long-form* secondary text. `--color-background-neutral` is for
 surfaces that are reacting to the user: hover on a menu item, the
 selected row in a list.
 
@@ -55,19 +55,19 @@ intent that should change will change.
 
 ## Solid actions
 
-Filled controls. `--primary` is the default button and **the brand hue** —
+Filled controls. `--color-background-brand-bold` is the default button and **the brand hue** —
 blue out of the box, and the one token the
 [`accentColor`](?path=/docs/foundations-overview--docs) setting moves. It
-lightens in dark mode rather than darkening, so `--primary-foreground`
+lightens in dark mode rather than darkening, so `--color-text-brand-inverse`
 inverts with it.
 
-`--destructive` is a hue too, but a fixed one: it stays red whatever the
+`--color-background-danger-bold` is a hue too, but a fixed one: it stays red whatever the
 accent is. A status colour that follows the brand stops being a status —
 if the accent is already red, distinguish destructive actions by wording
 and placement, not by colour alone.
 
-A note on names: the token called `--accent` is **not** the brand hue. It
-is a subtle surface (hover, selected row). The brand hue is `--primary`.
+A note on names: the token called `--color-background-neutral` is **not** the brand hue. It
+is a subtle surface (hover, selected row). The brand hue is `--color-background-brand-bold`.
 The collision is unfortunate and predates this kit — the names come from
 the token contract the registry is compatible with.
 
@@ -75,15 +75,15 @@ the token contract the registry is compatible with.
 
 ## Lines and focus
 
-`--border` is a divider or a container edge, `--input` is a form control's
-edge, `--ring` is the focus indicator. None of them take a foreground —
+`--color-border` is a divider or a container edge, `--color-border` is a form control's
+edge, `--color-border-focused` is the focus indicator. None of them take a foreground —
 they are only ever an outline color, never a fill behind text.
 
-`--border` and `--input` are the same value in both modes and, like
+`--color-border` and `--color-border` are the same value in both modes and, like
 muted/accent, are separated by intent rather than appearance. In dark mode
 they stop being opaque neutrals and become white at 10% and 15% alpha
 respectively, so an edge reads consistently whether it sits on
-`--background` or on a lifted `--card`. That is the one place the palette
+`--color-surface` or on a lifted `--color-surface-raised`. That is the one place the palette
 uses transparency.
 
 <Canvas of={ColorsStories.LinesAndFocus} />
@@ -123,47 +123,47 @@ Measured on the defaults: blue accent, gray gray. The `primary` row is the defau
 accents is measured the same way and clears 4.5:1 for its own label — see
 [Overview → Accent color](?path=/docs/foundations-overview--docs).
 
-**`--muted-foreground` on `--muted` is 4.60:1 in light mode**, the
+**`--color-text-subtlest` on `--color-background-neutral` is 4.60:1 in light mode**, the
 tightest pair it forms. It used to be 4.34:1, under AA: gray-500 on every
 ramp has since been darkened to the lightest value that clears 4.6:1 on
 its own gray-100, so muted text can now sit on a muted fill. On the page background, where secondary
 text usually lives, the same token is 4.85:1.
 
-**`--subtle-foreground` is a step between body text and muted text**
+**`--color-text-subtle` is a step between body text and muted text**
 (gray-600 light, gray-300 dark): navigation labels that should recede
 until hovered or current, as in the Claude apps' sidebar. It reads about
-7.5:1 on the light page, so it is body-safe; use `--muted-foreground` for
+7.5:1 on the light page, so it is body-safe; use `--color-text-subtlest` for
 genuinely secondary text.
 
-**`--surface-filled` is a filled panel that muted text can sit on.**
-Muted text reads 4.85:1 on it (gray-50) and 5.64:1 on gray-800 in dark — a step off `--card` so a filled panel still reads as filled. The build
-measures `--muted-foreground` on `--background`, `--card`,
-`--surface-filled` and `--muted` in both modes on all nine gray ramps, and
-stops if any pair drops under 4.5:1. The tightest is neutral on `--muted`,
+**`--color-background-input` is a filled panel that muted text can sit on.**
+Muted text reads 4.85:1 on it (gray-50) and 5.64:1 on gray-800 in dark — a step off `--color-surface-raised` so a filled panel still reads as filled. The build
+measures `--color-text-subtlest` on `--color-surface`, `--color-surface-raised`,
+`--color-background-input` and `--color-background-neutral` in both modes on all nine gray ramps, and
+stops if any pair drops under 4.5:1. The tightest is neutral on `--color-background-neutral`,
 at 4.60:1.
 
-**`--control-border` outlines a checkbox, radio or switch track.** Those
+**`--color-border-bold` outlines a checkbox, radio or switch track.** Those
 controls have nothing else that shows they are there, so WCAG 1.4.11 wants
-3:1 against the page — and `--input` (gray-200) is about 1.3:1. The build
+3:1 against the page — and `--color-border` (gray-200) is about 1.3:1. The build
 measures it on all nine gray ramps.
 
-**`--field-border` is the text-field edge** (gray-300 light, white 18%
+**`--color-border-input` is the text-field edge** (gray-300 light, white 18%
 dark), about 1.5:1: the light hairline of the Claude apps, and a
 deliberate exception to 3:1 for fields only. Fields lean on a white
-`--card` fill, a faint drop, the label and the focus ring instead. A
-product that needs 3:1 sets `--field-border: var(--control-border)`.
+`--color-surface-raised` fill, a faint drop, the label and the focus ring instead. A
+product that needs 3:1 sets `--color-border-input: var(--color-border-bold)`.
 
-**`--primary-text` is the brand hue as text** — an outlined or ghost
+**`--color-text-brand` is the brand hue as text** — an outlined or ghost
 primary button. The solid is picked for its label, not for being read on
 the page, and amber-500 on white is barely 2:1, so the build measures a
 third step per accent that clears 4.5:1 against the page.
 
-**Two values are deliberately off the beaten path.** `--ring` follows the
+**Two values are deliberately off the beaten path.** `--color-border-focused` follows the
 accent at its `-700` step rather than being a neutral, because a focus
 indicator has to clear 3:1 against the page under WCAG 1.4.11 and the
 lighter solids miss it — yellow-600 measures 2.93:1, so the ring uses a
 step darker than the fill for every accent.
-And dark `--destructive-foreground` is neutral-900 rather than near-white:
+And dark `--color-text-danger-inverse` is neutral-900 rather than near-white:
 dark mode inverts the destructive fill to red-400, and near-white on
 red-400 is 2.77:1, which makes the label of a destructive button in dark
 mode fail AA outright.
@@ -171,7 +171,7 @@ mode fail AA outright.
 ## Status
 
 Four fixed hues for messages about state: `info` (blue), `success`
-(green), `warning` (amber), `danger` (red). Like `--destructive`, they do
+(green), `warning` (amber), `danger` (red). Like `--color-background-danger-bold`, they do
 not follow the accent. Each comes as four tokens:
 
 | Token | Use | Light | Dark |
@@ -199,7 +199,7 @@ wrong. Keep them apart so either can move without the other.
 
 ## Color is never the only signal
 
-`--destructive` on a button does not say what will be destroyed, and a red
+`--color-background-danger-bold` on a button does not say what will be destroyed, and a red
 badge means nothing to a reader who cannot distinguish it from a neutral
 one. Pair color with words, an icon, or a shape every time it carries
 meaning. The contrast numbers above are a floor, not a design review.
@@ -208,8 +208,8 @@ meaning. The contrast numbers above are a floor, not a design review.
 
 **Every value is a step off a published ramp, digit for digit.** Nothing
 here was hand-picked or eyeballed. Two ramps feed the palette and each is
-swappable on its own: an **accent** (blue by default) for `--primary` and
-`--ring`, and a **gray** (the `gray` ramp by default) for everything structural.
+swappable on its own: an **accent** (blue by default) for `--color-background-brand-bold` and
+`--color-border-focused`, and a **gray** (the `gray` ramp by default) for everything structural.
 
 | Token | Light | Dark | Driven by |
 | --- | --- | --- | --- |
@@ -240,18 +240,18 @@ swappable on its own: an **accent** (blue by default) for `--primary` and
 The light accent step is `-600` for most hues but `-700` for sky, fuchsia,
 pink and rose, and the label is white or near-black depending on which one
 clears 4.5:1 on that fill — the warm hues take dark labels. Exceptions to
-the ramp rule: light `--card`/`--popover` (pure white, so a panel reads
-lighter than the gray-50 page) and dark `--border`/`--input`/`--selected`, and `--hover-overlay` in both
+the ramp rule: light `--color-surface-raised`/`--color-surface-overlay` (pure white, so a panel reads
+lighter than the gray-50 page) and dark `--color-border`/`--color-border`/`--color-background-selected`, and `--color-interaction-hovered` in both
 (alpha, so they work over any surface — the sidebar's hover sits on
-`--surface-filled`, which in dark equals the opaque `--accent` fill).
+`--color-background-input`, which in dark equals the opaque `--color-background-neutral` fill).
 
-`--destructive` deliberately does **not** follow the accent. A status
+`--color-background-danger-bold` deliberately does **not** follow the accent. A status
 colour that changes with the brand stops being a status.
 
 ## Naming
 
-Token names describe a **role**, not a property or a color. `--primary` is
-not "the brand color" and `--destructive` is not "red"; they are the
+Token names describe a **role**, not a property or a color. `--color-background-brand-bold` is
+not "the brand color" and `--color-background-danger-bold` is not "red"; they are the
 default action and the dangerous one. The names are also the common
 contract most token-based kits share, which is what lets a component
 copied out of Zweihänder resolve against tokens a target project already
@@ -259,8 +259,8 @@ has instead of arriving with its own private palette.
 
 Figma, by contrast, conventionally names tokens by property —
 `bg/primary`, `text/primary`, `border/default`. Those do not map one to
-one: Figma's `text/primary` is this system's `--foreground`, and its
-`bg/primary` is `--background`. Neither is `--primary`. Worth pinning down
+one: Figma's `text/primary` is this system's `--color-text`, and its
+`bg/primary` is `--color-surface`. Neither is `--color-background-brand-bold`. Worth pinning down
 before any Figma sync, since the collision is silent.
 
 ## Primitives
@@ -279,7 +279,7 @@ shows up in a component, a token is missing.
 ## Customization
 
 Swap the raw values in `:root` and `.dark` in `src/tokens.css`. Nothing
-that reads `var(--primary)` or `var(--muted-foreground)` changes, because
+that reads `var(--color-background-brand-bold)` or `var(--color-text-subtlest)` changes, because
 every rule points at the variable rather than the value.
 
 Two things to carry through a rebrand: re-measure the pairs in the

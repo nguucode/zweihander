@@ -93,13 +93,13 @@ edge. When the bar is wider than its container, it scrolls sideways.
 <SpecTable
   caption="Bar"
   rows={[
-    { part: 'Bar', property: 'Background', token: '--background' },
-    { part: 'Bar', property: 'Text', token: '--foreground' },
-    { part: 'Bar', property: 'Border', token: '--border' },
-    { part: 'Trigger, hover, highlighted or open', property: 'Background', token: '--accent' },
-    { part: 'Trigger, hover, highlighted or open', property: 'Text', token: '--accent-foreground' },
-    { part: 'Trigger, disabled', property: 'Text', token: '--muted-foreground' },
-    { part: 'Trigger, focus', property: 'Ring', token: '--ring' },
+    { part: 'Bar', property: 'Background', token: '--color-surface' },
+    { part: 'Bar', property: 'Text', token: '--color-text' },
+    { part: 'Bar', property: 'Border', token: '--color-border' },
+    { part: 'Trigger, hover, highlighted or open', property: 'Background', token: '--color-background-neutral' },
+    { part: 'Trigger, hover, highlighted or open', property: 'Text', token: '--color-text' },
+    { part: 'Trigger, disabled', property: 'Text', token: '--color-text-subtlest' },
+    { part: 'Trigger, focus', property: 'Ring', token: '--color-border-focused' },
   ]}
 />
 
@@ -115,7 +115,7 @@ The flyout's colours are Menu's.
   ]}
 />
 
-- **Hover and highlighted**: the trigger takes the same `--accent` fill as
+- **Hover and highlighted**: the trigger takes the same `--color-background-neutral` fill as
   a highlighted item in the flyout.
 - **Open**: the trigger keeps that fill while its flyout is open, so the
   reader sees which menu they are in.
@@ -139,8 +139,8 @@ the page.
 
 - **No navigation menu.** The source pairs a menubar with a navigation
   menu: links in flyouts, each with a description. Zweihänder leaves that
-  out: app navigation is the Nav Sidebar and the Top Bar's links, which
-  show the current page; a flyout of described links is a marketing-site
+  out: app navigation is a side or top navigation of links, which shows
+  the current page; a flyout of described links is a marketing-site
   pattern.
 - **No item description.** Flyout items are Menu's entries, one line
   each. A second line of text is what a navigation menu needs, and it is
@@ -161,21 +161,17 @@ then Help.
   do={<Story of={MenubarStories.DoConventionalOrder} />}
   doCaption="Commands, grouped by the familiar File, Edit, View, with their shortcuts."
   dont={<Story of={MenubarStories.DontNavigation} />}
-  dontCaption="Pages behind flyouts. Navigation belongs in the Nav Sidebar or the Top Bar, where the current page shows."
+  dontCaption="Pages behind flyouts. Navigation belongs in a side or top navigation of links, where the current page shows."
 />
 
 ## When not to use
 
-- **For the app's navigation.** Use a
-  [Nav Sidebar](?path=/docs/patterns-application-ui-nav-sidebar--docs) or
-  the [Top Bar](?path=/docs/patterns-application-ui-top-bar--docs)'s
-  links: they show where the reader is, a menubar does not.
+- **For the app's navigation.** Use a side or top navigation of
+  [Links](?path=/docs/components-navigation-link--docs): it shows where
+  the reader is, a menubar does not.
 - **For a few actions on one thing.** Use a
   [Menu](?path=/docs/components-navigation-menu--docs) from a button, or
   Buttons.
-- **To find any command by name.** Add a
-  [Command Palette](?path=/docs/components-navigation-command-palette--docs);
-  it can sit alongside the menubar.
 
 ## Accessibility
 

@@ -121,28 +121,28 @@ The uploader is 24rem wide unless `isFullWidth`. The type icon is 20px.
 <SpecTable
   caption="Drop zone"
   rows={[
-    { part: 'Drop zone', property: 'Background', token: '--surface-filled' },
-    { part: 'Drop zone', property: 'Border, dashed', token: '--field-border' },
-    { part: 'Drop zone, dragging', property: 'Border, solid', token: '--ring' },
-    { part: 'Drop zone, dragging', property: 'Background', token: '--accent' },
-    { part: 'Drop zone, errors', property: 'Border', token: '--danger-text' },
-    { part: 'Icon', property: 'Background', token: '--background' },
-    { part: 'Icon, prompt, helper', property: 'Colour', token: '--muted-foreground' },
-    { part: 'Choose button', property: 'Background', token: '--foreground' },
-    { part: 'Choose button', property: 'Label', token: '--background' },
-    { part: 'Label', property: 'Colour', token: '--foreground' },
-    { part: 'Required asterisk, errors', property: 'Colour', token: '--danger-text' },
+    { part: 'Drop zone', property: 'Background', token: '--color-background-input' },
+    { part: 'Drop zone', property: 'Border, dashed', token: '--color-border-input' },
+    { part: 'Drop zone, dragging', property: 'Border, solid', token: '--color-border-focused' },
+    { part: 'Drop zone, dragging', property: 'Background', token: '--color-background-neutral' },
+    { part: 'Drop zone, errors', property: 'Border', token: '--color-text-danger' },
+    { part: 'Icon', property: 'Background', token: '--color-surface' },
+    { part: 'Icon, prompt, helper', property: 'Colour', token: '--color-text-subtlest' },
+    { part: 'Choose button', property: 'Background', token: '--color-text' },
+    { part: 'Choose button', property: 'Label', token: '--color-surface' },
+    { part: 'Label', property: 'Colour', token: '--color-text' },
+    { part: 'Required asterisk, errors', property: 'Colour', token: '--color-text-danger' },
   ]}
 />
 
 <SpecTable
   caption="File list"
   rows={[
-    { part: 'File row, hover', property: 'Background', token: '--hover-overlay' },
-    { part: 'Name', property: 'Colour', token: '--foreground' },
-    { part: 'Size', property: 'Colour', token: '--muted-foreground' },
-    { part: 'Progress ring', property: 'Colour', token: '--primary-text' },
-    { part: 'File error', property: 'Colour', token: '--danger-text' },
+    { part: 'File row, hover', property: 'Background', token: '--color-interaction-hovered' },
+    { part: 'Name', property: 'Colour', token: '--color-text' },
+    { part: 'Size', property: 'Colour', token: '--color-text-subtlest' },
+    { part: 'Progress ring', property: 'Colour', token: '--color-text-brand' },
+    { part: 'File error', property: 'Colour', token: '--color-text-danger' },
   ]}
 />
 
@@ -165,10 +165,10 @@ Choose button is an `accent contained` Button and the remove buttons
 </States>
 
 - **Dragging**: while a file is over the drop zone its edge turns solid
-  `--ring` and it fills with `--accent`, so the change is not colour
+  `--color-border-focused` and it fills with `--color-background-neutral`, so the change is not colour
   alone.
 - **Rejected or required and empty**: the drop zone's edge turns
-  `--danger-text` and the errors list why, one line per file.
+  `--color-text-danger` and the errors list why, one line per file.
 - **Focus** is the Choose button's and the remove buttons' own ring.
 - **Uploading**: a progress ring beside the remove button while
   `progress` is under 100; it goes at 100. An `error` takes its place.

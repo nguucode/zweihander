@@ -13,7 +13,7 @@
   font-family: var(--font-sans);
   font-size: var(--text-body);
   line-height: var(--leading-body);
-  color: var(--foreground);
+  color: var(--color-text);
   font-variant-numeric: tabular-nums;
 }
 
@@ -55,13 +55,13 @@
   border: 0;
   border-radius: var(--radius-control);
   background: transparent;
-  color: var(--foreground);
+  color: var(--color-text);
   font-size: var(--icon-xs);
   cursor: var(--cursor-button);
 }
 .nav:hover:not(:disabled) {
-  background: var(--accent);
-  color: var(--accent-foreground);
+  background: var(--color-background-neutral);
+  color: var(--color-text);
 }
 .nav:disabled {
   opacity: 0.5;
@@ -99,7 +99,7 @@
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
   font-weight: 600;
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
   text-align: center;
   white-space: nowrap;
 }
@@ -125,50 +125,50 @@
   border: 0;
   border-radius: var(--radius-control);
   background: transparent;
-  color: var(--foreground);
+  color: var(--color-text);
   font: inherit;
   cursor: var(--cursor-button);
 }
 .day:hover:not([aria-disabled='true'], .selected, .outside) {
-  background: var(--accent);
-  color: var(--accent-foreground);
+  background: var(--color-background-neutral);
+  color: var(--color-text);
 }
 
 /* Days of the next and previous month: shape, not content. Faded past
-   --muted-foreground so the month reads first; no token is lighter. About
+   --color-text-subtlest so the month reads first; no token is lighter. About
    2:1, which WCAG allows for decoration: they are aria-hidden and not
    pickable. */
 .outside {
-  color: color-mix(in oklch, var(--muted-foreground) 50%, transparent);
+  color: color-mix(in oklch, var(--color-text-subtlest) 50%, transparent);
   cursor: default;
 }
 
 /* Today: an orange pill, round-ended where the selected day is the control's
    shape, so the two differ by shape as well as colour. The figure is dark,
-   as the generator gives warm accents: white on --orange is 3.4:1, under the
-   4.5:1 a 14px figure needs, while --orange-contrast (neutral 900) clears
-   4.9:1 in both modes. --orange-foreground stays white for the solid Tags. */
+   as the generator gives warm accents: white on --color-background-accent-orange-bolder is 3.4:1, under the
+   4.5:1 a 14px figure needs, while --color-text-accent-orange-contrast (neutral 900) clears
+   4.9:1 in both modes. --color-text-accent-orange-inverse stays white for the solid Tags. */
 .today {
   border-radius: var(--radius-pill);
-  background: var(--orange);
-  color: var(--orange-contrast);
+  background: var(--color-background-accent-orange-bolder);
+  color: var(--color-text-accent-orange-contrast);
   font-weight: 600;
 }
 .today:hover:not([aria-disabled='true'], .selected) {
-  background: var(--orange);
-  color: var(--orange-contrast);
+  background: var(--color-background-accent-orange-bolder);
+  color: var(--color-text-accent-orange-contrast);
 }
 
 /* After .today: a selected today shows as selected. */
 .selected {
   border-radius: var(--radius-control);
-  background: var(--primary);
-  color: var(--primary-foreground);
+  background: var(--color-background-brand-bold);
+  color: var(--color-text-brand-inverse);
   font-weight: 600;
 }
 
 .day[aria-disabled='true'] {
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
   text-decoration: line-through;
   opacity: 0.6;
   cursor: var(--cursor-disabled);
@@ -176,7 +176,7 @@
 
 .day:focus-visible,
 .nav:focus-visible {
-  outline: var(--focus-width) solid var(--ring);
+  outline: var(--focus-width) solid var(--color-border-focused);
   outline-offset: var(--focus-offset);
 }
 /* The days touch, so the ring lies over the days around it: the focused day
@@ -199,7 +199,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: var(--accent);
+  background: var(--color-background-neutral);
 }
 .rangeStart::before {
   inset-inline-start: 50%;
@@ -216,12 +216,12 @@
   border-end-end-radius: var(--radius-control);
 }
 .between {
-  color: var(--accent-foreground);
+  color: var(--color-text);
   font-weight: 500;
 }
 /* Today keeps its dark figure inside a range too. */
 .between.today {
-  color: var(--orange-contrast);
+  color: var(--color-text-accent-orange-contrast);
 }
 
 /* 40 by 32px days are below the 44px touch target. They touch, so a larger

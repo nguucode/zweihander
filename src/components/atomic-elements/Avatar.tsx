@@ -64,7 +64,7 @@ export function Avatar({
       // Children of role="img" are not read, so the status joins the name.
       aria-label={imageAlt && status ? `${imageAlt}, ${statusLabel}` : imageAlt}
       aria-hidden={imageAlt ? undefined : true}
-      // The Theme's own palette switch: on the avatar it remaps --primary and
+      // The Theme's own palette switch: on the avatar it remaps --color-background-brand-bold and
       // its tints to this hue, already measured for contrast.
       data-accent={color}
       // A CSS class cannot start with a digit.

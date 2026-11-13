@@ -1,7 +1,7 @@
 /* Scrolls sideways on a narrow screen rather than squeezing the columns. */
 .container {
   overflow-x: auto;
-  background: var(--card);
+  background: var(--color-surface-raised);
 }
 .sticky {
   overflow-y: auto;
@@ -9,7 +9,7 @@
 /* Only focusable when it scrolls and nothing inside takes focus. Inset: the
    box clips anything drawn outside it. */
 .container:focus-visible {
-  outline: var(--focus-width) solid var(--ring);
+  outline: var(--focus-width) solid var(--color-border-focused);
   outline-offset: var(--focus-offset-inset);
 }
 
@@ -24,14 +24,14 @@
   font-family: var(--font-sans);
   font-size: var(--text-body);
   line-height: var(--leading-body);
-  color: var(--card-foreground);
+  color: var(--color-text);
   font-variant-numeric: tabular-nums;
 }
 /* Atlassian's dynamic table closes a table that has rows on the header's
    rule. On the table itself, as theirs, so it sits under whatever comes
    last: a row, an open row's content or the total row. */
 .table.hasRows {
-  border-block-end: var(--border-width-selected) solid var(--border);
+  border-block-end: var(--border-width-selected) solid var(--color-border);
 }
 /* Atlassian's caption: 24px above it, 8px to the table. Flush with the
    table's edge inline, as the first cell's text is. */
@@ -73,14 +73,14 @@
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
   font-weight: 600;
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
   white-space: nowrap;
 }
 /* The only rule between rows: the header's. On the cells, so a sticky
    header carries it along. Under .table: a bare element selector is global
    in a CSS module and would rule every table on the page. */
 .table > thead > tr > * {
-  border-block-end: var(--border-width-selected) solid var(--border);
+  border-block-end: var(--border-width-selected) solid var(--color-border);
 }
 .sticky thead .th,
 .sticky thead .select,
@@ -91,7 +91,7 @@
   /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- local stacking inside the table, not a global layer */
   z-index: 1;
   /* The container's own colour, not a fill: only so the rows scroll under it. */
-  background: var(--card);
+  background: var(--color-surface-raised);
 }
 
 .rowHeader {
@@ -139,11 +139,11 @@
   padding-inline-end: 0;
 }
 .sortButton:hover {
-  background: var(--accent);
-  color: var(--accent-foreground);
+  background: var(--color-background-neutral);
+  color: var(--color-text);
 }
 .sortButton:focus-visible {
-  outline: var(--focus-width) solid var(--ring);
+  outline: var(--focus-width) solid var(--color-border-focused);
   outline-offset: var(--focus-offset-inset);
 }
 
@@ -176,16 +176,16 @@
 }
 .sortActive {
   opacity: 1;
-  color: var(--foreground);
+  color: var(--color-text);
 }
 
 /* Under .table: a bare element selector is global in a CSS module and
    would tint the rows of every table on the page. */
 .table > tbody > tr:hover > * {
-  background: var(--accent);
+  background: var(--color-background-neutral);
 }
 .table > tbody > tr.selected > * {
-  background: var(--primary-subtle);
+  background: var(--color-background-brand-subtlest);
 }
 
 /* The control columns: just wide enough for the checkbox or the icon
@@ -265,16 +265,16 @@
 }
 /* It shares its row's hover and selected tint, so the pair still reads as one. */
 .table > tbody > tr.expanded:hover + tr.expandedRow > * {
-  background: var(--accent);
+  background: var(--color-background-neutral);
 }
 .table > tbody > tr.selected.expanded + tr.expandedRow > * {
-  background: var(--primary-subtle);
+  background: var(--color-background-brand-subtlest);
 }
 
 /* The total row sits under the header's rule, turned over: with no
    dividers between rows, that is what makes the sum read as a sum. */
 .table > tfoot > tr > * {
-  border-block-start: var(--border-width-selected) solid var(--border);
+  border-block-start: var(--border-width-selected) solid var(--color-border);
   font-weight: 600;
 }
 
@@ -322,7 +322,7 @@
   inset-block: var(--space-1);
   inset-inline-end: 0;
   inline-size: 1px;
-  background: var(--border);
+  background: var(--color-border);
 }
 /* The last column's handle sits on the table's own edge, where the label of
    an end-aligned column ends: no resting line there, the edge marks it. */
@@ -332,10 +332,10 @@
 .resizeHandle:hover::before,
 .resizeHandle:active::before {
   inline-size: var(--focus-width);
-  background: var(--primary);
+  background: var(--color-background-brand-bold);
 }
 .resizeHandle:focus-visible {
-  outline: var(--focus-width) solid var(--ring);
+  outline: var(--focus-width) solid var(--color-border-focused);
   outline-offset: var(--focus-offset-inset);
 }
 /* The visible line stays thin; on touch screens the strip it sits in is

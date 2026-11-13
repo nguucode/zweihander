@@ -81,7 +81,7 @@ export const Default: Story = {
 
 export const Small: Story = {
   args: { size: 'sm', headingLevel: 3, title: 'All caught up', description: 'No new notifications.', action: undefined },
-  decorators: [(Story) => <div style={{ maxInlineSize: '20rem', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)' }}>{Story()}</div>],
+  decorators: [(Story) => <div style={{ maxInlineSize: '20rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)' }}>{Story()}</div>],
 }
 
 /** Replaces a form once it is sent, and is announced. */
@@ -120,7 +120,7 @@ export const DontForQuickSave: Story = {
   args: { size: 'sm', headingLevel: 3, title: 'Changes saved', description: undefined, action: undefined },
   decorators: [
     (Story) => (
-      <section style={{ maxInlineSize: '20rem', border: '1px solid var(--border)', borderRadius: 'var(--radius-md)' }}>
+      <section style={{ maxInlineSize: '20rem', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)' }}>
         <h2 style={{ margin: 0, padding: 'var(--space-3) var(--space-4) 0', fontSize: 'var(--text-heading-sm)' }}>Profile</h2>
         {Story()}
       </section>

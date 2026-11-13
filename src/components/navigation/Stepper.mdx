@@ -118,61 +118,61 @@ clear of each.
 <SpecTable
   caption="Complete"
   rows={[
-    { part: 'Marker', property: 'Background and ring', token: '--primary' },
-    { part: 'Check', property: 'Colour', token: '--primary-foreground' },
-    { part: 'Connector', property: 'Colour', token: '--primary' },
+    { part: 'Marker', property: 'Background and ring', token: '--color-background-brand-bold' },
+    { part: 'Check', property: 'Colour', token: '--color-text-brand-inverse' },
+    { part: 'Connector', property: 'Colour', token: '--color-background-brand-bold' },
   ]}
 />
 
 <SpecTable
   caption="Current"
   rows={[
-    { part: 'Marker', property: 'Background', token: '--background' },
-    { part: 'Marker', property: 'Ring and number', token: '--primary-text' },
-    { part: 'Label', property: 'Colour', token: '--foreground' },
+    { part: 'Marker', property: 'Background', token: '--color-surface' },
+    { part: 'Marker', property: 'Ring and number', token: '--color-text-brand' },
+    { part: 'Label', property: 'Colour', token: '--color-text' },
   ]}
 />
 
 <SpecTable
   caption="Upcoming"
   rows={[
-    { part: 'Marker', property: 'Ring', token: '--control-border' },
-    { part: 'Marker number, label', property: 'Colour', token: '--muted-foreground' },
-    { part: 'Connector', property: 'Colour', token: '--border' },
+    { part: 'Marker', property: 'Ring', token: '--color-border-bold' },
+    { part: 'Marker number, label', property: 'Colour', token: '--color-text-subtlest' },
+    { part: 'Connector', property: 'Colour', token: '--color-border' },
   ]}
 />
 
 <SpecTable
   caption="Error"
   rows={[
-    { part: 'Marker', property: 'Background', token: '--danger-subtle' },
-    { part: 'Marker ring, icon, label', property: 'Colour', token: '--danger-text' },
+    { part: 'Marker', property: 'Background', token: '--color-background-danger' },
+    { part: 'Marker ring, icon, label', property: 'Colour', token: '--color-text-danger' },
   ]}
 />
 
 <SpecTable
   caption="Bullets"
   rows={[
-    { part: 'Dot, complete', property: 'Colour', token: '--primary' },
-    { part: 'Dot and ring, current', property: 'Colour', token: '--primary-text' },
-    { part: 'Dot, upcoming', property: 'Colour', token: '--border' },
-    { part: 'Dot, error', property: 'Colour', token: '--danger-text' },
-    { part: 'Ring gap, current', property: 'Colour', token: '--background' },
-    { part: 'Dot hit area, hover', property: 'Background', token: '--muted' },
-    { part: '"Step 3 of 4"', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Dot, complete', property: 'Colour', token: '--color-background-brand-bold' },
+    { part: 'Dot and ring, current', property: 'Colour', token: '--color-text-brand' },
+    { part: 'Dot, upcoming', property: 'Colour', token: '--color-border' },
+    { part: 'Dot, error', property: 'Colour', token: '--color-text-danger' },
+    { part: 'Ring gap, current', property: 'Colour', token: '--color-surface' },
+    { part: 'Dot hit area, hover', property: 'Background', token: '--color-background-neutral' },
+    { part: '"Step 3 of 4"', property: 'Colour', token: '--color-text-subtlest' },
   ]}
 />
 
 <SpecTable
   caption="Every status"
   rows={[
-    { part: 'Description', property: 'Colour', token: '--muted-foreground' },
-    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+    { part: 'Description', property: 'Colour', token: '--color-text-subtlest' },
+    { part: 'Focus ring', property: 'Colour', token: '--color-border-focused' },
   ]}
 />
 
 Complete and current share the primary colour: the filled disc says done,
-the ring says here. The current ring uses `--primary-text`, the step of
+the ring says here. The current ring uses `--color-text-brand`, the step of
 the accent that reads at 4.5:1 on the page, because it frames a number.
 
 ## States
@@ -192,9 +192,9 @@ current one are buttons, with hover and focus of their own.
 </States>
 
 - **Hover** underlines the label of a clickable step.
-- **Focus** is a 2px `--ring` outline, 2px outside the step.
+- **Focus** is a 2px `--color-border-focused` outline, 2px outside the step.
 - **Upcoming** steps are never buttons, so they have no hover or focus.
-- With bullets, **hover** fills the dot's hit area with `--muted`, since
+- With bullets, **hover** fills the dot's hit area with `--color-background-neutral`, since
   there is no visible label to underline.
 
 ## API

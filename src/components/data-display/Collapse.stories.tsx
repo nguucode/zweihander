@@ -195,7 +195,7 @@ export const DoAsideInText: Story = {
   ),
 }
 
-/** Guidelines, Don't: a stack of Collapses standing in for an Accordion. */
+/** Guidelines, Don't: bare Collapses stacked as a list of sections, with no headings. */
 export const DontStackAsList: Story = {
   tags: ['!dev'],
   render: (args) => (

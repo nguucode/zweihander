@@ -1,6 +1,6 @@
 .spinner {
   --spinner-size: var(--space-6);
-  --spinner-color: var(--foreground);
+  --spinner-color: var(--color-text);
   position: relative;
   display: inline-flex;
   flex-direction: column;
@@ -9,7 +9,7 @@
   font-family: var(--font-sans);
   font-size: var(--text-body);
   line-height: var(--leading-body);
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
 }
 
 .sm {
@@ -23,16 +23,16 @@
 }
 
 /* The indicator is the part that must be seen, so it takes a colour that
-   clears 3:1 on the page: --primary-text (measured per accent at 4.5:1),
-   --muted-foreground, --foreground. */
+   clears 3:1 on the page: --color-text-brand (measured per accent at 4.5:1),
+   --color-text-subtlest, --color-text. */
 .primary {
-  --spinner-color: var(--primary-text);
+  --spinner-color: var(--color-text-brand);
 }
 .secondary {
-  --spinner-color: var(--muted-foreground);
+  --spinner-color: var(--color-text-subtlest);
 }
 .accent {
-  --spinner-color: var(--foreground);
+  --spinner-color: var(--color-text);
 }
 
 .svg {
@@ -51,7 +51,7 @@
 
 /* The track only frames the motion; it is decoration and may be faint. */
 .track {
-  stroke: var(--border);
+  stroke: var(--color-border);
 }
 
 .indicator {

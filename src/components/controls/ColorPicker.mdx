@@ -119,14 +119,14 @@ is under them.
 
 <SpecTable
   rows={[
-    { part: 'Popover', property: 'Background', token: '--popover' },
-    { part: 'Popover', property: 'Text', token: '--popover-foreground' },
-    { part: 'Popover and swatch divider', property: 'Border', token: '--border' },
+    { part: 'Popover', property: 'Background', token: '--color-surface-overlay' },
+    { part: 'Popover', property: 'Text', token: '--color-text' },
+    { part: 'Popover and swatch divider', property: 'Border', token: '--color-border' },
     { part: 'Popover', property: 'Shadow', token: '--shadow-overlay' },
-    { part: 'Swatch button', property: 'Inner edge', token: '--control-border' },
-    { part: 'Chosen swatch', property: 'Ring', token: '--primary' },
-    { part: 'Channel fields', property: 'Divider', token: '--border' },
-    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+    { part: 'Swatch button', property: 'Inner edge', token: '--color-border-bold' },
+    { part: 'Chosen swatch', property: 'Ring', token: '--color-background-brand-bold' },
+    { part: 'Channel fields', property: 'Divider', token: '--color-border' },
+    { part: 'Focus ring', property: 'Colour', token: '--color-border-focused' },
   ]}
 />
 
@@ -149,12 +149,12 @@ tells the colour.
 </States>
 
 - **Focus** follows Text Input on the field. In the panel every thumb,
-  swatch and field draws a 2px `--ring` outline, 2px outside.
+  swatch and field draws a 2px `--color-border-focused` outline, 2px outside.
 - **Disabled** dims the field and disables the swatch button.
 - **Error** is Text Input's. Typed text that is not a colour turns the
   field to error on its own, with a hint, and keeps the last good value.
-- **Chosen swatch** has a 2px `--primary` ring; focused as well, the ring
-  turns `--ring` and moves 1px further out.
+- **Chosen swatch** has a 2px `--color-background-brand-bold` ring; focused as well, the ring
+  turns `--color-border-focused` and moves 1px further out.
 
 ## API
 

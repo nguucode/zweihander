@@ -18,41 +18,41 @@
 
 /* One rule per variant, the same four colours as Tag. */
 .info {
-  --alert-solid: var(--info);
-  --alert-on-solid: var(--info-foreground);
-  --alert-subtle: var(--info-subtle);
-  --alert-text: var(--info-text);
+  --alert-solid: var(--color-background-info-bold);
+  --alert-on-solid: var(--color-text-info-inverse);
+  --alert-subtle: var(--color-background-info);
+  --alert-text: var(--color-text-info);
 }
 .success {
-  --alert-solid: var(--success);
-  --alert-on-solid: var(--success-foreground);
-  --alert-subtle: var(--success-subtle);
-  --alert-text: var(--success-text);
+  --alert-solid: var(--color-background-success-bold);
+  --alert-on-solid: var(--color-text-success-inverse);
+  --alert-subtle: var(--color-background-success);
+  --alert-text: var(--color-text-success);
 }
 .warning {
-  --alert-solid: var(--warning);
-  --alert-on-solid: var(--warning-foreground);
-  --alert-subtle: var(--warning-subtle);
-  --alert-text: var(--warning-text);
+  --alert-solid: var(--color-background-warning-bold);
+  --alert-on-solid: var(--color-text-warning-inverse);
+  --alert-subtle: var(--color-background-warning);
+  --alert-text: var(--color-text-warning);
 }
 .danger {
-  --alert-solid: var(--danger);
-  --alert-on-solid: var(--danger-foreground);
-  --alert-subtle: var(--danger-subtle);
-  --alert-text: var(--danger-text);
+  --alert-solid: var(--color-background-danger-bold);
+  --alert-on-solid: var(--color-text-danger-inverse);
+  --alert-subtle: var(--color-background-danger);
+  --alert-text: var(--color-text-danger);
 }
 
-/* Subtle and outlined keep the message in --foreground: a paragraph in
+/* Subtle and outlined keep the message in --color-text: a paragraph in
    the variant's text colour is tiring to read. The colour goes on the icon
    and the title, which is where the eye lands first. */
 .subtle {
   background: var(--alert-subtle);
-  color: var(--foreground);
+  color: var(--color-text);
 }
 .outlined {
   border-color: var(--alert-text);
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--color-surface);
+  color: var(--color-text);
 }
 .subtle .icon,
 .subtle .title,
@@ -120,7 +120,7 @@
 }
 
 .close:focus-visible {
-  outline: var(--focus-width) solid var(--ring);
+  outline: var(--focus-width) solid var(--color-border-focused);
   outline-offset: var(--focus-offset-inset);
 }
 

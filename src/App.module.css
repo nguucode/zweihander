@@ -8,13 +8,13 @@
 .page {
   --font-sans: 'Geist', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace;
-  --hair: 1px solid var(--border);
+  --hair: 1px solid var(--color-border);
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
   --gutter: 36px;
 
   min-block-size: 100dvh;
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--color-surface);
+  color: var(--color-text);
   font-family: var(--font-sans);
   font-size: 1rem;
   line-height: 1.6;
@@ -27,7 +27,7 @@
 }
 
 .page :focus-visible {
-  outline: 2px solid var(--ring);
+  outline: 2px solid var(--color-border-focused);
   outline-offset: 2px;
 }
 
@@ -43,8 +43,8 @@
   inset-block-start: -64px;
   z-index: 3;
   padding: 8px 12px;
-  background: var(--foreground);
-  color: var(--background) !important;
+  background: var(--color-text);
+  color: var(--color-surface) !important;
 }
 
 .skip:focus {
@@ -61,7 +61,7 @@
   align-items: center;
   gap: 32px;
   padding: 20px var(--gutter);
-  background: var(--background);
+  background: var(--color-surface);
 }
 
 .brand {
@@ -83,7 +83,7 @@
   padding: 0;
   border: 0;
   background: none;
-  color: var(--foreground);
+  color: var(--color-text);
   font: inherit;
   letter-spacing: inherit;
   text-transform: inherit;
@@ -93,18 +93,18 @@
 
 .nav kbd {
   font-size: inherit;
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
   transition: color 0.2s var(--ease);
 }
 
 .nav a:hover kbd,
 .navButton:hover kbd {
-  color: var(--primary-text);
+  color: var(--color-text-brand);
 }
 
 .header .cta {
-  --button-solid: var(--foreground);
-  --button-on-solid: var(--background);
+  --button-solid: var(--color-text);
+  --button-on-solid: var(--color-surface);
 }
 
 /* ---------- two-column layout ---------- */
@@ -157,18 +157,18 @@
 .lede {
   margin: 0;
   max-inline-size: 48ch;
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
 }
 
 /* Pixel logo: accent body, white blade and hooks. Ink read as a dark blob
    at header size; the accent is the recognisable part. */
 .body {
-  fill: var(--primary);
+  fill: var(--color-background-brand-bold);
 }
 
 .blade,
 .hooks {
-  fill: var(--primary-foreground);
+  fill: var(--color-text-brand-inverse);
 }
 
 /* ---------- copy command ---------- */
@@ -180,7 +180,7 @@
   max-inline-size: 100%;
   padding: 8px 8px 8px 16px;
   border: var(--hair);
-  background: var(--card);
+  background: var(--color-surface-raised);
   font-family: var(--font-mono);
   font-size: 0.875rem;
 }
@@ -208,7 +208,7 @@
 }
 
 .prompt {
-  color: var(--primary-text);
+  color: var(--color-text-brand);
   user-select: none;
 }
 
@@ -216,8 +216,8 @@
   flex: none;
   padding: 4px 12px;
   border: var(--hair);
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--color-surface);
+  color: var(--color-text);
   font: inherit;
   font-size: 0.75rem;
   text-transform: uppercase;
@@ -227,7 +227,7 @@
 }
 
 .copy:hover {
-  background: var(--muted);
+  background: var(--color-background-neutral);
 }
 
 .copy:active {
@@ -258,24 +258,24 @@
 }
 
 .sectionNote {
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
   font-family: var(--font-mono);
   font-size: 0.75rem;
   text-decoration: none;
 }
 
 a.sectionNote:hover {
-  color: var(--foreground);
+  color: var(--color-text);
 }
 
 .note {
   margin: 0;
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
   font-size: 1rem;
 }
 
 .muted {
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
 }
 
 .stack {
@@ -295,7 +295,7 @@ a.sectionNote:hover {
   margin: 0;
   padding: 16px;
   border: var(--hair);
-  background: var(--card);
+  background: var(--color-surface-raised);
   font-family: var(--font-mono);
   font-size: 0.8125rem;
   line-height: 1.7;
@@ -321,7 +321,7 @@ a.sectionNote:hover {
   flex-direction: column;
   aspect-ratio: 4 / 3;
   border: var(--hair);
-  background: var(--card);
+  background: var(--color-surface-raised);
 }
 
 /* Three columns with equal sides, so the title centres on the bar, not
@@ -333,7 +333,7 @@ a.sectionNote:hover {
   align-items: center;
   block-size: 28px;
   padding: 0 12px;
-  background: var(--muted);
+  background: var(--color-background-neutral);
 }
 
 .frameDots {
@@ -345,11 +345,11 @@ a.sectionNote:hover {
   inline-size: 11px;
   block-size: 11px;
   border-radius: 50%;
-  background: var(--border);
+  background: var(--color-border);
 }
 
 .frameTitle {
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
   font-family: var(--font-mono);
   font-size: 0.75rem;
   text-align: center;
@@ -363,7 +363,7 @@ a.sectionNote:hover {
   padding: 0 12px;
   border: 0;
   background: none;
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
   font-family: var(--font-mono);
   font-size: 0.6875rem;
   text-transform: uppercase;
@@ -372,7 +372,7 @@ a.sectionNote:hover {
 }
 
 .frameAction:hover {
-  color: var(--foreground);
+  color: var(--color-text);
 }
 
 /* Title, description, controls: three tracks, gutter from padding. */
@@ -392,7 +392,7 @@ a.sectionNote:hover {
 
 .showcaseBody > p {
   margin: 14px 0 0;
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
   font-size: 1rem;
   line-height: 1.6;
 }
@@ -406,7 +406,7 @@ a.sectionNote:hover {
 
 .showcaseMeta dt {
   margin-block-end: 8px;
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
   font-family: var(--font-mono);
   font-size: 0.8125rem;
   text-transform: uppercase;
@@ -423,7 +423,7 @@ a.sectionNote:hover {
 .showcaseMeta dd::before {
   content: '└';
   flex: none;
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
   opacity: 0.6;
 }
 
@@ -441,8 +441,8 @@ a.sectionNote:hover {
   min-block-size: 0;
   overflow: auto;
   padding: 24px;
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--color-surface);
+  color: var(--color-text);
   font-size: 0.875rem;
   transition: background-color 0.3s var(--ease);
 }
@@ -477,7 +477,7 @@ a.sectionNote:hover {
   padding: 0;
   border: 0;
   background: none;
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
   font: inherit;
   letter-spacing: inherit;
   text-transform: inherit;
@@ -486,7 +486,7 @@ a.sectionNote:hover {
 
 .filters button:hover,
 .filters button[aria-pressed='true'] {
-  color: var(--foreground);
+  color: var(--color-text);
 }
 
 .filters button[aria-pressed='true'] {
@@ -496,7 +496,7 @@ a.sectionNote:hover {
 
 .filterCount {
   margin-inline-start: auto;
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
   text-transform: none;
 }
 
@@ -529,7 +529,7 @@ a.sectionNote:hover {
 }
 
 .rowNo {
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
   font-family: var(--font-mono);
   font-size: 0.8125rem;
 }
@@ -539,13 +539,13 @@ a.sectionNote:hover {
 }
 
 .rowMeta {
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
   font-family: var(--font-mono);
   font-size: 0.75rem;
 }
 
 .rowArrow {
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
   transition: transform 0.3s var(--ease), color 0.3s var(--ease);
 }
 
@@ -555,7 +555,7 @@ a.row:hover .rowTitle {
 }
 
 a.row:hover .rowArrow {
-  color: var(--primary-text);
+  color: var(--color-text-brand);
   transform: translateX(4px);
 }
 
@@ -574,8 +574,8 @@ a.row:hover .rowArrow {
   justify-items: start;
   gap: 16px;
   padding: 24px;
-  border: 1px dashed var(--border);
-  color: var(--muted-foreground);
+  border: 1px dashed var(--color-border);
+  color: var(--color-text-subtlest);
 }
 
 .empty p {
@@ -612,7 +612,7 @@ a.row:hover .rowArrow {
 .principle p {
   margin: 0 0 12px;
   max-inline-size: 64ch;
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
 }
 
 .more {
@@ -627,7 +627,7 @@ a.row:hover .rowArrow {
 }
 
 .more:hover {
-  color: var(--primary-text);
+  color: var(--color-text-brand);
 }
 
 /* ---------- footer ---------- */
@@ -661,7 +661,7 @@ a.row:hover .rowArrow {
 
 .footerCol p {
   margin-block-end: 4px;
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
   font-family: var(--font-mono);
   font-size: 0.75rem;
   text-transform: uppercase;

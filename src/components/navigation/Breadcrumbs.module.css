@@ -46,29 +46,29 @@
    muted, underlined on hover, like Link's underline="hover". */
 .link {
   border-radius: var(--radius-sm);
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
   text-decoration: none;
   cursor: var(--cursor-link);
 }
 .link:hover {
-  color: var(--foreground);
+  color: var(--color-text);
   text-decoration: underline;
   text-underline-offset: 0.2em;
 }
 .link:focus-visible,
 .ellipsis:focus-visible {
-  outline: var(--focus-width) solid var(--ring);
+  outline: var(--focus-width) solid var(--color-border-focused);
   outline-offset: var(--focus-offset);
 }
 
 .current {
-  color: var(--foreground);
+  color: var(--color-text);
   font-weight: 500;
 }
 
 .separator {
   display: inline-flex;
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
   font-size: inherit;
 }
 
@@ -81,13 +81,13 @@
   border: 0;
   border-radius: var(--radius-sm);
   background: transparent;
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
   font-size: inherit;
   cursor: var(--cursor-button);
 }
 .ellipsis:hover {
-  background: var(--accent);
-  color: var(--accent-foreground);
+  background: var(--color-background-neutral);
+  color: var(--color-text);
 }
 @media (pointer: coarse) {
   .ellipsis::before {

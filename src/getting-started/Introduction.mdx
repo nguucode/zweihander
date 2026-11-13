@@ -10,7 +10,7 @@ properties. There is no CSS framework, no primitive library, and one
 runtime dependency.
 
 <div style={{
-  border: '1px solid var(--destructive)',
+  border: '1px solid var(--color-background-danger-bold)',
   borderRadius: 'var(--radius-panel)',
   padding: 'var(--space-4)',
   margin: 'var(--space-6) 0',
@@ -34,7 +34,7 @@ component never holds a colour, a size or a radius — it reads a token:
 
 ```css
 .button {
-  background: var(--primary);
+  background: var(--color-background-brand-bold);
   border-radius: var(--radius-control);
   font-size: var(--text-body);
 }
@@ -45,7 +45,7 @@ Three consequences follow, and most of these docs are about them:
 - **Theming is scoping.** `<Theme accentColor="violet" appearance="dark">`
   redeclares tokens on a subtree; everything inside re-resolves. No
   context, no re-render, no theme object.
-- **Rebranding is one file.** Change what `--primary` means and every rule
+- **Rebranding is one file.** Change what `--color-background-brand-bold` means and every rule
   reading it moves. No component is touched.
 - **There is no build step on your side.** No config, no content scanning,
   no plugin. It is a stylesheet.
@@ -58,10 +58,6 @@ measurements behind each. Start with its Overview.
 
 **[Components](?path=/docs/components-overview--docs)** is what exists so
 far, plus the full category list of what does not.
-
-**[Patterns](?path=/docs/patterns-overview--docs)** are whole sections
-assembled from those components, starting with Application UI: copy one
-into your app and edit it.
 
 Each topic has a hand-written page rather than a generated blurb, and they
 are written as reference docs — what a token is *for*, where its value came

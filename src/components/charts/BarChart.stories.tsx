@@ -66,7 +66,7 @@ export const Palette: Story = {
   play: async ({ canvas, canvasElement }) => {
     await canvas.findByRole('img')
     const fills = [...canvasElement.querySelectorAll('svg g[class*="series"]')].map((g) => g.getAttribute('fill'))
-    await expect(fills).toEqual(['var(--chart-1)', 'var(--chart-2)', 'var(--chart-3)', 'var(--chart-4)'])
+    await expect(fills).toEqual(['var(--color-chart-1)', 'var(--color-chart-2)', 'var(--color-chart-3)', 'var(--color-chart-4)'])
   },
 }
 

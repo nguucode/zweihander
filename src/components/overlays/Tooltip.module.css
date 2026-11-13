@@ -4,15 +4,15 @@
   z-index: var(--layer-tooltip);
 }
 
-/* Inverted: --foreground on --background reads as "not part of the page"
+/* Inverted: --color-text on --color-surface reads as "not part of the page"
    in both modes, at the same 16:1 or more as body text. */
 .popup {
   box-sizing: border-box;
   max-inline-size: min(15rem, var(--available-width));
   padding: var(--space-1) var(--space-1-5);
   border-radius: var(--radius-sm);
-  background: var(--foreground);
-  color: var(--background);
+  background: var(--color-text);
+  color: var(--color-surface);
   font-family: var(--font-sans);
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
@@ -30,7 +30,7 @@
 }
 
 /* Hover card: on the popup layer (50) with Popover, below tooltips, and
-   drawn like one: a raised --popover surface, not an inverted label. */
+   drawn like one: a raised --color-surface-overlay surface, not an inverted label. */
 .cardPositioner {
   z-index: var(--layer-overlay);
 }
@@ -46,11 +46,11 @@
   inline-size: max-content;
   max-inline-size: min(20rem, var(--available-width));
   padding: var(--space-group);
-  border: 1px solid var(--border);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  background: var(--popover);
+  background: var(--color-surface-overlay);
   box-shadow: var(--shadow-overlay);
-  color: var(--popover-foreground);
+  color: var(--color-text);
   font-family: var(--font-sans);
   font-size: var(--text-body);
   line-height: var(--leading-body);
@@ -88,7 +88,7 @@
 }
 
 .cardDescription {
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
 }

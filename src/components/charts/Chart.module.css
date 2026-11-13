@@ -1,4 +1,4 @@
-/* Shared by every chart. Marks take their colour from --chart-1…8 (or a
+/* Shared by every chart. Marks take their colour from --color-chart-1…8 (or a
    status token) through the fill/stroke attribute the component sets, so a
    theme switch repaints them without React rendering again. */
 
@@ -8,7 +8,7 @@
   min-inline-size: 0;
   margin: 0;
   font-family: var(--font-sans);
-  color: var(--foreground);
+  color: var(--color-text);
 }
 
 .header {
@@ -54,7 +54,7 @@
   font: inherit;
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
-  color: var(--subtle-foreground);
+  color: var(--color-text-subtle);
   text-align: start;
 }
 
@@ -80,16 +80,16 @@ button.legendItem {
 
 button.legendItem:hover,
 .legendVertical .legendItem:hover {
-  background: var(--hover-overlay);
+  background: var(--color-interaction-hovered);
 }
 
 button.legendItem:focus-visible {
-  outline: var(--focus-width) solid var(--ring);
+  outline: var(--focus-width) solid var(--color-border-focused);
   outline-offset: var(--focus-offset-inset);
 }
 
 /* Off: struck through, with a hollow swatch. Not a lighter grey: on the hover
-   fill --muted-foreground drops under 4.5:1. */
+   fill --color-text-subtlest drops under 4.5:1. */
 button.legendItem[aria-pressed='false'] .legendLabel {
   text-decoration: line-through;
 }
@@ -109,7 +109,7 @@ button.legendItem[aria-pressed='false'] .swatch {
 .legendValue {
   font-weight: 500;
   font-variant-numeric: tabular-nums;
-  color: var(--foreground);
+  color: var(--color-text);
 }
 
 .legendVertical .legendValue {
@@ -140,16 +140,16 @@ button.legendItem[aria-pressed='false'] .swatch {
 .axis {
   font-size: var(--text-body-sm);
   font-variant-numeric: tabular-nums;
-  fill: var(--muted-foreground);
+  fill: var(--color-text-subtlest);
 }
 
 .grid {
-  stroke: var(--border);
+  stroke: var(--color-border);
   stroke-dasharray: 2 3;
 }
 
 .tick {
-  stroke: var(--border);
+  stroke: var(--color-border);
 }
 
 .series {
@@ -178,7 +178,7 @@ button.legendItem[aria-pressed='false'] .swatch {
 /* A gap of card colour between stacked segments, so each one meets the card
    rather than its neighbour: the 3:1 of WCAG 1.4.11 is against the card. */
 .bar {
-  stroke: var(--card);
+  stroke: var(--color-surface-raised);
   stroke-width: 1;
 }
 
@@ -187,20 +187,20 @@ button.legendItem[aria-pressed='false'] .swatch {
 }
 
 .cursor {
-  stroke: var(--control-border);
+  stroke: var(--color-border-bold);
 }
 
 .cursorBand {
-  fill: var(--hover-overlay);
+  fill: var(--color-interaction-hovered);
 }
 
 .dot {
-  stroke: var(--card);
+  stroke: var(--color-surface-raised);
   stroke-width: 1.5;
 }
 
 .slice {
-  stroke: var(--card);
+  stroke: var(--color-surface-raised);
   stroke-width: 1.5;
   transition: opacity var(--duration-base);
 }
@@ -219,12 +219,12 @@ button.legendItem[aria-pressed='false'] .swatch {
 .centerTotal {
   font-size: var(--text-heading-sm);
   font-weight: 600;
-  fill: var(--foreground);
+  fill: var(--color-text);
 }
 
 .centerLabel {
   font-size: var(--text-body-sm);
-  fill: var(--muted-foreground);
+  fill: var(--color-text-subtlest);
 }
 
 /* Tooltip: follows the crosshair, flips to the start side past the middle. */
@@ -235,13 +235,13 @@ button.legendItem[aria-pressed='false'] .swatch {
   gap: var(--space-1);
   min-inline-size: 9rem;
   padding: var(--space-2) var(--space-2-5);
-  border: 1px solid var(--border);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-field);
-  background: var(--popover);
+  background: var(--color-surface-overlay);
   box-shadow: var(--shadow-overlay);
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
-  color: var(--popover-foreground);
+  color: var(--color-text);
   pointer-events: none;
   transform: translateX(var(--space-3));
 }
@@ -251,7 +251,7 @@ button.legendItem[aria-pressed='false'] .swatch {
 }
 
 .tooltipHead {
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
 }
 
 .tooltipRow {
@@ -269,7 +269,7 @@ button.legendItem[aria-pressed='false'] .swatch {
 
 .tooltipTotal {
   padding-block-start: var(--space-1);
-  border-block-start: 1px solid var(--border);
+  border-block-start: 1px solid var(--color-border);
 }
 
 .tableWrap {
@@ -284,17 +284,17 @@ button.legendItem[aria-pressed='false'] .swatch {
   inset-inline-start: 50%;
   translate: -50% -50%;
   padding: 0 var(--space-2);
-  border: 1px solid var(--border);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-pill);
-  background: var(--card);
+  background: var(--color-surface-raised);
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
   white-space: nowrap;
 }
 
 .plot:has(> .badge) {
-  background: repeating-linear-gradient(to bottom, transparent 0 calc(var(--space-12) - 1px), var(--border) calc(var(--space-12) - 1px) var(--space-12));
+  background: repeating-linear-gradient(to bottom, transparent 0 calc(var(--space-12) - 1px), var(--color-border) calc(var(--space-12) - 1px) var(--space-12));
 }
 
 /* Sparkline */
@@ -322,7 +322,7 @@ button.legendItem[aria-pressed='false'] .swatch {
 }
 
 .sparkEmpty {
-  stroke: var(--border);
+  stroke: var(--color-border);
   stroke-width: 1.5;
 }
 

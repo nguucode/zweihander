@@ -20,9 +20,9 @@ const lint = async (code) => {
 }
 
 test('declaring a token name in a component fails (PR #138: --radio-dot)', async () => {
-  const warnings = await lint('.dot { --background: red; }')
+  const warnings = await lint('.dot { --color-surface: red; }')
   assert.equal(warnings.length, 1)
-  assert.match(warnings[0], /--background/)
+  assert.match(warnings[0], /--color-surface/)
 })
 
 test('a primitive counts too', async () => {
@@ -34,13 +34,13 @@ test('a local name no token uses passes', async () => {
 })
 
 test('reading a token is not declaring it', async () => {
-  assert.deepEqual(await lint('.a { color: var(--background); }'), [])
+  assert.deepEqual(await lint('.a { color: var(--color-surface); }'), [])
 })
 
 test('an intended override passes with a reasoned disable comment', async () => {
   const code = `.card {
   /* stylelint-disable-next-line zweihander/no-token-shadow -- children sit on the card */
-  --background: var(--card);
+  --color-surface: var(--color-surface-raised);
 }`
   assert.deepEqual(await lint(code), [])
 })
@@ -48,7 +48,7 @@ test('an intended override passes with a reasoned disable comment', async () => 
 test('a disable comment without a reason still fails', async () => {
   const code = `.card {
   /* stylelint-disable-next-line zweihander/no-token-shadow */
-  --background: var(--card);
+  --color-surface: var(--color-surface-raised);
 }`
   assert.equal((await lint(code)).length, 1)
 })

@@ -29,23 +29,23 @@
   padding: 0;
   border: 1px solid var(--field-edge);
   border-radius: var(--otp-radius);
-  background: var(--card);
-  color: var(--foreground);
+  background: var(--color-surface-raised);
+  color: var(--color-text);
   font-family: var(--font-sans);
   font-size: inherit;
   font-variant-numeric: tabular-nums;
   text-align: center;
-  caret-color: var(--ring);
+  caret-color: var(--color-border-focused);
   transition: border-color var(--duration-base);
 }
 
 .cell:focus {
-  outline: var(--focus-width) solid var(--ring);
+  outline: var(--focus-width) solid var(--color-border-focused);
   outline-offset: var(--focus-offset);
 }
 
 .cell[aria-invalid='true']:focus {
-  outline-color: var(--danger-text);
+  outline-color: var(--color-text-danger);
 }
 
 .cell:disabled {
@@ -54,11 +54,11 @@
 }
 
 .cell[readonly] {
-  background: var(--surface-filled);
+  background: var(--color-background-input);
 }
 
 .separator {
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
 }
 
 /* A ghost button whose text starts where the cells do. */

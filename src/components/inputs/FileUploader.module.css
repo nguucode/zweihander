@@ -6,7 +6,7 @@
   font-family: var(--font-sans);
   font-size: var(--text-body);
   line-height: var(--leading-body);
-  color: var(--foreground);
+  color: var(--color-text);
 }
 
 .fullWidth {
@@ -24,11 +24,11 @@
 .required {
   /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- 2px between label and asterisk, below the spacing scale on purpose */
   margin-inline-start: 0.125rem;
-  color: var(--danger-text);
+  color: var(--color-text-danger);
 }
 
 /* ------------------------------------------------------------- dropzone
-   The dashed edge is --field-border, as a text field's. The Choose button
+   The dashed edge is --color-border-input, as a text field's. The Choose button
    inside is an accent contained button. */
 .dropzone {
   position: relative;
@@ -36,9 +36,9 @@
   justify-items: center;
   gap: var(--space-inline);
   padding: var(--space-container) var(--space-group);
-  border: 1px dashed var(--field-border);
+  border: 1px dashed var(--color-border-input);
   border-radius: var(--radius-panel);
-  background: var(--surface-filled);
+  background: var(--color-background-input);
   text-align: center;
   transition:
     border-color var(--duration-base),
@@ -49,26 +49,26 @@
    the change is not colour alone. */
 .dragging {
   border-style: solid;
-  border-color: var(--ring);
-  background: var(--accent);
+  border-color: var(--color-border-focused);
+  background: var(--color-background-neutral);
 }
 
 .invalid {
-  border-color: var(--danger-text);
+  border-color: var(--color-text-danger);
 }
 
 .icon {
   display: inline-flex;
   padding: var(--space-inline);
   border-radius: var(--radius-pill);
-  background: var(--background);
-  color: var(--muted-foreground);
+  background: var(--color-surface);
+  color: var(--color-text-subtlest);
   font-size: var(--space-6);
 }
 
 .prompt {
   margin: 0;
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
 }
 
 /* Disabled fades the icon, and the buttons fade themselves. The text stays
@@ -81,21 +81,21 @@
   opacity: 0.5;
 }
 .disabled .label {
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
 }
 
 .helper {
   margin: 0;
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
 }
 
 .errors {
   margin: 0;
   padding: 0;
   list-style: none;
-  color: var(--danger-text);
+  color: var(--color-text-danger);
 }
 
 /* ------------------------------------------------------------------ list */
@@ -117,7 +117,7 @@
   border-radius: var(--radius-field);
 }
 .item:hover {
-  background: var(--hover-overlay);
+  background: var(--color-interaction-hovered);
 }
 
 /* File-type icon, after Microsoft 365's: a page with a coloured badge.
@@ -127,7 +127,7 @@
   flex: none;
   inline-size: 1.25rem;
   block-size: 1.25rem;
-  --kind: var(--muted-foreground);
+  --kind: var(--color-text-subtlest);
 }
 .fileIcon[data-kind='word'] { --kind: #185abd; }
 .fileIcon[data-kind='excel'] { --kind: #107c41; }
@@ -139,10 +139,10 @@
 /* Filled: the page is a tint of the type colour, the folded corner a
    deeper one, the badge solid. */
 .page {
-  fill: color-mix(in oklab, var(--kind) 18%, var(--background));
+  fill: color-mix(in oklab, var(--kind) 18%, var(--color-surface));
 }
 .fold {
-  fill: color-mix(in oklab, var(--kind) 40%, var(--background));
+  fill: color-mix(in oklab, var(--kind) 40%, var(--color-surface));
 }
 
 .badge {
@@ -187,7 +187,7 @@
   white-space: nowrap;
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
   font-variant-numeric: tabular-nums;
 }
 
@@ -204,7 +204,7 @@
   white-space: nowrap;
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
-  color: var(--danger-text);
+  color: var(--color-text-danger);
 }
 
 .srOnly {

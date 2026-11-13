@@ -143,35 +143,35 @@ options).
 <SpecTable
   caption="Field"
   rows={[
-    { part: 'Field', property: 'Background', token: '--card' },
-    { part: 'Field', property: 'Border', token: '--field-border' },
-    { part: 'Label, input', property: 'Colour', token: '--foreground' },
-    { part: 'Placeholder, helper, icons', property: 'Colour', token: '--muted-foreground' },
-    { part: 'Required asterisk', property: 'Colour', token: '--danger-text' },
-    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+    { part: 'Field', property: 'Background', token: '--color-surface-raised' },
+    { part: 'Field', property: 'Border', token: '--color-border-input' },
+    { part: 'Label, input', property: 'Colour', token: '--color-text' },
+    { part: 'Placeholder, helper, icons', property: 'Colour', token: '--color-text-subtlest' },
+    { part: 'Required asterisk', property: 'Colour', token: '--color-text-danger' },
+    { part: 'Focus ring', property: 'Colour', token: '--color-border-focused' },
   ]}
 />
 
 <SpecTable
   caption="Validation and read-only"
   rows={[
-    { part: 'Border, helper, focus ring, error', property: 'Colour', token: '--danger-text' },
-    { part: 'Border, helper, success', property: 'Colour', token: '--success-text' },
-    { part: 'Field, read-only', property: 'Background', token: '--surface-filled' },
+    { part: 'Border, helper, focus ring, error', property: 'Colour', token: '--color-text-danger' },
+    { part: 'Border, helper, success', property: 'Colour', token: '--color-text-success' },
+    { part: 'Field, read-only', property: 'Background', token: '--color-background-input' },
   ]}
 />
 
 <SpecTable
   caption="Options list"
   rows={[
-    { part: 'List', property: 'Background', token: '--popover' },
-    { part: 'List', property: 'Border', token: '--border' },
+    { part: 'List', property: 'Background', token: '--color-surface-overlay' },
+    { part: 'List', property: 'Border', token: '--color-border' },
     { part: 'List', property: 'Shadow', token: '--shadow-overlay' },
-    { part: 'Option', property: 'Colour', token: '--popover-foreground' },
-    { part: 'Option, highlighted', property: 'Background', token: '--accent' },
-    { part: 'Option, highlighted', property: 'Colour', token: '--accent-foreground' },
-    { part: 'Check', property: 'Colour', token: '--primary-text' },
-    { part: 'No matches, Loading…', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Option', property: 'Colour', token: '--color-text' },
+    { part: 'Option, highlighted', property: 'Background', token: '--color-background-neutral' },
+    { part: 'Option, highlighted', property: 'Colour', token: '--color-text' },
+    { part: 'Check', property: 'Colour', token: '--color-text-brand' },
+    { part: 'No matches, Loading…', property: 'Colour', token: '--color-text-subtlest' },
   ]}
 />
 
@@ -196,15 +196,15 @@ so it holds full contrast on the highlighted row.
   <Fit><Story of={ComboboxStories.Default} /></Fit>
 </States>
 
-- **Focus** is a 2px `--ring` outline, 2px outside the field, drawn while
+- **Focus** is a 2px `--color-border-focused` outline, 2px outside the field, drawn while
   the input has focus, by pointer too: that is where typing goes. In the
-  error state the ring is `--danger-text`. The clear and open buttons draw
+  error state the ring is `--color-text-danger`. The clear and open buttons draw
   their own ring when tabbed to, so the field never shows two.
 - **Hover** changes nothing on the field; the clear and open buttons
-  darken from `--muted-foreground` to `--foreground`.
-- **Error** turns the edge and the helper `--danger-text` together; the
+  darken from `--color-text-subtlest` to `--color-text`.
+- **Error** turns the edge and the helper `--color-text-danger` together; the
   words are the message, the colour only points at it.
-- **Read-only** fills the field with `--surface-filled`; there is no clear
+- **Read-only** fills the field with `--color-background-input`; there is no clear
   button.
 - **Disabled** is the enabled look at 50% opacity.
 - **Loading** adds a spinner before the buttons and says "Loading…" in the

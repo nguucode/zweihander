@@ -26,7 +26,7 @@ same in all three.
 
 | Variant | Use for |
 | --- | --- |
-| <Spinner variant="accent" /> `accent` | The default: a quiet placeholder in `--foreground`, inside content that has its own colour. |
+| <Spinner variant="accent" /> `accent` | The default: a quiet placeholder in `--color-text`, inside content that has its own colour. |
 | <Spinner variant="primary" /> `primary` | A load the page is about, where the brand colour helps it be found: the first load of a view. |
 | <Spinner variant="secondary" /> `secondary` | Low emphasis: a spinner beside other muted text, or in a dense list. |
 
@@ -95,17 +95,17 @@ The indicator is the part that has to be seen, so each variant takes a
 colour that clears 3:1 on the page. Switch the theme and the accent in the
 toolbar: the values follow.
 
-<SpecTable caption="primary" rows={[{ part: 'Indicator', property: 'Stroke', token: '--primary-text' }]} />
+<SpecTable caption="primary" rows={[{ part: 'Indicator', property: 'Stroke', token: '--color-text-brand' }]} />
 
-<SpecTable caption="accent" rows={[{ part: 'Indicator', property: 'Stroke', token: '--foreground' }]} />
+<SpecTable caption="accent" rows={[{ part: 'Indicator', property: 'Stroke', token: '--color-text' }]} />
 
-<SpecTable caption="secondary" rows={[{ part: 'Indicator', property: 'Stroke', token: '--muted-foreground' }]} />
+<SpecTable caption="secondary" rows={[{ part: 'Indicator', property: 'Stroke', token: '--color-text-subtlest' }]} />
 
 <SpecTable
   caption="Every variant"
   rows={[
-    { part: 'Track', property: 'Stroke', token: '--border' },
-    { part: 'Label', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Track', property: 'Stroke', token: '--color-border' },
+    { part: 'Label', property: 'Colour', token: '--color-text-subtlest' },
   ]}
 />
 
@@ -182,8 +182,8 @@ appears if the wait turns out to be long enough to notice.
   `aria-valuemin="0"` and `aria-valuemax="100"`. Values outside 0–100 are
   clamped.
 - The SVG is hidden.
-- The indicator clears 3:1 on the page in every variant: `--primary-text`
-  (measured at 4.5:1 per accent), `--muted-foreground`, `--foreground`.
+- The indicator clears 3:1 on the page in every variant: `--color-text-brand`
+  (measured at 4.5:1 per accent), `--color-text-subtlest`, `--color-text`.
   The track is decoration and may be faint.
 - Under `prefers-reduced-motion` it slows to one turn in 2.5s rather than
   stopping, since a frozen arc reads as "stuck", and the progress ring

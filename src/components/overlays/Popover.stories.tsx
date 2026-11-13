@@ -34,7 +34,7 @@ const meta = {
       table: { type: { summary: 'ReactNode' } },
     },
     description: {
-      description: 'Optional, under the title in `--muted-foreground`. Read as the dialog\'s description.',
+      description: 'Optional, under the title in `--color-text-subtlest`. Read as the dialog\'s description.',
       control: 'text',
       table: { type: { summary: 'ReactNode' } },
     },

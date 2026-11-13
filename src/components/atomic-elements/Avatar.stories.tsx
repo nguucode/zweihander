@@ -206,7 +206,7 @@ export const Contrast: Story = {
             key={mode + gray}
             appearance={mode}
             grayColor={gray}
-            style={{ background: 'var(--background)', display: 'flex', flexWrap: 'wrap', gap: 2, padding: 2 }}
+            style={{ background: 'var(--color-surface)', display: 'flex', flexWrap: 'wrap', gap: 2, padding: 2 }}
           >
             {(['subtle', 'solid'] as const).flatMap((variant) =>
               [undefined, ...ACCENT_COLORS].flatMap((color) =>
@@ -244,9 +244,9 @@ export const Contrast: Story = {
         const floor = variant === 'solid' && color === 'neutral' ? 6.5 : 4.5
         if (ratio < floor) failures.push(`${audit} initials ${ratio.toFixed(2)}`)
       } else if (variant === 'subtle') {
-        // The initials' colour (neutral: --muted-foreground), past 3:1.
+        // The initials' colour (neutral: --color-text-subtlest), past 3:1.
         const probe = avatar.parentElement!.appendChild(document.createElement('span'))
-        probe.style.color = 'var(--muted-foreground)'
+        probe.style.color = 'var(--color-text-subtlest)'
         const expected =
           color === 'neutral'
             ? getComputedStyle(probe).color

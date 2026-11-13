@@ -24,10 +24,10 @@ takes every size and orientation.
 
 | Appearance | Use for |
 | --- | --- |
-| `elevated` | The default panel: a white `--card` on the off-white page, with an edge and a faint shadow. |
+| `elevated` | The default panel: a white `--color-surface-raised` on the off-white page, with an edge and a faint shadow. |
 | `outline` | Cards in a dense grid or inside another panel, where a shadow per card is too much. |
 | `unstyled` | The card's padding and layout with nothing visible, e.g. inside a surface that already has its own. |
-| `surface` | A block of an AppShell page. It follows the Theme's `contentStyle`: raised like `elevated` when the content is `card`, a section set off by a rule above when it is `flat`. See [App Shell](?path=/docs/templates-application-ui-app-shell--docs). |
+| `surface` | A block of a page on the Theme's canvas. It follows the Theme's `contentStyle`: raised like `elevated` when the content is `card`, a section set off by a rule above when it is `flat`. |
 
 `size` sets the padding and the gap between children, from 12px (`xs`) to
 32px (`lg`).
@@ -135,21 +135,21 @@ Switch the theme in the toolbar: the values follow.
 <SpecTable
   caption="elevated"
   rows={[
-    { part: 'Container', property: 'Background', token: '--card' },
-    { part: 'Container', property: 'Border', token: '--border' },
+    { part: 'Container', property: 'Background', token: '--color-surface-raised' },
+    { part: 'Container', property: 'Border', token: '--color-border' },
     { part: 'Container', property: 'Shadow', token: '--shadow-raised' },
     { part: 'Container, hover', property: 'Shadow', token: '--shadow-overlay' },
-    { part: 'Content', property: 'Colour', token: '--card-foreground' },
+    { part: 'Content', property: 'Colour', token: '--color-text' },
   ]}
 />
 
 <SpecTable
   caption="outline"
   rows={[
-    { part: 'Container', property: 'Background', token: '--card' },
-    { part: 'Container', property: 'Border', token: '--border' },
-    { part: 'Container, hover', property: 'Border', token: '--control-border' },
-    { part: 'Content', property: 'Colour', token: '--card-foreground' },
+    { part: 'Container', property: 'Background', token: '--color-surface-raised' },
+    { part: 'Container', property: 'Border', token: '--color-border' },
+    { part: 'Container, hover', property: 'Border', token: '--color-border-bold' },
+    { part: 'Content', property: 'Colour', token: '--color-text' },
   ]}
 />
 
@@ -157,10 +157,10 @@ Switch the theme in the toolbar: the values follow.
 colour of what it sits on.
 
 `surface` takes `elevated`'s colours under `contentStyle="card"`. Under
-`contentStyle="flat"` it has no background, radius or shadow, only `--border`
+`contentStyle="flat"` it has no background, radius or shadow, only `--color-border`
 along its top edge.
 
-<SpecTable caption="Every appearance" rows={[{ part: 'Focus ring', property: 'Colour', token: '--ring' }]} />
+<SpecTable caption="Every appearance" rows={[{ part: 'Focus ring', property: 'Colour', token: '--color-border-focused' }]} />
 
 ## States
 
@@ -178,12 +178,12 @@ has these:
   <Story of={CardStories.Clickable} />
 </States>
 
-- **Hover** never touches the surface: muted text sits on `--card` at
+- **Hover** never touches the surface: muted text sits on `--color-surface-raised` at
   4.5:1 with no margin to spare, and darkening it 6% took muted text to
   3.9:1. An `elevated` card lifts to `--shadow-overlay`; an `outline` card's
-  edge strengthens to `--control-border`, the 3:1 control border. An
+  edge strengthens to `--color-border-bold`, the 3:1 control border. An
   `unstyled` card has no hover look.
-- **Focus** is a 2px `--ring` outline, 2px outside the card.
+- **Focus** is a 2px `--color-border-focused` outline, 2px outside the card.
 - **Pressed and disabled** have no look of their own. A card has no
   `disabled` prop: a card that cannot act is a plain card.
 
@@ -205,7 +205,7 @@ Every other `<div>` attribute passes through, including `ref`.
 - **`render` is added** so a card can be a link, alongside `onClick` for
   a card that acts.
 - **No `filled` appearance.** The spec's tinted card was dropped to match
-  the Claude apps, where a panel is a white `--card` on the off-white
+  the Claude apps, where a panel is a white `--color-surface-raised` on the off-white
   page, with an edge or a faint shadow.
 - **`unstyled`** keeps the padding and layout and drops every visual.
 
@@ -241,8 +241,7 @@ address.
 - **For rows of data to compare.** Use a
   [Table](?path=/docs/components-data-display-table--docs): columns line
   values up, cards do not.
-- **To show and hide content.** Use an
-  [Accordion](?path=/docs/components-data-display-accordion--docs) or a
+- **To show and hide content.** Use a
   [Collapse](?path=/docs/components-data-display-collapse--docs).
 - **Just to add space or a background.** A plain `<div>` with padding
   does that without suggesting a unit.

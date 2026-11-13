@@ -80,9 +80,9 @@ Switch the theme in the toolbar: the values follow.
 <SpecTable
   caption="primary, contained"
   rows={[
-    { part: 'Container', property: 'Background', token: '--primary' },
-    { part: 'Label', property: 'Colour', token: '--primary-foreground' },
-    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+    { part: 'Container', property: 'Background', token: '--color-background-brand-bold' },
+    { part: 'Label', property: 'Colour', token: '--color-text-brand-inverse' },
+    { part: 'Focus ring', property: 'Colour', token: '--color-border-focused' },
   ]}
 />
 
@@ -121,8 +121,7 @@ come from stories (`<Story of={…} />`), the Don't one tagged `!dev`.
 
 ## When not to use
 
-These blocks are for component docs. Foundations and Patterns stay single
-pages.
+These blocks are for component docs. Foundations stay single pages.
 
 <DoDont
   do={<Button>Save</Button>}

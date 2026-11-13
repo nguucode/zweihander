@@ -117,13 +117,13 @@ the text, with 0.2em before it.
 The text and its underline share one colour. Switch the theme and the
 accent in the toolbar: the values follow.
 
-<SpecTable caption="primary" rows={[{ part: 'Text and underline', property: 'Colour', token: '--primary-text' }]} />
+<SpecTable caption="primary" rows={[{ part: 'Text and underline', property: 'Colour', token: '--color-text-brand' }]} />
 
-<SpecTable caption="accent" rows={[{ part: 'Text and underline', property: 'Colour', token: '--foreground' }]} />
+<SpecTable caption="accent" rows={[{ part: 'Text and underline', property: 'Colour', token: '--color-text' }]} />
 
-<SpecTable caption="secondary" rows={[{ part: 'Text and underline', property: 'Colour', token: '--muted-foreground' }]} />
+<SpecTable caption="secondary" rows={[{ part: 'Text and underline', property: 'Colour', token: '--color-text-subtlest' }]} />
 
-<SpecTable caption="Every variant" rows={[{ part: 'Focus ring', property: 'Colour', token: '--ring' }]} />
+<SpecTable caption="Every variant" rows={[{ part: 'Focus ring', property: 'Colour', token: '--color-border-focused' }]} />
 
 ## States
 
@@ -141,7 +141,7 @@ accent in the toolbar: the values follow.
 - **Hover** thickens the underline from 1px to 2px and keeps the colour,
   so the link keeps the contrast it was measured at. With
   `underline="hover"`, hover is when the line appears.
-- **Focus** is a 2px `--ring` outline, 2px outside the text.
+- **Focus** is a 2px `--color-border-focused` outline, 2px outside the text.
 - **Disabled** is the enabled look at 50% opacity, with no `href`.
 - There is no visited style: most links in an app lead to screens, not
   documents, and a "seen it" colour there is noise.
@@ -207,7 +207,7 @@ onto it, and the router keeps control of navigation:
   followed, or saying in text why it is unavailable.
 - Every variant is a text colour measured at 4.5:1 on the page, and hover
   does not change it.
-- Focus ring: 2px `--ring`, 2px offset.
+- Focus ring: 2px `--color-border-focused`, 2px offset.
 
 </DocTab>
 </DocTabs>

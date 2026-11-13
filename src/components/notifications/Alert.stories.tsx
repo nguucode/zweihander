@@ -75,10 +75,10 @@ type Story = StoryObj<typeof meta>
 const stack = { display: 'grid', gap: 'var(--space-3)' }
 const variants = ['info', 'success', 'warning', 'danger'] as const
 
-/** The computed value of `--ring`, resolved the same way an outline colour is. */
+/** The computed value of `--color-border-focused`, resolved the same way an outline colour is. */
 const ringColour = (host: Element) => {
   const probe = document.createElement('span')
-  probe.style.color = 'var(--ring)'
+  probe.style.color = 'var(--color-border-focused)'
   host.append(probe)
   const colour = getComputedStyle(probe).color
   probe.remove()
@@ -161,7 +161,7 @@ export const Dismissible: Story = {
     const close = canvas.getByRole('button', { name: 'Dismiss' })
     await userEvent.tab()
     await expect(close).toHaveFocus()
-    // Keyboard focus shows the 2px ring in --ring.
+    // Keyboard focus shows the 2px ring in --color-border-focused.
     const { outlineStyle, outlineWidth, outlineColor } = getComputedStyle(close)
     await expect([outlineStyle, outlineWidth, outlineColor]).toEqual(['solid', '2px', ringColour(canvasElement)])
     // A 24px button that adds nothing to the alert's first 20px line.

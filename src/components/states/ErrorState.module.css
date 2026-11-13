@@ -1,8 +1,8 @@
-/* The disc in the danger tone: --danger-subtle behind --danger-text,
+/* The disc in the danger tone: --color-background-danger behind --color-text-danger,
    4.5:1 and more. */
 .error {
-  --empty-icon-bg: var(--danger-subtle);
-  --empty-icon-fg: var(--danger-text);
+  --empty-icon-bg: var(--color-background-danger);
+  --empty-icon-fg: var(--color-text-danger);
 }
 
 .details {

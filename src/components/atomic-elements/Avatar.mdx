@@ -178,8 +178,8 @@ at 45°.
 <SpecTable
   caption="Status dot and group"
   rows={[
-    { part: 'Status dot', property: 'Ring', token: '--background' },
-    { part: 'Group', property: 'Ring around each avatar', token: '--background' },
+    { part: 'Status dot', property: 'Ring', token: '--color-surface' },
+    { part: 'Group', property: 'Ring around each avatar', token: '--color-surface' },
     { part: 'Group', property: 'Overlap, every size but sm', token: '--space-1' },
   ]}
 />
@@ -196,34 +196,34 @@ the values for another one.
 <SpecTable
   caption="subtle, neutral"
   rows={[
-    { part: 'Container', property: 'Background', token: '--secondary' },
-    { part: 'Initials', property: 'Colour', token: '--secondary-foreground' },
-    { part: 'Silhouette', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Container', property: 'Background', token: '--color-background-neutral' },
+    { part: 'Initials', property: 'Colour', token: '--color-text' },
+    { part: 'Silhouette', property: 'Colour', token: '--color-text-subtlest' },
   ]}
 />
 
 <SpecTable
   caption="subtle, with a hue"
   rows={[
-    { part: 'Container', property: 'Background', token: '--primary-subtle' },
-    { part: 'Initials and silhouette', property: 'Colour', token: '--primary-subtle-text' },
+    { part: 'Container', property: 'Background', token: '--color-background-brand-subtlest' },
+    { part: 'Initials and silhouette', property: 'Colour', token: '--color-text-brand-bold' },
   ]}
 />
 
 <SpecTable
   caption="solid, neutral"
   rows={[
-    { part: 'Container', property: 'Background', token: '--neutral-solid' },
-    { part: 'Initials and silhouette', property: 'Colour', token: '--neutral-solid-foreground' },
+    { part: 'Container', property: 'Background', token: '--color-background-neutral-bold' },
+    { part: 'Initials and silhouette', property: 'Colour', token: '--color-text-inverse' },
   ]}
 />
 
 <SpecTable
   caption="solid, with a hue"
   rows={[
-    { part: 'Container', property: 'Background', token: '--primary' },
-    { part: 'Initials', property: 'Colour', token: '--primary-foreground' },
-    { part: 'Silhouette', property: 'Colour', token: '--neutral-solid-foreground' },
+    { part: 'Container', property: 'Background', token: '--color-background-brand-bold' },
+    { part: 'Initials', property: 'Colour', token: '--color-text-brand-inverse' },
+    { part: 'Silhouette', property: 'Colour', token: '--color-text-inverse' },
   ]}
 />
 
@@ -352,7 +352,7 @@ once.
   both modes, measured by the `Contrast` story. Neutral solid is gray 600
   under gray 50, 6.5:1 or more.
 - On `subtle` the silhouette uses the initials colour (neutral uses
-  `--muted-foreground`), past the 3:1 a graphic needs.
+  `--color-text-subtlest`), past the 3:1 a graphic needs.
 - On `solid` the silhouette is **always white**, by choice. In light mode
   that is under 3:1 on the warm hues (orange to lime); in dark mode, where
   the fill is the lighter 400 step, on most hues. It is accepted because

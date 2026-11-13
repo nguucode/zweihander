@@ -120,9 +120,9 @@ export const ValueLabel: Story = {
   play: async ({ canvas }) => {
     const value = canvas.getByText('70%')
     await expect(value).toBeVisible()
-    // The value label is --muted-foreground (read back through a probe beside it).
+    // The value label is --color-text-subtlest (read back through a probe beside it).
     const probe = document.createElement('span')
-    probe.style.color = 'var(--muted-foreground)'
+    probe.style.color = 'var(--color-text-subtlest)'
     value.after(probe)
     await expect(getComputedStyle(value).color).toBe(getComputedStyle(probe).color)
     probe.remove()
@@ -181,7 +181,7 @@ export const WithoutVisibleLabel: Story = {
 /** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
 export const anatomyParts = [
   { name: 'Label', selector: '[role="progressbar"] > :first-child', description: 'Optional, above the bar. Names the progressbar.' },
-  { name: 'Track', selector: '[role="progressbar"] > div > :first-child', description: 'The full length, --secondary.' },
+  { name: 'Track', selector: '[role="progressbar"] > div > :first-child', description: 'The full length, --color-background-neutral.' },
   { name: 'Indicator', selector: '[role="progressbar"] > div > :first-child > *', description: 'The filled share, coloured by variant. A sliding third when indeterminate.' },
   { name: 'Value label', selector: '[role="progressbar"] > div > :last-child', description: 'Optional, showValueLabel: the percentage after the bar.' },
 ]
@@ -216,7 +216,7 @@ export const FillContrast: Story = {
   render: () => (
     <div>
       {(['light', 'dark'] as const).map((mode) => (
-        <Theme key={mode} appearance={mode} style={{ background: 'var(--background)', padding: 8 }}>
+        <Theme key={mode} appearance={mode} style={{ background: 'var(--color-surface)', padding: 8 }}>
           {ACCENT_COLORS.map((accent) => (
             <Theme key={accent} accentColor={accent} style={{ display: 'flex', gap: 4 }}>
               {(['primary', 'accent', 'secondary', 'destructive'] as const).map((variant) => (

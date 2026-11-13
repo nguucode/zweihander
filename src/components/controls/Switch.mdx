@@ -104,51 +104,51 @@ development, and will be removed in the next release: drop the prop.
 
 ## Color
 
-Off is a `--control-border` track (3:1 on the page, so the control is
+Off is a `--color-border-bold` track (3:1 on the page, so the control is
 visible at all) with a page-coloured thumb. On takes the variant's solid,
 and the thumb its label colour, measured at 4.5:1 against it.
 
 <SpecTable
   caption="Off, every variant"
   rows={[
-    { part: 'Track', property: 'Background', token: '--control-border' },
-    { part: 'Thumb', property: 'Background', token: '--background' },
+    { part: 'Track', property: 'Background', token: '--color-border-bold' },
+    { part: 'Thumb', property: 'Background', token: '--color-surface' },
   ]}
 />
 
 <SpecTable
   caption="primary, on"
   rows={[
-    { part: 'Track', property: 'Background', token: '--primary' },
-    { part: 'Thumb', property: 'Background', token: '--primary-foreground' },
+    { part: 'Track', property: 'Background', token: '--color-background-brand-bold' },
+    { part: 'Thumb', property: 'Background', token: '--color-text-brand-inverse' },
   ]}
 />
 
 <SpecTable
   caption="accent, on"
   rows={[
-    { part: 'Track', property: 'Background', token: '--foreground' },
-    { part: 'Thumb', property: 'Background', token: '--background' },
+    { part: 'Track', property: 'Background', token: '--color-text' },
+    { part: 'Thumb', property: 'Background', token: '--color-surface' },
   ]}
 />
 
 <SpecTable
   caption="destructive, on"
   rows={[
-    { part: 'Track', property: 'Background', token: '--destructive' },
-    { part: 'Thumb', property: 'Background', token: '--destructive-foreground' },
+    { part: 'Track', property: 'Background', token: '--color-background-danger-bold' },
+    { part: 'Thumb', property: 'Background', token: '--color-text-danger-inverse' },
   ]}
 />
 
 <SpecTable
   caption="Every variant"
   rows={[
-    { part: 'Label', property: 'Colour', token: '--foreground' },
-    { part: 'Helper text', property: 'Colour', token: '--muted-foreground' },
-    { part: 'Track, error', property: 'Inner edge', token: '--danger-text' },
-    { part: 'Helper text, error', property: 'Colour', token: '--danger-text' },
-    { part: 'Helper text, success', property: 'Colour', token: '--success-text' },
-    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+    { part: 'Label', property: 'Colour', token: '--color-text' },
+    { part: 'Helper text', property: 'Colour', token: '--color-text-subtlest' },
+    { part: 'Track, error', property: 'Inner edge', token: '--color-text-danger' },
+    { part: 'Helper text, error', property: 'Colour', token: '--color-text-danger' },
+    { part: 'Helper text, success', property: 'Colour', token: '--color-text-success' },
+    { part: 'Focus ring', property: 'Colour', token: '--color-border-focused' },
   ]}
 />
 
@@ -168,9 +168,9 @@ and the thumb its label colour, measured at 4.5:1 against it.
 
 - **Hover** changes only the cursor: the track has no lighter or darker
   step to move to without losing its 3:1.
-- **Focus** is a 2px `--ring` outline, 2px outside the track.
+- **Focus** is a 2px `--color-border-focused` outline, 2px outside the track.
 - **Disabled** dims the track and the label to 50%.
-- **Error** draws a 2px `--danger-text` edge inside the track, so it reads
+- **Error** draws a 2px `--color-text-danger` edge inside the track, so it reads
   on and off alike and leaves the band outside to the focus ring.
 - **Read-only** looks enabled, with an arrow cursor.
 - The thumb slides over `--duration-base`, and stops animating under
@@ -231,7 +231,7 @@ like a light switch: dark mode, notifications, auto-save.
 - The label wraps the control, so it names it and clicking it toggles it.
 - `helperText` is the switch's description (`aria-describedby`); in the
   error state the switch has `aria-invalid`.
-- The off track is `--control-border`, measured at 3:1 on the page on
+- The off track is `--color-border-bold`, measured at 3:1 on the page on
   every gray ramp; the thumb is 4.5:1 or more against its track in both
   states.
 - A hidden `<input type="checkbox">` carries `name`, `value` and

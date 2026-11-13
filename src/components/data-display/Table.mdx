@@ -45,17 +45,6 @@ A menu at the end of each row. A row with nothing to do gets no button:
 
 <Canvas of={TableStories.RowActions} />
 
-`hasRowContextMenu` also opens a row's `rowActions` at the pointer on
-right click or long press, through [Context
-Menu](?path=/docs/components-navigation-context-menu--docs), as Stacked
-List and Grid List do. It is off by default: the row then loses the
-browser's own menu, so people can no longer copy a cell's text or open a
-link in a cell in a new tab from it. Turn it on for tables people work
-through record by record, not ones they read or copy from. A row with no
-items, and an expanded row's details, keep the browser's menu.
-
-<Canvas of={TableStories.RowContextMenu} />
-
 A total row under the rows, which sorting leaves at the bottom. The table
 does not add anything up: you pass each column's `footer`, so you decide
 whether it totals this page or every row.
@@ -205,50 +194,50 @@ Switch the theme and the accent in the toolbar: the values follow.
 <SpecTable
   caption="Header"
   rows={[
-    { part: 'Header row', property: 'Background when sticky', token: '--card' },
-    { part: 'Header label', property: 'Colour', token: '--muted-foreground' },
-    { part: 'Sort icon, sorted column', property: 'Colour', token: '--foreground' },
-    { part: 'Header row', property: 'Rule under it', token: '--border' },
+    { part: 'Header row', property: 'Background when sticky', token: '--color-surface-raised' },
+    { part: 'Header label', property: 'Colour', token: '--color-text-subtlest' },
+    { part: 'Sort icon, sorted column', property: 'Colour', token: '--color-text' },
+    { part: 'Header row', property: 'Rule under it', token: '--color-border' },
   ]}
 />
 
 <SpecTable
   caption="Row"
   rows={[
-    { part: 'Container', property: 'Background', token: '--card' },
-    { part: 'Cell', property: 'Colour', token: '--card-foreground' },
-    { part: 'Total row', property: 'Rule above it', token: '--border' },
+    { part: 'Container', property: 'Background', token: '--color-surface-raised' },
+    { part: 'Cell', property: 'Colour', token: '--color-text' },
+    { part: 'Total row', property: 'Rule above it', token: '--color-border' },
   ]}
 />
 
 <SpecTable
   caption="Hover"
   rows={[
-    { part: 'Row', property: 'Background', token: '--accent' },
-    { part: 'Sort button', property: 'Background', token: '--accent' },
-    { part: 'Sort button', property: 'Colour', token: '--accent-foreground' },
+    { part: 'Row', property: 'Background', token: '--color-background-neutral' },
+    { part: 'Sort button', property: 'Background', token: '--color-background-neutral' },
+    { part: 'Sort button', property: 'Colour', token: '--color-text' },
   ]}
 />
 
 <SpecTable
   caption="Selected"
   rows={[
-    { part: 'Row', property: 'Background', token: '--primary-subtle' },
+    { part: 'Row', property: 'Background', token: '--color-background-brand-subtlest' },
   ]}
 />
 
 <SpecTable
   caption="Resize handle"
   rows={[
-    { part: 'Handle line', property: 'Colour', token: '--border' },
-    { part: 'Handle line, hover and drag', property: 'Colour', token: '--primary' },
+    { part: 'Handle line', property: 'Colour', token: '--color-border' },
+    { part: 'Handle line, hover and drag', property: 'Colour', token: '--color-background-brand-bold' },
   ]}
 />
 
-<SpecTable caption="Every part" rows={[{ part: 'Focus ring', property: 'Colour', token: '--ring' }]} />
+<SpecTable caption="Every part" rows={[{ part: 'Focus ring', property: 'Colour', token: '--color-border-focused' }]} />
 
 - The header has no fill. With `hasStickyHeader` it takes the container's
-  own `--card`, only so the rows scroll under it.
+  own `--color-surface-raised`, only so the rows scroll under it.
 - Rows are not striped, and have no divider: hover and selection tint
   the row under the pointer or the checkbox, from edge to edge, so the
   tint starts where the first cell's text does.
@@ -292,19 +281,19 @@ Switch the theme and the accent in the toolbar: the values follow.
 Each example forces the state on every row and button at once; on screen
 it is the one under the pointer or the keyboard.
 
-- **Hover** tints the row with `--accent`, and the sort button too. The
+- **Hover** tints the row with `--color-background-neutral`, and the sort button too. The
   content row of an open row takes no hover of its own, only its row's.
-- **Focus** is a 2px `--ring` outline, drawn 2px inside the sort button.
+- **Focus** is a 2px `--color-border-focused` outline, drawn 2px inside the sort button.
   The checkboxes and the expand button keep
   their own focus rings.
 - **Pressed** has no look of its own: the click sorts, selects or opens,
   and that state's look follows.
-- **Resize handle**: hover and drag thicken its line to 2px `--primary`;
-  focus draws the `--ring` outline inside the handle.
+- **Resize handle**: hover and drag thicken its line to 2px `--color-background-brand-bold`;
+  focus draws the `--color-border-focused` outline inside the handle.
 - **Disabled**: Table has none. A row that cannot be acted on is a row
   without the control.
 - **Sorted** shows the column's icon at full colour, pointing up or down.
-- **Selected** tints the row with `--primary-subtle`.
+- **Selected** tints the row with `--color-background-brand-subtlest`.
 - **Expanded** turns the chevron to point down and opens the content row
   under it.
 
@@ -344,9 +333,7 @@ whenever it is used. So `size="sm"` and any `density` warn, and
 
 With `sort` controlled, the table leaves the order to you. `sortRows(rows,
 columns, sort)` returns the rows in the order the table would sort them,
-so you can sort every row before slicing out a page, as the
-[Projects](?path=/docs/templates-object-management-projects--docs)
-template does.
+so you can sort every row before slicing out a page.
 
 ### Differences from the spec
 
@@ -418,10 +405,6 @@ Pass `expandedIds` to open rows from outside the table:
 
 ## When not to use
 
-- **For a whole list page** with search, filters, bulk actions and paging.
-  Start from the
-  [Data Table Page](?path=/docs/patterns-application-ui-data-table-page--docs)
-  pattern, which puts a Table together with them.
 - **For records that do not share fields**, or that are read one at a
   time, like products in a shop. Use [Cards](?path=/docs/components-data-display-card--docs).
 - **For layout.** A table announces rows and columns to a screen reader;
@@ -455,8 +438,6 @@ Pass `expandedIds` to open rows from outside the table:
   Escape closes it, and focus returns to the button. A row with no items
   has no button.
 - The actions column's header is "Actions", visually hidden.
-- With `hasRowContextMenu`, the right-click menu is a shortcut to the
-  same entries, never the only way in: the ⋯ button stays.
 - When the table is wider than its box and nothing in it takes focus, the
   scroll box becomes a tab stop with a focus ring: `role="region"` named by
   the caption, which the browser scrolls with the arrow keys. A table that

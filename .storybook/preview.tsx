@@ -107,7 +107,7 @@ const preview: Preview = {
 
     options: {
       // Getting Started first, then atomic design order: Foundations (atoms)
-      // -> Components (molecules) -> Patterns (organisms) -> Templates. Foundations are
+      // -> Components (molecules). Foundations are
       // ordered by how they build on each other, not alphabetically.
       storySort: {
         order: [
@@ -130,9 +130,6 @@ const preview: Preview = {
             'Icons',
           ],
           'Components',
-          'Patterns',
-          'Templates',
-          ['Overview'],
           // Tooling for the docs themselves, last.
           'Internal',
         ],

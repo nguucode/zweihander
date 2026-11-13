@@ -20,7 +20,7 @@
 /* The summary leads and pushes the pages and the select to the end. */
 .summary {
   margin: 0 auto 0 0;
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
   font-variant-numeric: tabular-nums;
 }
 
@@ -28,7 +28,7 @@
   display: inline-flex;
   align-items: center;
   gap: var(--space-inline);
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
 }
 
 /* A Select is a 20rem field by default; this one only holds a short number. */
@@ -60,7 +60,7 @@
   border: 0;
   border-radius: var(--pagination-radius);
   background: transparent;
-  color: var(--foreground);
+  color: var(--color-text);
   font: inherit;
   font-variant-numeric: tabular-nums;
   text-decoration: none;
@@ -74,18 +74,18 @@ a.control[href] {
 }
 
 .control:hover:not(:disabled, [aria-disabled='true'], .current) {
-  background: var(--accent);
-  color: var(--accent-foreground);
+  background: var(--color-background-neutral);
+  color: var(--color-text);
 }
 
 .control:focus-visible {
-  outline: var(--focus-width) solid var(--ring);
+  outline: var(--focus-width) solid var(--color-border-focused);
   outline-offset: var(--focus-offset);
 }
 
 .current {
-  background: var(--primary);
-  color: var(--primary-foreground);
+  background: var(--color-background-brand-bold);
+  color: var(--color-text-brand-inverse);
   font-weight: 500;
   cursor: default;
 }
@@ -108,7 +108,7 @@ a.control[href] {
   justify-content: center;
   /* Atlassian's ellipsis: 8px either side of the glyph. */
   padding-inline: var(--space-2);
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
 }
 
 /* 32px is below the 44px touch target; grow it on coarse pointers. */

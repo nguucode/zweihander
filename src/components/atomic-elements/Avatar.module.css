@@ -83,33 +83,33 @@
 
 /* Neutral is the default: no [data-accent], so the gray surface tokens. */
 .subtle {
-  background: var(--secondary);
-  color: var(--secondary-foreground);
+  background: var(--color-background-neutral);
+  color: var(--color-text);
 }
 
-/* --neutral-solid is gray 600 in both appearances; the token build measures
+/* --color-background-neutral-bold is gray 600 in both appearances; the token build measures
    its label on every gray ramp. */
 .solid {
-  background: var(--neutral-solid);
-  color: var(--neutral-solid-foreground);
+  background: var(--color-background-neutral-bold);
+  color: var(--color-text-inverse);
 }
 
 /* With a hue, the tint and its label are measured per accent by the token
    build; solid is the accent's own fill (600 in light) and label. */
 [data-accent].subtle {
-  background: var(--primary-subtle);
-  color: var(--primary-subtle-text);
+  background: var(--color-background-brand-subtlest);
+  color: var(--color-text-brand-bold);
 }
 
 [data-accent].solid {
-  background: var(--primary);
-  color: var(--primary-foreground);
+  background: var(--color-background-brand-bold);
+  color: var(--color-text-brand-inverse);
 }
 
 /* On subtle the silhouette takes the initials' colour, measured on its fill.
    The hue's 600 step would look closer to a portrait but misses 3:1 on the
    warm tints. Neutral subtle is the exception: gray 900 is too heavy for a
-   shape this large, and --muted-foreground is measured on the same fill. */
+   shape this large, and --color-text-subtlest is measured on the same fill. */
 .silhouette {
   inline-size: 100%;
   block-size: 100%;
@@ -118,7 +118,7 @@
 }
 
 .subtle:not([data-accent]) .silhouette {
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
 }
 
 /* On solid the silhouette is always white, for one consistent look across
@@ -128,7 +128,7 @@
    carries no information: the name is in imageAlt or next to the avatar.
    Initials keep the measured label. */
 .solid .silhouette {
-  color: var(--neutral-solid-foreground);
+  color: var(--color-text-inverse);
 }
 
 /* On the bounding box's corner, outside the curve, as in most chat apps: the
@@ -143,7 +143,7 @@
   position: absolute;
   inset-block-end: 0;
   inset-inline-end: 0;
-  box-shadow: 0 0 0 2px var(--background);
+  box-shadow: 0 0 0 2px var(--color-surface);
 }
 
 /* At 96px and up the box's corner is far off the curve, and a Badge dot is
@@ -177,7 +177,7 @@
    (z-index set inline), so a status dot on the bottom-end corner is never
    covered by the next avatar. */
 .group > .avatar {
-  box-shadow: 0 0 0 2px var(--background);
+  box-shadow: 0 0 0 2px var(--color-surface);
 }
 
 .group > .avatar + .avatar {
@@ -190,6 +190,6 @@
 
 /* Only a group's "+n" with tooltips takes focus. */
 .avatar:focus-visible {
-  outline: var(--focus-width) solid var(--ring);
+  outline: var(--focus-width) solid var(--color-border-focused);
   outline-offset: var(--focus-offset);
 }

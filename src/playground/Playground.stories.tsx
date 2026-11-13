@@ -46,9 +46,9 @@ const manifest: Manifest = {
           { caption: 'Every size', rows: [{ part: 'Focus ring', property: 'Width', token: '--focus-width' }] },
         ],
         color: [
-          { caption: 'primary', rows: [{ part: 'Label, contained', property: 'Colour', token: '--primary-foreground' }] },
-          { caption: 'secondary', rows: [{ part: 'Label', property: 'Colour', token: '--secondary-foreground' }] },
-          { caption: 'Every variant', rows: [{ part: 'Container, hover', property: 'Background', token: '--accent' }] },
+          { caption: 'primary', rows: [{ part: 'Label, contained', property: 'Colour', token: '--color-text-brand-inverse' }] },
+          { caption: 'secondary', rows: [{ part: 'Label', property: 'Colour', token: '--color-text' }] },
+          { caption: 'Every variant', rows: [{ part: 'Container, hover', property: 'Background', token: '--color-background-neutral' }] },
         ],
         pseudo: ['hover', 'focus-visible', 'focus'],
       },
@@ -675,7 +675,7 @@ export const SpecsTab: Story = {
           { name: 'Container', selector: 'button' },
           { name: 'Label', selector: 'button > span' },
         ],
-        tokens: ['--control-md', '--focus-width', '--primary-foreground'],
+        tokens: ['--control-md', '--focus-width', '--color-text-brand-inverse'],
         highlight: null,
       }),
     )
@@ -726,7 +726,7 @@ export const SpecsFollowSize: Story = {
     const panel = propsPanel(canvas)
     await expect(panel.getByRole('table', { name: 'sm' })).toBeVisible()
     await expect(panel.queryByRole('table', { name: 'md' })).toBeNull()
-    await waitFor(() => expect(lastInspect(received)?.tokens).toEqual(['--control-sm', '--focus-width', '--primary-foreground']))
+    await waitFor(() => expect(lastInspect(received)?.tokens).toEqual(['--control-sm', '--focus-width', '--color-text-brand-inverse']))
   },
 }
 
@@ -752,7 +752,7 @@ export const SpecsStates: Story = {
     await userEvent.click(picker.getByRole('radio', { name: 'Hover' }))
     await waitFor(() => expect(lastInspect(received)?.pseudo).toBe('hover'))
     await expect(panel.getByRole('row', { name: /Container, hover Background/ })).toBeVisible()
-    await expect(lastInspect(received)?.tokens).toContain('--accent')
+    await expect(lastInspect(received)?.tokens).toContain('--color-background-neutral')
 
     await userEvent.click(picker.getByRole('radio', { name: 'Default' }))
     await waitFor(() => expect(lastInspect(received)).not.toHaveProperty('pseudo'))

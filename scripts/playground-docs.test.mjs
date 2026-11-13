@@ -16,11 +16,11 @@ const page = `
   ]}
 />
 
-<SpecTable rows={[{ part: 'Focus ring', property: 'Colour', token: '--ring' }]} />
+<SpecTable rows={[{ part: 'Focus ring', property: 'Colour', token: '--color-border-focused' }]} />
 
 ## Color
 
-<SpecTable caption="primary" rows={[{ part: 'Label', property: 'Colour', token: '--primary-foreground' }]} />
+<SpecTable caption="primary" rows={[{ part: 'Label', property: 'Colour', token: '--color-text-brand-inverse' }]} />
 
 ## States
 
@@ -58,9 +58,9 @@ test('reads the tables, prose and Do/Don’t pairs', () => {
     hasSpecs: true,
     measurements: [
       { caption: 'sm', rows: [{ part: 'Container', property: 'Height', token: '--control-sm' }] },
-      { rows: [{ part: 'Focus ring', property: 'Colour', token: '--ring' }] },
+      { rows: [{ part: 'Focus ring', property: 'Colour', token: '--color-border-focused' }] },
     ],
-    color: [{ caption: 'primary', rows: [{ part: 'Label', property: 'Colour', token: '--primary-foreground' }] }],
+    color: [{ caption: 'primary', rows: [{ part: 'Label', property: 'Colour', token: '--color-text-brand-inverse' }] }],
     pseudo: ['hover', 'focus-visible'],
     intro: [],
     whenToUse: ['Use it for an action.', '- Save\n- Delete'],

@@ -105,13 +105,13 @@ the accent in the toolbar: the values follow.
 <SpecTable
   caption="Every pagination"
   rows={[
-    { part: 'Page, Previous, Next', property: 'Colour', token: '--foreground' },
-    { part: 'Page, Previous, Next, hover', property: 'Background', token: '--accent' },
-    { part: 'Page, Previous, Next, hover', property: 'Colour', token: '--accent-foreground' },
-    { part: 'Current page', property: 'Background', token: '--primary' },
-    { part: 'Current page', property: 'Colour', token: '--primary-foreground' },
-    { part: 'Ellipsis, Summary, Rows per page label', property: 'Colour', token: '--muted-foreground' },
-    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+    { part: 'Page, Previous, Next', property: 'Colour', token: '--color-text' },
+    { part: 'Page, Previous, Next, hover', property: 'Background', token: '--color-background-neutral' },
+    { part: 'Page, Previous, Next, hover', property: 'Colour', token: '--color-text' },
+    { part: 'Current page', property: 'Background', token: '--color-background-brand-bold' },
+    { part: 'Current page', property: 'Colour', token: '--color-text-brand-inverse' },
+    { part: 'Ellipsis, Summary, Rows per page label', property: 'Colour', token: '--color-text-subtlest' },
+    { part: 'Focus ring', property: 'Colour', token: '--color-border-focused' },
   ]}
 />
 
@@ -129,10 +129,10 @@ At rest a control has no fill.
   <Story of={PaginationStories.StatesExample} />
 </States>
 
-- **Selected**: the current page is filled with `--primary`, medium
+- **Selected**: the current page is filled with `--color-background-brand-bold`, medium
   weight. It does not change on hover, and pressing it does nothing.
-- **Hover** fills a page, Previous or Next with an `--accent` chip.
-- **Focus** is a 2px `--ring` outline, 2px outside the control.
+- **Hover** fills a page, Previous or Next with an `--color-background-neutral` chip.
+- **Focus** is a 2px `--color-border-focused` outline, 2px outside the control.
 - **Disabled**: Previous on the first page (above) and Next on the last, at 50%
   opacity. As buttons they are `disabled`; as links they lose their
   `href`.
@@ -216,7 +216,7 @@ tab, bookmarked and shared.
   are there.
 - Controls are 32px and grow to 44px on touch screens (`pointer:
   coarse`).
-- Focus ring: 2px `--ring`, 2px offset.
+- Focus ring: 2px `--color-border-focused`, 2px offset.
 
 </DocTab>
 </DocTabs>

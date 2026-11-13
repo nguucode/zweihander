@@ -10,7 +10,7 @@ export interface AnatomyPart {
   description?: ReactNode
 }
 
-/* Story files write descriptions as plain strings, so `--muted` or
+/* Story files write descriptions as plain strings, so `--color-background-neutral` or
    `aria-label` would show its backticks: render those spans as code. An odd
    count is a typo, left as written rather than turning the rest into code. */
 const withCode = (text: ReactNode) =>

@@ -22,10 +22,10 @@ export interface ChartSeries {
   color?: ChartColor
 }
 
-/* --warning is a fill for dark labels and only reaches 2.15:1 on a white card;
-   a mark needs 3:1 (WCAG 1.4.11), which --warning-indicator is measured for. */
+/* --color-background-warning-bold is a fill for dark labels and only reaches 2.15:1 on a white card;
+   a mark needs 3:1 (WCAG 1.4.11), which --color-icon-warning is measured for. */
 export const colorVar = (color: ChartColor) =>
-  color === 'warning' ? 'var(--warning-indicator)' : color === 'neutral' ? 'var(--muted-foreground)' : `var(--${color})`
+  color === 'warning' ? 'var(--color-icon-warning)' : color === 'neutral' ? 'var(--color-text-subtlest)' : `var(--${color})`
 
 export const paletteColor = (index: number): ChartColor => `chart-${(index % 8) + 1}` as ChartColor
 

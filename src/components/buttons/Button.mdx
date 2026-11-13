@@ -129,47 +129,47 @@ accent in the toolbar: the values follow.
 <SpecTable
   caption="primary"
   rows={[
-    { part: 'Container, contained', property: 'Background', token: '--primary' },
-    { part: 'Label, contained', property: 'Colour', token: '--primary-foreground' },
-    { part: 'Label, outlined and ghost', property: 'Colour', token: '--primary-text' },
-    { part: 'Container, outlined', property: 'Border', token: '--primary-text' },
+    { part: 'Container, contained', property: 'Background', token: '--color-background-brand-bold' },
+    { part: 'Label, contained', property: 'Colour', token: '--color-text-brand-inverse' },
+    { part: 'Label, outlined and ghost', property: 'Colour', token: '--color-text-brand' },
+    { part: 'Container, outlined', property: 'Border', token: '--color-text-brand' },
   ]}
 />
 
 <SpecTable
   caption="accent"
   rows={[
-    { part: 'Container, contained', property: 'Background', token: '--foreground' },
-    { part: 'Label, contained', property: 'Colour', token: '--background' },
-    { part: 'Label, outlined and ghost', property: 'Colour', token: '--foreground' },
-    { part: 'Container, outlined', property: 'Border', token: '--foreground' },
+    { part: 'Container, contained', property: 'Background', token: '--color-text' },
+    { part: 'Label, contained', property: 'Colour', token: '--color-surface' },
+    { part: 'Label, outlined and ghost', property: 'Colour', token: '--color-text' },
+    { part: 'Container, outlined', property: 'Border', token: '--color-text' },
   ]}
 />
 
 <SpecTable
   caption="secondary"
   rows={[
-    { part: 'Container, contained', property: 'Background', token: '--secondary' },
-    { part: 'Label, contained', property: 'Colour', token: '--secondary-foreground' },
-    { part: 'Label, outlined and ghost', property: 'Colour', token: '--foreground' },
-    { part: 'Container, outlined', property: 'Border', token: '--input' },
+    { part: 'Container, contained', property: 'Background', token: '--color-background-neutral' },
+    { part: 'Label, contained', property: 'Colour', token: '--color-text' },
+    { part: 'Label, outlined and ghost', property: 'Colour', token: '--color-text' },
+    { part: 'Container, outlined', property: 'Border', token: '--color-border' },
   ]}
 />
 
 <SpecTable
   caption="destructive"
   rows={[
-    { part: 'Container, contained', property: 'Background', token: '--destructive' },
-    { part: 'Label, contained', property: 'Colour', token: '--destructive-foreground' },
-    { part: 'Label, outlined and ghost', property: 'Colour', token: '--destructive' },
-    { part: 'Container, outlined', property: 'Border', token: '--destructive' },
+    { part: 'Container, contained', property: 'Background', token: '--color-background-danger-bold' },
+    { part: 'Label, contained', property: 'Colour', token: '--color-text-danger-inverse' },
+    { part: 'Label, outlined and ghost', property: 'Colour', token: '--color-background-danger-bold' },
+    { part: 'Container, outlined', property: 'Border', token: '--color-background-danger-bold' },
   ]}
 />
 
 <SpecTable
   caption="Every variant"
   rows={[
-    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+    { part: 'Focus ring', property: 'Colour', token: '--color-border-focused' },
   ]}
 />
 
@@ -206,7 +206,7 @@ and the mode.
   ring is left out: it would cut across the next segment.
 - **Pressed**, on contained, turns the light over: shade on the top edge,
   no drop shadow, no gradient, as if pushed in.
-- **Focus** is a 2px `--ring` outline, 2px outside the button.
+- **Focus** is a 2px `--color-border-focused` outline, 2px outside the button.
 - **Disabled** is the enabled look at 50% opacity.
 - **Loading** keeps the full colour: the button is busy, not unavailable.
 
@@ -229,7 +229,7 @@ Every other `<button>` attribute passes through, including `ref`.
   matching Base UI and shadcn. It replaced `asChild` in 0.8.
 - **`accent` is the inverted neutral** (foreground on background), as on
   Badge: the token set has one brand hue and `primary` uses it.
-- Outlined and ghost `primary` use `--primary-text`, a step of the accent
+- Outlined and ghost `primary` use `--color-text-brand`, a step of the accent
   measured to read at 4.5:1 on the page. The solid step would not, for
   warm accents.
 
@@ -295,7 +295,7 @@ back to the top of the page.
   accents in both modes, from the CSS that ships.
 - `sm` and `md` are under 44px; on touch screens (`pointer: coarse`) the
   hit area grows to 44×44px without the button growing.
-- Focus ring: 2px `--ring`, 2px offset, at 3:1 or better on the page.
+- Focus ring: 2px `--color-border-focused`, 2px offset, at 3:1 or better on the page.
 
 </DocTab>
 </DocTabs>

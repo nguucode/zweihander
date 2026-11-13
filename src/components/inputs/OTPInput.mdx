@@ -110,26 +110,26 @@ button is a small ghost [Button](?path=/docs/components-buttons-button--docs).
 <SpecTable
   caption="default"
   rows={[
-    { part: 'Cell', property: 'Background', token: '--card' },
+    { part: 'Cell', property: 'Background', token: '--color-surface-raised' },
     { part: 'Cell', property: 'Border', token: '--field-edge' },
-    { part: 'Character', property: 'Colour', token: '--foreground' },
-    { part: 'Caret', property: 'Colour', token: '--ring' },
-    { part: 'Group separator', property: 'Colour', token: '--muted-foreground' },
-    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+    { part: 'Character', property: 'Colour', token: '--color-text' },
+    { part: 'Caret', property: 'Colour', token: '--color-border-focused' },
+    { part: 'Group separator', property: 'Colour', token: '--color-text-subtlest' },
+    { part: 'Focus ring', property: 'Colour', token: '--color-border-focused' },
   ]}
 />
 
 <SpecTable
   caption="error"
   rows={[
-    { part: 'Focus ring', property: 'Colour', token: '--danger-text' },
+    { part: 'Focus ring', property: 'Colour', token: '--color-text-danger' },
   ]}
 />
 
-<SpecTable caption="Read-only" rows={[{ part: 'Cell', property: 'Background', token: '--surface-filled' }]} />
+<SpecTable caption="Read-only" rows={[{ part: 'Cell', property: 'Background', token: '--color-background-input' }]} />
 
-`--field-edge` is the shared field's edge colour: `--field-border` by
-default, `--danger-text` on error and `--success-text` on success, so every
+`--field-edge` is the shared field's edge colour: `--color-border-input` by
+default, `--color-text-danger` on error and `--color-text-success` on success, so every
 cell and the helper text change together.
 
 ## States
@@ -148,10 +148,10 @@ cell and the helper text change together.
 
 - **Hover** changes nothing: a cell is a text field, and the caret shows
   where typing goes.
-- **Focus** rings only the cell being typed into, in `--danger-text` when
+- **Focus** rings only the cell being typed into, in `--color-text-danger` when
   invalid.
-- **Error** turns every cell's edge and the helper text `--danger-text`.
-- **Read-only** fills the cells with `--surface-filled`; typing does
+- **Error** turns every cell's edge and the helper text `--color-text-danger`.
+- **Read-only** fills the cells with `--color-background-input`; typing does
   nothing.
 - **Disabled** dims the cells to 50% and disables the resend button.
 - **Cooling down**, the resend button is disabled and shows the time left

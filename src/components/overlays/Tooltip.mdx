@@ -125,18 +125,18 @@ Popover, below tooltips.
 <SpecTable
   caption="Every tooltip"
   rows={[
-    { part: 'Container', property: 'Background', token: '--foreground' },
-    { part: 'Text', property: 'Colour', token: '--background' },
+    { part: 'Container', property: 'Background', token: '--color-text' },
+    { part: 'Text', property: 'Colour', token: '--color-surface' },
   ]}
 />
 
 <SpecTable
   caption="Hover card"
   rows={[
-    { part: 'Container', property: 'Background', token: '--popover' },
-    { part: 'Container', property: 'Border', token: '--border' },
-    { part: 'Name', property: 'Colour', token: '--popover-foreground' },
-    { part: 'Meta', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Container', property: 'Background', token: '--color-surface-overlay' },
+    { part: 'Container', property: 'Border', token: '--color-border' },
+    { part: 'Name', property: 'Colour', token: '--color-text' },
+    { part: 'Meta', property: 'Colour', token: '--color-text-subtlest' },
   ]}
 />
 
@@ -223,7 +223,7 @@ flash as the pointer crosses a toolbar.
 - It is a **description, not a name.** An icon-only button still needs its
   own `aria-label`; the tooltip then shows that label to sighted users too.
 - The trigger must be focusable: a Button, a link, a field.
-- `--background` on `--foreground` reads at 16:1 or more in both modes.
+- `--color-surface` on `--color-text` reads at 16:1 or more in both modes.
 
 ### Hover card
 

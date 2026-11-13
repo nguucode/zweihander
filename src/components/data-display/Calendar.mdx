@@ -152,59 +152,59 @@ the values follow.
 <SpecTable
   caption="Header and weekdays"
   rows={[
-    { part: 'Month', property: 'Colour', token: '--foreground' },
-    { part: 'Previous and next', property: 'Colour', token: '--foreground' },
-    { part: 'Weekdays', property: 'Colour', token: '--muted-foreground' },
+    { part: 'Month', property: 'Colour', token: '--color-text' },
+    { part: 'Previous and next', property: 'Colour', token: '--color-text' },
+    { part: 'Weekdays', property: 'Colour', token: '--color-text-subtlest' },
   ]}
 />
 
 <SpecTable
   caption="Day"
   rows={[
-    { part: 'Day', property: 'Colour', token: '--foreground' },
+    { part: 'Day', property: 'Colour', token: '--color-text' },
   ]}
 />
 
 <SpecTable
   caption="Selected"
   rows={[
-    { part: 'Day', property: 'Background', token: '--primary' },
-    { part: 'Day', property: 'Colour', token: '--primary-foreground' },
+    { part: 'Day', property: 'Background', token: '--color-background-brand-bold' },
+    { part: 'Day', property: 'Colour', token: '--color-text-brand-inverse' },
   ]}
 />
 
 <SpecTable
   caption="Today"
   rows={[
-    { part: 'Day', property: 'Background', token: '--orange' },
-    { part: 'Day', property: 'Colour', token: '--orange-contrast' },
+    { part: 'Day', property: 'Background', token: '--color-background-accent-orange-bolder' },
+    { part: 'Day', property: 'Colour', token: '--color-text-accent-orange-contrast' },
   ]}
 />
 
 <SpecTable
   caption="Range"
   rows={[
-    { part: 'Band', property: 'Background', token: '--accent' },
-    { part: 'Days between', property: 'Colour', token: '--accent-foreground' },
-    { part: 'Today, between', property: 'Colour', token: '--orange-contrast' },
+    { part: 'Band', property: 'Background', token: '--color-background-neutral' },
+    { part: 'Days between', property: 'Colour', token: '--color-text' },
+    { part: 'Today, between', property: 'Colour', token: '--color-text-accent-orange-contrast' },
   ]}
 />
 
 <SpecTable
   caption="Outside the month and unavailable"
   rows={[
-    { part: 'Outside day', property: 'Colour, at 50%', token: '--muted-foreground' },
-    { part: 'Unavailable day', property: 'Colour, at 60% opacity', token: '--muted-foreground' },
+    { part: 'Outside day', property: 'Colour, at 50%', token: '--color-text-subtlest' },
+    { part: 'Unavailable day', property: 'Colour, at 60% opacity', token: '--color-text-subtlest' },
   ]}
 />
 
-<SpecTable caption="Every part" rows={[{ part: 'Focus ring', property: 'Colour', token: '--ring' }]} />
+<SpecTable caption="Every part" rows={[{ part: 'Focus ring', property: 'Colour', token: '--color-border-focused' }]} />
 
 - **Day** has no fill at rest.
-- **Today's figure is dark**, not white: white on `--orange` is 3.4:1,
-  under the 4.5:1 a 14px figure needs, while `--orange-contrast` clears
+- **Today's figure is dark**, not white: white on `--color-background-accent-orange-bolder` is 3.4:1,
+  under the 4.5:1 a 14px figure needs, while `--color-text-accent-orange-contrast` clears
   4.9:1 in both modes. A selected today shows as selected.
-- **Outside days** are `--muted-foreground` mixed 50% with transparent,
+- **Outside days** are `--color-text-subtlest` mixed 50% with transparent,
   about 2:1. No token is lighter, and WCAG allows it for decoration: they
   are hidden from assistive tech and cannot be picked.
 - **Unavailable days** are struck through as well as faded, so they do not
@@ -242,10 +242,10 @@ the values follow.
 Each example forces the state on every day at once; on screen it is the
 one under the pointer or the keyboard.
 
-- **Hover** fills a day, or the previous and next buttons, with `--accent`
-  behind `--accent-foreground`. The selected day and today keep their own
+- **Hover** fills a day, or the previous and next buttons, with `--color-background-neutral`
+  behind `--color-text`. The selected day and today keep their own
   colours; unavailable and outside days do not react.
-- **Focus** is a 2px `--ring` outline, 2px outside the day. The days
+- **Focus** is a 2px `--color-border-focused` outline, 2px outside the day. The days
   touch, so the focused day is lifted above its neighbours and the ring
   is drawn whole over their edges.
 - **Pressed** has no look of its own: the click selects the day, and the
@@ -323,8 +323,7 @@ February, not 3 March.
   [Date Range Picker](?path=/docs/components-inputs-daterangepicker--docs):
   it owns the two clicks that make a span and shows it here.
 - **For a schedule of events.** A day here holds a number, not content.
-  Use the [Event Calendar](?path=/docs/patterns-application-ui-event-calendar--docs)
-  pattern, or list the events in a [Table](?path=/docs/components-data-display-table--docs).
+  List the events in a [Table](?path=/docs/components-data-display-table--docs).
 
 ## Accessibility
 

@@ -62,32 +62,32 @@
   font-family: var(--font-mono);
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
 }
 
 .sectionTitle {
   font-size: var(--text-body);
   line-height: var(--leading-body);
   font-weight: 500;
-  color: var(--foreground);
+  color: var(--color-text);
   margin: 0;
 }
 
 .sectionNote {
   font-size: var(--text-body-sm);
   line-height: var(--leading-body-sm);
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
   margin: 0 0 var(--space-3);
 }
 
 .note {
   font-size: var(--text-body);
   line-height: var(--leading-body);
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
 }
 
 .card {
-  border: 1px solid var(--border);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-panel);
   padding: var(--space-4);
 }
@@ -97,7 +97,7 @@
   flex-direction: column;
   justify-content: space-between;
   height: 6rem;
-  border: 1px solid var(--border);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-panel);
   padding: var(--space-3);
 }
@@ -120,7 +120,7 @@
   font-size: var(--text-body);
   font-weight: 500;
   text-transform: capitalize;
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
 }
 
 .ramp {
@@ -141,8 +141,8 @@
   align-items: center;
   gap: var(--space-3);
   border-radius: var(--radius-md);
-  background: var(--primary);
-  color: var(--primary-foreground);
+  background: var(--color-background-brand-bold);
+  color: var(--color-text-brand-inverse);
   padding: var(--space-2) var(--space-3);
 }
 
@@ -188,12 +188,12 @@
 .tokenTable th,
 .tokenTable td {
   padding: var(--space-2) var(--space-3);
-  border-block-end: 1px solid var(--border);
+  border-block-end: 1px solid var(--color-border);
   text-align: start;
   vertical-align: top;
 }
 
 .tokenTable th {
-  color: var(--muted-foreground);
+  color: var(--color-text-subtlest);
   font-weight: 500;
 }

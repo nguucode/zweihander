@@ -88,7 +88,7 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/text-input.json
 </Anatomy>
 
 The placeholder has no element of its own: it is the input's, shown in
-`--muted-foreground` while the input is empty. With `required`, an
+`--color-text-subtlest` while the input is empty. With `required`, an
 asterisk follows the label.
 
 ## Measurements
@@ -155,38 +155,38 @@ follow.
 <SpecTable
   caption="default"
   rows={[
-    { part: 'Container', property: 'Background', token: '--card' },
-    { part: 'Container', property: 'Border', token: '--field-border' },
-    { part: 'Label and input', property: 'Colour', token: '--foreground' },
-    { part: 'Placeholder, prefix, suffix', property: 'Colour', token: '--muted-foreground' },
-    { part: 'Add-on', property: 'Background', token: '--surface-filled' },
-    { part: 'Add-on text', property: 'Colour', token: '--muted-foreground' },
-    { part: 'Add-on button', property: 'Colour', token: '--foreground' },
-    { part: 'Add-on button, hover', property: 'Background', token: '--accent' },
-    { part: 'Helper text', property: 'Colour', token: '--muted-foreground' },
-    { part: 'Required asterisk', property: 'Colour', token: '--danger-text' },
-    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+    { part: 'Container', property: 'Background', token: '--color-surface-raised' },
+    { part: 'Container', property: 'Border', token: '--color-border-input' },
+    { part: 'Label and input', property: 'Colour', token: '--color-text' },
+    { part: 'Placeholder, prefix, suffix', property: 'Colour', token: '--color-text-subtlest' },
+    { part: 'Add-on', property: 'Background', token: '--color-background-input' },
+    { part: 'Add-on text', property: 'Colour', token: '--color-text-subtlest' },
+    { part: 'Add-on button', property: 'Colour', token: '--color-text' },
+    { part: 'Add-on button, hover', property: 'Background', token: '--color-background-neutral' },
+    { part: 'Helper text', property: 'Colour', token: '--color-text-subtlest' },
+    { part: 'Required asterisk', property: 'Colour', token: '--color-text-danger' },
+    { part: 'Focus ring', property: 'Colour', token: '--color-border-focused' },
   ]}
 />
 
 <SpecTable
   caption="error"
   rows={[
-    { part: 'Container', property: 'Border', token: '--danger-text' },
-    { part: 'Helper text', property: 'Colour', token: '--danger-text' },
-    { part: 'Focus ring', property: 'Colour', token: '--danger-text' },
+    { part: 'Container', property: 'Border', token: '--color-text-danger' },
+    { part: 'Helper text', property: 'Colour', token: '--color-text-danger' },
+    { part: 'Focus ring', property: 'Colour', token: '--color-text-danger' },
   ]}
 />
 
 <SpecTable
   caption="success"
   rows={[
-    { part: 'Container', property: 'Border', token: '--success-text' },
-    { part: 'Helper text', property: 'Colour', token: '--success-text' },
+    { part: 'Container', property: 'Border', token: '--color-text-success' },
+    { part: 'Helper text', property: 'Colour', token: '--color-text-success' },
   ]}
 />
 
-<SpecTable caption="Read-only" rows={[{ part: 'Container', property: 'Background', token: '--surface-filled' }]} />
+<SpecTable caption="Read-only" rows={[{ part: 'Container', property: 'Background', token: '--color-background-input' }]} />
 
 ## States
 
@@ -205,15 +205,15 @@ follow.
 
 - **Hover** changes nothing: the field is already plainly a field, and the
   cursor turns to a text cursor.
-- **Focus** is a 2px `--ring` outline, 2px outside the box, drawn on click
+- **Focus** is a 2px `--color-border-focused` outline, 2px outside the box, drawn on click
   as well as from the keyboard, since that is where typing will go. In the
-  error state the ring is `--danger-text`.
-- **Read-only** fills the box with `--surface-filled`: it can be focused
+  error state the ring is `--color-text-danger`.
+- **Read-only** fills the box with `--color-background-input`: it can be focused
   and copied, not changed.
 - **Disabled** is the enabled look at 50% opacity.
-- **A button in an add-on** fills the segment: hover gives it `--accent`,
+- **A button in an add-on** fills the segment: hover gives it `--color-background-neutral`,
   and its focus ring sits inside the segment, so the box's edge does not
-  cut it. An icon button in `prefix` or `suffix` turns `--foreground` on
+  cut it. An icon button in `prefix` or `suffix` turns `--color-text` on
   hover. In a read-only field the box takes the add-on's fill, so only the
   divider sets the add-on apart.
 
@@ -315,10 +315,10 @@ the value to read.
   Pressing it does not move focus to the input.
 - `TextInputButton` is disabled with the field. In a read-only field it
   stays enabled, since opening or copying a fixed value is what it is for.
-- **The edge is `--field-border`, about 1.5:1, a deliberate exception to
+- **The edge is `--color-border-input`, about 1.5:1, a deliberate exception to
   WCAG 1.4.11** (approved 2026-10-08), for the light hairline of the
-  Claude apps. The field is a white `--card` box on the off-white page, and the label, placeholder and focus ring mark it too.
-  If your audience needs 3:1, set `--field-border: var(--control-border)`.
+  Claude apps. The field is a white `--color-surface-raised` box on the off-white page, and the label, placeholder and focus ring mark it too.
+  If your audience needs 3:1, set `--color-border-input: var(--color-border-bold)`.
 - Focus ring: 2px, 2px offset, on click and keyboard alike.
 - Heights are 32 and 40px, above WCAG 2.5.8's 24px minimum; a button in
   the field is a 24px target. The

@@ -119,55 +119,55 @@ colour that subtle and outlined use. Subtle and outlined text is measured at
 <SpecTable
   caption="neutral"
   rows={[
-    { part: 'Container, subtle', property: 'Background', token: '--secondary' },
-    { part: 'Text, subtle and outlined', property: 'Colour', token: '--secondary-foreground' },
-    { part: 'Container, outlined', property: 'Border', token: '--secondary-foreground' },
-    { part: 'Container, solid', property: 'Background', token: '--foreground' },
-    { part: 'Text, solid', property: 'Colour', token: '--background' },
+    { part: 'Container, subtle', property: 'Background', token: '--color-background-neutral' },
+    { part: 'Text, subtle and outlined', property: 'Colour', token: '--color-text' },
+    { part: 'Container, outlined', property: 'Border', token: '--color-text' },
+    { part: 'Container, solid', property: 'Background', token: '--color-text' },
+    { part: 'Text, solid', property: 'Colour', token: '--color-surface' },
   ]}
 />
 
 <SpecTable
   caption="info"
   rows={[
-    { part: 'Container, subtle', property: 'Background', token: '--info-subtle' },
-    { part: 'Text, subtle and outlined', property: 'Colour', token: '--info-text' },
-    { part: 'Container, outlined', property: 'Border', token: '--info-text' },
-    { part: 'Container, solid', property: 'Background', token: '--info' },
-    { part: 'Text, solid', property: 'Colour', token: '--info-foreground' },
+    { part: 'Container, subtle', property: 'Background', token: '--color-background-info' },
+    { part: 'Text, subtle and outlined', property: 'Colour', token: '--color-text-info' },
+    { part: 'Container, outlined', property: 'Border', token: '--color-text-info' },
+    { part: 'Container, solid', property: 'Background', token: '--color-background-info-bold' },
+    { part: 'Text, solid', property: 'Colour', token: '--color-text-info-inverse' },
   ]}
 />
 
 <SpecTable
   caption="success"
   rows={[
-    { part: 'Container, subtle', property: 'Background', token: '--success-subtle' },
-    { part: 'Text, subtle and outlined', property: 'Colour', token: '--success-text' },
-    { part: 'Container, outlined', property: 'Border', token: '--success-text' },
-    { part: 'Container, solid', property: 'Background', token: '--success' },
-    { part: 'Text, solid', property: 'Colour', token: '--success-foreground' },
+    { part: 'Container, subtle', property: 'Background', token: '--color-background-success' },
+    { part: 'Text, subtle and outlined', property: 'Colour', token: '--color-text-success' },
+    { part: 'Container, outlined', property: 'Border', token: '--color-text-success' },
+    { part: 'Container, solid', property: 'Background', token: '--color-background-success-bold' },
+    { part: 'Text, solid', property: 'Colour', token: '--color-text-success-inverse' },
   ]}
 />
 
 <SpecTable
   caption="warning"
   rows={[
-    { part: 'Container, subtle', property: 'Background', token: '--warning-subtle' },
-    { part: 'Text, subtle and outlined', property: 'Colour', token: '--warning-text' },
-    { part: 'Container, outlined', property: 'Border', token: '--warning-text' },
-    { part: 'Container, solid', property: 'Background', token: '--warning' },
-    { part: 'Text, solid', property: 'Colour', token: '--warning-foreground' },
+    { part: 'Container, subtle', property: 'Background', token: '--color-background-warning' },
+    { part: 'Text, subtle and outlined', property: 'Colour', token: '--color-text-warning' },
+    { part: 'Container, outlined', property: 'Border', token: '--color-text-warning' },
+    { part: 'Container, solid', property: 'Background', token: '--color-background-warning-bold' },
+    { part: 'Text, solid', property: 'Colour', token: '--color-text-warning-inverse' },
   ]}
 />
 
 <SpecTable
   caption="danger"
   rows={[
-    { part: 'Container, subtle', property: 'Background', token: '--danger-subtle' },
-    { part: 'Text, subtle and outlined', property: 'Colour', token: '--danger-text' },
-    { part: 'Container, outlined', property: 'Border', token: '--danger-text' },
-    { part: 'Container, solid', property: 'Background', token: '--danger' },
-    { part: 'Text, solid', property: 'Colour', token: '--danger-foreground' },
+    { part: 'Container, subtle', property: 'Background', token: '--color-background-danger' },
+    { part: 'Text, subtle and outlined', property: 'Colour', token: '--color-text-danger' },
+    { part: 'Container, outlined', property: 'Border', token: '--color-text-danger' },
+    { part: 'Container, solid', property: 'Background', token: '--color-background-danger-bold' },
+    { part: 'Text, solid', property: 'Colour', token: '--color-text-danger-inverse' },
   ]}
 />
 
@@ -177,15 +177,15 @@ example; the other sixteen swap `red` for their hue.
 <SpecTable
   caption="red, and every other hue"
   rows={[
-    { part: 'Container, subtle', property: 'Background', token: '--red-subtle' },
-    { part: 'Text, subtle and outlined', property: 'Colour', token: '--red-text' },
-    { part: 'Container, outlined', property: 'Border', token: '--red-text' },
-    { part: 'Container, solid', property: 'Background', token: '--red' },
-    { part: 'Text, solid', property: 'Colour', token: '--red-foreground' },
+    { part: 'Container, subtle', property: 'Background', token: '--color-background-accent-red-subtler' },
+    { part: 'Text, subtle and outlined', property: 'Colour', token: '--color-text-accent-red' },
+    { part: 'Container, outlined', property: 'Border', token: '--color-text-accent-red' },
+    { part: 'Container, solid', property: 'Background', token: '--color-background-accent-red-bolder' },
+    { part: 'Text, solid', property: 'Colour', token: '--color-text-accent-red-inverse' },
   ]}
 />
 
-<SpecTable caption="Every variant" rows={[{ part: 'Remove button focus ring', property: 'Colour', token: '--ring' }]} />
+<SpecTable caption="Every variant" rows={[{ part: 'Remove button focus ring', property: 'Colour', token: '--color-border-focused' }]} />
 
 ## States
 
@@ -203,7 +203,7 @@ The tag itself is not interactive. Its remove button is:
 
 - **Hover** tints the button with the tag's own text colour at 15%, so it
   reads on every variant and appearance without a token for each.
-- **Focus** is the `--ring` outline every control uses, drawn inset so it
+- **Focus** is the `--color-border-focused` outline every control uses, drawn inset so it
   stays inside a 20px tag.
 - Pressing removes nothing by itself: `onRemove` reports it, and the
   parent drops the tag from its list.

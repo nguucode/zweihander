@@ -5,7 +5,6 @@ import { Icon } from '@/lib/icon'
 import { cn } from '@/lib/utils'
 import { Button } from '../buttons/Button'
 import { Checkbox } from '../controls/Checkbox'
-import { ContextMenu } from '../navigation/ContextMenu'
 import { Menu, type MenuEntry } from '../navigation/Menu'
 import styles from './Table.module.css'
 
@@ -68,12 +67,6 @@ export interface TableProps<Row> {
    * after the row. A row that returns no items gets no button.
    */
   rowActions?: (row: Row) => MenuEntry[] | null | undefined
-  /**
-   * Also opens a row's `rowActions` on right click or long press, at the
-   * pointer. Off by default: the row then keeps no browser menu of its own,
-   * so copying a cell's text or opening a link in it from that menu is gone.
-   */
-  hasRowContextMenu?: boolean
   /** @deprecated Table has one size: `sm` renders the same table as `md`. Drop the prop; removed in the next release. */
   size?: 'sm' | 'md'
   /** @deprecated Does nothing, like `size`. Removed in the next release. */
@@ -216,7 +209,6 @@ export function Table<Row>({
   defaultExpandedIds = [],
   onExpandedChange,
   rowActions,
-  hasRowContextMenu = false,
   size,
   density,
   hasStickyHeader = false,
@@ -460,17 +452,7 @@ export function Table<Row>({
               )
               return (
                 <Fragment key={id}>
-                  {/* The <tr> itself is the area, so <tbody> keeps only <tr> children.
-                      Disabled, not left out, for a row with no items: the browser
-                      keeps its menu there, and the row is not remounted (focus
-                      kept) when its items come or go. */}
-                  {hasRowContextMenu ? (
-                    <ContextMenu items={actions ?? []} disabled={!actions}>
-                      {rowEl}
-                    </ContextMenu>
-                  ) : (
-                    rowEl
-                  )}
+                  {rowEl}
                   {isExpanded && (
                     <tr className={styles.expandedRow}>
                       <td id={contentId} colSpan={columnCount} className={styles.expandedContent}>

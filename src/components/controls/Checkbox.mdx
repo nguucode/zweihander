@@ -99,38 +99,38 @@ label weight is for a field's or a group's label, not an option's.
 <SpecTable
   caption="Unchecked, every variant"
   rows={[
-    { part: 'Container', property: 'Background', token: '--background' },
-    { part: 'Container', property: 'Border', token: '--control-border' },
-    { part: 'Container, hover', property: 'Border', token: '--foreground' },
+    { part: 'Container', property: 'Background', token: '--color-surface' },
+    { part: 'Container', property: 'Border', token: '--color-border-bold' },
+    { part: 'Container, hover', property: 'Border', token: '--color-text' },
   ]}
 />
 
 <SpecTable
   caption="neutral, checked or indeterminate"
   rows={[
-    { part: 'Container', property: 'Background', token: '--foreground' },
-    { part: 'Check mark', property: 'Colour', token: '--background' },
+    { part: 'Container', property: 'Background', token: '--color-text' },
+    { part: 'Check mark', property: 'Colour', token: '--color-surface' },
   ]}
 />
 
 <SpecTable
   caption="primary, checked or indeterminate"
   rows={[
-    { part: 'Container', property: 'Background', token: '--primary' },
-    { part: 'Check mark', property: 'Colour', token: '--primary-foreground' },
+    { part: 'Container', property: 'Background', token: '--color-background-brand-bold' },
+    { part: 'Check mark', property: 'Colour', token: '--color-text-brand-inverse' },
   ]}
 />
 
 <SpecTable
   caption="Every variant"
   rows={[
-    { part: 'Label', property: 'Colour', token: '--foreground' },
-    { part: 'Helper text', property: 'Colour', token: '--muted-foreground' },
-    { part: 'Container, error', property: 'Border', token: '--danger-text' },
-    { part: 'Helper text, error', property: 'Colour', token: '--danger-text' },
-    { part: 'Helper text, success', property: 'Colour', token: '--success-text' },
-    { part: 'Required asterisk', property: 'Colour', token: '--danger-text' },
-    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+    { part: 'Label', property: 'Colour', token: '--color-text' },
+    { part: 'Helper text', property: 'Colour', token: '--color-text-subtlest' },
+    { part: 'Container, error', property: 'Border', token: '--color-text-danger' },
+    { part: 'Helper text, error', property: 'Colour', token: '--color-text-danger' },
+    { part: 'Helper text, success', property: 'Colour', token: '--color-text-success' },
+    { part: 'Required asterisk', property: 'Colour', token: '--color-text-danger' },
+    { part: 'Focus ring', property: 'Colour', token: '--color-border-focused' },
   ]}
 />
 
@@ -151,9 +151,9 @@ label weight is for a field's or a group's label, not an option's.
 </States>
 
 - **Hover** anywhere on the label darkens an unchecked outline to
-  `--foreground`. A checked box mixes 12% of the mark's colour into its
+  `--color-text`. A checked box mixes 12% of the mark's colour into its
   fill, as Button does. An error outline stays red.
-- **Focus** is a 2px `--ring` outline, 2px outside the box.
+- **Focus** is a 2px `--color-border-focused` outline, 2px outside the box.
 - **Disabled** dims the box and the label to 50%.
 - **Read-only** looks enabled but has no hover and an arrow cursor.
 
@@ -219,7 +219,7 @@ Write the label so that checked means yes.
 - The label wraps the box, so it names it and clicking it toggles the box.
 - `helperText` is the box's description; the error state sets
   `aria-invalid`.
-- The unchecked outline is `--control-border`, 3:1 on the page on every
+- The unchecked outline is `--color-border-bold`, 3:1 on the page on every
   gray ramp.
 - A hidden native input carries `name`, `value` and `required` into form
   submission and validation.

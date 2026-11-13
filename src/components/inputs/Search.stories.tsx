@@ -61,7 +61,7 @@ const meta = {
       table: { type: { summary: 'string' }, defaultValue: { summary: "''" } },
     },
     shortcut: {
-      description: 'One key, e.g. `/`, that focuses the field from anywhere on the page, unless focus is already in a form field. Shown as a key cap while the field is empty and idle. Off while disabled or read-only. No modifiers: ⌘K belongs to the Command Palette. One per page.',
+      description: 'One key, e.g. `/`, that focuses the field from anywhere on the page, unless focus is already in a form field. Shown as a key cap while the field is empty and idle. Off while disabled or read-only. No modifiers: ⌘K is left to the app. One per page.',
       control: 'text',
       table: { type: { summary: 'string' } },
     },

@@ -27,7 +27,7 @@ export const Catalog: Story = {
         gap: 'var(--space-4)',
         fontFamily: 'var(--font-sans)',
         fontSize: 'var(--text-body-sm)',
-        color: 'var(--foreground)',
+        color: 'var(--color-text)',
       }}
     >
       {names.map((name) => (

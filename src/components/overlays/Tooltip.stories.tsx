@@ -334,7 +334,7 @@ const cardPicture = (props: HoverCardProps) => (
 )
 
 export const hoverCardParts = [
-  { name: 'Container', selector: `.${styles.card}`, description: 'A raised `--popover` surface, 6px from the link, at most 20rem wide.' },
+  { name: 'Container', selector: `.${styles.card}`, description: 'A raised `--color-surface-overlay` surface, 6px from the link, at most 20rem wide.' },
   { name: 'Avatar', selector: `.${styles.cardAvatar}`, description: 'Optional. At the start, beside the name and the meta.' },
   { name: 'Name', selector: `.${styles.cardTitle}`, description: 'What is previewed: a person, a record, a document.' },
   { name: 'Meta', selector: `.${styles.cardDescription}`, description: 'Optional. One or two muted lines: role, team, last active.' },

@@ -21,12 +21,12 @@ light theme. That is the trade — see **Following the system** below.
 ## Components don't know about it
 
 No component stylesheet — `Button.module.css`, `InputField.module.css` or any other — mentions `.dark`.
-They write `background: var(--primary)`, and it is the variable that
+They write `background: var(--color-background-brand-bold)`, and it is the variable that
 changes; the rule is identical in both modes.
 
 This is the main reason to reach for a token rather than a literal. A
 hard-coded `#0a0a0a` is near-black in both modes and needs a `.dark`
-override beside it to survive a theme switch; `var(--primary)` needs
+override beside it to survive a theme switch; `var(--color-background-brand-bold)` needs
 nothing. Every theme conditional in a codebase is a place a value was
 hardcoded and then patched.
 
@@ -35,17 +35,17 @@ hardcoded and then patched.
 Flipping lightness would produce the wrong result in three places, and the
 palette deliberately doesn't:
 
-- **`--background` is neutral-950, not black.** A pure-black page makes
+- **`--color-surface` is neutral-950, not black.** A pure-black page makes
   the halation around light text worse and leaves no room to sit a surface
   *below* the page level.
-- **Surfaces go up, not down.** `--card` and `--popover` are a step
+- **Surfaces go up, not down.** `--color-surface-raised` and `--color-surface-overlay` are a step
   *lighter* than the page in dark mode and identical to it in light mode.
   Elevation in dark mode is carried by lightness, because a drop shadow
   has almost nothing left to darken (see
   [Shadows](?path=/docs/foundations-shadows--docs)).
 - **Strong fills become light, so their labels become dark.**
-  `--primary` goes from near-black to near-white, and
-  `--primary-foreground` inverts with it. `--destructive` does the same,
+  `--color-background-brand-bold` goes from near-black to near-white, and
+  `--color-text-brand-inverse` inverts with it. `--color-background-danger-bold` does the same,
   red-600 to red-400 — which is exactly where the palette's one contrast
   bug lived: keeping the near-white label on the lightened red measured
   2.77:1. It is now neutral-900 at 6.19:1. Inverting a fill without
@@ -57,11 +57,11 @@ Full measurements for both modes are in
 
 ## Alpha for edges
 
-`--border` and `--input` are the one place the palette uses transparency:
+`--color-border` and `--color-border` are the one place the palette uses transparency:
 opaque neutral-200 in light, `white / 10%` and `white / 15%` in dark. An
 opaque dark border would have to be re-chosen for every surface it sits
 on; a translucent white edge lightens whatever is underneath, so the same
-token reads correctly on `--background` and on a lifted `--card`.
+token reads correctly on `--color-surface` and on a lifted `--color-surface-raised`.
 
 ## Scoping
 

@@ -50,10 +50,10 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-// On the page background, as a skeleton sits in an app. In dark mode --muted
-// is the docs stage's own colour (--surface-filled), so a bare skeleton on a
+// On the page background, as a skeleton sits in an app. In dark mode --color-background-neutral
+// is the docs stage's own colour (--color-background-input), so a bare skeleton on a
 // stage would vanish.
-const card = { background: 'var(--background)', padding: 'var(--space-4)', borderRadius: 'var(--radius-lg)' }
+const card = { background: 'var(--color-surface)', padding: 'var(--space-4)', borderRadius: 'var(--radius-lg)' }
 
 export const Default: Story = {
   play: async ({ canvasElement }) => {
@@ -137,14 +137,14 @@ export const CardPlaceholder: Story = {
   },
 }
 
-/** --muted on the page, in both modes: under 3:1, the lowest floor, on purpose. */
+/** --color-background-neutral on the page, in both modes: under 3:1, the lowest floor, on purpose. */
 export const Muted: Story = {
   render: (args) => (
     <div>
       {(['light', 'dark'] as const).map((mode) => (
-        <Theme key={mode} appearance={mode} style={{ background: 'var(--background)', padding: 'var(--space-2)' }}>
+        <Theme key={mode} appearance={mode} style={{ background: 'var(--color-surface)', padding: 'var(--space-2)' }}>
           <Skeleton {...args} />
-          <span style={{ color: 'var(--muted)' }} />
+          <span style={{ color: 'var(--color-background-neutral)' }} />
         </Theme>
       ))}
     </div>
@@ -152,7 +152,7 @@ export const Muted: Story = {
   play: async ({ canvasElement }) => {
     for (const bone of canvasElement.querySelectorAll<HTMLElement>('[aria-hidden="true"]')) {
       const fill = getComputedStyle(bone).backgroundColor
-      // The bone is --muted (read back through a probe beside it).
+      // The bone is --color-background-neutral (read back through a probe beside it).
       await expect(fill).toBe(getComputedStyle(bone.nextElementSibling!).color)
       const page = getComputedStyle(bone.parentElement!).backgroundColor
       const [x, y] = [lum(paint(page, fill)), lum(paint(page))].sort((m, n) => n - m)
@@ -163,7 +163,7 @@ export const Muted: Story = {
 
 /** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
 export const anatomyParts = [
-  { name: 'Shape', selector: '[data-part="shape"]', description: 'One bone in --muted, sized like what it stands in for: here an avatar.' },
+  { name: 'Shape', selector: '[data-part="shape"]', description: 'One bone in --color-background-neutral, sized like what it stands in for: here an avatar.' },
   { name: 'Line', selector: '[data-part="rows"] > :first-child', description: 'With rows, one line of text.' },
   { name: 'Last line', selector: '[data-part="rows"] > :last-child', description: 'At 60%, like the end of a paragraph.' },
 ]

@@ -116,26 +116,26 @@ opposite appearance.
 <SpecTable
   caption="Every variant"
   rows={[
-    { part: 'Container', property: 'Background', token: '--popover' },
-    { part: 'Container', property: 'Border', token: '--border' },
+    { part: 'Container', property: 'Background', token: '--color-surface-overlay' },
+    { part: 'Container', property: 'Border', token: '--color-border' },
     { part: 'Container', property: 'Shadow', token: '--shadow-overlay' },
-    { part: 'Title', property: 'Colour', token: '--popover-foreground' },
-    { part: 'Description', property: 'Colour', token: '--muted-foreground' },
-    { part: 'Action', property: 'Colour', token: '--primary-text' },
-    { part: 'Close button', property: 'Colour', token: '--muted-foreground' },
-    { part: 'Close button, hover', property: 'Background', token: '--accent' },
-    { part: 'Close button, hover', property: 'Colour', token: '--accent-foreground' },
-    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+    { part: 'Title', property: 'Colour', token: '--color-text' },
+    { part: 'Description', property: 'Colour', token: '--color-text-subtlest' },
+    { part: 'Action', property: 'Colour', token: '--color-text-brand' },
+    { part: 'Close button', property: 'Colour', token: '--color-text-subtlest' },
+    { part: 'Close button, hover', property: 'Background', token: '--color-background-neutral' },
+    { part: 'Close button, hover', property: 'Colour', token: '--color-text' },
+    { part: 'Focus ring', property: 'Colour', token: '--color-border-focused' },
   ]}
 />
 
 <SpecTable
   caption="Icon, by variant"
   rows={[
-    { part: 'info', property: 'Colour', token: '--info-text' },
-    { part: 'success', property: 'Colour', token: '--success-text' },
-    { part: 'warning', property: 'Colour', token: '--warning-text' },
-    { part: 'danger', property: 'Colour', token: '--danger-text' },
+    { part: 'info', property: 'Colour', token: '--color-text-info' },
+    { part: 'success', property: 'Colour', token: '--color-text-success' },
+    { part: 'warning', property: 'Colour', token: '--color-text-warning' },
+    { part: 'danger', property: 'Colour', token: '--color-text-danger' },
   ]}
 />
 
@@ -154,9 +154,9 @@ opposite appearance.
   <Story of={ToastStories.StateExample} />
 </States>
 
-- **Hover** fills the close button with `--accent`. Hovering the stack
+- **Hover** fills the close button with `--color-background-neutral`. Hovering the stack
   also pauses every toast's timer.
-- **Focus** is a 2px `--ring` outline inside the action or the close
+- **Focus** is a 2px `--color-border-focused` outline inside the action or the close
   button. Focus in the stack pauses the timers too.
 - **Pending** is a `promise()` toast: a spinner in place of the icon, and
   no timer until it settles.

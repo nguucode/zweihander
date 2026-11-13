@@ -98,7 +98,7 @@ Thickness is whole pixels, not a token: `--border-width` covers 1px and
 
 Every size and appearance uses the same colour.
 
-<SpecTable caption="Every appearance" rows={[{ part: 'Line', property: 'Colour', token: '--border' }]} />
+<SpecTable caption="Every appearance" rows={[{ part: 'Line', property: 'Colour', token: '--color-border' }]} />
 
 ## States
 
@@ -167,7 +167,7 @@ stripes and makes the real breaks harder to see.
   already the default.
 - If the line is purely decorative, e.g. between two icons that are
   already grouped, pass `aria-hidden` so it isn't announced at all.
-- The `--border` colour is below 3:1 against the background on purpose: a
+- The `--color-border` colour is below 3:1 against the background on purpose: a
   divider is decoration and is not required to meet the non-text contrast
   ratio. Never let a divider be the only thing that tells groups apart.
 

@@ -49,7 +49,7 @@ function Ladder() {
             style={{
               height: '1rem',
               borderRadius: 'var(--radius-sm)',
-              background: 'var(--muted)',
+              background: 'var(--color-background-neutral)',
               width: `calc(${bp.min} / 96 * 100%)`,
             }}
           />
@@ -70,7 +70,7 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const Active: Story = {
-  // Token specimen, not UI: the active chip labels the breakpoint in a tint of --primary on purpose.
+  // Token specimen, not UI: the active chip labels the breakpoint in a tint of --color-background-brand-bold on purpose.
   parameters: { a11y: { test: 'off' } },
   name: 'Active breakpoint',
   render: () => <ActiveBreakpoint />,

@@ -93,26 +93,26 @@ the button.
 <SpecTable
   caption="default"
   rows={[
-    { part: 'Label', property: 'Colour', token: '--foreground' },
-    { part: 'Required asterisk', property: 'Colour', token: '--danger-text' },
-    { part: 'Info button', property: 'Colour', token: '--muted-foreground' },
-    { part: 'Helper text', property: 'Colour', token: '--muted-foreground' },
-    { part: 'Info note', property: 'Background', token: '--popover' },
-    { part: 'Info note', property: 'Border', token: '--border' },
+    { part: 'Label', property: 'Colour', token: '--color-text' },
+    { part: 'Required asterisk', property: 'Colour', token: '--color-text-danger' },
+    { part: 'Info button', property: 'Colour', token: '--color-text-subtlest' },
+    { part: 'Helper text', property: 'Colour', token: '--color-text-subtlest' },
+    { part: 'Info note', property: 'Background', token: '--color-surface-overlay' },
+    { part: 'Info note', property: 'Border', token: '--color-border' },
     { part: 'Info note', property: 'Shadow', token: '--shadow-overlay' },
   ]}
 />
 
 <SpecTable
   caption="read-only"
-  rows={[{ part: 'Field box', property: 'Background', token: '--surface-filled' }]}
+  rows={[{ part: 'Field box', property: 'Background', token: '--color-background-input' }]}
 />
 
 <SpecTable
   caption="error"
   rows={[
-    { part: 'Helper text', property: 'Colour', token: '--danger-text' },
-    { part: 'Field box edge', property: 'Colour', token: '--danger-text' },
+    { part: 'Helper text', property: 'Colour', token: '--color-text-danger' },
+    { part: 'Field box edge', property: 'Colour', token: '--color-text-danger' },
   ]}
 />
 
@@ -161,12 +161,12 @@ the button.
 </States>
 
 - **Hover** and **focus** belong to the control. The info button turns
-  `--foreground` on hover and draws the `--ring` outline on keyboard focus.
+  `--color-text` on hover and draws the `--color-border-focused` outline on keyboard focus.
 - **Error** colours the helper text, which then says what to change, and
   the edge of a field box inside.
 - **Read-only** is set on the control (`readOnly`), not on the Field.
   A field box with a read-only control inside is filled with
-  `--surface-filled`; the edge, label and helper stay as they are.
+  `--color-background-input`; the edge, label and helper stay as they are.
 - **Disabled** disables the control; how it dims is the control's own. The
   info button stays active: the note may say why the field is disabled.
 
@@ -237,8 +237,8 @@ their look, since their mark is the value, and only stop changing.
   icon would need its own name for screen readers; the helper text says
   more than a lock.
 - **A whole record that cannot be edited** is not a form of read-only
-  fields: show it as a [Description List](?path=/docs/patterns-application-ui-description-list--docs),
-  label and value with no box.
+  fields: show it as a description list (`<dl>`), label and value with no
+  box.
 
 ### Disabled
 
@@ -264,20 +264,16 @@ Say what turns it on, in `helperText` or in the control that does it.
 - **Dimmed on purpose.** Disabled controls are exempt from contrast
   rules and drop below readable contrast, one more reason not to disable
   a value people need to read.
-- **Fields that turn off together** go in a disabled
-  [`FormFieldGroup`](?path=/docs/patterns-application-ui-form-layouts--docs#field-groups):
-  every control inside is disabled and dimmed, Checkbox, Switch and Radio
-  included, and none is submitted. Slider and File Uploader do not read
-  the group: give them `disabled` too.
+- **Fields that turn off together** each take `disabled`, and one line of
+  text near them says what turns them on.
 
 ## When not to use
 
 - **Round a Zweihänder control.** Text Input, Textarea, Number Input,
   Select, Combobox, Date Picker, Checkbox, Switch and Radio have their own
   label, helper text and validation; a Field round one gives it two labels.
-- **For a group of controls** under one name, use a
-  [`FormFieldGroup`](?path=/docs/patterns-application-ui-form-layouts--docs#field-groups)
-  (a `<fieldset>` and `<legend>`), or Radio's own group.
+- **For a group of controls** under one name, use a `<fieldset>` and
+  `<legend>`, or Radio's own group.
 
 ## Accessibility
 

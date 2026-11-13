@@ -9,7 +9,7 @@
   flex: none;
   inline-size: var(--icon-md);
   block-size: 1lh;
-  color: var(--destructive);
+  color: var(--color-background-danger-bold);
 }
 
 /* The text to type, set apart from the sentence around it. */

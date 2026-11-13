@@ -122,25 +122,25 @@ it room or `isFullWidth`.
 <SpecTable
   caption="Field"
   rows={[
-    { part: 'Field', property: 'Background', token: '--card' },
-    { part: 'Field', property: 'Border', token: '--field-border' },
-    { part: 'Label, input', property: 'Colour', token: '--foreground' },
-    { part: 'Placeholder, helper, calendar icon', property: 'Colour', token: '--muted-foreground' },
-    { part: 'Border, helper, error', property: 'Colour', token: '--danger-text' },
-    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+    { part: 'Field', property: 'Background', token: '--color-surface-raised' },
+    { part: 'Field', property: 'Border', token: '--color-border-input' },
+    { part: 'Label, input', property: 'Colour', token: '--color-text' },
+    { part: 'Placeholder, helper, calendar icon', property: 'Colour', token: '--color-text-subtlest' },
+    { part: 'Border, helper, error', property: 'Colour', token: '--color-text-danger' },
+    { part: 'Focus ring', property: 'Colour', token: '--color-border-focused' },
   ]}
 />
 
 <SpecTable
   caption="Popover"
   rows={[
-    { part: 'Panel', property: 'Background', token: '--popover' },
-    { part: 'Panel', property: 'Border', token: '--border' },
+    { part: 'Panel', property: 'Background', token: '--color-surface-overlay' },
+    { part: 'Panel', property: 'Border', token: '--color-border' },
     { part: 'Panel', property: 'Shadow', token: '--shadow-overlay' },
-    { part: 'Dividers between presets and months', property: 'Colour', token: '--border' },
-    { part: 'Preset', property: 'Colour', token: '--foreground' },
-    { part: 'Preset, hover and pressed', property: 'Background', token: '--accent' },
-    { part: 'Preset, hover and pressed', property: 'Colour', token: '--accent-foreground' },
+    { part: 'Dividers between presets and months', property: 'Colour', token: '--color-border' },
+    { part: 'Preset', property: 'Colour', token: '--color-text' },
+    { part: 'Preset, hover and pressed', property: 'Background', token: '--color-background-neutral' },
+    { part: 'Preset, hover and pressed', property: 'Colour', token: '--color-text' },
   ]}
 />
 
@@ -171,9 +171,9 @@ The days and the band between the range's ends are the
   <DateRangePicker label="Period" locale="en-GB" defaultValue={{ start: new Date(2026, 8, 7), end: new Date(2026, 8, 13) }} />
 </States>
 
-The field's states are Date Picker's: a `--ring` outline while the input
-has focus, `--danger-text` in error (also while the typed text is not a
-range), `--surface-filled` and no calendar button when read-only, 50%
+The field's states are Date Picker's: a `--color-border-focused` outline while the input
+has focus, `--color-text-danger` in error (also while the typed text is not a
+range), `--color-background-input` and no calendar button when read-only, 50%
 opacity when disabled. A preset matching the picked range
 stays in its pressed look.
 

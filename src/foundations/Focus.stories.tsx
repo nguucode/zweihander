@@ -13,8 +13,8 @@ const SAMPLE: React.CSSProperties = {
   inlineSize: 'var(--control-md)',
   blockSize: 'var(--control-md)',
   borderRadius: 'var(--radius-control)',
-  background: 'var(--muted)',
-  outline: 'var(--focus-width) solid var(--ring)',
+  background: 'var(--color-background-neutral)',
+  outline: 'var(--focus-width) solid var(--color-border-focused)',
 }
 
 // Both rings drawn at rest, so the page shows the difference without a

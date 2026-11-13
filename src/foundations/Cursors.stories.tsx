@@ -54,7 +54,7 @@ function CursorTokens() {
             </div>
           </div>
           <p className={docs.note}>
-            <strong style={{ color: 'var(--foreground)', fontWeight: 500 }}>{usage}.</strong> {note}
+            <strong style={{ color: 'var(--color-text)', fontWeight: 500 }}>{usage}.</strong> {note}
           </p>
         </div>
       ))}

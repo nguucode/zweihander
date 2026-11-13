@@ -103,14 +103,14 @@ group's legend is.
 
 <SpecTable
   rows={[
-    { part: 'Filled star', property: 'Colour', token: '--warning' },
-    { part: 'Empty star', property: 'Colour', token: '--control-border' },
-    { part: 'Label', property: 'Colour', token: '--foreground' },
-    { part: 'Focus ring', property: 'Colour', token: '--ring' },
+    { part: 'Filled star', property: 'Colour', token: '--color-background-warning-bold' },
+    { part: 'Empty star', property: 'Colour', token: '--color-border-bold' },
+    { part: 'Label', property: 'Colour', token: '--color-text' },
+    { part: 'Focus ring', property: 'Colour', token: '--color-border-focused' },
   ]}
 />
 
-The fill is the bright `--warning` amber, not the darker warning text
+The fill is the bright `--color-background-warning-bold` amber, not the darker warning text
 colour: a rating reads as a rating when it looks like one. It is 2.1:1 on
 white, below the 3:1 a meaningful graphic needs, so colour is not what
 carries the score. A filled star differs from the outlined empty one by
@@ -133,7 +133,7 @@ shape, and the group or image is named "3 out of 5 stars".
 
 - **Hover** previews the score up to the star under the pointer, and only
   while the rating can be changed.
-- **Focus** is a 2px `--ring` outline round the focused star.
+- **Focus** is a 2px `--color-border-focused` outline round the focused star.
 - **Disabled** dims the stars to 50%.
 - **Read-only** is one image; fractions fill a star part-way, cut rather
   than shrunk.
