@@ -36,7 +36,6 @@ export default {
   plugins: ['stylelint-declaration-strict-value', './scripts/stylelint-semantic-tokens.mjs'],
   ignoreFiles: [
     'src/tokens.css', // generated
-    'src/App.module.css', // the landing page, not part of the system: its 56–80px and clamp() type have no tokens
   ],
   reportDescriptionlessDisables: true,
   rules: {
