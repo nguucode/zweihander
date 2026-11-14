@@ -109,8 +109,8 @@ const stack = { display: 'grid', gap: 'var(--space-4)', justifyItems: 'start' }
 export const Default: Story = {
   play: async ({ canvas, userEvent, args }) => {
     const input = canvas.getByLabelText('Email')
-    await userEvent.type(input, 'user@zweihander.dev')
-    await expect(input).toHaveValue('user@zweihander.dev')
+    await userEvent.type(input, 'user@marram.dev')
+    await expect(input).toHaveValue('user@marram.dev')
     // onChange is the native event, as on a plain <input>.
     await expect(args.onChange).toHaveBeenCalled()
     await expect((args.onChange as ReturnType<typeof fn>).mock.calls[0][0]).toHaveProperty('target')
@@ -198,7 +198,7 @@ export const Addons: Story = {
 }
 
 export const WithButton: Story = {
-  args: { label: 'Website', defaultValue: 'zweihander.dev' },
+  args: { label: 'Website', defaultValue: 'marram.dev' },
   render: function Render(args) {
     const [opened, setOpened] = useState(0)
     return (
@@ -296,18 +296,18 @@ export const Required: Story = {
 }
 
 export const Disabled: Story = {
-  args: { disabled: true, defaultValue: 'locked@zweihander.dev' },
+  args: { disabled: true, defaultValue: 'locked@marram.dev' },
   play: async ({ canvas }) => {
     await expect(canvas.getByLabelText('Email')).toBeDisabled()
   },
 }
 
 export const ReadOnly: Story = {
-  args: { readOnly: true, defaultValue: 'fixed@zweihander.dev' },
+  args: { readOnly: true, defaultValue: 'fixed@marram.dev' },
   play: async ({ canvas, userEvent }) => {
     const input = canvas.getByLabelText('Email')
     await userEvent.type(input, 'x')
-    await expect(input).toHaveValue('fixed@zweihander.dev')
+    await expect(input).toHaveValue('fixed@marram.dev')
   },
 }
 

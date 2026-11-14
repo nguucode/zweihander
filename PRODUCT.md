@@ -12,7 +12,7 @@ Enterprise product teams in SaaS, ERP, CRM, fintech and accounting: product desi
 
 ## Product Purpose
 
-Zweihänder is a React UI kit documented in Storybook. It gives product teams components, patterns and templates for application UI that they can re-theme to their own product without forking. Success is a team shipping a data-heavy app screen from kit pieces, themed to their brand, with no accessibility errors and a Figma file that matches the code.
+Marram is a React UI kit documented in Storybook. It gives product teams components, patterns and templates for application UI that they can re-theme to their own product without forking. Success is a team shipping a data-heavy app screen from kit pieces, themed to their brand, with no accessibility errors and a Figma file that matches the code.
 
 Current state: early stage (0.x), not production-ready, palettes are placeholders. 1.0 requires every component to meet the definition of done (including a Figma component set), a semver 1.x commitment, the two latest Chrome/Edge/Firefox/Safari (incl. iOS), and full keyboard use.
 
@@ -29,7 +29,7 @@ Four things together, none of which a neighbour (shadcn, Radix Themes, Carbon) o
 
 - Storybook is the reference (https://zweihander.ontheshore.biz/storybook/); every topic has a hand-written MDX page (Overview, Specs, Guidelines tabs).
 - The Playground (`/playground/`) previews components, patterns and templates in device frames with a theme panel and copy-code.
-- Figma file Zweihander-v0.7.0 mirrors the code: variables, text and effect styles, one page per component, patterns and templates.
+- Figma file Marram-v0.7.0 mirrors the code: variables, text and effect styles, one page per component, patterns and templates.
 - Component spec source is uiguideline.com Anatomy and Prop list; deviations are written down in the MDX.
 - Atomic tiers: Foundations → Components → Patterns → Templates.
 
@@ -43,13 +43,13 @@ Four things together, none of which a neighbour (shadcn, Radix Themes, Carbon) o
 
 ## Brand Commitments
 
-- Name: Zweihänder (with the umlaut).
-- Logo: 16×16 pixel sword mark (brand kit v0.3), blue body, white blade; `public/logo.svg`, `public/favicon.svg`.
+- Name: Marram (with the umlaut).
+- Logo: Modular M (2026-11-14): two Ink `#16181D` pillars and a `#2563EB` diamond make an M; `public/logo.svg` (symbol), `public/favicon.svg` (tile). The full kit (lockups, app icons, guide) lives in the vault.
 - Docs and public copy are English. Voice cuts complexity: plain, technical, no hype.
 
 ## Evidence on Hand
 
-- Live docs site and Storybook, the registry, the npm package `zweihander`.
+- Live docs site and Storybook, the registry, the npm package `marram`.
 - Research notes in `docs/research/` and the vault (spacing, box sizing, app shell surfaces, chart library, Application UI catalogue).
 - No customers, testimonials, adoption numbers or benchmarks exist. Do not invent them.
 

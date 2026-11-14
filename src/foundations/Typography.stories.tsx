@@ -35,7 +35,7 @@ function Row({ token, px, weight }: { token: string; px: string; weight: number 
       <span className={docs.caption} style={{ width: '10rem', flexShrink: 0 }}>
         --text-{token}
       </span>
-      <span style={{ flex: 1, ...role(token, weight) }}>Zweihänder</span>
+      <span style={{ flex: 1, ...role(token, weight) }}>Marram</span>
       <span className={docs.caption} style={{ width: '7rem', textAlign: 'right' }}>
         {px}
       </span>
@@ -68,7 +68,7 @@ export const Headings: Story = {
     </div>
   ),
   play: async ({ canvas }) => {
-    const el = canvas.getAllByText('Zweihänder')[0]
+    const el = canvas.getAllByText('Marram')[0]
     // A heading role carries its weight, not just its size.
     await expect(getComputedStyle(el).fontWeight).toBe('600')
     await expect(Number.parseFloat(getComputedStyle(el).fontSize)).toBe(32)
@@ -84,11 +84,11 @@ export const Body: Story = {
     </div>
   ),
   play: async ({ canvas }) => {
-    const el = canvas.getAllByText('Zweihänder')[1]
+    const el = canvas.getAllByText('Marram')[1]
     // body is 14px, one step down from the 16px many interfaces start at.
     await expect(Number.parseFloat(getComputedStyle(el).fontSize)).toBe(14)
     // Every body line sits on the 4px grid.
-    for (const sample of canvas.getAllByText('Zweihänder')) {
+    for (const sample of canvas.getAllByText('Marram')) {
       await expect(Number.parseFloat(getComputedStyle(sample).lineHeight) % 4).toBeCloseTo(0, 5)
     }
   },
@@ -102,14 +102,14 @@ export const Weights: Story = {
           <span className={docs.caption} style={{ width: '8rem', flexShrink: 0 }}>
             {value}
           </span>
-          <span style={{ ...role('body-lg', value) }}>Zweihänder</span>
+          <span style={{ ...role('body-lg', value) }}>Marram</span>
           <span className={docs.caption}>{name}</span>
         </div>
       ))}
     </div>
   ),
   play: async ({ canvas }) => {
-    const bold = canvas.getAllByText('Zweihänder').at(-1)!
+    const bold = canvas.getAllByText('Marram').at(-1)!
     await expect(getComputedStyle(bold).fontWeight).toBe('700')
   },
 }
@@ -120,13 +120,13 @@ export const Families: Story = {
       <div className={docs.stack}>
         <span className={docs.caption}>--font-sans</span>
         <span style={{ ...role('heading-md', 700), fontFamily: 'var(--font-sans)' }}>
-          Zweihänder — system-ui 0123
+          Marram — system-ui 0123
         </span>
       </div>
       <div className={docs.stack}>
         <span className={docs.caption}>--font-mono</span>
         <span style={{ ...role('heading-md', 700), fontFamily: 'var(--font-mono)' }}>
-          Zweihänder — ui-monospace 0123
+          Marram — ui-monospace 0123
         </span>
       </div>
     </div>

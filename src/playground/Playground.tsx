@@ -446,7 +446,7 @@ export function Playground({ manifest, storybookUrl = '../storybook/', homeUrl =
     <div className={styles.shell}>
       <header className={styles.header}>
         <a href={homeUrl} className={styles.brand}>
-          zweihänder
+          Marram
         </a>
         <h1 className={styles.title}>Playground</h1>
         <a href={storybookUrl} className={styles.headerLink}>

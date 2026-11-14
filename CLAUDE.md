@@ -1,4 +1,4 @@
-# Zweihänder
+# Marram
 
 Project info (decisions, tickets, roadmap, Figma links) lives in the Obsidian vault, not in this repo:
 @/Volumes/KAFKA/Vault/10-projects/zweihander/_context.md

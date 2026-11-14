@@ -43,7 +43,7 @@ whether the cells are grouped, and whether there is a resend button.
 From npm, or copied into your project through the registry:
 
 ```js
-import { OTPInput } from 'zweihander/otp-input'
+import { OTPInput } from 'marram/otp-input'
 ```
 
 ```sh
@@ -174,7 +174,7 @@ no other attributes are.
 There is no uiguideline.com spec for this component; the reference is shadcn/ui Input OTP.
 
 - **One component, flat props.** shadcn composes `InputOTP`, `InputOTPGroup`,
-  `InputOTPSlot` and `InputOTPSeparator`; Zweihänder takes `length` and
+  `InputOTPSlot` and `InputOTPSeparator`; Marram takes `length` and
   `groupSize`, as the API conventions ask for flat props before 1.0.
 - **Resend is built in.** shadcn leaves it to the page. Every screen that
   sends a code needs the same button and countdown, so it lives here.

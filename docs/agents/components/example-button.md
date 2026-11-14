@@ -6,7 +6,7 @@ Button (`src/components/buttons/`) is the model component. Below is each section
 
 > Button — new (batch 0) — non-breaking — target `stable`
 
-Source spec: [uiguideline.com/components/button](https://www.uiguideline.com/components/button). In the 1.0 scope (`zweihander-component-list.md`, Buttons section).
+Source spec: [uiguideline.com/components/button](https://www.uiguideline.com/components/button). In the 1.0 scope (`marram-component-list.md`, Buttons section).
 
 Example of a breaking enhance: `render` replacing `asChild`. The API conventions changed first (vault `05-api-conventions.md`), the MDX §Differences says "It replaced `asChild` in 0.8", and only then the code changed.
 
@@ -51,7 +51,7 @@ No changeset yet, because the repo has not installed Changesets. Once it has, th
 
 ```md
 ---
-'zweihander': minor
+'marram': minor
 ---
 
 Button: `render` replaces `asChild`. Pass the element itself: `<Button render={<Link to="/settings" />}>`.

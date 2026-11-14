@@ -22,7 +22,7 @@ Run typechecking regularly, single test files regularly, and the full test suite
 
 ## Test
 
-Add a changeset in `.changeset/<short-name>.md`: `---`, the package line (`"zweihander": patch|minor`) when `src/` or published files change, `---`, then one line on what changed. Tooling-only work gets an empty changeset (`---` twice, then the line). Stage everything with `git add -A`: `changeset status` ignores untracked files.
+Add a changeset in `.changeset/<short-name>.md`: `---`, the package line (`"marram": patch|minor`) when `src/` or published files change, `---`, then one line on what changed. Tooling-only work gets an empty changeset (`---` twice, then the line). Stage everything with `git add -A`: `changeset status` ignores untracked files.
 
 Run `npm run verify`. It runs what CI runs, except the `visual` project: its baselines are Linux-only, so CI checks it. Fix every failure and run it again until it passes.
 

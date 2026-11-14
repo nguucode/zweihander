@@ -58,7 +58,7 @@ export interface ThemeProps extends ComponentProps<'div'> {
   /**
    * Token overrides for this scope, without the `--` prefix:
    * `{ radius: '1rem', 'color-background-brand-bold': 'oklch(0.55 0.2 260)' }`. Any custom property
-   * works, including ones Zweihänder doesn't define.
+   * works, including ones Marram doesn't define.
    */
   tokens?: Record<string, string>
   /** Apply to this element instead of rendering a wrapper `<div>`. */

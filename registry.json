@@ -1,6 +1,6 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
-  "name": "zweihander",
+  "name": "marram",
   "homepage": "https://ontheshore.biz/zweihander",
   "items": [
     {
@@ -26,7 +26,7 @@
         {
           "path": "src/tokens.css",
           "type": "registry:file",
-          "target": "styles/zweihander-tokens.css"
+          "target": "styles/marram-tokens.css"
         }
       ]
     },
@@ -56,7 +56,7 @@
         {
           "path": "src/theme/Theme.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/theme/Theme.tsx"
+          "target": "components/marram/theme/Theme.tsx"
         },
         {
           "path": "src/theme/palettes.ts",
@@ -81,12 +81,12 @@
         {
           "path": "src/components/buttons/Button.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/buttons/Button.tsx"
+          "target": "components/marram/buttons/Button.tsx"
         },
         {
           "path": "src/components/buttons/Button.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/buttons/Button.module.css"
+          "target": "components/marram/buttons/Button.module.css"
         }
       ],
       "dependencies": [
@@ -110,12 +110,12 @@
         {
           "path": "src/components/inputs/InputField.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/inputs/InputField.tsx"
+          "target": "components/marram/inputs/InputField.tsx"
         },
         {
           "path": "src/components/inputs/InputField.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/inputs/InputField.module.css"
+          "target": "components/marram/inputs/InputField.module.css"
         }
       ]
     },
@@ -133,7 +133,7 @@
         {
           "path": "src/components/inputs/TextInput.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/inputs/TextInput.tsx"
+          "target": "components/marram/inputs/TextInput.tsx"
         }
       ],
       "dependencies": [
@@ -154,7 +154,7 @@
         {
           "path": "src/components/inputs/Field.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/inputs/Field.tsx"
+          "target": "components/marram/inputs/Field.tsx"
         }
       ],
       "dependencies": [
@@ -174,12 +174,12 @@
         {
           "path": "src/components/atomic-elements/Divider.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/atomic-elements/Divider.tsx"
+          "target": "components/marram/atomic-elements/Divider.tsx"
         },
         {
           "path": "src/components/atomic-elements/Divider.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/atomic-elements/Divider.module.css"
+          "target": "components/marram/atomic-elements/Divider.module.css"
         }
       ]
     },
@@ -196,12 +196,12 @@
         {
           "path": "src/components/atomic-elements/Badge.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/atomic-elements/Badge.tsx"
+          "target": "components/marram/atomic-elements/Badge.tsx"
         },
         {
           "path": "src/components/atomic-elements/Badge.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/atomic-elements/Badge.module.css"
+          "target": "components/marram/atomic-elements/Badge.module.css"
         }
       ]
     },
@@ -218,12 +218,12 @@
         {
           "path": "src/components/atomic-elements/Kbd.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/atomic-elements/Kbd.tsx"
+          "target": "components/marram/atomic-elements/Kbd.tsx"
         },
         {
           "path": "src/components/atomic-elements/Kbd.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/atomic-elements/Kbd.module.css"
+          "target": "components/marram/atomic-elements/Kbd.module.css"
         }
       ]
     },
@@ -244,12 +244,12 @@
         {
           "path": "src/components/atomic-elements/Avatar.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/atomic-elements/Avatar.tsx"
+          "target": "components/marram/atomic-elements/Avatar.tsx"
         },
         {
           "path": "src/components/atomic-elements/Avatar.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/atomic-elements/Avatar.module.css"
+          "target": "components/marram/atomic-elements/Avatar.module.css"
         }
       ]
     },
@@ -267,12 +267,12 @@
         {
           "path": "src/components/atomic-elements/Tag.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/atomic-elements/Tag.tsx"
+          "target": "components/marram/atomic-elements/Tag.tsx"
         },
         {
           "path": "src/components/atomic-elements/Tag.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/atomic-elements/Tag.module.css"
+          "target": "components/marram/atomic-elements/Tag.module.css"
         }
       ]
     },
@@ -293,12 +293,12 @@
         {
           "path": "src/components/buttons/ToggleButton.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/buttons/ToggleButton.tsx"
+          "target": "components/marram/buttons/ToggleButton.tsx"
         },
         {
           "path": "src/components/buttons/ToggleButton.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/buttons/ToggleButton.module.css"
+          "target": "components/marram/buttons/ToggleButton.module.css"
         }
       ]
     },
@@ -319,12 +319,12 @@
         {
           "path": "src/components/buttons/ButtonGroup.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/buttons/ButtonGroup.tsx"
+          "target": "components/marram/buttons/ButtonGroup.tsx"
         },
         {
           "path": "src/components/buttons/ButtonGroup.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/buttons/ButtonGroup.module.css"
+          "target": "components/marram/buttons/ButtonGroup.module.css"
         }
       ]
     },
@@ -344,12 +344,12 @@
         {
           "path": "src/components/controls/ChoiceField.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/controls/ChoiceField.tsx"
+          "target": "components/marram/controls/ChoiceField.tsx"
         },
         {
           "path": "src/components/controls/ChoiceField.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/controls/ChoiceField.module.css"
+          "target": "components/marram/controls/ChoiceField.module.css"
         }
       ]
     },
@@ -370,12 +370,12 @@
         {
           "path": "src/components/controls/Switch.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/controls/Switch.tsx"
+          "target": "components/marram/controls/Switch.tsx"
         },
         {
           "path": "src/components/controls/Switch.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/controls/Switch.module.css"
+          "target": "components/marram/controls/Switch.module.css"
         }
       ]
     },
@@ -397,12 +397,12 @@
         {
           "path": "src/components/controls/Checkbox.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/controls/Checkbox.tsx"
+          "target": "components/marram/controls/Checkbox.tsx"
         },
         {
           "path": "src/components/controls/Checkbox.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/controls/Checkbox.module.css"
+          "target": "components/marram/controls/Checkbox.module.css"
         }
       ]
     },
@@ -423,12 +423,12 @@
         {
           "path": "src/components/controls/Radio.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/controls/Radio.tsx"
+          "target": "components/marram/controls/Radio.tsx"
         },
         {
           "path": "src/components/controls/Radio.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/controls/Radio.module.css"
+          "target": "components/marram/controls/Radio.module.css"
         }
       ]
     },
@@ -448,12 +448,12 @@
         {
           "path": "src/components/data-display/Card.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/data-display/Card.tsx"
+          "target": "components/marram/data-display/Card.tsx"
         },
         {
           "path": "src/components/data-display/Card.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/data-display/Card.module.css"
+          "target": "components/marram/data-display/Card.module.css"
         }
       ]
     },
@@ -474,12 +474,12 @@
         {
           "path": "src/components/inputs/Textarea.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/inputs/Textarea.tsx"
+          "target": "components/marram/inputs/Textarea.tsx"
         },
         {
           "path": "src/components/inputs/Textarea.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/inputs/Textarea.module.css"
+          "target": "components/marram/inputs/Textarea.module.css"
         }
       ]
     },
@@ -502,12 +502,12 @@
         {
           "path": "src/components/inputs/Search.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/inputs/Search.tsx"
+          "target": "components/marram/inputs/Search.tsx"
         },
         {
           "path": "src/components/inputs/Search.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/inputs/Search.module.css"
+          "target": "components/marram/inputs/Search.module.css"
         }
       ]
     },
@@ -525,7 +525,7 @@
         {
           "path": "src/components/buttons/ResendButton.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/buttons/ResendButton.tsx"
+          "target": "components/marram/buttons/ResendButton.tsx"
         }
       ]
     },
@@ -547,12 +547,12 @@
         {
           "path": "src/components/inputs/OTPInput.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/inputs/OTPInput.tsx"
+          "target": "components/marram/inputs/OTPInput.tsx"
         },
         {
           "path": "src/components/inputs/OTPInput.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/inputs/OTPInput.module.css"
+          "target": "components/marram/inputs/OTPInput.module.css"
         }
       ]
     },
@@ -572,12 +572,12 @@
         {
           "path": "src/components/inputs/PasswordInput.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/inputs/PasswordInput.tsx"
+          "target": "components/marram/inputs/PasswordInput.tsx"
         },
         {
           "path": "src/components/inputs/PasswordInput.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/inputs/PasswordInput.module.css"
+          "target": "components/marram/inputs/PasswordInput.module.css"
         }
       ]
     },
@@ -599,12 +599,12 @@
         {
           "path": "src/components/inputs/NumberInput.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/inputs/NumberInput.tsx"
+          "target": "components/marram/inputs/NumberInput.tsx"
         },
         {
           "path": "src/components/inputs/NumberInput.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/inputs/NumberInput.module.css"
+          "target": "components/marram/inputs/NumberInput.module.css"
         }
       ]
     },
@@ -626,7 +626,7 @@
         {
           "path": "src/components/inputs/Select.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/inputs/Select.tsx"
+          "target": "components/marram/inputs/Select.tsx"
         }
       ]
     },
@@ -648,12 +648,12 @@
         {
           "path": "src/components/inputs/Combobox.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/inputs/Combobox.tsx"
+          "target": "components/marram/inputs/Combobox.tsx"
         },
         {
           "path": "src/components/inputs/Combobox.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/inputs/Combobox.module.css"
+          "target": "components/marram/inputs/Combobox.module.css"
         }
       ]
     },
@@ -670,12 +670,12 @@
         {
           "path": "src/components/loaders/Spinner.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/loaders/Spinner.tsx"
+          "target": "components/marram/loaders/Spinner.tsx"
         },
         {
           "path": "src/components/loaders/Spinner.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/loaders/Spinner.module.css"
+          "target": "components/marram/loaders/Spinner.module.css"
         }
       ]
     },
@@ -695,12 +695,12 @@
         {
           "path": "src/components/loaders/ProgressBar.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/loaders/ProgressBar.tsx"
+          "target": "components/marram/loaders/ProgressBar.tsx"
         },
         {
           "path": "src/components/loaders/ProgressBar.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/loaders/ProgressBar.module.css"
+          "target": "components/marram/loaders/ProgressBar.module.css"
         }
       ]
     },
@@ -717,12 +717,12 @@
         {
           "path": "src/components/loaders/Skeleton.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/loaders/Skeleton.tsx"
+          "target": "components/marram/loaders/Skeleton.tsx"
         },
         {
           "path": "src/components/loaders/Skeleton.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/loaders/Skeleton.module.css"
+          "target": "components/marram/loaders/Skeleton.module.css"
         }
       ]
     },
@@ -743,12 +743,12 @@
         {
           "path": "src/components/navigation/Link.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/navigation/Link.tsx"
+          "target": "components/marram/navigation/Link.tsx"
         },
         {
           "path": "src/components/navigation/Link.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/navigation/Link.module.css"
+          "target": "components/marram/navigation/Link.module.css"
         }
       ]
     },
@@ -766,12 +766,12 @@
         {
           "path": "src/components/notifications/Alert.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/notifications/Alert.tsx"
+          "target": "components/marram/notifications/Alert.tsx"
         },
         {
           "path": "src/components/notifications/Alert.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/notifications/Alert.module.css"
+          "target": "components/marram/notifications/Alert.module.css"
         }
       ]
     },
@@ -788,12 +788,12 @@
         {
           "path": "src/components/states/EmptyState.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/states/EmptyState.tsx"
+          "target": "components/marram/states/EmptyState.tsx"
         },
         {
           "path": "src/components/states/EmptyState.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/states/EmptyState.module.css"
+          "target": "components/marram/states/EmptyState.module.css"
         }
       ]
     },
@@ -813,12 +813,12 @@
         {
           "path": "src/components/overlays/Tooltip.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/overlays/Tooltip.tsx"
+          "target": "components/marram/overlays/Tooltip.tsx"
         },
         {
           "path": "src/components/overlays/Tooltip.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/overlays/Tooltip.module.css"
+          "target": "components/marram/overlays/Tooltip.module.css"
         }
       ]
     },
@@ -839,12 +839,12 @@
         {
           "path": "src/components/overlays/Popover.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/overlays/Popover.tsx"
+          "target": "components/marram/overlays/Popover.tsx"
         },
         {
           "path": "src/components/overlays/Popover.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/overlays/Popover.module.css"
+          "target": "components/marram/overlays/Popover.module.css"
         }
       ]
     },
@@ -865,12 +865,12 @@
         {
           "path": "src/components/overlays/Modal.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/overlays/Modal.tsx"
+          "target": "components/marram/overlays/Modal.tsx"
         },
         {
           "path": "src/components/overlays/Modal.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/overlays/Modal.module.css"
+          "target": "components/marram/overlays/Modal.module.css"
         }
       ]
     },
@@ -891,12 +891,12 @@
         {
           "path": "src/components/overlays/ConfirmDialog.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/overlays/ConfirmDialog.tsx"
+          "target": "components/marram/overlays/ConfirmDialog.tsx"
         },
         {
           "path": "src/components/overlays/ConfirmDialog.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/overlays/ConfirmDialog.module.css"
+          "target": "components/marram/overlays/ConfirmDialog.module.css"
         }
       ]
     },
@@ -917,12 +917,12 @@
         {
           "path": "src/components/navigation/Menu.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/navigation/Menu.tsx"
+          "target": "components/marram/navigation/Menu.tsx"
         },
         {
           "path": "src/components/navigation/Menu.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/navigation/Menu.module.css"
+          "target": "components/marram/navigation/Menu.module.css"
         }
       ]
     },
@@ -943,12 +943,12 @@
         {
           "path": "src/components/navigation/Menubar.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/navigation/Menubar.tsx"
+          "target": "components/marram/navigation/Menubar.tsx"
         },
         {
           "path": "src/components/navigation/Menubar.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/navigation/Menubar.module.css"
+          "target": "components/marram/navigation/Menubar.module.css"
         }
       ]
     },
@@ -969,12 +969,12 @@
         {
           "path": "src/components/navigation/Breadcrumbs.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/navigation/Breadcrumbs.tsx"
+          "target": "components/marram/navigation/Breadcrumbs.tsx"
         },
         {
           "path": "src/components/navigation/Breadcrumbs.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/navigation/Breadcrumbs.module.css"
+          "target": "components/marram/navigation/Breadcrumbs.module.css"
         }
       ]
     },
@@ -993,12 +993,12 @@
         {
           "path": "src/components/navigation/Pagination.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/navigation/Pagination.tsx"
+          "target": "components/marram/navigation/Pagination.tsx"
         },
         {
           "path": "src/components/navigation/Pagination.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/navigation/Pagination.module.css"
+          "target": "components/marram/navigation/Pagination.module.css"
         }
       ]
     },
@@ -1018,12 +1018,12 @@
         {
           "path": "src/components/navigation/Tabs.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/navigation/Tabs.tsx"
+          "target": "components/marram/navigation/Tabs.tsx"
         },
         {
           "path": "src/components/navigation/Tabs.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/navigation/Tabs.module.css"
+          "target": "components/marram/navigation/Tabs.module.css"
         }
       ]
     },
@@ -1044,12 +1044,12 @@
         {
           "path": "src/components/notifications/Toast.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/notifications/Toast.tsx"
+          "target": "components/marram/notifications/Toast.tsx"
         },
         {
           "path": "src/components/notifications/Toast.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/notifications/Toast.module.css"
+          "target": "components/marram/notifications/Toast.module.css"
         }
       ]
     },
@@ -1067,12 +1067,12 @@
         {
           "path": "src/components/notifications/InlineAlert.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/notifications/InlineAlert.tsx"
+          "target": "components/marram/notifications/InlineAlert.tsx"
         },
         {
           "path": "src/components/notifications/InlineAlert.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/notifications/InlineAlert.module.css"
+          "target": "components/marram/notifications/InlineAlert.module.css"
         }
       ]
     },
@@ -1091,12 +1091,12 @@
         {
           "path": "src/components/states/ErrorState.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/states/ErrorState.tsx"
+          "target": "components/marram/states/ErrorState.tsx"
         },
         {
           "path": "src/components/states/ErrorState.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/states/ErrorState.module.css"
+          "target": "components/marram/states/ErrorState.module.css"
         }
       ]
     },
@@ -1115,12 +1115,12 @@
         {
           "path": "src/components/states/SuccessState.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/states/SuccessState.tsx"
+          "target": "components/marram/states/SuccessState.tsx"
         },
         {
           "path": "src/components/states/SuccessState.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/states/SuccessState.module.css"
+          "target": "components/marram/states/SuccessState.module.css"
         }
       ]
     },
@@ -1141,12 +1141,12 @@
         {
           "path": "src/components/data-display/Collapse.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/data-display/Collapse.tsx"
+          "target": "components/marram/data-display/Collapse.tsx"
         },
         {
           "path": "src/components/data-display/Collapse.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/data-display/Collapse.module.css"
+          "target": "components/marram/data-display/Collapse.module.css"
         }
       ]
     },
@@ -1166,12 +1166,12 @@
         {
           "path": "src/components/controls/Slider.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/controls/Slider.tsx"
+          "target": "components/marram/controls/Slider.tsx"
         },
         {
           "path": "src/components/controls/Slider.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/controls/Slider.module.css"
+          "target": "components/marram/controls/Slider.module.css"
         }
       ]
     },
@@ -1189,12 +1189,12 @@
         {
           "path": "src/components/navigation/Stepper.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/navigation/Stepper.tsx"
+          "target": "components/marram/navigation/Stepper.tsx"
         },
         {
           "path": "src/components/navigation/Stepper.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/navigation/Stepper.module.css"
+          "target": "components/marram/navigation/Stepper.module.css"
         }
       ]
     },
@@ -1212,12 +1212,12 @@
         {
           "path": "src/components/controls/Rating.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/controls/Rating.tsx"
+          "target": "components/marram/controls/Rating.tsx"
         },
         {
           "path": "src/components/controls/Rating.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/controls/Rating.module.css"
+          "target": "components/marram/controls/Rating.module.css"
         }
       ]
     },
@@ -1238,12 +1238,12 @@
         {
           "path": "src/components/data-display/ColumnChooser.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/data-display/ColumnChooser.tsx"
+          "target": "components/marram/data-display/ColumnChooser.tsx"
         },
         {
           "path": "src/components/data-display/ColumnChooser.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/data-display/ColumnChooser.module.css"
+          "target": "components/marram/data-display/ColumnChooser.module.css"
         }
       ]
     },
@@ -1268,12 +1268,12 @@
         {
           "path": "src/components/data-display/Table.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/data-display/Table.tsx"
+          "target": "components/marram/data-display/Table.tsx"
         },
         {
           "path": "src/components/data-display/Table.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/data-display/Table.module.css"
+          "target": "components/marram/data-display/Table.module.css"
         }
       ]
     },
@@ -1297,47 +1297,47 @@
         {
           "path": "src/components/charts/chart-utils.ts",
           "type": "registry:component",
-          "target": "components/zweihander/charts/chart-utils.ts"
+          "target": "components/marram/charts/chart-utils.ts"
         },
         {
           "path": "src/components/charts/Chart.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/charts/Chart.module.css"
+          "target": "components/marram/charts/Chart.module.css"
         },
         {
           "path": "src/components/charts/ChartFrame.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/charts/ChartFrame.tsx"
+          "target": "components/marram/charts/ChartFrame.tsx"
         },
         {
           "path": "src/components/charts/ChartLegend.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/charts/ChartLegend.tsx"
+          "target": "components/marram/charts/ChartLegend.tsx"
         },
         {
           "path": "src/components/charts/CartesianChart.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/charts/CartesianChart.tsx"
+          "target": "components/marram/charts/CartesianChart.tsx"
         },
         {
           "path": "src/components/charts/LineChart.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/charts/LineChart.tsx"
+          "target": "components/marram/charts/LineChart.tsx"
         },
         {
           "path": "src/components/charts/BarChart.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/charts/BarChart.tsx"
+          "target": "components/marram/charts/BarChart.tsx"
         },
         {
           "path": "src/components/charts/PieChart.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/charts/PieChart.tsx"
+          "target": "components/marram/charts/PieChart.tsx"
         },
         {
           "path": "src/components/charts/Sparkline.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/charts/Sparkline.tsx"
+          "target": "components/marram/charts/Sparkline.tsx"
         }
       ]
     },
@@ -1355,12 +1355,12 @@
         {
           "path": "src/components/data-display/Calendar.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/data-display/Calendar.tsx"
+          "target": "components/marram/data-display/Calendar.tsx"
         },
         {
           "path": "src/components/data-display/Calendar.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/data-display/Calendar.module.css"
+          "target": "components/marram/data-display/Calendar.module.css"
         }
       ]
     },
@@ -1383,12 +1383,12 @@
         {
           "path": "src/components/inputs/DatePicker.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/inputs/DatePicker.tsx"
+          "target": "components/marram/inputs/DatePicker.tsx"
         },
         {
           "path": "src/components/inputs/DatePicker.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/inputs/DatePicker.module.css"
+          "target": "components/marram/inputs/DatePicker.module.css"
         }
       ]
     },
@@ -1410,12 +1410,12 @@
         {
           "path": "src/components/controls/ColorPicker.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/controls/ColorPicker.tsx"
+          "target": "components/marram/controls/ColorPicker.tsx"
         },
         {
           "path": "src/components/controls/ColorPicker.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/controls/ColorPicker.module.css"
+          "target": "components/marram/controls/ColorPicker.module.css"
         }
       ]
     },
@@ -1436,12 +1436,12 @@
         {
           "path": "src/components/inputs/FileUploader.tsx",
           "type": "registry:component",
-          "target": "components/zweihander/inputs/FileUploader.tsx"
+          "target": "components/marram/inputs/FileUploader.tsx"
         },
         {
           "path": "src/components/inputs/FileUploader.module.css",
           "type": "registry:component",
-          "target": "components/zweihander/inputs/FileUploader.module.css"
+          "target": "components/marram/inputs/FileUploader.module.css"
         }
       ]
     }

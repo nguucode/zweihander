@@ -1,4 +1,4 @@
-# Zweihänder
+# Marram
 
 > **Early stage, not production-ready.** Only a few components exist
 > (see Components → Overview in Storybook) and no Figma file has been applied yet — the
@@ -132,13 +132,13 @@ Scopes nest in either direction (light values live on `:root, .light`), and
 cover. Full write-up in
 [Foundations → Overview](https://ontheshore.biz/zweihander/?path=/docs/foundations-overview--docs).
 
-Globally, it is plain CSS — redeclare the variables after Zweihänder's
+Globally, it is plain CSS — redeclare the variables after Marram's
 stylesheet, or set `data-accent` / `data-gray` on `<html>`.
 
 `registry.json`'s `tokens` item ships `tokens.css` itself for the
 copy-source path, and its `theme` item ships the component.
 
-## Using Zweihänder in a project
+## Using Marram in a project
 
 Two ways to consume it — pick per project.
 
@@ -200,15 +200,15 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/color-picker.json
 npx shadcn@latest add https://ontheshore.biz/zweihander/r/file-uploader.json
 ```
 
-Or register Zweihänder as a named registry in the project's `components.json`
+Or register Marram as a named registry in the project's `components.json`
 so components can be added by name:
 
 ```json
-{ "registries": { "@zweihander": "https://ontheshore.biz/zweihander/r/{name}.json" } }
+{ "registries": { "@marram": "https://ontheshore.biz/zweihander/r/{name}.json" } }
 ```
 
 ```bash
-npx shadcn@latest add @zweihander/button
+npx shadcn@latest add @marram/button
 ```
 
 The CLI resolves `registryDependencies` (e.g. `avatar` → `utils`, `icon`)
@@ -218,60 +218,60 @@ import in the copied file to match whatever alias the target project uses.
 ### npm package
 
 For projects that would rather version-pin than own the source. Published
-at [npmjs.com/package/zweihander](https://www.npmjs.com/package/zweihander):
+at [npmjs.com/package/marram](https://www.npmjs.com/package/marram):
 
 ```bash
-npm install zweihander
+npm install marram
 ```
 
 ```ts
-import { Button } from 'zweihander/button'
-import { TextInput } from 'zweihander/text-input'
-import { Divider } from 'zweihander/divider'
-import { Badge } from 'zweihander/badge'
-import { Avatar } from 'zweihander/avatar'
-import { Tag } from 'zweihander/tag'
-import { ToggleButton } from 'zweihander/toggle-button'
-import { Switch } from 'zweihander/switch'
-import { Checkbox } from 'zweihander/checkbox'
-import { RadioGroup } from 'zweihander/radio'
-import { Card } from 'zweihander/card'
-import { Textarea } from 'zweihander/textarea'
-import { Search } from 'zweihander/search'
-import { NumberInput } from 'zweihander/number-input'
-import { Select } from 'zweihander/select'
-import { Combobox } from 'zweihander/combobox'
-import { Spinner } from 'zweihander/spinner'
-import { ProgressBar } from 'zweihander/progress-bar'
-import { Skeleton } from 'zweihander/skeleton'
-import { Link } from 'zweihander/link'
-import { Alert } from 'zweihander/alert'
-import { EmptyState } from 'zweihander/empty-state'
-import { Tooltip } from 'zweihander/tooltip'
-import { Popover } from 'zweihander/popover'
-import { Modal } from 'zweihander/modal'
-import { Menu } from 'zweihander/menu'
-import { Breadcrumbs } from 'zweihander/breadcrumbs'
-import { Pagination } from 'zweihander/pagination'
-import { Tabs } from 'zweihander/tabs'
-import { InlineAlert } from 'zweihander/inline-alert'
-import { ErrorState } from 'zweihander/error-state'
-import { SuccessState } from 'zweihander/success-state'
-import { Collapse } from 'zweihander/collapse'
-import { Slider } from 'zweihander/slider'
-import { Stepper } from 'zweihander/stepper'
-import { Rating } from 'zweihander/rating'
-import { Table } from 'zweihander/table'
-import { Calendar } from 'zweihander/calendar'
-import { DatePicker } from 'zweihander/date-picker'
-import { ColorPicker } from 'zweihander/color-picker'
-import { FileUploader } from 'zweihander/file-uploader'
-import { ToastProvider, useToast } from 'zweihander/toast'
+import { Button } from 'marram/button'
+import { TextInput } from 'marram/text-input'
+import { Divider } from 'marram/divider'
+import { Badge } from 'marram/badge'
+import { Avatar } from 'marram/avatar'
+import { Tag } from 'marram/tag'
+import { ToggleButton } from 'marram/toggle-button'
+import { Switch } from 'marram/switch'
+import { Checkbox } from 'marram/checkbox'
+import { RadioGroup } from 'marram/radio'
+import { Card } from 'marram/card'
+import { Textarea } from 'marram/textarea'
+import { Search } from 'marram/search'
+import { NumberInput } from 'marram/number-input'
+import { Select } from 'marram/select'
+import { Combobox } from 'marram/combobox'
+import { Spinner } from 'marram/spinner'
+import { ProgressBar } from 'marram/progress-bar'
+import { Skeleton } from 'marram/skeleton'
+import { Link } from 'marram/link'
+import { Alert } from 'marram/alert'
+import { EmptyState } from 'marram/empty-state'
+import { Tooltip } from 'marram/tooltip'
+import { Popover } from 'marram/popover'
+import { Modal } from 'marram/modal'
+import { Menu } from 'marram/menu'
+import { Breadcrumbs } from 'marram/breadcrumbs'
+import { Pagination } from 'marram/pagination'
+import { Tabs } from 'marram/tabs'
+import { InlineAlert } from 'marram/inline-alert'
+import { ErrorState } from 'marram/error-state'
+import { SuccessState } from 'marram/success-state'
+import { Collapse } from 'marram/collapse'
+import { Slider } from 'marram/slider'
+import { Stepper } from 'marram/stepper'
+import { Rating } from 'marram/rating'
+import { Table } from 'marram/table'
+import { Calendar } from 'marram/calendar'
+import { DatePicker } from 'marram/date-picker'
+import { ColorPicker } from 'marram/color-picker'
+import { FileUploader } from 'marram/file-uploader'
+import { ToastProvider, useToast } from 'marram/toast'
 ```
 
 ```css
-@import "zweihander/tokens.css";  /* the token layer */
-@import "zweihander/styles.css";  /* the component styles */
+@import "marram/tokens.css";  /* the token layer */
+@import "marram/styles.css";  /* the component styles */
 ```
 
 Order matters: the component styles read the tokens. Nothing else is
