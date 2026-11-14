@@ -16,7 +16,7 @@ that has none of its own.
 
 <Status of={FieldStories} />
 
-Every Zweihänder control (Text Input, Select, Checkbox and the rest)
+Every Marram control (Text Input, Select, Checkbox and the rest)
 already carries this anatomy. Field is for the control that does not: a
 native element the kit has no component for, a Base UI primitive, or one
 of your own. It wires the label, description and invalid state to it
@@ -42,7 +42,7 @@ There is one appearance. What changes is which optional parts are there.
 From npm, or copied into your project through the registry:
 
 ```js
-import { Field } from 'zweihander/field'
+import { Field } from 'marram/field'
 ```
 
 ```sh
@@ -183,7 +183,7 @@ Field wires itself.
 
 ### Differences from the spec
 
-- **No separate error part.** As in every Zweihänder control, the error
+- **No separate error part.** As in every Marram control, the error
   is the helper text in the error state (the kit's API convention), so a
   field never shows a hint and an error at once.
 - **The info note is a toggletip**, opened by press or Enter, not a
@@ -217,7 +217,7 @@ An **error** says what to change, not only that something is wrong.
 
 A value people need to see but cannot change here (set by a rule,
 another team or their role) stays a field: put `readOnly` on the control
-and say in `helperText` why, and who can change it. Every Zweihänder
+and say in `helperText` why, and who can change it. Every Marram
 control takes `readOnly`. The boxed fields (Text Input, Textarea,
 Search, Number Input, Select, Combobox, Date Picker, Date Range Picker)
 all look the same: a filled box, still focusable, the value selectable
@@ -269,7 +269,7 @@ Say what turns it on, in `helperText` or in the control that does it.
 
 ## When not to use
 
-- **Round a Zweihänder control.** Text Input, Textarea, Number Input,
+- **Round a Marram control.** Text Input, Textarea, Number Input,
   Select, Combobox, Date Picker, Checkbox, Switch and Radio have their own
   label, helper text and validation; a Field round one gives it two labels.
 - **For a group of controls** under one name, use a `<fieldset>` and

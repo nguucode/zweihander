@@ -1,9 +1,9 @@
 {
-  "name": "zweihander",
+  "name": "marram",
   "version": "0.9.0",
   "license": "MIT",
   "type": "module",
-  "description": "Zweihänder components (early stage, not production-ready — see README), published for npm install as an alternative to the copy-source registry.",
+  "description": "Marram components (early stage, not production-ready — see README), published for npm install as an alternative to the copy-source registry.",
   "homepage": "https://zweihander.ontheshore.biz",
   "files": [
     "dist"

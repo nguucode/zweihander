@@ -91,9 +91,9 @@ export default {
     // The canvas ones are set only by the consumer, through Theme tokens, to
     // paint an AppShell's canvas their own colour or gradient, and the
     // sidebar's fills on it (hover, current item, search field, badge).
-    'zweihander/semantic-tokens': [true, { external: [...baseUiVars, '--canvas', '--canvas-solid', '--canvas-foreground', '--canvas-muted-foreground', '--canvas-hover', '--canvas-selected', '--canvas-field', '--canvas-field-border', '--canvas-badge', '--canvas-badge-foreground'] }],
+    'marram/semantic-tokens': [true, { external: [...baseUiVars, '--canvas', '--canvas-solid', '--canvas-foreground', '--canvas-muted-foreground', '--canvas-hover', '--canvas-selected', '--canvas-field', '--canvas-field-border', '--canvas-badge', '--canvas-badge-foreground'] }],
     // A component never declares a token's name (PR #138: a local --radio-dot
     // took on a new token's value). Intended restatements carry a disable comment.
-    'zweihander/no-token-shadow': true,
+    'marram/no-token-shadow': true,
   },
 }

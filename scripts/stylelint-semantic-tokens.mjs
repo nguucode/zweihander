@@ -1,5 +1,5 @@
 /**
- * zweihander/semantic-tokens: a component reads semantic tokens only.
+ * marram/semantic-tokens: a component reads semantic tokens only.
  *
  * Every `var(--name)` in a component stylesheet must be one of:
  *   - a token the build declares in src/tokens.css, minus the primitives
@@ -13,11 +13,11 @@
  * usually a typo, which would silently fall back to the property's initial
  * value.
  *
- * zweihander/no-token-shadow: a component stylesheet never declares a name
+ * marram/no-token-shadow: a component stylesheet never declares a name
  * src/tokens.css emits. A local `--radio-dot` once collided with a new
  * `--radio-dot` token and the dot silently changed colour (PR #138). An
  * intended restatement (a surface setting --color-surface for what sits on it)
- * takes a `stylelint-disable-next-line zweihander/no-token-shadow -- <reason>`.
+ * takes a `stylelint-disable-next-line marram/no-token-shadow -- <reason>`.
  * A separate rule so that comment leaves the var() check on the line alone.
  */
 import { readFileSync, globSync } from 'node:fs'
@@ -30,7 +30,7 @@ const {
   utils: { report, ruleMessages, validateOptions },
 } = stylelint
 
-const ruleName = 'zweihander/semantic-tokens'
+const ruleName = 'marram/semantic-tokens'
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 
 const PRIMITIVE = [/^--gray-\d+$/, /^--accent-(solid|contrast|ring|text|subtle|subtle-text)-(light|dark)$/]
@@ -100,7 +100,7 @@ const ruleFunction = (primary, secondary) => (cssRoot, result) => {
 ruleFunction.ruleName = ruleName
 ruleFunction.messages = messages
 
-const shadowName = 'zweihander/no-token-shadow'
+const shadowName = 'marram/no-token-shadow'
 const shadowMessages = ruleMessages(shadowName, {
   shadow: (name) => `"${name}" is a token in src/tokens.css. Rename the local property, or mark an intended override with a reasoned disable comment.`,
 })

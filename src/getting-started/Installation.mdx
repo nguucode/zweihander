@@ -79,11 +79,11 @@ npx shadcn@latest add https://ontheshore.biz/zweihander/r/theme.json
 Or register the kit once and add components by name:
 
 ```json
-{ "registries": { "@zweihander": "https://ontheshore.biz/zweihander/r/{name}.json" } }
+{ "registries": { "@marram": "https://ontheshore.biz/zweihander/r/{name}.json" } }
 ```
 
 ```bash
-npx shadcn@latest add @zweihander/button
+npx shadcn@latest add @marram/button
 ```
 
 `tokens` only needs adding once — every component depends on it, so the CLI
@@ -94,7 +94,7 @@ pulls it in with the first component anyway. Shared helpers (`utils`,
 Import the token layer once, at your app's entry:
 
 ```css
-@import "./styles/zweihander-tokens.css";
+@import "./styles/marram-tokens.css";
 ```
 
 The CLI prints where each file landed; the path above is relative to the
@@ -113,58 +113,58 @@ declare module '*.module.css' {
 ## npm package
 
 ```bash
-npm install zweihander
+npm install marram
 ```
 
 ```ts
-import { Button } from 'zweihander/button'
-import { TextInput } from 'zweihander/text-input'
-import { Divider } from 'zweihander/divider'
-import { Badge } from 'zweihander/badge'
-import { Avatar } from 'zweihander/avatar'
-import { Tag } from 'zweihander/tag'
-import { ToggleButton } from 'zweihander/toggle-button'
-import { Switch } from 'zweihander/switch'
-import { Checkbox } from 'zweihander/checkbox'
-import { RadioGroup } from 'zweihander/radio'
-import { Card } from 'zweihander/card'
-import { Textarea } from 'zweihander/textarea'
-import { Search } from 'zweihander/search'
-import { NumberInput } from 'zweihander/number-input'
-import { Select } from 'zweihander/select'
-import { Combobox } from 'zweihander/combobox'
-import { Spinner } from 'zweihander/spinner'
-import { ProgressBar } from 'zweihander/progress-bar'
-import { Skeleton } from 'zweihander/skeleton'
-import { Link } from 'zweihander/link'
-import { Alert } from 'zweihander/alert'
-import { EmptyState } from 'zweihander/empty-state'
-import { Tooltip } from 'zweihander/tooltip'
-import { Popover } from 'zweihander/popover'
-import { Modal } from 'zweihander/modal'
-import { Menu } from 'zweihander/menu'
-import { Breadcrumbs } from 'zweihander/breadcrumbs'
-import { Pagination } from 'zweihander/pagination'
-import { Tabs } from 'zweihander/tabs'
-import { InlineAlert } from 'zweihander/inline-alert'
-import { ErrorState } from 'zweihander/error-state'
-import { SuccessState } from 'zweihander/success-state'
-import { Collapse } from 'zweihander/collapse'
-import { Slider } from 'zweihander/slider'
-import { Stepper } from 'zweihander/stepper'
-import { Rating } from 'zweihander/rating'
-import { Table } from 'zweihander/table'
-import { Calendar } from 'zweihander/calendar'
-import { DatePicker } from 'zweihander/date-picker'
-import { ColorPicker } from 'zweihander/color-picker'
-import { FileUploader } from 'zweihander/file-uploader'
-import { ToastProvider, useToast } from 'zweihander/toast'
-import { Theme } from 'zweihander/theme'
+import { Button } from 'marram/button'
+import { TextInput } from 'marram/text-input'
+import { Divider } from 'marram/divider'
+import { Badge } from 'marram/badge'
+import { Avatar } from 'marram/avatar'
+import { Tag } from 'marram/tag'
+import { ToggleButton } from 'marram/toggle-button'
+import { Switch } from 'marram/switch'
+import { Checkbox } from 'marram/checkbox'
+import { RadioGroup } from 'marram/radio'
+import { Card } from 'marram/card'
+import { Textarea } from 'marram/textarea'
+import { Search } from 'marram/search'
+import { NumberInput } from 'marram/number-input'
+import { Select } from 'marram/select'
+import { Combobox } from 'marram/combobox'
+import { Spinner } from 'marram/spinner'
+import { ProgressBar } from 'marram/progress-bar'
+import { Skeleton } from 'marram/skeleton'
+import { Link } from 'marram/link'
+import { Alert } from 'marram/alert'
+import { EmptyState } from 'marram/empty-state'
+import { Tooltip } from 'marram/tooltip'
+import { Popover } from 'marram/popover'
+import { Modal } from 'marram/modal'
+import { Menu } from 'marram/menu'
+import { Breadcrumbs } from 'marram/breadcrumbs'
+import { Pagination } from 'marram/pagination'
+import { Tabs } from 'marram/tabs'
+import { InlineAlert } from 'marram/inline-alert'
+import { ErrorState } from 'marram/error-state'
+import { SuccessState } from 'marram/success-state'
+import { Collapse } from 'marram/collapse'
+import { Slider } from 'marram/slider'
+import { Stepper } from 'marram/stepper'
+import { Rating } from 'marram/rating'
+import { Table } from 'marram/table'
+import { Calendar } from 'marram/calendar'
+import { DatePicker } from 'marram/date-picker'
+import { ColorPicker } from 'marram/color-picker'
+import { FileUploader } from 'marram/file-uploader'
+import { ToastProvider, useToast } from 'marram/toast'
+import { Theme } from 'marram/theme'
 ```
 
 ```css
-@import "zweihander/tokens.css";  /* the token layer */
-@import "zweihander/styles.css";  /* the component styles */
+@import "marram/tokens.css";  /* the token layer */
+@import "marram/styles.css";  /* the component styles */
 ```
 
 **Order matters** — the component styles read the tokens, so `tokens.css`

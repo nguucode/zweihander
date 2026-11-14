@@ -16,7 +16,7 @@ Source: vault `v1-plan/issues/05-api-conventions.md` (decided by the user 2026-0
 
 ## Behaviour
 
-Behaviour comes from Base UI (`@base-ui/react/*`). Zweihänder adds the styling layer and decides the API. Do not rewrite focus management, roving tabindex or popover handling that Base UI already has. When Base UI gets the semantics wrong for your case (for example putting `role="button"` on an `<a>`), split the branch and comment the reason right there.
+Behaviour comes from Base UI (`@base-ui/react/*`). Marram adds the styling layer and decides the API. Do not rewrite focus management, roving tabindex or popover handling that Base UI already has. When Base UI gets the semantics wrong for your case (for example putting `role="button"` on an `<a>`), split the branch and comment the reason right there.
 
 The `## Accessibility` section in the MDX comes from the matching [WAI-ARIA APG](https://www.w3.org/WAI/ARIA/apg/patterns/) pattern: which key does what, which role and state, where focus goes. Write it as checkable sentences, one `play` per sentence.
 

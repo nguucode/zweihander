@@ -27,7 +27,7 @@ export interface FieldProps {
 
 /**
  * Label, helper text and validation for a control that has none of its own.
- * Text Input, Select, Checkbox and the other Zweihänder controls already
+ * Text Input, Select, Checkbox and the other Marram controls already
  * carry this anatomy: do not wrap them.
  */
 export function Field(props: FieldProps) {

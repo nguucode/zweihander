@@ -339,7 +339,7 @@ export const Normalize: Story = {
 
 /** The parts the Specs tab numbers, each found by a selector inside the `Anatomy` story. */
 export const anatomyParts = [
-  { name: 'Field', selector: 'input[aria-labelledby]', description: 'A text field holding the hex, with the label, helper and validation of every Zweihänder field. Reads any CSS colour.' },
+  { name: 'Field', selector: 'input[aria-labelledby]', description: 'A text field holding the hex, with the label, helper and validation of every Marram field. Reads any CSS colour.' },
   { name: 'Swatch button', selector: 'button[aria-haspopup="dialog"]', description: 'At the start of the field, filled with the current colour. Opens the panel.' },
   { name: 'Area', selector: 'div:has(> div > input[aria-label="Saturation"])', description: 'Saturation left to right, brightness bottom to top, in the current hue.' },
   { name: 'Hue strip', selector: '[role="group"]:has(input[aria-label="Hue"])', description: 'A slider round the colour wheel, 0 to 359 degrees.' },

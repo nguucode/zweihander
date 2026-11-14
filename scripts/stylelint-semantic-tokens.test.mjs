@@ -13,7 +13,7 @@ const lint = async (code) => {
     config: {
       plugins: ['./scripts/stylelint-semantic-tokens.mjs'],
       reportDescriptionlessDisables: true,
-      rules: { 'zweihander/no-token-shadow': true },
+      rules: { 'marram/no-token-shadow': true },
     },
   })
   return results[0].warnings.map((w) => w.text)
@@ -39,7 +39,7 @@ test('reading a token is not declaring it', async () => {
 
 test('an intended override passes with a reasoned disable comment', async () => {
   const code = `.card {
-  /* stylelint-disable-next-line zweihander/no-token-shadow -- children sit on the card */
+  /* stylelint-disable-next-line marram/no-token-shadow -- children sit on the card */
   --color-surface: var(--color-surface-raised);
 }`
   assert.deepEqual(await lint(code), [])
@@ -47,7 +47,7 @@ test('an intended override passes with a reasoned disable comment', async () => 
 
 test('a disable comment without a reason still fails', async () => {
   const code = `.card {
-  /* stylelint-disable-next-line zweihander/no-token-shadow */
+  /* stylelint-disable-next-line marram/no-token-shadow */
   --color-surface: var(--color-surface-raised);
 }`
   assert.equal((await lint(code)).length, 1)

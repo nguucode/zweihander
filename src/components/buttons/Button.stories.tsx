@@ -211,10 +211,10 @@ export const Disabled: Story = {
 }
 
 export const Href: Story = {
-  args: { href: '#zweihander', children: 'Documentation' },
+  args: { href: '#marram', children: 'Documentation' },
   play: async ({ canvas }) => {
     const link = canvas.getByRole('link', { name: 'Documentation' })
-    await expect(link).toHaveAttribute('href', '#zweihander')
+    await expect(link).toHaveAttribute('href', '#marram')
     await expect(link).not.toHaveAttribute('type')
     await expect(canvas.queryByRole('button')).not.toBeInTheDocument()
 
@@ -231,7 +231,7 @@ export const Href: Story = {
 }
 
 export const DisabledHref: Story = {
-  args: { href: '#zweihander', disabled: true, children: 'Documentation' },
+  args: { href: '#marram', disabled: true, children: 'Documentation' },
   play: async ({ canvasElement }) => {
     // No href is what actually stops an <a> navigating.
     const a = canvasElement.querySelector('a')!

@@ -18,7 +18,7 @@ The source decisions live in the vault (Definition of done, API conventions, Fig
 Answer two questions before opening the editor:
 
 1. **New or enhance?**
-   - *New:* is there a source spec on uiguideline.com? Is it in the 1.0 scope (`zweihander-component-list.md`)? Out of scope can still be built, but it enters with status `experimental`.
+   - *New:* is there a source spec on uiguideline.com? Is it in the 1.0 scope (`marram-component-list.md`)? Out of scope can still be built, but it enters with status `experimental`.
    - *Enhance:* is the change breaking? Check the breaking table in the reference file. Breaking starts at section 1. Only a token, color or spacing change goes straight to section 2.
 2. **Does it need Figma first?** A visual change (new component, new variant, changed anatomy) goes Figma → user approves → code. Tokens always go from code to Figma, never the other way.
 
@@ -150,8 +150,8 @@ Do not raise a status before the conditions are met. Do not write "tested with a
 
 ## Wrap-up
 
-1. Add one line to `zweihander-build-log.md` in the vault: decisions, spec deviations, items waiting on the user's approval.
-2. Update the card in `zweihander-kanban.md`.
+1. Add one line to `marram-build-log.md` in the vault: decisions, spec deviations, items waiting on the user's approval.
+2. Update the card in `marram-kanban.md`.
 3. If a token or a prop that exists in Figma changed: note the Figma sync in the project's `_context.md`.
 4. Add one line to `/Volumes/KAFKA/Vault/_system/agent-log.md`, written after the last commit.
 

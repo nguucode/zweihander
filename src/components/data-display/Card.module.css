@@ -35,14 +35,14 @@
 }
 
 .elevated {
-  /* stylelint-disable-next-line zweihander/no-token-shadow -- what sits on the card reads its colour */
+  /* stylelint-disable-next-line marram/no-token-shadow -- what sits on the card reads its colour */
   --color-surface: var(--color-surface-raised);
   background: var(--color-surface-raised);
   box-shadow: var(--shadow-raised);
 }
 
 .outline {
-  /* stylelint-disable-next-line zweihander/no-token-shadow -- what sits on the card reads its colour */
+  /* stylelint-disable-next-line marram/no-token-shadow -- what sits on the card reads its colour */
   --color-surface: var(--color-surface-raised);
   /* The only appearance with a visible edge. Elevated and unstyled keep the
      transparent 1px from .card, so every appearance has the same box. */

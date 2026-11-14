@@ -5,7 +5,7 @@ import { Field, FieldControl } from './Field'
 import { boxClass, inputStyles } from './InputField'
 
 /**
- * The control in these stories: a native time input, which Zweihänder has
+ * The control in these stories: a native time input, which Marram has
  * no component for, in the same box as Text Input.
  */
 const time = (
