@@ -1,0 +1,29 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "button-group",
+  "title": "Button Group",
+  "description": "A selection control on Base UI Toggle Group: ToggleButtons with exactly one on, set apart with a small gap or joined into one bar.",
+  "dependencies": [
+    "@base-ui/react"
+  ],
+  "registryDependencies": [
+    "https://ontheshore.biz/zweihander/r/utils.json",
+    "https://ontheshore.biz/zweihander/r/tokens.json",
+    "https://ontheshore.biz/zweihander/r/toggle-button.json"
+  ],
+  "files": [
+    {
+      "path": "src/components/buttons/ButtonGroup.tsx",
+      "content": "'use client'\n\nimport type { ComponentProps } from 'react'\nimport { ToggleGroup } from '@base-ui/react/toggle-group'\nimport { cn } from '@/lib/utils'\nimport styles from './ButtonGroup.module.css'\n\nexport interface ButtonGroupProps\n  extends Omit<ComponentProps<'div'>, 'defaultValue' | 'onChange' | 'dir'> {\n  /** `separate`: ToggleButtons 4px apart. `joined`: one bar, inner corners square, borders shared. */\n  type?: 'separate' | 'joined'\n  /** Controlled: the `value` of the ToggleButton that is on. Pair with `onValueChange`. */\n  value?: string\n  /** Uncontrolled: the value on at first. */\n  defaultValue?: string\n  /** Called with the value of the ToggleButton just turned on. */\n  onValueChange?: (value: string) => void\n  /** Disables every toggle in the group. */\n  disabled?: boolean\n}\n\n/** ToggleButtons that share one selection, exactly one on at a time, like Tabs. */\nexport function ButtonGroup({\n  type = 'separate',\n  value,\n  defaultValue,\n  onValueChange,\n  className,\n  ...props\n}: ButtonGroupProps) {\n  return (\n    <ToggleGroup\n      {...props}\n      value={value === undefined ? undefined : [value]}\n      defaultValue={defaultValue === undefined ? undefined : [defaultValue]}\n      onValueChange={(next, details) => {\n        // Once one is on, pressing it again does not leave none on.\n        if (next.length === 0) return details.cancel()\n        onValueChange?.(next[0])\n      }}\n      className={cn(styles[type], className)}\n    />\n  )\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/buttons/ButtonGroup.tsx"
+    },
+    {
+      "path": "src/components/buttons/ButtonGroup.module.css",
+      "content": "/* Separate: ToggleButtons in a row, 4px apart, each keeping its own corners\n   and border; a toggle never shrinks below its content. */\n.separate {\n  display: inline-flex;\n  /* One row: it does not wrap. */\n  gap: var(--space-1);\n}\n\n.separate > * {\n  flex: 1 0 auto;\n}\n\n/* Joined: one bar. The toggles keep their own size and colour; the group\n   only joins them. Inner corners go square and each toggle after the first\n   overlaps the previous one by its 1px border, so two outlined toggles share\n   one line instead of drawing a double one. Two classes' worth of\n   specificity, so it outranks Button's size class whichever stylesheet\n   loads first. */\n.joined {\n  display: inline-flex;\n  /* Keeps the z-index below inside the group. */\n  isolation: isolate;\n}\n\n.joined > :not(:first-child) {\n  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- the toggles' 1px border, see above */\n  margin-inline-start: -1px;\n  border-start-start-radius: 0;\n  border-end-start-radius: 0;\n}\n\n.joined > :not(:last-child) {\n  border-start-end-radius: 0;\n  border-end-end-radius: 0;\n}\n\n/* The toggle that is on has its own border colour; raised, it draws over\n   the neighbour's line it overlaps. Focus goes higher still so the ring is\n   never cut by the next toggle. */\n.joined > [aria-pressed='true'] {\n  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- local stacking inside the group, not a global layer */\n  z-index: 1;\n}\n\n.joined > :focus-visible {\n  /* stylelint-disable-next-line scale-unlimited/declaration-strict-value -- local stacking inside the group, not a global layer */\n  z-index: 2;\n}\n",
+      "type": "registry:component",
+      "target": "components/zweihander/buttons/ButtonGroup.module.css"
+    }
+  ],
+  "type": "registry:component"
+}

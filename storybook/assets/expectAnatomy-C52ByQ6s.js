@@ -1,0 +1,1 @@
+import{n as e}from"./rolldown-runtime-DkW27tQK.js";async function t(e,t){await r(()=>n(t.filter(({selector:t})=>!e.querySelector(t)).map(e=>e.selector)).toEqual([]));let i=t.map(({selector:t})=>e.querySelector(t));return await n(new Set(i).size).toBe(t.length),i}var n,r;function i(){return(i=e((()=>{({expect:n,waitFor:r}=__STORYBOOK_MODULE_TEST__)})))()}export{i as n,t};

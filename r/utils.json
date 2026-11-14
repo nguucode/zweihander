@@ -1,0 +1,16 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "utils",
+  "description": "The cn() class-name helper every component uses.",
+  "dependencies": [
+    "clsx"
+  ],
+  "files": [
+    {
+      "path": "src/lib/utils.ts",
+      "content": "import { type ClassValue, clsx } from 'clsx'\n\n/**\n * Joins class names, dropping falsy ones. Class names come from CSS Modules,\n * so there is nothing to deduplicate — the last rule in the stylesheet wins\n * by ordinary cascade rather than by class order.\n */\nexport function cn(...inputs: ClassValue[]) {\n  return clsx(inputs)\n}\n",
+      "type": "registry:lib"
+    }
+  ],
+  "type": "registry:lib"
+}
